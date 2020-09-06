@@ -19,8 +19,21 @@ import "vuetify/dist/vuetify.min.css";
 Vue.use(Vuetify);
 const vuetify = new Vuetify();
 
+import VuetifyConfirm from "vuetify-confirm";
+Vue.use(VuetifyConfirm, { vuetify });
+
+import VuetifyDialog from "vuetify-dialog";
+Vue.use(VuetifyDialog, {
+    context: {
+        vuetify
+    }
+});
+
 import { store } from "./store/index";
+
 import { router } from "./router/index";
+
+import App from "./views/layouts/App.vue";
 
 /**
  * The following block of code may be used to automatically register your
