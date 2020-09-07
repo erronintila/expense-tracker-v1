@@ -2,38 +2,28 @@ import Vue from "vue";
 import Vuex from "vuex";
 Vue.use(Vuex);
 
-import auth from "./auth";
-
 export const store = new Vuex.Store({
-    // state: {},
-    // getters: {},
-    // mutations: {},
-    // actions: {},
-    // modules: {
-    //     auth
-    // }
-
     state: {
         token: localStorage.getItem("access_token") || null
     },
     getters: {
-        TOKEN(state) {
+        getToken(state) {
             return state.token;
         },
-        LOGGED_IN(state) {
+        isAuthenticated(state) {
             return state.token !== null;
         }
     },
     mutations: {
-        RETRIEVE_TOKEN(state, payload) {
+        AUTH_LOGIN(state, payload) {
             state.token = payload;
         },
-        DESTROY_TOKEN(state) {
+        AUTH_LOGOUT(state) {
             state.token = null;
         }
     },
     actions: {
-        RETRIEVE_TOKEN(context, payload) {
+        AUTH_LOGIN(context, payload) {
             return new Promise((resolve, reject) => {
                 axios
                     .post("/api/login", {
@@ -41,11 +31,13 @@ export const store = new Vuex.Store({
                         password: payload.password
                     })
                     .then(function(response) {
+                        console.log(response);
+
                         let token = response.data.access_token;
 
                         localStorage.setItem("access_token", token);
 
-                        context.commit("RETRIEVE_TOKEN", token);
+                        context.commit("AUTH_LOGIN", token);
 
                         resolve(response);
                     })
@@ -58,30 +50,30 @@ export const store = new Vuex.Store({
                     });
             });
         },
-        DESTROY_TOKEN(context) {
+        AUTH_LOGOUT(context) {
             axios.defaults.headers.common["Authorization"] =
                 "Bearer " + context.state.token;
 
-            if (context.getters.LOGGED_IN) {
+            if (context.getters.isAuthenticated) {
                 return new Promise((resolve, reject) => {
                     axios
                         .post("/api/logout")
                         .then(function(response) {
                             localStorage.removeItem("access_token");
 
-                            context.commit("DESTROY_TOKEN");
+                            context.commit("AUTH_LOGOUT");
 
                             resolve(response);
                         })
                         .catch(function(error) {
                             localStorage.removeItem("access_token");
 
-                            context.commit("DESTROY_TOKEN");
+                            context.commit("AUTH_LOGOUT");
 
                             reject(error.response);
                         });
                 });
             }
         }
-    }
+    },
 });

@@ -1,11 +1,10 @@
-
 const routes = [
     {
         path: "/login",
         name: "login",
         component: () => import("../../views/auth/Login"),
         meta: {
-            requiresVisitor : true
+            requiresVisitor: true
         }
     },
     {
@@ -13,7 +12,15 @@ const routes = [
         name: "register",
         component: () => import("../../views/auth/Register"),
         meta: {
-            requiresVisitor : true
+            requiresVisitor: true
+        }
+    },
+    {
+        path: "/logout",
+        name: "logout",
+        component: () => import("../../views/auth/Logout"),
+        meta: {
+            requiresAuth: true
         }
     }
 ];

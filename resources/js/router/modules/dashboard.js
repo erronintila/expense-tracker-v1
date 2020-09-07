@@ -1,6 +1,6 @@
 const adminRoutes = [
     {
-        path: "/admin",
+        path: "/admin/dashboard",
         name: "admin.dashboard.index",
         component: () =>
             import("../../views/modules/admin/dashboard/Index.vue"),

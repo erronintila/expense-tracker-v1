@@ -35,7 +35,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users,email',
+            // 'email' => 'required|email|exists:users,email',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
@@ -53,11 +54,17 @@ class AuthController extends Controller
                 'access_token' => $token
             ]);
         }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        // $request->user()->token()->revoke();
+
+        $request->user()->tokens->each(function ($token, $key) {
+            $token->delete();
+        });
 
         return response()->json([
             'message' => 'Successfully logged out'

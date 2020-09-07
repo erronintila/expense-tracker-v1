@@ -24,5 +24,25 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/user', 'API\v1\AuthController@user');
 
-    Route::apiResource('/users', 'API\v1\UserController');
+    Route::apiResources(
+        [
+            'departments' => 'API\v1\DepartmentController',
+    
+            'employees' => 'API\v1\EmployeeController',
+    
+            'expense_types' => 'API\v1\ExpenseTypeController',
+    
+            'expenses' => 'API\v1\ExpenseController',
+    
+            'jobs' => 'API\v1\JobController',
+    
+            'payments' => 'API\v1\PaymentController',
+    
+            'reports' => 'API\v1\ExpenseReportController',
+    
+            'users' => 'API\v1\UserController',
+    
+            'vendors' => 'API\v1\VendorController',
+        ]
+    );
 });

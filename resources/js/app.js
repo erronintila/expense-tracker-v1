@@ -5,34 +5,42 @@
  */
 
 require("./bootstrap");
-
 window.Vue = require("vue");
 
+/**
+ * Import Vue packages
+ */
 import VueRouter from "vue-router";
-Vue.use(VueRouter);
-
 import Vuex from "vuex";
-Vue.use(Vuex);
-
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
-Vue.use(Vuetify);
+import VuetifyConfirm from "vuetify-confirm";
+import VuetifyDialog from "vuetify-dialog";
+
+/**
+ * Load Instances
+ */
 const vuetify = new Vuetify();
 
-import VuetifyConfirm from "vuetify-confirm";
+/**
+ * Load Plugins
+ */
+Vue.use(VueRouter);
+Vue.use(Vuex);
+Vue.use(Vuetify);
 Vue.use(VuetifyConfirm, { vuetify });
-
-import VuetifyDialog from "vuetify-dialog";
 Vue.use(VuetifyDialog, {
     context: {
         vuetify
     }
 });
 
+/**
+ * Import Vue components/files
+ */
+
 import { store } from "./store/index";
-
 import { router } from "./router/index";
-
 import App from "./views/layouts/App.vue";
 
 /**
@@ -46,6 +54,9 @@ import App from "./views/layouts/App.vue";
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
+import components from "./components/ExampleComponent";
+Vue.use(components);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
