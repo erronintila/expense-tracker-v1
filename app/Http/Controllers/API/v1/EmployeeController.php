@@ -21,10 +21,15 @@ class EmployeeController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'password'  => ['required', 'min:8'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'suffix' => ['nullable', 'max:30'],
+            'gender' => ['nullable', 'max:10'],
+            'birthdate' => ['required', 'string', 'max:255'],
+            'address' => ['nullable'],
+            'phone' => ['nullable', 'max:30'],
+            'job_id' => ['required'],
         ]);
     }
 

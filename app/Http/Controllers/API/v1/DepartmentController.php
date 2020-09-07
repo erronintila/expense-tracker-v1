@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
+use App\Models\Department;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,10 +22,7 @@ class DepartmentController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'password'  => ['required', 'min:8'],
+            'name' => ['required', 'max:255', Rule::unique('departments')->ignore($id, 'id')],
         ]);
     }
 
@@ -35,31 +33,22 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = User::all();
-
-        $user = User::orderBy('name')->get();
-        $count = count($user);
+        $departments = Department::orderBy('name')->get();
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $user = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Verified':
-                    $user = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Unverified':
-                    $user = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $departments = Department::onlyTrashed()->orderBy('name')->get();
                     break;
                 default:
-                    $user = User::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $departments = Department::orderBy('name')->get();
                     break;
             }
         }
 
         return response(
             [
-                'data' => DepartmentResource::collection($user),
+                'data' => DepartmentResource::collection($departments),
                 'message' => 'Users retrieved successfully'
             ],
             200
@@ -76,18 +65,15 @@ class DepartmentController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $user = new User();
+        $department = new Department();
 
-        $user->name     = $request['name'];
-        $user->username = $request['username'];
-        $user->email    = $request['email'];
-        $user->password = Hash::make($request['password']);
+        $department->name = $request->name;
 
-        $user->save();
+        $department->save();
 
         return response(
             [
-                'data' => new DepartmentResource($user),
+                'data' => new DepartmentResource($department),
                 'message' => 'Created successfully'
             ],
             201
@@ -102,11 +88,11 @@ class DepartmentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $department = Department::findOrFail($id);
 
         return response(
             [
-                'data' => new DepartmentResource($user),
+                'data' => new DepartmentResource($department),
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -124,39 +110,26 @@ class DepartmentController extends Controller
     {
         switch ($request->action) {
             case 'restore':
-                $user = User::withTrashed()
+                $department = Department::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
-
-                break;
-            case 'password_reset':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('password' => Hash::make('password')));
-
-                break;
-            case 'verify':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('verified_at' => now()));
 
                 break;
             default:
                 $this->validator($request->all(), $id)->validate();
 
-                $user = User::findOrFail($id);
+                $department = Department::findOrFail($id);
 
-                $user->name     = $request['name'];
-                $user->username = $request['username'];
-                $user->email    = $request['email'];
-                $user->password = Hash::make($request['password']);
+                $department->name = $request->name;
 
-                $user->save();
+                $department->save();
 
                 break;
         }
 
         return response(
             [
-                'data' => new DepartmentResource($user),
+                'data' => new DepartmentResource($department),
                 'message' => 'Updated successfully'
             ],
             201
@@ -171,11 +144,11 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::whereIn('id', $request->ids)->delete();
+        $department = Department::whereIn('id', $request->ids)->delete();
 
         return response(
             [
-                'data' => new DepartmentResource($user),
+                'data' => new DepartmentResource($department),
                 'message' => 'Deleted successfully'
             ],
             200
