@@ -4,7 +4,8 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        token: localStorage.getItem("access_token") || null
+        token: localStorage.getItem("access_token") || null,
+        user: {}
     },
     getters: {
         getToken(state) {
@@ -12,6 +13,9 @@ export const store = new Vuex.Store({
         },
         isAuthenticated(state) {
             return state.token !== null;
+        },
+        currentUser(state) {
+            return state.user;
         }
     },
     mutations: {
@@ -20,6 +24,10 @@ export const store = new Vuex.Store({
         },
         AUTH_LOGOUT(state) {
             state.token = null;
+            state.user = {};
+        },
+        AUTH_USER(state, payload) {
+            state.user = payload;
         }
     },
     actions: {
@@ -31,13 +39,17 @@ export const store = new Vuex.Store({
                         password: payload.password
                     })
                     .then(function(response) {
-                        console.log(response);
-
                         let token = response.data.access_token;
+
+                        let user = response.data.user;
 
                         localStorage.setItem("access_token", token);
 
                         context.commit("AUTH_LOGIN", token);
+
+                        // context.commit("AUTH_USER", user);
+
+                        context.dispatch("AUTH_USER");
 
                         resolve(response);
                     })
@@ -74,6 +86,27 @@ export const store = new Vuex.Store({
                         });
                 });
             }
+        },
+        AUTH_USER(context) {
+            if (context.getters.isAuthenticated) {
+                return new Promise((resolve, reject) => {
+                    axios.defaults.headers.common["Authorization"] =
+                        "Bearer " + context.state.token;
+
+                    axios
+                        .get("/api/user")
+                        .then(function(response) {
+                            context.commit("AUTH_USER", response.data);
+
+                            resolve(response);
+                        })
+                        .catch(function(error) {
+                            context.commit("AUTH_LOGOUT");
+
+                            reject(error.response);
+                        });
+                });
+            }
         }
-    },
+    }
 });

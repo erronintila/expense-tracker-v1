@@ -6,18 +6,19 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'username' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6'
+            'name'      => ['required', 'max:255'],
+            'username'  => ['required', Rule::unique('users'), 'max:255'],
+            'email'     => ['required', 'email', Rule::unique('users'), 'max:255'],
+            'password'  => ['required', 'min:8'],
         ]);
-
 
         $user = User::create([
             'name' => $request->name,
@@ -34,9 +35,14 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            // 'email' => 'required|email|exists:users,email',
-            'email' => 'required',
+        // $validator = $request->validate([
+        //     'email' => 'required|email|exists:users,email',
+        //     // 'email' => 'required',
+        //     'password' => 'required'
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
             'password' => 'required'
         ]);
 
@@ -50,12 +56,12 @@ class AuthController extends Controller
 
             return response()->json([
                 'user_id' => $user->id,
-                'user' => $user->name,
+                'user' => $user,
                 'access_token' => $token
             ]);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json([$validator->errors()], 401);
     }
 
     public function logout(Request $request)

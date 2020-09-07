@@ -88,14 +88,25 @@ __webpack_require__.r(__webpack_exports__);
 
       var _this = this;
 
-      this.$store.dispatch("AUTH_LOGIN", {
-        email: _this.email,
-        password: _this.password
-      }).then(function (response) {
-        _this2.$router.push({
-          name: "admin.dashboard.index"
+      _this.$refs.form.validate();
+
+      if (_this.$refs.form.validate()) {
+        this.$store.dispatch("AUTH_LOGIN", {
+          email: _this.email,
+          password: _this.password
+        }).then(function (response) {
+          _this2.$router.push({
+            name: "admin.dashboard.index"
+          });
+        })["catch"](function (error) {
+          console.log(error);
+
+          _this.$dialog.message.error("Unauthorized: Error username/password", {
+            position: "top-right",
+            timeout: 2000
+          });
         });
-      });
+      }
     }
   }
 });

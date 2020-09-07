@@ -3,96 +3,40 @@
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Departments</h4>
+
                 <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="500px">
+
+                <v-btn
+                    class="elevation-3 mr-2"
+                    color="green"
+                    to="/admin/users/create"
+                    dark
+                    fab
+                    x-small
+                >
+                    <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+
+                <v-btn
+                    class="elevation-3 mr-2"
+                    color="green"
+                    dark
+                    fab
+                    x-small
+                    @click="onRefresh"
+                >
+                    <v-icon dark>mdi-reload</v-icon>
+                </v-btn>
+
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    left
+                    bottom
+                >
                     <template v-slot:activator="{ on, attrs }">
-                        <v-menu offset-y transition="scale-transition" left>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    <v-icon dark>
-                                        mdi-format-list-bulleted-square
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-
-                            <v-list>
-                                <v-list-item @click="onRestore">
-                                    <v-list-item-title>
-                                        Restore
-                                    </v-list-item-title>
-                                </v-list-item>
-                                <v-list-item @click="onDelete">
-                                    <v-list-item-title>
-                                        Move to archive
-                                    </v-list-item-title>
-                                </v-list-item>
-                                <!-- <v-list-item
-                                    v-for="n in 5"
-                                    :key="n"
-                                    @click="() => {}"
-                                >
-                                    <v-list-item-title>
-                                        Option {{ n }}
-                                    </v-list-item-title>
-                                </v-list-item> -->
-                            </v-list>
-                        </v-menu>
-
-                        <v-menu
-                            transition="scale-transition"
-                            :close-on-content-click="false"
-                            :nudge-width="200"
-                            offset-y
-                            left
-                            bottom
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-
-                            <v-card>
-                                <v-list>
-                                    <v-list-item>
-                                        <v-select
-                                            v-model="status"
-                                            v-on:change="loadItems"
-                                            :items="statuses"
-                                            label="Status"
-                                        ></v-select>
-                                    </v-list-item>
-                                </v-list>
-                            </v-card>
-                        </v-menu>
-
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -102,49 +46,75 @@
                             v-bind="attrs"
                             v-on="on"
                         >
-                            <v-icon dark>mdi-plus</v-icon>
+                            <v-icon dark>mdi-filter</v-icon>
                         </v-btn>
                     </template>
+
                     <v-card>
-                        <v-card-title>
-                            <span class="headline">{{ formTitle }}</span>
-                        </v-card-title>
-
-                        <v-card-text>
-                            <v-container>
-                                <v-form
-                                    ref="form"
-                                    v-model="valid"
-                                    :lazy-validation="lazy"
-                                >
-                                    <v-row>
-                                        <v-col>
-                                            <v-text-field
-                                                v-model="editedItem.name"
-                                                label="Name"
-                                                clearable
-                                                :rules="rules.name"
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                </v-form>
-                            </v-container>
-                        </v-card-text>
-
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                text
-                                @click="closeDialog"
-                            >
-                                Cancel
-                            </v-btn>
-                            <v-btn color="green darken-1" text @click="onSave">
-                                Save
-                            </v-btn>
-                        </v-card-actions>
+                        <v-list>
+                            <v-list-item>
+                                <v-select
+                                    v-model="status"
+                                    v-on:change="loadItems"
+                                    :items="statuses"
+                                    label="Status"
+                                ></v-select>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="limit"
+                                    v-on:change="loadItems"
+                                    :items="limits"
+                                    label="Limit rows"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
                     </v-card>
-                </v-dialog>
+                </v-menu>
+
+                <v-menu offset-y transition="scale-transition" left>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3"
+                            color="green"
+                            dark
+                            fab
+                            x-small
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>
+                                mdi-format-list-bulleted-square
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-list>
+                        <v-list-item @click="onVerify">
+                            <v-list-item-title>
+                                Verify Account(s)
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onPasswordReset">
+                            <v-list-item-title>
+                                Reset Password
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onRestore">
+                            <v-list-item-title>
+                                Restore
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onDelete">
+                            <v-list-item-title>
+                                Move to archive
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
             </v-card-title>
             <v-card-subtitle>
                 <v-text-field
@@ -155,16 +125,20 @@
                     hide-details
                 ></v-text-field>
             </v-card-subtitle>
+
             <v-data-table
                 :headers="headers"
                 :items="items"
                 :search="search"
                 v-model="selected"
                 show-select
-                item-key="name"
+                item-key="id"
                 class="elevation-0"
             >
                 <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-2" @click="onShow(item)">
+                        mdi-eye
+                    </v-icon>
                     <v-icon small class="mr-2" @click="onEdit(item)">
                         mdi-pencil
                     </v-icon>
@@ -181,32 +155,18 @@ export default {
         return {
             headers: [
                 { text: "Name", value: "name" },
+                { text: "Username", value: "username" },
+                { text: "Email", value: "email" },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false }
             ],
             items: [],
-            status: "Active",
-            statuses: ["Active", "Archived"],
-            valid: true,
-            rules: {
-                name: [
-                    value => !!value || "Name is required",
-                    value =>
-                        (value && value.length <= 250) ||
-                        "Name must be less than 250 characters"
-                ]
-            },
-            lazy: false,
+            limit: 500,
+            limits: [500, 1000, 5000, "No limit"],
+            status: "Verified",
+            statuses: ["Verified", "Unverified", "Archived"],
             selected: [],
-            search: "",
-            dialog: false,
-            editedIndex: -1,
-            editedItem: {
-                name: ""
-            },
-            defaultItem: {
-                name: ""
-            }
+            search: ""
         };
     },
     methods: {
@@ -215,9 +175,14 @@ export default {
             _this.selected = [];
 
             axios
-                .get("/api/departments", {
+                .get("/api/users", {
                     params: {
-                        status: _this.status
+                        status: _this.status,
+
+                        // Exclude limit parameter if limit is equals to 'No limit'
+                        ...(_this.limit == "No limit"
+                            ? {}
+                            : { limit: _this.limit })
                     }
                 })
                 .then(function(response) {
@@ -225,63 +190,71 @@ export default {
                 })
                 .catch(function(error) {
                     console.log(error);
+
+                    console.log(error.response);
                 });
         },
         onRefresh() {
             this.selected = [];
-            this.status = "Active";
+            this.status = "Verified";
+            this.limit = 500;
+            this.search = "";
             this.loadItems();
         },
-        onSave() {
-            let _this = this;
-
-            if (_this.editedIndex > -1) {
-                axios
-                    .put(`/api/departments/${_this.editedItem.id}`, {
-                        name: _this.editedItem.name,
-                        action: "update"
-                    })
-                    .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Item updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-                        _this.loadItems();
-                    })
-                    .catch(function(error) {
-                        console.log(error.response);
-                    });
-            } else {
-                axios
-                    .post("/api/departments", {
-                        name: _this.editedItem.name
-                    })
-                    .then(function(response) {
-                         _this.$dialog.message.success(
-                            "Item added successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-                        _this.loadItems();
-                    })
-                    .catch(function(error) {
-                        console.log(error.response);
-                    });
-            }
-            _this.closeDialog();
+        onShow(item) {
+            this.$router.push({
+                name: "admin.users.show",
+                params: { id: item.id }
+            });
         },
         onEdit(item) {
-            this.editedIndex = this.items.indexOf(item);
-            this.editedItem = Object.assign({}, item);
-            this.dialog = true;
+            this.$router.push({
+                name: "admin.users.edit",
+                params: { id: item.id }
+            });
+        },
+        onPasswordReset() {
+            let _this = this;
+
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            this.$confirm("Do you want to reset password?").then(res => {
+                if (res) {
+                    axios
+                        .put(`/api/users/${_this.selected[0].id}`, {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            }),
+                            action: "password_reset"
+                        })
+                        .then(function(response) {
+                            _this.$dialog.message.success(
+                                "Password reset successfully. (Default: password)",
+                                {
+                                    position: "top-right",
+                                    timeout: 2000
+                                }
+                            );
+                            _this.loadItems();
+                        })
+                        .catch(function(error) {
+                            console.log(error.response);
+                        });
+                }
+            });
         },
         onDelete() {
             let _this = this;
+
+            // console.log(_this.selected);
+
+            // return;
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -294,7 +267,7 @@ export default {
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
                     axios
-                        .delete(`/api/departments/${_this.selected[0].id}`, {
+                        .delete(`/api/users/${_this.selected[0].id}`, {
                             params: {
                                 ids: _this.selected.map(item => {
                                     return item.id;
@@ -328,46 +301,69 @@ export default {
                 return;
             }
 
-            axios
-                .put(`/api/departments/${_this.selected[0].id}`, {
-                    ids: _this.selected.map(item => {
-                        return item.id;
-                    }),
-                    action: "restore"
-                })
-                .then(function(response) {
-                    _this.$dialog.message.success("Item(s) restored.", {
-                        position: "top-right",
-                        timeout: 2000
-                    });
-                    _this.loadItems();
-                })
-                .catch(function(error) {
-                    console.log(error.response);
-                });
-        },
-        closeDialog() {
-            this.dialog = false;
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
-                this.editedIndex = -1;
+            this.$confirm("Do you want to restore account(s)?").then(res => {
+                if (res) {
+                    axios
+                        .put(`/api/users/${_this.selected[0].id}`, {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            }),
+                            action: "restore"
+                        })
+                        .then(function(response) {
+                            _this.$dialog.message.success("Item(s) restored.", {
+                                position: "top-right",
+                                timeout: 2000
+                            });
+                            _this.loadItems();
+                        })
+                        .catch(function(error) {
+                            console.log(error.response);
+                        });
+                }
             });
-            this.$refs.form.resetValidation();
-        }
-    },
-    computed: {
-        formTitle() {
-            return this.editedIndex === -1
-                ? "New Department"
-                : "Edit Department";
-        }
-    },
-    watch: {
-        dialog(val) {
-            val || this.closeDialog();
+        },
+        onVerify() {
+            let _this = this;
+
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            this.$confirm("Do you want to verify account(s)?").then(res => {
+                if (res) {
+                    axios
+                        .put(`/api/users/${_this.selected[0].id}`, {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            }),
+                            action: "verify"
+                        })
+                        .then(function(response) {
+                            _this.$dialog.message.success("Item(s) verified.", {
+                                position: "top-right",
+                                timeout: 2000
+                            });
+                            _this.loadItems();
+                        })
+                        .catch(function(error) {
+                            console.log(error.response);
+                        });
+                }
+            });
         }
     },
     created() {
+        // const token = localStorage.getItem("access_token");
+        // if (token) {
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
+        // }
+
         this.loadItems();
     },
     mounted() {}

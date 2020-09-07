@@ -9,11 +9,25 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 //
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {// ...mapGetters(["currentUser"])
+  },
+  created: function created() {}
+});
 
 /***/ }),
 
@@ -32,7 +46,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-app")
+  return _c(
+    "v-app",
+    [
+      _c(
+        "v-card",
+        { staticClass: "elevation-0 pt-0" },
+        [
+          _c(
+            "v-card-title",
+            { staticClass: "pt-0" },
+            [
+              _c("h4", { staticClass: "title green--text" }, [
+                _vm._v("Dashboard")
+              ]),
+              _vm._v(" "),
+              _c("v-spacer")
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-card-subtitle")
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

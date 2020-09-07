@@ -73,14 +73,26 @@ export default {
         onLogin() {
             let _this = this;
 
-            this.$store
-                .dispatch("AUTH_LOGIN", {
-                    email: _this.email,
-                    password: _this.password
-                })
-                .then(response => {
-                    this.$router.push({ name: "admin.dashboard.index" });
-                });
+            _this.$refs.form.validate();
+
+            if (_this.$refs.form.validate()) {
+                this.$store
+                    .dispatch("AUTH_LOGIN", {
+                        email: _this.email,
+                        password: _this.password
+                    })
+                    .then(response => {
+                        this.$router.push({ name: "admin.dashboard.index" });
+                    })
+                    .catch(error => {
+                        console.log(error);
+
+                        _this.$dialog.message.error("Unauthorized: Error username/password", {
+                            position: "top-right",
+                            timeout: 2000
+                        });
+                    });
+            }
         }
     }
 };

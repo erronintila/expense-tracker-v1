@@ -109,8 +109,41 @@ export default {
     },
     methods: {
         onRegister() {
-            console.log("Register successfully.");
+            let _this = this;
+
+            _this.$refs.form.validate();
+
+            if (_this.$refs.form.validate()) {
+                axios
+                    .post("/api/register", {
+                        name: _this.name,
+                        username: _this.username,
+                        email: _this.email,
+                        password: _this.password,
+                        password_confirmation: _this.password_confirmation
+                    })
+                    .then(function(response) {
+                        console.log(response);
+
+                        _this.$dialog.message.success(
+                            "Registered successfully.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+
+                        _this.$router.push({ name: "login" });
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+
+                        console.log(error.response);
+                    });
+
+                return;
+            }
         }
-    }
+    },
 };
 </script>

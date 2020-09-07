@@ -153,7 +153,6 @@ export default {
                         password_confirmation: _this.password_confirmation
                     })
                     .then(function(response) {
-                        console.log(response.data);
                         _this.onRefresh();
 
                         _this.$dialog.message.success(
@@ -170,12 +169,11 @@ export default {
 
                 return;
             }
-
-            console.log("Error");
         }
     },
     created() {
-        console.log("Users create component mounted.");
-    },
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
+    }
 };
 </script>

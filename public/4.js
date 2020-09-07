@@ -9,32 +9,12 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -193,6 +173,12 @@ __webpack_require__.r(__webpack_exports__);
         text: "Name",
         value: "name"
       }, {
+        text: "Username",
+        value: "username"
+      }, {
+        text: "Email",
+        value: "email"
+      }, {
         text: "Last Updated",
         value: "updated_at"
       }, {
@@ -201,27 +187,12 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       items: [],
-      status: "Active",
-      statuses: ["Active", "Archived"],
-      valid: true,
-      rules: {
-        name: [function (value) {
-          return !!value || "Name is required";
-        }, function (value) {
-          return value && value.length <= 250 || "Name must be less than 250 characters";
-        }]
-      },
-      lazy: false,
+      limit: 500,
+      limits: [500, 1000, 5000, "No limit"],
+      status: "Verified",
+      statuses: ["Verified", "Unverified", "Archived"],
       selected: [],
-      search: "",
-      dialog: false,
-      editedIndex: -1,
-      editedItem: {
-        name: ""
-      },
-      defaultItem: {
-        name: ""
-      }
+      search: ""
     };
   },
   methods: {
@@ -229,62 +200,77 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _this.selected = [];
-      axios.get("/api/departments", {
-        params: {
+      axios.get("/api/users", {
+        params: _objectSpread({
           status: _this.status
-        }
+        }, _this.limit == "No limit" ? {} : {
+          limit: _this.limit
+        })
       }).then(function (response) {
         _this.items = response.data.data;
       })["catch"](function (error) {
         console.log(error);
+        console.log(error.response);
       });
     },
     onRefresh: function onRefresh() {
       this.selected = [];
-      this.status = "Active";
+      this.status = "Verified";
+      this.limit = 500;
+      this.search = "";
       this.loadItems();
     },
-    onSave: function onSave() {
-      var _this = this;
-
-      if (_this.editedIndex > -1) {
-        axios.put("/api/departments/".concat(_this.editedItem.id), {
-          name: _this.editedItem.name,
-          action: "update"
-        }).then(function (response) {
-          _this.$dialog.message.success("Item updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
-
-          _this.loadItems();
-        })["catch"](function (error) {
-          console.log(error.response);
-        });
-      } else {
-        axios.post("/api/departments", {
-          name: _this.editedItem.name
-        }).then(function (response) {
-          _this.$dialog.message.success("Item added successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
-
-          _this.loadItems();
-        })["catch"](function (error) {
-          console.log(error.response);
-        });
-      }
-
-      _this.closeDialog();
+    onShow: function onShow(item) {
+      this.$router.push({
+        name: "admin.users.show",
+        params: {
+          id: item.id
+        }
+      });
     },
     onEdit: function onEdit(item) {
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+      this.$router.push({
+        name: "admin.users.edit",
+        params: {
+          id: item.id
+        }
+      });
+    },
+    onPasswordReset: function onPasswordReset() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      this.$confirm("Do you want to reset password?").then(function (res) {
+        if (res) {
+          axios.put("/api/users/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "password_reset"
+          }).then(function (response) {
+            _this.$dialog.message.success("Password reset successfully. (Default: password)", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.loadItems();
+          })["catch"](function (error) {
+            console.log(error.response);
+          });
+        }
+      });
     },
     onDelete: function onDelete() {
-      var _this = this;
+      var _this = this; // console.log(_this.selected);
+      // return;
+
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -296,7 +282,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/departments/".concat(_this.selected[0].id), {
+          axios["delete"]("/api/users/".concat(_this.selected[0].id), {
             params: {
               ids: _this.selected.map(function (item) {
                 return item.id;
@@ -326,44 +312,63 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      axios.put("/api/departments/".concat(_this.selected[0].id), {
-        ids: _this.selected.map(function (item) {
-          return item.id;
-        }),
-        action: "restore"
-      }).then(function (response) {
-        _this.$dialog.message.success("Item(s) restored.", {
+      this.$confirm("Do you want to restore account(s)?").then(function (res) {
+        if (res) {
+          axios.put("/api/users/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "restore"
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) restored.", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.loadItems();
+          })["catch"](function (error) {
+            console.log(error.response);
+          });
+        }
+      });
+    },
+    onVerify: function onVerify() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
           timeout: 2000
         });
+        return;
+      }
 
-        _this.loadItems();
-      })["catch"](function (error) {
-        console.log(error.response);
-      });
-    },
-    closeDialog: function closeDialog() {
-      var _this2 = this;
+      this.$confirm("Do you want to verify account(s)?").then(function (res) {
+        if (res) {
+          axios.put("/api/users/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "verify"
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) verified.", {
+              position: "top-right",
+              timeout: 2000
+            });
 
-      this.dialog = false;
-      this.$nextTick(function () {
-        _this2.editedItem = Object.assign({}, _this2.defaultItem);
-        _this2.editedIndex = -1;
+            _this.loadItems();
+          })["catch"](function (error) {
+            console.log(error.response);
+          });
+        }
       });
-      this.$refs.form.resetValidation();
-    }
-  },
-  computed: {
-    formTitle: function formTitle() {
-      return this.editedIndex === -1 ? "New Department" : "Edit Department";
-    }
-  },
-  watch: {
-    dialog: function dialog(val) {
-      val || this.closeDialog();
     }
   },
   created: function created() {
+    // const token = localStorage.getItem("access_token");
+    // if (token) {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // }
+
     this.loadItems();
   },
   mounted: function mounted() {}
@@ -404,9 +409,43 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c(
-                "v-dialog",
+                "v-btn",
                 {
-                  attrs: { "max-width": "500px" },
+                  staticClass: "elevation-3 mr-2",
+                  attrs: {
+                    color: "green",
+                    to: "/admin/users/create",
+                    dark: "",
+                    fab: "",
+                    "x-small": ""
+                  }
+                },
+                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-plus")])],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "elevation-3 mr-2",
+                  attrs: { color: "green", dark: "", fab: "", "x-small": "" },
+                  on: { click: _vm.onRefresh }
+                },
+                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-reload")])],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    transition: "scale-transition",
+                    "close-on-content-click": false,
+                    "nudge-width": 200,
+                    "offset-y": "",
+                    left: "",
+                    bottom: ""
+                  },
                   scopedSlots: _vm._u([
                     {
                       key: "activator",
@@ -414,212 +453,6 @@ var render = function() {
                         var on = ref.on
                         var attrs = ref.attrs
                         return [
-                          _c(
-                            "v-menu",
-                            {
-                              attrs: {
-                                "offset-y": "",
-                                transition: "scale-transition",
-                                left: ""
-                              },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "activator",
-                                    fn: function(ref) {
-                                      var on = ref.on
-                                      var attrs = ref.attrs
-                                      return [
-                                        _c(
-                                          "v-btn",
-                                          _vm._g(
-                                            _vm._b(
-                                              {
-                                                staticClass: "elevation-3",
-                                                attrs: {
-                                                  color: "green",
-                                                  dark: "",
-                                                  fab: "",
-                                                  "x-small": ""
-                                                }
-                                              },
-                                              "v-btn",
-                                              attrs,
-                                              false
-                                            ),
-                                            on
-                                          ),
-                                          [
-                                            _c(
-                                              "v-icon",
-                                              { attrs: { dark: "" } },
-                                              [
-                                                _vm._v(
-                                                  "\n                                    mdi-format-list-bulleted-square\n                                "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ],
-                                null,
-                                true
-                              )
-                            },
-                            [
-                              _vm._v(" "),
-                              _c(
-                                "v-list",
-                                [
-                                  _c(
-                                    "v-list-item",
-                                    { on: { click: _vm.onRestore } },
-                                    [
-                                      _c("v-list-item-title", [
-                                        _vm._v(
-                                          "\n                                    Restore\n                                "
-                                        )
-                                      ])
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-item",
-                                    { on: { click: _vm.onDelete } },
-                                    [
-                                      _c("v-list-item-title", [
-                                        _vm._v(
-                                          "\n                                    Move to archive\n                                "
-                                        )
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-menu",
-                            {
-                              attrs: {
-                                transition: "scale-transition",
-                                "close-on-content-click": false,
-                                "nudge-width": 200,
-                                "offset-y": "",
-                                left: "",
-                                bottom: ""
-                              },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "activator",
-                                    fn: function(ref) {
-                                      var on = ref.on
-                                      var attrs = ref.attrs
-                                      return [
-                                        _c(
-                                          "v-btn",
-                                          _vm._g(
-                                            _vm._b(
-                                              {
-                                                staticClass: "elevation-3 mr-2",
-                                                attrs: {
-                                                  color: "green",
-                                                  dark: "",
-                                                  fab: "",
-                                                  "x-small": ""
-                                                }
-                                              },
-                                              "v-btn",
-                                              attrs,
-                                              false
-                                            ),
-                                            on
-                                          ),
-                                          [
-                                            _c(
-                                              "v-icon",
-                                              { attrs: { dark: "" } },
-                                              [_vm._v("mdi-filter")]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ],
-                                null,
-                                true
-                              )
-                            },
-                            [
-                              _vm._v(" "),
-                              _c(
-                                "v-card",
-                                [
-                                  _c(
-                                    "v-list",
-                                    [
-                                      _c(
-                                        "v-list-item",
-                                        [
-                                          _c("v-select", {
-                                            attrs: {
-                                              items: _vm.statuses,
-                                              label: "Status"
-                                            },
-                                            on: { change: _vm.loadItems },
-                                            model: {
-                                              value: _vm.status,
-                                              callback: function($$v) {
-                                                _vm.status = $$v
-                                              },
-                                              expression: "status"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              staticClass: "elevation-3 mr-2",
-                              attrs: {
-                                color: "green",
-                                dark: "",
-                                fab: "",
-                                "x-small": ""
-                              },
-                              on: { click: _vm.onRefresh }
-                            },
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-reload")
-                              ])
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
                           _c(
                             "v-btn",
                             _vm._g(
@@ -641,7 +474,7 @@ var render = function() {
                             ),
                             [
                               _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-plus")
+                                _vm._v("mdi-filter")
                               ])
                             ],
                             1
@@ -649,116 +482,165 @@ var render = function() {
                         ]
                       }
                     }
-                  ]),
-                  model: {
-                    value: _vm.dialog,
-                    callback: function($$v) {
-                      _vm.dialog = $$v
-                    },
-                    expression: "dialog"
-                  }
+                  ])
                 },
                 [
                   _vm._v(" "),
                   _c(
                     "v-card",
                     [
-                      _c("v-card-title", [
-                        _c("span", { staticClass: "headline" }, [
-                          _vm._v(_vm._s(_vm.formTitle))
-                        ])
-                      ]),
-                      _vm._v(" "),
                       _c(
-                        "v-card-text",
+                        "v-list",
                         [
                           _c(
-                            "v-container",
+                            "v-list-item",
                             [
-                              _c(
-                                "v-form",
-                                {
-                                  ref: "form",
-                                  attrs: { "lazy-validation": _vm.lazy },
-                                  model: {
-                                    value: _vm.valid,
-                                    callback: function($$v) {
-                                      _vm.valid = $$v
-                                    },
-                                    expression: "valid"
-                                  }
+                              _c("v-select", {
+                                attrs: { items: _vm.statuses, label: "Status" },
+                                on: { change: _vm.loadItems },
+                                model: {
+                                  value: _vm.status,
+                                  callback: function($$v) {
+                                    _vm.status = $$v
+                                  },
+                                  expression: "status"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.limits,
+                                  label: "Limit rows"
                                 },
-                                [
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              label: "Name",
-                                              clearable: "",
-                                              rules: _vm.rules.name
-                                            },
-                                            model: {
-                                              value: _vm.editedItem.name,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.editedItem,
-                                                  "name",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "editedItem.name"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
+                                on: { change: _vm.loadItems },
+                                model: {
+                                  value: _vm.limit,
+                                  callback: function($$v) {
+                                    _vm.limit = $$v
+                                  },
+                                  expression: "limit"
+                                }
+                              })
                             ],
                             1
                           )
                         ],
                         1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    "offset-y": "",
+                    transition: "scale-transition",
+                    left: ""
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass: "elevation-3",
+                                  attrs: {
+                                    color: "green",
+                                    dark: "",
+                                    fab: "",
+                                    "x-small": ""
+                                  }
+                                },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v(
+                                  "\n                            mdi-format-list-bulleted-square\n                        "
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onVerify } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Verify Account(s)\n                        "
+                            )
+                          ])
+                        ],
+                        1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-card-actions",
+                        "v-list-item",
+                        { on: { click: _vm.onPasswordReset } },
                         [
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { text: "" },
-                              on: { click: _vm.closeDialog }
-                            },
-                            [
-                              _vm._v(
-                                "\n                            Cancel\n                        "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "green darken-1", text: "" },
-                              on: { click: _vm.onSave }
-                            },
-                            [
-                              _vm._v(
-                                "\n                            Save\n                        "
-                              )
-                            ]
-                          )
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Reset Password\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onRestore } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Restore\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onDelete } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Move to archive\n                        "
+                            )
+                          ])
                         ],
                         1
                       )
@@ -801,7 +683,7 @@ var render = function() {
               items: _vm.items,
               search: _vm.search,
               "show-select": "",
-              "item-key": "name"
+              "item-key": "id"
             },
             scopedSlots: _vm._u(
               [
@@ -810,6 +692,24 @@ var render = function() {
                   fn: function(ref) {
                     var item = ref.item
                     return [
+                      _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-2",
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.onShow(item)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    mdi-eye\n                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-icon",
                         {

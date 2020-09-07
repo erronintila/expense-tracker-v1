@@ -105,7 +105,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-menu
+            <!-- <v-menu
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-y
@@ -177,7 +177,7 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-            </v-menu>
+            </v-menu> -->
 
             <v-menu
                 :close-on-content-click="false"
@@ -216,13 +216,13 @@
                     <v-divider></v-divider>
 
                     <v-list>
-                        <v-list-item @click="() => {}">
+                        <v-list-item to="/admin/profile">
                             <v-list-item-title>My Profile</v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item @click="() => {}">
+                        <!-- <v-list-item @click="() => {}">
                             <v-list-item-title>Settings</v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
                     </v-list>
 
                     <v-card-actions>
@@ -267,30 +267,30 @@ export default {
         source: String
     },
     data: () => ({
-        // notifications: [],
-        notifications: [
-            { title: "5 Pending Reports", link: "", created_at: "3 hours ago" },
-            {
-                title: "Mike added new report",
-                link: "",
-                created_at: "5 hours ago"
-            },
-            {
-                title: "Sheena approved payment",
-                link: "",
-                created_at: "10 hours ago"
-            },
-            {
-                title: "Sheena approved payment",
-                link: "",
-                created_at: "10 hours ago"
-            },
-            {
-                title: "Sheena approved payment",
-                link: "",
-                created_at: "10 hours ago"
-            }
-        ],
+        notifications: [],
+        // notifications: [
+        //     { title: "5 Pending Reports", link: "", created_at: "3 hours ago" },
+        //     {
+        //         title: "Mike added new report",
+        //         link: "",
+        //         created_at: "5 hours ago"
+        //     },
+        //     {
+        //         title: "Sheena approved payment",
+        //         link: "",
+        //         created_at: "10 hours ago"
+        //     },
+        //     {
+        //         title: "Sheena approved payment",
+        //         link: "",
+        //         created_at: "10 hours ago"
+        //     },
+        //     {
+        //         title: "Sheena approved payment",
+        //         link: "",
+        //         created_at: "10 hours ago"
+        //     }
+        // ],
         dialog: false,
         drawer: null,
         items: [

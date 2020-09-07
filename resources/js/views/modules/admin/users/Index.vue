@@ -171,26 +171,28 @@ export default {
     },
     methods: {
         loadItems() {
-            // let _this = this;
-            // _this.selected = [];
+            let _this = this;
+            _this.selected = [];
 
-            // axios
-            //     .get("/api/users", {
-            //         params: {
-            //             status: _this.status,
+            axios
+                .get("/api/users", {
+                    params: {
+                        status: _this.status,
 
-            //             // Exclude limit parameter if limit is equals to 'No limit'
-            //             ...(_this.limit == "No limit"
-            //                 ? {}
-            //                 : { limit: _this.limit })
-            //         }
-            //     })
-            //     .then(function(response) {
-            //         _this.items = response.data.data;
-            //     })
-            //     .catch(function(error) {
-            //         console.log(error);
-            //     });
+                        // Exclude limit parameter if limit is equals to 'No limit'
+                        ...(_this.limit == "No limit"
+                            ? {}
+                            : { limit: _this.limit })
+                    }
+                })
+                .then(function(response) {
+                    _this.items = response.data.data;
+                })
+                .catch(function(error) {
+                    console.log(error);
+
+                    console.log(error.response);
+                });
         },
         onRefresh() {
             this.selected = [];
@@ -249,6 +251,10 @@ export default {
         },
         onDelete() {
             let _this = this;
+
+            // console.log(_this.selected);
+
+            // return;
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -352,6 +358,12 @@ export default {
         }
     },
     created() {
+        // const token = localStorage.getItem("access_token");
+        // if (token) {
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
+        // }
+
         this.loadItems();
     },
     mounted() {}

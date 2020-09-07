@@ -9,6 +9,12 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -190,24 +196,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    loadItems: function loadItems() {// let _this = this;
-      // _this.selected = [];
-      // axios
-      //     .get("/api/users", {
-      //         params: {
-      //             status: _this.status,
-      //             // Exclude limit parameter if limit is equals to 'No limit'
-      //             ...(_this.limit == "No limit"
-      //                 ? {}
-      //                 : { limit: _this.limit })
-      //         }
-      //     })
-      //     .then(function(response) {
-      //         _this.items = response.data.data;
-      //     })
-      //     .catch(function(error) {
-      //         console.log(error);
-      //     });
+    loadItems: function loadItems() {
+      var _this = this;
+
+      _this.selected = [];
+      axios.get("/api/users", {
+        params: _objectSpread({
+          status: _this.status
+        }, _this.limit == "No limit" ? {} : {
+          limit: _this.limit
+        })
+      }).then(function (response) {
+        _this.items = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
     },
     onRefresh: function onRefresh() {
       this.selected = [];
@@ -264,7 +268,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onDelete: function onDelete() {
-      var _this = this;
+      var _this = this; // console.log(_this.selected);
+      // return;
+
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -359,6 +365,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    // const token = localStorage.getItem("access_token");
+    // if (token) {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // }
+
     this.loadItems();
   },
   mounted: function mounted() {}
