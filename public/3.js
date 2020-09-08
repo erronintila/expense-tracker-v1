@@ -22,6 +22,65 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {// ...mapGetters(["currentUser"])
@@ -66,7 +125,162 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("v-card-subtitle")
+          _c("v-card-subtitle"),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            [
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto rounded-xl",
+                                    attrs: {
+                                      rounded: "",
+                                      elevation: hover ? 5 : 2,
+                                      to: "/admin/profile"
+                                    }
+                                  },
+                                  [
+                                    _c("v-card-title", [
+                                      _vm._v("User Profile")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-card-subtitle", [
+                                      _vm._v(
+                                        "\n                                Secondary text\n                            "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-card-text", [
+                                      _vm._v(
+                                        "\n                                Go to user profile and configure.\n                            "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto rounded-lg",
+                                    attrs: {
+                                      rounded: "",
+                                      elevation: hover ? 5 : 2,
+                                      to: "/admin/expenses"
+                                    }
+                                  },
+                                  [
+                                    _c("v-card-title", [_vm._v("Expenses")]),
+                                    _vm._v(" "),
+                                    _c("v-card-subtitle", [
+                                      _vm._v(
+                                        "\n                                Secondary text\n                            "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-card-text", [
+                                      _vm._v(
+                                        "\n                                Track and manage expenses.\n                            "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto rounded-xl",
+                                    attrs: {
+                                      rounded: "",
+                                      elevation: hover ? 5 : 2,
+                                      to: "/admin/employees"
+                                    }
+                                  },
+                                  [
+                                    _c("v-card-title", [_vm._v("Employees")]),
+                                    _vm._v(" "),
+                                    _c("v-card-subtitle", [
+                                      _vm._v(
+                                        "\n                                Secondary text\n                            "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-card-text", [
+                                      _vm._v(
+                                        "\n                                Modify employee details.\n                            "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       )

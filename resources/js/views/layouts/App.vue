@@ -4,10 +4,11 @@
         <v-navigation-drawer
             v-model="drawer"
             :clipped="$vuetify.breakpoint.lgAndUp"
+            floating
             app
             v-if="loggedIn"
         >
-            <v-list dense>
+            <v-list dense shaped>
                 <v-list-item two-line>
                     <v-list-item-avatar>
                         <img
@@ -16,14 +17,23 @@
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                        <v-list-item-title>Erron Intila</v-list-item-title>
+                        <v-list-item-title>
+                            <router-link
+                                to="/admin/profile"
+                                class="text-decoration-none"
+                                style="color: #4caf50"
+                            >
+                                Erron Intila
+                            </router-link>
+                            <!-- <v-btn small text color="green">Erron Intila</v-btn> -->
+                        </v-list-item-title>
                         <v-list-item-subtitle>
                             Administrator
                         </v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-divider></v-divider>
+                <!-- <v-divider></v-divider> -->
 
                 <template v-for="item in items">
                     <v-row
@@ -41,6 +51,7 @@
                         </v-col>
                     </v-row>
                     <v-list-group
+                        color="green"
                         v-else-if="item.children"
                         :key="item.text"
                         v-model="item.model"
@@ -72,7 +83,13 @@
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
-                    <v-list-item v-else :key="item.text" :to="item.link" link>
+                    <v-list-item
+                        color="green"
+                        v-else
+                        :key="item.text"
+                        :to="item.link"
+                        link
+                    >
                         <v-list-item-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-action>

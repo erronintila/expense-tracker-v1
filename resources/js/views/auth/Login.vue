@@ -37,7 +37,7 @@
                                     Register
                                 </v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn color="green" @click="onLogin">
+                                <v-btn color="green" dark @click="onLogin">
                                     Login
                                 </v-btn>
                             </v-card-actions>

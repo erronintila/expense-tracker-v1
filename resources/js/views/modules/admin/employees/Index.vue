@@ -105,35 +105,46 @@
                 </v-menu>
             </v-card-title>
             <v-card-subtitle>
-                <v-text-field
-                    v-model="search"
-                    append-icon="mdi-magnify"
-                    label="Search"
-                    single-line
-                    hide-details
-                ></v-text-field>
+                <v-hover v-slot:default="{ hover }">
+                    <v-text-field
+                        v-model="search"
+                        :elevation="hover ? 5 : 2"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                    ></v-text-field>
+                </v-hover>
             </v-card-subtitle>
 
-            <v-data-table
-                :headers="headers"
-                :items="items"
-                :search="search"
-                :loading="loading"
-                :loading-text="loading_text"
-                v-model="selected"
-                show-select
-                item-key="id"
-                class="elevation-0"
-            >
-                <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="onShow(item)">
-                        mdi-eye
-                    </v-icon>
-                    <v-icon small class="mr-2" @click="onEdit(item)">
-                        mdi-pencil
-                    </v-icon>
-                </template>
-            </v-data-table>
+            <v-card-text>
+                <v-data-table
+                    :headers="headers"
+                    :items="items"
+                    :search="search"
+                    :loading="loading"
+                    :loading-text="loading_text"
+                    show-expand
+                    v-model="selected"
+                    show-select
+                    item-key="id"
+                    class="elevation-0"
+                >
+                    <template v-slot:expanded-item="{ headers, item }">
+                        <td :colspan="headers.length">
+                            More info about {{ item.name }}
+                        </td>
+                    </template>
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small class="mr-2" @click="onShow(item)">
+                            mdi-eye
+                        </v-icon>
+                        <v-icon small class="mr-2" @click="onEdit(item)">
+                            mdi-pencil
+                        </v-icon>
+                    </template>
+                </v-data-table>
+            </v-card-text>
         </v-card>
     </v-app>
 </template>
@@ -143,6 +154,7 @@ export default {
     props: {},
     data() {
         return {
+            expanded: [],
             loading: true,
             loading_text: "Loading items...",
             headers: [
@@ -152,7 +164,8 @@ export default {
                 { text: "Department", value: "department.name" },
                 // { text: "Created", value: "created_at" },
                 // { text: "Updated", value: "updated_at" },
-                { text: "Actions", value: "actions", sortable: false }
+                { text: "Actions", value: "actions", sortable: false },
+                { text: "", value: "data-table-expand" }
             ],
             items: [],
             limit: 500,
@@ -280,7 +293,7 @@ export default {
     },
     watch: {
         items() {
-            this.loading = false
+            this.loading = false;
             this.loading_text = "No data available";
         }
     },
