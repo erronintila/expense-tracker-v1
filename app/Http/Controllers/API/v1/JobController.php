@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\JobResource;
-use App\User;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,10 +21,8 @@ class JobController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'password'  => ['required', 'min:8'],
+            'name' => ['required', 'max:255', Rule::unique('jobs')->ignore($id, 'id')],
+            'department_id' => ['required'],
         ]);
     }
 
@@ -35,32 +33,29 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = User::all();
-
-        $user = User::orderBy('name')->get();
-        $count = count($user);
+        $jobs = Job::orderBy('name')->get();
+        $count = count($jobs);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $user = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Verified':
-                    $user = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Unverified':
-                    $user = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $jobs = Job::onlyTrashed()
+                        ->orderBy('name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
                 default:
-                    $user = User::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $jobs = Job::orderBy('name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
             }
         }
 
         return response(
             [
-                'data' => JobResource::collection($user),
-                'message' => 'Users retrieved successfully'
+                'data' => JobResource::collection($jobs),
+                'message' => 'Jobs retrieved successfully'
             ],
             200
         );
@@ -76,18 +71,16 @@ class JobController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $user = new User();
+        $job = new Job();
 
-        $user->name     = $request['name'];
-        $user->username = $request['username'];
-        $user->email    = $request['email'];
-        $user->password = Hash::make($request['password']);
+        $job->name = $request->name;
+        $job->department_id = $request->department_id;
 
-        $user->save();
+        $job->save();
 
         return response(
             [
-                'data' => new JobResource($user),
+                'data' => new JobResource($job),
                 'message' => 'Created successfully'
             ],
             201
@@ -102,11 +95,11 @@ class JobController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $job = Job::findOrFail($id);
 
         return response(
             [
-                'data' => new JobResource($user),
+                'data' => new JobResource($job),
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -124,39 +117,27 @@ class JobController extends Controller
     {
         switch ($request->action) {
             case 'restore':
-                $user = User::withTrashed()
+                $job = Job::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
-
-                break;
-            case 'password_reset':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('password' => Hash::make('password')));
-
-                break;
-            case 'verify':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('verified_at' => now()));
 
                 break;
             default:
                 $this->validator($request->all(), $id)->validate();
 
-                $user = User::findOrFail($id);
+                $job = Job::findOrFail($id);
 
-                $user->name     = $request['name'];
-                $user->username = $request['username'];
-                $user->email    = $request['email'];
-                $user->password = Hash::make($request['password']);
+                $job->name = $request->name;
+                $job->department_id = $request->department_id;
 
-                $user->save();
+                $job->save();
 
                 break;
         }
 
         return response(
             [
-                'data' => new JobResource($user),
+                'data' => new JobResource($job),
                 'message' => 'Updated successfully'
             ],
             201
@@ -171,11 +152,11 @@ class JobController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::whereIn('id', $request->ids)->delete();
+        $job = Job::whereIn('id', $request->ids)->delete();
 
         return response(
             [
-                'data' => new JobResource($user),
+                'data' => new JobResource($job),
                 'message' => 'Deleted successfully'
             ],
             200

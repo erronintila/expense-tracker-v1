@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReportResource;
-use App\User;
+use App\Models\ExpenseReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,18 +13,18 @@ use Illuminate\Validation\Rule;
 class ExpenseReportController extends Controller
 {
     /**
-     * Get a validator for an incoming registration request.
+     * Get a validator for an incoming request.
      *
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data, $id)
+    protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'password'  => ['required', 'min:8'],
+            'description' => ['required', 'string', 'max:255'],
+            'employee_id' => ['required'],
+            'remarks' => ['nullable'],
+            'notes' => ['nullable'],
         ]);
     }
 
@@ -35,32 +35,29 @@ class ExpenseReportController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = User::all();
-
-        $user = User::orderBy('name')->get();
-        $count = count($user);
+        $expese_reports = ExpenseReport::latest()->get();
+        $count = count($expese_reports);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $user = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Verified':
-                    $user = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Unverified':
-                    $user = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $expese_reports = ExpenseReport::onlyTrashed()
+                        ->latest()
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
                 default:
-                    $user = User::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $expese_reports = ExpenseReport::latest()
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
             }
         }
 
         return response(
             [
-                'data' => ExpenseReportResource::collection($user),
-                'message' => 'Users retrieved successfully'
+                'data' => ExpenseReportResource::collection($expese_reports),
+                'message' => 'Expense Reports retrieved successfully'
             ],
             200
         );
@@ -76,18 +73,18 @@ class ExpenseReportController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $user = new User();
+        $expense_report = new ExpenseReport();
 
-        $user->name     = $request['name'];
-        $user->username = $request['username'];
-        $user->email    = $request['email'];
-        $user->password = Hash::make($request['password']);
+        $expense_report->description = $request->description;
+        $expense_report->employee_id = $request->employee_id;
+        $expense_report->remarks = $request->remarks;
+        $expense_report->notes = $request->notes;
 
-        $user->save();
+        $expense_report->save();
 
         return response(
             [
-                'data' => new ExpenseReportResource($user),
+                'data' => new ExpenseReportResource($expense_report),
                 'message' => 'Created successfully'
             ],
             201
@@ -102,11 +99,11 @@ class ExpenseReportController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $expense_report = ExpenseReport::findOrFail($id);
 
         return response(
             [
-                'data' => new ExpenseReportResource($user),
+                'data' => new ExpenseReportResource($expense_report),
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -124,39 +121,29 @@ class ExpenseReportController extends Controller
     {
         switch ($request->action) {
             case 'restore':
-                $user = User::withTrashed()
+                $expense_report = ExpenseReport::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
-            case 'password_reset':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('password' => Hash::make('password')));
-
-                break;
-            case 'verify':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('verified_at' => now()));
-
-                break;
             default:
-                $this->validator($request->all(), $id)->validate();
+                $this->validator($request->all(), null)->validate();
 
-                $user = User::findOrFail($id);
+                $expense_report = ExpenseReport::findOrFail($id);
 
-                $user->name     = $request['name'];
-                $user->username = $request['username'];
-                $user->email    = $request['email'];
-                $user->password = Hash::make($request['password']);
+                $expense_report->description = $request->description;
+                $expense_report->employee_id = $request->employee_id;
+                $expense_report->remarks = $request->remarks;
+                $expense_report->notes = $request->notes;
 
-                $user->save();
+                $expense_report->save();
 
                 break;
         }
 
         return response(
             [
-                'data' => new ExpenseReportResource($user),
+                'data' => new ExpenseReportResource($expense_report),
                 'message' => 'Updated successfully'
             ],
             201
@@ -171,11 +158,11 @@ class ExpenseReportController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::whereIn('id', $request->ids)->delete();
+        $expense_report = ExpenseReport::whereIn('id', $request->ids)->delete();
 
         return response(
             [
-                'data' => new ExpenseReportResource($user),
+                'data' => new ExpenseReportResource($expense_report),
                 'message' => 'Deleted successfully'
             ],
             200

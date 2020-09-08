@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Models\ExpenseType;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -34,11 +33,28 @@ class ExpenseTypeController extends Controller
     public function index(Request $request)
     {
         $expense_type = ExpenseType::orderBy('name')->get();
+        $count = count($expense_type);
+
+        if (request()->has('status')) {
+            switch ($request->status) {
+                case 'Archived':
+                    $expense_type = ExpenseType::onlyTrashed()
+                        ->orderBy('name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
+                    break;
+                default:
+                    $expense_type = ExpenseType::orderBy('name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
+                    break;
+            }
+        }
 
         return response(
             [
                 'data' => ExpenseTypeResource::collection($expense_type),
-                'message' => 'Users retrieved successfully'
+                'message' => 'Expense Types retrieved successfully'
             ],
             200
         );

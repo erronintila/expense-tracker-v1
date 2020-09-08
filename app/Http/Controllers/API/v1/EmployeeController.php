@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
-use App\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,14 +21,14 @@ class EmployeeController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['nullable', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'middle_name' => ['nullable', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
             'suffix' => ['nullable', 'max:30'],
             'gender' => ['nullable', 'max:10'],
-            'birthdate' => ['required', 'string', 'max:255'],
+            'birthdate' => ['required', 'string', 'max:100'],
             'address' => ['nullable'],
-            'phone' => ['nullable', 'max:30'],
+            'phone' => ['nullable', 'max:50'],
             'job_id' => ['required'],
         ]);
     }
@@ -40,32 +40,29 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = User::all();
-
-        $user = User::orderBy('name')->get();
-        $count = count($user);
+        $employees = Employee::orderBy('last_name')->get();
+        $count = count($employees);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $user = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Verified':
-                    $user = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Unverified':
-                    $user = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $employees = Employee::onlyTrashed()
+                        ->orderBy('last_name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
                 default:
-                    $user = User::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $employees = Employee::orderBy('last_name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
             }
         }
 
         return response(
             [
-                'data' => EmployeeResource::collection($user),
-                'message' => 'Users retrieved successfully'
+                'data' => EmployeeResource::collection($employees),
+                'message' => 'Employees retrieved successfully'
             ],
             200
         );
@@ -81,18 +78,23 @@ class EmployeeController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $user = new User();
+        $employee = new Employee();
 
-        $user->name     = $request['name'];
-        $user->username = $request['username'];
-        $user->email    = $request['email'];
-        $user->password = Hash::make($request['password']);
+        $employee->first_name = $request->first_name;
+        $employee->middle_name = $request->middle_name;
+        $employee->last_name = $request->last_name;
+        $employee->suffix = $request->suffix;
+        $employee->gender = $request->gender;
+        $employee->birthdate = $request->birthdate;
+        $employee->address = $request->address;
+        $employee->phone = $request->phone;
+        $employee->job_id = $request->job_id;
 
-        $user->save();
+        $employee->save();
 
         return response(
             [
-                'data' => new EmployeeResource($user),
+                'data' => new EmployeeResource($employee),
                 'message' => 'Created successfully'
             ],
             201
@@ -107,11 +109,11 @@ class EmployeeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $employee = Employee::findOrFail($id);
 
         return response(
             [
-                'data' => new EmployeeResource($user),
+                'data' => new EmployeeResource($employee),
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -129,39 +131,34 @@ class EmployeeController extends Controller
     {
         switch ($request->action) {
             case 'restore':
-                $user = User::withTrashed()
+                $employee = Employee::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
-            case 'password_reset':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('password' => Hash::make('password')));
-
-                break;
-            case 'verify':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('verified_at' => now()));
-
-                break;
             default:
-                $this->validator($request->all(), $id)->validate();
+                $this->validator($request->all(), null)->validate();
 
-                $user = User::findOrFail($id);
+                $employee = Employee::findOrFail($id);
 
-                $user->name     = $request['name'];
-                $user->username = $request['username'];
-                $user->email    = $request['email'];
-                $user->password = Hash::make($request['password']);
+                $employee->first_name     = $request->first_name;
+                $employee->middle_name = $request->middle_name;
+                $employee->last_name    = $request->last_name;
+                $employee->suffix = $request->suffix;
+                $employee->gender     = $request->gender;
+                $employee->birthdate = $request->birthdate;
+                $employee->address    = $request->address;
+                $employee->phone = $request->phone;
+                $employee->job_id = $request->job_id;
 
-                $user->save();
+                $employee->save();
 
                 break;
         }
 
         return response(
             [
-                'data' => new EmployeeResource($user),
+                'data' => new EmployeeResource($employee),
                 'message' => 'Updated successfully'
             ],
             201
@@ -176,11 +173,11 @@ class EmployeeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::whereIn('id', $request->ids)->delete();
+        $employee = Employee::whereIn('id', $request->ids)->delete();
 
         return response(
             [
-                'data' => new EmployeeResource($user),
+                'data' => new EmployeeResource($employee),
                 'message' => 'Deleted successfully'
             ],
             200

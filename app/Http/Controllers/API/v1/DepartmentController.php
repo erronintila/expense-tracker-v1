@@ -5,9 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
 use App\Models\Department;
-use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +20,7 @@ class DepartmentController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name' => ['required', 'max:255', Rule::unique('departments')->ignore($id, 'id')],
+            'name' => ['required', 'max:250', Rule::unique('departments')->ignore($id, 'id')],
         ]);
     }
 
@@ -34,14 +32,20 @@ class DepartmentController extends Controller
     public function index(Request $request)
     {
         $departments = Department::orderBy('name')->get();
+        $count = count($departments);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $departments = Department::onlyTrashed()->orderBy('name')->get();
+                    $departments = Department::onlyTrashed()
+                        ->orderBy('name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
                 default:
-                    $departments = Department::orderBy('name')->get();
+                    $departments = Department::orderBy('name')
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
             }
         }
@@ -49,7 +53,7 @@ class DepartmentController extends Controller
         return response(
             [
                 'data' => DepartmentResource::collection($departments),
-                'message' => 'Users retrieved successfully'
+                'message' => 'Departments retrieved successfully'
             ],
             200
         );

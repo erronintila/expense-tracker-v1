@@ -153,18 +153,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -173,13 +161,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Name",
         value: "name"
       }, {
-        text: "Username",
-        value: "username"
+        text: "Created",
+        value: "created_at"
       }, {
-        text: "Email",
-        value: "email"
-      }, {
-        text: "Last Updated",
+        text: "Updated",
         value: "updated_at"
       }, {
         text: "Actions",
@@ -189,8 +174,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       items: [],
       limit: 500,
       limits: [500, 1000, 5000, "No limit"],
-      status: "Verified",
-      statuses: ["Verified", "Unverified", "Archived"],
+      status: "Active",
+      statuses: ["Active", "Archived"],
       selected: [],
       search: ""
     };
@@ -200,7 +185,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       _this.selected = [];
-      axios.get("/api/users", {
+      axios.get("/api/expense_types", {
         params: _objectSpread({
           status: _this.status
         }, _this.limit == "No limit" ? {} : {
@@ -222,7 +207,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onShow: function onShow(item) {
       this.$router.push({
-        name: "admin.users.show",
+        name: "admin.expense_types.show",
         params: {
           id: item.id
         }
@@ -230,40 +215,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onEdit: function onEdit(item) {
       this.$router.push({
-        name: "admin.users.edit",
+        name: "admin.expense_types.edit",
         params: {
           id: item.id
-        }
-      });
-    },
-    onPasswordReset: function onPasswordReset() {
-      var _this = this;
-
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      this.$confirm("Do you want to reset password?").then(function (res) {
-        if (res) {
-          axios.put("/api/users/".concat(_this.selected[0].id), {
-            ids: _this.selected.map(function (item) {
-              return item.id;
-            }),
-            action: "password_reset"
-          }).then(function (response) {
-            _this.$dialog.message.success("Password reset successfully. (Default: password)", {
-              position: "top-right",
-              timeout: 2000
-            });
-
-            _this.loadItems();
-          })["catch"](function (error) {
-            console.log(error.response);
-          });
         }
       });
     },
@@ -282,7 +236,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/users/".concat(_this.selected[0].id), {
+          axios["delete"]("/api/expense_types/".concat(_this.selected[0].id), {
             params: {
               ids: _this.selected.map(function (item) {
                 return item.id;
@@ -314,44 +268,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/users/".concat(_this.selected[0].id), {
+          axios.put("/api/expense_types/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
             }),
             action: "restore"
           }).then(function (response) {
             _this.$dialog.message.success("Item(s) restored.", {
-              position: "top-right",
-              timeout: 2000
-            });
-
-            _this.loadItems();
-          })["catch"](function (error) {
-            console.log(error.response);
-          });
-        }
-      });
-    },
-    onVerify: function onVerify() {
-      var _this = this;
-
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      this.$confirm("Do you want to verify account(s)?").then(function (res) {
-        if (res) {
-          axios.put("/api/users/".concat(_this.selected[0].id), {
-            ids: _this.selected.map(function (item) {
-              return item.id;
-            }),
-            action: "verify"
-          }).then(function (response) {
-            _this.$dialog.message.success("Item(s) verified.", {
               position: "top-right",
               timeout: 2000
             });
@@ -414,7 +337,7 @@ var render = function() {
                   staticClass: "elevation-3 mr-2",
                   attrs: {
                     color: "green",
-                    to: "/admin/users/create",
+                    to: "/admin/expense_types/create",
                     dark: "",
                     fab: "",
                     "x-small": ""
@@ -593,32 +516,6 @@ var render = function() {
                   _c(
                     "v-list",
                     [
-                      _c(
-                        "v-list-item",
-                        { on: { click: _vm.onVerify } },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Verify Account(s)\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { on: { click: _vm.onPasswordReset } },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Reset Password\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c(
                         "v-list-item",
                         { on: { click: _vm.onRestore } },

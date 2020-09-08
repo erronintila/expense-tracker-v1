@@ -38,29 +38,29 @@ class UserController extends Controller
     {
         // $user = User::all();
 
-        $user = User::orderBy('name')->get();
-        $count = count($user);
+        $users = User::orderBy('name')->get();
+        $count = count($users);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $user = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $users = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
                     break;
                 case 'Verified':
-                    $user = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $users = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
                     break;
                 case 'Unverified':
-                    $user = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $users = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
                     break;
                 default:
-                    $user = User::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $users = User::orderBy('name')->limit($request->limit ?? $count)->get();
                     break;
             }
         }
 
         return response(
             [
-                'data' => UserResource::collection($user),
+                'data' => UserResource::collection($users),
                 'message' => 'Users retrieved successfully'
             ],
             200

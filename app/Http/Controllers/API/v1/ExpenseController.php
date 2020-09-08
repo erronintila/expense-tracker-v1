@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseResource;
-use App\User;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,18 +13,21 @@ use Illuminate\Validation\Rule;
 class ExpenseController extends Controller
 {
     /**
-     * Get a validator for an incoming registration request.
+     * Get a validator for an incoming request.
      *
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data, $id)
+    protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'password'  => ['required', 'min:8'],
+            'description' => ['required', 'string', 'max:255'],
+            'receipt_number' => ['required', 'max:255'],
+            'date' => ['required'],
+            'amount' => ['required', 'numeric', 'gt:0'],
+            'remarks' => [],
+            'expense_type_id' => ['required'],
+            'employee_id' => ['required'],
         ]);
     }
 
@@ -35,32 +38,29 @@ class ExpenseController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = User::all();
-
-        $user = User::orderBy('name')->get();
-        $count = count($user);
+        $expense = Expense::latest()->get();
+        $count = count($expense);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $user = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Verified':
-                    $user = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Unverified':
-                    $user = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $expense = Expense::onlyTrashed()
+                        ->latest()
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
                 default:
-                    $user = User::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $expense = Expense::latest()
+                        ->limit($request->limit ?? $count)
+                        ->get();
                     break;
             }
         }
 
         return response(
             [
-                'data' => ExpenseResource::collection($user),
-                'message' => 'Users retrieved successfully'
+                'data' => ExpenseResource::collection($expense),
+                'message' => 'Expenses retrieved successfully'
             ],
             200
         );
@@ -76,18 +76,22 @@ class ExpenseController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $user = new User();
+        $expense = new Expense();
 
-        $user->name     = $request['name'];
-        $user->username = $request['username'];
-        $user->email    = $request['email'];
-        $user->password = Hash::make($request['password']);
+        $expense->description = $request->description;
+        $expense->receipt_number = $request->receipt_number;
+        $expense->date = $request->date;
+        $expense->amount = $request->amount;
+        $expense->remarks = $request->remarks;
+        $expense->expense_type_id = $request->expense_type_id;
+        $expense->employee_id  = $request->employee_id;
+        $expense->vendor_id  = $request->vendor_id;
 
-        $user->save();
+        $expense->save();
 
         return response(
             [
-                'data' => new ExpenseResource($user),
+                'data' => new ExpenseResource($expense),
                 'message' => 'Created successfully'
             ],
             201
@@ -102,11 +106,11 @@ class ExpenseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $expense = Expense::findOrFail($id);
 
         return response(
             [
-                'data' => new ExpenseResource($user),
+                'data' => new ExpenseResource($expense),
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -124,39 +128,33 @@ class ExpenseController extends Controller
     {
         switch ($request->action) {
             case 'restore':
-                $user = User::withTrashed()
+                $expense = Expense::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
-            case 'password_reset':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('password' => Hash::make('password')));
-
-                break;
-            case 'verify':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('verified_at' => now()));
-
-                break;
             default:
-                $this->validator($request->all(), $id)->validate();
+                $this->validator($request->all(), null)->validate();
 
-                $user = User::findOrFail($id);
+                $expense = Expense::findOrFail($id);
 
-                $user->name     = $request['name'];
-                $user->username = $request['username'];
-                $user->email    = $request['email'];
-                $user->password = Hash::make($request['password']);
+                $expense->description = $request->description;
+                $expense->receipt_number = $request->receipt_number;
+                $expense->date = $request->date;
+                $expense->amount = $request->amount;
+                $expense->remarks = $request->remarks;
+                $expense->expense_type_id = $request->expense_type_id;
+                $expense->employee_id  = $request->employee_id;
+                $expense->vendor_id  = $request->vendor_id;
 
-                $user->save();
+                $expense->save();
 
                 break;
         }
 
         return response(
             [
-                'data' => new ExpenseResource($user),
+                'data' => new ExpenseResource($expense),
                 'message' => 'Updated successfully'
             ],
             201
@@ -171,11 +169,11 @@ class ExpenseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::whereIn('id', $request->ids)->delete();
+        $expense = Expense::whereIn('id', $request->ids)->delete();
 
         return response(
             [
-                'data' => new ExpenseResource($user),
+                'data' => new ExpenseResource($expense),
                 'message' => 'Deleted successfully'
             ],
             200

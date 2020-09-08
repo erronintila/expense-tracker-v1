@@ -4,11 +4,9 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
-use App\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class VendorController extends Controller
 {
@@ -21,10 +19,15 @@ class VendorController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'password'  => ['required', 'min:8'],
+            'code' => ['required', 'max:255'],
+            'name' => ['required', 'max:255'],
+            'email' => ['required', 'max:255'],
+            'tin' => ['required', 'max:255'],
+            'contact_person' => ['required', 'max:255'],
+            'phone' => ['required', 'max:255'],
+            'address' => ['required', 'max:255'],
+            'remarks' => ['required', 'max:255'],
+            'is_vat_inclusive' => ['required', 'max:255'],
         ]);
     }
 
@@ -35,30 +38,24 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        $user = User::orderBy('name')->get();
-        $count = count($user);
+        $vendor = Vendor::orderBy('name')->get();
+        $count = count($vendor);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $user = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Verified':
-                    $user = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-                    break;
-                case 'Unverified':
-                    $user = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $vendor = Vendor::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
                     break;
                 default:
-                    $user = User::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $vendor = Vendor::orderBy('name')->limit($request->limit ?? $count)->get();
                     break;
             }
         }
 
         return response(
             [
-                'data' => VendorResource::collection($user),
-                'message' => 'Users retrieved successfully'
+                'data' => VendorResource::collection($vendor),
+                'message' => 'Vendors retrieved successfully'
             ],
             200
         );
@@ -74,18 +71,23 @@ class VendorController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $user = new User();
+        $vendor = new Vendor();
 
-        $user->name     = $request['name'];
-        $user->username = $request['username'];
-        $user->email    = $request['email'];
-        $user->password = Hash::make($request['password']);
+        $vendor->code = $request->code;
+        $vendor->name = $request->name;
+        $vendor->email = $request->email;
+        $vendor->tin = $request->tin;
+        $vendor->contact_person = $request->contact_person;
+        $vendor->phone = $request->phone;
+        $vendor->address = $request->address;
+        $vendor->remarks = $request->remarks;
+        $vendor->is_vat_inclusive = $request->is_vat_inclusive;
 
-        $user->save();
+        $vendor->save();
 
         return response(
             [
-                'data' => new VendorResource($user),
+                'data' => new VendorResource($vendor),
                 'message' => 'Created successfully'
             ],
             201
@@ -100,11 +102,11 @@ class VendorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $vendor = Vendor::findOrFail($id);
 
         return response(
             [
-                'data' => new VendorResource($user),
+                'data' => new VendorResource($vendor),
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -122,39 +124,34 @@ class VendorController extends Controller
     {
         switch ($request->action) {
             case 'restore':
-                $user = User::withTrashed()
+                $vendor = Vendor::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
-            case 'password_reset':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('password' => Hash::make('password')));
-
-                break;
-            case 'verify':
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('verified_at' => now()));
-
-                break;
             default:
-                $this->validator($request->all(), $id)->validate();
+                $this->validator($request->all(), null)->validate();
 
-                $user = User::findOrFail($id);
+                $vendor = Vendor::findOrFail($id);
 
-                $user->name     = $request['name'];
-                $user->username = $request['username'];
-                $user->email    = $request['email'];
-                $user->password = Hash::make($request['password']);
+                $vendor->code = $request->code;
+                $vendor->name = $request->name;
+                $vendor->email = $request->email;
+                $vendor->tin = $request->tin;
+                $vendor->contact_person = $request->contact_person;
+                $vendor->phone = $request->phone;
+                $vendor->address = $request->address;
+                $vendor->remarks = $request->remarks;
+                $vendor->is_vat_inclusive = $request->is_vat_inclusive;
 
-                $user->save();
+                $vendor->save();
 
                 break;
         }
 
         return response(
             [
-                'data' => new VendorResource($user),
+                'data' => new VendorResource($vendor),
                 'message' => 'Updated successfully'
             ],
             201
@@ -169,11 +166,11 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::whereIn('id', $request->ids)->delete();
+        $vendor = Vendor::whereIn('id', $request->ids)->delete();
 
         return response(
             [
-                'data' => new VendorResource($user),
+                'data' => new VendorResource($vendor),
                 'message' => 'Deleted successfully'
             ],
             200
