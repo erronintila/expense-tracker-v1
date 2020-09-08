@@ -228,7 +228,7 @@
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" text :to="{ name: 'logout' }">
+                        <v-btn color="green" text @click="onLogout">
                             Log out
                         </v-btn>
                     </v-card-actions>
@@ -365,6 +365,15 @@ export default {
     computed: {
         loggedIn() {
             return this.$store.getters.isAuthenticated;
+        }
+    },
+    methods: {
+        onLogout() {
+            this.$confirm("Do you want to log out?").then(res => {
+                if (res) {
+                    this.$router.push({ name: "logout" });
+                }
+            });
         }
     }
 };
