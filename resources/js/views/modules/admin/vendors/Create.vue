@@ -72,6 +72,16 @@
                         </v-col>
                     </v-row>
 
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-checkbox
+                            color="green"
+                                v-model="is_vat_inclusive"
+                                label="Vat Inclusive"
+                            ></v-checkbox>
+                        </v-col>
+                    </v-row>
+
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
@@ -118,18 +128,7 @@ export default {
     },
     methods: {
         onRefresh() {
-            this.name = "";
-            this.code = "";
-            this.name = "";
-            this.email = "";
-            this.tin = "";
-            this.contact_person = "";
-            this.phone = "";
-            this.address = "";
-            this.remarks = "";
-            this.is_active = true;
-            this.is_vat_inclusive = false;
-
+            this.$refs.form.reset();
             this.$refs.form.resetValidation();
         },
         onSave() {

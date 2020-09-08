@@ -94,6 +94,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -127,17 +137,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onRefresh: function onRefresh() {
-      this.name = "";
-      this.code = "";
-      this.name = "";
-      this.email = "";
-      this.tin = "";
-      this.contact_person = "";
-      this.phone = "";
-      this.address = "";
-      this.remarks = "";
-      this.is_active = true;
-      this.is_vat_inclusive = false;
+      this.$refs.form.reset();
       this.$refs.form.resetValidation();
     },
     onSave: function onSave() {
@@ -371,6 +371,30 @@ var render = function() {
                                 _vm.address = $$v
                               },
                               expression: "address"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-checkbox", {
+                            attrs: { color: "green", label: "Vat Inclusive" },
+                            model: {
+                              value: _vm.is_vat_inclusive,
+                              callback: function($$v) {
+                                _vm.is_vat_inclusive = $$v
+                              },
+                              expression: "is_vat_inclusive"
                             }
                           })
                         ],

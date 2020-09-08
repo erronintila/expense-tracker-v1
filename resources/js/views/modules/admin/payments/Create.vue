@@ -130,12 +130,7 @@ export default {
     },
     methods: {
         onRefresh() {
-            this.name = "";
-            this.username = "";
-            this.email = "";
-            this.password = "";
-            this.password_confirmation = "";
-
+            this.$refs.form.reset();
             this.$refs.form.resetValidation();
         },
         onSave() {

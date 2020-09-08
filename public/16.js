@@ -232,7 +232,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onRefresh: function onRefresh() {
-      this.name = "";
+      this.$refs.form.reset();
       this.$refs.form.resetValidation();
     },
     onSave: function onSave() {

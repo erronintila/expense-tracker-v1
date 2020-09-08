@@ -160,6 +160,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -218,7 +226,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onRefresh: function onRefresh() {
-      this.first_name = "";
+      this.$refs.form.reset();
       this.$refs.form.resetValidation();
     },
     onSave: function onSave() {

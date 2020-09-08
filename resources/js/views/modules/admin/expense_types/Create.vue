@@ -55,8 +55,7 @@ export default {
     },
     methods: {
         onRefresh() {
-            this.name = "";
-
+            this.$refs.form.reset();
             this.$refs.form.resetValidation();
         },
         onSave() {

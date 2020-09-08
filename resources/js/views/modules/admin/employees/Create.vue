@@ -76,6 +76,14 @@
                                 required
                             >
                             </v-select>
+                            <!-- <v-radio-group v-model="gender" row>
+                                Gender&nbsp;&nbsp;
+                                <v-radio label="Male" value="Male"></v-radio>
+                                <v-radio
+                                    label="Female"
+                                    value="Female"
+                                ></v-radio>
+                            </v-radio-group> -->
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -210,8 +218,7 @@ export default {
                 });
         },
         onRefresh() {
-            this.first_name = "";
-
+            this.$refs.form.reset();
             this.$refs.form.resetValidation();
         },
         onSave() {
