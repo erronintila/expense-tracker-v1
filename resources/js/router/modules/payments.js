@@ -7,6 +7,33 @@ const adminRoutes = [
         meta: {
             requiresAuth: true
         }
+    },
+    {
+        path: "/admin/payments/create",
+        name: "admin.payments.create",
+        component: () =>
+            import("../../views/modules/admin/payments/Create.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/admin/payments/:id/edit",
+        name: "admin.payments.edit",
+        component: () =>
+            import("../../views/modules/admin/payments/Edit.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/admin/payments/:id",
+        name: "admin.payments.show",
+        component: () =>
+            import("../../views/modules/admin/payments/Show.vue"),
+        meta: {
+            requiresAuth: true
+        }
     }
 ];
 

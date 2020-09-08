@@ -37,6 +37,16 @@ class Employee extends Model
     }
 
     /**
+     * Displays the job designation associated with employee.
+     *
+     * @return void
+     */
+    public function department()
+    {
+        return $this->belongsTo(Job::class);
+    }
+
+    /**
      * Displays the expenses associated with employee.
      *
      * @return void

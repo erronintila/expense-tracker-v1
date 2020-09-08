@@ -2,89 +2,150 @@
     <v-app>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <v-btn to="/admin/users" class="mr-3" icon>
+                <v-btn to="/admin/expenses" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">New User</h4>
+                <h4 class="title green--text">New Expense</h4>
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="name"
-                                :rules="rules.name"
+                            <v-select
+                                v-model="employee"
+                                :rules="rules.employee"
                                 :counter="100"
-                                label="Name"
+                                :items="employees"
+                                item-value="id"
+                                item-text="fullname"
+                                label="Employee"
+                                required
+                            >
+                            </v-select>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-select
+                                v-model="expense_type"
+                                :rules="rules.expense_type"
+                                :counter="100"
+                                :items="expense_types"
+                                item-value="id"
+                                item-text="name"
+                                label="Expense Type"
+                                required
+                            >
+                            </v-select>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-select
+                                v-model="vendor"
+                                :rules="rules.vendor"
+                                :counter="100"
+                                :items="vendors"
+                                item-value="id"
+                                item-text="name"
+                                label="Vendor"
+                                required
+                            >
+                            </v-select>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" md="8">
+                            <v-text-field
+                                v-model="description"
+                                :rules="rules.description"
+                                :counter="100"
+                                label="Description"
+                                required
+                            ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-menu
+                                ref="menu"
+                                v-model="menu"
+                                :close-on-content-click="false"
+                                :return-value.sync="date"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date"
+                                        label="Date"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                    v-model="date"
+                                    no-title
+                                    scrollable
+                                >
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="menu = false"
+                                        >Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="$refs.menu.save(date)"
+                                        >OK
+                                    </v-btn>
+                                </v-date-picker>
+                            </v-menu>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="receipt_number"
+                                :rules="rules.receipt_number"
+                                :counter="100"
+                                label="Receipt No."
                                 required
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="username"
-                                :rules="rules.username"
-                                :counter="20"
-                                label="Username"
+                                v-model="amount"
+                                :rules="rules.amount"
+                                :counter="100"
+                                label="Amount"
                                 required
                             ></v-text-field>
                         </v-col>
+                    </v-row>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="email"
-                                :rules="rules.email"
-                                label="Email Address"
-                                required
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="password"
-                                :append-icon="
-                                    showPassword ? 'mdi-eye' : 'mdi-eye-off'
-                                "
-                                :rules="rules.password"
-                                :type="showPassword ? 'text' : 'password'"
-                                label="Password"
-                                hint="At least 8 characters"
-                                required
-                                @click:append="showPassword = !showPassword"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="password_confirmation"
-                                :append-icon="
-                                    showPasswordConfirmation
-                                        ? 'mdi-eye'
-                                        : 'mdi-eye-off'
-                                "
-                                :rules="rules.password_confirmation"
-                                :type="
-                                    showPasswordConfirmation
-                                        ? 'text'
-                                        : 'password'
-                                "
-                                label="Re-type Password"
-                                required
-                                @click:append="
-                                    showPasswordConfirmation = !showPasswordConfirmation
-                                "
-                            ></v-text-field>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-textarea
+                                rows="1"
+                                label="Remarks"
+                                v-model="remarks"
+                            ></v-textarea>
                         </v-col>
                     </v-row>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn to="/admin/users">Cancel</v-btn>
+                        <v-btn to="/admin/expenses">Cancel</v-btn>
                     </v-card-actions>
                 </v-container>
             </v-form>
@@ -97,13 +158,20 @@ export default {
     data() {
         return {
             valid: false,
-            showPassword: false,
-            showPasswordConfirmation: false,
-            name: "",
-            username: "",
-            email: "",
-            password: "",
-            password_confirmation: "",
+            menu: false,
+            code: "",
+            description: "",
+            amount: 0,
+            receipt_number: "",
+            date: null,
+            remarks: "",
+            is_active: true,
+            expense_type: {},
+            expense_types: [],
+            employee: {},
+            employees: [],
+            vendor: {},
+            vendors: [],
             rules: {
                 name: [
                     v => !!v || "Name is required",
@@ -111,30 +179,63 @@ export default {
                         v.length <= 100 ||
                         "Name must be less than 100 characters"
                 ],
-                username: [
-                    v => !!v || "Username is required",
-                    v =>
-                        v.length <= 50 ||
-                        "Username must be less than 20 characters"
-                ],
-                email: [
-                    v => !!v || "E-mail is required",
-                    v => /.+@.+/.test(v) || "E-mail must be valid"
-                ],
-                password: [v => !!v || "Password is required"],
-                password_confirmation: [
-                    v => !!v || "Confirm Password is required"
-                ]
+                description: [],
+                amount: [],
+                receipt_number: [],
+                date: [],
+                remarks: [],
+                is_active: [],
+                expense_type: [],
+                employee: [],
+                vendor: []
             }
         };
     },
     methods: {
+        loadExpenseTypes() {
+            let _this = this;
+
+            axios
+                .get("/api/expense_types")
+                .then(response => {
+                    _this.expense_types = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+
+                    console.log(error.response);
+                });
+        },
+        loadEmployees() {
+            let _this = this;
+
+            axios
+                .get("/api/employees")
+                .then(response => {
+                    _this.employees = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+
+                    console.log(error.response);
+                });
+        },
+        loadVendors() {
+            let _this = this;
+
+            axios
+                .get("/api/vendors")
+                .then(response => {
+                    _this.vendors = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+
+                    console.log(error.response);
+                });
+        },
         onRefresh() {
             this.name = "";
-            this.username = "";
-            this.email = "";
-            this.password = "";
-            this.password_confirmation = "";
 
             this.$refs.form.resetValidation();
         },
@@ -145,18 +246,24 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 axios
-                    .post("/api/users", {
+                    .post("/api/expenses", {
                         name: _this.name,
-                        username: _this.username,
-                        email: _this.email,
-                        password: _this.password,
-                        password_confirmation: _this.password_confirmation
+                        code: _this.code,
+                        description: _this.description,
+                        amount: _this.amount,
+                        receipt_number: _this.receipt_number,
+                        date: _this.date,
+                        remarks: _this.remarks,
+                        is_active: _this.is_active,
+                        expense_type_id: _this.expense_type,
+                        employee_id: _this.employee,
+                        vendor_id: _this.vendor
                     })
                     .then(function(response) {
                         _this.onRefresh();
 
                         _this.$dialog.message.success(
-                            "User created successfully.",
+                            "Expense created successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
@@ -174,6 +281,10 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        this.loadExpenseTypes();
+        this.loadEmployees();
+        this.loadVendors();
     }
 };
 </script>

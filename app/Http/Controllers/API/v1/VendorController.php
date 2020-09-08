@@ -19,14 +19,14 @@ class VendorController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'code' => ['required', 'max:255'],
+            'code' => ['nullable', 'max:255'],
             'name' => ['required', 'max:255'],
             'email' => ['required', 'max:255'],
             'tin' => ['required', 'max:255'],
             'contact_person' => ['required', 'max:255'],
             'phone' => ['required', 'max:255'],
             'address' => ['required', 'max:255'],
-            'remarks' => ['required', 'max:255'],
+            'remarks' => ['nullable', 'max:255'],
             'is_vat_inclusive' => ['required', 'max:255'],
         ]);
     }

@@ -7,6 +7,33 @@ const adminRoutes = [
         meta: {
             requiresAuth: true
         }
+    },
+    {
+        path: "/admin/vendors/create",
+        name: "admin.vendors.create",
+        component: () =>
+            import("../../views/modules/admin/vendors/Create.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/admin/vendors/:id/edit",
+        name: "admin.vendors.edit",
+        component: () =>
+            import("../../views/modules/admin/vendors/Edit.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/admin/vendors/:id",
+        name: "admin.vendors.show",
+        component: () =>
+            import("../../views/modules/admin/vendors/Show.vue"),
+        meta: {
+            requiresAuth: true
+        }
     }
 ];
 

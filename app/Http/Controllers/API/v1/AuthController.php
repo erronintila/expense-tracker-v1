@@ -35,12 +35,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // $validator = $request->validate([
-        //     'email' => 'required|email|exists:users,email',
-        //     // 'email' => 'required',
-        //     'password' => 'required'
-        // ]);
-
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
             'password' => 'required'

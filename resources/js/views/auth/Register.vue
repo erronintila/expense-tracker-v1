@@ -123,8 +123,6 @@ export default {
                         password_confirmation: _this.password_confirmation
                     })
                     .then(function(response) {
-                        console.log(response);
-
                         _this.$dialog.message.success(
                             "Registered successfully.",
                             {

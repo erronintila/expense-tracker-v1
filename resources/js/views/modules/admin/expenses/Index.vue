@@ -118,11 +118,16 @@
                 :headers="headers"
                 :items="items"
                 :search="search"
+                :loading="loading"
+                :loading-text="loading_text"
                 v-model="selected"
                 show-select
                 item-key="id"
                 class="elevation-0"
             >
+                <!-- <template v-slot:[`item.employee_name`]="{ item }">
+                    {{ item.employee.first_name }} {{ item.employee.last_name }}
+                </template> -->
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="onShow(item)">
                         mdi-eye
@@ -141,9 +146,13 @@ export default {
     props: {},
     data() {
         return {
+            loading: true,
+            loading_text: "Loading items...",
             headers: [
                 { text: "Description", value: "description" },
                 { text: "Date", value: "date" },
+                { text: "Type", value: "expense_type.name" },
+                { text: "Employee", value: "employee_name" },
                 { text: "Created", value: "created_at" },
                 { text: "Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false }
@@ -274,7 +283,13 @@ export default {
                         });
                 }
             });
-        },
+        }
+    },
+    watch: {
+        items() {
+            this.loading = false;
+            this.loading_text = "No data available";
+        }
     },
     created() {
         // const token = localStorage.getItem("access_token");

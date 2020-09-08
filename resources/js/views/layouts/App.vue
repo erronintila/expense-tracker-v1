@@ -100,7 +100,8 @@
                 @click.stop="drawer = !drawer"
             ></v-app-bar-nav-icon>
             <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-                <span class="hidden-sm-and-down">Expense Tracker</span>
+                <span class="title">Expense Tracker</span>
+                <!-- <span class="title ml-3 mr-5">Expense&nbsp;<span class="font-weight-light">Tracker</span></span> -->
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
@@ -220,9 +221,9 @@
                             <v-list-item-title>My Profile</v-list-item-title>
                         </v-list-item>
 
-                        <!-- <v-list-item @click="() => {}">
+                        <v-list-item @click="() => {}">
                             <v-list-item-title>Settings</v-list-item-title>
-                        </v-list-item> -->
+                        </v-list-item>
                     </v-list>
 
                     <v-card-actions>
@@ -293,6 +294,8 @@ export default {
         // ],
         dialog: false,
         drawer: null,
+        admin_items: [],
+        user_items: [],
         items: [
             {
                 icon: "mdi-chart-areaspline",
@@ -300,19 +303,14 @@ export default {
                 link: { name: "admin.dashboard.index" }
             },
             {
-                icon: "mdi-clipboard-account",
-                text: "Employees",
-                link: { name: "admin.employees.index" }
-            },
-            {
-                icon: "mdi-account-group",
-                text: "Vendors",
-                link: { name: "admin.vendors.index" }
-            },
-            {
                 icon: "mdi-cash-multiple",
                 text: "Expenses",
                 link: { name: "admin.expenses.index" }
+            },
+            {
+                icon: "mdi-clipboard-account",
+                text: "Employees",
+                link: { name: "admin.employees.index" }
             },
             {
                 icon: "mdi-file-chart",
@@ -327,13 +325,18 @@ export default {
             {
                 icon: "mdi-chevron-up",
                 "icon-alt": "mdi-chevron-down",
-                text: "Settings",
+                text: "More",
                 model: false,
                 children: [
                     {
                         icon: "mdi-circle-medium",
                         text: "Users",
                         link: { name: "admin.users.index" }
+                    },
+                    {
+                        icon: "mdi-circle-medium",
+                        text: "Vendors",
+                        link: { name: "admin.vendors.index" }
                     },
                     {
                         icon: "mdi-circle-medium",
@@ -363,6 +366,6 @@ export default {
         loggedIn() {
             return this.$store.getters.isAuthenticated;
         }
-    },
+    }
 };
 </script>

@@ -20,7 +20,6 @@ class CreateExpensesTable extends Migration
             $table->double('amount', 10, 2);
             $table->string('receipt_number');
             $table->date('date');
-            $table->string('vendor')->nullable();
             $table->text('remarks')->nullable();
             $table->boolean('is_active')->default(true);
 

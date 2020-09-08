@@ -7,6 +7,33 @@ const adminRoutes = [
         meta: {
             requiresAuth: true
         }
+    },
+    {
+        path: "/admin/expenses/create",
+        name: "admin.expenses.create",
+        component: () =>
+            import("../../views/modules/admin/expenses/Create.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/admin/expenses/:id/edit",
+        name: "admin.expenses.edit",
+        component: () =>
+            import("../../views/modules/admin/expenses/Edit.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/admin/expenses/:id",
+        name: "admin.expenses.show",
+        component: () =>
+            import("../../views/modules/admin/expenses/Show.vue"),
+        meta: {
+            requiresAuth: true
+        }
     }
 ];
 

@@ -118,6 +118,8 @@
                 :headers="headers"
                 :items="items"
                 :search="search"
+                :loading="loading"
+                :loading-text="loading_text"
                 v-model="selected"
                 show-select
                 item-key="id"
@@ -141,10 +143,12 @@ export default {
     props: {},
     data() {
         return {
+            loading: true,
+            loading_text: "Loading items...",
             headers: [
                 { text: "Name", value: "name" },
-                { text: "Created", value: "created_at" },
-                { text: "Updated", value: "updated_at" },
+                // { text: "Created", value: "created_at" },
+                // { text: "Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false }
             ],
             items: [],
@@ -274,6 +278,12 @@ export default {
                 }
             });
         },
+    },
+    watch: {
+        items() {
+            this.loading = false;
+            this.loading_text = "No data available";
+        }
     },
     created() {
         // const token = localStorage.getItem("access_token");

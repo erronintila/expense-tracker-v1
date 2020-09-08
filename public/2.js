@@ -132,8 +132,6 @@ __webpack_require__.r(__webpack_exports__);
           password: _this.password,
           password_confirmation: _this.password_confirmation
         }).then(function (response) {
-          console.log(response);
-
           _this.$dialog.message.success("Registered successfully.", {
             position: "top-right",
             timeout: 2000
