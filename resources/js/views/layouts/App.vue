@@ -208,8 +208,8 @@
             >
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on">
-                        <!-- <v-icon>mdi-dots-vertical</v-icon> -->
-                        <v-icon>mdi-account</v-icon>
+                        <v-icon>mdi-dots-vertical</v-icon>
+                        <!-- <v-icon>mdi-account</v-icon> -->
                     </v-btn>
                 </template>
 
@@ -248,11 +248,11 @@
                     </v-list> -->
 
                     <v-card-actions>
-                        <v-btn color="green" text @click="() => {}">
+                        <v-btn color="green" text @click="toProfile">
                             Profile
                         </v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn text @click="() => {}">
+                        <v-btn text @click="onLogout">
                             Log out
                         </v-btn>
                     </v-card-actions>
@@ -352,9 +352,9 @@
                 </v-card> -->
             </v-menu>
 
-            <v-btn icon @click="onLogout">
+            <!-- <v-btn icon @click="onLogout">
                 <v-icon>mdi-logout</v-icon>
-            </v-btn>
+            </v-btn> -->
         </v-app-bar>
         <!-- End of App Bar -->
 
