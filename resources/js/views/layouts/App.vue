@@ -123,7 +123,7 @@
 
             <v-spacer></v-spacer>
 
-            <!-- <v-menu
+            <v-menu
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-y
@@ -142,9 +142,11 @@
                             </template>
 
                             <v-icon>mdi-bell</v-icon>
+                            <!-- <v-icon>mdi-bell-circle</v-icon> -->
                         </v-badge>
 
                         <v-icon v-else>mdi-bell</v-icon>
+                        <!-- <v-icon>mdi-bell-circle</v-icon> -->
                     </v-btn>
                 </template>
 
@@ -195,7 +197,7 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-            </v-menu> -->
+            </v-menu>
 
             <v-menu
                 :close-on-content-click="false"
@@ -206,11 +208,102 @@
             >
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-dots-vertical</v-icon>
+                        <!-- <v-icon>mdi-dots-vertical</v-icon> -->
+                        <v-icon>mdi-account</v-icon>
                     </v-btn>
                 </template>
 
-                <v-card>
+                 <v-card>
+                    <v-list>
+                        <v-list-item>
+                            <v-icon class="mr-4">mdi-account-circle</v-icon>
+                            <v-list-item-content>
+                                <v-list-item-title>
+                                    Erron Intila
+                                </v-list-item-title>
+                                <v-list-item-subtitle>
+                                    Administrator
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+
+                    <v-divider></v-divider>
+
+                    <!-- <v-list>
+                        <v-list-item
+                            v-for="item in notifications.slice(0, 3)"
+                            :key="item.title"
+                            @click="() => {}"
+                        >
+                            <v-list-item-content>
+                                <v-list-item-title>
+                                    {{ item.title }}
+                                </v-list-item-title>
+                                <v-list-item-subtitle>
+                                    {{ item.created_at }}
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list> -->
+
+                    <v-card-actions>
+                        <v-btn color="green" text @click="() => {}">
+                            Profile
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn text @click="() => {}">
+                            Log out
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+
+                <!-- <v-card class="mx-auto" max-width="344" outlined>
+                    <v-list-item three-line>
+                        <v-list-item-content>
+                            <div class="overline mb-4">OVERLINE</div>
+                            <v-list-item-title class="headline mb-1"
+                                >Erron Intila</v-list-item-title
+                            >
+                            <v-list-item-subtitle
+                                >Administrator</v-list-item-subtitle
+                            >
+                        </v-list-item-content>
+
+                        <v-list-item-avatar
+                            tile
+                            size="80"
+                            color="grey"
+                        ></v-list-item-avatar>
+                    </v-list-item>
+
+                    <v-card-actions>
+                        <v-btn text>Button</v-btn>
+                        <v-btn text>Button</v-btn>
+                    </v-card-actions>
+                </v-card> -->
+
+                <!-- <v-card class="mx-auto" max-width="344">
+                    <v-card-title>
+                        Erron Intila
+                    </v-card-title>
+
+                    <v-card-subtitle>
+                        Administrator
+                    </v-card-subtitle>
+
+                    <v-card-actions>
+                        <v-btn color="green" text @click="toProfile">
+                            Manage account
+                        </v-btn>
+
+                        <v-spacer></v-spacer>
+
+                        <v-btn text @click="onLogout">Log out</v-btn>
+                    </v-card-actions>
+                </v-card> -->
+
+                <!-- <v-card>
                     <v-list>
                         <v-list-item>
                             <v-list-item-avatar>
@@ -233,9 +326,16 @@
 
                     <v-divider></v-divider>
 
-                    <v-list>
-                        <v-list-item to="/admin/profile">
-                            <v-list-item-title>My Profile</v-list-item-title>
+                    <v-list class="mx-auto">
+
+                        <v-btn rounded>Manage account</v-btn>
+
+                        <v-btn color="green" rounded text @click="onLogout">
+                            Log out
+                        </v-btn>
+
+                        <v-list-item @click="() => {}">
+                            <v-list-item-title>Manage Account</v-list-item-title>
                         </v-list-item>
 
                         <v-list-item @click="() => {}">
@@ -249,8 +349,12 @@
                             Log out
                         </v-btn>
                     </v-card-actions>
-                </v-card>
+                </v-card> -->
             </v-menu>
+
+            <v-btn icon @click="onLogout">
+                <v-icon>mdi-logout</v-icon>
+            </v-btn>
         </v-app-bar>
         <!-- End of App Bar -->
 
@@ -371,12 +475,12 @@ export default {
                         link: { name: "admin.expense_types.index" }
                     }
                 ]
-            },
-            {
-                icon: "mdi-logout",
-                text: "Logout",
-                link: { name: "logout" }
             }
+            // {
+            //     icon: "mdi-logout",
+            //     text: "Logout",
+            //     link: { name: "logout" }
+            // }
         ]
     }),
     computed: {
@@ -385,6 +489,10 @@ export default {
         }
     },
     methods: {
+        toProfile() {
+            // Added () => {} on router, used to prevent NavigationDuplicated error
+            this.$router.push({ name: "admin.profile.index" }, () => {});
+        },
         onLogout() {
             this.$confirm("Do you want to log out?").then(res => {
                 if (res) {

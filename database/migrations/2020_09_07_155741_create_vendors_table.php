@@ -15,17 +15,28 @@ class CreateVendorsTable extends Migration
     {
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->nullable();
-            $table->string('name');
-            $table->string('email')->nullable();
+            $table->string('code')->unique()->nullable();
+            $table->string('name', 150);
+            $table->string('email', 150)->unique()->nullable();
             $table->string('tin')->unique()->nullable();
-            $table->string('contact_person')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('address')->nullable();
+            $table->string('contact_person', 150)->nullable();
+            $table->string('mobile_number', 50)->nullable();
+            $table->string('telephone_number', 50)->nullable();
             $table->text('remarks')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->string('website', 150)->nullable();
             $table->boolean('is_vat_inclusive')->default(false);
-
+            
+            $table->text('address')->nullable();
+            $table->string('building_address', 150)->nullable();
+            $table->string('street_name', 150)->nullable();
+            $table->string('street_address', 150)->nullable();
+            $table->string('subdivision', 150)->nullable();
+            $table->string('barangay', 150)->nullable();
+            $table->string('city', 150)->nullable();
+            $table->string('province', 150)->nullable();
+            $table->string('country', 150)->nullable();
+            $table->string('zip', 50)->nullable();
+            
             $table->timestamps();
             $table->softDeletes();
 

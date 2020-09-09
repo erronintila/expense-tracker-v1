@@ -19,13 +19,13 @@ class CreatePaymentsTable extends Migration
             $table->string('reference_no')->nullable();
             $table->string('voucher_no')->nullable();
             $table->date('date');
-            $table->text('description');
+            $table->string('description');
             $table->string('cheque_no')->nullable();
             $table->date('cheque_date')->nullable();
             $table->double('amount', 10, 2);
-            $table->string('payee');
-            $table->text('payee_address')->nullable();
-            $table->text('payee_phone')->nullable();
+            $table->string('payee', 150);
+            $table->string('payee_address')->nullable();
+            $table->string('payee_phone', 50)->nullable();
             $table->text('notes')->nullable();
             $table->text('remarks')->nullable();
 

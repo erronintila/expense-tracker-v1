@@ -35,7 +35,7 @@ const routes = baseRoutes.concat(
 
 export const router = new VueRouter({
     mode: "history",
-    routes
+    routes,
 });
 
 router.beforeEach((to, from, next) => {

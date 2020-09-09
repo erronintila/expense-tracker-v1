@@ -14,10 +14,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users'), 'max:255'],
-            'email'     => ['required', 'email', Rule::unique('users'), 'max:255'],
-            'password'  => ['required', 'min:8'],
+            'name'      => ['required', 'max:200'],
+            'username'  => ['required', 'unique:users', 'max:150'],
+            'email'     => ['required', 'email', 'unique:users', 'max:255'],
+            'password'  => ['required', 'min:8', 'max:255', 'confirmed'],
         ]);
 
         $user = User::create([

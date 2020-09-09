@@ -38,7 +38,7 @@ Route::middleware('auth:api')->group(function () {
     
             'payments' => 'API\v1\PaymentController',
     
-            'reports' => 'API\v1\ExpenseReportController',
+            'expense_reports' => 'API\v1\ExpenseReportController',
     
             'users' => 'API\v1\UserController',
     

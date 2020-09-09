@@ -125,6 +125,7 @@
                     :loading="loading"
                     :loading-text="loading_text"
                     show-expand
+                    single-expand
                     v-model="selected"
                     show-select
                     item-key="id"
@@ -132,7 +133,49 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            More info about {{ item.name }}
+                            <v-row>
+                                <v-col cols="12" md="6">
+                                    <table class="table" style="width:100%;">
+                                        <tbody>
+                                            <tr>
+                                                <td>First Name</td>
+                                                <td>{{ item.first_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Middle Name</td>
+                                                <td>{{ item.middle_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Last Name</td>
+                                                <td>{{ item.last_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Suffix</td>
+                                                <td>{{ item.suffix }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </v-col>
+
+                                <v-col cols="12" md="6">
+                                    <table class="table" style="width:100%;">
+                                        <tbody>
+                                            <tr>
+                                                <td>First Name</td>
+                                                <td>{{ item.first_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Middle Name</td>
+                                                <td>{{ item.middle_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Last Name</td>
+                                                <td>{{ item.last_name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </v-col>
+                            </v-row>
                         </td>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
@@ -162,6 +205,7 @@ export default {
                 // { text: "First Name", value: "first_name" },
                 { text: "Job Designation", value: "job.name" },
                 { text: "Department", value: "department.name" },
+                { text: "Contact", value: "mobile_number" },
                 // { text: "Created", value: "created_at" },
                 // { text: "Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },

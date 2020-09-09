@@ -114,26 +114,28 @@
                 ></v-text-field>
             </v-card-subtitle>
 
-            <v-data-table
-                :headers="headers"
-                :items="items"
-                :search="search"
-                :loading="loading"
-                :loading-text="loading_text"
-                v-model="selected"
-                show-select
-                item-key="id"
-                class="elevation-0"
-            >
-                <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="onShow(item)">
-                        mdi-eye
-                    </v-icon>
-                    <v-icon small class="mr-2" @click="onEdit(item)">
-                        mdi-pencil
-                    </v-icon>
-                </template>
-            </v-data-table>
+            <v-card-text>
+                <v-data-table
+                    :headers="headers"
+                    :items="items"
+                    :search="search"
+                    :loading="loading"
+                    :loading-text="loading_text"
+                    v-model="selected"
+                    show-select
+                    item-key="id"
+                    class="elevation-0"
+                >
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small class="mr-2" @click="onShow(item)">
+                            mdi-eye
+                        </v-icon>
+                        <v-icon small class="mr-2" @click="onEdit(item)">
+                            mdi-pencil
+                        </v-icon>
+                    </template>
+                </v-data-table>
+            </v-card-text>
         </v-card>
     </v-app>
 </template>
@@ -147,8 +149,10 @@ export default {
             loading_text: "Loading items...",
             headers: [
                 { text: "Description", value: "description" },
-                { text: "Created", value: "created_at" },
-                { text: "Updated", value: "updated_at" },
+                { text: "Amount", value: "total" },
+                { text: "Status", value: "status.status" },
+                // { text: "Remarks", value: "status.text" },
+                { text: "Created", value: "created" },
                 { text: "Actions", value: "actions", sortable: false }
             ],
             items: [],
@@ -218,13 +222,16 @@ export default {
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
                     axios
-                        .delete(`/api/expense_reports/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
+                        .delete(
+                            `/api/expense_reports/${_this.selected[0].id}`,
+                            {
+                                params: {
+                                    ids: _this.selected.map(item => {
+                                        return item.id;
+                                    })
+                                }
                             }
-                        })
+                        )
                         .then(function(response) {
                             _this.$dialog.message.success(
                                 "Item(s) moved to archive.",
@@ -273,7 +280,7 @@ export default {
                         });
                 }
             });
-        },
+        }
     },
     watch: {
         items() {

@@ -18,10 +18,11 @@ class ExpenseReportController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'description' => ['required', 'string', 'max:255'],
+            'code' => ['nullable', Rule::unique('employees')->ignore($id, 'id'), 'max:255'],
+            'description' => ['required', 'max:255'],
             'employee_id' => ['required'],
             'remarks' => ['nullable'],
             'notes' => ['nullable'],
@@ -35,19 +36,19 @@ class ExpenseReportController extends Controller
      */
     public function index(Request $request)
     {
-        $expese_reports = ExpenseReport::latest()->get();
-        $count = count($expese_reports);
+        $expense_reports = ExpenseReport::latest()->get();
+        $count = count($expense_reports);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $expese_reports = ExpenseReport::onlyTrashed()
+                    $expense_reports = ExpenseReport::onlyTrashed()
                         ->latest()
                         ->limit($request->limit ?? $count)
                         ->get();
                     break;
                 default:
-                    $expese_reports = ExpenseReport::latest()
+                    $expense_reports = ExpenseReport::latest()
                         ->limit($request->limit ?? $count)
                         ->get();
                     break;
@@ -56,7 +57,7 @@ class ExpenseReportController extends Controller
 
         return response(
             [
-                'data' => ExpenseReportResource::collection($expese_reports),
+                'data' => ExpenseReportResource::collection($expense_reports),
                 'message' => 'Expense Reports retrieved successfully'
             ],
             200

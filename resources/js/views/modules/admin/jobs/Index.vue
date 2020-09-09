@@ -114,26 +114,28 @@
                 ></v-text-field>
             </v-card-subtitle>
 
-            <v-data-table
-                :headers="headers"
-                :items="items"
-                :search="search"
-                :loading="loading"
-                :loading-text="loading_text"
-                v-model="selected"
-                show-select
-                item-key="id"
-                class="elevation-0"
-            >
-                <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="onShow(item)">
-                        mdi-eye
-                    </v-icon>
-                    <v-icon small class="mr-2" @click="onEdit(item)">
-                        mdi-pencil
-                    </v-icon>
-                </template>
-            </v-data-table>
+            <v-card-text>
+                <v-data-table
+                    :headers="headers"
+                    :items="items"
+                    :search="search"
+                    :loading="loading"
+                    :loading-text="loading_text"
+                    v-model="selected"
+                    show-select
+                    item-key="id"
+                    class="elevation-0"
+                >
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small class="mr-2" @click="onShow(item)">
+                            mdi-eye
+                        </v-icon>
+                        <v-icon small class="mr-2" @click="onEdit(item)">
+                            mdi-pencil
+                        </v-icon>
+                    </template>
+                </v-data-table>
+            </v-card-text>
         </v-card>
     </v-app>
 </template>
@@ -274,7 +276,7 @@ export default {
                         });
                 }
             });
-        },
+        }
     },
     watch: {
         items() {

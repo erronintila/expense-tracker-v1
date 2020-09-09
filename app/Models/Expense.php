@@ -10,11 +10,31 @@ class Expense extends Model
     use SoftDeletes;
     
     /**
-     * guarded
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = [
+        'expense_report_id'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        // 'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // 'email_verified_at' => 'datetime',
+    ];
 
     /**
      * Displays the expense type associated with expense.
@@ -63,7 +83,7 @@ class Expense extends Model
      */
     public function status()
     {
-        return $this->is_active ? "Active" : "Inactive";
+        return $this->deleted_at == null ? "Active" : "Archived";
     }
 
     /**

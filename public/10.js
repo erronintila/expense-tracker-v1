@@ -166,6 +166,49 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -183,6 +226,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: "Department",
         value: "department.name"
+      }, {
+        text: "Contact",
+        value: "mobile_number"
       }, // { text: "Created", value: "created_at" },
       // { text: "Updated", value: "updated_at" },
       {
@@ -624,6 +670,7 @@ var render = function() {
                   loading: _vm.loading,
                   "loading-text": _vm.loading_text,
                   "show-expand": "",
+                  "single-expand": "",
                   "show-select": "",
                   "item-key": "id"
                 },
@@ -635,13 +682,108 @@ var render = function() {
                         var headers = ref.headers
                         var item = ref.item
                         return [
-                          _c("td", { attrs: { colspan: headers.length } }, [
-                            _vm._v(
-                              "\n                        More info about " +
-                                _vm._s(item.name) +
-                                "\n                    "
-                            )
-                          ])
+                          _c(
+                            "td",
+                            { attrs: { colspan: headers.length } },
+                            [
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "6" } },
+                                    [
+                                      _c(
+                                        "table",
+                                        {
+                                          staticClass: "table",
+                                          staticStyle: { width: "100%" }
+                                        },
+                                        [
+                                          _c("tbody", [
+                                            _c("tr", [
+                                              _c("td", [_vm._v("First Name")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.first_name))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [_vm._v("Middle Name")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.middle_name))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [_vm._v("Last Name")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.last_name))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [_vm._v("Suffix")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.suffix))
+                                              ])
+                                            ])
+                                          ])
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "6" } },
+                                    [
+                                      _c(
+                                        "table",
+                                        {
+                                          staticClass: "table",
+                                          staticStyle: { width: "100%" }
+                                        },
+                                        [
+                                          _c("tbody", [
+                                            _c("tr", [
+                                              _c("td", [_vm._v("First Name")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.first_name))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [_vm._v("Middle Name")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.middle_name))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [_vm._v("Last Name")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.last_name))
+                                              ])
+                                            ])
+                                          ])
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
                         ]
                       }
                     },

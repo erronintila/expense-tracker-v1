@@ -81,6 +81,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {// ...mapGetters(["currentUser"])
@@ -149,8 +152,9 @@ var render = function() {
                                   {
                                     staticClass: "mx-auto rounded-xl",
                                     attrs: {
+                                      outlined: "",
                                       rounded: "",
-                                      elevation: hover ? 5 : 2,
+                                      elevation: hover ? 3 : 0,
                                       to: "/admin/profile"
                                     }
                                   },
@@ -198,8 +202,9 @@ var render = function() {
                                   {
                                     staticClass: "mx-auto rounded-lg",
                                     attrs: {
+                                      outlined: "",
                                       rounded: "",
-                                      elevation: hover ? 5 : 2,
+                                      elevation: hover ? 3 : 0,
                                       to: "/admin/expenses"
                                     }
                                   },
@@ -245,8 +250,9 @@ var render = function() {
                                   {
                                     staticClass: "mx-auto rounded-xl",
                                     attrs: {
+                                      outlined: "",
                                       rounded: "",
-                                      elevation: hover ? 5 : 2,
+                                      elevation: hover ? 3 : 0,
                                       to: "/admin/employees"
                                     }
                                   },

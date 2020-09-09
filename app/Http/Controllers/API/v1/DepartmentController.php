@@ -20,7 +20,7 @@ class DepartmentController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name' => ['required', 'max:250', Rule::unique('departments')->ignore($id, 'id')],
+            'name' => ['required', 'max:150', Rule::unique('departments')->ignore($id, 'id')],
         ]);
     }
 

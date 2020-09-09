@@ -155,6 +155,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -579,74 +581,80 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("v-data-table", {
-            staticClass: "elevation-0",
-            attrs: {
-              headers: _vm.headers,
-              items: _vm.items,
-              search: _vm.search,
-              loading: _vm.loading,
-              "loading-text": _vm.loading_text,
-              "show-select": "",
-              "item-key": "id"
-            },
-            scopedSlots: _vm._u(
-              [
-                {
-                  key: "item.actions",
-                  fn: function(ref) {
-                    var item = ref.item
-                    return [
-                      _c(
-                        "v-icon",
-                        {
-                          staticClass: "mr-2",
-                          attrs: { small: "" },
-                          on: {
-                            click: function($event) {
-                              return _vm.onShow(item)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    mdi-eye\n                "
+          _c(
+            "v-card-text",
+            [
+              _c("v-data-table", {
+                staticClass: "elevation-0",
+                attrs: {
+                  headers: _vm.headers,
+                  items: _vm.items,
+                  search: _vm.search,
+                  loading: _vm.loading,
+                  "loading-text": _vm.loading_text,
+                  "show-select": "",
+                  "item-key": "id"
+                },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "item.actions",
+                      fn: function(ref) {
+                        var item = ref.item
+                        return [
+                          _c(
+                            "v-icon",
+                            {
+                              staticClass: "mr-2",
+                              attrs: { small: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onShow(item)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        mdi-eye\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-icon",
+                            {
+                              staticClass: "mr-2",
+                              attrs: { small: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onEdit(item)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        mdi-pencil\n                    "
+                              )
+                            ]
                           )
                         ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-icon",
-                        {
-                          staticClass: "mr-2",
-                          attrs: { small: "" },
-                          on: {
-                            click: function($event) {
-                              return _vm.onEdit(item)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    mdi-pencil\n                "
-                          )
-                        ]
-                      )
-                    ]
-                  }
+                      }
+                    }
+                  ],
+                  null,
+                  true
+                ),
+                model: {
+                  value: _vm.selected,
+                  callback: function($$v) {
+                    _vm.selected = $$v
+                  },
+                  expression: "selected"
                 }
-              ],
-              null,
-              true
-            ),
-            model: {
-              value: _vm.selected,
-              callback: function($$v) {
-                _vm.selected = $$v
-              },
-              expression: "selected"
-            }
-          })
+              })
+            ],
+            1
+          )
         ],
         1
       )

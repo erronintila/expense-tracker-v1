@@ -21,11 +21,10 @@ class UserController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name'      => ['required', 'max:255'],
-            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
+            'name'      => ['required', 'max:200'],
+            'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:150'],
             'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
-            'password'  => ['required', 'min:8'],
-            // 'password'  => ['required', 'min:8', 'confirmed'],
+            'password'  => ['required', 'min:8', 'max:255', 'confirmed'],
         ]);
     }
 
@@ -36,8 +35,6 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = User::all();
-
         $users = User::orderBy('name')->get();
         $count = count($users);
 

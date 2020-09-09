@@ -8,13 +8,33 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ExpenseReport extends Model
 {
     use SoftDeletes;
-    
+
     /**
-     * guarded
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'code', 'description', 'remarks', 'notes', 'employee_id'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        // 'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // 'email_verified_at' => 'datetime',
+    ];
 
     /**
      * Displays the expenses associated with Expense Report.
@@ -72,7 +92,6 @@ class ExpenseReport extends Model
             $arr = [
                 'text' => 'Archived',
                 'status' => 'Archived',
-                'badge' => '<span class="badge badge-danger">Archived</span>'
             ];
 
             return $arr;
@@ -82,7 +101,6 @@ class ExpenseReport extends Model
             $arr = [
                 'text' => 'Cancelled',
                 'status' => 'Cancelled',
-                'badge' => '<span class="badge badge-danger">Cancelled</span>'
             ];
 
             return $arr;
@@ -90,50 +108,9 @@ class ExpenseReport extends Model
 
         if (!$paid) {
 
-            // if($payment_approved) {
-            //     $arr = [
-            //         'text' => 'Payment Approved',
-            //         'status' => 'Payment for Release',
-            //         'badge' => '<span class="badge badge-success">Payment for Release</span>'
-            //     ];
-
-            //     return $arr;
-            // }
-
-            // if($payment_cancelled) {
-            //     $arr = [
-            //         'text' => 'Payment Cancelled',
-            //         'status' => 'Payment Cancelled',
-            //         'badge' => '<span class="badge badge-danger">Payment Cancelled</span>'
-            //     ];
-
-            //     return $arr;
-            // }
-
-            // if($payment_released) {
-            //     $arr = [
-            //         'text' => 'Payment Released',
-            //         'status' => 'Waiting for Receiver\'s Confirmation',
-            //         'badge' => '<span class="badge badge-success">Waiting for Receiver\'s Confirmation</span>'
-            //     ];
-
-            //     return $arr;
-            // }
-
-            // if($payment_received) {
-            //     $arr = [
-            //         'text' => 'Payment Received',
-            //         'status' => 'Payment Received',
-            //         'badge' => '<span class="badge badge-success">Reimbursed</span>'
-            //     ];
-
-            //     return $arr;
-            // }
-
             $arr = [
                 'text' => 'Paid',
                 'status' => 'Paid',
-                'badge' => '<span class="badge badge-success">Reimbursed</span>'
             ];
 
             return $arr;
@@ -141,9 +118,8 @@ class ExpenseReport extends Model
 
         if (!$approved) {
             $arr = [
-                'text' => 'Approved',
-                'status' => 'Processing Payment',
-                'badge' => '<span class="badge badge-primary">Processing Payment</span>'
+                'text' => 'Processing Payment',
+                'status' => 'Approved',
             ];
 
             return $arr;
@@ -151,9 +127,8 @@ class ExpenseReport extends Model
 
         if (!$reviewed) {
             $arr = [
-                'text' => 'Reviewed',
-                'status' => 'For Approval',
-                'badge' => '<span class="badge badge-primary">For Approval</span>'
+                'text' => 'For Approval',
+                'status' => 'Reviewed',
             ];
 
             return $arr;
@@ -161,76 +136,19 @@ class ExpenseReport extends Model
 
         if (!$submitted) {
             $arr = [
-                // 'text' => 'Submitted',
-                // 'badge' => '<span class="badge badge-primary">Submitted</span>'
-                'text' => 'Submitted',
-                'status' => 'For Review',
-                // 'badge' => '<span class="badge badge-warning">Pending</span>'
-                'badge' => '<span class="badge badge-primary">For Review</span>'
+                'text' => 'For Review',
+                'status' => 'Submitted',
             ];
 
             return $arr;
         }
 
         $arr = [
-            // 'text' => 'Pending',
-            // 'badge' => '<span class="badge badge-warning">Pending</span>'
-            'text' => 'Pending',
-            'status' => 'For Submission',
-            'badge' => '<span class="badge badge-warning">For Submission</span>'
+            'text' => 'For Submission',
+            'status' => 'Pending',
         ];
 
         return $arr;
-
-
-
-        // if ($submitted && $approved && $cancelled && $deleted) {
-        //     $arr = [
-        //         'text' => 'Pending',
-        //         'badge' => '<span class="badge badge-warning">Pending</span>'
-        //     ];
-
-        //     return $arr;
-        // }
-        // if (!$submitted && $approved && $cancelled && $deleted) {
-        //     $arr = [
-        //         'text' => 'Submitted',
-        //         'badge' => '<span class="badge badge-primary">Submitted</span>'
-        //     ];
-
-        //     return $arr;
-        // }
-        // if (!$submitted && !$approved && $cancelled && $deleted) {
-        //     $arr = [
-        //         'text' => 'Approved',
-        //         'badge' => '<span class="badge badge-success">Approved</span>'
-        //     ];
-
-        //     return $arr;
-        // }
-        // if (!$cancelled && $deleted) {
-        //     $arr = [
-        //         'text' => 'Cancelled',
-        //         'badge' => '<span class="badge badge-danger">Cancelled</span>'
-        //     ];
-
-        //     return $arr;
-        // }
-        // if (!$deleted) {
-        //     $arr = [
-        //         'text' => 'Deleted',
-        //         'badge' => '<span class="badge badge-danger">Deleted</span>'
-        //     ];
-
-        //     return $arr;
-        // }
-
-        // $arr = [
-        //     'text' => 'Unknown',
-        //     'badge' => '<span class="badge badge-danger">Unknown</span>'
-        // ];
-
-        // return $arr;
     }
 
     /**

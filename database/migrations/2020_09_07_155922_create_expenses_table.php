@@ -21,7 +21,6 @@ class CreateExpensesTable extends Migration
             $table->string('receipt_number');
             $table->date('date');
             $table->text('remarks')->nullable();
-            $table->boolean('is_active')->default(true);
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('employee_id')->unsigned();

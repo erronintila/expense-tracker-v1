@@ -4,10 +4,13 @@
 
 use App\Models\Expense;
 use App\Models\ExpenseType;
+use Faker\Factory;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
 $factory->define(Expense::class, function (Faker $faker) {
+    $faker = Factory::create('en_PH');
+    
     $expenses = $faker->randomElement(
         [
             ["type" => "Delivery Expense", "description" => "Lazada Delivery", "amount" => 1000],

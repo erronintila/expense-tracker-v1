@@ -15,8 +15,7 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->boolean('is_active')->default(true);
+            $table->string('name', 150)->unique();
 
             $table->unsignedBigInteger('department_id');
             

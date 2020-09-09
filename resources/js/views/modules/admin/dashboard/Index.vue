@@ -12,9 +12,10 @@
                     <v-col cols="12" md="4">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
+                                outlined
                                 rounded
                                 class="mx-auto rounded-xl"
-                                :elevation="hover ? 5 : 2"
+                                :elevation="hover ? 3 : 0"
                                 to="/admin/profile"
                             >
                                 <v-card-title>User Profile</v-card-title>
@@ -30,9 +31,10 @@
                     <v-col cols="12" md="4">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
+                                outlined
                                 rounded
                                 class="mx-auto rounded-lg"
-                                :elevation="hover ? 5 : 2"
+                                :elevation="hover ? 3 : 0"
                                 to="/admin/expenses"
                             >
                                 <v-card-title>Expenses</v-card-title>
@@ -48,9 +50,10 @@
                     <v-col cols="12" md="4">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
+                                outlined
                                 rounded
                                 class="mx-auto rounded-xl"
-                                :elevation="hover ? 5 : 2"
+                                :elevation="hover ? 3 : 0"
                                 to="/admin/employees"
                             >
                                 <v-card-title>Employees</v-card-title>

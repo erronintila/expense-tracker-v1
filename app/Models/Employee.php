@@ -10,11 +10,31 @@ class Employee extends Model
     use SoftDeletes;
 
     /**
-     * guarded
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = [
+        // 'deleted_at'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        // 'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // 'email_verified_at' => 'datetime',
+    ];
 
     /**
      * Displays the user account associated with employee.

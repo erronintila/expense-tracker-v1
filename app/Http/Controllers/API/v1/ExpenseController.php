@@ -18,14 +18,15 @@ class ExpenseController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'description' => ['required', 'string', 'max:255'],
+            'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
+            'description' => ['required', 'max:255'],
             'receipt_number' => ['required', 'max:255'],
             'date' => ['required'],
             'amount' => ['required', 'numeric', 'gt:0'],
-            'remarks' => [],
+            'remarks' => ['nullable'],
             'expense_type_id' => ['required'],
             'employee_id' => ['required'],
         ]);
