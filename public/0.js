@@ -60,6 +60,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
@@ -69,7 +78,9 @@ __webpack_require__.r(__webpack_exports__);
       password: "",
       rules: {
         name: [],
-        username: [],
+        username: [function (v) {
+          return !!v || "Username is required";
+        }],
         email: [function (v) {
           return !!v || "E-mail is required";
         }, function (v) {
@@ -92,6 +103,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         this.$store.dispatch("AUTH_LOGIN", {
+          username: _this.username,
           email: _this.email,
           password: _this.password
         }).then(function (response) {
@@ -184,18 +196,18 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.rules.email,
-                                      label: "Email Address",
-                                      name: "email",
+                                      rules: _vm.rules.username,
+                                      label: "Username",
+                                      name: "username",
                                       "prepend-icon": "mdi-account",
-                                      type: "email"
+                                      type: "text"
                                     },
                                     model: {
-                                      value: _vm.email,
+                                      value: _vm.username,
                                       callback: function($$v) {
-                                        _vm.email = $$v
+                                        _vm.username = $$v
                                       },
-                                      expression: "email"
+                                      expression: "username"
                                     }
                                   }),
                                   _vm._v(" "),

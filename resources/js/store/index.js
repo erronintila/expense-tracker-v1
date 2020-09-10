@@ -35,7 +35,8 @@ export const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios
                     .post("/api/login", {
-                        email: payload.email,
+                        // email: payload.email,
+                        username: payload.username,
                         password: payload.password
                     })
                     .then(function(response) {

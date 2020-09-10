@@ -13,13 +13,22 @@
                             </v-toolbar>
                             <v-card-text>
                                 <v-form ref="form" v-model="valid">
-                                    <v-text-field
+                                    <!-- <v-text-field
                                         v-model="email"
                                         :rules="rules.email"
                                         label="Email Address"
                                         name="email"
                                         prepend-icon="mdi-account"
                                         type="email"
+                                    ></v-text-field> -->
+
+                                    <v-text-field
+                                        v-model="username"
+                                        :rules="rules.username"
+                                        label="Username"
+                                        name="username"
+                                        prepend-icon="mdi-account"
+                                        type="text"
                                     ></v-text-field>
 
                                     <v-text-field
@@ -59,7 +68,7 @@ export default {
             password: "",
             rules: {
                 name: [],
-                username: [],
+                username: [ v => !!v || "Username is required"],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail must be valid"
@@ -78,6 +87,7 @@ export default {
             if (_this.$refs.form.validate()) {
                 this.$store
                     .dispatch("AUTH_LOGIN", {
+                        username: _this.username,
                         email: _this.email,
                         password: _this.password
                     })
