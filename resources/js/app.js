@@ -16,7 +16,7 @@ import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import VuetifyConfirm from "vuetify-confirm";
 import VuetifyDialog from "vuetify-dialog";
-import moment from 'moment';
+import moment from "moment";
 
 /**
  * Load Instances
@@ -35,6 +35,7 @@ Vue.use(VuetifyDialog, {
         vuetify
     }
 });
+// Vue.use(VeeValidate);
 // Vue.use(moment);
 
 /**

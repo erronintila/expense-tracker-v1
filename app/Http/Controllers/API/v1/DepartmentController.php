@@ -31,32 +31,58 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $departments = Department::orderBy('name')->get();
-        $count = count($departments);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "name";
+        $sortDesc = $request->sortDesc ?? false;
+        $rowsPerPage = $request->rowsPerPage ?? 10;
+        $limit = $request->limit ?? count(Department::all());
+
+        $departments = Department::orderBy($sortBy, ($sortDesc ? "desc" : "asc"));
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $departments = Department::onlyTrashed()
-                        ->orderBy('name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $departments = $departments->onlyTrashed();
                     break;
                 default:
-                    $departments = Department::orderBy('name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $departments = $departments;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => DepartmentResource::collection($departments),
-                'message' => 'Departments retrieved successfully'
-            ],
-            200
-        );
+        $departments = $departments->where('name', "like", "%" . $search . "%");
+        $departments = $departments->limit($limit);
+        $departments = $departments->paginate($rowsPerPage);
+
+        return DepartmentResource::collection($departments);
+
+        // $departments = Department::orderBy('name')->get();
+
+        // $count = count($departments);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $departments = Department::onlyTrashed()
+        //                 ->orderBy('name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //         default:
+        //             $departments = Department::orderBy('name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => DepartmentResource::collection($departments),
+        //         'message' => 'Departments retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**

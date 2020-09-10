@@ -168,6 +168,85 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -178,11 +257,23 @@ __webpack_require__.r(__webpack_exports__);
       suffix: "",
       gender: "",
       birthdate: null,
-      address: "",
       phone: "",
       is_active: true,
       job: {},
       jobs: [],
+      mobile_number: "+63",
+      telephone_number: "",
+      email: "",
+      address: "",
+      building_address: "",
+      street_address: "",
+      street_name: "",
+      subdivision: "",
+      barangay: "",
+      city: "",
+      province: "",
+      country: "Philippines",
+      zip: "",
       menu: false,
       rules: {
         first_name: [function (v) {
@@ -205,12 +296,24 @@ __webpack_require__.r(__webpack_exports__);
         birthdate: [function (v) {
           return !!v || "Birthdate is required";
         }],
-        address: [],
         phone: [],
         is_active: [],
         job: [function (v) {
           return !!v || "Job designation is required";
-        }]
+        }],
+        mobile_number: [],
+        telephone_number: [],
+        email: [],
+        address: [],
+        building_address: [],
+        street_address: [],
+        street_name: [],
+        subdivision: [],
+        barangay: [],
+        city: [],
+        province: [],
+        country: [],
+        zip: []
       }
     };
   },
@@ -242,10 +345,22 @@ __webpack_require__.r(__webpack_exports__);
           suffix: _this.suffix,
           gender: _this.gender,
           birthdate: _this.birthdate,
-          address: _this.address,
           phone: _this.phone,
           is_active: _this.is_active,
-          job_id: _this.job
+          job_id: _this.job,
+          mobile_number: _this.mobile_number,
+          telephone_number: _this.telephone_number,
+          email: _this.email,
+          address: _this.address,
+          building_address: _this.building_address,
+          street_address: _this.street_address,
+          street_name: _this.street_name,
+          subdivision: _this.subdivision,
+          barangay: _this.barangay,
+          city: _this.city,
+          province: _this.province,
+          country: _this.country,
+          zip: _this.zip
         }).then(function (response) {
           _this.onRefresh();
 
@@ -462,7 +577,8 @@ var render = function() {
                               rules: _vm.rules.gender,
                               items: ["Male", "Female"],
                               label: "Gender",
-                              required: ""
+                              required: "",
+                              placeholder: "hello"
                             },
                             model: {
                               value: _vm.gender,
@@ -610,17 +726,16 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.phone,
+                              rules: _vm.rules.mobile_number,
                               counter: 30,
-                              label: "Phone",
-                              required: ""
+                              label: "Mobile Number"
                             },
                             model: {
-                              value: _vm.phone,
+                              value: _vm.mobile_number,
                               callback: function($$v) {
-                                _vm.phone = $$v
+                                _vm.mobile_number = $$v
                               },
-                              expression: "phone"
+                              expression: "mobile_number"
                             }
                           })
                         ],
@@ -631,14 +746,246 @@ var render = function() {
                         "v-col",
                         { attrs: { cols: "12", md: "4" } },
                         [
-                          _c("v-textarea", {
-                            attrs: { rows: "1", label: "Address" },
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.telephone_number,
+                              counter: 30,
+                              label: "Telephone Number",
+                              type: "number"
+                            },
                             model: {
-                              value: _vm.address,
+                              value: _vm.telephone_number,
                               callback: function($$v) {
-                                _vm.address = $$v
+                                _vm.telephone_number = $$v
                               },
-                              expression: "address"
+                              expression: "telephone_number"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.email,
+                              counter: 30,
+                              label: "Email Address",
+                              placeholder: "hello"
+                            },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.building_address,
+                              counter: 30,
+                              label: "Rm./Flr./Unit No. & Bldg. Name"
+                            },
+                            model: {
+                              value: _vm.building_address,
+                              callback: function($$v) {
+                                _vm.building_address = $$v
+                              },
+                              expression: "building_address"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.street_name,
+                              counter: 30,
+                              label: "Street Name"
+                            },
+                            model: {
+                              value: _vm.street_name,
+                              callback: function($$v) {
+                                _vm.street_name = $$v
+                              },
+                              expression: "street_name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.street_address,
+                              counter: 30,
+                              label: "House/Lot & Blk. No."
+                            },
+                            model: {
+                              value: _vm.street_address,
+                              callback: function($$v) {
+                                _vm.street_address = $$v
+                              },
+                              expression: "street_address"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.subdivision,
+                              counter: 30,
+                              label: "Subdivision"
+                            },
+                            model: {
+                              value: _vm.subdivision,
+                              callback: function($$v) {
+                                _vm.subdivision = $$v
+                              },
+                              expression: "subdivision"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.barangay,
+                              counter: 30,
+                              label: "Barangay/District/Locality"
+                            },
+                            model: {
+                              value: _vm.barangay,
+                              callback: function($$v) {
+                                _vm.barangay = $$v
+                              },
+                              expression: "barangay"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.city,
+                              counter: 30,
+                              label: "City/Municipality"
+                            },
+                            model: {
+                              value: _vm.city,
+                              callback: function($$v) {
+                                _vm.city = $$v
+                              },
+                              expression: "city"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.province,
+                              counter: 30,
+                              label: "Province"
+                            },
+                            model: {
+                              value: _vm.province,
+                              callback: function($$v) {
+                                _vm.province = $$v
+                              },
+                              expression: "province"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.country,
+                              counter: 30,
+                              label: "Country"
+                            },
+                            model: {
+                              value: _vm.country,
+                              callback: function($$v) {
+                                _vm.country = $$v
+                              },
+                              expression: "country"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.zip,
+                              counter: 30,
+                              label: "Zip Code"
+                            },
+                            model: {
+                              value: _vm.zip,
+                              callback: function($$v) {
+                                _vm.zip = $$v
+                              },
+                              expression: "zip"
                             }
                           })
                         ],

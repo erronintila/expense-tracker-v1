@@ -74,16 +74,9 @@
                                 :items="['Male', 'Female']"
                                 label="Gender"
                                 required
+                                placeholder="hello"
                             >
                             </v-select>
-                            <!-- <v-radio-group v-model="gender" row>
-                                Gender&nbsp;&nbsp;
-                                <v-radio label="Male" value="Male"></v-radio>
-                                <v-radio
-                                    label="Female"
-                                    value="Female"
-                                ></v-radio>
-                            </v-radio-group> -->
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -129,20 +122,106 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="phone"
-                                :rules="rules.phone"
+                                v-model="mobile_number"
+                                :rules="rules.mobile_number"
                                 :counter="30"
-                                label="Phone"
-                                required
+                                label="Mobile Number"
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-textarea
-                                v-model="address"
-                                rows="1"
-                                label="Address"
-                            ></v-textarea>
+                            <v-text-field
+                                v-model="telephone_number"
+                                :rules="rules.telephone_number"
+                                :counter="30"
+                                label="Telephone Number"
+                                type="number"
+                            ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="email"
+                                :rules="rules.email"
+                                :counter="30"
+                                label="Email Address"
+                                placeholder="hello"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="building_address"
+                                :rules="rules.building_address"
+                                :counter="30"
+                                label="Rm./Flr./Unit No. & Bldg. Name"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="street_name"
+                                :rules="rules.street_name"
+                                :counter="30"
+                                label="Street Name"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="street_address"
+                                :rules="rules.street_address"
+                                :counter="30"
+                                label="House/Lot & Blk. No."
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="subdivision"
+                                :rules="rules.subdivision"
+                                :counter="30"
+                                label="Subdivision"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="barangay"
+                                :rules="rules.barangay"
+                                :counter="30"
+                                label="Barangay/District/Locality"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="city"
+                                :rules="rules.city"
+                                :counter="30"
+                                label="City/Municipality"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="province"
+                                :rules="rules.province"
+                                :counter="30"
+                                label="Province"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="country"
+                                :rules="rules.country"
+                                :counter="30"
+                                label="Country"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="zip"
+                                :rules="rules.zip"
+                                :counter="30"
+                                label="Zip Code"
+                            ></v-text-field>
                         </v-col>
                     </v-row>
 
@@ -168,11 +247,23 @@ export default {
             suffix: "",
             gender: "",
             birthdate: null,
-            address: "",
             phone: "",
             is_active: true,
             job: {},
             jobs: [],
+            mobile_number: "+63",
+            telephone_number: "",
+            email: "",
+            address: "",
+            building_address: "",
+            street_address: "",
+            street_name: "",
+            subdivision: "",
+            barangay: "",
+            city: "",
+            province: "",
+            country: "Philippines",
+            zip: "",
             menu: false,
             rules: {
                 first_name: [
@@ -195,10 +286,22 @@ export default {
                 suffix: [],
                 gender: [v => !!v || "Gender is required"],
                 birthdate: [v => !!v || "Birthdate is required"],
-                address: [],
                 phone: [],
                 is_active: [],
-                job: [v => !!v || "Job designation is required"]
+                job: [v => !!v || "Job designation is required"],
+                mobile_number: [],
+                telephone_number: [],
+                email: [],
+                address: [],
+                building_address: [],
+                street_address: [],
+                street_name: [],
+                subdivision: [],
+                barangay: [],
+                city: [],
+                province: [],
+                country: [],
+                zip: []
             }
         };
     },
@@ -235,10 +338,22 @@ export default {
                         suffix: _this.suffix,
                         gender: _this.gender,
                         birthdate: _this.birthdate,
-                        address: _this.address,
                         phone: _this.phone,
                         is_active: _this.is_active,
-                        job_id: _this.job
+                        job_id: _this.job,
+                        mobile_number: _this.mobile_number,
+                        telephone_number: _this.telephone_number,
+                        email: _this.email,
+                        address: _this.address,
+                        building_address: _this.building_address,
+                        street_address: _this.street_address,
+                        street_name: _this.street_name,
+                        subdivision: _this.subdivision,
+                        barangay: _this.barangay,
+                        city: _this.city,
+                        province: _this.province,
+                        country: _this.country,
+                        zip: _this.zip
                     })
                     .then(function(response) {
                         _this.onRefresh();

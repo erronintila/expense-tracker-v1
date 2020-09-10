@@ -157,6 +157,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -174,26 +176,49 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortable: false
       }],
       items: [],
-      limit: 500,
-      limits: [500, 1000, 5000, "No limit"],
+      limit: 2,
+      limits: [2, 5, 500, 1000, 5000, "No limit"],
       status: "Active",
       statuses: ["Active", "Archived"],
       selected: [],
-      search: ""
+      // sortBy: "",
+      // sortType: "",
+      // rowsPerPage: "",
+      search: "",
+      totalItems: 0,
+      pagination: {
+        // sortBy : "name",
+        // descending : false,
+        // page : 1,
+        // rowsPerPage : 10
+        page: 1,
+        itemsPerPage: 10,
+        sortBy: "name",
+        sortDesc: false
+      }
     };
   },
   methods: {
     loadItems: function loadItems() {
+      console.log("loaded");
+
       var _this = this;
 
       _this.selected = [];
       axios.get("/api/departments", {
         params: _objectSpread({
-          status: _this.status
+          search: _this.search.trim().toLowerCase(),
+          sortBy: _this.pagination.sortBy,
+          sortDesc: _this.pagination.sortDesc,
+          rowsPerPage: _this.pagination.itemsPerPage,
+          status: _this.status,
+          page: _this.pagination.page
         }, _this.limit == "No limit" ? {} : {
           limit: _this.limit
         })
       }).then(function (response) {
+        console.log(response.data);
+        _this.totalItems = response.data.meta.total;
         _this.items = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -569,6 +594,7 @@ var render = function() {
                   "single-line": "",
                   "hide-details": ""
                 },
+                on: { input: _vm.loadItems },
                 model: {
                   value: _vm.search,
                   callback: function($$v) {
@@ -589,11 +615,17 @@ var render = function() {
                 attrs: {
                   headers: _vm.headers,
                   items: _vm.items,
-                  search: _vm.search,
                   loading: _vm.loading,
                   "loading-text": _vm.loading_text,
                   "show-select": "",
-                  "item-key": "id"
+                  "item-key": "id",
+                  options: _vm.pagination,
+                  "server-items-length": _vm.totalItems
+                },
+                on: {
+                  "update:options": function($event) {
+                    _vm.pagination = $event
+                  }
                 },
                 scopedSlots: _vm._u(
                   [

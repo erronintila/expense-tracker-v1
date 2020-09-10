@@ -111,6 +111,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @input="loadItems"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -118,13 +119,14 @@
                 <v-data-table
                     :headers="headers"
                     :items="items"
-                    :search="search"
                     :loading="loading"
                     :loading-text="loading_text"
                     v-model="selected"
                     show-select
                     item-key="id"
                     class="elevation-0"
+                    :options.sync="pagination"
+                    :server-items-length="totalItems"
                 >
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
@@ -154,23 +156,45 @@ export default {
                 { text: "Actions", value: "actions", sortable: false }
             ],
             items: [],
-            limit: 500,
-            limits: [500, 1000, 5000, "No limit"],
+            limit: 2,
+            limits: [2, 5, 500, 1000, 5000, "No limit"],
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
-            search: ""
+
+            // sortBy: "",
+            // sortType: "",
+            // rowsPerPage: "",
+            search: "",
+            totalItems: 0,
+            pagination: {
+                // sortBy : "name",
+                // descending : false,
+                // page : 1,
+                // rowsPerPage : 10
+                page: 1,
+                itemsPerPage: 10,
+                sortBy: "name",
+                sortDesc: false,
+            }
         };
     },
     methods: {
         loadItems() {
+            console.log("loaded");
+
             let _this = this;
             _this.selected = [];
 
             axios
                 .get("/api/departments", {
                     params: {
+                        search: _this.search.trim().toLowerCase(),
+                        sortBy: _this.pagination.sortBy,
+                        sortDesc: _this.pagination.sortDesc,
+                        rowsPerPage: _this.pagination.itemsPerPage,
                         status: _this.status,
+                        page: _this.pagination.page,
 
                         // Exclude limit parameter if limit is equals to 'No limit'
                         ...(_this.limit == "No limit"
@@ -179,6 +203,8 @@ export default {
                     }
                 })
                 .then(function(response) {
+                    console.log(response.data);
+                    _this.totalItems = response.data.meta.total;
                     _this.items = response.data.data;
                 })
                 .catch(function(error) {
