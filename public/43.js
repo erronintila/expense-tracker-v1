@@ -59,6 +59,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -185,7 +197,81 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee2, null, [[1, 9]]);
       }))();
-    }
+    } // getDataFromApi(search_val) {
+    //     let _this = this;
+    //     _this.loading = true;
+    //     return new Promise((resolve, reject) => {
+    //         const {
+    //             sortBy,
+    //             sortDesc,
+    //             page,
+    //             itemsPerPage
+    //         } = this.pagination;
+    //         const search = _this.search;
+    //         let items = [];
+    //         let total = 0;
+    //         axios
+    //             .get("/api/departments", {
+    //                 search: search,
+    //                 sortBy: sortBy,
+    //                 sortDesc: descending,
+    //                 page: page,
+    //                 itemsPerPage: itemsPerPage,
+    //                 status: "Active"
+    //             })
+    //             .then(response => {
+    //                 items = response.data.data;
+    //                 total = response.data.meta.total;
+    //                 _this.loading = false;
+    //             })
+    //             .catch(error => {
+    //                 console.log(error.response);
+    //                 _this.loading = false;
+    //             });
+    //         if (sortBy.length === 1 && sortDesc.length === 1) {
+    //             items = items.sort((a, b) => {
+    //                 const sortA = a[sortBy[0]];
+    //                 const sortB = b[sortBy[0]];
+    //                 if (sortDesc[0]) {
+    //                     if (sortA < sortB) return 1;
+    //                     if (sortA > sortB) return -1;
+    //                     return 0;
+    //                 } else {
+    //                     if (sortA < sortB) return -1;
+    //                     if (sortA > sortB) return 1;
+    //                     return 0;
+    //                 }
+    //             });
+    //         }
+    //         resolve({
+    //             items,
+    //             total
+    //         });
+    //     });
+    // }
+    // // fetchData() {
+    // //     let _this = this;
+    // //     axios
+    // //         .get("/api/departments", {
+    // //             search: "",
+    // //             sortBy: "name",
+    // //             sortDesc: true,
+    // //             page: 1,
+    // //             itemsPerPage: 10,
+    // //             status: "Active"
+    // //         })
+    // //         .then(response => {
+    // //             _this.totalItems = response.data.meta.total;
+    // //             _this.items = response.data.data;
+    // //             _this.loading = false;
+    // //         })
+    // //         .catch(error => {
+    // //             console.log(error);
+    // //             console.log(error.response);
+    // //             _this.loading = false;
+    // //         });
+    // // }
+
   },
   watch: {
     params: {
@@ -198,7 +284,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         });
       },
       deep: true
-    }
+    } // options: {
+    //     handler() {
+    //         let _this = this;
+    //         this.getDataFromApi().then(data => {
+    //             _this.items = data.items;
+    //             _this.totalItems = data.total;
+    //         });
+    //     },
+    //     deep: true
+    // }
+
   },
   computed: {
     params: function params(nv) {
@@ -221,7 +317,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+              axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // this.fetchData();
 
             case 1:
             case "end":
@@ -265,7 +361,18 @@ var render = function() {
                 _vm._v("Departments")
               ]),
               _vm._v(" "),
-              _c("v-spacer")
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("v-select", {
+                attrs: { items: _vm.statuses, label: "Status" },
+                model: {
+                  value: _vm.status,
+                  callback: function($$v) {
+                    _vm.status = $$v
+                  },
+                  expression: "status"
+                }
+              })
             ],
             1
           ),
