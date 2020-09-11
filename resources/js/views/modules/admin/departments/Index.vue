@@ -5,104 +5,6 @@
                 <h4 class="title green--text">Departments</h4>
 
                 <v-spacer></v-spacer>
-
-                <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    to="/admin/departments/create"
-                    dark
-                    fab
-                    x-small
-                >
-                    <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-
-                <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    dark
-                    fab
-                    x-small
-                    @click="onRefresh"
-                >
-                    <v-icon dark>mdi-reload</v-icon>
-                </v-btn>
-
-                <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-filter</v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    v-on:change="loadItems"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="limit"
-                                    v-on:change="loadItems"
-                                    :items="limits"
-                                    label="Limit rows"
-                                ></v-select>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>
-                                mdi-format-list-bulleted-square
-                            </v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onRestore">
-                            <v-list-item-title>
-                                Restore
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-title>
-                                Move to archive
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
             </v-card-title>
             <v-card-subtitle>
                 <v-text-field
@@ -111,7 +13,6 @@
                     label="Search"
                     single-line
                     hide-details
-                    @input="loadItems"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -120,22 +21,13 @@
                     :headers="headers"
                     :items="items"
                     :loading="loading"
-                    :loading-text="loading_text"
+                    :options.sync="options"
+                    :server-items-length="totalItems"
                     v-model="selected"
                     show-select
                     item-key="id"
                     class="elevation-0"
-                    :options.sync="pagination"
-                    :server-items-length="totalItems"
                 >
-                    <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onShow(item)">
-                            mdi-eye
-                        </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)">
-                            mdi-pencil
-                        </v-icon>
-                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
@@ -144,184 +36,119 @@
 
 <script>
 export default {
-    props: {},
     data() {
         return {
             loading: true,
-            loading_text: "Loading items...",
-            headers: [
-                { text: "Name", value: "name" },
-                // { text: "Created", value: "created_at" },
-                // { text: "Updated", value: "updated_at" },
-                { text: "Actions", value: "actions", sortable: false }
-            ],
+            headers: [{ text: "Name", value: "name" }],
             items: [],
-            limit: 2,
-            limits: [2, 5, 500, 1000, 5000, "No limit"],
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
-
-            // sortBy: "",
-            // sortType: "",
-            // rowsPerPage: "",
             search: "",
             totalItems: 0,
-            pagination: {
-                // sortBy : "name",
-                // descending : false,
-                // page : 1,
-                // rowsPerPage : 10
-                page: 1,
-                itemsPerPage: 10,
-                sortBy: "name",
-                sortDesc: false,
-            }
+            options: {}
         };
     },
     methods: {
-        loadItems() {
-            console.log("loaded");
+        async getDataFromApi() {
+            this.loading = true;
 
-            let _this = this;
-            _this.selected = [];
+            let data = await this.getItems();
 
-            axios
-                .get("/api/departments", {
-                    params: {
-                        search: _this.search.trim().toLowerCase(),
-                        sortBy: _this.pagination.sortBy,
-                        sortDesc: _this.pagination.sortDesc,
-                        rowsPerPage: _this.pagination.itemsPerPage,
-                        status: _this.status,
-                        page: _this.pagination.page,
+            return new Promise((resolve, reject) => {
+                const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                        // Exclude limit parameter if limit is equals to 'No limit'
-                        ...(_this.limit == "No limit"
-                            ? {}
-                            : { limit: _this.limit })
-                    }
-                })
-                .then(function(response) {
-                    console.log(response.data);
-                    _this.totalItems = response.data.meta.total;
-                    _this.items = response.data.data;
-                })
-                .catch(function(error) {
-                    console.log(error);
+                let search = this.search.trim().toLowerCase();
+                let items = data.data;
+                let total = items.length;
 
-                    console.log(error.response);
-                });
-        },
-        onRefresh() {
-            this.selected = [];
-            this.status = "Active";
-            this.limit = 500;
-            this.search = "";
-            this.loadItems();
-        },
-        onShow(item) {
-            this.$router.push({
-                name: "admin.departments.show",
-                params: { id: item.id }
-            });
-        },
-        onEdit(item) {
-            this.$router.push({
-                name: "admin.departments.edit",
-                params: { id: item.id }
-            });
-        },
-        onDelete() {
-            let _this = this;
+                if (search) {
+                    items = items.filter(item => {
+                        return Object.values(item)
+                            .join(",")
+                            .toLowerCase()
+                            .includes(search);
+                    });
 
-            // console.log(_this.selected);
-
-            // return;
-
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
-
-            this.$confirm("Move item(s) to archive?").then(res => {
-                if (res) {
-                    axios
-                        .delete(`/api/departments/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
-                            _this.loadItems();
-                        })
-                        .catch(function(error) {
-                            console.log(error.response);
-                        });
+                    total = items.length;
                 }
+
+                if (sortBy.length === 1 && sortDesc.length === 1) {
+                    items = items.sort((a, b) => {
+                        const sortA = a[sortBy[0]];
+                        const sortB = b[sortBy[0]];
+
+                        if (sortDesc[0]) {
+                            if (sortA < sortB) return 1;
+                            if (sortA > sortB) return -1;
+                            return 0;
+                        } else {
+                            if (sortA < sortB) return -1;
+                            if (sortA > sortB) return 1;
+                            return 0;
+                        }
+                    });
+                }
+
+                if (itemsPerPage > 0) {
+                    items = items.slice(
+                        (page - 1) * itemsPerPage,
+                        page * itemsPerPage
+                    );
+                }
+
+                this.loading = false;
+                resolve({ items, total });
+
+                // setTimeout(() => {
+                //     this.loading = false;
+                //     resolve({
+                //         items,
+                //         total
+                //     });
+                // }, 500);
             });
         },
-        onRestore() {
+        async getItems(status) {
             let _this = this;
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
+            try {
+                var arr = [];
+                arr = await axios.get("/api/departments");
+                return arr.data;
+            } catch (e) {
+                return [];
             }
-
-            this.$confirm("Do you want to restore account(s)?").then(res => {
-                if (res) {
-                    axios
-                        .put(`/api/departments/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "restore"
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
-                            _this.loadItems();
-                        })
-                        .catch(function(error) {
-                            console.log(error.response);
-                        });
-                }
-            });
         }
     },
     watch: {
-        items() {
-            this.loading = false;
-            this.loading_text = "No data available";
+        params: {
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            },
+            deep: true
         }
     },
-    created() {
-        // const token = localStorage.getItem("access_token");
-        // if (token) {
+    computed: {
+        params(nv) {
+            return {
+                ...this.options,
+                query: this.search
+            };
+        }
+    },
+    mounted() {
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
+    },
+    async created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
-        // }
-
-        this.loadItems();
-    },
-    mounted() {}
+    }
 };
 </script>

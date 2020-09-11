@@ -12,6 +12,8 @@ class DepartmentSeeder extends Seeder
      */
     public function run()
     {
+        // factory(Department::class, 5000)->create();
+
         $departments = [
             ['name' => 'Administrative Department'],
             ['name' => 'Sales & Marketing Department'],

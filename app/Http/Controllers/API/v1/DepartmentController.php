@@ -31,13 +31,16 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
+        // return Department::all();
+
+        return DepartmentResource::collection(Department::all());
+        
         $search = $request->search ?? "";
         $sortBy = $request->sortBy ?? "name";
         $sortDesc = $request->sortDesc ?? false;
-        $rowsPerPage = $request->rowsPerPage ?? 10;
-        $limit = $request->limit ?? count(Department::all());
+        $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $departments = Department::orderBy($sortBy, ($sortDesc ? "desc" : "asc"));
+        $departments = Department::orderBy($sortBy, ($sortDesc ? "asc" : "desc"));
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -51,8 +54,7 @@ class DepartmentController extends Controller
         }
 
         $departments = $departments->where('name', "like", "%" . $search . "%");
-        $departments = $departments->limit($limit);
-        $departments = $departments->paginate($rowsPerPage);
+        $departments = $departments->paginate($itemsPerPage);
 
         return DepartmentResource::collection($departments);
 
