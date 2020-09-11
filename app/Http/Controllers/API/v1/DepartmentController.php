@@ -53,34 +53,6 @@ class DepartmentController extends Controller
         $departments = $departments->paginate($itemsPerPage);
 
         return DepartmentResource::collection($departments);
-
-        // $departments = Department::orderBy('name')->get();
-
-        // $count = count($departments);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $departments = Department::onlyTrashed()
-        //                 ->orderBy('name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //         default:
-        //             $departments = Department::orderBy('name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => DepartmentResource::collection($departments),
-        //         'message' => 'Departments retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**
