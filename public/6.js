@@ -163,6 +163,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       headers: [{
         text: "Name",
         value: "name"
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
       }],
       items: [],
       status: "Active",
@@ -173,7 +177,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       options: {
         sortBy: ["name"],
         sortDesc: [false],
-        page: 2,
+        page: 1,
         itemsPerPage: 10
       }
     };
@@ -199,33 +203,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           params: {
             search: search,
             sortBy: sortBy[0],
-            sortDesc: sortDesc[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
             status: status
           }
         }).then(function (response) {
           var items = response.data.data;
-          var total = response.data.meta.total; // console.log(sortBy[0]);
-          // console.log(sortDesc[0]);
-
-          if (sortBy.length === 1 && sortDesc.length === 1) {
-            items = items.sort(function (a, b) {
-              var sortA = a[sortBy[0]];
-              var sortB = b[sortBy[0]];
-
-              if (sortDesc[0]) {
-                if (sortA < sortB) return 1;
-                if (sortA > sortB) return -1;
-                return 0;
-              } else {
-                if (sortA < sortB) return -1;
-                if (sortA > sortB) return 1;
-                return 0;
-              }
-            });
-          }
-
+          var total = response.data.meta.total;
           _this.loading = false;
           resolve({
             items: items,
@@ -233,24 +218,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         })["catch"](function (error) {
           console.log(error);
-          console.log(error.response);
           _this.loading = false;
         });
       });
     },
     onRefresh: function onRefresh() {
-      this.loading = false;
-      this.items = [];
-      this.status = "Active";
-      this.selected = [];
-      this.search = "";
-      this.totalItems = 0;
-      this.options = {
-        page: 1,
-        itemsPerPage: 10,
-        sortBy: ["name"],
-        sortDesc: [false]
-      };
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -291,10 +264,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.$dialog.message.success("Item(s) moved to archive.", {
               position: "top-right",
               timeout: 2000
-            }); // _this.loadItems();
+            });
 
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -321,8 +298,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.$dialog.message.success("Item(s) restored.", {
               position: "top-right",
               timeout: 2000
-            }); // _this.loadItems();
+            });
 
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
           })["catch"](function (error) {
             console.log(error.response);
           });
@@ -341,17 +322,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       },
       deep: true
-    } // options: {
-    //     handler() {
-    //         let _this = this;
-    //         this.getDataFromApi().then(data => {
-    //             _this.items = data.items;
-    //             _this.totalItems = data.total;
-    //         });
-    //     },
-    //     deep: true
-    // }
-
+    }
   },
   computed: {
     params: function params(nv) {
@@ -413,7 +384,7 @@ var render = function() {
                   staticClass: "elevation-3 mr-2",
                   attrs: {
                     color: "green",
-                    to: "/admin/departments/create",
+                    to: { name: "admin.departments.create" },
                     dark: "",
                     fab: "",
                     "x-small": ""

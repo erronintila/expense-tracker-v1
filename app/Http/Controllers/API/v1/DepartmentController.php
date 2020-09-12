@@ -33,10 +33,10 @@ class DepartmentController extends Controller
     {
         $search = $request->search ?? "";
         $sortBy = $request->sortBy ?? "name";
-        $sortDesc = $request->sortDesc ?? false;
+        $sortType = $request->sortType ?? "asc";
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $departments = Department::orderBy($sortBy, ($sortDesc ? "desc" : "asc"));
+        $departments = Department::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -129,7 +129,6 @@ class DepartmentController extends Controller
 
         return response(
             [
-                'data' => new DepartmentResource($department),
                 'message' => 'Updated successfully'
             ],
             201
@@ -148,7 +147,6 @@ class DepartmentController extends Controller
 
         return response(
             [
-                'data' => new DepartmentResource($department),
                 'message' => 'Deleted successfully'
             ],
             200

@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/admin/departments/create"
+                    :to="{ name: 'admin.departments.create' }"
                     dark
                     fab
                     x-small
@@ -144,7 +144,10 @@ export default {
     data() {
         return {
             loading: true,
-            headers: [{ text: "Name", value: "name" }],
+            headers: [
+                { text: "Name", value: "name" },
+                { text: "Actions", value: "actions", sortable: false }
+            ],
             items: [],
             status: "Active",
             statuses: ["Active", "Archived"],
@@ -154,7 +157,7 @@ export default {
             options: {
                 sortBy: ["name"],
                 sortDesc: [false],
-                page: 2,
+                page: 1,
                 itemsPerPage: 10
             }
         };
@@ -176,7 +179,7 @@ export default {
                         params: {
                             search: search,
                             sortBy: sortBy[0],
-                            sortDesc: sortDesc[0],
+                            sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
                             status: status
@@ -186,26 +189,6 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        // console.log(sortBy[0]);
-                        // console.log(sortDesc[0]);
-
-                        if (sortBy.length === 1 && sortDesc.length === 1) {
-                            items = items.sort((a, b) => {
-                                const sortA = a[sortBy[0]];
-                                const sortB = b[sortBy[0]];
-
-                                if (sortDesc[0]) {
-                                    if (sortA < sortB) return 1;
-                                    if (sortA > sortB) return -1;
-                                    return 0;
-                                } else {
-                                    if (sortA < sortB) return -1;
-                                    if (sortA > sortB) return 1;
-                                    return 0;
-                                }
-                            });
-                        }
-
                         _this.loading = false;
 
                         resolve({ items, total });
@@ -213,25 +196,12 @@ export default {
                     .catch(error => {
                         console.log(error);
 
-                        console.log(error.response);
-
                         _this.loading = false;
                     });
             });
         },
         onRefresh() {
-            this.loading = false;
-            this.items = [];
-            this.status = "Active";
-            this.selected = [];
-            this.search = "";
-            this.totalItems = 0;
-            this.options = {
-                page: 1,
-                itemsPerPage: 10,
-                sortBy: ["name"],
-                sortDesc: [false]
-            };
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onShow(item) {
             this.$router.push({
@@ -274,10 +244,14 @@ export default {
                                     timeout: 2000
                                 }
                             );
-                            // _this.loadItems();
+
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -307,7 +281,11 @@ export default {
                                 position: "top-right",
                                 timeout: 2000
                             });
-                            // _this.loadItems();
+
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
                         })
                         .catch(function(error) {
                             console.log(error.response);
@@ -326,17 +304,6 @@ export default {
             },
             deep: true
         }
-        // options: {
-        //     handler() {
-        //         let _this = this;
-
-        //         this.getDataFromApi().then(data => {
-        //             _this.items = data.items;
-        //             _this.totalItems = data.total;
-        //         });
-        //     },
-        //     deep: true
-        // }
     },
     computed: {
         params(nv) {
