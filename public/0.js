@@ -69,10 +69,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
     return {
+      overlay: false,
       username: "",
       email: "",
       password: "",
@@ -94,9 +110,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onLogin: function onLogin() {
+    loadingScreen: function loadingScreen() {
       var _this2 = this;
 
+      this.overlay = true;
+      setTimeout(function () {
+        _this2.overlay = false;
+
+        _this2.$router.push({
+          name: "admin.dashboard.index"
+        });
+      }, 2000);
+    },
+    onLogin: function onLogin() {
       var _this = this;
 
       _this.$refs.form.validate();
@@ -107,9 +133,7 @@ __webpack_require__.r(__webpack_exports__);
           email: _this.email,
           password: _this.password
         }).then(function (response) {
-          _this2.$router.push({
-            name: "admin.dashboard.index"
-          });
+          _this.loadingScreen();
         })["catch"](function (error) {
           console.log(error);
 
@@ -120,7 +144,15 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     }
-  }
+  } // watch: {
+  //     overlay(val) {
+  //         val &&
+  //             setTimeout(() => {
+  //                 this.overlay = false;
+  //             }, 2000);
+  //     }
+  // }
+
 });
 
 /***/ }),
@@ -147,6 +179,17 @@ var render = function() {
       _c(
         "v-main",
         [
+          _c(
+            "v-overlay",
+            { attrs: { value: _vm.overlay, opacity: "100", color: "success" } },
+            [
+              _c("v-progress-circular", {
+                attrs: { indeterminate: "", size: "80" }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-container",
             { staticClass: "fill-height", attrs: { fluid: "" } },

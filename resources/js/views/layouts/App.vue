@@ -117,8 +117,12 @@
                 @click.stop="drawer = !drawer"
             ></v-app-bar-nav-icon>
             <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-                <span class="title">Expense Tracker</span>
-                <!-- <span class="title ml-3 mr-5">Expense&nbsp;<span class="font-weight-light">Tracker</span></span> -->
+                <router-link
+                    to="/admin/dashboard"
+                    style="text-decoration: none; color: inherit;"
+                >
+                    <span class="title">Expense Tracker</span>
+                </router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
@@ -213,7 +217,7 @@
                     </v-btn>
                 </template>
 
-                 <v-card>
+                <v-card>
                     <v-list>
                         <v-list-item>
                             <v-icon class="mr-4">mdi-account-circle</v-icon>

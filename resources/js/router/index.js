@@ -14,6 +14,7 @@ import profileRoutes from "../router/modules/profile";
 import reportsRoutes from "../router/modules/reports";
 import usersRoutes from "../router/modules/users";
 import vendorsRoutes from "../router/modules/vendors";
+import errorRoutes from "../router/modules/errors";
 
 import { store } from "../store";
 
@@ -30,12 +31,13 @@ const routes = baseRoutes.concat(
     profileRoutes,
     reportsRoutes,
     usersRoutes,
-    vendorsRoutes
+    vendorsRoutes,
+    errorRoutes
 );
 
 export const router = new VueRouter({
     mode: "history",
-    routes,
+    routes
 });
 
 router.beforeEach((to, from, next) => {
