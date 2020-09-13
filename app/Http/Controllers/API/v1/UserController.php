@@ -60,41 +60,13 @@ class UserController extends Controller
         }
 
         $users = $users->where(function ($query) use ($search) {
-            $query->where("name", "%" . $search . "%");
-            $query->orWhere("username", "%" . $search . "%");
-            $query->orWhere("email", "%" . $search . "%");
+            $query->where("name", "like", "%" . $search . "%");
+            $query->orWhere("username", "like", "%" . $search . "%");
+            $query->orWhere("email", "like", "%" . $search . "%");
         });
         $users = $users->paginate($itemsPerPage);
 
         return UserResource::collection($users);
-
-        // $users = User::orderBy('name')->get();
-        // $count = count($users);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $users = User::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-        //             break;
-        //         case 'Verified':
-        //             $users = User::where('email_verified_at', '<>', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-        //             break;
-        //         case 'Unverified':
-        //             $users = User::where('email_verified_at', null)->orderBy('name')->limit($request->limit ?? $count)->get();
-        //             break;
-        //         default:
-        //             $users = User::orderBy('name')->limit($request->limit ?? $count)->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => UserResource::collection($users),
-        //         'message' => 'Users retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**

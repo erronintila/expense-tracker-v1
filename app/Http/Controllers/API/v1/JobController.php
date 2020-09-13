@@ -55,32 +55,6 @@ class JobController extends Controller
         $jobs = $jobs->paginate($itemsPerPage);
 
         return JobResource::collection($jobs);
-        // $jobs = Job::orderBy('name')->get();
-        // $count = count($jobs);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $jobs = Job::onlyTrashed()
-        //                 ->orderBy('name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //         default:
-        //             $jobs = Job::orderBy('name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => JobResource::collection($jobs),
-        //         'message' => 'Jobs retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**

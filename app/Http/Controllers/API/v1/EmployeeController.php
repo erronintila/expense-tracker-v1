@@ -84,32 +84,6 @@ class EmployeeController extends Controller
         $employees = $employees->paginate($itemsPerPage);
 
         return EmployeeResource::collection($employees);
-        // $employees = Employee::orderBy('last_name')->get();
-        // $count = count($employees);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $employees = Employee::onlyTrashed()
-        //                 ->orderBy('last_name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //         default:
-        //             $employees = Employee::orderBy('last_name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => EmployeeResource::collection($employees),
-        //         'message' => 'Employees retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**

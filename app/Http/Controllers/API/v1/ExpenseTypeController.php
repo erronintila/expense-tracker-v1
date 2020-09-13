@@ -54,32 +54,6 @@ class ExpenseTypeController extends Controller
         $expense_types = $expense_types->paginate($itemsPerPage);
 
         return ExpenseTypeResource::collection($expense_types);
-        // $expense_type = ExpenseType::orderBy('name')->get();
-        // $count = count($expense_type);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $expense_type = ExpenseType::onlyTrashed()
-        //                 ->orderBy('name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //         default:
-        //             $expense_type = ExpenseType::orderBy('name')
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => ExpenseTypeResource::collection($expense_type),
-        //         'message' => 'Expense Types retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**

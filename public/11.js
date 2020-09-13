@@ -380,12 +380,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
-  // watch: {
-  //     items() {
-  //         this.loading = false;
-  //         this.loading_text = "No data available";
-  //     }
-  // },
   watch: {
     params: {
       handler: function handler() {

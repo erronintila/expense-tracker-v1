@@ -353,12 +353,6 @@ export default {
             });
         }
     },
-    // watch: {
-    //     items() {
-    //         this.loading = false;
-    //         this.loading_text = "No data available";
-    //     }
-    // },
     watch: {
         params: {
             handler() {

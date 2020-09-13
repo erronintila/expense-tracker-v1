@@ -303,7 +303,11 @@ __webpack_require__.r(__webpack_exports__);
         }],
         mobile_number: [],
         telephone_number: [],
-        email: [],
+        email: [function (v) {
+          return !!v || "E-mail is required";
+        }, function (v) {
+          return /.+@.+/.test(v) || "E-mail is not valid";
+        }],
         address: [],
         building_address: [],
         street_address: [],

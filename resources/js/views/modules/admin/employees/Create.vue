@@ -291,7 +291,10 @@ export default {
                 job: [v => !!v || "Job designation is required"],
                 mobile_number: [],
                 telephone_number: [],
-                email: [],
+                email: [
+                    v => !!v || "E-mail is required",
+                    v => /.+@.+/.test(v) || "E-mail is not valid"
+                ],
                 address: [],
                 building_address: [],
                 street_address: [],

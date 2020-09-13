@@ -72,27 +72,6 @@ class PaymentController extends Controller
         $payments = $payments->paginate($itemsPerPage);
 
         return PaymentResource::collection($payments);
-        // $payment = Payment::latest()->get();
-        // $count = count($payment);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $payment = Payment::onlyTrashed()->latest()->limit($request->limit ?? $count)->get();
-        //             break;
-        //         default:
-        //             $payment = Payment::latest()->limit($request->limit ?? $count)->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => PaymentResource::collection($payment),
-        //         'message' => 'Payments retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**

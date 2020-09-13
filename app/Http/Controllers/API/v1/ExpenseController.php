@@ -66,32 +66,6 @@ class ExpenseController extends Controller
         $expenses = $expenses->paginate($itemsPerPage);
 
         return ExpenseResource::collection($expenses);
-        // $expense = Expense::latest()->get();
-        // $count = count($expense);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $expense = Expense::onlyTrashed()
-        //                 ->latest()
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //         default:
-        //             $expense = Expense::latest()
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => ExpenseResource::collection($expense),
-        //         'message' => 'Expenses retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**

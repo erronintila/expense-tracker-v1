@@ -61,32 +61,6 @@ class ExpenseReportController extends Controller
         $expense_reports = $expense_reports->paginate($itemsPerPage);
 
         return ExpenseReportResource::collection($expense_reports);
-        // $expense_reports = ExpenseReport::latest()->get();
-        // $count = count($expense_reports);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $expense_reports = ExpenseReport::onlyTrashed()
-        //                 ->latest()
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //         default:
-        //             $expense_reports = ExpenseReport::latest()
-        //                 ->limit($request->limit ?? $count)
-        //                 ->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => ExpenseReportResource::collection($expense_reports),
-        //         'message' => 'Expense Reports retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**

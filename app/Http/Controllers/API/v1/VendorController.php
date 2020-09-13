@@ -81,27 +81,6 @@ class VendorController extends Controller
         $vendors = $vendors->paginate($itemsPerPage);
 
         return VendorResource::collection($vendors);
-        // $vendor = Vendor::orderBy('name')->get();
-        // $count = count($vendor);
-
-        // if (request()->has('status')) {
-        //     switch ($request->status) {
-        //         case 'Archived':
-        //             $vendor = Vendor::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
-        //             break;
-        //         default:
-        //             $vendor = Vendor::orderBy('name')->limit($request->limit ?? $count)->get();
-        //             break;
-        //     }
-        // }
-
-        // return response(
-        //     [
-        //         'data' => VendorResource::collection($vendor),
-        //         'message' => 'Vendors retrieved successfully'
-        //     ],
-        //     200
-        // );
     }
 
     /**
