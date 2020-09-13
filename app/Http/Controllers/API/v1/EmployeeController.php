@@ -53,32 +53,63 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $employees = Employee::orderBy('last_name')->get();
-        $count = count($employees);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "last_name";
+        $sortType = $request->sortType ?? "asc";
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $employees = Employee::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $employees = Employee::onlyTrashed()
-                        ->orderBy('last_name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $employees = $employees->onlyTrashed();
                     break;
                 default:
-                    $employees = Employee::orderBy('last_name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $employees = $employees;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => EmployeeResource::collection($employees),
-                'message' => 'Employees retrieved successfully'
-            ],
-            200
-        );
+        $employees = $employees->where(function ($query) use ($search) {
+            $query->where('code', "like", "%" . $search . "%");
+            $query->orWhere("first_name", "like", "%" . $search . "%");
+            $query->orWhere("middle_name", "like", "%" . $search . "%");
+            $query->orWhere("last_name", "like", "%" . $search . "%");
+            $query->orWhere("gender", "like", "%" . $search . "%");
+            $query->orWhere("birthdate", "like", "%" . $search . "%");
+            $query->orWhere("mobile_number", "like", "%" . $search . "%");
+            $query->orWhere("email", "like", "%" . $search . "%");
+        });
+        $employees = $employees->paginate($itemsPerPage);
+
+        return EmployeeResource::collection($employees);
+        // $employees = Employee::orderBy('last_name')->get();
+        // $count = count($employees);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $employees = Employee::onlyTrashed()
+        //                 ->orderBy('last_name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //         default:
+        //             $employees = Employee::orderBy('last_name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => EmployeeResource::collection($employees),
+        //         'message' => 'Employees retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**
@@ -197,7 +228,6 @@ class EmployeeController extends Controller
 
         return response(
             [
-                'data' => new EmployeeResource($employee),
                 'message' => 'Updated successfully'
             ],
             201
@@ -216,7 +246,6 @@ class EmployeeController extends Controller
 
         return response(
             [
-                'data' => new EmployeeResource($employee),
                 'message' => 'Deleted successfully'
             ],
             200

@@ -156,16 +156,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
     return {
       loading: true,
-      loading_text: "Loading items...",
       headers: [{
         text: "Expense",
         value: "expense_type.name"
@@ -188,38 +183,61 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortable: false
       }],
       items: [],
-      limit: 500,
-      limits: [500, 1000, 5000, "No limit"],
       status: "Active",
       statuses: ["Active", "Archived"],
       selected: [],
-      search: ""
+      search: "",
+      totalItems: 0,
+      options: {
+        sortBy: ["created_at"],
+        sortDesc: [true],
+        page: 1,
+        itemsPerPage: 10
+      }
     };
   },
   methods: {
-    loadItems: function loadItems() {
+    getDataFromApi: function getDataFromApi() {
+      var _this2 = this;
+
       var _this = this;
 
-      _this.selected = [];
-      axios.get("/api/expenses", {
-        params: _objectSpread({
-          status: _this.status
-        }, _this.limit == "No limit" ? {} : {
-          limit: _this.limit
-        })
-      }).then(function (response) {
-        _this.items = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      _this.loading = true;
+      return new Promise(function (resolve, reject) {
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
+
+        var search = _this.search.trim().toLowerCase();
+
+        var status = _this.status;
+        axios.get("/api/expenses", {
+          params: {
+            search: search,
+            sortBy: sortBy[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
+            page: page,
+            itemsPerPage: itemsPerPage,
+            status: status
+          }
+        }).then(function (response) {
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this.loading = false;
+          resolve({
+            items: items,
+            total: total
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          _this.loading = false;
+        });
       });
     },
     onRefresh: function onRefresh() {
-      this.selected = [];
-      this.status = "Active";
-      this.limit = 500;
-      this.search = "";
-      this.loadItems();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -238,9 +256,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this = this; // console.log(_this.selected);
-      // return;
-
+      var _this = this;
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -264,7 +280,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               timeout: 2000
             });
 
-            _this.loadItems();
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
           })["catch"](function (error) {
             console.log(error.response);
           });
@@ -295,7 +314,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               timeout: 2000
             });
 
-            _this.loadItems();
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
           })["catch"](function (error) {
             console.log(error.response);
           });
@@ -304,19 +326,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   watch: {
-    items: function items() {
-      this.loading = false;
-      this.loading_text = "No data available";
+    params: {
+      handler: function handler() {
+        var _this3 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this3.items = data.items;
+          _this3.totalItems = data.total;
+        });
+      },
+      deep: true
     }
   },
-  created: function created() {
-    // const token = localStorage.getItem("access_token");
-    // if (token) {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // }
-
-    this.loadItems();
+  computed: {
+    params: function params(nv) {
+      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+        query: this.search
+      }, "query", this.status));
+    }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    var _this4 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this4.items = data.items;
+      _this4.totalItems = data.total;
+    });
+  },
+  created: function created() {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+  }
 });
 
 /***/ }),
@@ -442,34 +481,12 @@ var render = function() {
                             [
                               _c("v-select", {
                                 attrs: { items: _vm.statuses, label: "Status" },
-                                on: { change: _vm.loadItems },
                                 model: {
                                   value: _vm.status,
                                   callback: function($$v) {
                                     _vm.status = $$v
                                   },
                                   expression: "status"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("v-select", {
-                                attrs: {
-                                  items: _vm.limits,
-                                  label: "Limit rows"
-                                },
-                                on: { change: _vm.loadItems },
-                                model: {
-                                  value: _vm.limit,
-                                  callback: function($$v) {
-                                    _vm.limit = $$v
-                                  },
-                                  expression: "limit"
                                 }
                               })
                             ],
@@ -603,11 +620,24 @@ var render = function() {
                 attrs: {
                   headers: _vm.headers,
                   items: _vm.items,
-                  search: _vm.search,
                   loading: _vm.loading,
-                  "loading-text": _vm.loading_text,
+                  options: _vm.options,
+                  "server-items-length": _vm.totalItems,
+                  "footer-props": {
+                    itemsPerPageOptions: [10, 20, 50, 100],
+                    showFirstLastPage: true,
+                    firstIcon: "mdi-page-first",
+                    lastIcon: "mdi-page-last",
+                    prevIcon: "mdi-chevron-left",
+                    nextIcon: "mdi-chevron-right"
+                  },
                   "show-select": "",
                   "item-key": "id"
+                },
+                on: {
+                  "update:options": function($event) {
+                    _vm.options = $event
+                  }
                 },
                 scopedSlots: _vm._u(
                   [

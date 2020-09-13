@@ -55,17 +55,8 @@
                             <v-list-item>
                                 <v-select
                                     v-model="status"
-                                    v-on:change="loadItems"
                                     :items="statuses"
                                     label="Status"
-                                ></v-select>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="limit"
-                                    v-on:change="loadItems"
-                                    :items="limits"
-                                    label="Limit rows"
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -121,9 +112,17 @@
                 <v-data-table
                     :headers="headers"
                     :items="items"
-                    :search="search"
                     :loading="loading"
-                    :loading-text="loading_text"
+                    :options.sync="options"
+                    :server-items-length="totalItems"
+                    :footer-props="{
+                        itemsPerPageOptions: [10, 20, 50, 100],
+                        showFirstLastPage: true,
+                        firstIcon: 'mdi-page-first',
+                        lastIcon: 'mdi-page-last',
+                        prevIcon: 'mdi-chevron-left',
+                        nextIcon: 'mdi-chevron-right'
+                    }"
                     show-expand
                     single-expand
                     v-model="selected"
@@ -199,7 +198,6 @@ export default {
         return {
             expanded: [],
             loading: true,
-            loading_text: "Loading items...",
             headers: [
                 { text: "Name", value: "fullname" },
                 // { text: "First Name", value: "first_name" },
@@ -212,45 +210,59 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            limit: 500,
-            limits: [500, 1000, 5000, "No limit"],
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
-            search: ""
+            search: "",
+            totalItems: 0,
+            options: {
+                sortBy: ["last_name"],
+                sortDesc: [false],
+                page: 1,
+                itemsPerPage: 10
+            }
         };
     },
     methods: {
-        loadItems() {
+        getDataFromApi() {
             let _this = this;
-            _this.selected = [];
 
-            axios
-                .get("/api/employees", {
-                    params: {
-                        status: _this.status,
+            _this.loading = true;
 
-                        // Exclude limit parameter if limit is equals to 'No limit'
-                        ...(_this.limit == "No limit"
-                            ? {}
-                            : { limit: _this.limit })
-                    }
-                })
-                .then(function(response) {
-                    _this.items = response.data.data;
-                })
-                .catch(function(error) {
-                    console.log(error);
+            return new Promise((resolve, reject) => {
+                const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                    console.log(error.response);
-                });
+                let search = _this.search.trim().toLowerCase();
+                let status = _this.status;
+
+                axios
+                    .get("/api/employees", {
+                        params: {
+                            search: search,
+                            sortBy: sortBy[0],
+                            sortType: sortDesc[0] ? "desc" : "asc",
+                            page: page,
+                            itemsPerPage: itemsPerPage,
+                            status: status
+                        }
+                    })
+                    .then(response => {
+                        let items = response.data.data;
+                        let total = response.data.meta.total;
+
+                        _this.loading = false;
+
+                        resolve({ items, total });
+                    })
+                    .catch(error => {
+                        console.log(error);
+
+                        _this.loading = false;
+                    });
+            });
         },
         onRefresh() {
-            this.selected = [];
-            this.status = "Active";
-            this.limit = 500;
-            this.search = "";
-            this.loadItems();
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onShow(item) {
             this.$router.push({
@@ -293,7 +305,10 @@ export default {
                                     timeout: 2000
                                 }
                             );
-                            _this.loadItems();
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
                         })
                         .catch(function(error) {
                             console.log(error.response);
@@ -326,7 +341,10 @@ export default {
                                 position: "top-right",
                                 timeout: 2000
                             });
-                            _this.loadItems();
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
                         })
                         .catch(function(error) {
                             console.log(error.response);
@@ -335,21 +353,41 @@ export default {
             });
         }
     },
+    // watch: {
+    //     items() {
+    //         this.loading = false;
+    //         this.loading_text = "No data available";
+    //     }
+    // },
     watch: {
-        items() {
-            this.loading = false;
-            this.loading_text = "No data available";
+        params: {
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            },
+            deep: true
         }
     },
+    computed: {
+        params(nv) {
+            return {
+                ...this.options,
+                query: this.search,
+                query: this.status
+            };
+        }
+    },
+    mounted() {
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
+    },
     created() {
-        // const token = localStorage.getItem("access_token");
-        // if (token) {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
-        // }
-
-        this.loadItems();
-    },
-    mounted() {}
+    }
 };
 </script>

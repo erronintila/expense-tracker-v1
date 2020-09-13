@@ -39,32 +39,59 @@ class ExpenseController extends Controller
      */
     public function index(Request $request)
     {
-        $expense = Expense::latest()->get();
-        $count = count($expense);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "created_at";
+        $sortType = $request->sortType ?? "desc";
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $expenses = Expense::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $expense = Expense::onlyTrashed()
-                        ->latest()
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $expenses = $expenses->onlyTrashed();
                     break;
                 default:
-                    $expense = Expense::latest()
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $expenses = $expenses;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => ExpenseResource::collection($expense),
-                'message' => 'Expenses retrieved successfully'
-            ],
-            200
-        );
+        $expenses = $expenses->where(function ($query) use ($search) {
+            $query->where('code', "like", "%" . $search . "%");
+            $query->orWhere("description", "like", "%" . $search . "%");
+            $query->orWhere("receipt_number", "like", "%" . $search . "%");
+            $query->orWhere("date", "like", "%" . $search . "%");
+        });
+        $expenses = $expenses->paginate($itemsPerPage);
+
+        return ExpenseResource::collection($expenses);
+        // $expense = Expense::latest()->get();
+        // $count = count($expense);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $expense = Expense::onlyTrashed()
+        //                 ->latest()
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //         default:
+        //             $expense = Expense::latest()
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => ExpenseResource::collection($expense),
+        //         'message' => 'Expenses retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**
@@ -155,7 +182,6 @@ class ExpenseController extends Controller
 
         return response(
             [
-                'data' => new ExpenseResource($expense),
                 'message' => 'Updated successfully'
             ],
             201
@@ -174,7 +200,6 @@ class ExpenseController extends Controller
 
         return response(
             [
-                'data' => new ExpenseResource($expense),
                 'message' => 'Deleted successfully'
             ],
             200

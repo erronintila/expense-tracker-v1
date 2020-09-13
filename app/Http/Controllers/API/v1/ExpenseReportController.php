@@ -36,32 +36,57 @@ class ExpenseReportController extends Controller
      */
     public function index(Request $request)
     {
-        $expense_reports = ExpenseReport::latest()->get();
-        $count = count($expense_reports);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "created_at";
+        $sortType = $request->sortType ?? "desc";
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $expense_reports = ExpenseReport::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $expense_reports = ExpenseReport::onlyTrashed()
-                        ->latest()
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $expense_reports = $expense_reports->onlyTrashed();
                     break;
                 default:
-                    $expense_reports = ExpenseReport::latest()
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $expense_reports = $expense_reports;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => ExpenseReportResource::collection($expense_reports),
-                'message' => 'Expense Reports retrieved successfully'
-            ],
-            200
-        );
+        $expense_reports = $expense_reports->where(function ($query) use ($search) {
+            $query->where('code', "like", "%" . $search . "%");
+            $query->orWhere('description', "like", "%" . $search . "%");
+        });
+        $expense_reports = $expense_reports->paginate($itemsPerPage);
+
+        return ExpenseReportResource::collection($expense_reports);
+        // $expense_reports = ExpenseReport::latest()->get();
+        // $count = count($expense_reports);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $expense_reports = ExpenseReport::onlyTrashed()
+        //                 ->latest()
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //         default:
+        //             $expense_reports = ExpenseReport::latest()
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => ExpenseReportResource::collection($expense_reports),
+        //         'message' => 'Expense Reports retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**
@@ -144,7 +169,6 @@ class ExpenseReportController extends Controller
 
         return response(
             [
-                'data' => new ExpenseReportResource($expense_report),
                 'message' => 'Updated successfully'
             ],
             201
@@ -163,7 +187,6 @@ class ExpenseReportController extends Controller
 
         return response(
             [
-                'data' => new ExpenseReportResource($expense_report),
                 'message' => 'Deleted successfully'
             ],
             200

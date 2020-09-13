@@ -51,27 +51,57 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        $vendor = Vendor::orderBy('name')->get();
-        $count = count($vendor);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "name";
+        $sortType = $request->sortType ?? "asc";
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $vendors = Vendor::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $vendor = Vendor::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
+                    $vendors = $vendors->onlyTrashed();
                     break;
                 default:
-                    $vendor = Vendor::orderBy('name')->limit($request->limit ?? $count)->get();
+                    $vendors = $vendors;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => VendorResource::collection($vendor),
-                'message' => 'Vendors retrieved successfully'
-            ],
-            200
-        );
+        $vendors = $vendors->where(function ($query) use ($search) {
+            $query->where('code', "like", "%" . $search . "%");
+            $query->orWhere("name", "like", "%" . $search . "%");
+            $query->orWhere("email", "like", "%" . $search . "%");
+            $query->orWhere("tin", "like", "%" . $search . "%");
+            $query->orWhere("mobile_number", "like", "%" . $search . "%");
+            $query->orWhere("telephone_number", "like", "%" . $search . "%");
+        });
+
+        $vendors = $vendors->paginate($itemsPerPage);
+
+        return VendorResource::collection($vendors);
+        // $vendor = Vendor::orderBy('name')->get();
+        // $count = count($vendor);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $vendor = Vendor::onlyTrashed()->orderBy('name')->limit($request->limit ?? $count)->get();
+        //             break;
+        //         default:
+        //             $vendor = Vendor::orderBy('name')->limit($request->limit ?? $count)->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => VendorResource::collection($vendor),
+        //         'message' => 'Vendors retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**
@@ -188,7 +218,6 @@ class VendorController extends Controller
 
         return response(
             [
-                'data' => new VendorResource($vendor),
                 'message' => 'Updated successfully'
             ],
             201
@@ -207,7 +236,6 @@ class VendorController extends Controller
 
         return response(
             [
-                'data' => new VendorResource($vendor),
                 'message' => 'Deleted successfully'
             ],
             200

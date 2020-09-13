@@ -42,27 +42,57 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        $payment = Payment::latest()->get();
-        $count = count($payment);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "created_at";
+        $sortType = $request->sortType ?? "desc";
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $payments = Payment::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $payment = Payment::onlyTrashed()->latest()->limit($request->limit ?? $count)->get();
+                    $payments = $payments->onlyTrashed();
                     break;
                 default:
-                    $payment = Payment::latest()->limit($request->limit ?? $count)->get();
+                    $payments = $payments;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => PaymentResource::collection($payment),
-                'message' => 'Payments retrieved successfully'
-            ],
-            200
-        );
+        $payments = $payments->where(function ($query) use ($search) {
+            $query->where('code', "like", "%" . $search . "%");
+            $query->orWhere('reference_no', "like", "%" . $search . "%");
+            $query->orWhere('voucher_no', "like", "%" . $search . "%");
+            $query->orWhere('description', "like", "%" . $search . "%");
+            $query->orWhere('cheque_no', "like", "%" . $search . "%");
+            $query->orWhere('amount', "like", "%" . $search . "%");
+            $query->orWhere('payee', "like", "%" . $search . "%");
+        });
+        $payments = $payments->paginate($itemsPerPage);
+
+        return PaymentResource::collection($payments);
+        // $payment = Payment::latest()->get();
+        // $count = count($payment);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $payment = Payment::onlyTrashed()->latest()->limit($request->limit ?? $count)->get();
+        //             break;
+        //         default:
+        //             $payment = Payment::latest()->limit($request->limit ?? $count)->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => PaymentResource::collection($payment),
+        //         'message' => 'Payments retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**
@@ -163,7 +193,6 @@ class PaymentController extends Controller
 
         return response(
             [
-                'data' => new PaymentResource($payment),
                 'message' => 'Updated successfully'
             ],
             201
@@ -182,7 +211,6 @@ class PaymentController extends Controller
 
         return response(
             [
-                'data' => new PaymentResource($payment),
                 'message' => 'Deleted successfully'
             ],
             200

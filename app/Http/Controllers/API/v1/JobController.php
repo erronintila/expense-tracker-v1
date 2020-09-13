@@ -33,32 +33,54 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        $jobs = Job::orderBy('name')->get();
-        $count = count($jobs);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "name";
+        $sortType = $request->sortType ?? "asc";
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $jobs = Job::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $jobs = Job::onlyTrashed()
-                        ->orderBy('name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $jobs = $jobs->onlyTrashed();
                     break;
                 default:
-                    $jobs = Job::orderBy('name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $jobs = $jobs;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => JobResource::collection($jobs),
-                'message' => 'Jobs retrieved successfully'
-            ],
-            200
-        );
+        $jobs = $jobs->where('name', "like", "%" . $search . "%");
+        $jobs = $jobs->paginate($itemsPerPage);
+
+        return JobResource::collection($jobs);
+        // $jobs = Job::orderBy('name')->get();
+        // $count = count($jobs);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $jobs = Job::onlyTrashed()
+        //                 ->orderBy('name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //         default:
+        //             $jobs = Job::orderBy('name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => JobResource::collection($jobs),
+        //         'message' => 'Jobs retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**
@@ -137,7 +159,6 @@ class JobController extends Controller
 
         return response(
             [
-                'data' => new JobResource($job),
                 'message' => 'Updated successfully'
             ],
             201
@@ -156,7 +177,6 @@ class JobController extends Controller
 
         return response(
             [
-                'data' => new JobResource($job),
                 'message' => 'Deleted successfully'
             ],
             200

@@ -32,32 +32,54 @@ class ExpenseTypeController extends Controller
      */
     public function index(Request $request)
     {
-        $expense_type = ExpenseType::orderBy('name')->get();
-        $count = count($expense_type);
+        $search = $request->search ?? "";
+        $sortBy = $request->sortBy ?? "name";
+        $sortType = $request->sortType ?? "asc";
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $expense_types = ExpenseType::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
                 case 'Archived':
-                    $expense_type = ExpenseType::onlyTrashed()
-                        ->orderBy('name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $expense_types = $expense_types->onlyTrashed();
                     break;
                 default:
-                    $expense_type = ExpenseType::orderBy('name')
-                        ->limit($request->limit ?? $count)
-                        ->get();
+                    $expense_types = $expense_types;
                     break;
             }
         }
 
-        return response(
-            [
-                'data' => ExpenseTypeResource::collection($expense_type),
-                'message' => 'Expense Types retrieved successfully'
-            ],
-            200
-        );
+        $expense_types = $expense_types->where('name', "like", "%" . $search . "%");
+        $expense_types = $expense_types->paginate($itemsPerPage);
+
+        return ExpenseTypeResource::collection($expense_types);
+        // $expense_type = ExpenseType::orderBy('name')->get();
+        // $count = count($expense_type);
+
+        // if (request()->has('status')) {
+        //     switch ($request->status) {
+        //         case 'Archived':
+        //             $expense_type = ExpenseType::onlyTrashed()
+        //                 ->orderBy('name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //         default:
+        //             $expense_type = ExpenseType::orderBy('name')
+        //                 ->limit($request->limit ?? $count)
+        //                 ->get();
+        //             break;
+        //     }
+        // }
+
+        // return response(
+        //     [
+        //         'data' => ExpenseTypeResource::collection($expense_type),
+        //         'message' => 'Expense Types retrieved successfully'
+        //     ],
+        //     200
+        // );
     }
 
     /**
@@ -133,7 +155,6 @@ class ExpenseTypeController extends Controller
 
         return response(
             [
-                'data' => new ExpenseTypeResource($expense_type),
                 'message' => 'Updated successfully'
             ],
             201
@@ -152,7 +173,6 @@ class ExpenseTypeController extends Controller
 
         return response(
             [
-                'data' => new ExpenseTypeResource($expense_type),
                 'message' => 'Deleted successfully'
             ],
             200

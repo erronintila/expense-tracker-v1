@@ -9,14 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vee-validate/dist/rules */ "./node_modules/vee-validate/dist/rules.js");
-/* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -57,77 +49,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-
- // import "../../../../helpers/vee-validate";
-
-Object(vee_validate__WEBPACK_IMPORTED_MODULE_1__["extend"])("required", _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_0__["required"]), {}, {
-  message: "{_field_} can not be empty"
-}));
-Object(vee_validate__WEBPACK_IMPORTED_MODULE_1__["extend"])("max", _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_0__["max"]), {}, {
-  message: "{_field_} may not be greater than {length} characters"
-}));
-Object(vee_validate__WEBPACK_IMPORTED_MODULE_1__["extend"])("email", _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_0__["email"]), {}, {
-  message: "Email must be valid"
-}));
-Object(vee_validate__WEBPACK_IMPORTED_MODULE_1__["setInteractionMode"])("eager");
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    ValidationProvider: vee_validate__WEBPACK_IMPORTED_MODULE_1__["ValidationProvider"],
-    ValidationObserver: vee_validate__WEBPACK_IMPORTED_MODULE_1__["ValidationObserver"]
-  },
   data: function data() {
     return {
       valid: false,
-      name: "" // rules: {
-      //     name: [
-      //         v => !!v || "Name is required",
-      //         v =>
-      //             v.length <= 100 ||
-      //             "Name must be less than 100 characters"
-      //     ]
-      // }
-
+      name: "",
+      rules: {
+        name: [function (v) {
+          return !!v || "The name field is required.";
+        } // v =>
+        //     v.length <= 100 ||
+        //     "Name must be less than 100 characters"
+        ]
+      },
+      errors: {
+        name: []
+      }
     };
   },
   methods: {
     onRefresh: function onRefresh() {
+      // Object.assign(this.$data, this.$options.data.apply(this));
       this.$refs.form.reset();
       this.$refs.form.resetValidation();
     },
-    clear: function clear() {
-      this.$refs.observer.reset();
-    },
     onSave: function onSave() {
-      var _this = this; // console.log(_this.$refs.observer.validate());
-      // if (true) {
-      // }
-      // _this.$refs.form.validate();
-      // if (_this.$refs.observer.validate()) {
-      //     alert("ola");
-      // }
-      // this.$refs.observer.reset();
-      // if (_this.$refs.form.validate()) {
+      var _this = this;
 
+      if (_this.$refs.form.validate()) {
+        axios.post("/api/departments", {
+          name: _this.name
+        }).then(function (response) {
+          _this.onRefresh();
 
-      axios.post("/api/departments", {
-        name: _this.name
-      }).then(function (response) {
-        _this.onRefresh();
-
-        _this.$dialog.message.success("Department created successfully.", {
-          position: "top-right",
-          timeout: 2000
+          _this.$dialog.message.success("Department created successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          _this.errors = error.response.data.errors;
         });
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-        var errors = error.response.data.errors;
-
-        _this.$refs.observer.setErrors(errors);
-
-        _this.$refs.observer.validate();
-      }); //     return;
-      // }
+      }
     }
   },
   created: function created() {
@@ -207,10 +174,16 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.name,
                               counter: 100,
-                              label: "Name",
+                              rules: _vm.rules.name,
+                              "error-messages": _vm.errors.name[0],
+                              label: "Name *",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.name = []
+                              }
                             },
                             model: {
                               value: _vm.name,
@@ -226,6 +199,12 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",
@@ -252,9 +231,7 @@ var render = function() {
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("v-text-field", { attrs: { counter: 100, label: "Name" } })
+          )
         ],
         1
       )
