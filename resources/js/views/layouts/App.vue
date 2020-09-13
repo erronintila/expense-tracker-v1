@@ -127,7 +127,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-menu
+            <!-- <v-menu
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-y
@@ -146,11 +146,9 @@
                             </template>
 
                             <v-icon>mdi-bell</v-icon>
-                            <!-- <v-icon>mdi-bell-circle</v-icon> -->
                         </v-badge>
 
                         <v-icon v-else>mdi-bell</v-icon>
-                        <!-- <v-icon>mdi-bell-circle</v-icon> -->
                     </v-btn>
                 </template>
 
@@ -201,9 +199,9 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-            </v-menu>
+            </v-menu> -->
 
-            <v-menu
+            <!-- <v-menu
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-y
@@ -213,7 +211,6 @@
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on">
                         <v-icon>mdi-dots-vertical</v-icon>
-                        <!-- <v-icon>mdi-account</v-icon> -->
                     </v-btn>
                 </template>
 
@@ -234,23 +231,6 @@
 
                     <v-divider></v-divider>
 
-                    <!-- <v-list>
-                        <v-list-item
-                            v-for="item in notifications.slice(0, 3)"
-                            :key="item.title"
-                            @click="() => {}"
-                        >
-                            <v-list-item-content>
-                                <v-list-item-title>
-                                    {{ item.title }}
-                                </v-list-item-title>
-                                <v-list-item-subtitle>
-                                    {{ item.created_at }}
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list> -->
-
                     <v-card-actions>
                         <v-btn color="green" text @click="toProfile">
                             Profile
@@ -261,104 +241,11 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
+            </v-menu> -->
 
-                <!-- <v-card class="mx-auto" max-width="344" outlined>
-                    <v-list-item three-line>
-                        <v-list-item-content>
-                            <div class="overline mb-4">OVERLINE</div>
-                            <v-list-item-title class="headline mb-1"
-                                >Erron Intila</v-list-item-title
-                            >
-                            <v-list-item-subtitle
-                                >Administrator</v-list-item-subtitle
-                            >
-                        </v-list-item-content>
-
-                        <v-list-item-avatar
-                            tile
-                            size="80"
-                            color="grey"
-                        ></v-list-item-avatar>
-                    </v-list-item>
-
-                    <v-card-actions>
-                        <v-btn text>Button</v-btn>
-                        <v-btn text>Button</v-btn>
-                    </v-card-actions>
-                </v-card> -->
-
-                <!-- <v-card class="mx-auto" max-width="344">
-                    <v-card-title>
-                        Erron Intila
-                    </v-card-title>
-
-                    <v-card-subtitle>
-                        Administrator
-                    </v-card-subtitle>
-
-                    <v-card-actions>
-                        <v-btn color="green" text @click="toProfile">
-                            Manage account
-                        </v-btn>
-
-                        <v-spacer></v-spacer>
-
-                        <v-btn text @click="onLogout">Log out</v-btn>
-                    </v-card-actions>
-                </v-card> -->
-
-                <!-- <v-card>
-                    <v-list>
-                        <v-list-item>
-                            <v-list-item-avatar>
-                                <img
-                                    src="https://cdn.vuetifyjs.com/images/john.jpg"
-                                    alt="John"
-                                />
-                            </v-list-item-avatar>
-
-                            <v-list-item-content>
-                                <v-list-item-title>
-                                    Erron Intila
-                                </v-list-item-title>
-                                <v-list-item-subtitle>
-                                    Administrator
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list>
-
-                    <v-divider></v-divider>
-
-                    <v-list class="mx-auto">
-
-                        <v-btn rounded>Manage account</v-btn>
-
-                        <v-btn color="green" rounded text @click="onLogout">
-                            Log out
-                        </v-btn>
-
-                        <v-list-item @click="() => {}">
-                            <v-list-item-title>Manage Account</v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="() => {}">
-                            <v-list-item-title>Settings</v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" text @click="onLogout">
-                            Log out
-                        </v-btn>
-                    </v-card-actions>
-                </v-card> -->
-            </v-menu>
-
-            <!-- <v-btn icon @click="onLogout">
+            <v-btn icon @click="onLogout">
                 <v-icon>mdi-logout</v-icon>
-            </v-btn> -->
+            </v-btn>
         </v-app-bar>
         <!-- End of App Bar -->
 
@@ -393,7 +280,7 @@ export default {
         source: String
     },
     data: () => ({
-        notifications: [],
+        // notifications: [],
         // notifications: [
         //     { title: "5 Pending Reports", link: "", created_at: "3 hours ago" },
         //     {
@@ -507,3 +394,15 @@ export default {
     }
 };
 </script>
+
+<style>
+/* html,
+body {
+    background: #000000;
+    width: 100%;
+    height: 100%;
+}
+html {
+    overflow-y: auto !important; // override Vuetify's default style
+} */
+</style>

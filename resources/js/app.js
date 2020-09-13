@@ -35,7 +35,6 @@ Vue.use(VuetifyDialog, {
         vuetify
     }
 });
-// Vue.use(VeeValidate);
 // Vue.use(moment);
 
 /**
@@ -57,9 +56,10 @@ import App from "./views/layouts/App.vue";
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('create-department', require('./views/modules/admin/departments/components/Create.vue').default);
 
-import components from "./components/ExampleComponent";
-Vue.use(components);
+import components from "./components/index";
+// Vue.use(components);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
