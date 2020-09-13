@@ -14,6 +14,12 @@
                                     <v-text-field
                                         v-model="name"
                                         :rules="rules.name"
+                                        :error-messages="errors.name"
+                                        @input="
+                                            () => {
+                                                errors.name = [];
+                                            }
+                                        "
                                         label="Name"
                                         name="name"
                                         prepend-icon="mdi-account"
@@ -23,6 +29,12 @@
                                     <v-text-field
                                         v-model="username"
                                         :rules="rules.username"
+                                        :error-messages="errors.username"
+                                        @input="
+                                            () => {
+                                                errors.username = [];
+                                            }
+                                        "
                                         label="Username"
                                         name="username"
                                         prepend-icon="mdi-account"
@@ -32,6 +44,12 @@
                                     <v-text-field
                                         v-model="email"
                                         :rules="rules.email"
+                                        :error-messages="errors.email"
+                                        @input="
+                                            () => {
+                                                errors.email = [];
+                                            }
+                                        "
                                         label="Email Address"
                                         name="email"
                                         prepend-icon="mdi-account"
@@ -41,6 +59,12 @@
                                     <v-text-field
                                         v-model="password"
                                         :rules="rules.password"
+                                        :error-messages="errors.password"
+                                        @input="
+                                            () => {
+                                                errors.password = [];
+                                            }
+                                        "
                                         label="Password"
                                         name="password"
                                         prepend-icon="mdi-lock"
@@ -48,8 +72,16 @@
                                     ></v-text-field>
 
                                     <v-text-field
-                                        v-model="confirm_password"
-                                        :rules="rules.confirm_password"
+                                        v-model="password_confirmation"
+                                        :rules="rules.password_confirmation"
+                                        :error-messages="
+                                            errors.password_confirmation
+                                        "
+                                        @input="
+                                            () => {
+                                                errors.password_confirmation = [];
+                                            }
+                                        "
                                         label="Re-type Password"
                                         name="confirm_password"
                                         prepend-icon="mdi-lock"
@@ -83,7 +115,7 @@ export default {
             username: "",
             email: "",
             password: "",
-            confirm_password: "",
+            password_confirmation: "",
             rules: {
                 name: [
                     v => !!v || "Name is required",
@@ -101,8 +133,25 @@ export default {
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail must be valid"
                 ],
-                password: [v => !!v || "Password is required"],
-                confirm_password: []
+                password: [
+                    v => !!v || "Password is required",
+                    v =>
+                        v.length >= 8 ||
+                        "Password must be at least 8 characters"
+                ],
+                password_confirmation: [
+                    v => !!v || "Retype password is required",
+                    v =>
+                        this.password === this.password_confirmation ||
+                        "Passwords do not match"
+                ]
+            },
+            errors: {
+                name: [],
+                username: [],
+                email: [],
+                password: [],
+                password_confirmation: []
             },
             valid: false
         };
@@ -137,11 +186,13 @@ export default {
                         console.log(error);
 
                         console.log(error.response);
+
+                        _this.errors = error.response.data.errors;
                     });
 
                 return;
             }
         }
-    },
+    }
 };
 </script>

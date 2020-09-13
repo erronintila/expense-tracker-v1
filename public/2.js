@@ -85,15 +85,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "register",
   data: function data() {
+    var _this2 = this;
+
     return {
       name: "",
       username: "",
       email: "",
       password: "",
-      confirm_password: "",
+      password_confirmation: "",
       rules: {
         name: [function (v) {
           return !!v || "Name is required";
@@ -112,8 +146,21 @@ __webpack_require__.r(__webpack_exports__);
         }],
         password: [function (v) {
           return !!v || "Password is required";
+        }, function (v) {
+          return v.length >= 8 || "Password must be at least 8 characters";
         }],
-        confirm_password: []
+        password_confirmation: [function (v) {
+          return !!v || "Retype password is required";
+        }, function (v) {
+          return _this2.password === _this2.password_confirmation || "Passwords do not match";
+        }]
+      },
+      errors: {
+        name: [],
+        username: [],
+        email: [],
+        password: [],
+        password_confirmation: []
       },
       valid: false
     };
@@ -143,6 +190,7 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+          _this.errors = error.response.data.errors;
         });
         return;
       }
@@ -220,10 +268,16 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       rules: _vm.rules.name,
+                                      "error-messages": _vm.errors.name,
                                       label: "Name",
                                       name: "name",
                                       "prepend-icon": "mdi-account",
                                       type: "text"
+                                    },
+                                    on: {
+                                      input: function() {
+                                        _vm.errors.name = []
+                                      }
                                     },
                                     model: {
                                       value: _vm.name,
@@ -237,10 +291,16 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       rules: _vm.rules.username,
+                                      "error-messages": _vm.errors.username,
                                       label: "Username",
                                       name: "username",
                                       "prepend-icon": "mdi-account",
                                       type: "text"
+                                    },
+                                    on: {
+                                      input: function() {
+                                        _vm.errors.username = []
+                                      }
                                     },
                                     model: {
                                       value: _vm.username,
@@ -254,10 +314,16 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       rules: _vm.rules.email,
+                                      "error-messages": _vm.errors.email,
                                       label: "Email Address",
                                       name: "email",
                                       "prepend-icon": "mdi-account",
                                       type: "text"
+                                    },
+                                    on: {
+                                      input: function() {
+                                        _vm.errors.email = []
+                                      }
                                     },
                                     model: {
                                       value: _vm.email,
@@ -271,10 +337,16 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       rules: _vm.rules.password,
+                                      "error-messages": _vm.errors.password,
                                       label: "Password",
                                       name: "password",
                                       "prepend-icon": "mdi-lock",
                                       type: "password"
+                                    },
+                                    on: {
+                                      input: function() {
+                                        _vm.errors.password = []
+                                      }
                                     },
                                     model: {
                                       value: _vm.password,
@@ -287,18 +359,25 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.rules.confirm_password,
+                                      rules: _vm.rules.password_confirmation,
+                                      "error-messages":
+                                        _vm.errors.password_confirmation,
                                       label: "Re-type Password",
                                       name: "confirm_password",
                                       "prepend-icon": "mdi-lock",
                                       type: "password"
                                     },
+                                    on: {
+                                      input: function() {
+                                        _vm.errors.password_confirmation = []
+                                      }
+                                    },
                                     model: {
-                                      value: _vm.confirm_password,
+                                      value: _vm.password_confirmation,
                                       callback: function($$v) {
-                                        _vm.confirm_password = $$v
+                                        _vm.password_confirmation = $$v
                                       },
-                                      expression: "confirm_password"
+                                      expression: "password_confirmation"
                                     }
                                   })
                                 ],

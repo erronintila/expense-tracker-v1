@@ -84,6 +84,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
@@ -93,7 +95,6 @@ __webpack_require__.r(__webpack_exports__);
       email: "",
       password: "",
       rules: {
-        name: [],
         username: [function (v) {
           return !!v || "Username is required";
         }],
@@ -105,6 +106,11 @@ __webpack_require__.r(__webpack_exports__);
         password: [function (v) {
           return !!v || "Password is required";
         }]
+      },
+      errors: {
+        username: [],
+        email: [],
+        password: []
       },
       valid: false
     };
@@ -135,9 +141,9 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           _this.loadingScreen();
         })["catch"](function (error) {
-          console.log(error);
+          _this.errors = error.data;
 
-          _this.$dialog.message.error("Unauthorized: Error username/password", {
+          _this.$dialog.message.error("Error ".concat(error.status, " : ").concat(error.statusText), {
             position: "top-right",
             timeout: 2000
           });
@@ -240,6 +246,7 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       rules: _vm.rules.username,
+                                      "error-messages": _vm.errors.username,
                                       label: "Username",
                                       name: "username",
                                       "prepend-icon": "mdi-account",
@@ -257,6 +264,7 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       rules: _vm.rules.password,
+                                      "error-messages": _vm.errors.password,
                                       label: "Password",
                                       name: "password",
                                       "prepend-icon": "mdi-lock",

@@ -40,6 +40,7 @@
                                     <v-text-field
                                         v-model="username"
                                         :rules="rules.username"
+                                        :error-messages="errors.username"
                                         label="Username"
                                         name="username"
                                         prepend-icon="mdi-account"
@@ -49,6 +50,7 @@
                                     <v-text-field
                                         v-model="password"
                                         :rules="rules.password"
+                                        :error-messages="errors.password"
                                         label="Password"
                                         name="password"
                                         prepend-icon="mdi-lock"
@@ -83,13 +85,17 @@ export default {
             email: "",
             password: "",
             rules: {
-                name: [],
                 username: [v => !!v || "Username is required"],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail must be valid"
                 ],
                 password: [v => !!v || "Password is required"]
+            },
+            errors: {
+                username: [],
+                email: [],
+                password: []
             },
             valid: false
         };
@@ -121,11 +127,11 @@ export default {
                     .then(response => {
                         _this.loadingScreen();
                     })
-                    .catch(error => {
-                        console.log(error);
+                    .catch(function(error) {
+                        _this.errors = error.data;
 
                         _this.$dialog.message.error(
-                            "Unauthorized: Error username/password",
+                            `Error ${error.status} : ${error.statusText}`,
                             {
                                 position: "top-right",
                                 timeout: 2000

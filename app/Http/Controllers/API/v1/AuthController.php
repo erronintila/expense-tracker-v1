@@ -56,7 +56,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([$validator->errors()], 401);
+        return response()->json($validator->errors(), 401);
     }
 
     public function logout(Request $request)
