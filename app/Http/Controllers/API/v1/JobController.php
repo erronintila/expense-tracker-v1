@@ -38,7 +38,11 @@ class JobController extends Controller
         $sortType = $request->sortType ?? "asc";
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
+        // if($sortBy == "department.name") {
+        //     $jobs = Job::with("department")->sortBy("department.name", $sortType);
+        // } else {
         $jobs = Job::orderBy($sortBy, $sortType);
+        // }
 
         if (request()->has('status')) {
             switch ($request->status) {

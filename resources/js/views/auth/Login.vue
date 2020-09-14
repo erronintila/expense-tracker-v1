@@ -45,6 +45,7 @@
                                         name="username"
                                         prepend-icon="mdi-account"
                                         type="text"
+                                        color="success"
                                     ></v-text-field>
 
                                     <v-text-field
@@ -55,6 +56,7 @@
                                         name="password"
                                         prepend-icon="mdi-lock"
                                         type="password"
+                                        color="success"
                                     ></v-text-field>
                                 </v-form>
                             </v-card-text>

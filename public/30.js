@@ -141,8 +141,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onRefresh: function onRefresh() {
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;

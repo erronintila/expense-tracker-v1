@@ -130,8 +130,7 @@ export default {
     },
     methods: {
         onRefresh() {
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
             let _this = this;

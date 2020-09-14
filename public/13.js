@@ -48,6 +48,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -59,13 +69,15 @@ __webpack_require__.r(__webpack_exports__);
         }, function (v) {
           return v.length <= 100 || "Name must be less than 100 characters";
         }]
+      },
+      errors: {
+        name: []
       }
     };
   },
   methods: {
     onRefresh: function onRefresh() {
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
@@ -84,6 +96,7 @@ __webpack_require__.r(__webpack_exports__);
           });
         })["catch"](function (error) {
           console.log(error.response);
+          _this.errors = error.response.data.errors;
         });
         return;
       }
@@ -168,8 +181,15 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.name,
                               counter: 100,
-                              label: "Name",
+                              "error-messages": _vm.errors.name,
+                              label: "Name *",
+                              color: "success",
                               required: ""
+                            },
+                            on: {
+                              input: function() {
+                                _vm.errors.name = []
+                              }
                             },
                             model: {
                               value: _vm.name,
@@ -185,6 +205,12 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",

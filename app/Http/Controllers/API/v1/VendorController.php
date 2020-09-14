@@ -32,15 +32,15 @@ class VendorController extends Controller
             'is_vat_inclusive' => ['required'],
 
             'address' => ['nullable'],
-            'building_address' => ['nullable', 'max:150'],
-            'street_name' => ['nullable', 'max:150'],
-            'street_address' => ['nullable', 'max:150'],
-            'subdivision' => ['nullable', 'max:150'],
-            'barangay' => ['nullable', 'max:150'],
-            'city' => ['nullable', 'max:150'],
-            'province' => ['nullable', 'max:150'],
-            'country' => ['nullable', 'max:150'],
-            'zip' => ['nullable', 'max:50'],
+            // 'building_address' => ['nullable', 'max:150'],
+            // 'street_name' => ['nullable', 'max:150'],
+            // 'street_address' => ['nullable', 'max:150'],
+            // 'subdivision' => ['nullable', 'max:150'],
+            // 'barangay' => ['nullable', 'max:150'],
+            // 'city' => ['nullable', 'max:150'],
+            // 'province' => ['nullable', 'max:150'],
+            // 'country' => ['nullable', 'max:150'],
+            // 'zip' => ['nullable', 'max:50'],
         ]);
     }
 
@@ -107,15 +107,15 @@ class VendorController extends Controller
         $vendor->is_vat_inclusive = $request->is_vat_inclusive;
 
         $vendor->address = $request->address;
-        $vendor->building_address = $request->building_address;
-        $vendor->street_name = $request->street_name;
-        $vendor->street_address = $request->street_address;
-        $vendor->subdivision = $request->subdivision;
-        $vendor->barangay = $request->barangay;
-        $vendor->city = $request->city;
-        $vendor->province = $request->province;
-        $vendor->country = $request->country;
-        $vendor->zip = $request->zip;
+        // $vendor->building_address = $request->building_address;
+        // $vendor->street_name = $request->street_name;
+        // $vendor->street_address = $request->street_address;
+        // $vendor->subdivision = $request->subdivision;
+        // $vendor->barangay = $request->barangay;
+        // $vendor->city = $request->city;
+        // $vendor->province = $request->province;
+        // $vendor->country = $request->country;
+        // $vendor->zip = $request->zip;
 
         $vendor->save();
 
@@ -180,15 +180,15 @@ class VendorController extends Controller
                 $vendor->is_vat_inclusive = $request->is_vat_inclusive;
 
                 $vendor->address = $request->address;
-                $vendor->building_address = $request->building_address;
-                $vendor->street_name = $request->street_name;
-                $vendor->street_address = $request->street_address;
-                $vendor->subdivision = $request->subdivision;
-                $vendor->barangay = $request->barangay;
-                $vendor->city = $request->city;
-                $vendor->province = $request->province;
-                $vendor->country = $request->country;
-                $vendor->zip = $request->zip;
+                // $vendor->building_address = $request->building_address;
+                // $vendor->street_name = $request->street_name;
+                // $vendor->street_address = $request->street_address;
+                // $vendor->subdivision = $request->subdivision;
+                // $vendor->barangay = $request->barangay;
+                // $vendor->city = $request->city;
+                // $vendor->province = $request->province;
+                // $vendor->country = $request->country;
+                // $vendor->zip = $request->zip;
 
                 $vendor->save();
 

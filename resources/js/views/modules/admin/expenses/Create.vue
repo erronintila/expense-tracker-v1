@@ -18,8 +18,10 @@
                             <v-select
                                 v-model="employee"
                                 :rules="rules.employee"
-                                :counter="100"
                                 :items="employees"
+                                :error-messages="errors.employee_id"
+                                @input="errors.employee_id = []"
+                                color="success"
                                 item-value="id"
                                 item-text="fullname"
                                 label="Employee"
@@ -32,8 +34,10 @@
                             <v-select
                                 v-model="expense_type"
                                 :rules="rules.expense_type"
-                                :counter="100"
                                 :items="expense_types"
+                                :error-messages="errors.expense_type_id"
+                                @input="errors.expense_type_id = []"
+                                color="success"
                                 item-value="id"
                                 item-text="name"
                                 label="Expense Type"
@@ -46,8 +50,10 @@
                             <v-select
                                 v-model="vendor"
                                 :rules="rules.vendor"
-                                :counter="100"
                                 :items="vendors"
+                                :error-messages="errors.vendor_id"
+                                @input="errors.vendor_id = []"
+                                color="success"
                                 item-value="id"
                                 item-text="name"
                                 label="Vendor"
@@ -63,6 +69,9 @@
                                 v-model="description"
                                 :rules="rules.description"
                                 :counter="100"
+                                :error-messages="errors.description"
+                                @input="errors.description = []"
+                                color="success"
                                 label="Description"
                                 required
                             ></v-text-field>
@@ -81,6 +90,9 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="date"
+                                        :error-messages="errors.date"
+                                        @input="errors.date = []"
+                                        color="success"
                                         label="Date"
                                         readonly
                                         v-bind="attrs"
@@ -91,17 +103,18 @@
                                     v-model="date"
                                     no-title
                                     scrollable
+                                    color="success"
                                 >
                                     <v-spacer></v-spacer>
                                     <v-btn
                                         text
-                                        color="primary"
+                                        color="success"
                                         @click="menu = false"
                                         >Cancel
                                     </v-btn>
                                     <v-btn
                                         text
-                                        color="primary"
+                                        color="success"
                                         @click="$refs.menu.save(date)"
                                         >OK
                                     </v-btn>
@@ -115,7 +128,9 @@
                             <v-text-field
                                 v-model="receipt_number"
                                 :rules="rules.receipt_number"
-                                :counter="100"
+                                :error-messages="errors.receipt_number"
+                                @input="errors.receipt_number=[]"
+                                color="success"
                                 label="Receipt No."
                                 required
                             ></v-text-field>
@@ -125,7 +140,9 @@
                             <v-text-field
                                 v-model="amount"
                                 :rules="rules.amount"
-                                :counter="100"
+                                :error-messages="errors.amount"
+                                @input="errors.amount=[]"
+                                color="success"
                                 label="Amount"
                                 required
                             ></v-text-field>
@@ -138,6 +155,9 @@
                                 rows="1"
                                 label="Remarks"
                                 v-model="remarks"
+                                :error-messages="errors.remarks"
+                                @input="errors.remarks=[]"
+                                color="success"
                             ></v-textarea>
                         </v-col>
                     </v-row>
@@ -173,21 +193,26 @@ export default {
             vendor: {},
             vendors: [],
             rules: {
-                name: [
-                    v => !!v || "Name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
-                ],
+                description: [v => !!v || "Description is required"],
+                amount: [v => !!v || "Amount is required"],
+                receipt_number: [v => !!v || "Receipt Number is required"],
+                date: [v => !!v || "Date is required"],
+                remarks: [],
+                is_active: [],
+                expense_type: [v => !!v || "Expense Type is required"],
+                employee: [v => !!v || "Employee is required"],
+                vendor: [v => !!v || "Vendor is required"]
+            },
+            errors: {
                 description: [],
                 amount: [],
                 receipt_number: [],
                 date: [],
                 remarks: [],
                 is_active: [],
-                expense_type: [],
-                employee: [],
-                vendor: []
+                expense_type_id: [],
+                employee_id: [],
+                vendor_id: []
             }
         };
     },
@@ -235,8 +260,9 @@ export default {
                 });
         },
         onRefresh() {
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
+            Object.assign(this.$data, this.$options.data.apply(this));
+            // this.$refs.form.reset();
+            // this.$refs.form.resetValidation();
         },
         onSave() {
             let _this = this;
@@ -246,7 +272,6 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/expenses", {
-                        name: _this.name,
                         code: _this.code,
                         description: _this.description,
                         amount: _this.amount,
@@ -271,6 +296,8 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error.response);
+
+                        _this.errors = error.response.data.errors;
                     });
 
                 return;

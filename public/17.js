@@ -164,6 +164,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -183,20 +203,40 @@ __webpack_require__.r(__webpack_exports__);
       vendor: {},
       vendors: [],
       rules: {
-        name: [function (v) {
-          return !!v || "Name is required";
-        }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
+        description: [function (v) {
+          return !!v || "Description is required";
         }],
+        amount: [function (v) {
+          return !!v || "Amount is required";
+        }],
+        receipt_number: [function (v) {
+          return !!v || "Receipt Number is required";
+        }],
+        date: [function (v) {
+          return !!v || "Date is required";
+        }],
+        remarks: [],
+        is_active: [],
+        expense_type: [function (v) {
+          return !!v || "Expense Type is required";
+        }],
+        employee: [function (v) {
+          return !!v || "Employee is required";
+        }],
+        vendor: [function (v) {
+          return !!v || "Vendor is required";
+        }]
+      },
+      errors: {
         description: [],
         amount: [],
         receipt_number: [],
         date: [],
         remarks: [],
         is_active: [],
-        expense_type: [],
-        employee: [],
-        vendor: []
+        expense_type_id: [],
+        employee_id: [],
+        vendor_id: []
       }
     };
   },
@@ -232,8 +272,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onRefresh: function onRefresh() {
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this)); // this.$refs.form.reset();
+      // this.$refs.form.resetValidation();
     },
     onSave: function onSave() {
       var _this = this;
@@ -242,7 +282,6 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/expenses", {
-          name: _this.name,
           code: _this.code,
           description: _this.description,
           amount: _this.amount,
@@ -262,6 +301,7 @@ __webpack_require__.r(__webpack_exports__);
           });
         })["catch"](function (error) {
           console.log(error.response);
+          _this.errors = error.response.data.errors;
         });
         return;
       }
@@ -348,12 +388,18 @@ var render = function() {
                           _c("v-select", {
                             attrs: {
                               rules: _vm.rules.employee,
-                              counter: 100,
                               items: _vm.employees,
+                              "error-messages": _vm.errors.employee_id,
+                              color: "success",
                               "item-value": "id",
                               "item-text": "fullname",
                               label: "Employee",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.employee_id = []
+                              }
                             },
                             model: {
                               value: _vm.employee,
@@ -374,12 +420,18 @@ var render = function() {
                           _c("v-select", {
                             attrs: {
                               rules: _vm.rules.expense_type,
-                              counter: 100,
                               items: _vm.expense_types,
+                              "error-messages": _vm.errors.expense_type_id,
+                              color: "success",
                               "item-value": "id",
                               "item-text": "name",
                               label: "Expense Type",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.expense_type_id = []
+                              }
                             },
                             model: {
                               value: _vm.expense_type,
@@ -400,12 +452,18 @@ var render = function() {
                           _c("v-select", {
                             attrs: {
                               rules: _vm.rules.vendor,
-                              counter: 100,
                               items: _vm.vendors,
+                              "error-messages": _vm.errors.vendor_id,
+                              color: "success",
                               "item-value": "id",
                               "item-text": "name",
                               label: "Vendor",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.vendor_id = []
+                              }
                             },
                             model: {
                               value: _vm.vendor,
@@ -433,8 +491,15 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.description,
                               counter: 100,
+                              "error-messages": _vm.errors.description,
+                              color: "success",
                               label: "Description",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.description = []
+                              }
                             },
                             model: {
                               value: _vm.description,
@@ -484,8 +549,16 @@ var render = function() {
                                           _vm._b(
                                             {
                                               attrs: {
+                                                "error-messages":
+                                                  _vm.errors.date,
+                                                color: "success",
                                                 label: "Date",
                                                 readonly: ""
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  _vm.errors.date = []
+                                                }
                                               },
                                               model: {
                                                 value: _vm.date,
@@ -519,7 +592,11 @@ var render = function() {
                               _c(
                                 "v-date-picker",
                                 {
-                                  attrs: { "no-title": "", scrollable: "" },
+                                  attrs: {
+                                    "no-title": "",
+                                    scrollable: "",
+                                    color: "success"
+                                  },
                                   model: {
                                     value: _vm.date,
                                     callback: function($$v) {
@@ -534,7 +611,7 @@ var render = function() {
                                   _c(
                                     "v-btn",
                                     {
-                                      attrs: { text: "", color: "primary" },
+                                      attrs: { text: "", color: "success" },
                                       on: {
                                         click: function($event) {
                                           _vm.menu = false
@@ -551,7 +628,7 @@ var render = function() {
                                   _c(
                                     "v-btn",
                                     {
-                                      attrs: { text: "", color: "primary" },
+                                      attrs: { text: "", color: "success" },
                                       on: {
                                         click: function($event) {
                                           return _vm.$refs.menu.save(_vm.date)
@@ -587,9 +664,15 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.receipt_number,
-                              counter: 100,
+                              "error-messages": _vm.errors.receipt_number,
+                              color: "success",
                               label: "Receipt No.",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.receipt_number = []
+                              }
                             },
                             model: {
                               value: _vm.receipt_number,
@@ -610,9 +693,15 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.amount,
-                              counter: 100,
+                              "error-messages": _vm.errors.amount,
+                              color: "success",
                               label: "Amount",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.amount = []
+                              }
                             },
                             model: {
                               value: _vm.amount,
@@ -637,7 +726,17 @@ var render = function() {
                         { attrs: { cols: "12" } },
                         [
                           _c("v-textarea", {
-                            attrs: { rows: "1", label: "Remarks" },
+                            attrs: {
+                              rows: "1",
+                              label: "Remarks",
+                              "error-messages": _vm.errors.remarks,
+                              color: "success"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.remarks = []
+                              }
+                            },
                             model: {
                               value: _vm.remarks,
                               callback: function($$v) {

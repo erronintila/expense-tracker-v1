@@ -19,12 +19,22 @@
                                 v-model="name"
                                 :rules="rules.name"
                                 :counter="100"
-                                label="Name"
+                                :error-messages="errors.name"
+                                @input="
+                                    () => {
+                                        errors.name = [];
+                                    }
+                                "
+                                label="Name *"
+                                color="success"
                                 required
                             ></v-text-field>
                         </v-col>
-
                     </v-row>
+
+                    <small style="opacity: 0.5">
+                        * indicates required field
+                    </small>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -49,14 +59,16 @@ export default {
                     v =>
                         v.length <= 100 ||
                         "Name must be less than 100 characters"
-                ],
+                ]
+            },
+            errors: {
+                name: []
             }
         };
     },
     methods: {
         onRefresh() {
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
             let _this = this;
@@ -66,7 +78,7 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/expense_types", {
-                        name: _this.name,
+                        name: _this.name
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -81,6 +93,8 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error.response);
+
+                        _this.errors = error.response.data.errors;
                     });
 
                 return;

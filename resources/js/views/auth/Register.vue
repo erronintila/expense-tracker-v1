@@ -20,6 +20,8 @@
                                                 errors.name = [];
                                             }
                                         "
+                                        :counter="150"
+                                        color="success"
                                         label="Name"
                                         name="name"
                                         prepend-icon="mdi-account"
@@ -30,11 +32,13 @@
                                         v-model="username"
                                         :rules="rules.username"
                                         :error-messages="errors.username"
+                                        :counter="50"
                                         @input="
                                             () => {
                                                 errors.username = [];
                                             }
                                         "
+                                        color="success"
                                         label="Username"
                                         name="username"
                                         prepend-icon="mdi-account"
@@ -50,6 +54,7 @@
                                                 errors.email = [];
                                             }
                                         "
+                                        color="success"
                                         label="Email Address"
                                         name="email"
                                         prepend-icon="mdi-account"
@@ -65,6 +70,7 @@
                                                 errors.password = [];
                                             }
                                         "
+                                        color="success"
                                         label="Password"
                                         name="password"
                                         prepend-icon="mdi-lock"
@@ -82,6 +88,7 @@
                                                 errors.password_confirmation = [];
                                             }
                                         "
+                                        color="success"
                                         label="Re-type Password"
                                         name="confirm_password"
                                         prepend-icon="mdi-lock"
@@ -120,13 +127,13 @@ export default {
                 name: [
                     v => !!v || "Name is required",
                     v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
+                        v.length <= 150 ||
+                        "Name must be less than 150 characters"
                 ],
                 username: [
                     v => !!v || "Username is required",
                     v =>
-                        v.length <= 100 ||
+                        v.length <= 50 ||
                         "Username must be less than 100 characters"
                 ],
                 email: [

@@ -86,6 +86,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
@@ -250,7 +252,8 @@ var render = function() {
                                       label: "Username",
                                       name: "username",
                                       "prepend-icon": "mdi-account",
-                                      type: "text"
+                                      type: "text",
+                                      color: "success"
                                     },
                                     model: {
                                       value: _vm.username,
@@ -268,7 +271,8 @@ var render = function() {
                                       label: "Password",
                                       name: "password",
                                       "prepend-icon": "mdi-lock",
-                                      type: "password"
+                                      type: "password",
+                                      color: "success"
                                     },
                                     model: {
                                       value: _vm.password,

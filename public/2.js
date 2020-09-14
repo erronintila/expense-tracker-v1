@@ -117,6 +117,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "register",
   data: function data() {
@@ -132,12 +139,12 @@ __webpack_require__.r(__webpack_exports__);
         name: [function (v) {
           return !!v || "Name is required";
         }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
+          return v.length <= 150 || "Name must be less than 150 characters";
         }],
         username: [function (v) {
           return !!v || "Username is required";
         }, function (v) {
-          return v.length <= 100 || "Username must be less than 100 characters";
+          return v.length <= 50 || "Username must be less than 100 characters";
         }],
         email: [function (v) {
           return !!v || "E-mail is required";
@@ -269,6 +276,8 @@ var render = function() {
                                     attrs: {
                                       rules: _vm.rules.name,
                                       "error-messages": _vm.errors.name,
+                                      counter: 150,
+                                      color: "success",
                                       label: "Name",
                                       name: "name",
                                       "prepend-icon": "mdi-account",
@@ -292,6 +301,8 @@ var render = function() {
                                     attrs: {
                                       rules: _vm.rules.username,
                                       "error-messages": _vm.errors.username,
+                                      counter: 50,
+                                      color: "success",
                                       label: "Username",
                                       name: "username",
                                       "prepend-icon": "mdi-account",
@@ -315,6 +326,7 @@ var render = function() {
                                     attrs: {
                                       rules: _vm.rules.email,
                                       "error-messages": _vm.errors.email,
+                                      color: "success",
                                       label: "Email Address",
                                       name: "email",
                                       "prepend-icon": "mdi-account",
@@ -338,6 +350,7 @@ var render = function() {
                                     attrs: {
                                       rules: _vm.rules.password,
                                       "error-messages": _vm.errors.password,
+                                      color: "success",
                                       label: "Password",
                                       name: "password",
                                       "prepend-icon": "mdi-lock",
@@ -362,6 +375,7 @@ var render = function() {
                                       rules: _vm.rules.password_confirmation,
                                       "error-messages":
                                         _vm.errors.password_confirmation,
+                                      color: "success",
                                       label: "Re-type Password",
                                       name: "confirm_password",
                                       "prepend-icon": "mdi-lock",

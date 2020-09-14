@@ -104,6 +104,148 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -113,32 +255,88 @@ __webpack_require__.r(__webpack_exports__);
       email: "",
       tin: "",
       contact_person: "",
-      phone: "",
-      address: "",
+      mobile_number: "",
+      telephone_number: "",
       remarks: "",
-      is_active: true,
+      website: "",
       is_vat_inclusive: false,
+      address: "",
+      // building_address: "",
+      // street_address: "",
+      // street_name: "",
+      // subdivision: "",
+      // barangay: "",
+      // city: "",
+      // province: "",
+      // country: "Philippines",
+      // zip: "",
       rules: {
-        name: [function (v) {
-          return !!v || "Name is required";
+        code: [],
+        name: [// v => !!v || "Name is required",
+          // v =>
+          //     v.length <= 150 ||
+          //     "Name must be less than 100 characters"
+        ],
+        email: [],
+        tin: [function (v) {
+          return !!v || "TIN is required";
         }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
+          return v.length <= 150 || "Name must be less than 100 characters";
         }],
+        contact_person: [],
+        mobile_number: [],
+        telephone_number: [],
+        remarks: [],
+        website: [],
+        is_vat_inclusive: [],
+        address: [] // building_address: [],
+        // street_address: [],
+        // street_name: [],
+        // subdivision: [],
+        // barangay: [],
+        // city: [
+        //     v => !!v || "City/Municipality is required",
+        //     v =>
+        //         v.length <= 100 ||
+        //         "City/Municipality must be less than 100 characters"
+        // ],
+        // province: [],
+        // country: [
+        //     v => !!v || "Country is required",
+        //     v =>
+        //         v.length <= 100 ||
+        //         "Country must be less than 100 characters"
+        // ],
+        // zip: []
+
+      },
+      errors: {
+        code: [],
+        name: [],
         email: [],
         tin: [],
         contact_person: [],
-        phone: [],
-        address: [],
+        mobile_number: [],
+        telephone_number: [],
         remarks: [],
-        is_active: [],
-        is_vat_inclusive: []
+        website: [],
+        is_vat_inclusive: [],
+        address: [] // building_address: [],
+        // street_address: [],
+        // street_name: [],
+        // subdivision: [],
+        // barangay: [],
+        // city: [],
+        // province: [],
+        // country: [],
+        // zip: []
+
       }
     };
   },
   methods: {
     onRefresh: function onRefresh() {
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
@@ -152,20 +350,34 @@ __webpack_require__.r(__webpack_exports__);
           email: _this.email,
           tin: _this.tin,
           contact_person: _this.contact_person,
-          phone: _this.phone,
-          address: _this.address,
+          mobile_number: _this.mobile_number,
+          telephone_number: _this.telephone_number,
           remarks: _this.remarks,
-          is_active: _this.is_active,
-          is_vat_inclusive: _this.is_vat_inclusive
-        }).then(function (response) {
-          _this.onRefresh();
+          website: _this.website,
+          is_vat_inclusive: _this.is_vat_inclusive,
+          address: _this.address // building_address: _this.building_address,
+          // street_address: _this.street_address,
+          // street_name: _this.street_name,
+          // subdivision: _this.subdivision,
+          // barangay: _this.barangay,
+          // city: _this.city,
+          // province: _this.province,
+          // country: _this.country,
+          // zip: _this.zip
 
+        }).then(function (response) {
+          // _this.onRefresh();
           _this.$dialog.message.success("Vendor created successfully.", {
             position: "top-right",
             timeout: 2000
           });
+
+          _this.$router.push({
+            name: "admin.vendors.index"
+          });
         })["catch"](function (error) {
           console.log(error.response);
+          _this.errors = error.response.data.errors;
         });
         return;
       }
@@ -249,7 +461,9 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.name,
-                              counter: 100,
+                              counter: 150,
+                              "error-messages": _vm.errors.name,
+                              color: "success",
                               label: "Name",
                               required: ""
                             },
@@ -272,7 +486,8 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.email,
-                              counter: 100,
+                              "error-messages": _vm.errors.email,
+                              color: "success",
                               label: "Email Address"
                             },
                             model: {
@@ -294,7 +509,9 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.tin,
+                              "error-messages": _vm.errors.tin,
                               counter: 100,
+                              color: "success",
                               label: "Tax Identification Number (TIN)",
                               required: ""
                             },
@@ -317,7 +534,9 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.contact_person,
+                              "error-messages": _vm.errors.contact_person,
                               counter: 100,
+                              color: "success",
                               label: "Contact Person"
                             },
                             model: {
@@ -338,16 +557,23 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.phone,
-                              counter: 100,
-                              label: "Phone"
+                              rules: _vm.rules.mobile_number,
+                              counter: 30,
+                              "error-messages": _vm.errors.mobile_number,
+                              color: "success",
+                              label: "Mobile Number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.mobile_number = []
+                              }
                             },
                             model: {
-                              value: _vm.phone,
+                              value: _vm.mobile_number,
                               callback: function($$v) {
-                                _vm.phone = $$v
+                                _vm.mobile_number = $$v
                               },
-                              expression: "phone"
+                              expression: "mobile_number"
                             }
                           })
                         ],
@@ -358,12 +584,83 @@ var render = function() {
                         "v-col",
                         { attrs: { cols: "12", md: "4" } },
                         [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.telephone_number,
+                              counter: 30,
+                              "error-messages": _vm.errors.telephone_number,
+                              label: "Telephone Number",
+                              color: "success",
+                              type: "number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.telephone_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.telephone_number,
+                              callback: function($$v) {
+                                _vm.telephone_number = $$v
+                              },
+                              expression: "telephone_number"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              counter: 100,
+                              rules: _vm.rules.website,
+                              "error-messages": _vm.errors.website,
+                              label: "Website",
+                              color: "success"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.website = []
+                              }
+                            },
+                            model: {
+                              value: _vm.website,
+                              callback: function($$v) {
+                                _vm.website = $$v
+                              },
+                              expression: "website"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12" } },
+                        [
                           _c("v-textarea", {
                             attrs: {
                               rules: _vm.rules.address,
-                              counter: 100,
-                              rows: "1",
-                              label: "Address"
+                              "error-messages": _vm.errors.address,
+                              color: "success",
+                              label: "Address",
+                              rows: "1"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.address = []
+                              }
                             },
                             model: {
                               value: _vm.address,
@@ -388,7 +685,11 @@ var render = function() {
                         { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-checkbox", {
-                            attrs: { color: "green", label: "Vat Inclusive" },
+                            attrs: {
+                              color: "green",
+                              label: "Vat Inclusive",
+                              "error-messages": _vm.errors.is_vat_inclusive
+                            },
                             model: {
                               value: _vm.is_vat_inclusive,
                               callback: function($$v) {

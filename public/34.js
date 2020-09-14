@@ -103,8 +103,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
+    var _this2 = this;
+
     return {
       valid: false,
       showPassword: false,
@@ -118,12 +135,12 @@ __webpack_require__.r(__webpack_exports__);
         name: [function (v) {
           return !!v || "Name is required";
         }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
+          return v.length <= 150 || "Name must be less than 150 characters";
         }],
         username: [function (v) {
           return !!v || "Username is required";
         }, function (v) {
-          return v.length <= 50 || "Username must be less than 20 characters";
+          return v.length <= 50 || "Username must be less than 50 characters";
         }],
         email: [function (v) {
           return !!v || "E-mail is required";
@@ -132,17 +149,27 @@ __webpack_require__.r(__webpack_exports__);
         }],
         password: [function (v) {
           return !!v || "Password is required";
+        }, function (v) {
+          return v.length >= 8 || "Password must be at least 8 characters";
         }],
         password_confirmation: [function (v) {
-          return !!v || "Confirm Password is required";
+          return !!v || "Retype password is required";
+        }, function (v) {
+          return _this2.password === _this2.password_confirmation || "Passwords do not match";
         }]
+      },
+      errors: {
+        name: [],
+        username: [],
+        email: [],
+        password: [],
+        password_confirmation: []
       }
     };
   },
   methods: {
     onRefresh: function onRefresh() {
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
@@ -165,6 +192,7 @@ __webpack_require__.r(__webpack_exports__);
           });
         })["catch"](function (error) {
           console.log(error.response);
+          _this.errors = error.response.data.errors;
         });
         return;
       }
@@ -248,9 +276,16 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.name,
-                              counter: 100,
+                              counter: 150,
+                              "error-messages": _vm.errors.name,
+                              color: "success",
                               label: "Name",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.name = []
+                              }
                             },
                             model: {
                               value: _vm.name,
@@ -271,9 +306,16 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.username,
-                              counter: 20,
+                              counter: 50,
+                              "error-messages": _vm.errors.username,
+                              color: "success",
                               label: "Username",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.username = []
+                              }
                             },
                             model: {
                               value: _vm.username,
@@ -294,8 +336,15 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.email,
+                              "error-messages": _vm.errors.email,
+                              color: "success",
                               label: "Email Address",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.email = []
+                              }
                             },
                             model: {
                               value: _vm.email,
@@ -320,11 +369,16 @@ var render = function() {
                                 : "mdi-eye-off",
                               rules: _vm.rules.password,
                               type: _vm.showPassword ? "text" : "password",
+                              "error-messages": _vm.errors.password,
+                              color: "success",
                               label: "Password",
                               hint: "At least 8 characters",
                               required: ""
                             },
                             on: {
+                              input: function($event) {
+                                _vm.errors.password = []
+                              },
                               "click:append": function($event) {
                                 _vm.showPassword = !_vm.showPassword
                               }
@@ -354,10 +408,16 @@ var render = function() {
                               type: _vm.showPasswordConfirmation
                                 ? "text"
                                 : "password",
+                              "error-messages":
+                                _vm.errors.password_confirmation,
                               label: "Re-type Password",
+                              color: "success",
                               required: ""
                             },
                             on: {
+                              input: function($event) {
+                                _vm.errors.password_confirmation = []
+                              },
                               "click:append": function($event) {
                                 _vm.showPasswordConfirmation = !_vm.showPasswordConfirmation
                               }

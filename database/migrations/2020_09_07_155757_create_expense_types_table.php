@@ -15,7 +15,7 @@ class CreateExpenseTypesTable extends Migration
     {
         Schema::create('expense_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 150)->unique();
+            $table->string('name', 100)->unique();
 
             $table->timestamps();
             $table->softDeletes();

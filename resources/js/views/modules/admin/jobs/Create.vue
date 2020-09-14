@@ -19,9 +19,12 @@
                                 v-model="department"
                                 :items="departments"
                                 :rules="rules.department"
-                                item-value="id" 
+                                :error-messages="errors.department_id"
+                                @input="errors.department_id = []"
+                                color="success"
+                                item-value="id"
                                 item-text="name"
-                                label="Department"
+                                label="Department *"
                             ></v-select>
                         </v-col>
 
@@ -30,11 +33,18 @@
                                 v-model="name"
                                 :rules="rules.name"
                                 :counter="100"
-                                label="Name"
+                                :error-messages="errors.name"
+                                @input="errors.name = []"
+                                color="success"
+                                label="Name *"
                                 required
                             ></v-text-field>
                         </v-col>
                     </v-row>
+
+                    <small style="opacity: 0.5">
+                        * indicates required field
+                    </small>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -62,7 +72,13 @@ export default {
                         v.length <= 100 ||
                         "Name must be less than 100 characters"
                 ],
-                department: [v => !!v || "Department is required"]
+                department: [
+                    v => !!v || "Department is required"
+                ]
+            },
+            errors: {
+                name: [],
+                department_id: []
             }
         };
     },
@@ -87,8 +103,9 @@ export default {
                 });
         },
         onRefresh() {
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
+            Object.assign(this.$data, this.$options.data.apply(this));
+            // this.$refs.form.reset();
+            // this.$refs.form.resetValidation();
         },
         onSave() {
             let _this = this;
@@ -114,6 +131,8 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error.response);
+
+                        _this.errors = error.response.data.errors;
                     });
 
                 return;

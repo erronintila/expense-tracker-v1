@@ -16,26 +16,26 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->string('first_name', 150);
-            $table->string('middle_name', 150)->nullable();
-            $table->string('last_name', 150);
+            $table->string('first_name', 100);
+            $table->string('middle_name', 100)->nullable();
+            $table->string('last_name', 100);
             $table->string('suffix', 30)->nullable();
             $table->string('gender', 10);
             $table->date('birthdate')->nullable();
-            $table->string('mobile_number', 50)->nullable();
-            $table->string('telephone_number', 50)->nullable();
+            $table->string('mobile_number', 30)->nullable();
+            $table->string('telephone_number', 30)->nullable();
             $table->string('email')->unique()->nullable();
             
             $table->text('address')->nullable();
-            $table->string('building_address', 150)->nullable();
-            $table->string('street_name', 150)->nullable();
-            $table->string('street_address', 150)->nullable();
-            $table->string('subdivision', 150)->nullable();
-            $table->string('barangay', 150)->nullable();
-            $table->string('city', 150)->nullable();
-            $table->string('province', 150)->nullable();
-            $table->string('country', 150)->nullable();
-            $table->string('zip', 50)->nullable();
+            // $table->string('building_address', 100)->nullable();
+            // $table->string('street_name', 100)->nullable();
+            // $table->string('street_address', 100)->nullable();
+            // $table->string('subdivision', 100)->nullable();
+            // $table->string('barangay', 100)->nullable();
+            // $table->string('city', 100)->nullable();
+            // $table->string('province', 100)->nullable();
+            // $table->string('country', 100)->nullable();
+            // $table->string('zip', 10)->nullable();
 
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('user_id')->nullable();

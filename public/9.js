@@ -247,6 +247,88 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// let ph_addresses = require('../../../../assets/philippine_address_2019v2.json');
+// import ph_addresses from "../../../../assets/philippine_address_2019v2.json";
+// console.log(ph_addresses);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -257,23 +339,23 @@ __webpack_require__.r(__webpack_exports__);
       suffix: "",
       gender: "",
       birthdate: null,
-      phone: "",
-      is_active: true,
       job: {},
       jobs: [],
       mobile_number: "+63",
       telephone_number: "",
       email: "",
       address: "",
-      building_address: "",
-      street_address: "",
-      street_name: "",
-      subdivision: "",
-      barangay: "",
-      city: "",
-      province: "",
-      country: "Philippines",
-      zip: "",
+      // building_address: "",
+      // street_address: "",
+      // street_name: "",
+      // subdivision: "",
+      // barangay: "",
+      // city: "",
+      // province: "",
+      // region: {},
+      // country: "Philippines",
+      // countries: [],
+      // zip: "",
       menu: false,
       rules: {
         first_name: [function (v) {
@@ -296,8 +378,6 @@ __webpack_require__.r(__webpack_exports__);
         birthdate: [function (v) {
           return !!v || "Birthdate is required";
         }],
-        phone: [],
-        is_active: [],
         job: [function (v) {
           return !!v || "Job designation is required";
         }],
@@ -308,16 +388,50 @@ __webpack_require__.r(__webpack_exports__);
         }, function (v) {
           return /.+@.+/.test(v) || "E-mail is not valid";
         }],
-        address: [],
-        building_address: [],
-        street_address: [],
-        street_name: [],
-        subdivision: [],
-        barangay: [],
-        city: [],
-        province: [],
-        country: [],
-        zip: []
+        address: [] // building_address: [],
+        // street_address: [],
+        // street_name: [],
+        // subdivision: [],
+        // barangay: [],
+        // city: [
+        //     v => !!v || "City/Municipality is required",
+        //     v =>
+        //         v.length <= 100 ||
+        //         "City/Municipality must be less than 100 characters"
+        // ],
+        // province: [],
+        // region: [],
+        // country: [
+        //     v => !!v || "Country is required",
+        //     v =>
+        //         v.length <= 100 ||
+        //         "Country must be less than 100 characters"
+        // ],
+        // zip: []
+
+      },
+      errors: {
+        first_name: [],
+        middle_name: [],
+        last_name: [],
+        suffix: [],
+        gender: [],
+        birthdate: [],
+        job: [],
+        mobile_number: [],
+        telephone_number: [],
+        email: [],
+        address: [] // building_address: [],
+        // street_address: [],
+        // street_name: [],
+        // subdivision: [],
+        // barangay: [],
+        // city: [],
+        // province: [],
+        // region: [],
+        // country: [],
+        // zip: []
+
       }
     };
   },
@@ -333,8 +447,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onRefresh: function onRefresh() {
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
@@ -349,22 +462,20 @@ __webpack_require__.r(__webpack_exports__);
           suffix: _this.suffix,
           gender: _this.gender,
           birthdate: _this.birthdate,
-          phone: _this.phone,
-          is_active: _this.is_active,
           job_id: _this.job,
           mobile_number: _this.mobile_number,
           telephone_number: _this.telephone_number,
           email: _this.email,
-          address: _this.address,
-          building_address: _this.building_address,
-          street_address: _this.street_address,
-          street_name: _this.street_name,
-          subdivision: _this.subdivision,
-          barangay: _this.barangay,
-          city: _this.city,
-          province: _this.province,
-          country: _this.country,
-          zip: _this.zip
+          address: _this.address // building_address: _this.building_address,
+          // street_address: _this.street_address,
+          // street_name: _this.street_name,
+          // subdivision: _this.subdivision,
+          // barangay: _this.barangay,
+          // city: _this.city,
+          // province: _this.province,
+          // country: _this.country,
+          // zip: _this.zip
+
         }).then(function (response) {
           _this.onRefresh();
 
@@ -374,10 +485,56 @@ __webpack_require__.r(__webpack_exports__);
           });
         })["catch"](function (error) {
           console.log(error.response);
+          _this.errors = error.response.data.errors;
         });
         return;
       }
     }
+  },
+  computed: {// regions() {
+    //     let regions = [];
+    //     for (let region in ph_addresses) {
+    //         regions.push({
+    //             key: region,
+    //             value: ph_addresses[region]["region_name"]
+    //         });
+    //     }
+    //     return regions;
+    // },
+    // provinces() {
+    //     let provinces = [];
+    //     if (this.region.length > 0) {
+    //         for (let province in ph_addresses[this.region][
+    //             "province_list"
+    //         ]) {
+    //             provinces.push(province);
+    //         }
+    //     }
+    //     return provinces;
+    // },
+    // cities() {
+    //     let cities = [];
+    //     if (this.region.length > 0 && this.province.length > 0) {
+    //         for (let municipality in ph_addresses[this.region][
+    //             "province_list"
+    //         ][this.province]["municipality_list"]) {
+    //             cities.push(municipality);
+    //         }
+    //     }
+    //     return cities;
+    // },
+    // barangays() {
+    //     if (
+    //         this.region.length > 0 &&
+    //         this.province.length > 0 &&
+    //         this.city.length > 0
+    //     ) {
+    //         return ph_addresses[this.region]["province_list"][
+    //             this.province
+    //         ]["municipality_list"][this.city]["barangay_list"];
+    //     }
+    //     return [];
+    // }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
@@ -425,7 +582,7 @@ var render = function() {
               _vm._v(" "),
               _c("v-spacer"),
               _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
+              _c("h4", { staticClass: "title success--text" }, [
                 _vm._v("New Employee")
               ])
             ],
@@ -459,10 +616,17 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.job,
                               items: _vm.jobs,
+                              "error-messages": _vm.errors.job_id,
                               "item-text": "name",
                               "item-value": "id",
                               label: "Job Designation",
+                              color: "success",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.job_id = []
+                              }
                             },
                             model: {
                               value: _vm.job,
@@ -490,8 +654,15 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.first_name,
                               counter: 100,
+                              "error-messages": _vm.errors.first_name,
                               label: "First Name",
+                              color: "success",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.first_name = []
+                              }
                             },
                             model: {
                               value: _vm.first_name,
@@ -513,7 +684,14 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.middle_name,
                               counter: 100,
+                              "error-messages": _vm.errors.middle_name,
+                              color: "success",
                               label: "Middle Name"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.middle_name = []
+                              }
                             },
                             model: {
                               value: _vm.middle_name,
@@ -535,8 +713,15 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.last_name,
                               counter: 100,
+                              "error-messages": _vm.errors.last_name,
                               label: "Last Name",
+                              color: "success",
                               required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.last_name = []
+                              }
                             },
                             model: {
                               value: _vm.last_name,
@@ -557,8 +742,16 @@ var render = function() {
                           _c("v-combobox", {
                             attrs: {
                               rules: _vm.rules.suffix,
+                              counter: 30,
                               items: ["Jr", "Sr", "II", "III"],
+                              "error-messages": _vm.errors.suffix,
+                              color: "success",
                               label: "Suffix"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.suffix = []
+                              }
                             },
                             model: {
                               value: _vm.suffix,
@@ -580,9 +773,15 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.gender,
                               items: ["Male", "Female"],
+                              "error-messages": _vm.errors.gender,
                               label: "Gender",
-                              required: "",
-                              placeholder: "hello"
+                              color: "success",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.gender = []
+                              }
                             },
                             model: {
                               value: _vm.gender,
@@ -632,8 +831,16 @@ var render = function() {
                                           _vm._b(
                                             {
                                               attrs: {
+                                                "error-messages":
+                                                  _vm.errors.birthdate,
                                                 label: "Birthdate",
+                                                color: "success",
                                                 readonly: ""
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  _vm.errors.birthdate = []
+                                                }
                                               },
                                               model: {
                                                 value: _vm.birthdate,
@@ -667,7 +874,11 @@ var render = function() {
                               _c(
                                 "v-date-picker",
                                 {
-                                  attrs: { "no-title": "", scrollable: "" },
+                                  attrs: {
+                                    "no-title": "",
+                                    scrollable: "",
+                                    color: "success"
+                                  },
                                   model: {
                                     value: _vm.birthdate,
                                     callback: function($$v) {
@@ -682,7 +893,7 @@ var render = function() {
                                   _c(
                                     "v-btn",
                                     {
-                                      attrs: { text: "", color: "primary" },
+                                      attrs: { text: "", color: "success" },
                                       on: {
                                         click: function($event) {
                                           _vm.menu = false
@@ -691,7 +902,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "Cancel\n                                "
+                                        "\n                                    Cancel\n                                "
                                       )
                                     ]
                                   ),
@@ -699,7 +910,7 @@ var render = function() {
                                   _c(
                                     "v-btn",
                                     {
-                                      attrs: { text: "", color: "primary" },
+                                      attrs: { text: "", color: "success" },
                                       on: {
                                         click: function($event) {
                                           return _vm.$refs.menu.save(
@@ -710,7 +921,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "OK\n                                "
+                                        "\n                                    OK\n                                "
                                       )
                                     ]
                                   )
@@ -732,7 +943,14 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.mobile_number,
                               counter: 30,
+                              "error-messages": _vm.errors.mobile_number,
+                              color: "success",
                               label: "Mobile Number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.mobile_number = []
+                              }
                             },
                             model: {
                               value: _vm.mobile_number,
@@ -754,8 +972,15 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.telephone_number,
                               counter: 30,
+                              "error-messages": _vm.errors.telephone_number,
                               label: "Telephone Number",
+                              color: "success",
                               type: "number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.telephone_number = []
+                              }
                             },
                             model: {
                               value: _vm.telephone_number,
@@ -776,9 +1001,14 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               rules: _vm.rules.email,
-                              counter: 30,
+                              "error-messages": _vm.errors.email,
                               label: "Email Address",
-                              placeholder: "hello"
+                              color: "success"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.email = []
+                              }
                             },
                             model: {
                               value: _vm.email,
@@ -800,196 +1030,27 @@ var render = function() {
                     [
                       _c(
                         "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        { attrs: { cols: "12" } },
                         [
-                          _c("v-text-field", {
+                          _c("v-textarea", {
                             attrs: {
-                              rules: _vm.rules.building_address,
-                              counter: 30,
-                              label: "Rm./Flr./Unit No. & Bldg. Name"
+                              rules: _vm.rules.address,
+                              "error-messages": _vm.errors.address,
+                              color: "success",
+                              label: "Address",
+                              rows: "1"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.address = []
+                              }
                             },
                             model: {
-                              value: _vm.building_address,
+                              value: _vm.address,
                               callback: function($$v) {
-                                _vm.building_address = $$v
+                                _vm.address = $$v
                               },
-                              expression: "building_address"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.street_name,
-                              counter: 30,
-                              label: "Street Name"
-                            },
-                            model: {
-                              value: _vm.street_name,
-                              callback: function($$v) {
-                                _vm.street_name = $$v
-                              },
-                              expression: "street_name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.street_address,
-                              counter: 30,
-                              label: "House/Lot & Blk. No."
-                            },
-                            model: {
-                              value: _vm.street_address,
-                              callback: function($$v) {
-                                _vm.street_address = $$v
-                              },
-                              expression: "street_address"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.subdivision,
-                              counter: 30,
-                              label: "Subdivision"
-                            },
-                            model: {
-                              value: _vm.subdivision,
-                              callback: function($$v) {
-                                _vm.subdivision = $$v
-                              },
-                              expression: "subdivision"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.barangay,
-                              counter: 30,
-                              label: "Barangay/District/Locality"
-                            },
-                            model: {
-                              value: _vm.barangay,
-                              callback: function($$v) {
-                                _vm.barangay = $$v
-                              },
-                              expression: "barangay"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.city,
-                              counter: 30,
-                              label: "City/Municipality"
-                            },
-                            model: {
-                              value: _vm.city,
-                              callback: function($$v) {
-                                _vm.city = $$v
-                              },
-                              expression: "city"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.province,
-                              counter: 30,
-                              label: "Province"
-                            },
-                            model: {
-                              value: _vm.province,
-                              callback: function($$v) {
-                                _vm.province = $$v
-                              },
-                              expression: "province"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.country,
-                              counter: 30,
-                              label: "Country"
-                            },
-                            model: {
-                              value: _vm.country,
-                              callback: function($$v) {
-                                _vm.country = $$v
-                              },
-                              expression: "country"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.zip,
-                              counter: 30,
-                              label: "Zip Code"
-                            },
-                            model: {
-                              value: _vm.zip,
-                              callback: function($$v) {
-                                _vm.zip = $$v
-                              },
-                              expression: "zip"
+                              expression: "address"
                             }
                           })
                         ],
@@ -1007,7 +1068,7 @@ var render = function() {
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "green", dark: "" },
+                          attrs: { color: "success", dark: "" },
                           on: { click: _vm.onSave }
                         },
                         [_vm._v("Save")]

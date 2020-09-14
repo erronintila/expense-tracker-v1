@@ -22,6 +22,7 @@
                                 :error-messages="errors.name[0]"
                                 @input="errors.name = []"
                                 label="Name *"
+                                color="success"
                                 required
                             ></v-text-field>
                         </v-col>

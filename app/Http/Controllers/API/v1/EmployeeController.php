@@ -34,15 +34,15 @@ class EmployeeController extends Controller
             'job_id' => ['required'],
 
             'address' => ['nullable'],
-            'building_address' => ['nullable', 'max:150'],
-            'street_name' => ['nullable', 'max:150'],
-            'street_address' => ['nullable', 'max:150'],
-            'subdivision' => ['nullable', 'max:150'],
-            'barangay' => ['nullable', 'max:150'],
-            'city' => ['nullable', 'max:150'],
-            'province' => ['nullable', 'max:150'],
-            'country' => ['nullable', 'max:150'],
-            'zip' => ['nullable', 'max:50'],
+            // 'building_address' => ['nullable', 'max:150'],
+            // 'street_name' => ['nullable', 'max:150'],
+            // 'street_address' => ['nullable', 'max:150'],
+            // 'subdivision' => ['nullable', 'max:150'],
+            // 'barangay' => ['nullable', 'max:150'],
+            // 'city' => ['nullable', 'max:150'],
+            // 'province' => ['nullable', 'max:150'],
+            // 'country' => ['nullable', 'max:150'],
+            // 'zip' => ['nullable', 'max:50'],
         ]);
     }
 
@@ -111,15 +111,15 @@ class EmployeeController extends Controller
         $employee->job_id = $request->job_id;
 
         $employee->address = $request->address;
-        $employee->building_address = $request->building_address;
-        $employee->street_name = $request->street_name;
-        $employee->street_address = $request->street_address;
-        $employee->subdivision = $request->subdivision;
-        $employee->barangay = $request->barangay;
-        $employee->city = $request->city;
-        $employee->province = $request->province;
-        $employee->country = $request->country;
-        $employee->zip = $request->zip;
+        // $employee->building_address = $request->building_address;
+        // $employee->street_name = $request->street_name;
+        // $employee->street_address = $request->street_address;
+        // $employee->subdivision = $request->subdivision;
+        // $employee->barangay = $request->barangay;
+        // $employee->city = $request->city;
+        // $employee->province = $request->province;
+        // $employee->country = $request->country;
+        // $employee->zip = $request->zip;
 
         $employee->save();
 
@@ -185,15 +185,15 @@ class EmployeeController extends Controller
                 $employee->job_id = $request->job_id;
 
                 $employee->address = $request->address;
-                $employee->building_address = $request->building_address;
-                $employee->street_name = $request->street_name;
-                $employee->street_address = $request->street_address;
-                $employee->subdivision = $request->subdivision;
-                $employee->barangay = $request->barangay;
-                $employee->city = $request->city;
-                $employee->province = $request->province;
-                $employee->country = $request->country;
-                $employee->zip = $request->zip;
+                // $employee->building_address = $request->building_address;
+                // $employee->street_name = $request->street_name;
+                // $employee->street_address = $request->street_address;
+                // $employee->subdivision = $request->subdivision;
+                // $employee->barangay = $request->barangay;
+                // $employee->city = $request->city;
+                // $employee->province = $request->province;
+                // $employee->country = $request->country;
+                // $employee->zip = $request->zip;
 
                 $employee->save();
 

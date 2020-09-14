@@ -18,7 +18,10 @@
                             <v-text-field
                                 v-model="name"
                                 :rules="rules.name"
-                                :counter="100"
+                                :counter="150"
+                                :error-messages="errors.name"
+                                @input="errors.name = []"
+                                color="success"
                                 label="Name"
                                 required
                             ></v-text-field>
@@ -28,7 +31,10 @@
                             <v-text-field
                                 v-model="username"
                                 :rules="rules.username"
-                                :counter="20"
+                                :counter="50"
+                                :error-messages="errors.username"
+                                @input="errors.username = []"
+                                color="success"
                                 label="Username"
                                 required
                             ></v-text-field>
@@ -38,6 +44,9 @@
                             <v-text-field
                                 v-model="email"
                                 :rules="rules.email"
+                                :error-messages="errors.email"
+                                @input="errors.email = []"
+                                color="success"
                                 label="Email Address"
                                 required
                             ></v-text-field>
@@ -51,6 +60,9 @@
                                 "
                                 :rules="rules.password"
                                 :type="showPassword ? 'text' : 'password'"
+                                :error-messages="errors.password"
+                                @input="errors.password = []"
+                                color="success"
                                 label="Password"
                                 hint="At least 8 characters"
                                 required
@@ -72,7 +84,10 @@
                                         ? 'text'
                                         : 'password'
                                 "
+                                :error-messages="errors.password_confirmation"
+                                @input="errors.password_confirmation = []"
                                 label="Re-type Password"
+                                color="success"
                                 required
                                 @click:append="
                                     showPasswordConfirmation = !showPasswordConfirmation
@@ -108,30 +123,44 @@ export default {
                 name: [
                     v => !!v || "Name is required",
                     v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
+                        v.length <= 150 ||
+                        "Name must be less than 150 characters"
                 ],
                 username: [
                     v => !!v || "Username is required",
                     v =>
                         v.length <= 50 ||
-                        "Username must be less than 20 characters"
+                        "Username must be less than 50 characters"
                 ],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail must be valid"
                 ],
-                password: [v => !!v || "Password is required"],
+                password: [
+                    v => !!v || "Password is required",
+                    v =>
+                        v.length >= 8 ||
+                        "Password must be at least 8 characters"
+                ],
                 password_confirmation: [
-                    v => !!v || "Confirm Password is required"
+                    v => !!v || "Retype password is required",
+                    v =>
+                        this.password === this.password_confirmation ||
+                        "Passwords do not match"
                 ]
+            },
+            errors: {
+                name: [],
+                username: [],
+                email: [],
+                password: [],
+                password_confirmation: []
             }
         };
     },
     methods: {
         onRefresh() {
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
             let _this = this;
@@ -160,6 +189,8 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error.response);
+
+                        _this.errors = error.response.data.errors;
                     });
 
                 return;

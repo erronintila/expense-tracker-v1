@@ -21,7 +21,7 @@ class ExpenseTypeController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'name' => ['required', 'max:255', Rule::unique('expense_types')->ignore($id, 'id')],
+            'name' => ['required', 'max:100', Rule::unique('expense_types')->ignore($id, 'id')],
         ]);
     }
 
