@@ -217,7 +217,7 @@ export default {
         return {
             valid: false,
             first_name: null,
-            middle_name: null,
+            middle_name: "",
             last_name: null,
             suffix: null,
             gender: null,
@@ -225,7 +225,7 @@ export default {
             job: null,
             jobs: [],
             mobile_number: null,
-            telephone_number: null,
+            telephone_number: "",
             email: null,
             address: null,
             menu: false,
@@ -236,7 +236,11 @@ export default {
                         v.length <= 100 ||
                         "First name must be less than 100 characters"
                 ],
-                middle_name: [],
+                middle_name: [
+                    v =>
+                        (v !== null && v.length <= 100) ||
+                        "Middle name must be less than 100 characters"
+                ],
                 last_name: [
                     v => !!v || "Last name is required",
                     v =>
@@ -248,7 +252,9 @@ export default {
                 birthdate: [v => !!v || "Birthdate is required"],
                 job: [v => !!v || "Job designation is required"],
                 mobile_number: [v => !!v || "Mobile number is required"],
-                telephone_number: [],
+                telephone_number: [v =>
+                        (v !== null && v.length <= 30) ||
+                        "Telephone number must be less than 30 characters"],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail is not valid"

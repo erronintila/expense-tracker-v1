@@ -212,21 +212,20 @@
 </template>
 
 <script>
-
 export default {
     data() {
         return {
             valid: false,
             first_name: null,
-            middle_name: null,
+            middle_name: "",
             last_name: null,
-            suffix: null,
+            suffix: "",
             gender: null,
             birthdate: null,
             job: null,
             jobs: [],
             mobile_number: null,
-            telephone_number: null,
+            telephone_number: "",
             email: null,
             address: null,
             menu: false,
@@ -234,27 +233,39 @@ export default {
                 first_name: [
                     v => !!v || "First name is required",
                     v =>
-                        v && v.length <= 100 ||
+                        !!v && v.length <= 100 ||
                         "First name must be less than 100 characters"
                 ],
-                middle_name: [],
+                middle_name: [
+                    v =>
+                        (v !== null && v.length <= 100) ||
+                        "Middle name must be less than 100 characters"
+                ],
                 last_name: [
                     v => !!v || "Last name is required",
                     v =>
-                        v && v.length <= 100 ||
+                        (v && v.length <= 100) ||
                         "Last name must be less than 100 characters"
                 ],
-                suffix: [],
+                suffix: [
+                    // v =>
+                    //     (v !== null && v.length <= 30) ||
+                    //     "Suffix must be less than 30 characters"
+                ],
                 gender: [v => !!v || "Gender is required"],
                 birthdate: [v => !!v || "Birthdate is required"],
                 job: [v => !!v || "Job designation is required"],
-                mobile_number: [v => !!v || "Mobile number is required"],
-                telephone_number: [],
+                mobile_number: [v => !!v || "Mobile number is required", v =>
+                        (!!v && v.length <= 30) ||
+                        "Mobile number must be less than 30 characters"],
+                telephone_number: [v =>
+                        (v !== null && v.length <= 30) ||
+                        "Telephone number must be less than 30 characters"],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail is not valid"
                 ],
-                address: [v => !!v || "Address is required"],
+                address: [v => !!v || "Address is required"]
             },
             errors: {
                 first_name: [],
@@ -267,7 +278,7 @@ export default {
                 mobile_number: [],
                 telephone_number: [],
                 email: [],
-                address: [],
+                address: []
             }
         };
     },
@@ -307,7 +318,7 @@ export default {
                         mobile_number: _this.mobile_number,
                         telephone_number: _this.telephone_number,
                         email: _this.email,
-                        address: _this.address,
+                        address: _this.address
                     })
                     .then(function(response) {
                         // _this.onRefresh();
@@ -337,6 +348,6 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
         this.loadJobs();
-    },
+    }
 };
 </script>

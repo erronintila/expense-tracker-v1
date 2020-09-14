@@ -156,6 +156,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -181,6 +188,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Actions",
         value: "actions",
         sortable: false
+      }, {
+        text: "",
+        value: "data-table-expand"
       }],
       items: [],
       status: "Active",
@@ -631,6 +641,8 @@ var render = function() {
                     prevIcon: "mdi-chevron-left",
                     nextIcon: "mdi-chevron-right"
                   },
+                  "show-expand": "",
+                  "single-expand": "",
                   "show-select": "",
                   "item-key": "id"
                 },
@@ -641,6 +653,22 @@ var render = function() {
                 },
                 scopedSlots: _vm._u(
                   [
+                    {
+                      key: "expanded-item",
+                      fn: function(ref) {
+                        var headers = ref.headers
+                        var item = ref.item
+                        return [
+                          _c("td", { attrs: { colspan: headers.length } }, [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(item) +
+                                "\n                    "
+                            )
+                          ])
+                        ]
+                      }
+                    },
                     {
                       key: "item.actions",
                       fn: function(ref) {

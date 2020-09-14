@@ -121,10 +121,17 @@
                         nextIcon: 'mdi-chevron-right'
                     }"
                     v-model="selected"
+                    show-expand
+                    single-expand
                     show-select
                     item-key="id"
                     class="elevation-0"
                 >
+                    <template v-slot:expanded-item="{ headers, item }">
+                        <td :colspan="headers.length">
+                            {{ item }}
+                        </td>
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
@@ -151,7 +158,8 @@ export default {
                 { text: "Status", value: "status.status" },
                 // { text: "Remarks", value: "status.text" },
                 { text: "Created", value: "created" },
-                { text: "Actions", value: "actions", sortable: false }
+                { text: "Actions", value: "actions", sortable: false },
+                { text: "", value: "data-table-expand" }
             ],
             items: [],
             status: "Active",
@@ -329,6 +337,6 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
-    },
+    }
 };
 </script>

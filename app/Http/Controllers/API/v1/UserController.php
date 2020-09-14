@@ -139,7 +139,7 @@ class UserController extends Controller
                 break;
             case 'verify':
                 $user = User::whereIn('id', $request->ids)
-                    ->update(array('verified_at' => now()));
+                    ->update(array('email_verified_at' => now()));
 
                 break;
             default:

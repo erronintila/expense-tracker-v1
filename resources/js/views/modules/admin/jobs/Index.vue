@@ -126,9 +126,9 @@
                     class="elevation-0"
                 >
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onShow(item)">
+                        <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
-                        </v-icon>
+                        </v-icon> -->
                         <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
                         </v-icon>

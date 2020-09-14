@@ -39,18 +39,7 @@ $factory->define(Employee::class, function (Faker $faker) {
         'mobile_number' => $faker->e164PhoneNumber,
         'telephone_number' => $faker->phoneNumber,
         'email' => $faker->unique()->safeEmail,
-
         'address' => $faker->address,
-        'building_address' => $faker->buildingNumber . ' ' . $faker->company,
-        'street_name' => $faker->streetName,
-        'street_address' => $faker->streetAddress,
-        'subdivision' => $faker->company,
-        'barangay' => $faker->city,
-        'city' => $faker->city,
-        'province' => $faker->city,
-        'country' => $faker->country,
-        'zip' => $faker->postcode,
-
         'job_id' => $job->id,
     ];
 });

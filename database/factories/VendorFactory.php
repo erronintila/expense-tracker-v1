@@ -18,16 +18,6 @@ $factory->define(Vendor::class, function (Faker $faker) {
         'mobile_number' => $faker->e164PhoneNumber,
         'telephone_number' => $faker->phoneNumber,
         'website' => $faker->companyEmail,
-
         'address' => $faker->address,
-        'building_address' => $faker->buildingNumber . ' ' . $faker->company,
-        'street_name' => $faker->streetName,
-        'street_address' => $faker->streetAddress,
-        'subdivision' => $faker->company,
-        'barangay' => $faker->city,
-        'city' => $faker->city,
-        'province' => $faker->city,
-        'country' => $faker->country,
-        'zip' => $faker->postcode,
     ];
 });

@@ -227,15 +227,15 @@ __webpack_require__.r(__webpack_exports__);
     return {
       valid: false,
       first_name: null,
-      middle_name: null,
+      middle_name: "",
       last_name: null,
-      suffix: null,
+      suffix: "",
       gender: null,
       birthdate: null,
       job: null,
       jobs: [],
       mobile_number: null,
-      telephone_number: null,
+      telephone_number: "",
       email: null,
       address: null,
       menu: false,
@@ -243,15 +243,20 @@ __webpack_require__.r(__webpack_exports__);
         first_name: [function (v) {
           return !!v || "First name is required";
         }, function (v) {
-          return v && v.length <= 100 || "First name must be less than 100 characters";
+          return !!v && v.length <= 100 || "First name must be less than 100 characters";
         }],
-        middle_name: [],
+        middle_name: [function (v) {
+          return v !== null && v.length <= 100 || "Middle name must be less than 100 characters";
+        }],
         last_name: [function (v) {
           return !!v || "Last name is required";
         }, function (v) {
           return v && v.length <= 100 || "Last name must be less than 100 characters";
         }],
-        suffix: [],
+        suffix: [// v =>
+          //     (v !== null && v.length <= 30) ||
+          //     "Suffix must be less than 30 characters"
+        ],
         gender: [function (v) {
           return !!v || "Gender is required";
         }],
@@ -263,8 +268,12 @@ __webpack_require__.r(__webpack_exports__);
         }],
         mobile_number: [function (v) {
           return !!v || "Mobile number is required";
+        }, function (v) {
+          return !!v && v.length <= 30 || "Mobile number must be less than 30 characters";
         }],
-        telephone_number: [],
+        telephone_number: [function (v) {
+          return v !== null && v.length <= 30 || "Telephone number must be less than 30 characters";
+        }],
         email: [function (v) {
           return !!v || "E-mail is required";
         }, function (v) {
