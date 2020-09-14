@@ -25,27 +25,90 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      valid: false,
+      name: "",
+      rules: {
+        name: [function (v) {
+          return !!v || "The name field is required.";
+        }, function (v) {
+          return v.length <= 100 || "Name must be less than 100 characters";
+        }]
+      },
+      errors: {
+        name: []
+      }
+    };
   },
   methods: {
-    loadItem: function loadItem() {
+    getData: function getData() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response.data);
+      axios.get("/api/departments/" + _this.$route.params.id).then(function (response) {
+        _this.name = response.data.data.name;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
+    },
+    onSave: function onSave() {
+      var _this = this;
+
+      if (_this.$refs.form.validate()) {
+        axios.put("/api/departments/".concat(_this.$route.params.id), {
+          action: "update",
+          name: _this.name
+        }).then(function (response) {
+          _this.$dialog.message.success("Department updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.departments.index"
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+          _this.errors = error.response.data.errors;
+        });
+      }
     }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadItem();
-  },
-  mounted: function mounted() {}
+    this.getData();
+  }
 });
 
 /***/ }),
@@ -80,7 +143,7 @@ var render = function() {
                 "v-btn",
                 {
                   staticClass: "mr-3",
-                  attrs: { to: "/admin/users", icon: "" }
+                  attrs: { to: "/admin/departments", icon: "" }
                 },
                 [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
@@ -89,8 +152,93 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit User")
+                _vm._v("Edit Department")
               ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
+            },
+            [
+              _c(
+                "v-container",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "12" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              counter: 100,
+                              rules: _vm.rules.name,
+                              "error-messages": _vm.errors.name[0],
+                              label: "Name *",
+                              color: "success",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.name = []
+                              }
+                            },
+                            model: {
+                              value: _vm.name,
+                              callback: function($$v) {
+                                _vm.name = $$v
+                              },
+                              expression: "name"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green", dark: "" },
+                          on: { click: _vm.onSave }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { to: "/admin/departments" } }, [
+                        _vm._v("Cancel")
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           )

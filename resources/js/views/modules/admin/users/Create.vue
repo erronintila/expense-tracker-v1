@@ -177,7 +177,7 @@ export default {
                         password_confirmation: _this.password_confirmation
                     })
                     .then(function(response) {
-                        _this.onRefresh();
+                        // _this.onRefresh();
 
                         _this.$dialog.message.success(
                             "User created successfully.",
@@ -186,6 +186,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
                         console.log(error.response);

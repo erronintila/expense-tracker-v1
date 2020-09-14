@@ -217,118 +217,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// let ph_addresses = require('../../../../assets/philippine_address_2019v2.json');
-// import ph_addresses from "../../../../assets/philippine_address_2019v2.json";
-// console.log(ph_addresses);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -345,17 +233,6 @@ __webpack_require__.r(__webpack_exports__);
       telephone_number: "",
       email: "",
       address: "",
-      // building_address: "",
-      // street_address: "",
-      // street_name: "",
-      // subdivision: "",
-      // barangay: "",
-      // city: "",
-      // province: "",
-      // region: {},
-      // country: "Philippines",
-      // countries: [],
-      // zip: "",
       menu: false,
       rules: {
         first_name: [function (v) {
@@ -388,27 +265,7 @@ __webpack_require__.r(__webpack_exports__);
         }, function (v) {
           return /.+@.+/.test(v) || "E-mail is not valid";
         }],
-        address: [] // building_address: [],
-        // street_address: [],
-        // street_name: [],
-        // subdivision: [],
-        // barangay: [],
-        // city: [
-        //     v => !!v || "City/Municipality is required",
-        //     v =>
-        //         v.length <= 100 ||
-        //         "City/Municipality must be less than 100 characters"
-        // ],
-        // province: [],
-        // region: [],
-        // country: [
-        //     v => !!v || "Country is required",
-        //     v =>
-        //         v.length <= 100 ||
-        //         "Country must be less than 100 characters"
-        // ],
-        // zip: []
-
+        address: []
       },
       errors: {
         first_name: [],
@@ -421,17 +278,7 @@ __webpack_require__.r(__webpack_exports__);
         mobile_number: [],
         telephone_number: [],
         email: [],
-        address: [] // building_address: [],
-        // street_address: [],
-        // street_name: [],
-        // subdivision: [],
-        // barangay: [],
-        // city: [],
-        // province: [],
-        // region: [],
-        // country: [],
-        // zip: []
-
+        address: []
       }
     };
   },
@@ -466,22 +313,16 @@ __webpack_require__.r(__webpack_exports__);
           mobile_number: _this.mobile_number,
           telephone_number: _this.telephone_number,
           email: _this.email,
-          address: _this.address // building_address: _this.building_address,
-          // street_address: _this.street_address,
-          // street_name: _this.street_name,
-          // subdivision: _this.subdivision,
-          // barangay: _this.barangay,
-          // city: _this.city,
-          // province: _this.province,
-          // country: _this.country,
-          // zip: _this.zip
-
+          address: _this.address
         }).then(function (response) {
-          _this.onRefresh();
-
+          // _this.onRefresh();
           _this.$dialog.message.success("Employee created successfully.", {
             position: "top-right",
             timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.employees.index"
           });
         })["catch"](function (error) {
           console.log(error.response);
@@ -490,51 +331,6 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
     }
-  },
-  computed: {// regions() {
-    //     let regions = [];
-    //     for (let region in ph_addresses) {
-    //         regions.push({
-    //             key: region,
-    //             value: ph_addresses[region]["region_name"]
-    //         });
-    //     }
-    //     return regions;
-    // },
-    // provinces() {
-    //     let provinces = [];
-    //     if (this.region.length > 0) {
-    //         for (let province in ph_addresses[this.region][
-    //             "province_list"
-    //         ]) {
-    //             provinces.push(province);
-    //         }
-    //     }
-    //     return provinces;
-    // },
-    // cities() {
-    //     let cities = [];
-    //     if (this.region.length > 0 && this.province.length > 0) {
-    //         for (let municipality in ph_addresses[this.region][
-    //             "province_list"
-    //         ][this.province]["municipality_list"]) {
-    //             cities.push(municipality);
-    //         }
-    //     }
-    //     return cities;
-    // },
-    // barangays() {
-    //     if (
-    //         this.region.length > 0 &&
-    //         this.province.length > 0 &&
-    //         this.city.length > 0
-    //     ) {
-    //         return ph_addresses[this.region]["province_list"][
-    //             this.province
-    //         ]["municipality_list"][this.city]["barangay_list"];
-    //     }
-    //     return [];
-    // }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");

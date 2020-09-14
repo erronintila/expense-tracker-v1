@@ -67,9 +67,9 @@ export default {
         };
     },
     methods: {
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-        },
+        // onRefresh() {
+        //     Object.assign(this.$data, this.$options.data.apply(this));
+        // },
         onSave() {
             let _this = this;
 
@@ -81,7 +81,7 @@ export default {
                         name: _this.name
                     })
                     .then(function(response) {
-                        _this.onRefresh();
+                        // _this.onRefresh();
 
                         _this.$dialog.message.success(
                             "Expense type created successfully.",
@@ -90,6 +90,10 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$router.push({
+                            name: "admin.expense_types.index"
+                        });
                     })
                     .catch(function(error) {
                         console.log(error.response);

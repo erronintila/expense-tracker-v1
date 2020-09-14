@@ -143,7 +143,11 @@ class UserController extends Controller
 
                 break;
             default:
-                $this->validator($request->all(), $id)->validate();
+                $request->validate([
+                    'name'      => ['required', 'max:200'],
+                    'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:150'],
+                    'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
+                ]);
 
                 $user = User::findOrFail($id);
 

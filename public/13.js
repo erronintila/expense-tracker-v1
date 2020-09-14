@@ -76,9 +76,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
+    // onRefresh() {
+    //     Object.assign(this.$data, this.$options.data.apply(this));
+    // },
     onSave: function onSave() {
       var _this = this;
 
@@ -88,11 +88,14 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/expense_types", {
           name: _this.name
         }).then(function (response) {
-          _this.onRefresh();
-
+          // _this.onRefresh();
           _this.$dialog.message.success("Expense type created successfully.", {
             position: "top-right",
             timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.expense_types.index"
           });
         })["catch"](function (error) {
           console.log(error.response);

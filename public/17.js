@@ -299,6 +299,10 @@ __webpack_require__.r(__webpack_exports__);
             position: "top-right",
             timeout: 2000
           });
+
+          _this.$router.push({
+            name: "admin.expenses.index"
+          });
         })["catch"](function (error) {
           console.log(error.response);
           _this.errors = error.response.data.errors;

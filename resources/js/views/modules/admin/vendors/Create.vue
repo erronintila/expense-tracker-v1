@@ -111,108 +111,6 @@
                         </v-col>
                     </v-row>
 
-                    <!-- <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="building_address"
-                                :rules="rules.building_address"
-                                :counter="100"
-                                :error-messages="errors.building_address"
-                                @input="errors.building_address = []"
-                                color="success"
-                                label="Rm./Flr./Unit No. & Bldg. Name"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="street_name"
-                                :rules="rules.street_name"
-                                :counter="100"
-                                :error-messages="errors.street_name"
-                                @input="errors.street_name = []"
-                                color="success"
-                                label="Street Name"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="street_address"
-                                :rules="rules.street_address"
-                                :counter="100"
-                                :error-messages="errors.street_address"
-                                @input="errors.street_address = []"
-                                color="success"
-                                label="House/Lot & Blk. No."
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="subdivision"
-                                :rules="rules.subdivision"
-                                :counter="100"
-                                :error-messages="errors.subdivision"
-                                @input="errors.subdivision = []"
-                                color="success"
-                                label="Subdivision"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="barangay"
-                                :rules="rules.barangay"
-                                :counter="100"
-                                :error-messages="errors.barangay"
-                                @input="errors.barangay = []"
-                                color="success"
-                                label="Barangay/District/Locality"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="city"
-                                :rules="rules.city"
-                                :counter="100"
-                                :error-messages="errors.city"
-                                @input="errors.city = []"
-                                color="success"
-                                label="City/Municipality"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="province"
-                                :rules="rules.province"
-                                :counter="100"
-                                :error-messages="errors.province"
-                                @input="errors.province = []"
-                                color="success"
-                                label="Province"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="country"
-                                :rules="rules.country"
-                                :counter="100"
-                                :error-messages="errors.country"
-                                @input="errors.country = []"
-                                color="success"
-                                label="Country"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="zip"
-                                :rules="rules.zip"
-                                :counter="10"
-                                :error-messages="errors.zip"
-                                @input="errors.zip = []"
-                                color="success"
-                                label="Zip Code"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row> -->
-
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-checkbox
@@ -251,22 +149,13 @@ export default {
             website: "",
             is_vat_inclusive: false,
             address: "",
-            // building_address: "",
-            // street_address: "",
-            // street_name: "",
-            // subdivision: "",
-            // barangay: "",
-            // city: "",
-            // province: "",
-            // country: "Philippines",
-            // zip: "",
             rules: {
                 code: [],
                 name: [
-                    // v => !!v || "Name is required",
-                    // v =>
-                    //     v.length <= 150 ||
-                    //     "Name must be less than 100 characters"
+                    v => !!v || "Name is required",
+                    v =>
+                        v.length <= 150 ||
+                        "Name must be less than 100 characters"
                 ],
                 email: [],
                 tin: [
@@ -282,25 +171,6 @@ export default {
                 website: [],
                 is_vat_inclusive: [],
                 address: []
-                // building_address: [],
-                // street_address: [],
-                // street_name: [],
-                // subdivision: [],
-                // barangay: [],
-                // city: [
-                //     v => !!v || "City/Municipality is required",
-                //     v =>
-                //         v.length <= 100 ||
-                //         "City/Municipality must be less than 100 characters"
-                // ],
-                // province: [],
-                // country: [
-                //     v => !!v || "Country is required",
-                //     v =>
-                //         v.length <= 100 ||
-                //         "Country must be less than 100 characters"
-                // ],
-                // zip: []
             },
             errors: {
                 code: [],
@@ -314,15 +184,6 @@ export default {
                 website: [],
                 is_vat_inclusive: [],
                 address: []
-                // building_address: [],
-                // street_address: [],
-                // street_name: [],
-                // subdivision: [],
-                // barangay: [],
-                // city: [],
-                // province: [],
-                // country: [],
-                // zip: []
             }
         };
     },
@@ -349,15 +210,6 @@ export default {
                         website: _this.website,
                         is_vat_inclusive: _this.is_vat_inclusive,
                         address: _this.address
-                        // building_address: _this.building_address,
-                        // street_address: _this.street_address,
-                        // street_name: _this.street_name,
-                        // subdivision: _this.subdivision,
-                        // barangay: _this.barangay,
-                        // city: _this.city,
-                        // province: _this.province,
-                        // country: _this.country,
-                        // zip: _this.zip
                     })
                     .then(function(response) {
                         // _this.onRefresh();

@@ -72,9 +72,7 @@ export default {
                         v.length <= 100 ||
                         "Name must be less than 100 characters"
                 ],
-                department: [
-                    v => !!v || "Department is required"
-                ]
+                department: [v => !!v || "Department is required"]
             },
             errors: {
                 name: [],
@@ -102,11 +100,11 @@ export default {
                     console.log(error.response);
                 });
         },
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-            // this.$refs.form.reset();
-            // this.$refs.form.resetValidation();
-        },
+        // onRefresh() {
+        //     Object.assign(this.$data, this.$options.data.apply(this));
+        //     // this.$refs.form.reset();
+        //     // this.$refs.form.resetValidation();
+        // },
         onSave() {
             let _this = this;
 
@@ -119,7 +117,7 @@ export default {
                         department_id: _this.department
                     })
                     .then(function(response) {
-                        _this.onRefresh();
+                        // _this.onRefresh();
 
                         _this.$dialog.message.success(
                             "Job designation created successfully.",
@@ -128,6 +126,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$router.push({ name: "admin.jobs.index" });
                     })
                     .catch(function(error) {
                         console.log(error.response);

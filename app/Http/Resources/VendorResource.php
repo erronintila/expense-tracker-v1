@@ -29,18 +29,7 @@ class VendorResource extends JsonResource
             'website' => $this->website,
             'remarks' => $this->remarks,
             'is_vat_inclusive' => $this->is_vat_inclusive,
-
             'address' => $this->address,
-            'building_address' => $this->building_address,
-            'street_name' => $this->street_name,
-            'street_address' => $this->street_address,
-            'subdivision' => $this->subdivision,
-            'barangay' => $this->barangay,
-            'city' => $this->city,
-            'province' => $this->province,
-            'country' => $this->country,
-            'zip' => $this->zip,
-            
             'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:m:s'),
             'updated_at' => Carbon::parse($this->updated_at)->format('Y-m-d H:m:s'),
         ];

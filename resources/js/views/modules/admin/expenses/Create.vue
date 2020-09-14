@@ -129,7 +129,7 @@
                                 v-model="receipt_number"
                                 :rules="rules.receipt_number"
                                 :error-messages="errors.receipt_number"
-                                @input="errors.receipt_number=[]"
+                                @input="errors.receipt_number = []"
                                 color="success"
                                 label="Receipt No."
                                 required
@@ -141,7 +141,7 @@
                                 v-model="amount"
                                 :rules="rules.amount"
                                 :error-messages="errors.amount"
-                                @input="errors.amount=[]"
+                                @input="errors.amount = []"
                                 color="success"
                                 label="Amount"
                                 required
@@ -156,7 +156,7 @@
                                 label="Remarks"
                                 v-model="remarks"
                                 :error-messages="errors.remarks"
-                                @input="errors.remarks=[]"
+                                @input="errors.remarks = []"
                                 color="success"
                             ></v-textarea>
                         </v-col>
@@ -293,6 +293,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$router.push({ name: "admin.expenses.index" });
                     })
                     .catch(function(error) {
                         console.log(error.response);

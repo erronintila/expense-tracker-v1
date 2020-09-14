@@ -25,27 +25,141 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      valid: false,
+      name: "",
+      department: {},
+      departments: [],
+      rules: {
+        name: [function (v) {
+          return !!v || "Name is required";
+        }, function (v) {
+          return v.length <= 100 || "Name must be less than 100 characters";
+        }],
+        department: [function (v) {
+          return !!v || "Department is required";
+        }]
+      },
+      errors: {
+        name: [],
+        department_id: []
+      }
+    };
   },
   methods: {
-    loadItem: function loadItem() {
+    getData: function getData() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response.data);
+      axios.get("/api/jobs/" + _this.$route.params.id).then(function (response) {
+        console.log(response);
+        var data = response.data.data;
+        _this.name = data.name;
+        _this.department = data.department.id;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    loadDepartments: function loadDepartments() {
+      var _this = this;
+
+      axios.get("/api/departments").then(function (response) {
+        var data = response.data.data.map(function (item) {
+          return {
+            id: item.id,
+            name: item.name
+          };
+        });
+        _this.departments = data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
       });
+    },
+    // onRefresh() {
+    //     Object.assign(this.$data, this.$options.data.apply(this));
+    //     // this.$refs.form.reset();
+    //     // this.$refs.form.resetValidation();
+    // },
+    onSave: function onSave() {
+      var _this = this;
+
+      console.log(_this.department);
+
+      _this.$refs.form.validate();
+
+      if (_this.$refs.form.validate()) {
+        axios.put("/api/jobs/" + _this.$route.params.id, {
+          action: "update",
+          name: _this.name,
+          department_id: _this.department
+        }).then(function (response) {
+          // _this.onRefresh();
+          _this.$dialog.message.success("Job designation updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.jobs.index"
+          });
+        })["catch"](function (error) {
+          console.log(error.response);
+          _this.errors = error.response.data.errors;
+        });
+        return;
+      }
     }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadItem();
-  },
-  mounted: function mounted() {}
+    this.loadDepartments();
+    this.getData();
+  }
 });
 
 /***/ }),
@@ -78,10 +192,7 @@ var render = function() {
             [
               _c(
                 "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { to: "/admin/users", icon: "" }
-                },
+                { staticClass: "mr-3", attrs: { to: "/admin/jobs", icon: "" } },
                 [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
               ),
@@ -89,8 +200,127 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit User")
+                _vm._v("Edit Job Designation")
               ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
+            },
+            [
+              _c(
+                "v-container",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        {
+                          staticClass: "d-flex",
+                          attrs: { cols: "12", sm: "6" }
+                        },
+                        [
+                          _c("v-select", {
+                            attrs: {
+                              items: _vm.departments,
+                              rules: _vm.rules.department,
+                              "error-messages": _vm.errors.department_id,
+                              color: "success",
+                              "item-value": "id",
+                              "item-text": "name",
+                              label: "Department *"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.department_id = []
+                              }
+                            },
+                            model: {
+                              value: _vm.department,
+                              callback: function($$v) {
+                                _vm.department = $$v
+                              },
+                              expression: "department"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "6" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.name,
+                              counter: 100,
+                              "error-messages": _vm.errors.name,
+                              color: "success",
+                              label: "Name *",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.name = []
+                              }
+                            },
+                            model: {
+                              value: _vm.name,
+                              callback: function($$v) {
+                                _vm.name = $$v
+                              },
+                              expression: "name"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green", dark: "" },
+                          on: { click: _vm.onSave }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { to: "/admin/jobs" } }, [
+                        _vm._v("Cancel")
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           )

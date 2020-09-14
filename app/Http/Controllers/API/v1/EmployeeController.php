@@ -32,17 +32,7 @@ class EmployeeController extends Controller
             'telephone_number' => ['nullable', 'max:50'],
             'email' => ['nullable', 'email', Rule::unique('employees')->ignore($id, 'id')],
             'job_id' => ['required'],
-
             'address' => ['nullable'],
-            // 'building_address' => ['nullable', 'max:150'],
-            // 'street_name' => ['nullable', 'max:150'],
-            // 'street_address' => ['nullable', 'max:150'],
-            // 'subdivision' => ['nullable', 'max:150'],
-            // 'barangay' => ['nullable', 'max:150'],
-            // 'city' => ['nullable', 'max:150'],
-            // 'province' => ['nullable', 'max:150'],
-            // 'country' => ['nullable', 'max:150'],
-            // 'zip' => ['nullable', 'max:50'],
         ]);
     }
 
@@ -109,18 +99,7 @@ class EmployeeController extends Controller
         $employee->telephone_number = $request->telephone_number;
         $employee->email = $request->email;
         $employee->job_id = $request->job_id;
-
         $employee->address = $request->address;
-        // $employee->building_address = $request->building_address;
-        // $employee->street_name = $request->street_name;
-        // $employee->street_address = $request->street_address;
-        // $employee->subdivision = $request->subdivision;
-        // $employee->barangay = $request->barangay;
-        // $employee->city = $request->city;
-        // $employee->province = $request->province;
-        // $employee->country = $request->country;
-        // $employee->zip = $request->zip;
-
         $employee->save();
 
         return response(
@@ -168,7 +147,7 @@ class EmployeeController extends Controller
 
                 break;
             default:
-                $this->validator($request->all(), null)->validate();
+                $this->validator($request->all(), $id)->validate();
 
                 $employee = Employee::findOrFail($id);
 
@@ -183,18 +162,7 @@ class EmployeeController extends Controller
                 $employee->telephone_number = $request->telephone_number;
                 $employee->email = $request->email;
                 $employee->job_id = $request->job_id;
-
                 $employee->address = $request->address;
-                // $employee->building_address = $request->building_address;
-                // $employee->street_name = $request->street_name;
-                // $employee->street_address = $request->street_address;
-                // $employee->subdivision = $request->subdivision;
-                // $employee->barangay = $request->barangay;
-                // $employee->city = $request->city;
-                // $employee->province = $request->province;
-                // $employee->country = $request->country;
-                // $employee->zip = $request->zip;
-
                 $employee->save();
 
                 break;

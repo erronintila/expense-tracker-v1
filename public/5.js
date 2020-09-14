@@ -62,10 +62,9 @@ __webpack_require__.r(__webpack_exports__);
       rules: {
         name: [function (v) {
           return !!v || "The name field is required.";
-        } // v =>
-        //     v.length <= 100 ||
-        //     "Name must be less than 100 characters"
-        ]
+        }, function (v) {
+          return v.length <= 100 || "Name must be less than 100 characters";
+        }]
       },
       errors: {
         name: []
@@ -73,11 +72,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onRefresh: function onRefresh() {
-      // Object.assign(this.$data, this.$options.data.apply(this));
-      this.$refs.form.reset();
-      this.$refs.form.resetValidation();
-    },
+    // onRefresh() {
+    //     // Object.assign(this.$data, this.$options.data.apply(this));
+    //     this.$refs.form.reset();
+    //     this.$refs.form.resetValidation();
+    // },
     onSave: function onSave() {
       var _this = this;
 
@@ -85,11 +84,14 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/departments", {
           name: _this.name
         }).then(function (response) {
-          _this.onRefresh();
-
+          // _this.onRefresh();
           _this.$dialog.message.success("Department created successfully.", {
             position: "top-right",
             timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.departments.index"
           });
         })["catch"](function (error) {
           console.log(error);

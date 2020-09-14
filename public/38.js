@@ -144,108 +144,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -261,22 +159,13 @@ __webpack_require__.r(__webpack_exports__);
       website: "",
       is_vat_inclusive: false,
       address: "",
-      // building_address: "",
-      // street_address: "",
-      // street_name: "",
-      // subdivision: "",
-      // barangay: "",
-      // city: "",
-      // province: "",
-      // country: "Philippines",
-      // zip: "",
       rules: {
         code: [],
-        name: [// v => !!v || "Name is required",
-          // v =>
-          //     v.length <= 150 ||
-          //     "Name must be less than 100 characters"
-        ],
+        name: [function (v) {
+          return !!v || "Name is required";
+        }, function (v) {
+          return v.length <= 150 || "Name must be less than 100 characters";
+        }],
         email: [],
         tin: [function (v) {
           return !!v || "TIN is required";
@@ -289,26 +178,7 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         website: [],
         is_vat_inclusive: [],
-        address: [] // building_address: [],
-        // street_address: [],
-        // street_name: [],
-        // subdivision: [],
-        // barangay: [],
-        // city: [
-        //     v => !!v || "City/Municipality is required",
-        //     v =>
-        //         v.length <= 100 ||
-        //         "City/Municipality must be less than 100 characters"
-        // ],
-        // province: [],
-        // country: [
-        //     v => !!v || "Country is required",
-        //     v =>
-        //         v.length <= 100 ||
-        //         "Country must be less than 100 characters"
-        // ],
-        // zip: []
-
+        address: []
       },
       errors: {
         code: [],
@@ -321,16 +191,7 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         website: [],
         is_vat_inclusive: [],
-        address: [] // building_address: [],
-        // street_address: [],
-        // street_name: [],
-        // subdivision: [],
-        // barangay: [],
-        // city: [],
-        // province: [],
-        // country: [],
-        // zip: []
-
+        address: []
       }
     };
   },
@@ -355,16 +216,7 @@ __webpack_require__.r(__webpack_exports__);
           remarks: _this.remarks,
           website: _this.website,
           is_vat_inclusive: _this.is_vat_inclusive,
-          address: _this.address // building_address: _this.building_address,
-          // street_address: _this.street_address,
-          // street_name: _this.street_name,
-          // subdivision: _this.subdivision,
-          // barangay: _this.barangay,
-          // city: _this.city,
-          // province: _this.province,
-          // country: _this.country,
-          // zip: _this.zip
-
+          address: _this.address
         }).then(function (response) {
           // _this.onRefresh();
           _this.$dialog.message.success("Vendor created successfully.", {

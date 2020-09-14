@@ -25,27 +25,238 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      valid: false,
+      code: "",
+      name: "",
+      email: "",
+      tin: "",
+      contact_person: "",
+      mobile_number: "",
+      telephone_number: "",
+      remarks: "",
+      website: "",
+      is_vat_inclusive: false,
+      address: "",
+      rules: {
+        code: [],
+        name: [function (v) {
+          return !!v || "Name is required";
+        }, function (v) {
+          return v.length <= 150 || "Name must be less than 100 characters";
+        }],
+        email: [],
+        tin: [function (v) {
+          return !!v || "TIN is required";
+        }, function (v) {
+          return v.length <= 150 || "Name must be less than 100 characters";
+        }],
+        contact_person: [],
+        mobile_number: [],
+        telephone_number: [],
+        remarks: [],
+        website: [],
+        is_vat_inclusive: [],
+        address: []
+      },
+      errors: {
+        code: [],
+        name: [],
+        email: [],
+        tin: [],
+        contact_person: [],
+        mobile_number: [],
+        telephone_number: [],
+        remarks: [],
+        website: [],
+        is_vat_inclusive: [],
+        address: []
+      }
+    };
   },
   methods: {
-    loadItem: function loadItem() {
+    getData: function getData() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response.data);
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
+      axios.get("/api/vendors/" + _this.$route.params.id).then(function (response) {
+        var data = response.data.data;
+        console.log(data);
+        _this.code = data.code;
+        _this.name = data.name;
+        _this.email = data.email;
+        _this.tin = data.tin;
+        _this.contact_person = data.contact_person;
+        _this.mobile_number = data.mobile_number;
+        _this.telephone_number = data.telephone_number;
+        _this.remarks = data.remarks;
+        _this.website = data.website;
+        _this.is_vat_inclusive = data.is_vat_inclusive;
+        _this.address = data.address;
+      })["catch"](function (error) {});
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
+    onSave: function onSave() {
+      var _this = this;
+
+      _this.$refs.form.validate();
+
+      if (_this.$refs.form.validate()) {
+        axios.put("/api/vendors/" + _this.$route.params.id, {
+          code: _this.code,
+          name: _this.name,
+          email: _this.email,
+          tin: _this.tin,
+          contact_person: _this.contact_person,
+          mobile_number: _this.mobile_number,
+          telephone_number: _this.telephone_number,
+          remarks: _this.remarks,
+          website: _this.website,
+          is_vat_inclusive: _this.is_vat_inclusive,
+          address: _this.address
+        }).then(function (response) {
+          // _this.onRefresh();
+          _this.$dialog.message.success("Vendor updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.vendors.index"
+          });
+        })["catch"](function (error) {
+          console.log(error.response);
+          _this.errors = error.response.data.errors;
+        });
+        return;
+      }
     }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadItem();
-  },
-  mounted: function mounted() {}
+    this.getData();
+  }
 });
 
 /***/ }),
@@ -80,7 +291,7 @@ var render = function() {
                 "v-btn",
                 {
                   staticClass: "mr-3",
-                  attrs: { to: "/admin/users", icon: "" }
+                  attrs: { to: "/admin/vendors", icon: "" }
                 },
                 [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
@@ -89,8 +300,304 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit User")
+                _vm._v("Edit Vendor")
               ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
+            },
+            [
+              _c(
+                "v-container",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.name,
+                              counter: 150,
+                              "error-messages": _vm.errors.name,
+                              color: "success",
+                              label: "Name",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.name,
+                              callback: function($$v) {
+                                _vm.name = $$v
+                              },
+                              expression: "name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.email,
+                              "error-messages": _vm.errors.email,
+                              color: "success",
+                              label: "Email Address"
+                            },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.tin,
+                              "error-messages": _vm.errors.tin,
+                              counter: 100,
+                              color: "success",
+                              label: "Tax Identification Number (TIN)",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.tin,
+                              callback: function($$v) {
+                                _vm.tin = $$v
+                              },
+                              expression: "tin"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.contact_person,
+                              "error-messages": _vm.errors.contact_person,
+                              counter: 100,
+                              color: "success",
+                              label: "Contact Person"
+                            },
+                            model: {
+                              value: _vm.contact_person,
+                              callback: function($$v) {
+                                _vm.contact_person = $$v
+                              },
+                              expression: "contact_person"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.mobile_number,
+                              counter: 30,
+                              "error-messages": _vm.errors.mobile_number,
+                              color: "success",
+                              label: "Mobile Number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.mobile_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.mobile_number,
+                              callback: function($$v) {
+                                _vm.mobile_number = $$v
+                              },
+                              expression: "mobile_number"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.telephone_number,
+                              counter: 30,
+                              "error-messages": _vm.errors.telephone_number,
+                              label: "Telephone Number",
+                              color: "success"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.telephone_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.telephone_number,
+                              callback: function($$v) {
+                                _vm.telephone_number = $$v
+                              },
+                              expression: "telephone_number"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              counter: 100,
+                              rules: _vm.rules.website,
+                              "error-messages": _vm.errors.website,
+                              label: "Website",
+                              color: "success"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.website = []
+                              }
+                            },
+                            model: {
+                              value: _vm.website,
+                              callback: function($$v) {
+                                _vm.website = $$v
+                              },
+                              expression: "website"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12" } },
+                        [
+                          _c("v-textarea", {
+                            attrs: {
+                              rules: _vm.rules.address,
+                              "error-messages": _vm.errors.address,
+                              color: "success",
+                              label: "Address",
+                              rows: "1"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.address = []
+                              }
+                            },
+                            model: {
+                              value: _vm.address,
+                              callback: function($$v) {
+                                _vm.address = $$v
+                              },
+                              expression: "address"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-checkbox", {
+                            attrs: {
+                              color: "green",
+                              label: "Vat Inclusive",
+                              "error-messages": _vm.errors.is_vat_inclusive
+                            },
+                            model: {
+                              value: _vm.is_vat_inclusive,
+                              callback: function($$v) {
+                                _vm.is_vat_inclusive = $$v
+                              },
+                              expression: "is_vat_inclusive"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green", dark: "" },
+                          on: { click: _vm.onSave }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { to: "/admin/vendors" } }, [
+                        _vm._v("Cancel")
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           )

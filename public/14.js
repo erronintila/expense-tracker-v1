@@ -25,27 +25,100 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      valid: false,
+      name: "",
+      rules: {
+        name: [function (v) {
+          return !!v || "Name is required";
+        }, function (v) {
+          return v.length <= 100 || "Name must be less than 100 characters";
+        }]
+      },
+      errors: {
+        name: []
+      }
+    };
   },
   methods: {
-    loadItem: function loadItem() {
+    // onRefresh() {
+    //     Object.assign(this.$data, this.$options.data.apply(this));
+    // },
+    getData: function getData() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response.data);
+      axios.get("/api/expense_types/" + _this.$route.params.id).then(function (response) {
+        // console.log(response);
+        _this.name = response.data.data.name;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
+    },
+    onSave: function onSave() {
+      var _this = this;
+
+      _this.$refs.form.validate();
+
+      if (_this.$refs.form.validate()) {
+        axios.put("/api/expense_types/" + _this.$route.params.id, {
+          name: _this.name
+        }).then(function (response) {
+          // _this.onRefresh();
+          _this.$dialog.message.success("Expense type updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.expense_types.index"
+          });
+        })["catch"](function (error) {
+          console.log(error.response);
+          _this.errors = error.response.data.errors;
+        });
+        return;
+      }
     }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadItem();
-  },
-  mounted: function mounted() {}
+    this.getData();
+  }
 });
 
 /***/ }),
@@ -80,7 +153,7 @@ var render = function() {
                 "v-btn",
                 {
                   staticClass: "mr-3",
-                  attrs: { to: "/admin/users", icon: "" }
+                  attrs: { to: "/admin/expense_types", icon: "" }
                 },
                 [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
@@ -89,8 +162,93 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit User")
+                _vm._v("Edit Expense Type")
               ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
+            },
+            [
+              _c(
+                "v-container",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "12" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.name,
+                              counter: 100,
+                              "error-messages": _vm.errors.name,
+                              label: "Name *",
+                              color: "success",
+                              required: ""
+                            },
+                            on: {
+                              input: function() {
+                                _vm.errors.name = []
+                              }
+                            },
+                            model: {
+                              value: _vm.name,
+                              callback: function($$v) {
+                                _vm.name = $$v
+                              },
+                              expression: "name"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green", dark: "" },
+                          on: { click: _vm.onSave }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { to: "/admin/expense_types" } }, [
+                        _vm._v("Cancel")
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           )

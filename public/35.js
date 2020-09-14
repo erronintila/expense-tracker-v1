@@ -25,27 +25,138 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      valid: false,
+      showPassword: false,
+      showPasswordConfirmation: false,
+      name: "",
+      username: "",
+      email: "",
+      rules: {
+        name: [function (v) {
+          return !!v || "Name is required";
+        }, function (v) {
+          return v.length <= 150 || "Name must be less than 150 characters";
+        }],
+        username: [function (v) {
+          return !!v || "Username is required";
+        }, function (v) {
+          return v.length <= 50 || "Username must be less than 50 characters";
+        }],
+        email: [function (v) {
+          return !!v || "E-mail is required";
+        }, function (v) {
+          return /.+@.+/.test(v) || "E-mail must be valid";
+        }]
+      },
+      errors: {
+        name: [],
+        username: [],
+        email: []
+      }
+    };
   },
   methods: {
-    loadItem: function loadItem() {
+    getData: function getData() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response.data);
+      axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
+        var data = response.data.data;
+        _this.name = data.name;
+        _this.username = data.username;
+        _this.email = data.email;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
+    onSave: function onSave() {
+      var _this = this;
+
+      _this.$refs.form.validate();
+
+      if (_this.$refs.form.validate()) {
+        axios.put("/api/users/" + _this.$route.params.id, {
+          action: "update",
+          name: _this.name,
+          username: _this.username,
+          email: _this.email
+        }).then(function (response) {
+          // _this.onRefresh();
+          _this.$dialog.message.success("User updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.users.index"
+          });
+        })["catch"](function (error) {
+          console.log(error.response);
+          _this.errors = error.response.data.errors;
+        });
+        return;
+      }
     }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadItem();
-  },
-  mounted: function mounted() {}
+    this.getData();
+  }
 });
 
 /***/ }),
@@ -91,6 +202,144 @@ var render = function() {
               _c("h4", { staticClass: "title green--text" }, [
                 _vm._v("Edit User")
               ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
+            },
+            [
+              _c(
+                "v-container",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.name,
+                              counter: 150,
+                              "error-messages": _vm.errors.name,
+                              color: "success",
+                              label: "Name",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.name = []
+                              }
+                            },
+                            model: {
+                              value: _vm.name,
+                              callback: function($$v) {
+                                _vm.name = $$v
+                              },
+                              expression: "name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.username,
+                              counter: 50,
+                              "error-messages": _vm.errors.username,
+                              color: "success",
+                              label: "Username",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.username = []
+                              }
+                            },
+                            model: {
+                              value: _vm.username,
+                              callback: function($$v) {
+                                _vm.username = $$v
+                              },
+                              expression: "username"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.rules.email,
+                              "error-messages": _vm.errors.email,
+                              color: "success",
+                              label: "Email Address",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.email = []
+                              }
+                            },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green", dark: "" },
+                          on: { click: _vm.onSave }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { to: "/admin/users" } }, [
+                        _vm._v("Cancel")
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           )

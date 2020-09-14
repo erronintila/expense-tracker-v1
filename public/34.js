@@ -184,11 +184,14 @@ __webpack_require__.r(__webpack_exports__);
           password: _this.password,
           password_confirmation: _this.password_confirmation
         }).then(function (response) {
-          _this.onRefresh();
-
+          // _this.onRefresh();
           _this.$dialog.message.success("User created successfully.", {
             position: "top-right",
             timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.users.index"
           });
         })["catch"](function (error) {
           console.log(error.response);

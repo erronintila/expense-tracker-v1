@@ -29,18 +29,7 @@ class EmployeeResource extends JsonResource
             'mobile_number' => $this->mobile_number,
             'telephone_number' => $this->telephone_number,
             'email' => $this->email,
-
             'address' => $this->address,
-            'building_address' => $this->building_address,
-            'street_name' => $this->street_name,
-            'street_address' => $this->street_address,
-            'subdivision' => $this->subdivision,
-            'barangay' => $this->barangay,
-            'city' => $this->city,
-            'province' => $this->province,
-            'country' => $this->country,
-            'zip' => $this->zip,
-
             'job' => $this->job,
             'department' => $this->job->department,
             'fullname' => $this->last_name . ", " . $this->first_name,

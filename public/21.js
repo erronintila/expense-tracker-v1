@@ -108,10 +108,11 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this)); // this.$refs.form.reset();
-      // this.$refs.form.resetValidation();
-    },
+    // onRefresh() {
+    //     Object.assign(this.$data, this.$options.data.apply(this));
+    //     // this.$refs.form.reset();
+    //     // this.$refs.form.resetValidation();
+    // },
     onSave: function onSave() {
       var _this = this;
 
@@ -122,11 +123,14 @@ __webpack_require__.r(__webpack_exports__);
           name: _this.name,
           department_id: _this.department
         }).then(function (response) {
-          _this.onRefresh();
-
+          // _this.onRefresh();
           _this.$dialog.message.success("Job designation created successfully.", {
             position: "top-right",
             timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.jobs.index"
           });
         })["catch"](function (error) {
           console.log(error.response);

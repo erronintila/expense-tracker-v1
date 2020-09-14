@@ -51,10 +51,10 @@ export default {
             name: "",
             rules: {
                 name: [
-                    v => !!v || "The name field is required."
-                    // v =>
-                    //     v.length <= 100 ||
-                    //     "Name must be less than 100 characters"
+                    v => !!v || "The name field is required.",
+                    v =>
+                        v.length <= 100 ||
+                        "Name must be less than 100 characters"
                 ]
             },
             errors: {
@@ -63,11 +63,11 @@ export default {
         };
     },
     methods: {
-        onRefresh() {
-            // Object.assign(this.$data, this.$options.data.apply(this));
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
-        },
+        // onRefresh() {
+        //     // Object.assign(this.$data, this.$options.data.apply(this));
+        //     this.$refs.form.reset();
+        //     this.$refs.form.resetValidation();
+        // },
         onSave() {
             let _this = this;
 
@@ -77,7 +77,7 @@ export default {
                         name: _this.name
                     })
                     .then(function(response) {
-                        _this.onRefresh();
+                        // _this.onRefresh();
 
                         _this.$dialog.message.success(
                             "Department created successfully.",
@@ -86,6 +86,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$router.push({ name: "admin.departments.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
