@@ -63,7 +63,7 @@ export default {
         return {
             valid: false,
             name: "",
-            department: {},
+            department: null,
             departments: [],
             rules: {
                 name: [

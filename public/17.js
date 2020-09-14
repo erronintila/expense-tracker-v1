@@ -184,23 +184,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
       menu: false,
-      code: "",
-      description: "",
+      code: null,
+      description: null,
       amount: 0,
-      receipt_number: "",
+      receipt_number: null,
       date: null,
       remarks: "",
       is_active: true,
-      expense_type: {},
+      expense_type: null,
       expense_types: [],
-      employee: {},
+      employee: null,
       employees: [],
-      vendor: {},
+      vendor: null,
       vendors: [],
       rules: {
         description: [function (v) {
@@ -316,6 +321,7 @@ __webpack_require__.r(__webpack_exports__);
     this.loadExpenseTypes();
     this.loadEmployees();
     this.loadVendors();
+    console.log(this.vendor);
   }
 });
 
@@ -397,7 +403,7 @@ var render = function() {
                               color: "success",
                               "item-value": "id",
                               "item-text": "fullname",
-                              label: "Employee",
+                              label: "Employee *",
                               required: ""
                             },
                             on: {
@@ -429,7 +435,7 @@ var render = function() {
                               color: "success",
                               "item-value": "id",
                               "item-text": "name",
-                              label: "Expense Type",
+                              label: "Expense Type *",
                               required: ""
                             },
                             on: {
@@ -461,7 +467,7 @@ var render = function() {
                               color: "success",
                               "item-value": "id",
                               "item-text": "name",
-                              label: "Vendor",
+                              label: "Vendor *",
                               required: ""
                             },
                             on: {
@@ -497,7 +503,7 @@ var render = function() {
                               counter: 100,
                               "error-messages": _vm.errors.description,
                               color: "success",
-                              label: "Description",
+                              label: "Description *",
                               required: ""
                             },
                             on: {
@@ -553,10 +559,11 @@ var render = function() {
                                           _vm._b(
                                             {
                                               attrs: {
+                                                rules: _vm.rules.date,
                                                 "error-messages":
                                                   _vm.errors.date,
                                                 color: "success",
-                                                label: "Date",
+                                                label: "Date *",
                                                 readonly: ""
                                               },
                                               on: {
@@ -670,7 +677,7 @@ var render = function() {
                               rules: _vm.rules.receipt_number,
                               "error-messages": _vm.errors.receipt_number,
                               color: "success",
-                              label: "Receipt No.",
+                              label: "Receipt No. *",
                               required: ""
                             },
                             on: {
@@ -699,7 +706,7 @@ var render = function() {
                               rules: _vm.rules.amount,
                               "error-messages": _vm.errors.amount,
                               color: "success",
-                              label: "Amount",
+                              label: "Amount *",
                               required: ""
                             },
                             on: {
@@ -755,6 +762,12 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",

@@ -22,7 +22,7 @@
                                 :error-messages="errors.name"
                                 @input="errors.name = []"
                                 color="success"
-                                label="Name"
+                                label="Name *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -35,7 +35,7 @@
                                 :error-messages="errors.username"
                                 @input="errors.username = []"
                                 color="success"
-                                label="Username"
+                                label="Username *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -47,7 +47,7 @@
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
                                 color="success"
-                                label="Email Address"
+                                label="Email Address *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -63,7 +63,7 @@
                                 :error-messages="errors.password"
                                 @input="errors.password = []"
                                 color="success"
-                                label="Password"
+                                label="Password *"
                                 hint="At least 8 characters"
                                 required
                                 @click:append="showPassword = !showPassword"
@@ -86,7 +86,7 @@
                                 "
                                 :error-messages="errors.password_confirmation"
                                 @input="errors.password_confirmation = []"
-                                label="Re-type Password"
+                                label="Re-type Password *"
                                 color="success"
                                 required
                                 @click:append="
@@ -95,6 +95,10 @@
                             ></v-text-field>
                         </v-col>
                     </v-row>
+
+                    <small style="opacity: 0.5">
+                        * indicates required field
+                    </small>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>

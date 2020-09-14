@@ -144,6 +144,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -316,7 +320,7 @@ var render = function() {
                               counter: 150,
                               "error-messages": _vm.errors.name,
                               color: "success",
-                              label: "Name",
+                              label: "Name *",
                               required: ""
                             },
                             model: {
@@ -364,7 +368,7 @@ var render = function() {
                               "error-messages": _vm.errors.tin,
                               counter: 100,
                               color: "success",
-                              label: "Tax Identification Number (TIN)",
+                              label: "Tax Identification Number (TIN) *",
                               required: ""
                             },
                             model: {
@@ -556,6 +560,12 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",

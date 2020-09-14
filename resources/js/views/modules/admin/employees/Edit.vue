@@ -23,7 +23,7 @@
                                 @input="errors.job_id = []"
                                 item-text="name"
                                 item-value="id"
-                                label="Job Designation"
+                                label="Job Designation *"
                                 color="success"
                                 required
                             >
@@ -39,7 +39,7 @@
                                 :counter="100"
                                 :error-messages="errors.first_name"
                                 @input="errors.first_name = []"
-                                label="First Name"
+                                label="First Name *"
                                 color="success"
                                 required
                             ></v-text-field>
@@ -64,7 +64,7 @@
                                 :counter="100"
                                 :error-messages="errors.last_name"
                                 @input="errors.last_name = []"
-                                label="Last Name"
+                                label="Last Name *"
                                 color="success"
                                 required
                             ></v-text-field>
@@ -90,7 +90,7 @@
                                 :items="['Male', 'Female']"
                                 :error-messages="errors.gender"
                                 @input="errors.gender = []"
-                                label="Gender"
+                                label="Gender *"
                                 color="success"
                                 required
                             >
@@ -110,9 +110,10 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="birthdate"
+                                        :rules="rules.birthdate"
                                         :error-messages="errors.birthdate"
                                         @input="errors.birthdate = []"
-                                        label="Birthdate"
+                                        label="Birthdate *"
                                         color="success"
                                         readonly
                                         v-bind="attrs"
@@ -152,7 +153,7 @@
                                 :error-messages="errors.mobile_number"
                                 @input="errors.mobile_number = []"
                                 color="success"
-                                label="Mobile Number"
+                                label="Mobile Number *"
                             ></v-text-field>
                         </v-col>
 
@@ -175,7 +176,7 @@
                                 :rules="rules.email"
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
-                                label="Email Address"
+                                label="Email Address *"
                                 color="success"
                             ></v-text-field>
                         </v-col>
@@ -189,11 +190,15 @@
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
                                 color="success"
-                                label="Address"
+                                label="Address *"
                                 rows="1"
                             ></v-textarea>
                         </v-col>
                     </v-row>
+
+                    <small style="opacity: 0.5">
+                        * indicates required field
+                    </small>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -211,18 +216,18 @@ export default {
     data() {
         return {
             valid: false,
-            first_name: "",
-            middle_name: "",
-            last_name: "",
-            suffix: "",
-            gender: "",
+            first_name: null,
+            middle_name: null,
+            last_name: null,
+            suffix: null,
+            gender: null,
             birthdate: null,
-            job: {},
+            job: null,
             jobs: [],
-            mobile_number: "+63",
-            telephone_number: "",
-            email: "",
-            address: "",
+            mobile_number: null,
+            telephone_number: null,
+            email: null,
+            address: null,
             menu: false,
             rules: {
                 first_name: [
@@ -231,11 +236,7 @@ export default {
                         v.length <= 100 ||
                         "First name must be less than 100 characters"
                 ],
-                middle_name: [
-                    v =>
-                        v.length <= 100 ||
-                        "Middle name must be less than 100 characters"
-                ],
+                middle_name: [],
                 last_name: [
                     v => !!v || "Last name is required",
                     v =>
@@ -246,13 +247,13 @@ export default {
                 gender: [v => !!v || "Gender is required"],
                 birthdate: [v => !!v || "Birthdate is required"],
                 job: [v => !!v || "Job designation is required"],
-                mobile_number: [],
+                mobile_number: [v => !!v || "Mobile number is required"],
                 telephone_number: [],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail is not valid"
                 ],
-                address: []
+                address: [v => !!v || "Address is required"]
             },
             errors: {
                 first_name: [],

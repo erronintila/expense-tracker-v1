@@ -21,7 +21,7 @@
                                 :counter="150"
                                 :error-messages="errors.name"
                                 color="success"
-                                label="Name"
+                                label="Name *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -43,7 +43,7 @@
                                 :error-messages="errors.tin"
                                 :counter="100"
                                 color="success"
-                                label="Tax Identification Number (TIN)"
+                                label="Tax Identification Number (TIN) *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -120,6 +120,10 @@
                             ></v-checkbox>
                         </v-col>
                     </v-row>
+
+                    <small style="opacity: 0.5">
+                        * indicates required field
+                    </small>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>

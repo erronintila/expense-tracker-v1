@@ -24,7 +24,7 @@
                                 color="success"
                                 item-value="id"
                                 item-text="fullname"
-                                label="Employee"
+                                label="Employee *"
                                 required
                             >
                             </v-select>
@@ -40,7 +40,7 @@
                                 color="success"
                                 item-value="id"
                                 item-text="name"
-                                label="Expense Type"
+                                label="Expense Type *"
                                 required
                             >
                             </v-select>
@@ -56,7 +56,7 @@
                                 color="success"
                                 item-value="id"
                                 item-text="name"
-                                label="Vendor"
+                                label="Vendor *"
                                 required
                             >
                             </v-select>
@@ -72,7 +72,7 @@
                                 :error-messages="errors.description"
                                 @input="errors.description = []"
                                 color="success"
-                                label="Description"
+                                label="Description *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -90,10 +90,11 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="date"
+                                        :rules="rules.date"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         color="success"
-                                        label="Date"
+                                        label="Date *"
                                         readonly
                                         v-bind="attrs"
                                         v-on="on"
@@ -131,7 +132,7 @@
                                 :error-messages="errors.receipt_number"
                                 @input="errors.receipt_number = []"
                                 color="success"
-                                label="Receipt No."
+                                label="Receipt No. *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -143,7 +144,7 @@
                                 :error-messages="errors.amount"
                                 @input="errors.amount = []"
                                 color="success"
-                                label="Amount"
+                                label="Amount *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -162,6 +163,10 @@
                         </v-col>
                     </v-row>
 
+                    <small style="opacity: 0.5">
+                        * indicates required field
+                    </small>
+
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
@@ -179,18 +184,18 @@ export default {
         return {
             valid: false,
             menu: false,
-            code: "",
-            description: "",
+            code: null,
+            description: null,
             amount: 0,
-            receipt_number: "",
+            receipt_number: null,
             date: null,
             remarks: "",
             is_active: true,
-            expense_type: {},
+            expense_type: null,
             expense_types: [],
-            employee: {},
+            employee: null,
             employees: [],
-            vendor: {},
+            vendor: null,
             vendors: [],
             rules: {
                 description: [v => !!v || "Description is required"],
@@ -313,6 +318,8 @@ export default {
         this.loadExpenseTypes();
         this.loadEmployees();
         this.loadVendors();
+
+        console.log(this.vendor);
     }
 };
 </script>

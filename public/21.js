@@ -73,7 +73,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       valid: false,
       name: "",
-      department: {},
+      department: null,
       departments: [],
       rules: {
         name: [function (v) {

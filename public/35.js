@@ -75,6 +75,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -235,7 +239,7 @@ var render = function() {
                               counter: 150,
                               "error-messages": _vm.errors.name,
                               color: "success",
-                              label: "Name",
+                              label: "Name *",
                               required: ""
                             },
                             on: {
@@ -265,7 +269,7 @@ var render = function() {
                               counter: 50,
                               "error-messages": _vm.errors.username,
                               color: "success",
-                              label: "Username",
+                              label: "Username *",
                               required: ""
                             },
                             on: {
@@ -294,7 +298,7 @@ var render = function() {
                               rules: _vm.rules.email,
                               "error-messages": _vm.errors.email,
                               color: "success",
-                              label: "Email Address",
+                              label: "Email Address *",
                               required: ""
                             },
                             on: {
@@ -316,6 +320,12 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",

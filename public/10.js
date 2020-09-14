@@ -217,22 +217,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
-      first_name: "",
-      middle_name: "",
-      last_name: "",
-      suffix: "",
-      gender: "",
+      first_name: null,
+      middle_name: null,
+      last_name: null,
+      suffix: null,
+      gender: null,
       birthdate: null,
-      job: {},
+      job: null,
       jobs: [],
-      mobile_number: "+63",
-      telephone_number: "",
-      email: "",
-      address: "",
+      mobile_number: null,
+      telephone_number: null,
+      email: null,
+      address: null,
       menu: false,
       rules: {
         first_name: [function (v) {
@@ -240,9 +245,7 @@ __webpack_require__.r(__webpack_exports__);
         }, function (v) {
           return v.length <= 100 || "First name must be less than 100 characters";
         }],
-        middle_name: [function (v) {
-          return v.length <= 100 || "Middle name must be less than 100 characters";
-        }],
+        middle_name: [],
         last_name: [function (v) {
           return !!v || "Last name is required";
         }, function (v) {
@@ -258,14 +261,18 @@ __webpack_require__.r(__webpack_exports__);
         job: [function (v) {
           return !!v || "Job designation is required";
         }],
-        mobile_number: [],
+        mobile_number: [function (v) {
+          return !!v || "Mobile number is required";
+        }],
         telephone_number: [],
         email: [function (v) {
           return !!v || "E-mail is required";
         }, function (v) {
           return /.+@.+/.test(v) || "E-mail is not valid";
         }],
-        address: []
+        address: [function (v) {
+          return !!v || "Address is required";
+        }]
       },
       errors: {
         first_name: [],
@@ -437,7 +444,7 @@ var render = function() {
                               "error-messages": _vm.errors.job_id,
                               "item-text": "name",
                               "item-value": "id",
-                              label: "Job Designation",
+                              label: "Job Designation *",
                               color: "success",
                               required: ""
                             },
@@ -473,7 +480,7 @@ var render = function() {
                               rules: _vm.rules.first_name,
                               counter: 100,
                               "error-messages": _vm.errors.first_name,
-                              label: "First Name",
+                              label: "First Name *",
                               color: "success",
                               required: ""
                             },
@@ -532,7 +539,7 @@ var render = function() {
                               rules: _vm.rules.last_name,
                               counter: 100,
                               "error-messages": _vm.errors.last_name,
-                              label: "Last Name",
+                              label: "Last Name *",
                               color: "success",
                               required: ""
                             },
@@ -592,7 +599,7 @@ var render = function() {
                               rules: _vm.rules.gender,
                               items: ["Male", "Female"],
                               "error-messages": _vm.errors.gender,
-                              label: "Gender",
+                              label: "Gender *",
                               color: "success",
                               required: ""
                             },
@@ -649,9 +656,10 @@ var render = function() {
                                           _vm._b(
                                             {
                                               attrs: {
+                                                rules: _vm.rules.birthdate,
                                                 "error-messages":
                                                   _vm.errors.birthdate,
-                                                label: "Birthdate",
+                                                label: "Birthdate *",
                                                 color: "success",
                                                 readonly: ""
                                               },
@@ -763,7 +771,7 @@ var render = function() {
                               counter: 30,
                               "error-messages": _vm.errors.mobile_number,
                               color: "success",
-                              label: "Mobile Number"
+                              label: "Mobile Number *"
                             },
                             on: {
                               input: function($event) {
@@ -820,7 +828,7 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.email,
                               "error-messages": _vm.errors.email,
-                              label: "Email Address",
+                              label: "Email Address *",
                               color: "success"
                             },
                             on: {
@@ -855,7 +863,7 @@ var render = function() {
                               rules: _vm.rules.address,
                               "error-messages": _vm.errors.address,
                               color: "success",
-                              label: "Address",
+                              label: "Address *",
                               rows: "1"
                             },
                             on: {
@@ -877,6 +885,12 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",
