@@ -8,12 +8,30 @@
             <v-card-subtitle> </v-card-subtitle>
 
             <v-container>
+                <v-btn @click="updateDonut">Update</v-btn>
+
                 <v-row>
                     <v-col cols="12">
-                        <DoughnutExample
+                        <DoughnutChart
+                            ref="donut_chart"
                             :data="chartData"
                             :options="chartOptions"
-                        ></DoughnutExample>
+                        ></DoughnutChart>
+
+                        <PieChart
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></PieChart>
+
+                        <BarChart
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></BarChart>
+
+                        <LineChart
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></LineChart>
                     </v-col>
                 </v-row>
             </v-container>
@@ -22,25 +40,25 @@
 </template>
 
 <script>
-import DoughnutExample from "./components/Doughnut";
+import DoughnutChart from "./components/DoughnutChart";
+import PieChart from "./components/PieChart";
+import BarChart from "./components/BarChart";
+import LineChart from "./components/LineChart";
+import randomcolor from "randomcolor";
 
 export default {
     components: {
-        DoughnutExample
+        DoughnutChart,
+        PieChart,
+        BarChart,
+        LineChart
     },
     data() {
         return {
-            options: {
-                borderWidth: "10px",
-                hoverBackgroundColor: "red",
-                hoverBorderWidth: "10px"
-            },
             chartOptions: {
                 hoverBorderWidth: 20
             },
             chartData: {
-                hoverBackgroundColor: "red",
-                hoverBorderWidth: 10,
                 labels: ["Green", "Red", "Blue"],
                 datasets: [
                     {
@@ -51,6 +69,30 @@ export default {
                 ]
             }
         };
+    },
+    methods: {
+        updateChart() {
+            this.$refs.donut_chart.update();
+        },
+        updateDonut() {
+            const currentDataset = this.chartData.datasets[0];
+            // this.chartData.labels.push(
+            //     `Skill ${currentDataset.data.length + 1}`
+            // );
+            // currentDataset.data.push(20);
+            // currentDataset.backgroundColor.push("#44B883");
+            // this.updateChart();
+
+            this.chartData.labels = ["Blue"];
+            this.chartData.datasets = [
+                {
+                    label: "000000000000000",
+                    backgroundColor: [randomcolor(), randomcolor()],
+                    data: [40, 60]
+                }
+            ];
+            this.$refs.donut_chart.update();
+        }
     },
     created() {
         axios.defaults.headers.common["Authorization"] =
