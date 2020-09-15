@@ -277,7 +277,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -311,7 +311,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });

@@ -30,8 +30,8 @@ class VendorResource extends JsonResource
             'remarks' => $this->remarks,
             'is_vat_inclusive' => $this->is_vat_inclusive,
             'address' => $this->address,
-            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:m:s'),
-            'updated_at' => Carbon::parse($this->updated_at)->format('Y-m-d H:m:s'),
+            'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
+            'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
         ];
     }
 }

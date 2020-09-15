@@ -141,7 +141,15 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            {{ item }}
+                            <v-container>
+                                <table>
+                                    <tr>
+                                        <td><strong>Created</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.created_at }}</td>
+                                    </tr>
+                                </table>
+                            </v-container>
                         </td>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
@@ -274,7 +282,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -318,7 +326,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -354,7 +362,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -390,7 +398,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });

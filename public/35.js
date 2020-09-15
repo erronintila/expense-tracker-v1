@@ -76,9 +76,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -150,7 +147,7 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.users.index"
           });
         })["catch"](function (error) {
-          console.log(error.response);
+          console.log(error);
           _this.errors = error.response.data.errors;
         });
         return;
@@ -238,7 +235,6 @@ var render = function() {
                               rules: _vm.rules.name,
                               counter: 150,
                               "error-messages": _vm.errors.name,
-                              color: "success",
                               label: "Name *",
                               required: ""
                             },
@@ -268,7 +264,6 @@ var render = function() {
                               rules: _vm.rules.username,
                               counter: 50,
                               "error-messages": _vm.errors.username,
-                              color: "success",
                               label: "Username *",
                               required: ""
                             },
@@ -297,7 +292,6 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.email,
                               "error-messages": _vm.errors.email,
-                              color: "success",
                               label: "Email Address *",
                               required: ""
                             },
@@ -321,7 +315,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                  _c("small", { staticClass: "text--secondary" }, [
                     _vm._v(
                       "\n                    * indicates required field\n                "
                     )

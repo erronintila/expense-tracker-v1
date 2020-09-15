@@ -27,14 +27,13 @@ class ExpenseReportResource extends JsonResource
             'payment' => $this->payment,
             'expenses' => $this->expenses,
             'status' => $this->status(),
-            'submitted_at' => Carbon::parse($this->submitted_at)->format('Y-m-d H:m:s'),
-            'reviewed_at' => Carbon::parse($this->reviewed_at)->format('Y-m-d H:m:s'),
-            'approved_at' => Carbon::parse($this->approved_at)->format('Y-m-d H:m:s'),
-            'cancelled_at' => Carbon::parse($this->cancelled_at)->format('Y-m-d H:m:s'),
-            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:m:s'),
-            'updated_at' => Carbon::parse($this->updated_at)->format('Y-m-d H:m:s'),
-            'deleted_at' => Carbon::parse($this->deleted_at)->format('Y-m-d H:m:s'),
-            'created' => $this->created_at->diffForHumans(),
+            'submitted_at' => Carbon::parse($this->submitted_at)->toDateTimeString(),
+            'reviewed_at' => Carbon::parse($this->reviewed_at)->toDateTimeString(),
+            'approved_at' => Carbon::parse($this->approved_at)->toDateTimeString(),
+            'cancelled_at' => Carbon::parse($this->cancelled_at)->toDateTimeString(),
+            'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
+            'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
+            'deleted_at' => Carbon::parse($this->deleted_at)->toDateTimeString(),
             'total' => $this->expenses->sum('amount')
         ];
     }

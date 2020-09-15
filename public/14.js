@@ -57,7 +57,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -108,7 +107,7 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.expense_types.index"
           });
         })["catch"](function (error) {
-          console.log(error.response);
+          console.log(error);
           _this.errors = error.response.data.errors;
         });
         return;
@@ -197,7 +196,6 @@ var render = function() {
                               counter: 100,
                               "error-messages": _vm.errors.name,
                               label: "Name *",
-                              color: "success",
                               required: ""
                             },
                             on: {
@@ -220,7 +218,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                  _c("small", { staticClass: "text--secondary" }, [
                     _vm._v(
                       "\n                    * indicates required field\n                "
                     )

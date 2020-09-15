@@ -181,14 +181,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -272,7 +264,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
     },
     loadEmployees: function loadEmployees() {
@@ -282,7 +273,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.employees = response.data.data;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
     },
     loadVendors: function loadVendors() {
@@ -292,7 +282,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.vendors = response.data.data;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
     },
     onRefresh: function onRefresh() {
@@ -328,7 +317,7 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.expenses.index"
           });
         })["catch"](function (error) {
-          console.log(error.response);
+          console.log(error);
           _this.errors = error.response.data.errors;
         });
         return;
@@ -419,7 +408,6 @@ var render = function() {
                               rules: _vm.rules.employee,
                               items: _vm.employees,
                               "error-messages": _vm.errors.employee_id,
-                              color: "success",
                               "item-value": "id",
                               "item-text": "fullname",
                               label: "Employee *",
@@ -451,7 +439,6 @@ var render = function() {
                               rules: _vm.rules.expense_type,
                               items: _vm.expense_types,
                               "error-messages": _vm.errors.expense_type_id,
-                              color: "success",
                               "item-value": "id",
                               "item-text": "name",
                               label: "Expense Type *",
@@ -483,7 +470,6 @@ var render = function() {
                               rules: _vm.rules.vendor,
                               items: _vm.vendors,
                               "error-messages": _vm.errors.vendor_id,
-                              color: "success",
                               "item-value": "id",
                               "item-text": "name",
                               label: "Vendor *",
@@ -521,7 +507,6 @@ var render = function() {
                               rules: _vm.rules.description,
                               counter: 100,
                               "error-messages": _vm.errors.description,
-                              color: "success",
                               label: "Description *",
                               required: ""
                             },
@@ -581,7 +566,6 @@ var render = function() {
                                                 rules: _vm.rules.date,
                                                 "error-messages":
                                                   _vm.errors.date,
-                                                color: "success",
                                                 label: "Date *",
                                                 readonly: ""
                                               },
@@ -695,7 +679,6 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.receipt_number,
                               "error-messages": _vm.errors.receipt_number,
-                              color: "success",
                               label: "Receipt No. *",
                               required: ""
                             },
@@ -724,7 +707,6 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.amount,
                               "error-messages": _vm.errors.amount,
-                              color: "success",
                               label: "Amount *",
                               required: ""
                             },
@@ -759,8 +741,7 @@ var render = function() {
                             attrs: {
                               rows: "1",
                               label: "Remarks",
-                              "error-messages": _vm.errors.remarks,
-                              color: "success"
+                              "error-messages": _vm.errors.remarks
                             },
                             on: {
                               input: function($event) {
@@ -782,7 +763,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                  _c("small", { staticClass: "text--secondary" }, [
                     _vm._v(
                       "\n                    * indicates required field\n                "
                     )

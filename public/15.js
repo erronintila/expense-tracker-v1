@@ -275,7 +275,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
           })["catch"](function (error) {
             console.log(error);
-            console.log(error.response);
           });
         }
       });
@@ -310,7 +309,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
           })["catch"](function (error) {
             console.log(error);
-            console.log(error.response);
           });
         }
       });

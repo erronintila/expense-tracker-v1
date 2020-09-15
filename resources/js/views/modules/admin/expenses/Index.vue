@@ -129,13 +129,34 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            {{item}}
+                            <v-container>
+                                <table>
+                                    <tr>
+                                        <td><strong>Type</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.expense_type.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Receipt</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.receipt_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Vendor</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.vendor.name }}</td>
+                                    </tr>
+                                </table>
+                            </v-container>
                         </td>
                     </template>
+                    <template v-slot:[`item.created_at`]="{ item }">
+                        {{ getHumanDate(item.created_at) }}
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onShow(item)">
+                        <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
-                        </v-icon>
+                        </v-icon> -->
                         <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
                         </v-icon>
@@ -147,18 +168,18 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
-    props: {},
     data() {
         return {
             loading: true,
             headers: [
-                { text: "Expense", value: "expense_type.name" },
+                { text: "Expense", value: "description" },
                 { text: "Employee", value: "employee_name" },
-                // { text: "Description", value: "description" },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Created", value: "created" },
+                { text: "Created", value: "created_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -264,7 +285,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -300,10 +321,13 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
+        },
+        getHumanDate(date) {
+            return moment(date).fromNow();
         }
     },
     watch: {
@@ -324,7 +348,7 @@ export default {
                 query: this.search,
                 query: this.status
             };
-        }
+        },
     },
     mounted() {
         this.getDataFromApi().then(data => {

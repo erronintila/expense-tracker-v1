@@ -25,25 +25,174 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      panel: [],
+      name: "",
+      username: "",
+      email: "",
+      updated_at: ""
+    };
   },
   methods: {
-    loadItem: function loadItem() {
+    getData: function getData() {
       var _this = this;
 
       axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response.data);
+        var data = response.data.data;
+        _this.name = data.name;
+        _this.username = data.username;
+        _this.email = data.email;
+        _this.updated_at = data.updated_at;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
     }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadItem();
+    this.getData();
   },
   mounted: function mounted() {}
 });
@@ -91,6 +240,206 @@ var render = function() {
               _c("h4", { staticClass: "title green--text" }, [
                 _vm._v("User Details")
               ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "6" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto mt-3",
+                                    attrs: { elevation: hover ? 5 : 2 }
+                                  },
+                                  [
+                                    _c(
+                                      "v-card-text",
+                                      [
+                                        _c(
+                                          "v-row",
+                                          [
+                                            _c(
+                                              "v-col",
+                                              { attrs: { cols: "12" } },
+                                              [
+                                                _c("div", [
+                                                  _vm._v(
+                                                    "\n                                            Administrator\n                                        "
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "p",
+                                                  {
+                                                    staticClass:
+                                                      "display-1 text--primary"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                            " +
+                                                        _vm._s(_vm.name) +
+                                                        "\n                                        "
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c("p", [
+                                                  _vm._v(_vm._s(_vm.username))
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "text--primary"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                            " +
+                                                        _vm._s(_vm.email) +
+                                                        " "
+                                                    ),
+                                                    _c("br")
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-card-actions",
+                                      [
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: { text: "", color: "green" }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    Edit Info\n                                "
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "6" } },
+                    [_c("v-row")],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c("v-col", { attrs: { cols: "12" } }, [
+                    _c(
+                      "div",
+                      [
+                        _c(
+                          "v-expansion-panels",
+                          {
+                            attrs: { hover: "" },
+                            model: {
+                              value: _vm.panel,
+                              callback: function($$v) {
+                                _vm.panel = $$v
+                              },
+                              expression: "panel"
+                            }
+                          },
+                          [
+                            _c(
+                              "v-expansion-panel",
+                              [
+                                _c("v-expansion-panel-header", [
+                                  _vm._v(
+                                    "\n                                    Roles and Permissions\n                                "
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "v-expansion-panel-content",
+                                  [
+                                    _c("v-simple-table", {
+                                      scopedSlots: _vm._u([
+                                        {
+                                          key: "default",
+                                          fn: function() {
+                                            return [
+                                              _c("tbody", [
+                                                _c("tr", [
+                                                  _c("td", [_vm._v("Role")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v("Sample")])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _vm._v("Permissions")
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v("Sample")])
+                                                ])
+                                              ])
+                                            ]
+                                          },
+                                          proxy: true
+                                        }
+                                      ])
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                ],
+                1
+              )
             ],
             1
           )

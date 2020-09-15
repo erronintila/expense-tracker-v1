@@ -254,7 +254,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -290,7 +290,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });

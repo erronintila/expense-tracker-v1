@@ -210,27 +210,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
-      first_name: null,
+      first_name: "",
       middle_name: "",
-      last_name: null,
-      suffix: null,
-      gender: null,
+      last_name: "",
+      suffix: "",
+      gender: "",
       birthdate: null,
       job: null,
       jobs: [],
@@ -321,7 +309,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.jobs = response.data.data;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
     },
     onRefresh: function onRefresh() {
@@ -357,7 +344,7 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.employees.index"
           });
         })["catch"](function (error) {
-          console.log(error.response);
+          console.log(error);
           _this.errors = error.response.data.errors;
         });
         return;
@@ -449,7 +436,6 @@ var render = function() {
                               "item-text": "name",
                               "item-value": "id",
                               label: "Job Designation *",
-                              color: "success",
                               required: ""
                             },
                             on: {
@@ -485,7 +471,6 @@ var render = function() {
                               counter: 100,
                               "error-messages": _vm.errors.first_name,
                               label: "First Name *",
-                              color: "success",
                               required: ""
                             },
                             on: {
@@ -514,7 +499,6 @@ var render = function() {
                               rules: _vm.rules.middle_name,
                               counter: 100,
                               "error-messages": _vm.errors.middle_name,
-                              color: "success",
                               label: "Middle Name"
                             },
                             on: {
@@ -544,7 +528,6 @@ var render = function() {
                               counter: 100,
                               "error-messages": _vm.errors.last_name,
                               label: "Last Name *",
-                              color: "success",
                               required: ""
                             },
                             on: {
@@ -574,7 +557,6 @@ var render = function() {
                               counter: 30,
                               items: ["Jr", "Sr", "II", "III"],
                               "error-messages": _vm.errors.suffix,
-                              color: "success",
                               label: "Suffix"
                             },
                             on: {
@@ -604,7 +586,6 @@ var render = function() {
                               items: ["Male", "Female"],
                               "error-messages": _vm.errors.gender,
                               label: "Gender *",
-                              color: "success",
                               required: ""
                             },
                             on: {
@@ -664,7 +645,6 @@ var render = function() {
                                                 "error-messages":
                                                   _vm.errors.birthdate,
                                                 label: "Birthdate *",
-                                                color: "success",
                                                 readonly: ""
                                               },
                                               on: {
@@ -774,7 +754,6 @@ var render = function() {
                               rules: _vm.rules.mobile_number,
                               counter: 30,
                               "error-messages": _vm.errors.mobile_number,
-                              color: "success",
                               label: "Mobile Number *"
                             },
                             on: {
@@ -803,9 +782,7 @@ var render = function() {
                               rules: _vm.rules.telephone_number,
                               counter: 30,
                               "error-messages": _vm.errors.telephone_number,
-                              label: "Telephone Number",
-                              color: "success",
-                              type: "number"
+                              label: "Telephone Number"
                             },
                             on: {
                               input: function($event) {
@@ -832,8 +809,7 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.email,
                               "error-messages": _vm.errors.email,
-                              label: "Email Address *",
-                              color: "success"
+                              label: "Email Address *"
                             },
                             on: {
                               input: function($event) {
@@ -866,7 +842,6 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.address,
                               "error-messages": _vm.errors.address,
-                              color: "success",
                               label: "Address *",
                               rows: "1"
                             },
@@ -890,7 +865,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                  _c("small", { staticClass: "text--secondary" }, [
                     _vm._v(
                       "\n                    * indicates required field\n                "
                     )

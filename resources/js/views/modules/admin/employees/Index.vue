@@ -132,49 +132,35 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            <v-row>
-                                <v-col cols="12" md="6">
-                                    <table class="table" style="width:100%;">
-                                        <tbody>
-                                            <tr>
-                                                <td>First Name</td>
-                                                <td>{{ item.first_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Middle Name</td>
-                                                <td>{{ item.middle_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Last Name</td>
-                                                <td>{{ item.last_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Suffix</td>
-                                                <td>{{ item.suffix }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </v-col>
-
-                                <v-col cols="12" md="6">
-                                    <table class="table" style="width:100%;">
-                                        <tbody>
-                                            <tr>
-                                                <td>First Name</td>
-                                                <td>{{ item.first_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Middle Name</td>
-                                                <td>{{ item.middle_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Last Name</td>
-                                                <td>{{ item.last_name }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </v-col>
-                            </v-row>
+                            <v-container>
+                                <table>
+                                    <tr>
+                                        <td><strong>Gender</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.gender }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Birthdate</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.birthdate }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email Address</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Telephone #</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.telephone_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Address</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.address }}</td>
+                                    </tr>
+                                </table>
+                            </v-container>
                         </td>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
@@ -311,7 +297,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -347,7 +333,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });

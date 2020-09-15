@@ -24,7 +24,6 @@
                                 item-text="name"
                                 item-value="id"
                                 label="Job Designation *"
-                                color="success"
                                 required
                             >
                             </v-select>
@@ -40,7 +39,6 @@
                                 :error-messages="errors.first_name"
                                 @input="errors.first_name = []"
                                 label="First Name *"
-                                color="success"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -52,7 +50,6 @@
                                 :counter="100"
                                 :error-messages="errors.middle_name"
                                 @input="errors.middle_name = []"
-                                color="success"
                                 label="Middle Name"
                             ></v-text-field>
                         </v-col>
@@ -65,7 +62,6 @@
                                 :error-messages="errors.last_name"
                                 @input="errors.last_name = []"
                                 label="Last Name *"
-                                color="success"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -78,7 +74,6 @@
                                 :items="['Jr', 'Sr', 'II', 'III']"
                                 :error-messages="errors.suffix"
                                 @input="errors.suffix = []"
-                                color="success"
                                 label="Suffix"
                             ></v-combobox>
                         </v-col>
@@ -91,7 +86,6 @@
                                 :error-messages="errors.gender"
                                 @input="errors.gender = []"
                                 label="Gender *"
-                                color="success"
                                 required
                             >
                             </v-select>
@@ -114,7 +108,6 @@
                                         :error-messages="errors.birthdate"
                                         @input="errors.birthdate = []"
                                         label="Birthdate *"
-                                        color="success"
                                         readonly
                                         v-bind="attrs"
                                         v-on="on"
@@ -152,7 +145,6 @@
                                 :counter="30"
                                 :error-messages="errors.mobile_number"
                                 @input="errors.mobile_number = []"
-                                color="success"
                                 label="Mobile Number *"
                             ></v-text-field>
                         </v-col>
@@ -165,7 +157,6 @@
                                 :error-messages="errors.telephone_number"
                                 @input="errors.telephone_number = []"
                                 label="Telephone Number"
-                                color="success"
                                 type="number"
                             ></v-text-field>
                         </v-col>
@@ -177,7 +168,6 @@
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
                                 label="Email Address *"
-                                color="success"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -189,14 +179,13 @@
                                 :rules="rules.address"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
-                                color="success"
                                 label="Address *"
                                 rows="1"
                             ></v-textarea>
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
@@ -233,7 +222,7 @@ export default {
                 first_name: [
                     v => !!v || "First name is required",
                     v =>
-                        !!v && v.length <= 100 ||
+                        (!!v && v.length <= 100) ||
                         "First name must be less than 100 characters"
                 ],
                 middle_name: [
@@ -255,12 +244,17 @@ export default {
                 gender: [v => !!v || "Gender is required"],
                 birthdate: [v => !!v || "Birthdate is required"],
                 job: [v => !!v || "Job designation is required"],
-                mobile_number: [v => !!v || "Mobile number is required", v =>
+                mobile_number: [
+                    v => !!v || "Mobile number is required",
+                    v =>
                         (!!v && v.length <= 30) ||
-                        "Mobile number must be less than 30 characters"],
-                telephone_number: [v =>
+                        "Mobile number must be less than 30 characters"
+                ],
+                telephone_number: [
+                    v =>
                         (v !== null && v.length <= 30) ||
-                        "Telephone number must be less than 30 characters"],
+                        "Telephone number must be less than 30 characters"
+                ],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail is not valid"
@@ -293,8 +287,6 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -334,7 +326,7 @@ export default {
                         _this.$router.push({ name: "admin.employees.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });

@@ -21,7 +21,6 @@
                                 :counter="150"
                                 :error-messages="errors.name"
                                 @input="errors.name = []"
-                                color="success"
                                 label="Name *"
                                 required
                             ></v-text-field>
@@ -34,7 +33,6 @@
                                 :counter="50"
                                 :error-messages="errors.username"
                                 @input="errors.username = []"
-                                color="success"
                                 label="Username *"
                                 required
                             ></v-text-field>
@@ -46,7 +44,6 @@
                                 :rules="rules.email"
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
-                                color="success"
                                 label="Email Address *"
                                 required
                             ></v-text-field>
@@ -62,9 +59,7 @@
                                 :type="showPassword ? 'text' : 'password'"
                                 :error-messages="errors.password"
                                 @input="errors.password = []"
-                                color="success"
                                 label="Password *"
-                                hint="At least 8 characters"
                                 required
                                 @click:append="showPassword = !showPassword"
                             ></v-text-field>
@@ -87,7 +82,6 @@
                                 :error-messages="errors.password_confirmation"
                                 @input="errors.password_confirmation = []"
                                 label="Re-type Password *"
-                                color="success"
                                 required
                                 @click:append="
                                     showPasswordConfirmation = !showPasswordConfirmation
@@ -96,7 +90,7 @@
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
@@ -194,7 +188,7 @@ export default {
                         _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });

@@ -9,62 +9,11 @@
 
             <v-container>
                 <v-row>
-                    <v-col cols="12" md="4">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                outlined
-                                rounded
-                                class="mx-auto rounded-xl"
-                                :elevation="hover ? 3 : 0"
-                                to="/admin/profile"
-                            >
-                                <v-card-title>User Profile</v-card-title>
-                                <v-card-subtitle>
-                                    Secondary text
-                                </v-card-subtitle>
-                                <v-card-text>
-                                    Go to user profile and configure.
-                                </v-card-text>
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                outlined
-                                rounded
-                                class="mx-auto rounded-lg"
-                                :elevation="hover ? 3 : 0"
-                                to="/admin/expenses"
-                            >
-                                <v-card-title>Expenses</v-card-title>
-                                <v-card-subtitle>
-                                    Secondary text
-                                </v-card-subtitle>
-                                <v-card-text>
-                                    Track and manage expenses.
-                                </v-card-text>
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                outlined
-                                rounded
-                                class="mx-auto rounded-xl"
-                                :elevation="hover ? 3 : 0"
-                                to="/admin/employees"
-                            >
-                                <v-card-title>Employees</v-card-title>
-                                <v-card-subtitle>
-                                    Secondary text
-                                </v-card-subtitle>
-                                <v-card-text>
-                                    Modify employee details.
-                                </v-card-text>
-                            </v-card>
-                        </v-hover>
+                    <v-col cols="12">
+                        <DoughnutExample
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></DoughnutExample>
                     </v-col>
                 </v-row>
             </v-container>
@@ -73,12 +22,39 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import DoughnutExample from "./components/Doughnut";
 
 export default {
-    computed: {
-        // ...mapGetters(["currentUser"])
+    components: {
+        DoughnutExample
     },
-    created() {}
+    data() {
+        return {
+            options: {
+                borderWidth: "10px",
+                hoverBackgroundColor: "red",
+                hoverBorderWidth: "10px"
+            },
+            chartOptions: {
+                hoverBorderWidth: 20
+            },
+            chartData: {
+                hoverBackgroundColor: "red",
+                hoverBorderWidth: 10,
+                labels: ["Green", "Red", "Blue"],
+                datasets: [
+                    {
+                        label: "Data One",
+                        backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+                        data: [1, 10, 5]
+                    }
+                ]
+            }
+        };
+    },
+    created() {
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
+    }
 };
 </script>

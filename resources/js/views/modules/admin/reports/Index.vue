@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/admin/expense_reports/create"
+                    to="/admin/reports/create"
                     dark
                     fab
                     x-small
@@ -129,8 +129,29 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            {{ item }}
+                            <v-container>
+                                <table>
+                                    <tr>
+                                        <td><strong>Code</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.code }}</td>
+                                    </tr>
+                                </table>
+                            </v-container>
                         </td>
+                    </template>
+                    <template v-slot:[`item.total`]="{ item }">
+                        {{ formatNumber(item.total) }}
+                    </template>
+                    <template v-slot:[`item.employee`]="{ item }">
+                        {{
+                            item.employee.last_name +
+                                ", " +
+                                item.employee.first_name
+                        }}
+                    </template>
+                    <template v-slot:[`item.created_at`]="{ item }">
+                        {{ getHumanDate(item.created_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
@@ -147,6 +168,9 @@
 </template>
 
 <script>
+import moment from "moment";
+import numeral from "numeral";
+
 export default {
     props: {},
     data() {
@@ -154,10 +178,11 @@ export default {
             loading: true,
             headers: [
                 { text: "Description", value: "description" },
+                { text: "Employee", value: "employee" },
                 { text: "Amount", value: "total" },
                 { text: "Status", value: "status.status" },
                 // { text: "Remarks", value: "status.text" },
-                { text: "Created", value: "created" },
+                { text: "Created", value: "created_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -218,13 +243,13 @@ export default {
         },
         onShow(item) {
             this.$router.push({
-                name: "admin.expense_reports.show",
+                name: "admin.reports.show",
                 params: { id: item.id }
             });
         },
         onEdit(item) {
             this.$router.push({
-                name: "admin.expense_reports.edit",
+                name: "admin.reports.edit",
                 params: { id: item.id }
             });
         },
@@ -266,7 +291,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -302,10 +327,16 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
+        },
+        getHumanDate(date) {
+            return moment(date).fromNow();
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     watch: {

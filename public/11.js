@@ -194,20 +194,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -340,7 +326,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -374,7 +360,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -721,101 +707,61 @@ var render = function() {
                             "td",
                             { attrs: { colspan: headers.length } },
                             [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c(
-                                        "table",
-                                        {
-                                          staticClass: "table",
-                                          staticStyle: { width: "100%" }
-                                        },
-                                        [
-                                          _c("tbody", [
-                                            _c("tr", [
-                                              _c("td", [_vm._v("First Name")]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(_vm._s(item.first_name))
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c("td", [_vm._v("Middle Name")]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(_vm._s(item.middle_name))
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c("td", [_vm._v("Last Name")]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(_vm._s(item.last_name))
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c("td", [_vm._v("Suffix")]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(_vm._s(item.suffix))
-                                              ])
-                                            ])
-                                          ])
-                                        ]
-                                      )
-                                    ]
-                                  ),
+                              _c("v-container", [
+                                _c("table", [
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Gender")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.gender))])
+                                  ]),
                                   _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c(
-                                        "table",
-                                        {
-                                          staticClass: "table",
-                                          staticStyle: { width: "100%" }
-                                        },
-                                        [
-                                          _c("tbody", [
-                                            _c("tr", [
-                                              _c("td", [_vm._v("First Name")]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(_vm._s(item.first_name))
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c("td", [_vm._v("Middle Name")]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(_vm._s(item.middle_name))
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c("td", [_vm._v("Last Name")]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(_vm._s(item.last_name))
-                                              ])
-                                            ])
-                                          ])
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                ],
-                                1
-                              )
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Birthdate")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.birthdate))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Email Address")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.email))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Telephone #")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(item.telephone_number))
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Address")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.address))])
+                                  ])
+                                ])
+                              ])
                             ],
                             1
                           )

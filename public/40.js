@@ -163,6 +163,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -290,7 +318,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -324,7 +352,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -654,13 +682,64 @@ var render = function() {
                         var headers = ref.headers
                         var item = ref.item
                         return [
-                          _c("td", { attrs: { colspan: headers.length } }, [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(item) +
-                                "\n                    "
-                            )
-                          ])
+                          _c(
+                            "td",
+                            { attrs: { colspan: headers.length } },
+                            [
+                              _c("v-container", [
+                                _c("table", [
+                                  _c("tr", [
+                                    _c("td", [_c("strong", [_vm._v("Code")])]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.code))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [_c("strong", [_vm._v("Email")])]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.email))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Telephone #")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(item.telephone_number))
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Website")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.website))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Address")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.address))])
+                                  ])
+                                ])
+                              ])
+                            ],
+                            1
+                          )
                         ]
                       }
                     },

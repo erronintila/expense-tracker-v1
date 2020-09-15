@@ -48,6 +48,8 @@ class EmployeeController extends Controller
         $sortType = $request->sortType ?? "asc";
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
+        $sortBy = $sortBy == "fullname" ? "last_name" : $sortBy;
+
         $employees = Employee::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {

@@ -138,15 +138,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -250,7 +241,7 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.vendors.index"
           });
         })["catch"](function (error) {
-          console.log(error.response);
+          console.log(error);
           _this.errors = error.response.data.errors;
         });
         return;
@@ -338,7 +329,6 @@ var render = function() {
                               rules: _vm.rules.name,
                               counter: 150,
                               "error-messages": _vm.errors.name,
-                              color: "success",
                               label: "Name *",
                               required: ""
                             },
@@ -362,7 +352,6 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.email,
                               "error-messages": _vm.errors.email,
-                              color: "success",
                               label: "Email Address"
                             },
                             model: {
@@ -386,7 +375,6 @@ var render = function() {
                               rules: _vm.rules.tin,
                               "error-messages": _vm.errors.tin,
                               counter: 100,
-                              color: "success",
                               label: "Tax Identification Number (TIN) *",
                               required: ""
                             },
@@ -411,7 +399,6 @@ var render = function() {
                               rules: _vm.rules.contact_person,
                               "error-messages": _vm.errors.contact_person,
                               counter: 100,
-                              color: "success",
                               label: "Contact Person"
                             },
                             model: {
@@ -435,7 +422,6 @@ var render = function() {
                               rules: _vm.rules.mobile_number,
                               counter: 30,
                               "error-messages": _vm.errors.mobile_number,
-                              color: "success",
                               label: "Mobile Number"
                             },
                             on: {
@@ -464,8 +450,7 @@ var render = function() {
                               rules: _vm.rules.telephone_number,
                               counter: 30,
                               "error-messages": _vm.errors.telephone_number,
-                              label: "Telephone Number",
-                              color: "success"
+                              label: "Telephone Number"
                             },
                             on: {
                               input: function($event) {
@@ -493,8 +478,7 @@ var render = function() {
                               counter: 100,
                               rules: _vm.rules.website,
                               "error-messages": _vm.errors.website,
-                              label: "Website",
-                              color: "success"
+                              label: "Website"
                             },
                             on: {
                               input: function($event) {
@@ -527,7 +511,6 @@ var render = function() {
                             attrs: {
                               rules: _vm.rules.address,
                               "error-messages": _vm.errors.address,
-                              color: "success",
                               label: "Address",
                               rows: "1"
                             },
@@ -560,7 +543,6 @@ var render = function() {
                         [
                           _c("v-checkbox", {
                             attrs: {
-                              color: "green",
                               label: "Vat Inclusive",
                               "error-messages": _vm.errors.is_vat_inclusive
                             },
@@ -579,7 +561,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("small", { staticStyle: { opacity: "0.5" } }, [
+                  _c("small", { staticClass: "text--secondary" }, [
                     _vm._v(
                       "\n                    * indicates required field\n                "
                     )

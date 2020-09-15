@@ -33,11 +33,10 @@ __webpack_require__.r(__webpack_exports__);
     loadItem: function loadItem() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
+      axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
         console.log(response.data);
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
       });
     }
   },
@@ -80,7 +79,7 @@ var render = function() {
                 "v-btn",
                 {
                   staticClass: "mr-3",
-                  attrs: { to: "/admin/users", icon: "" }
+                  attrs: { to: { name: "admin.reports.index" }, icon: "" }
                 },
                 [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
@@ -89,7 +88,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("User Details")
+                _vm._v("Expense Report Details")
               ])
             ],
             1

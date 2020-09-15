@@ -21,7 +21,6 @@
                                 :counter="150"
                                 :error-messages="errors.name"
                                 @input="errors.name = []"
-                                color="success"
                                 label="Name *"
                                 required
                             ></v-text-field>
@@ -34,7 +33,6 @@
                                 :counter="50"
                                 :error-messages="errors.username"
                                 @input="errors.username = []"
-                                color="success"
                                 label="Username *"
                                 required
                             ></v-text-field>
@@ -46,14 +44,13 @@
                                 :rules="rules.email"
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
-                                color="success"
                                 label="Email Address *"
                                 required
                             ></v-text-field>
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
@@ -150,7 +147,7 @@ export default {
                         _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });

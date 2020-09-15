@@ -21,7 +21,6 @@
                                 :items="employees"
                                 :error-messages="errors.employee_id"
                                 @input="errors.employee_id = []"
-                                color="success"
                                 item-value="id"
                                 item-text="fullname"
                                 label="Employee *"
@@ -37,7 +36,6 @@
                                 :items="expense_types"
                                 :error-messages="errors.expense_type_id"
                                 @input="errors.expense_type_id = []"
-                                color="success"
                                 item-value="id"
                                 item-text="name"
                                 label="Expense Type *"
@@ -53,7 +51,6 @@
                                 :items="vendors"
                                 :error-messages="errors.vendor_id"
                                 @input="errors.vendor_id = []"
-                                color="success"
                                 item-value="id"
                                 item-text="name"
                                 label="Vendor *"
@@ -71,7 +68,6 @@
                                 :counter="100"
                                 :error-messages="errors.description"
                                 @input="errors.description = []"
-                                color="success"
                                 label="Description *"
                                 required
                             ></v-text-field>
@@ -93,7 +89,6 @@
                                         :rules="rules.date"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
-                                        color="success"
                                         label="Date *"
                                         readonly
                                         v-bind="attrs"
@@ -131,7 +126,6 @@
                                 :rules="rules.receipt_number"
                                 :error-messages="errors.receipt_number"
                                 @input="errors.receipt_number = []"
-                                color="success"
                                 label="Receipt No. *"
                                 required
                             ></v-text-field>
@@ -143,7 +137,6 @@
                                 :rules="rules.amount"
                                 :error-messages="errors.amount"
                                 @input="errors.amount = []"
-                                color="success"
                                 label="Amount *"
                                 required
                             ></v-text-field>
@@ -158,12 +151,11 @@
                                 v-model="remarks"
                                 :error-messages="errors.remarks"
                                 @input="errors.remarks = []"
-                                color="success"
                             ></v-textarea>
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
@@ -255,8 +247,6 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         loadEmployees() {
@@ -269,8 +259,6 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         loadVendors() {
@@ -283,8 +271,6 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -325,7 +311,7 @@ export default {
                         _this.$router.push({ name: "admin.expenses.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });

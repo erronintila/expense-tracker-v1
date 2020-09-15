@@ -175,6 +175,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -301,7 +309,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -338,7 +346,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -372,7 +380,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -406,7 +414,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            console.log(error.response);
+            console.log(error);
           });
         }
       });
@@ -760,13 +768,26 @@ var render = function() {
                         var headers = ref.headers
                         var item = ref.item
                         return [
-                          _c("td", { attrs: { colspan: headers.length } }, [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(item) +
-                                "\n                    "
-                            )
-                          ])
+                          _c(
+                            "td",
+                            { attrs: { colspan: headers.length } },
+                            [
+                              _c("v-container", [
+                                _c("table", [
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Created")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.created_at))])
+                                  ])
+                                ])
+                              ])
+                            ],
+                            1
+                          )
                         ]
                       }
                     },
