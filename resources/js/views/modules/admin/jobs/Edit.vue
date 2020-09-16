@@ -15,7 +15,7 @@
                 <v-container>
                     <v-row>
                         <v-col class="d-flex" cols="12" sm="6">
-                            <v-select
+                            <v-autocomplete
                                 v-model="department"
                                 :items="departments"
                                 :rules="rules.department"
@@ -24,7 +24,7 @@
                                 item-value="id"
                                 item-text="name"
                                 label="Department *"
-                            ></v-select>
+                            ></v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="6">
@@ -100,7 +100,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/departments")
+                .get("/api/data/departments")
                 .then(response => {
                     let data = response.data.data.map(item => ({
                         id: item.id,

@@ -11,14 +11,14 @@ const adminRoutes = [
 ];
 
 const userRoutes = [
-    // {
-    //     path: "/",
-    //     name: "user.dashboard.index",
-    //     component: () => import("../../views/modules/user/dashboard/Index.vue"),
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // }
+    {
+        path: "/",
+        name: "user.dashboard.index",
+        component: () => import("../../views/modules/user/dashboard/Index.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    }
 ];
 
 const baseRoutes = adminRoutes.concat(userRoutes);

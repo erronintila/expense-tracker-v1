@@ -15,7 +15,7 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="job"
                                 :rules="rules.job"
                                 :items="jobs"
@@ -26,7 +26,7 @@
                                 label="Job Designation *"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
                     </v-row>
 
@@ -95,8 +95,6 @@
                             <v-menu
                                 ref="menu"
                                 v-model="menu"
-                                :close-on-content-click="false"
-                                :return-value.sync="birthdate"
                                 transition="scale-transition"
                                 offset-y
                                 min-width="290px"
@@ -119,21 +117,6 @@
                                     scrollable
                                     color="success"
                                 >
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="menu = false"
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="$refs.menu.save(birthdate)"
-                                    >
-                                        OK
-                                    </v-btn>
                                 </v-date-picker>
                             </v-menu>
                         </v-col>
@@ -295,7 +278,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/jobs")
+                .get("/api/data/jobs")
                 .then(response => {
                     _this.jobs = response.data.data;
                 })

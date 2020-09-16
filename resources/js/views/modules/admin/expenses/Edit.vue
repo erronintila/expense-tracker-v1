@@ -15,7 +15,7 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="employee"
                                 :rules="rules.employee"
                                 :items="employees"
@@ -26,11 +26,11 @@
                                 label="Employee *"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="expense_type"
                                 :rules="rules.expense_type"
                                 :items="expense_types"
@@ -41,11 +41,11 @@
                                 label="Expense Type *"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="vendor"
                                 :rules="rules.vendor"
                                 :items="vendors"
@@ -56,7 +56,7 @@
                                 label="Vendor *"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
                     </v-row>
 
@@ -77,8 +77,6 @@
                             <v-menu
                                 ref="menu"
                                 v-model="menu"
-                                :close-on-content-click="false"
-                                :return-value.sync="date"
                                 transition="scale-transition"
                                 offset-y
                                 min-width="290px"
@@ -101,19 +99,6 @@
                                     scrollable
                                     color="success"
                                 >
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="menu = false"
-                                        >Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="$refs.menu.save(date)"
-                                        >OK
-                                    </v-btn>
                                 </v-date-picker>
                             </v-menu>
                         </v-col>
@@ -241,7 +226,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/expense_types")
+                .get("/api/data/expense_types")
                 .then(response => {
                     _this.expense_types = response.data.data;
                 })
@@ -253,7 +238,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/employees")
+                .get("/api/data/employees")
                 .then(response => {
                     _this.employees = response.data.data;
                 })
@@ -265,7 +250,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/vendors")
+                .get("/api/data/vendors")
                 .then(response => {
                     _this.vendors = response.data.data;
                 })

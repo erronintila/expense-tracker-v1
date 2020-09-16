@@ -17,6 +17,8 @@ import "vuetify/dist/vuetify.min.css";
 import VuetifyConfirm from "vuetify-confirm";
 import VuetifyDialog from "vuetify-dialog";
 import colors from "vuetify/lib/util/colors";
+import VMdDateRangePicker from "v-md-date-range-picker";
+// import "./assets/styles/md-date-range-picker.css";
 
 /**
  * Load Instances
@@ -52,6 +54,7 @@ Vue.use(VuetifyDialog, {
         vuetify
     }
 });
+Vue.use(VMdDateRangePicker);
 // Vue.use(moment);
 
 /**
