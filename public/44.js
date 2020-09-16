@@ -62,6 +62,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+// Please visit : 
+// https://stackoverflow.com/questions/59404459/custom-date-picker-in-vuetify
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {

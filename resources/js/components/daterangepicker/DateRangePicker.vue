@@ -50,6 +50,9 @@
 </template>
 
 <script>
+// Please visit : 
+// https://stackoverflow.com/questions/59404459/custom-date-picker-in-vuetify
+
 import moment from "moment";
 
 export default {
