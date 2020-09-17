@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReportResource;
+use App\Models\Expense;
 use App\Models\ExpenseReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -82,6 +84,12 @@ class ExpenseReportController extends Controller
 
         $expense_report->save();
 
+        foreach ($request->expenses as $key => $value) {
+            $expense = Expense::find($value["id"]);
+            $expense->expense_report_id = $expense_report->id;
+            $expense->save();
+        }
+
         return response(
             [
                 'data' => new ExpenseReportResource($expense_report),
@@ -125,6 +133,27 @@ class ExpenseReportController extends Controller
                     ->whereIn('id', $request->ids)
                     ->restore();
 
+                // foreach ($request->ids as $key => $value) {
+                //     $expense_report = ExpenseReport::find($value);
+
+                //     $expense_report->deleted_by_user_id = null;
+                //     $expense_report->deleted_at = null;
+
+                //     $expense_report->save();
+
+                //     foreach ($expense_report->expenses as $key => $value) {
+                //         $expense = Expense::find($value["id"]);
+                //         $expense->restore();
+                //     }
+
+                //     // if (is_null($expense_report->cancelled_at)) {
+                //     //     foreach ($expense_report->expenses as $key => $value) {
+                //     //         $expense = Expense::find($value["id"]);
+                //     //         $expense->restore();
+                //     //     }
+                //     // }
+                // }
+
                 break;
             default:
                 $this->validator($request->all(), null)->validate();
@@ -137,6 +166,19 @@ class ExpenseReportController extends Controller
                 $expense_report->notes = $request->notes;
 
                 $expense_report->save();
+
+                // set existing references to null
+                foreach ($expense_report->expenses as $key => $value) {
+                    $expense = Expense::find($value["id"]);
+                    $expense->expense_report_id = null;
+                    $expense->save();
+                }
+
+                foreach ($request->expenses as $key => $value) {
+                    $expense = Expense::find($value["id"]);
+                    $expense->expense_report_id = $expense_report->id;
+                    $expense->save();
+                }
 
                 break;
         }
@@ -158,6 +200,20 @@ class ExpenseReportController extends Controller
     public function destroy(Request $request, $id)
     {
         $expense_report = ExpenseReport::whereIn('id', $request->ids)->delete();
+
+        // foreach ($request->ids as $key => $value) {
+        //     $expense_report = ExpenseReport::find($value);
+
+        //     $expense_report->deleted_by_user_id = Auth::id();
+        //     $expense_report->deleted_at = now();
+
+        //     $expense_report->save();
+
+        //     foreach ($expense_report->expenses as $key => $value) {
+        //         $expense = Expense::find($value["id"]);
+        //         $expense->delete();
+        //     }
+        // }
 
         return response(
             [

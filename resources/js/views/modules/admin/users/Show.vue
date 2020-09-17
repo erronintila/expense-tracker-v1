@@ -16,6 +16,7 @@
                     <v-col cols="12" md="6">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
+                                outlined
                                 class="mx-auto mt-3"
                                 :elevation="hover ? 5 : 2"
                             >
@@ -122,31 +123,35 @@
 
                 <v-row>
                     <v-col cols="12">
-                        <div>
-                            <v-expansion-panels v-model="panel" hover>
-                                <v-expansion-panel>
-                                    <v-expansion-panel-header>
-                                        Roles and Permissions
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content>
-                                        <v-simple-table>
-                                            <template v-slot:default>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Role</td>
-                                                        <td>Sample</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Permissions</td>
-                                                        <td>Sample</td>
-                                                    </tr>
-                                                </tbody>
-                                            </template>
-                                        </v-simple-table>
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                            </v-expansion-panels>
-                        </div>
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card outlined :elevation="hover ? 5 : 2">
+                                <v-expansion-panels v-model="panel" hover>
+                                    <v-expansion-panel>
+                                        <v-expansion-panel-header>
+                                            Roles and Permissions
+                                        </v-expansion-panel-header>
+                                        <v-expansion-panel-content>
+                                            <v-simple-table>
+                                                <template v-slot:default>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Role</td>
+                                                            <td>Sample</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                Permissions
+                                                            </td>
+                                                            <td>Sample</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </template>
+                                            </v-simple-table>
+                                        </v-expansion-panel-content>
+                                    </v-expansion-panel>
+                                </v-expansion-panels>
+                            </v-card>
+                        </v-hover>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -177,7 +182,7 @@ export default {
                     _this.name = data.name;
                     _this.username = data.username;
                     _this.email = data.email;
-                    _this.updated_at = data.updated_at
+                    _this.updated_at = data.updated_at;
                 })
                 .catch(function(error) {
                     console.log(error);

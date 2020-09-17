@@ -20,6 +20,7 @@
                     <v-col cols="12" md="6">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
+                                outlined
                                 class="mx-auto mt-3"
                                 :elevation="hover ? 5 : 2"
                             >
@@ -68,6 +69,7 @@
                             <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
+                                        outlined
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                     >
@@ -86,6 +88,7 @@
                             <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
+                                        outlined
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                         to="/admin/expenses"
@@ -103,6 +106,7 @@
                             <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
+                                        outlined
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                     >
@@ -121,6 +125,7 @@
                             <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
+                                        outlined
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                         to="/admin/reports"
@@ -142,73 +147,98 @@
                 <v-row>
                     <v-col cols="12">
                         <div>
-                            <v-expansion-panels v-model="panel" hover>
-                                <v-expansion-panel>
-                                    <v-expansion-panel-header>
-                                        Other Details
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content>
-                                        <v-simple-table>
-                                            <template v-slot:default>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Name</td>
-                                                        <td>{{ fullname }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Gender</td>
-                                                        <td>{{ gender }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Birthdate</td>
-                                                        <td>{{ birthdate }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            Telephone Number
-                                                        </td>
-                                                        <td>
-                                                            {{
-                                                                telephone_number
-                                                            }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Address</td>
-                                                        <td>{{ address }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </template>
-                                        </v-simple-table>
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                                <v-expansion-panel>
-                                    <v-expansion-panel-header>
-                                        Itinerary
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris
-                                        nisi ut aliquip ex ea commodo consequat.
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                                <v-expansion-panel>
-                                    <v-expansion-panel-header>
-                                        Activities
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris
-                                        nisi ut aliquip ex ea commodo consequat.
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                            </v-expansion-panels>
+                            <v-hover v-slot:default="{ hover }">
+                                <v-card outlined :elevation="hover ? 5 : 2">
+                                    <v-expansion-panels v-model="panel" hover accordion>
+                                        <v-expansion-panel>
+                                            <v-expansion-panel-header>
+                                                Other Details
+                                            </v-expansion-panel-header>
+                                            <v-expansion-panel-content>
+                                                <v-simple-table>
+                                                    <template v-slot:default>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Name</td>
+                                                                <td>
+                                                                    {{
+                                                                        fullname
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Gender</td>
+                                                                <td>
+                                                                    {{ gender }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    Birthdate
+                                                                </td>
+                                                                <td>
+                                                                    {{
+                                                                        birthdate
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    Telephone
+                                                                    Number
+                                                                </td>
+                                                                <td>
+                                                                    {{
+                                                                        telephone_number
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Address</td>
+                                                                <td>
+                                                                    {{
+                                                                        address
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </template>
+                                                </v-simple-table>
+                                            </v-expansion-panel-content>
+                                        </v-expansion-panel>
+                                        <v-expansion-panel>
+                                            <v-expansion-panel-header>
+                                                Itinerary
+                                            </v-expansion-panel-header>
+                                            <v-expansion-panel-content>
+                                                Lorem ipsum dolor sit amet,
+                                                consectetur adipiscing elit, sed
+                                                do eiusmod tempor incididunt ut
+                                                labore et dolore magna aliqua.
+                                                Ut enim ad minim veniam, quis
+                                                nostrud exercitation ullamco
+                                                laboris nisi ut aliquip ex ea
+                                                commodo consequat.
+                                            </v-expansion-panel-content>
+                                        </v-expansion-panel>
+                                        <v-expansion-panel>
+                                            <v-expansion-panel-header>
+                                                Activities
+                                            </v-expansion-panel-header>
+                                            <v-expansion-panel-content>
+                                                Lorem ipsum dolor sit amet,
+                                                consectetur adipiscing elit, sed
+                                                do eiusmod tempor incididunt ut
+                                                labore et dolore magna aliqua.
+                                                Ut enim ad minim veniam, quis
+                                                nostrud exercitation ullamco
+                                                laboris nisi ut aliquip ex ea
+                                                commodo consequat.
+                                            </v-expansion-panel-content>
+                                        </v-expansion-panel>
+                                    </v-expansion-panels>
+                                </v-card>
+                            </v-hover>
                         </div>
                     </v-col>
                 </v-row>

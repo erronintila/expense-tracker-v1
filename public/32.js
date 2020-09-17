@@ -188,6 +188,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -220,6 +234,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
+      totalAmount: 0,
       status: "Active",
       statuses: ["Active", "Archived"],
       selected: [],
@@ -379,6 +394,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       },
       deep: true
+    },
+    items: function items() {
+      this.totalAmount = this.formatNumber(this.items.reduce(function (total, item) {
+        return total + item.total;
+      }, 0));
     }
   },
   computed: {
@@ -658,159 +678,195 @@ var render = function() {
           _c(
             "v-card-text",
             [
-              _c("v-data-table", {
-                staticClass: "elevation-0",
-                attrs: {
-                  headers: _vm.headers,
-                  items: _vm.items,
-                  loading: _vm.loading,
-                  options: _vm.options,
-                  "server-items-length": _vm.totalItems,
-                  "footer-props": {
-                    itemsPerPageOptions: [10, 20, 50, 100],
-                    showFirstLastPage: true,
-                    firstIcon: "mdi-page-first",
-                    lastIcon: "mdi-page-last",
-                    prevIcon: "mdi-chevron-left",
-                    nextIcon: "mdi-chevron-right"
+              _c(
+                "v-data-table",
+                {
+                  staticClass: "elevation-0",
+                  attrs: {
+                    headers: _vm.headers,
+                    items: _vm.items,
+                    loading: _vm.loading,
+                    options: _vm.options,
+                    "server-items-length": _vm.totalItems,
+                    "footer-props": {
+                      itemsPerPageOptions: [10, 20, 50, 100],
+                      showFirstLastPage: true,
+                      firstIcon: "mdi-page-first",
+                      lastIcon: "mdi-page-last",
+                      prevIcon: "mdi-chevron-left",
+                      nextIcon: "mdi-chevron-right"
+                    },
+                    "show-expand": "",
+                    "single-expand": "",
+                    "show-select": "",
+                    "item-key": "id"
                   },
-                  "show-expand": "",
-                  "single-expand": "",
-                  "show-select": "",
-                  "item-key": "id"
-                },
-                on: {
-                  "update:options": function($event) {
-                    _vm.options = $event
-                  }
-                },
-                scopedSlots: _vm._u(
-                  [
-                    {
-                      key: "expanded-item",
-                      fn: function(ref) {
-                        var headers = ref.headers
-                        var item = ref.item
-                        return [
-                          _c(
-                            "td",
-                            { attrs: { colspan: headers.length } },
-                            [
-                              _c("v-container", [
-                                _c("table", [
-                                  _c("tr", [
-                                    _c("td", [_c("strong", [_vm._v("Code")])]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(":")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.code))])
+                  on: {
+                    "update:options": function($event) {
+                      _vm.options = $event
+                    }
+                  },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "expanded-item",
+                        fn: function(ref) {
+                          var headers = ref.headers
+                          var item = ref.item
+                          return [
+                            _c(
+                              "td",
+                              { attrs: { colspan: headers.length } },
+                              [
+                                _c("v-container", [
+                                  _c("table", [
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Code")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(_vm._s(item.code))])
+                                    ])
                                   ])
                                 ])
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.total",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(_vm.formatNumber(item.total)) +
-                              "\n                "
-                          )
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.employee",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(
-                                item.employee.last_name +
-                                  ", " +
-                                  item.employee.first_name
-                              ) +
-                              "\n                "
-                          )
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.created_at",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(_vm.getHumanDate(item.created_at)) +
-                              "\n                "
-                          )
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.actions",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _c(
-                            "v-icon",
-                            {
-                              staticClass: "mr-2",
-                              attrs: { small: "" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.onShow(item)
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.total",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(_vm.formatNumber(item.total)) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.employee",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(
+                                  item.employee.last_name +
+                                    ", " +
+                                    item.employee.first_name
+                                ) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.created_at",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(_vm.getHumanDate(item.created_at)) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.actions",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _c(
+                              "v-icon",
+                              {
+                                staticClass: "mr-2",
+                                attrs: { small: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onShow(item)
+                                  }
                                 }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        mdi-eye\n                    "
-                              )
-                            ]
-                          ),
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        mdi-eye\n                    "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-icon",
+                              {
+                                staticClass: "mr-2",
+                                attrs: { small: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onEdit(item)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        mdi-pencil\n                    "
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ],
+                    null,
+                    true
+                  ),
+                  model: {
+                    value: _vm.selected,
+                    callback: function($$v) {
+                      _vm.selected = $$v
+                    },
+                    expression: "selected"
+                  }
+                },
+                [
+                  _vm._v(" "),
+                  _vm._v(" "),
+                  _vm._v(" "),
+                  _vm._v(" "),
+                  _vm._v(" "),
+                  _vm.items.length > 0
+                    ? _c("template", { slot: "body.append" }, [
+                        _c("tr", { staticClass: "green--text" }, [
+                          _c("td", { staticClass: "title" }, [_vm._v("Total")]),
                           _vm._v(" "),
-                          _c(
-                            "v-icon",
-                            {
-                              staticClass: "mr-2",
-                              attrs: { small: "" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.onEdit(item)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        mdi-pencil\n                    "
-                              )
-                            ]
-                          )
-                        ]
-                      }
-                    }
-                  ],
-                  null,
-                  true
-                ),
-                model: {
-                  value: _vm.selected,
-                  callback: function($$v) {
-                    _vm.selected = $$v
-                  },
-                  expression: "selected"
-                }
-              })
+                          _c("td"),
+                          _vm._v(" "),
+                          _c("td"),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
+                          ]),
+                          _vm._v(" "),
+                          _c("td"),
+                          _vm._v(" "),
+                          _c("td"),
+                          _vm._v(" "),
+                          _c("td"),
+                          _vm._v(" "),
+                          _c("td")
+                        ])
+                      ])
+                    : _vm._e()
+                ],
+                2
+              )
             ],
             1
           )

@@ -153,6 +153,9 @@
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{ getHumanDate(item.created_at) }}
                     </template>
+                    <template v-slot:[`item.amount`]="{ item }">
+                        {{ formatNumber(item.amount) }}
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
@@ -161,6 +164,20 @@
                             mdi-pencil
                         </v-icon>
                     </template>
+                    <template slot="body.append" v-if="items.length > 0">
+                        <tr class="green--text">
+                            <td class="title">Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <strong>{{ totalAmount }}</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
@@ -168,7 +185,8 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
+import numeral from "numeral";
 
 export default {
     data() {
@@ -189,6 +207,7 @@ export default {
             selected: [],
             search: "",
             totalItems: 0,
+            totalAmount: 0,
             options: {
                 sortBy: ["created_at"],
                 sortDesc: [true],
@@ -328,6 +347,9 @@ export default {
         },
         getHumanDate(date) {
             return moment(date).fromNow();
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     watch: {
@@ -339,6 +361,11 @@ export default {
                 });
             },
             deep: true
+        },
+        items() {
+            this.totalAmount = this.formatNumber(
+                this.items.reduce((total, item) => total + item.amount, 0)
+            );
         }
     },
     computed: {
@@ -348,7 +375,7 @@ export default {
                 query: this.search,
                 query: this.status
             };
-        },
+        }
     },
     mounted() {
         this.getDataFromApi().then(data => {

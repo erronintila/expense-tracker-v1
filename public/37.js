@@ -165,6 +165,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -265,7 +270,10 @@ var render = function() {
                                   "v-card",
                                   {
                                     staticClass: "mx-auto mt-3",
-                                    attrs: { elevation: hover ? 5 : 2 }
+                                    attrs: {
+                                      outlined: "",
+                                      elevation: hover ? 5 : 2
+                                    }
                                   },
                                   [
                                     _c(
@@ -368,75 +376,114 @@ var render = function() {
               _c(
                 "v-row",
                 [
-                  _c("v-col", { attrs: { cols: "12" } }, [
-                    _c(
-                      "div",
-                      [
-                        _c(
-                          "v-expansion-panels",
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
                           {
-                            attrs: { hover: "" },
-                            model: {
-                              value: _vm.panel,
-                              callback: function($$v) {
-                                _vm.panel = $$v
-                              },
-                              expression: "panel"
-                            }
-                          },
-                          [
-                            _c(
-                              "v-expansion-panel",
-                              [
-                                _c("v-expansion-panel-header", [
-                                  _vm._v(
-                                    "\n                                    Roles and Permissions\n                                "
-                                  )
-                                ]),
-                                _vm._v(" "),
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
                                 _c(
-                                  "v-expansion-panel-content",
+                                  "v-card",
+                                  {
+                                    attrs: {
+                                      outlined: "",
+                                      elevation: hover ? 5 : 2
+                                    }
+                                  },
                                   [
-                                    _c("v-simple-table", {
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "default",
-                                          fn: function() {
-                                            return [
-                                              _c("tbody", [
-                                                _c("tr", [
-                                                  _c("td", [_vm._v("Role")]),
-                                                  _vm._v(" "),
-                                                  _c("td", [_vm._v("Sample")])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("tr", [
-                                                  _c("td", [
-                                                    _vm._v("Permissions")
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [_vm._v("Sample")])
-                                                ])
-                                              ])
-                                            ]
+                                    _c(
+                                      "v-expansion-panels",
+                                      {
+                                        attrs: { hover: "" },
+                                        model: {
+                                          value: _vm.panel,
+                                          callback: function($$v) {
+                                            _vm.panel = $$v
                                           },
-                                          proxy: true
+                                          expression: "panel"
                                         }
-                                      ])
-                                    })
+                                      },
+                                      [
+                                        _c(
+                                          "v-expansion-panel",
+                                          [
+                                            _c("v-expansion-panel-header", [
+                                              _vm._v(
+                                                "\n                                        Roles and Permissions\n                                    "
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-expansion-panel-content",
+                                              [
+                                                _c("v-simple-table", {
+                                                  scopedSlots: _vm._u(
+                                                    [
+                                                      {
+                                                        key: "default",
+                                                        fn: function() {
+                                                          return [
+                                                            _c("tbody", [
+                                                              _c("tr", [
+                                                                _c("td", [
+                                                                  _vm._v("Role")
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("td", [
+                                                                  _vm._v(
+                                                                    "Sample"
+                                                                  )
+                                                                ])
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("tr", [
+                                                                _c("td", [
+                                                                  _vm._v(
+                                                                    "\n                                                            Permissions\n                                                        "
+                                                                  )
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("td", [
+                                                                  _vm._v(
+                                                                    "Sample"
+                                                                  )
+                                                                ])
+                                                              ])
+                                                            ])
+                                                          ]
+                                                        },
+                                                        proxy: true
+                                                      }
+                                                    ],
+                                                    null,
+                                                    true
+                                                  )
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
                                   ],
                                   1
                                 )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ])
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
                 ],
                 1
               )

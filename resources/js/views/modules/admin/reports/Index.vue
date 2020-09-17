@@ -161,6 +161,20 @@
                             mdi-pencil
                         </v-icon>
                     </template>
+                    <template slot="body.append" v-if="items.length > 0">
+                        <tr class="green--text">
+                            <td class="title">Total</td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <strong>{{ totalAmount }}</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
@@ -187,6 +201,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
+            totalAmount: 0,
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
@@ -348,6 +363,11 @@ export default {
                 });
             },
             deep: true
+        },
+        items() {
+            this.totalAmount = this.formatNumber(
+                this.items.reduce((total, item) => total + item.total, 0)
+            );
         }
     },
     computed: {

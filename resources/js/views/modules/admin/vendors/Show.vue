@@ -16,6 +16,7 @@
                     <v-col cols="12" md="6">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
+                                outlined
                                 class="mx-auto mt-3"
                                 :elevation="hover ? 5 : 2"
                             >
@@ -61,6 +62,7 @@
                             <v-col cols="12" md="12">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
+                                        outlined
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                     >
@@ -136,57 +138,63 @@
 
                 <v-row>
                     <v-col cols="12">
-                        <div>
-                            <v-expansion-panels v-model="panel" hover>
-                                <v-expansion-panel>
-                                    <v-expansion-panel-header>
-                                        Other Details
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content>
-                                        <v-simple-table>
-                                            <template v-slot:default>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Code</td>
-                                                        <td>{{ code }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            Telephone Number
-                                                        </td>
-                                                        <td>
-                                                            {{
-                                                                telephone_number
-                                                            }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Website</td>
-                                                        <td>{{ website }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            VAT Inclusive
-                                                        </td>
-                                                        <td>
-                                                            {{
-                                                                is_vat_inclusive
-                                                                    ? "Yes"
-                                                                    : "No"
-                                                            }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Address</td>
-                                                        <td>{{ address }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </template>
-                                        </v-simple-table>
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                            </v-expansion-panels>
-                        </div>
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card outlined :elevation="hover ? 5 : 2">
+                                <v-expansion-panels v-model="panel" hover>
+                                    <v-expansion-panel>
+                                        <v-expansion-panel-header>
+                                            Other Details
+                                        </v-expansion-panel-header>
+                                        <v-expansion-panel-content>
+                                            <v-simple-table>
+                                                <template v-slot:default>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Code</td>
+                                                            <td>{{ code }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                Telephone Number
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    telephone_number
+                                                                }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Website</td>
+                                                            <td>
+                                                                {{ website }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                VAT Inclusive
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    is_vat_inclusive
+                                                                        ? "Yes"
+                                                                        : "No"
+                                                                }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Address</td>
+                                                            <td>
+                                                                {{ address }}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </template>
+                                            </v-simple-table>
+                                        </v-expansion-panel-content>
+                                    </v-expansion-panel>
+                                </v-expansion-panels>
+                            </v-card>
+                        </v-hover>
                     </v-col>
                 </v-row>
             </v-card-text>

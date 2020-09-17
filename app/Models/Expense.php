@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Expense extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * The attributes that are not mass assignable.
      *

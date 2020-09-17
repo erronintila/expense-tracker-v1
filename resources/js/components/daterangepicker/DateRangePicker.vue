@@ -11,12 +11,25 @@
         class="pa-0"
     >
         <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-if="buttonType"
+                :color="buttonColor"
+                :dark="buttonDark"
+                v-bind="attrs"
+                v-on="on"
+                offset-y
+            >
+                {{ dateRangeText }}
+            </v-btn>
+
             <v-text-field
+                v-else
                 v-model="dateRangeText"
                 label="Date"
                 readonly
                 v-bind="attrs"
                 v-on="on"
+                :solo="solo"
             ></v-text-field>
         </template>
         <v-card>
@@ -50,13 +63,29 @@
 </template>
 
 <script>
-// Please visit : 
+// Please visit :
 // https://stackoverflow.com/questions/59404459/custom-date-picker-in-vuetify
 
 import moment from "moment";
 
 export default {
     props: {
+        buttonType: {
+            type: Boolean,
+            default: false
+        },
+        buttonColor: {
+            type: String,
+            default: "primary"
+        },
+        buttonDark: {
+            type: Boolean,
+            default: true
+        },
+        solo: {
+            type: Boolean,
+            default: false
+        },
         value: {
             type: Array,
             default: () => {
@@ -280,6 +309,6 @@ export default {
             this.dates.sort();
             return this.dates.join(" ~ ");
         }
-    },
+    }
 };
 </script>
