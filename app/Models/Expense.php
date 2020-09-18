@@ -9,6 +9,8 @@ class Expense extends Model
 {
     use SoftDeletes;
 
+    protected $dates = ['deleted_at'];
+
     /**
      * The attributes that are not mass assignable.
      *

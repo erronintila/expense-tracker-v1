@@ -127,32 +127,20 @@ class ExpenseReportController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $message = "Item(s) updated successfully";
+
         switch ($request->action) {
             case 'restore':
-                $expense_report = ExpenseReport::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                foreach ($request->ids as $id) {
+                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report->restore();
 
-                // foreach ($request->ids as $key => $value) {
-                //     $expense_report = ExpenseReport::find($value);
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                        $expense->restore();
+                    }
+                }
 
-                //     $expense_report->deleted_by_user_id = null;
-                //     $expense_report->deleted_at = null;
-
-                //     $expense_report->save();
-
-                //     foreach ($expense_report->expenses as $key => $value) {
-                //         $expense = Expense::find($value["id"]);
-                //         $expense->restore();
-                //     }
-
-                //     // if (is_null($expense_report->cancelled_at)) {
-                //     //     foreach ($expense_report->expenses as $key => $value) {
-                //     //         $expense = Expense::find($value["id"]);
-                //     //         $expense->restore();
-                //     //     }
-                //     // }
-                // }
+                $message = "Item(s) restored successfully";
 
                 break;
             default:
@@ -185,7 +173,7 @@ class ExpenseReportController extends Controller
 
         return response(
             [
-                'message' => 'Updated successfully'
+                'message' => $message
             ],
             201
         );
@@ -199,21 +187,14 @@ class ExpenseReportController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $expense_report = ExpenseReport::whereIn('id', $request->ids)->delete();
+        foreach ($request->ids as $id) {
+            $expense_report = ExpenseReport::find($id);
+            $expense_report->delete();
 
-        // foreach ($request->ids as $key => $value) {
-        //     $expense_report = ExpenseReport::find($value);
-
-        //     $expense_report->deleted_by_user_id = Auth::id();
-        //     $expense_report->deleted_at = now();
-
-        //     $expense_report->save();
-
-        //     foreach ($expense_report->expenses as $key => $value) {
-        //         $expense = Expense::find($value["id"]);
-        //         $expense->delete();
-        //     }
-        // }
+            foreach ($expense_report->expenses as $expense) {
+                $expense->delete();
+            }
+        }
 
         return response(
             [

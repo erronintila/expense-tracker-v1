@@ -288,7 +288,12 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error);
+                            // _this.$dialog.message.error(error, {
+                            //     position: "top-right",
+                            //     timeout: 2000
+                            // });
+
+                            console.log(error.response);
                         });
                 }
             });

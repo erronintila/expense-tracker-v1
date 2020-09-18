@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Expense;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,7 +26,7 @@ class ExpenseReportResource extends JsonResource
             'notes' => $this->notes,
             'employee' => $this->employee,
             'payment' => $this->payment,
-            'expenses' => $this->expenses,
+            'expenses' => ExpenseResource::collection($this->expenses()->withTrashed()->get()),
             'status' => $this->status(),
             'submitted_at' => Carbon::parse($this->submitted_at)->toDateTimeString(),
             'reviewed_at' => Carbon::parse($this->reviewed_at)->toDateTimeString(),
@@ -34,7 +35,7 @@ class ExpenseReportResource extends JsonResource
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'deleted_at' => Carbon::parse($this->deleted_at)->toDateTimeString(),
-            'total' => $this->expenses->sum('amount')
+            'total' => $this->expenses()->withTrashed()->get()->sum('amount')
         ];
     }
 }

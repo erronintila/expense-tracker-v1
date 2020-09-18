@@ -21,6 +21,11 @@ use Illuminate\Http\Request;
 
 class DataController extends Controller
 {
+    public function test()
+    {
+        return "test";
+    }
+
     public function employees()
     {
         return EmployeeResource::collection(Employee::orderBy("last_name")->get());
@@ -103,12 +108,20 @@ class DataController extends Controller
             $expense_reports = $expense_reports->where("id", $request->id);
         }
 
+        if (request()->has("create_payment")) {
+            $expense_reports = $expense_reports->where("payment_id", null);
+        }
+
         if (request()->has("employee_id")) {
             $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
         }
 
         if (request()->has("payment_id")) {
             $expense_reports = $expense_reports->where("payment_id", $request->payment_id);
+        }
+
+        if (request()->has("start_date") && request()->has("end_date")) {
+            $expense_reports = $expense_reports->whereBetween("created_at", [$request->start_date, $request->end_date]);
         }
 
         if (request()->has("status")) {
@@ -122,6 +135,9 @@ class DataController extends Controller
             }
         }
 
-        return ExpenseReportResource::collection($expense_reports->get());
+        // return ExpenseReportResource::collection($expense_reports->get());
+        return response()->json([
+            "data" => ExpenseReportResource::collection($expense_reports->get()),
+        ]);
     }
 }

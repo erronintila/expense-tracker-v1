@@ -81,15 +81,35 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onRestore">
+                        <v-list-item>
                             <v-list-item-title>
-                                Restore
+                                Approve Report(s)
                             </v-list-item-title>
                         </v-list-item>
+
+                        <v-list-item>
+                            <v-list-item-title>
+                                Cancel Report(s)
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <v-list-item-title>
+                                Duplicate
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-divider></v-divider>
 
                         <v-list-item @click="onDelete">
                             <v-list-item-title>
                                 Move to archive
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onRestore">
+                            <v-list-item-title>
+                                Restore
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -326,10 +346,12 @@ export default {
                 if (res) {
                     axios
                         .put(`/api/expense_reports/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "restore"
+                            params: {
+                                ids: _this.selected.map(item => {
+                                    return item.id;
+                                }),
+                                action: "restore"
+                            }
                         })
                         .then(function(response) {
                             _this.$dialog.message.success("Item(s) restored.", {
@@ -342,7 +364,8 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error);
+                            // console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
