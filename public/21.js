@@ -13,6 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -205,12 +206,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
   data: function data() {
     return {
       loading: true,
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
+      preset: "",
+      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       headers: [{
         text: "Expense",
         value: "description"
@@ -235,6 +274,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
+      employee: 0,
+      employees: [],
+      expense_type: 0,
+      expense_types: [],
       status: "Active",
       statuses: ["Active", "Archived"],
       selected: [],
@@ -250,6 +293,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    updateDates: function updateDates(e) {
+      this.date_range = e;
+    },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -266,6 +312,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
+        var employee_id = _this.employee;
+        var expense_type_id = _this.expense_type;
+        var range = _this.date_range;
         axios.get("/api/expenses", {
           params: {
             search: search,
@@ -273,7 +322,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            status: status
+            status: status,
+            employee_id: employee_id,
+            expense_type_id: expense_type_id,
+            start_date: range[0],
+            end_date: range[1]
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -289,8 +342,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+    loadEmployees: function loadEmployees() {
+      var _this = this;
+
+      axios.get("/api/data/employees").then(function (response) {
+        _this.employees = response.data.data;
+
+        _this.employees.unshift({
+          id: 0,
+          fullname: "All Employees"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    loadExpenseTypes: function loadExpenseTypes() {
+      var _this = this;
+
+      axios.get("/api/data/expense_types").then(function (response) {
+        _this.expense_types = response.data.data;
+
+        _this.expense_types.unshift({
+          id: 0,
+          name: "All Expense Types"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.loadEmployees();
+      this.loadExpenseTypes();
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -404,9 +487,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, "query", this.status));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.expense_type), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     }
   },
   mounted: function mounted() {
@@ -419,6 +504,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    this.loadEmployees();
+    this.loadExpenseTypes();
   }
 });
 
@@ -543,6 +630,21 @@ var render = function() {
                           _c(
                             "v-list-item",
                             [
+                              _c("DateRangePicker", {
+                                attrs: {
+                                  preset: _vm.preset,
+                                  presets: _vm.presets,
+                                  value: _vm.date_range
+                                },
+                                on: { updateDates: _vm.updateDates }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
                               _c("v-select", {
                                 attrs: { items: _vm.statuses, label: "Status" },
                                 model: {
@@ -551,6 +653,50 @@ var render = function() {
                                     _vm.status = $$v
                                   },
                                   expression: "status"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.employees,
+                                  "item-text": "fullname",
+                                  "item-value": "id",
+                                  label: "Employee"
+                                },
+                                model: {
+                                  value: _vm.employee,
+                                  callback: function($$v) {
+                                    _vm.employee = $$v
+                                  },
+                                  expression: "employee"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.expense_types,
+                                  "item-text": "name",
+                                  "item-value": "id",
+                                  label: "Expense Types"
+                                },
+                                model: {
+                                  value: _vm.expense_type,
+                                  callback: function($$v) {
+                                    _vm.expense_type = $$v
+                                  },
+                                  expression: "expense_type"
                                 }
                               })
                             ],
@@ -834,25 +980,42 @@ var render = function() {
                   _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
-                        _c("tr", { staticClass: "green--text" }, [
-                          _c("td", { staticClass: "title" }, [_vm._v("Total")]),
-                          _vm._v(" "),
-                          _c("td"),
-                          _vm._v(" "),
-                          _c("td"),
-                          _vm._v(" "),
-                          _c("td"),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
-                          ]),
-                          _vm._v(" "),
-                          _c("td"),
-                          _vm._v(" "),
-                          _c("td"),
-                          _vm._v(" "),
-                          _c("td")
-                        ])
+                        _c(
+                          "tr",
+                          { staticClass: "green--text hidden-md-and-up" },
+                          [
+                            _c("td", { staticClass: "title" }, [
+                              _vm._v("\n                            Total: "),
+                              _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "tr",
+                          { staticClass: "green--text hidden-sm-and-down" },
+                          [
+                            _c("td", { staticClass: "title" }, [
+                              _vm._v("Total")
+                            ]),
+                            _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
+                            ]),
+                            _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
+                            _c("td")
+                          ]
+                        )
                       ])
                     : _vm._e()
                 ],

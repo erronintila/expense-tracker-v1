@@ -100,7 +100,8 @@ class ExpenseReport extends Model
 
         if (!$deleted) {
             $arr = [
-                'text' => 'Archived',
+                'color' => 'red',
+                'remarks' => 'Expense Report was moved to archive',
                 'status' => 'Archived',
             ];
 
@@ -109,7 +110,8 @@ class ExpenseReport extends Model
 
         if (!$cancelled) {
             $arr = [
-                'text' => 'Cancelled',
+                'color' => 'red',
+                'remarks' => 'Expense Report was cancelled',
                 'status' => 'Cancelled',
             ];
 
@@ -119,7 +121,8 @@ class ExpenseReport extends Model
         if (!$paid) {
 
             $arr = [
-                'text' => 'Paid',
+                'color' => 'green',
+                'remarks' => 'Payment successfully delivered',
                 'status' => 'Paid',
             ];
 
@@ -128,7 +131,8 @@ class ExpenseReport extends Model
 
         if (!$approved) {
             $arr = [
-                'text' => 'Processing Payment',
+                'color' => 'green',
+                'remarks' => 'Processing Payment',
                 'status' => 'Approved',
             ];
 
@@ -137,7 +141,8 @@ class ExpenseReport extends Model
 
         if (!$reviewed) {
             $arr = [
-                'text' => 'For Approval',
+                'color' => 'orange',
+                'remarks' => 'For Approval',
                 'status' => 'Reviewed',
             ];
 
@@ -146,7 +151,8 @@ class ExpenseReport extends Model
 
         if (!$submitted) {
             $arr = [
-                'text' => 'For Review',
+                'color' => 'orange',
+                'remarks' => 'For Review',
                 'status' => 'Submitted',
             ];
 
@@ -154,7 +160,8 @@ class ExpenseReport extends Model
         }
 
         $arr = [
-            'text' => 'For Submission',
+            'color' => 'blue',
+            'remarks' => 'For Submission',
             'status' => 'Pending',
         ];
 

@@ -50,10 +50,32 @@ class ExpenseReportController extends Controller
                 case 'Archived':
                     $expense_reports = $expense_reports->onlyTrashed();
                     break;
+                case 'Cancelled':
+                    $expense_reports = $expense_reports->where("cancelled_at", '<>', null);
+                    break;
+                case 'Approved':
+                    $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null);
+                    break;
+                case 'Pending':
+                    $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("approved_at", null)->where("cancelled_at", null);
+                    break;
+                case 'For Submission':
+                    $expense_reports = $expense_reports->where("submitted_at", null)->where("approved_at", null)->where("cancelled_at", null);
+                    break;
                 default:
-                    $expense_reports = $expense_reports;
+                    $expense_reports = $expense_reports->where("cancelled_at", null);
                     break;
             }
+        }
+
+        if (request()->has("employee_id")) {
+            if ($request->employee_id > 0) {
+                $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
+            }
+        }
+
+        if (request()->has("start_date") && request()->has("end_date")) {
+            $expense_reports = $expense_reports->whereBetween("created_at", [$request->start_date, $request->end_date]);
         }
 
         $expense_reports = $expense_reports->where(function ($query) use ($search) {
@@ -130,6 +152,43 @@ class ExpenseReportController extends Controller
         $message = "Item(s) updated successfully";
 
         switch ($request->action) {
+            case 'submit':
+                foreach ($request->ids as $id) {
+                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report->submitted_at = now();
+                    $expense_report->approved_at = null;
+                    $expense_report->cancelled_at = null;
+                    $expense_report->save();
+                }
+
+                $message = "Expense Report(s) submitted successfully";
+
+                break;
+            case 'approve':
+                foreach ($request->ids as $id) {
+                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report->approved_at = now();
+                    $expense_report->cancelled_at = null;
+                    $expense_report->save();
+                }
+
+                $message = "Expense Report(s) approved successfully";
+
+                break;
+            case 'cancel':
+                foreach ($request->ids as $id) {
+                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report->cancelled_at = now();
+                    $expense_report->save();
+
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                        $expense->delete();
+                    }
+                }
+
+                $message = "Expense Report(s) cancelled successfully";
+
+                break;
             case 'restore':
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->find($id);
@@ -140,11 +199,11 @@ class ExpenseReportController extends Controller
                     }
                 }
 
-                $message = "Item(s) restored successfully";
+                $message = "Expense Report(s) restored successfully";
 
                 break;
             default:
-                $this->validator($request->all(), null)->validate();
+                $this->validator($request->all(), $id)->validate();
 
                 $expense_report = ExpenseReport::findOrFail($id);
 
@@ -167,6 +226,8 @@ class ExpenseReportController extends Controller
                     $expense->expense_report_id = $expense_report->id;
                     $expense->save();
                 }
+
+                $message = "Expense Report updated successfully";
 
                 break;
         }

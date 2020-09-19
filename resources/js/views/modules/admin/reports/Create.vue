@@ -58,7 +58,10 @@
                                 show-expand
                                 class="elevation-0"
                             >
-                                <template slot="body.append" v-if="items.length > 0">
+                                <template
+                                    slot="body.append"
+                                    v-if="items.length > 0"
+                                >
                                     <tr class="green--text">
                                         <td class="title">Total</td>
                                         <td></td>
@@ -296,6 +299,17 @@ export default {
         },
         onSave() {
             let _this = this;
+
+            _this.$refs.form.validate();
+
+            if (_this.selected.length == 0) {
+                _this.$dialog.message.error("No Expenses selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+
+                return;
+            }
 
             if (_this.$refs.form.validate()) {
                 axios

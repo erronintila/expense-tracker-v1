@@ -59,6 +59,25 @@
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="department"
+                                    :items="departments"
+                                    item-text="name"
+                                    item-value="id"
+                                    label="Department"
+                                    @change="loadJobs"
+                                ></v-select>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="job"
+                                    :items="jobs"
+                                    item-text="name"
+                                    item-value="id"
+                                    label="Job Designation"
+                                ></v-select>
+                            </v-list-item>
                         </v-list>
                     </v-card>
                 </v-menu>
@@ -196,6 +215,10 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
+            department: 0,
+            departments: [],
+            job: 0,
+            jobs: [],
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
@@ -219,6 +242,8 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
+                let department_id = _this.department;
+                let job_id = _this.job;
                 let status = _this.status;
 
                 axios
@@ -229,7 +254,9 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            status: status
+                            status: status,
+                            department_id: department_id,
+                            job_id: job_id
                         }
                     })
                     .then(response => {
@@ -247,8 +274,45 @@ export default {
                     });
             });
         },
+        loadDepartments() {
+            let _this = this;
+
+            axios
+                .get("/api/data/departments")
+                .then(response => {
+                    _this.departments = response.data.data;
+                    _this.departments.unshift({ id: 0, name: "All Departments" });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        loadJobs() {
+            let _this = this;
+            axios
+                .get("/api/data/jobs", {
+                    params: {
+                        department_id: _this.department
+                    }
+                })
+                .then(response => {
+                    _this.jobs = response.data.data;
+                    _this.jobs.unshift({ id: 0, name: "All Job Designations" });
+
+                    _this.job = 0;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        updateDepartment() {
+            this.loadJobs();
+        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.loadDepartments();
+            this.loadJobs();
         },
         onShow(item) {
             this.$router.push({
@@ -355,7 +419,9 @@ export default {
             return {
                 ...this.options,
                 query: this.search,
-                query: this.status
+                query: this.status,
+                query: this.department,
+                query: this.job
             };
         }
     },
@@ -368,6 +434,9 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        this.loadDepartments();
+        this.loadJobs();
     }
 };
 </script>

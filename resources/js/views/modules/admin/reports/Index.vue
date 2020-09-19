@@ -53,10 +53,27 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
+                                <DateRangePicker
+                                    :preset="preset"
+                                    :presets="presets"
+                                    :value="date_range"
+                                    @updateDates="updateDates"
+                                ></DateRangePicker>
+                            </v-list-item>
+                            <v-list-item>
                                 <v-select
                                     v-model="status"
                                     :items="statuses"
                                     label="Status"
+                                ></v-select>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="employee"
+                                    :items="employees"
+                                    item-text="fullname"
+                                    item-value="id"
+                                    label="Employee"
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -81,13 +98,19 @@
                     </template>
 
                     <v-list>
-                        <v-list-item>
+                        <v-list-item @click="onUpdate('submit', 'put')">
+                            <v-list-item-title>
+                                Submit Report(s)
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onUpdate('approve', 'put')">
                             <v-list-item-title>
                                 Approve Report(s)
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item>
+                        <v-list-item @click="onUpdate('cancel', 'put')">
                             <v-list-item-title>
                                 Cancel Report(s)
                             </v-list-item-title>
@@ -98,8 +121,6 @@
                                 Duplicate
                             </v-list-item-title>
                         </v-list-item>
-
-                        <v-divider></v-divider>
 
                         <v-list-item @click="onDelete">
                             <v-list-item-title>
@@ -147,6 +168,11 @@
                     item-key="id"
                     class="elevation-0"
                 >
+                    <template v-slot:[`item.status.status`]="{ item }">
+                        <v-chip :color="item.status.color" dark small>{{
+                            item.status.status
+                        }}</v-chip>
+                    </template>
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
                             <v-container>
@@ -155,6 +181,11 @@
                                         <td><strong>Code</strong></td>
                                         <td>:</td>
                                         <td>{{ item.code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.status.remarks }}</td>
                                     </tr>
                                 </table>
                             </v-container>
@@ -182,7 +213,10 @@
                         </v-icon>
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
-                        <tr class="green--text">
+                        <tr class="green--text hidden-md-and-up">
+                            <td class="title">Total: <strong>{{ totalAmount }}</strong></td>
+                        </tr>
+                        <tr class="green--text hidden-sm-and-down">
                             <td class="title">Total</td>
                             <td></td>
                             <td></td>
@@ -204,9 +238,10 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 
 export default {
-    props: {},
+    components: { DateRangePicker },
     data() {
         return {
             loading: true,
@@ -214,16 +249,48 @@ export default {
                 { text: "Description", value: "description" },
                 { text: "Employee", value: "employee" },
                 { text: "Amount", value: "total" },
-                { text: "Status", value: "status.status" },
-                // { text: "Remarks", value: "status.text" },
                 { text: "Created", value: "created_at" },
+                { text: "Status", value: "status.status" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
+            employee: 0,
+            employees: [],
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ],
+            preset: "",
+            presets: [
+                "Today",
+                "Yesterday",
+                "Last 7 Days",
+                "Last 30 Days",
+                "This Week",
+                "This Month",
+                "This Quarter",
+                "This Year",
+                "Last Week",
+                "Last Month",
+                "Last Quarter",
+                "Last Year",
+                "Last 5 Years"
+            ],
             totalAmount: 0,
             status: "Active",
-            statuses: ["Active", "Archived"],
+            statuses: [
+                "Active",
+                "For Submission",
+                "Pending",
+                "Approved",
+                "Cancelled",
+                "Archived"
+            ],
             selected: [],
             search: "",
             totalItems: 0,
@@ -236,6 +303,9 @@ export default {
         };
     },
     methods: {
+        updateDates(e) {
+            this.date_range = e;
+        },
         getDataFromApi() {
             let _this = this;
 
@@ -246,6 +316,8 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
+                let employee_id = _this.employee;
+                let range = _this.date_range;
 
                 axios
                     .get("/api/expense_reports", {
@@ -255,7 +327,10 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            status: status
+                            status: status,
+                            employee_id: employee_id,
+                            start_date: range[0],
+                            end_date: range[1]
                         }
                     })
                     .then(response => {
@@ -273,8 +348,26 @@ export default {
                     });
             });
         },
+        loadEmployees() {
+            let _this = this;
+
+            axios
+                .get("/api/data/employees")
+                .then(response => {
+                    _this.employees = response.data.data;
+                    _this.employees.unshift({
+                        id: 0,
+                        fullname: "All Employees"
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.loadEmployees();
         },
         onShow(item) {
             this.$router.push({
@@ -342,17 +435,21 @@ export default {
                 return;
             }
 
-            this.$confirm("Do you want to restore account(s)?").then(res => {
+            this.$confirm("Do you want to restore report(s)?").then(res => {
                 if (res) {
+                    let ids = _this.selected.map(item => {
+                        return item.id;
+                    });
+
                     axios
-                        .put(`/api/expense_reports/${_this.selected[0].id}`, {
-                            params: {
+                        .put(
+                            `/api/expense_reports/${_this.selected[0].id}?action=restore`,
+                            {
                                 ids: _this.selected.map(item => {
                                     return item.id;
-                                }),
-                                action: "restore"
+                                })
                             }
-                        })
+                        )
                         .then(function(response) {
                             _this.$dialog.message.success("Item(s) restored.", {
                                 position: "top-right",
@@ -367,6 +464,76 @@ export default {
                             // console.log(error);
                             console.log(error.response);
                         });
+                }
+            });
+        },
+        onUpdate(action, method) {
+            let _this = this;
+            // let action = action;
+
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            this.$confirm(`Do you want to ${action} report(s)?`).then(res => {
+                if (res) {
+                    let ids = _this.selected.map(item => {
+                        return item.id;
+                    });
+
+                    axios({
+                        method: method,
+                        url: `/api/expense_reports/${_this.selected[0].id}`,
+                        data: {
+                            ids: ids,
+                            action: action
+                        }
+                    })
+                        .then(function(response) {
+                            _this.$dialog.message.success(
+                                response.data.message,
+                                {
+                                    position: "top-right",
+                                    timeout: 2000
+                                }
+                            );
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
+                        })
+                        .catch(function(error) {
+                            // console.log(error);
+                            console.log(error);
+                        });
+
+                    // axios
+                    //     .put(
+                    //         `/api/expense_reports/${_this.selected[0].id}?action=restore`,
+                    //         {
+                    //             ids: _this.selected.map(item => {
+                    //                 return item.id;
+                    //             })
+                    //         }
+                    //     )
+                    //     .then(function(response) {
+                    //         _this.$dialog.message.success("Item(s) restored.", {
+                    //             position: "top-right",
+                    //             timeout: 2000
+                    //         });
+                    //         _this.getDataFromApi().then(data => {
+                    //             _this.items = data.items;
+                    //             _this.totalItems = data.total;
+                    //         });
+                    //     })
+                    //     .catch(function(error) {
+                    //         // console.log(error);
+                    //         console.log(error.response);
+                    //     });
                 }
             });
         },
@@ -398,7 +565,9 @@ export default {
             return {
                 ...this.options,
                 query: this.search,
-                query: this.status
+                query: this.status,
+                query: this.employee,
+                query: this.date_range
             };
         }
     },
@@ -411,6 +580,8 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        this.loadEmployees();
     }
 };
 </script>

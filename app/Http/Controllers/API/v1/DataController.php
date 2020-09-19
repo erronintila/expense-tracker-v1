@@ -46,9 +46,17 @@ class DataController extends Controller
         return ExpenseTypeResource::collection(ExpenseType::orderBy("name")->get());
     }
 
-    public function jobs()
+    public function jobs(Request $request)
     {
-        return JobResource::collection(Job::orderBy("name")->get());
+        $jobs = Job::orderBy("name");
+
+        if (request()->has("department_id")) {
+            if($request->department_id > 0) {
+                $jobs = $jobs->where("department_id", $request->department_id);
+            }
+        }
+
+        return JobResource::collection($jobs->get());
     }
 
     public function expenses(Request $request)

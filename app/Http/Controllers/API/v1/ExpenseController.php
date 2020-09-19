@@ -57,6 +57,22 @@ class ExpenseController extends Controller
             }
         }
 
+        if (request()->has('start_date') && request()->has('end_date')) {
+            $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
+        }
+
+        if (request()->has('employee_id')) {
+            if ($request->employee_id > 0) {
+                $expenses = $expenses->where("employee_id", $request->employee_id);
+            }
+        }
+
+        if (request()->has('expense_type_id')) {
+            if ($request->expense_type_id > 0) {
+                $expenses = $expenses->where("expense_type_id", $request->expense_type_id);
+            }
+        }
+
         $expenses = $expenses->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
             $query->orWhere("description", "like", "%" . $search . "%");

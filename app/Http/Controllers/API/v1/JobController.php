@@ -55,6 +55,12 @@ class JobController extends Controller
             }
         }
 
+        if (request()->has('department_id')) {
+            if ($request->department_id > 0) {
+                $jobs = $jobs->where('department_id', $request->department_id);
+            }
+        }
+
         $jobs = $jobs->where('name', "like", "%" . $search . "%");
         $jobs = $jobs->paginate($itemsPerPage);
 

@@ -194,6 +194,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -224,6 +243,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
+      department: 0,
+      departments: [],
+      job: 0,
+      jobs: [],
       status: "Active",
       statuses: ["Active", "Archived"],
       selected: [],
@@ -253,6 +276,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var search = _this.search.trim().toLowerCase();
 
+        var department_id = _this.department;
+        var job_id = _this.job;
         var status = _this.status;
         axios.get("/api/employees", {
           params: {
@@ -261,7 +286,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            status: status
+            status: status,
+            department_id: department_id,
+            job_id: job_id
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -277,8 +304,47 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+    loadDepartments: function loadDepartments() {
+      var _this = this;
+
+      axios.get("/api/data/departments").then(function (response) {
+        _this.departments = response.data.data;
+
+        _this.departments.unshift({
+          id: 0,
+          name: "All Departments"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    loadJobs: function loadJobs() {
+      var _this = this;
+
+      axios.get("/api/data/jobs", {
+        params: {
+          department_id: _this.department
+        }
+      }).then(function (response) {
+        _this.jobs = response.data.data;
+
+        _this.jobs.unshift({
+          id: 0,
+          name: "All Job Designations"
+        });
+
+        _this.job = 0;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    updateDepartment: function updateDepartment() {
+      this.loadJobs();
+    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.loadDepartments();
+      this.loadJobs();
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -381,9 +447,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, "query", this.status));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
     }
   },
   mounted: function mounted() {
@@ -396,6 +464,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    this.loadDepartments();
+    this.loadJobs();
   }
 });
 
@@ -528,6 +598,51 @@ var render = function() {
                                     _vm.status = $$v
                                   },
                                   expression: "status"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.departments,
+                                  "item-text": "name",
+                                  "item-value": "id",
+                                  label: "Department"
+                                },
+                                on: { change: _vm.loadJobs },
+                                model: {
+                                  value: _vm.department,
+                                  callback: function($$v) {
+                                    _vm.department = $$v
+                                  },
+                                  expression: "department"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.jobs,
+                                  "item-text": "name",
+                                  "item-value": "id",
+                                  label: "Job Designation"
+                                },
+                                model: {
+                                  value: _vm.job,
+                                  callback: function($$v) {
+                                    _vm.job = $$v
+                                  },
+                                  expression: "job"
                                 }
                               })
                             ],
