@@ -103,17 +103,17 @@ export default {
         };
     },
     methods: {
-        loadingScreen() {
-            this.overlay = true;
+        // loadingScreen() {
+        //     this.overlay = true;
 
-            setTimeout(() => {
-                this.overlay = false;
+        //     setTimeout(() => {
+        //         this.overlay = false;
 
-                this.$router.push({
-                    name: "admin.dashboard.index"
-                });
-            }, 2000);
-        },
+        //         this.$router.push({
+        //             name: "admin.dashboard.index"
+        //         });
+        //     }, 2000);
+        // },
         onLogin() {
             let _this = this;
 
@@ -127,7 +127,10 @@ export default {
                         password: _this.password
                     })
                     .then(response => {
-                        _this.loadingScreen();
+                        // _this.loadingScreen();
+                        this.$router.push({
+                            name: "admin.dashboard.index"
+                        });
                     })
                     .catch(function(error) {
                         _this.errors = error.data;

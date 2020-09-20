@@ -21,7 +21,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      user: {
+        name: "",
+        email: "",
+        username: ""
+      }
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    axios.get("/api/user").then(function (response) {
+      _this.user = response.data;
+    });
+  }
+});
 
 /***/ }),
 
@@ -60,7 +80,15 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("v-card-subtitle")
+          _c("v-card-subtitle", [
+            _vm._v(
+              "\n            Hello " +
+                _vm._s(_vm.user.name) +
+                " (" +
+                _vm._s(_vm.user.email) +
+                ")\n        "
+            )
+          ])
         ],
         1
       )

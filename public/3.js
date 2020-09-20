@@ -118,19 +118,18 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    loadingScreen: function loadingScreen() {
+    // loadingScreen() {
+    //     this.overlay = true;
+    //     setTimeout(() => {
+    //         this.overlay = false;
+    //         this.$router.push({
+    //             name: "admin.dashboard.index"
+    //         });
+    //     }, 2000);
+    // },
+    onLogin: function onLogin() {
       var _this2 = this;
 
-      this.overlay = true;
-      setTimeout(function () {
-        _this2.overlay = false;
-
-        _this2.$router.push({
-          name: "admin.dashboard.index"
-        });
-      }, 2000);
-    },
-    onLogin: function onLogin() {
       var _this = this;
 
       _this.$refs.form.validate();
@@ -141,7 +140,10 @@ __webpack_require__.r(__webpack_exports__);
           email: _this.email,
           password: _this.password
         }).then(function (response) {
-          _this.loadingScreen();
+          // _this.loadingScreen();
+          _this2.$router.push({
+            name: "admin.dashboard.index"
+          });
         })["catch"](function (error) {
           _this.errors = error.data;
 

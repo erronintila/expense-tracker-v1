@@ -40,6 +40,8 @@ export const store = new Vuex.Store({
                         password: payload.password
                     })
                     .then(function(response) {
+                        console.log(response);
+
                         let token = response.data.access_token;
 
                         let user = response.data.user;
@@ -48,9 +50,9 @@ export const store = new Vuex.Store({
 
                         context.commit("AUTH_LOGIN", token);
 
-                        // context.commit("AUTH_USER", user);
+                        context.commit("AUTH_USER", user);
 
-                        context.dispatch("AUTH_USER");
+                        // context.dispatch("AUTH_USER");
 
                         resolve(response);
                     })
@@ -91,12 +93,14 @@ export const store = new Vuex.Store({
         AUTH_USER(context) {
             if (context.getters.isAuthenticated) {
                 return new Promise((resolve, reject) => {
-                    axios.defaults.headers.common["Authorization"] = 
+                    axios.defaults.headers.common["Authorization"] =
                         "Bearer " + context.state.token;
 
                     axios
                         .get("/api/user")
                         .then(function(response) {
+                            console.log(response);
+
                             context.commit("AUTH_USER", response.data);
 
                             resolve(response);

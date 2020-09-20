@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 import authRoutes from "./modules/auth";
+// import adminRoutes from "./modules/admin";
+// import userRoutes from "./modules/user";
 import dashboardRoutes from "../router/modules/dashboard";
 import departmentsRoutes from "../router/modules/departments";
 import employeesRoutes from "../router/modules/employees";
@@ -21,6 +23,8 @@ import { store } from "../store";
 const baseRoutes = [];
 const routes = baseRoutes.concat(
     authRoutes,
+    // adminRoutes,
+    // userRoutes,
     dashboardRoutes,
     departmentsRoutes,
     employeesRoutes,

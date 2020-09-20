@@ -97,6 +97,10 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        // axios.get("/api/user").then(response => {
+        //     console.log(response);
+        // });
     }
 };
 </script>
