@@ -15,51 +15,48 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="employee"
                                 :rules="rules.employee"
                                 :items="employees"
                                 :error-messages="errors.employee_id"
                                 @input="errors.employee_id = []"
-                                color="success"
                                 item-value="id"
                                 item-text="fullname"
                                 label="Employee *"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="expense_type"
                                 :rules="rules.expense_type"
                                 :items="expense_types"
                                 :error-messages="errors.expense_type_id"
                                 @input="errors.expense_type_id = []"
-                                color="success"
                                 item-value="id"
                                 item-text="name"
                                 label="Expense Type *"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="vendor"
                                 :rules="rules.vendor"
                                 :items="vendors"
                                 :error-messages="errors.vendor_id"
                                 @input="errors.vendor_id = []"
-                                color="success"
                                 item-value="id"
                                 item-text="name"
                                 label="Vendor *"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
                     </v-row>
 
@@ -71,7 +68,6 @@
                                 :counter="100"
                                 :error-messages="errors.description"
                                 @input="errors.description = []"
-                                color="success"
                                 label="Description *"
                                 required
                             ></v-text-field>
@@ -81,8 +77,6 @@
                             <v-menu
                                 ref="menu"
                                 v-model="menu"
-                                :close-on-content-click="false"
-                                :return-value.sync="date"
                                 transition="scale-transition"
                                 offset-y
                                 min-width="290px"
@@ -93,7 +87,6 @@
                                         :rules="rules.date"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
-                                        color="success"
                                         label="Date *"
                                         readonly
                                         v-bind="attrs"
@@ -106,19 +99,6 @@
                                     scrollable
                                     color="success"
                                 >
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="menu = false"
-                                        >Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="$refs.menu.save(date)"
-                                        >OK
-                                    </v-btn>
                                 </v-date-picker>
                             </v-menu>
                         </v-col>
@@ -131,7 +111,6 @@
                                 :rules="rules.receipt_number"
                                 :error-messages="errors.receipt_number"
                                 @input="errors.receipt_number = []"
-                                color="success"
                                 label="Receipt No. *"
                                 required
                             ></v-text-field>
@@ -143,7 +122,6 @@
                                 :rules="rules.amount"
                                 :error-messages="errors.amount"
                                 @input="errors.amount = []"
-                                color="success"
                                 label="Amount *"
                                 required
                             ></v-text-field>
@@ -158,12 +136,11 @@
                                 v-model="remarks"
                                 :error-messages="errors.remarks"
                                 @input="errors.remarks = []"
-                                color="success"
                             ></v-textarea>
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
@@ -249,42 +226,36 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/expense_types")
+                .get("/api/data/expense_types")
                 .then(response => {
                     _this.expense_types = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         loadEmployees() {
             let _this = this;
 
             axios
-                .get("/api/employees")
+                .get("/api/data/employees")
                 .then(response => {
                     _this.employees = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         loadVendors() {
             let _this = this;
 
             axios
-                .get("/api/vendors")
+                .get("/api/data/vendors")
                 .then(response => {
                     _this.vendors = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -325,7 +296,7 @@ export default {
                         _this.$router.push({ name: "admin.expenses.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });

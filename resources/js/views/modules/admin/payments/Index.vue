@@ -132,6 +132,12 @@
                             {{ item }}
                         </td>
                     </template>
+                    <template v-slot:[`item.created_at`]="{ item }">
+                        {{ getHumanDate(item.created_at) }}
+                    </template>
+                    <template v-slot:[`item.updated_at`]="{ item }">
+                        {{ getHumanDate(item.updated_at) }}
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
@@ -147,6 +153,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
     props: {},
     data() {
@@ -262,7 +270,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -298,10 +306,13 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
+        },
+        getHumanDate(date) {
+            return moment(date).fromNow();
         }
     },
     watch: {

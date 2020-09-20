@@ -22,13 +22,12 @@
                                 :error-messages="errors.name[0]"
                                 @input="errors.name = []"
                                 label="Name *"
-                                color="success"
                                 required
                             ></v-text-field>
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 

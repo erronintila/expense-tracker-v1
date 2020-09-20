@@ -20,7 +20,6 @@
                                 :rules="rules.name"
                                 :counter="150"
                                 :error-messages="errors.name"
-                                color="success"
                                 label="Name *"
                                 required
                             ></v-text-field>
@@ -31,7 +30,6 @@
                                 v-model="email"
                                 :rules="rules.email"
                                 :error-messages="errors.email"
-                                color="success"
                                 label="Email Address"
                             ></v-text-field>
                         </v-col>
@@ -42,7 +40,6 @@
                                 :rules="rules.tin"
                                 :error-messages="errors.tin"
                                 :counter="100"
-                                color="success"
                                 label="Tax Identification Number (TIN) *"
                                 required
                             ></v-text-field>
@@ -54,7 +51,6 @@
                                 :rules="rules.contact_person"
                                 :error-messages="errors.contact_person"
                                 :counter="100"
-                                color="success"
                                 label="Contact Person"
                             ></v-text-field>
                         </v-col>
@@ -66,7 +62,6 @@
                                 :counter="30"
                                 :error-messages="errors.mobile_number"
                                 @input="errors.mobile_number = []"
-                                color="success"
                                 label="Mobile Number"
                             ></v-text-field>
                         </v-col>
@@ -79,7 +74,6 @@
                                 :error-messages="errors.telephone_number"
                                 @input="errors.telephone_number = []"
                                 label="Telephone Number"
-                                color="success"
                                 type="number"
                             ></v-text-field>
                         </v-col>
@@ -92,7 +86,6 @@
                                 :error-messages="errors.website"
                                 @input="errors.website = []"
                                 label="Website"
-                                color="success"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -104,7 +97,6 @@
                                 :rules="rules.address"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
-                                color="success"
                                 label="Address"
                                 rows="1"
                             ></v-textarea>
@@ -114,7 +106,6 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-checkbox
-                                color="green"
                                 v-model="is_vat_inclusive"
                                 label="Vat Inclusive"
                                 :error-messages="errors.is_vat_inclusive"
@@ -122,13 +113,13 @@
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="onSave">Save</v-btn>
+                        <v-btn color="success" dark @click="onSave">Save</v-btn>
                         <v-btn to="/admin/vendors">Cancel</v-btn>
                     </v-card-actions>
                 </v-container>
@@ -229,7 +220,7 @@ export default {
                         _this.$router.push({ name: "admin.vendors.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });

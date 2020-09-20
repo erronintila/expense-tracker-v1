@@ -32,9 +32,9 @@ class EmployeeResource extends JsonResource
             'address' => $this->address,
             'job' => $this->job,
             'department' => $this->job->department,
-            'fullname' => $this->last_name . ", " . $this->first_name,
-            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:m:s'),
-            'updated_at' => Carbon::parse($this->updated_at)->format('Y-m-d H:m:s'),
+            'fullname' => $this->last_name . ", " . $this->first_name . " " . $this->middle_name . " " . $this->suffix,
+            'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
+            'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
         ];
     }
 }

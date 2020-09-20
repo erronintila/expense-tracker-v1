@@ -129,7 +129,35 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            {{ item }}
+                            <v-container>
+                                <table>
+                                    <tr>
+                                        <td><strong>Code</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Telephone #</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.telephone_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Website</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.website }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Address</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.address }}</td>
+                                    </tr>
+                                </table>
+                            </v-container>
                         </td>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
@@ -264,7 +292,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -300,7 +328,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });

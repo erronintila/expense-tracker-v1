@@ -143,7 +143,15 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $department = Department::whereIn('id', $request->ids)->delete();
+        if (request()->has("ids")) {
+            foreach ($request->ids as $id) {
+                $department = Department::findOrFail($id);
+                $department->delete();
+            }
+        } else {
+            $department = Department::findOrFail($id);
+            $department->delete();
+        }
 
         return response(
             [

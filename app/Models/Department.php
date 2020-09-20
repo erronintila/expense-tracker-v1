@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use JsonException;
 
 class Department extends Model
 {
@@ -35,6 +37,27 @@ class Department extends Model
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($department) {
+            if ($department->jobs()->count() > 0) {
+                
+                throw new JsonException("Model has child records");
+            
+                // abort("Model has child records", 401);
+            
+                // abort(response()->json(['Model has child records'], 401));
+            
+                // return abort(500, 'Model has child records');
+            
+                // return response("Model has child records", 500);
+                // throw new Exception("Model have child records");
+            }
+        });
+    }
 
     /**
      * Displays the jobs associated with department.

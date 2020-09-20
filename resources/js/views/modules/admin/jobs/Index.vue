@@ -59,6 +59,15 @@
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="department"
+                                    :items="departments"
+                                    item-text="name"
+                                    item-value="id"
+                                    label="Department"
+                                ></v-select>
+                            </v-list-item>
                         </v-list>
                     </v-card>
                 </v-menu>
@@ -126,9 +135,6 @@
                     class="elevation-0"
                 >
                     <template v-slot:[`item.actions`]="{ item }">
-                        <!-- <v-icon small class="mr-2" @click="onShow(item)">
-                            mdi-eye
-                        </v-icon> -->
                         <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
                         </v-icon>
@@ -148,11 +154,11 @@ export default {
             headers: [
                 { text: "Name", value: "name" },
                 { text: "Department", value: "department.name" },
-                // { text: "Created", value: "created_at" },
-                // { text: "Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false }
             ],
             items: [],
+            department: 0,
+            departments: [],
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
@@ -176,6 +182,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
+                let department_id = _this.department;
                 let status = _this.status;
 
                 axios
@@ -186,7 +193,8 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            status: status
+                            status: status,
+                            department_id: department_id
                         }
                     })
                     .then(response => {
@@ -204,8 +212,26 @@ export default {
                     });
             });
         },
+        loadDepartments() {
+            let _this = this;
+
+            axios
+                .get("/api/data/departments")
+                .then(response => {
+                    _this.departments = response.data.data;
+                    _this.departments.unshift({
+                        id: 0,
+                        name: "All Departments"
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.loadDepartments();
         },
         onShow(item) {
             this.$router.push({
@@ -254,7 +280,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -290,7 +316,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -312,7 +338,8 @@ export default {
             return {
                 ...this.options,
                 query: this.search,
-                query: this.status
+                query: this.status,
+                query: this.department
             };
         }
     },
@@ -325,6 +352,8 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        this.loadDepartments();
     }
 };
 </script>

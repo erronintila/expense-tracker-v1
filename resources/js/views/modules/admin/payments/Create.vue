@@ -2,13 +2,13 @@
     <v-app>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <v-btn to="/admin/users" class="mr-3" icon>
+                <v-btn :to="{ name: 'admin.payments.index' }" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">New User</h4>
+                <h4 class="title green--text">New Payment</h4>
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
@@ -16,75 +16,242 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="name"
-                                :rules="rules.name"
+                                v-model="description"
+                                :rules="rules.description"
                                 :counter="100"
-                                label="Name"
+                                label="Description *"
+                                required
+                            ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-menu
+                                ref="menu"
+                                v-model="menu"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date"
+                                        :rules="rules.date"
+                                        :error-messages="errors.date"
+                                        @input="errors.date = []"
+                                        label="Date *"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                    v-model="date"
+                                    no-title
+                                    scrollable
+                                    color="success"
+                                >
+                                </v-date-picker>
+                            </v-menu>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-menu
+                                v-model="menu_payee"
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                offset-y
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="payee"
+                                        :rules="rules.payee"
+                                        :error-messages="errors.payee"
+                                        @input="errors.payee = []"
+                                        label="Payee *"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </template>
+
+                                <v-card>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col cols="12" md="8">
+                                                <v-text-field
+                                                    v-model="payee"
+                                                    :rules="rules.payee"
+                                                    :counter="100"
+                                                    label="Payee *"
+                                                    required
+                                                ></v-text-field>
+                                            </v-col>
+
+                                            <v-col cols="12" md="4">
+                                                <v-text-field
+                                                    v-model="payee_phone"
+                                                    :rules="rules.payee_phone"
+                                                    :counter="100"
+                                                    label="Payee Phone No."
+                                                    required
+                                                ></v-text-field>
+                                            </v-col>
+
+                                            <v-col cols="12">
+                                                <v-text-field
+                                                    v-model="payee_address"
+                                                    :rules="rules.payee_address"
+                                                    :counter="100"
+                                                    label="Payee Address"
+                                                    required
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card>
+                            </v-menu>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="voucher_no"
+                                :rules="rules.voucher_no"
+                                :counter="100"
+                                label="Voucher No."
                                 required
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="username"
-                                :rules="rules.username"
-                                :counter="20"
-                                label="Username"
+                                v-model="amount"
+                                :rules="rules.amount"
+                                :counter="100"
+                                label="Amount"
                                 required
                             ></v-text-field>
                         </v-col>
+                    </v-row>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="email"
-                                :rules="rules.email"
-                                label="Email Address"
-                                required
-                            ></v-text-field>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-data-table
+                                elevation="0"
+                                v-model="selected"
+                                :headers="headers"
+                                :items="items"
+                                :items-per-page="5"
+                                :search="search"
+                                item-key="id"
+                                show-select
+                                single-expand
+                                show-expand
+                                class="elevation-0"
+                            >
+                                <template
+                                    slot="body.append"
+                                    v-if="items.length > 0"
+                                >
+                                    <tr class="green--text">
+                                        <td class="title">Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <strong>{{ total }}</strong>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </template>
+                                <template v-slot:top>
+                                    <v-row>
+                                        <v-col cols="12" md="4">
+                                            Expense Reports
+                                        </v-col>
+
+                                        <v-spacer></v-spacer>
+
+                                        <v-col cols="12" md="4">
+                                            <DateRangePicker
+                                                :preset="preset"
+                                                :presets="presets"
+                                                :value="date_range"
+                                                :solo="true"
+                                                :buttonType="true"
+                                                :buttonColor="'white'"
+                                                :buttonDark="false"
+                                                @updateDates="updateDates"
+                                            ></DateRangePicker>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col>
+                                            <v-text-field
+                                                v-model="search"
+                                                append-icon="mdi-magnify"
+                                                label="Search"
+                                                single-line
+                                                hide-details
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </template>
+                                <template v-slot:[`item.employee`]="{ item }">
+                                    {{
+                                        item.employee.last_name +
+                                            " " +
+                                            item.employee.first_name +
+                                            " " +
+                                            item.employee.suffix
+                                    }}
+                                </template>
+                                <template
+                                    v-slot:expanded-item="{ headers, item }"
+                                >
+                                    <td :colspan="headers.length">
+                                        <v-container>
+                                            <v-card
+                                                class="mx-auto"
+                                                tile
+                                                flat
+                                                :key="item.id"
+                                            >
+                                                <div>
+                                                    <strong>Expenses</strong>
+                                                </div>
+                                                <div
+                                                    v-for="item in item.expenses"
+                                                    :key="item.id"
+                                                >
+                                                    {{
+                                                        `${item.description} (${item.expense_type.name}): ${item.amount}`
+                                                    }}
+                                                </div>
+                                            </v-card>
+                                        </v-container>
+                                    </td>
+                                </template>
+                            </v-data-table>
                         </v-col>
+                    </v-row>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="password"
-                                :append-icon="
-                                    showPassword ? 'mdi-eye' : 'mdi-eye-off'
-                                "
-                                :rules="rules.password"
-                                :type="showPassword ? 'text' : 'password'"
-                                label="Password"
-                                hint="At least 8 characters"
-                                required
-                                @click:append="showPassword = !showPassword"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="password_confirmation"
-                                :append-icon="
-                                    showPasswordConfirmation
-                                        ? 'mdi-eye'
-                                        : 'mdi-eye-off'
-                                "
-                                :rules="rules.password_confirmation"
-                                :type="
-                                    showPasswordConfirmation
-                                        ? 'text'
-                                        : 'password'
-                                "
-                                label="Re-type Password"
-                                required
-                                @click:append="
-                                    showPasswordConfirmation = !showPasswordConfirmation
-                                "
-                            ></v-text-field>
+                    <v-row>
+                        <v-col cols="12" md="6">
+                            <v-textarea
+                                v-model="remarks"
+                                label="Remarks"
+                                rows="1"
+                            >
+                            </v-textarea>
                         </v-col>
                     </v-row>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn to="/admin/users">Cancel</v-btn>
+                        <v-btn :to="{ name: 'admin.payments.index' }">
+                            Cancel
+                        </v-btn>
                     </v-card-actions>
                 </v-container>
             </v-form>
@@ -93,44 +260,98 @@
 </template>
 
 <script>
+import moment from "moment";
+import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+
 export default {
+    components: {
+        DateRangePicker
+    },
     data() {
         return {
             valid: false,
-            showPassword: false,
-            showPasswordConfirmation: false,
-            name: "",
-            username: "",
-            email: "",
-            password: "",
-            password_confirmation: "",
+            menu: false,
+            menu_payee: false,
+            search: "",
+            date_range: [
+                moment()
+                    .startOf("week")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("week")
+                    .format("YYYY-MM-DD")
+            ],
+            preset: "",
+            presets: [
+                "Today",
+                "Last 7 Days",
+                "Last 30 Days",
+                "This Week",
+                "This Month",
+                "This Year",
+            ],
+            code: "",
+            reference_no: "",
+            voucher_no: "",
+            description: "",
+            date: "",
+            cheque_no: "",
+            cheque_date: "",
+            amount: "",
+            payee: "",
+            payee_address: "",
+            payee_phone: "",
+            remarks: "",
+            notes: "",
+            headers: [
+                { text: "Employee", value: "employee" },
+                { text: "Description", value: "description" },
+                { text: "Amount", value: "total" },
+                { text: "Created", value: "created_at" },
+                { text: "", value: "data-table-expand" }
+            ],
+            items: [],
+            selected: [],
+            total: 0,
             rules: {
                 name: [
                     v => !!v || "Name is required",
                     v =>
                         v.length <= 100 ||
                         "Name must be less than 100 characters"
-                ],
-                username: [
-                    v => !!v || "Username is required",
-                    v =>
-                        v.length <= 50 ||
-                        "Username must be less than 20 characters"
-                ],
-                email: [
-                    v => !!v || "E-mail is required",
-                    v => /.+@.+/.test(v) || "E-mail must be valid"
-                ],
-                password: [v => !!v || "Password is required"],
-                password_confirmation: [
-                    v => !!v || "Confirm Password is required"
                 ]
-            }
+            },
+            errors: {}
         };
     },
     methods: {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+        },
+        updateDates(e) {
+            this.date_range = e;
+            this.loadExpenseReports();
+        },
+        loadExpenseReports() {
+            let start_date = this.date_range[0];
+            let end_date = this.date_range[1];
+            let _this = this;
+
+            axios
+                .get("/api/data/expense_reports", {
+                    params: {
+                        create_payment: true,
+                        start_date: start_date,
+                        end_date: end_date
+                    }
+                })
+                .then(response => {
+                    _this.items = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
         },
         onSave() {
             let _this = this;
@@ -139,18 +360,14 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 axios
-                    .post("/api/users", {
-                        name: _this.name,
-                        username: _this.username,
-                        email: _this.email,
-                        password: _this.password,
-                        password_confirmation: _this.password_confirmation
+                    .post("/api/payments", {
+                        // name: _this.name
                     })
                     .then(function(response) {
                         _this.onRefresh();
 
                         _this.$dialog.message.success(
-                            "User created successfully.",
+                            "Payment created successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
@@ -158,16 +375,26 @@ export default {
                         );
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
                     });
 
                 return;
             }
         }
     },
+    watch: {
+        selected() {
+            this.total = this.selected.reduce(
+                (total, item) => total + item.total,
+                0
+            );
+        }
+    },
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        this.loadExpenseReports();
     }
 };
 </script>

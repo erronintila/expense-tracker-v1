@@ -53,10 +53,36 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
+                                <DateRangePicker
+                                    :preset="preset"
+                                    :presets="presets"
+                                    :value="date_range"
+                                    @updateDates="updateDates"
+                                ></DateRangePicker>
+                            </v-list-item>
+                            <v-list-item>
                                 <v-select
                                     v-model="status"
                                     :items="statuses"
                                     label="Status"
+                                ></v-select>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="employee"
+                                    :items="employees"
+                                    item-text="fullname"
+                                    item-value="id"
+                                    label="Employee"
+                                ></v-select>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="expense_type"
+                                    :items="expense_types"
+                                    item-text="name"
+                                    item-value="id"
+                                    label="Expense Types"
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -129,16 +155,59 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            {{item}}
+                            <v-container>
+                                <table>
+                                    <tr>
+                                        <td><strong>Type</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.expense_type.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Receipt</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.receipt_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Vendor</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.vendor.name }}</td>
+                                    </tr>
+                                </table>
+                            </v-container>
                         </td>
                     </template>
+                    <template v-slot:[`item.created_at`]="{ item }">
+                        {{ getHumanDate(item.created_at) }}
+                    </template>
+                    <template v-slot:[`item.amount`]="{ item }">
+                        {{ formatNumber(item.amount) }}
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onShow(item)">
+                        <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
-                        </v-icon>
+                        </v-icon> -->
                         <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
                         </v-icon>
+                    </template>
+                    <template slot="body.append" v-if="items.length > 0">
+                        <tr class="green--text hidden-md-and-up">
+                            <td class="title">
+                                Total: <strong>{{ totalAmount }}</strong>
+                            </td>
+                        </tr>
+                        <tr class="green--text hidden-sm-and-down">
+                            <td class="title">Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <strong>{{ totalAmount }}</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     </template>
                 </v-data-table>
             </v-card-text>
@@ -147,27 +216,61 @@
 </template>
 
 <script>
+import moment from "moment";
+import numeral from "numeral";
+import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+
 export default {
-    props: {},
+    components: {
+        DateRangePicker
+    },
     data() {
         return {
             loading: true,
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ],
+            preset: "",
+            presets: [
+                "Today",
+                "Yesterday",
+                "Last 7 Days",
+                "Last 30 Days",
+                "This Week",
+                "This Month",
+                "This Quarter",
+                "This Year",
+                "Last Week",
+                "Last Month",
+                "Last Quarter",
+                "Last Year",
+                "Last 5 Years"
+            ],
             headers: [
-                { text: "Expense", value: "expense_type.name" },
+                { text: "Expense", value: "description" },
                 { text: "Employee", value: "employee_name" },
-                // { text: "Description", value: "description" },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Created", value: "created" },
+                { text: "Created", value: "created_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
+            employee: 0,
+            employees: [],
+            expense_type: 0,
+            expense_types: [],
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
             search: "",
             totalItems: 0,
+            totalAmount: 0,
             options: {
                 sortBy: ["created_at"],
                 sortDesc: [true],
@@ -177,6 +280,9 @@ export default {
         };
     },
     methods: {
+        updateDates(e) {
+            this.date_range = e;
+        },
         getDataFromApi() {
             let _this = this;
 
@@ -187,6 +293,9 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
+                let employee_id = _this.employee;
+                let expense_type_id = _this.expense_type;
+                let range = _this.date_range;
 
                 axios
                     .get("/api/expenses", {
@@ -196,7 +305,11 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            status: status
+                            status: status,
+                            employee_id: employee_id,
+                            expense_type_id: expense_type_id,
+                            start_date: range[0],
+                            end_date: range[1]
                         }
                     })
                     .then(response => {
@@ -214,8 +327,43 @@ export default {
                     });
             });
         },
+        loadEmployees() {
+            let _this = this;
+
+            axios
+                .get("/api/data/employees")
+                .then(response => {
+                    _this.employees = response.data.data;
+                    _this.employees.unshift({
+                        id: 0,
+                        fullname: "All Employees"
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        loadExpenseTypes() {
+            let _this = this;
+
+            axios
+                .get("/api/data/expense_types")
+                .then(response => {
+                    _this.expense_types = response.data.data;
+                    _this.expense_types.unshift({
+                        id: 0,
+                        name: "All Expense Types"
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.loadEmployees();
+            this.loadExpenseTypes();
         },
         onShow(item) {
             this.$router.push({
@@ -264,7 +412,7 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
@@ -300,10 +448,16 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            console.log(error.response);
+                            console.log(error);
                         });
                 }
             });
+        },
+        getHumanDate(date) {
+            return moment(date).fromNow();
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     watch: {
@@ -315,6 +469,11 @@ export default {
                 });
             },
             deep: true
+        },
+        items() {
+            this.totalAmount = this.formatNumber(
+                this.items.reduce((total, item) => total + item.amount, 0)
+            );
         }
     },
     computed: {
@@ -322,7 +481,10 @@ export default {
             return {
                 ...this.options,
                 query: this.search,
-                query: this.status
+                query: this.status,
+                query: this.employee,
+                query: this.expense_type,
+                query: this.date_range
             };
         }
     },
@@ -335,6 +497,9 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        this.loadEmployees();
+        this.loadExpenseTypes();
     }
 };
 </script>

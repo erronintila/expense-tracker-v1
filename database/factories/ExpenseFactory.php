@@ -53,7 +53,7 @@ $factory->define(Expense::class, function (Faker $faker) {
         'receipt_number' => Str::random(10),
         'date' => $dates,
         'expense_type_id' => $expense_type->id,
-        'employee_id' => rand(1, 20),
-        'vendor_id' => rand(1, 20),
+        'employee_id' => rand(1, 10),
+        'vendor_id' => rand(1, 10),
     ];
 });

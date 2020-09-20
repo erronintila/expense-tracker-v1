@@ -91,7 +91,7 @@ export const store = new Vuex.Store({
         AUTH_USER(context) {
             if (context.getters.isAuthenticated) {
                 return new Promise((resolve, reject) => {
-                    axios.defaults.headers.common["Authorization"] =
+                    axios.defaults.headers.common["Authorization"] = 
                         "Bearer " + context.state.token;
 
                     axios

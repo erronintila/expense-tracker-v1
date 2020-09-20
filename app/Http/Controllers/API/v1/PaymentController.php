@@ -19,7 +19,7 @@ class PaymentController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            "code" => ['required', 'string', 'max:255'],
+            "code" => ['nullable', 'string', 'max:255'],
             "reference_no" => ['nullable', 'max:255'],
             "voucher_no" => ['nullable', 'max:255'],
             "description" => ['required', 'string', 'max:255'],

@@ -8,63 +8,30 @@
             <v-card-subtitle> </v-card-subtitle>
 
             <v-container>
+                <v-btn @click="updateDonut">Update</v-btn>
+
                 <v-row>
-                    <v-col cols="12" md="4">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                outlined
-                                rounded
-                                class="mx-auto rounded-xl"
-                                :elevation="hover ? 3 : 0"
-                                to="/admin/profile"
-                            >
-                                <v-card-title>User Profile</v-card-title>
-                                <v-card-subtitle>
-                                    Secondary text
-                                </v-card-subtitle>
-                                <v-card-text>
-                                    Go to user profile and configure.
-                                </v-card-text>
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                outlined
-                                rounded
-                                class="mx-auto rounded-lg"
-                                :elevation="hover ? 3 : 0"
-                                to="/admin/expenses"
-                            >
-                                <v-card-title>Expenses</v-card-title>
-                                <v-card-subtitle>
-                                    Secondary text
-                                </v-card-subtitle>
-                                <v-card-text>
-                                    Track and manage expenses.
-                                </v-card-text>
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                outlined
-                                rounded
-                                class="mx-auto rounded-xl"
-                                :elevation="hover ? 3 : 0"
-                                to="/admin/employees"
-                            >
-                                <v-card-title>Employees</v-card-title>
-                                <v-card-subtitle>
-                                    Secondary text
-                                </v-card-subtitle>
-                                <v-card-text>
-                                    Modify employee details.
-                                </v-card-text>
-                            </v-card>
-                        </v-hover>
+                    <v-col cols="12">
+                        <DoughnutChart
+                            ref="donut_chart"
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></DoughnutChart>
+
+                        <PieChart
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></PieChart>
+
+                        <BarChart
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></BarChart>
+
+                        <LineChart
+                            :data="chartData"
+                            :options="chartOptions"
+                        ></LineChart>
                     </v-col>
                 </v-row>
             </v-container>
@@ -73,12 +40,63 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import DoughnutChart from "./components/DoughnutChart";
+import PieChart from "./components/PieChart";
+import BarChart from "./components/BarChart";
+import LineChart from "./components/LineChart";
+import randomcolor from "randomcolor";
 
 export default {
-    computed: {
-        // ...mapGetters(["currentUser"])
+    components: {
+        DoughnutChart,
+        PieChart,
+        BarChart,
+        LineChart
     },
-    created() {}
+    data() {
+        return {
+            chartOptions: {
+                hoverBorderWidth: 20
+            },
+            chartData: {
+                labels: ["Green", "Red", "Blue"],
+                datasets: [
+                    {
+                        label: "Data One",
+                        backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+                        data: [1, 10, 5]
+                    }
+                ]
+            }
+        };
+    },
+    methods: {
+        updateChart() {
+            this.$refs.donut_chart.update();
+        },
+        updateDonut() {
+            const currentDataset = this.chartData.datasets[0];
+            // this.chartData.labels.push(
+            //     `Skill ${currentDataset.data.length + 1}`
+            // );
+            // currentDataset.data.push(20);
+            // currentDataset.backgroundColor.push("#44B883");
+            // this.updateChart();
+
+            this.chartData.labels = ["Blue"];
+            this.chartData.datasets = [
+                {
+                    label: "000000000000000",
+                    backgroundColor: [randomcolor(), randomcolor()],
+                    data: [40, 60]
+                }
+            ];
+            this.$refs.donut_chart.update();
+        }
+    },
+    created() {
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
+    }
 };
 </script>

@@ -27,22 +27,38 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResources(
         [
             'departments' => 'API\v1\DepartmentController',
-    
+
             'employees' => 'API\v1\EmployeeController',
-    
+
             'expense_types' => 'API\v1\ExpenseTypeController',
-    
+
             'expenses' => 'API\v1\ExpenseController',
-    
+
             'jobs' => 'API\v1\JobController',
-    
+
             'payments' => 'API\v1\PaymentController',
-    
+
             'expense_reports' => 'API\v1\ExpenseReportController',
-    
+
             'users' => 'API\v1\UserController',
-    
+
             'vendors' => 'API\v1\VendorController',
         ]
     );
 });
+
+Route::get('/data/employees', 'API\v1\DataController@employees');
+
+Route::get('/data/vendors', 'API\v1\DataController@vendors');
+
+Route::get('/data/departments', 'API\v1\DataController@departments');
+
+Route::get('/data/expense_types', 'API\v1\DataController@expense_types');
+
+Route::get('/data/jobs', 'API\v1\DataController@jobs');
+
+Route::get('/data/expenses', 'API\v1\DataController@expenses');
+
+Route::get('/data/expense_reports', 'API\v1\DataController@expense_reports');
+
+Route::get('/data/test', 'API\v1\DataController@test');

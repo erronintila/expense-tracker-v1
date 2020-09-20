@@ -15,17 +15,16 @@
                 <v-container>
                     <v-row>
                         <v-col class="d-flex" cols="12" sm="6">
-                            <v-select
+                            <v-autocomplete
                                 v-model="department"
                                 :items="departments"
                                 :rules="rules.department"
                                 :error-messages="errors.department_id"
                                 @input="errors.department_id = []"
-                                color="success"
                                 item-value="id"
                                 item-text="name"
                                 label="Department *"
-                            ></v-select>
+                            ></v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="6">
@@ -35,14 +34,13 @@
                                 :counter="100"
                                 :error-messages="errors.name"
                                 @input="errors.name = []"
-                                color="success"
                                 label="Name *"
                                 required
                             ></v-text-field>
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
@@ -102,7 +100,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/departments")
+                .get("/api/data/departments")
                 .then(response => {
                     let data = response.data.data.map(item => ({
                         id: item.id,
@@ -113,8 +111,6 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         // onRefresh() {
@@ -150,7 +146,7 @@ export default {
                         _this.$router.push({ name: "admin.jobs.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });

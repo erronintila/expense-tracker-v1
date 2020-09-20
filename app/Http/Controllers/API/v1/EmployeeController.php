@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -48,6 +49,8 @@ class EmployeeController extends Controller
         $sortType = $request->sortType ?? "asc";
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
+        $sortBy = $sortBy == "fullname" ? "last_name" : $sortBy;
+
         $employees = Employee::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
@@ -58,6 +61,19 @@ class EmployeeController extends Controller
                 default:
                     $employees = $employees;
                     break;
+            }
+        }
+
+        if (request()->has('department_id')) {
+            if ($request->department_id > 0) {
+                $jobs = Job::where('department_id', $request->department_id);
+                $employees = $employees->whereIn('job_id', $jobs->pluck('id'));
+            }
+        }
+
+        if (request()->has('job_id')) {
+            if ($request->job_id > 0) {
+                $employees = $employees->where("job_id", $request->job_id);
             }
         }
 

@@ -15,7 +15,7 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="job"
                                 :rules="rules.job"
                                 :items="jobs"
@@ -24,10 +24,9 @@
                                 item-text="name"
                                 item-value="id"
                                 label="Job Designation *"
-                                color="success"
                                 required
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
                     </v-row>
 
@@ -40,7 +39,6 @@
                                 :error-messages="errors.first_name"
                                 @input="errors.first_name = []"
                                 label="First Name *"
-                                color="success"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -52,7 +50,6 @@
                                 :counter="100"
                                 :error-messages="errors.middle_name"
                                 @input="errors.middle_name = []"
-                                color="success"
                                 label="Middle Name"
                             ></v-text-field>
                         </v-col>
@@ -65,7 +62,6 @@
                                 :error-messages="errors.last_name"
                                 @input="errors.last_name = []"
                                 label="Last Name *"
-                                color="success"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -78,7 +74,6 @@
                                 :items="['Jr', 'Sr', 'II', 'III']"
                                 :error-messages="errors.suffix"
                                 @input="errors.suffix = []"
-                                color="success"
                                 label="Suffix"
                             ></v-combobox>
                         </v-col>
@@ -91,7 +86,6 @@
                                 :error-messages="errors.gender"
                                 @input="errors.gender = []"
                                 label="Gender *"
-                                color="success"
                                 required
                             >
                             </v-select>
@@ -101,8 +95,6 @@
                             <v-menu
                                 ref="menu"
                                 v-model="menu"
-                                :close-on-content-click="false"
-                                :return-value.sync="birthdate"
                                 transition="scale-transition"
                                 offset-y
                                 min-width="290px"
@@ -114,7 +106,6 @@
                                         :error-messages="errors.birthdate"
                                         @input="errors.birthdate = []"
                                         label="Birthdate *"
-                                        color="success"
                                         readonly
                                         v-bind="attrs"
                                         v-on="on"
@@ -126,21 +117,6 @@
                                     scrollable
                                     color="success"
                                 >
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="menu = false"
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        text
-                                        color="success"
-                                        @click="$refs.menu.save(birthdate)"
-                                    >
-                                        OK
-                                    </v-btn>
                                 </v-date-picker>
                             </v-menu>
                         </v-col>
@@ -152,7 +128,6 @@
                                 :counter="30"
                                 :error-messages="errors.mobile_number"
                                 @input="errors.mobile_number = []"
-                                color="success"
                                 label="Mobile Number *"
                             ></v-text-field>
                         </v-col>
@@ -165,8 +140,6 @@
                                 :error-messages="errors.telephone_number"
                                 @input="errors.telephone_number = []"
                                 label="Telephone Number"
-                                color="success"
-                                type="number"
                             ></v-text-field>
                         </v-col>
 
@@ -177,7 +150,6 @@
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
                                 label="Email Address *"
-                                color="success"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -189,14 +161,13 @@
                                 :rules="rules.address"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
-                                color="success"
                                 label="Address *"
                                 rows="1"
                             ></v-textarea>
                         </v-col>
                     </v-row>
 
-                    <small style="opacity: 0.5">
+                    <small class="text--secondary">
                         * indicates required field
                     </small>
 
@@ -216,11 +187,11 @@ export default {
     data() {
         return {
             valid: false,
-            first_name: null,
+            first_name: "",
             middle_name: "",
-            last_name: null,
-            suffix: null,
-            gender: null,
+            last_name: "",
+            suffix: "",
+            gender: "",
             birthdate: null,
             job: null,
             jobs: [],
@@ -252,9 +223,11 @@ export default {
                 birthdate: [v => !!v || "Birthdate is required"],
                 job: [v => !!v || "Job designation is required"],
                 mobile_number: [v => !!v || "Mobile number is required"],
-                telephone_number: [v =>
+                telephone_number: [
+                    v =>
                         (v !== null && v.length <= 30) ||
-                        "Telephone number must be less than 30 characters"],
+                        "Telephone number must be less than 30 characters"
+                ],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail is not valid"
@@ -305,14 +278,12 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/jobs")
+                .get("/api/data/jobs")
                 .then(response => {
                     _this.jobs = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
-
-                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -353,7 +324,7 @@ export default {
                         _this.$router.push({ name: "admin.employees.index" });
                     })
                     .catch(function(error) {
-                        console.log(error.response);
+                        console.log(error);
 
                         _this.errors = error.response.data.errors;
                     });
@@ -367,7 +338,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
         this.loadJobs();
-    this.getData();
+        this.getData();
     }
 };
 </script>
