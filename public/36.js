@@ -116,6 +116,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -124,12 +134,14 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       showPassword: false,
       showPasswordConfirmation: false,
+      is_admin: false,
       name: "",
       username: "",
       email: "",
       password: "",
       password_confirmation: "",
       rules: {
+        is_admin: [],
         name: [function (v) {
           return !!v || "Name is required";
         }, function (v) {
@@ -157,6 +169,7 @@ __webpack_require__.r(__webpack_exports__);
         }]
       },
       errors: {
+        is_admin: [],
         name: [],
         username: [],
         email: [],
@@ -180,7 +193,8 @@ __webpack_require__.r(__webpack_exports__);
           username: _this.username,
           email: _this.email,
           password: _this.password,
-          password_confirmation: _this.password_confirmation
+          password_confirmation: _this.password_confirmation,
+          is_admin: _this.is_admin
         }).then(function (response) {
           // _this.onRefresh();
           _this.$dialog.message.success("User created successfully.", {
@@ -423,6 +437,33 @@ var render = function() {
                                 _vm.password_confirmation = $$v
                               },
                               expression: "password_confirmation"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-checkbox", {
+                            attrs: {
+                              label: "Is Administrator",
+                              "error-messages": _vm.errors.is_admin
+                            },
+                            model: {
+                              value: _vm.is_admin,
+                              callback: function($$v) {
+                                _vm.is_admin = $$v
+                              },
+                              expression: "is_admin"
                             }
                           })
                         ],

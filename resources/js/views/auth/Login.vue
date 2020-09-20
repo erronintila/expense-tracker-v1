@@ -9,12 +9,12 @@
                 Launch Application
                 <v-icon right>mdi-open-in-new</v-icon>
             </v-btn> -->
-            <v-overlay :value="overlay" opacity="100" color="success">
+            <!-- <v-overlay :value="overlay" opacity="100" color="success">
                 <v-progress-circular
                     indeterminate
                     size="80"
                 ></v-progress-circular>
-            </v-overlay>
+            </v-overlay> -->
 
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
@@ -82,7 +82,7 @@ export default {
     name: "login",
     data() {
         return {
-            overlay: false,
+            // overlay: false,
             username: "",
             email: "",
             password: "",

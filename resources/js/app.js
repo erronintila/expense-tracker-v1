@@ -17,8 +17,6 @@ import "vuetify/dist/vuetify.min.css";
 import VuetifyConfirm from "vuetify-confirm";
 import VuetifyDialog from "vuetify-dialog";
 import colors from "vuetify/lib/util/colors";
-import VMdDateRangePicker from "v-md-date-range-picker";
-// import "./assets/styles/md-date-range-picker.css";
 
 /**
  * Load Instances
@@ -27,16 +25,7 @@ const vuetify = new Vuetify({
     theme: {
         themes: {
             light: {
-                primary: colors.green,
-
-                // // default colors
-                // primary: '#1976D2',
-                // secondary: "#424242",
-                // accent: "#82B1FF",
-                // error: "#FF5252",
-                // info: "#2196F3",
-                // success: "#4CAF50",
-                // warning: "#FFC107"
+                primary: colors.green
             }
         }
     }
@@ -54,8 +43,6 @@ Vue.use(VuetifyDialog, {
         vuetify
     }
 });
-Vue.use(VMdDateRangePicker);
-// Vue.use(moment);
 
 /**
  * Import Vue components/files

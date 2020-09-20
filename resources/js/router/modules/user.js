@@ -3,7 +3,10 @@ const userRoutes = [
     {
         path: "/",
         name: "home",
-        // component: () => import("../../views/modules/admin/reports/Index.vue"),
+        component: () => import("../../views/modules/user/Index.vue"),
+        meta: {
+            requiresAuth: true,
+        },
         children: [
             /**
              *
@@ -12,59 +15,60 @@ const userRoutes = [
              */
             {
                 path: "/profile",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            /**
-             *
-             * Expenses
-             *
-             */
-            {
-                path: "/expenses",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            {
-                path: "/expenses/create",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            {
-                path: "/expenses/:id",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            {
-                path: "/expenses/:id/edit",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            /**
-             *
-             * Expense Reports
-             *
-             */
-            {
-                path: "/expense_reports",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            {
-                path: "/expense_reports/create",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            {
-                path: "/expense_reports/:id",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
-            },
-            {
-                path: "/expense_reports/:id/edit",
-                name: "admin.dashboard.index",
-                // component: () => import("../components/user/Profile")
+                name: "profile",
+                component: () =>
+                    import("../../views/modules/user/profile/Index.vue")
             }
+            // /**
+            //  *
+            //  * Expenses
+            //  *
+            //  */
+            // {
+            //     path: "/expenses",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // },
+            // {
+            //     path: "/expenses/create",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // },
+            // {
+            //     path: "/expenses/:id",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // },
+            // {
+            //     path: "/expenses/:id/edit",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // },
+            // /**
+            //  *
+            //  * Expense Reports
+            //  *
+            //  */
+            // {
+            //     path: "/expense_reports",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // },
+            // {
+            //     path: "/expense_reports/create",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // },
+            // {
+            //     path: "/expense_reports/:id",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // },
+            // {
+            //     path: "/expense_reports/:id/edit",
+            //     name: "admin.dashboard.index",
+            //     // component: () => import("../components/user/Profile")
+            // }
         ],
         meta: {
             requiresAuth: true

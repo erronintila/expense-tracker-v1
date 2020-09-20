@@ -4,7 +4,7 @@ const routes = [
         name: "login",
         component: () => import("../../views/auth/Login"),
         meta: {
-            requiresVisitor: true
+            requiresVisitor: true,
         }
     },
     {

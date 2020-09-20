@@ -5,7 +5,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         token: localStorage.getItem("access_token") || null,
-        user: {}
+        user: JSON.parse(localStorage.getItem("user")) || null
     },
     getters: {
         getToken(state) {
@@ -16,6 +16,10 @@ export const store = new Vuex.Store({
         },
         currentUser(state) {
             return state.user;
+        },
+        isAdmin(state) {
+            return state.user.is_admin == 1;
+            // return state.user.is_admin == 1;
         }
     },
     mutations: {
@@ -40,19 +44,21 @@ export const store = new Vuex.Store({
                         password: payload.password
                     })
                     .then(function(response) {
-                        console.log(response);
-
                         let token = response.data.access_token;
-
                         let user = response.data.user;
+
+                        localStorage.removeItem("user");
+                        localStorage.setItem("user", JSON.stringify(user));
+
+                        context.commit("AUTH_USER", JSON.stringify(user));
+
+                        context.dispatch("AUTH_USER");
 
                         localStorage.setItem("access_token", token);
 
                         context.commit("AUTH_LOGIN", token);
 
-                        context.commit("AUTH_USER", user);
-
-                        // context.dispatch("AUTH_USER");
+                        // context.commit("AUTH_USER", user);
 
                         resolve(response);
                     })
@@ -74,6 +80,7 @@ export const store = new Vuex.Store({
                     axios
                         .post("/api/logout")
                         .then(function(response) {
+                            localStorage.removeItem("user");
                             localStorage.removeItem("access_token");
 
                             context.commit("AUTH_LOGOUT");
@@ -81,6 +88,7 @@ export const store = new Vuex.Store({
                             resolve(response);
                         })
                         .catch(function(error) {
+                            localStorage.removeItem("user");
                             localStorage.removeItem("access_token");
 
                             context.commit("AUTH_LOGOUT");
@@ -99,9 +107,12 @@ export const store = new Vuex.Store({
                     axios
                         .get("/api/user")
                         .then(function(response) {
-                            console.log(response);
+                            let user = response.data;
 
-                            context.commit("AUTH_USER", response.data);
+                            localStorage.removeItem("user");
+                            localStorage.setItem("user", JSON.stringify(user));
+
+                            context.commit("AUTH_USER", JSON.stringify(user));
 
                             resolve(response);
                         })

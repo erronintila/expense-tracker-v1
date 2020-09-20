@@ -92,7 +92,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "login",
   data: function data() {
     return {
-      overlay: false,
+      // overlay: false,
       username: "",
       email: "",
       password: "",
@@ -189,17 +189,6 @@ var render = function() {
       _c(
         "v-main",
         [
-          _c(
-            "v-overlay",
-            { attrs: { value: _vm.overlay, opacity: "100", color: "success" } },
-            [
-              _c("v-progress-circular", {
-                attrs: { indeterminate: "", size: "80" }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
           _c(
             "v-container",
             { staticClass: "fill-height", attrs: { fluid: "" } },

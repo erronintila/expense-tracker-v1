@@ -19,23 +19,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      overlay: false
+    return {// overlay: false
     };
   },
   created: function created() {
     var _this = this;
 
-    this.overlay = true;
-    setTimeout(function () {
-      _this.overlay = false;
-
-      _this.$store.dispatch("AUTH_LOGOUT").then(function (response) {
-        _this.$router.push({
-          name: "login"
-        });
+    // this.overlay = true;
+    // setTimeout(() => {
+    //     this.overlay = false;
+    //     this.$store.dispatch("AUTH_LOGOUT").then(response => {
+    //         this.$router.push({ name: "login" });
+    //     });
+    // }, 1000);
+    this.$store.dispatch("AUTH_LOGOUT").then(function (response) {
+      _this.$router.push({
+        name: "login"
       });
-    }, 1000);
+    });
   }
 });
 
@@ -56,22 +57,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "v-app",
-    [
-      _c(
-        "v-overlay",
-        { attrs: { value: _vm.overlay, opacity: "100", color: "success" } },
-        [
-          _c("v-progress-circular", {
-            attrs: { indeterminate: "", size: "80" }
-          })
-        ],
-        1
-      )
-    ],
-    1
-  )
+  return _c("v-app")
 }
 var staticRenderFns = []
 render._withStripped = true

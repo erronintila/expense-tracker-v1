@@ -90,6 +90,16 @@
                         </v-col>
                     </v-row>
 
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-checkbox
+                                v-model="is_admin"
+                                label="Is Administrator"
+                                :error-messages="errors.is_admin"
+                            ></v-checkbox>
+                        </v-col>
+                    </v-row>
+
                     <small class="text--secondary">
                         * indicates required field
                     </small>
@@ -112,12 +122,14 @@ export default {
             valid: false,
             showPassword: false,
             showPasswordConfirmation: false,
+            is_admin: false,
             name: "",
             username: "",
             email: "",
             password: "",
             password_confirmation: "",
             rules: {
+                is_admin: [],
                 name: [
                     v => !!v || "Name is required",
                     v =>
@@ -148,6 +160,7 @@ export default {
                 ]
             },
             errors: {
+                is_admin: [],
                 name: [],
                 username: [],
                 email: [],
@@ -172,7 +185,8 @@ export default {
                         username: _this.username,
                         email: _this.email,
                         password: _this.password,
-                        password_confirmation: _this.password_confirmation
+                        password_confirmation: _this.password_confirmation,
+                        is_admin: _this.is_admin
                     })
                     .then(function(response) {
                         // _this.onRefresh();
