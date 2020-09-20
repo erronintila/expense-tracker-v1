@@ -152,8 +152,8 @@ class ExpenseReport extends Model
         if (!$submitted) {
             $arr = [
                 'color' => 'orange',
-                'remarks' => 'For Review',
-                'status' => 'Submitted',
+                'remarks' => 'Submitted expense report for approval',
+                'status' => 'Pending',
             ];
 
             return $arr;
@@ -161,8 +161,8 @@ class ExpenseReport extends Model
 
         $arr = [
             'color' => 'blue',
-            'remarks' => 'For Submission',
-            'status' => 'Pending',
+            'remarks' => 'Expense Report for submission',
+            'status' => 'For Submission',
         ];
 
         return $arr;

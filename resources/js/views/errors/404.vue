@@ -4,11 +4,9 @@
             <v-layout row wrap>
                 <v-flex xs12>
                     <v-card height="400" color="transparent" flat>
-                        <div class="display-3 mt-5">Page not found.</div>
+                        <div class="display-3 mt-5 mb-3">Page not found.</div>
                         <div class="grey--text lighten-5">
-                            The page you are trying to get to never existed in
-                            this reality, or has migrated to a parallel
-                            universe.
+                            We could not find the page you were looking for.
                         </div>
                         <div class="paragraph-text mt-2">
                             <br />

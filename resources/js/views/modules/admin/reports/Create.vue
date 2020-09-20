@@ -62,7 +62,13 @@
                                     slot="body.append"
                                     v-if="items.length > 0"
                                 >
-                                    <tr class="green--text">
+                                    <tr class="green--text hidden-md-and-up">
+                                        <td class="title">
+                                            Total:
+                                            <strong>{{ total }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="green--text hidden-sm-and-down">
                                         <td class="title">Total</td>
                                         <td></td>
                                         <td></td>
@@ -91,27 +97,31 @@
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
-                                        <v-col cols="12" md="4">
-                                            Expenses
-                                        </v-col>
+                                        <!-- <v-col cols="12" md="4"> -->
+                                        Expenses
+                                        <!-- </v-col> -->
 
                                         <v-spacer></v-spacer>
 
-                                        <v-col cols="12" md="4">
-                                            <v-btn color="white" class="mr-2">
-                                                New Item
-                                            </v-btn>
-                                            <DateRangePicker
-                                                :preset="preset"
-                                                :presets="presets"
-                                                :value="date_range"
-                                                :solo="true"
-                                                :buttonType="true"
-                                                :buttonColor="'white'"
-                                                :buttonDark="false"
-                                                @updateDates="updateDates"
-                                            ></DateRangePicker>
-                                        </v-col>
+                                        <!-- <v-col cols="12" md="4"> -->
+                                        <v-btn
+                                            @click="onCreate"
+                                            color="white"
+                                            class="mr-2"
+                                        >
+                                            New Item
+                                        </v-btn>
+                                        <DateRangePicker
+                                            :preset="preset"
+                                            :presets="presets"
+                                            :value="date_range"
+                                            :solo="true"
+                                            :buttonType="true"
+                                            :buttonColor="'white'"
+                                            :buttonDark="false"
+                                            @updateDates="updateDates"
+                                        ></DateRangePicker>
+                                        <!-- </v-col> -->
                                     </v-row>
                                 </template>
                                 <template
@@ -120,6 +130,17 @@
                                     <td :colspan="headers.length">
                                         <v-container>
                                             <table>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Date</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            item.date
+                                                        }}
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <td>
                                                         <strong>Receipt</strong>
@@ -170,26 +191,44 @@
                 </v-container>
             </v-form>
         </v-card>
+
+        <CreateExpense
+            ref="createExpense"
+            :employeeid="employee"
+            @onSaveExpense="loadExpenses"
+        ></CreateExpense>
+
+        <EditExpense
+            ref="editExpense"
+            :employeeid="employee"
+            @onSaveExpense="loadExpenses"
+        ></EditExpense>
     </v-app>
 </template>
 
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import CreateExpense from "./components/CreateExpense";
+import EditExpense from "./components/EditExpense";
 
 export default {
     components: {
-        DateRangePicker
+        DateRangePicker,
+        CreateExpense,
+        EditExpense
     },
     data() {
         return {
+            dialogCreate: false,
+            dialogEdit: false,
             valid: false,
             date_range: [
                 moment()
-                    .startOf("week")
+                    .startOf("month")
                     .format("YYYY-MM-DD"),
                 moment()
-                    .endOf("week")
+                    .endOf("month")
                     .format("YYYY-MM-DD")
             ],
             preset: "",
@@ -273,8 +312,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log(response);
-
                     _this.items = response.data.data;
                     // _this.total = response.data.total;
                 })
@@ -296,6 +333,8 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+
         },
         onSave() {
             let _this = this;
@@ -340,6 +379,53 @@ export default {
 
                 return;
             }
+        },
+        onCreate() {
+            if(this.employee == 0) {
+                 this.$dialog.message.error("No Employee selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+
+                return;
+            }
+
+            this.$refs.createExpense.openDialog();
+        },
+        // onSaveExpense() {
+        //     console.log("Expense saved");
+        //     this.loadExpenses();
+        // },
+        onEdit(item) {
+            this.$refs.editExpense.openDialog(item);
+        },
+        onDelete(item) {
+            let _this = this;
+
+            this.$confirm("Move item to archive?").then(res => {
+                if (res) {
+                    axios
+                        .delete(`/api/expenses/${item.id}`, {
+                            params: {
+                                ids: [item.id]
+                            }
+                        })
+                        .then(function(response) {
+                            _this.$dialog.message.success(
+                                "Item(s) moved to archive.",
+                                {
+                                    position: "top-right",
+                                    timeout: 2000
+                                }
+                            );
+
+                            _this.loadExpenses();
+                        })
+                        .catch(function(error) {
+                            console.log(error.response);
+                        });
+                }
+            });
         }
     },
     watch: {

@@ -63,7 +63,7 @@ class ExpenseReportController extends Controller
                     $expense_reports = $expense_reports->where("submitted_at", null)->where("approved_at", null)->where("cancelled_at", null);
                     break;
                 default:
-                    $expense_reports = $expense_reports->where("cancelled_at", null);
+                    $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("cancelled_at", null);
                     break;
             }
         }

@@ -46,6 +46,10 @@ class AuthController extends Controller
 
             $authenticated_user = Auth::user();
 
+            if ($authenticated_user->email_verified_at == null) {
+                return response()->json($validator->errors(), 401);
+            }
+
             $user = User::find($authenticated_user->id);
 
             $token = $user->createToken('authToken')->accessToken;
