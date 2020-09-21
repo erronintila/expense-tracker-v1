@@ -4,33 +4,102 @@
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Dashboard</h4>
                 <v-spacer></v-spacer>
+                <v-menu
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    left
+                    bottom
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on">
+                            <v-icon>mdi-dots-vertical</v-icon>
+                            <!-- <v-icon>mdi-filter</v-icon> -->
+                        </v-btn>
+                    </template>
+
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <DateRangePicker
+                                    :preset="preset"
+                                    :presets="presets"
+                                    :value="date_range"
+                                    @updateDates="updateDates"
+                                ></DateRangePicker>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="filter"
+                                    label="Filter"
+                                    :items="filterItems"
+                                    item-text="text"
+                                    item-value="value"
+                                    @change="onCategoryChange"
+                                ></v-select>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="groupBy"
+                                    label="Group by"
+                                    :items="groupByItems"
+                                    item-text="text"
+                                    item-value="value"
+                                    @change="onTimeUnitChange"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
             </v-card-title>
             <v-card-subtitle> </v-card-subtitle>
 
             <v-container>
-                <v-btn @click="updateDonut">Update</v-btn>
-
+                <!-- <v-row>
+                    <v-col cols="12" md="4">
+                        <v-select
+                            v-model="filter"
+                            label="Filter"
+                            :items="filterItems"
+                            item-text="text"
+                            item-value="value"
+                            @change="onCategoryChange"
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                        <DateRangePicker
+                            :preset="preset"
+                            :presets="presets"
+                            :value="date_range"
+                            @updateDates="updateDates"
+                        ></DateRangePicker>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                        <v-select
+                            v-model="groupBy"
+                            label="Group by"
+                            :items="groupByItems"
+                            item-text="text"
+                            item-value="value"
+                            @change="onTimeUnitChange"
+                        ></v-select>
+                    </v-col>
+                </v-row> -->
                 <v-row>
-                    <v-col cols="12">
+                    <v-col cols="12" md="4">
                         <DoughnutChart
                             ref="donut_chart"
-                            :data="chartData"
-                            :options="chartOptions"
+                            :data="doughnutChartData"
+                            :options="doughnutChartOptions"
                         ></DoughnutChart>
-
-                        <PieChart
-                            :data="chartData"
-                            :options="chartOptions"
-                        ></PieChart>
-
-                        <BarChart
-                            :data="chartData"
-                            :options="chartOptions"
-                        ></BarChart>
-
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="12">
                         <LineChart
-                            :data="chartData"
-                            :options="chartOptions"
+                            ref="line_chart"
+                            :data="lineChartData"
+                            :options="lineChartOptions"
                         ></LineChart>
                     </v-col>
                 </v-row>
@@ -40,67 +109,610 @@
 </template>
 
 <script>
+import moment from "moment";
+import randomcolor from "randomcolor";
+import numeral from "numeral";
+import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import DoughnutChart from "./components/DoughnutChart";
-import PieChart from "./components/PieChart";
+// import PieChart from "./components/PieChart";
 import BarChart from "./components/BarChart";
 import LineChart from "./components/LineChart";
-import randomcolor from "randomcolor";
 
 export default {
     components: {
         DoughnutChart,
-        PieChart,
+        // PieChart,
         BarChart,
-        LineChart
+        LineChart,
+        DateRangePicker
     },
     data() {
         return {
-            chartOptions: {
-                hoverBorderWidth: 20
-            },
-            chartData: {
-                labels: ["Green", "Red", "Blue"],
-                datasets: [
-                    {
-                        label: "Data One",
-                        backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
-                        data: [1, 10, 5]
-                    }
-                ]
-            }
+            total_expenses: 0,
+            // category: "expense_type",
+            // time_unit: "week",
+
+            // start_date: moment()
+            //     .startOf("month")
+            //     .format("YYYY-MM-DD"),
+            // end_date: moment()
+            //     .endOf("month")
+            //     .format("YYYY-MM-DD"),
+
+            // expenses_by_category: [],
+            // expense_reports: [],
+            // expenses_summary: [],
+
+            // pieChart: "",
+            // pieChart_labels: [],
+            // pieChart_data: [],
+
+            // lineChart: "",
+            // lineChart_labels: [],
+            // lineChart_data: [],
+
+            backgroundColors: [
+                "#36a2eb",
+                "#ff6384",
+                "#ff9f40",
+                "#4bc0c0",
+                "#ffcd56"
+            ],
+            doughnutChartOptions: {},
+            doughnutChartData: {},
+
+            lineChartOptions: {},
+            lineChartData: {},
+
+            filter: { text: "Expenses by type", value: "expense_type" },
+            filterItems: [
+                { text: "Expenses by type", value: "expense_type" },
+                { text: "Expenses per employee", value: "employee" },
+                { text: "Expenses per department", value: "department" }
+            ],
+
+            groupBy: { text: "Week", value: "week" },
+            groupByItems: [
+                { text: "Week", value: "week" },
+                { text: "Month", value: "month" },
+                { text: "Quarter", value: "quarter" },
+                { text: "Year", value: "year" }
+            ],
+
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ],
+
+            preset: "",
+            presets: [
+                "Today",
+                "Yesterday",
+                "Last 7 Days",
+                "Last 30 Days",
+                "This Week",
+                "This Month",
+                "This Quarter",
+                "This Year",
+                "Last Week",
+                "Last Month",
+                "Last Quarter",
+                "Last Year",
+                "Last 5 Years"
+            ]
         };
     },
     methods: {
-        updateChart() {
-            this.$refs.donut_chart.update();
-        },
-        updateDonut() {
-            const currentDataset = this.chartData.datasets[0];
-            // this.chartData.labels.push(
-            //     `Skill ${currentDataset.data.length + 1}`
-            // );
-            // currentDataset.data.push(20);
-            // currentDataset.backgroundColor.push("#44B883");
-            // this.updateChart();
+        load_total_expenses(start, end) {
+            let _this = this;
 
-            this.chartData.labels = ["Blue"];
-            this.chartData.datasets = [
+            axios
+                .get("/api/data/total_expenses", {
+                    params: {
+                        start_date: start,
+                        end_date: end
+                    }
+                })
+                .then(response => {
+                    _this.total_expenses = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        load_department_expenses(start, end) {
+            let _this = this;
+
+            axios
+                .get("/api/data/departments_expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end
+                    }
+                })
+                .then(response => {
+                    _this.expenses_by_category = response.data;
+
+                    _this.pieChart_labels = response.data.map(
+                        item => item.text
+                    );
+                    _this.pieChart_data = response.data.map(item => item.value);
+
+                    this.updatePieChartValues(
+                        _this.pieChart_labels,
+                        _this.pieChart_data
+                    );
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        load_expense_types_expenses(start, end) {
+            let _this = this;
+
+            axios
+                .get("/api/data/expense_types_expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end
+                    }
+                })
+                .then(response => {
+                    _this.expenses_by_category = response.data;
+
+                    _this.pieChart_labels = response.data.map(
+                        item => item.text
+                    );
+
+                    _this.pieChart_data = response.data.map(item => item.value);
+
+                    this.updatePieChartValues(
+                        _this.pieChart_labels,
+                        _this.pieChart_data
+                    );
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        load_employees_expenses(start, end) {
+            let _this = this;
+
+            axios
+                .get("/api/data/employees_expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end
+                    }
+                })
+                .then(response => {
+                    _this.expenses_by_category = response.data;
+
+                    _this.pieChart_labels = response.data.map(
+                        item => item.text
+                    );
+                    _this.pieChart_data = response.data.map(item => item.value);
+
+                    this.updatePieChartValues(
+                        _this.pieChart_labels,
+                        _this.pieChart_data
+                    );
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        load_expenses_summary(start, end, time_unit) {
+            console.log([start, end, time_unit]);
+
+            let _this = this;
+
+            axios
+                .get("/api/data/expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end,
+                        time_unit: time_unit
+                    }
+                })
+                .then(response => {
+                    // console.log(response.data);
+
+                    switch (_this.groupBy) {
+                        case "day":
+                            _this.lineChart_labels = response.data.map(
+                                item => item.text
+                            );
+                            break;
+                        case "week":
+                            _this.lineChart_labels = response.data.map(
+                                item =>
+                                    `${moment(item.text).format(
+                                        "YYYY-MM"
+                                    )} W:${this.getWeekInMonth(
+                                        new Date(item.text)
+                                    )}`
+                            );
+                            break;
+                        case "month":
+                            _this.lineChart_labels = response.data.map(item =>
+                                moment(item.text).format("MMM YYYY")
+                            );
+                            break;
+                        case "quarter":
+                            _this.lineChart_labels = response.data.map(
+                                item =>
+                                    `${moment(item.text).format(
+                                        "YYYY"
+                                    )} Q:${moment(item.text).format("Q")}`
+                            );
+                            break;
+                        case "year":
+                            _this.lineChart_labels = response.data.map(item =>
+                                moment(item.text).format("YYYY")
+                            );
+                            break;
+                        default:
+                            break;
+                    }
+
+                    _this.lineChart_data = response.data.map(
+                        item => item.value
+                    );
+
+                    // console.log([_this.lineChart_labels, _this.lineChart_data]);
+
+                    this.updateLineChartValues(
+                        _this.lineChart_labels,
+                        _this.lineChart_data
+                    );
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        load_pie_chart() {
+            this.doughnutChartOptions = {
+                hoverBorderWidth: 20,
+                legend: false
+            };
+            this.doughnutChartData = {
+                labels: [],
+                datasets: [
+                    {
+                        label: "",
+                        backgroundColor: [],
+                        data: []
+                    }
+                ]
+            };
+            // let _this = this;
+
+            // pieChart = new Chart(
+            //     $("#pieChart")
+            //         .get(0)
+            //         .getContext("2d"),
+            //     {
+            //         type: "doughnut",
+            //         // type: "pie",
+            //         data: {
+            //             labels: [],
+            //             datasets: [
+            //                 {
+            //                     data: [],
+            //                     backgroundColor: []
+            //                 }
+            //             ]
+            //         },
+            //         options: {
+            //             maintainAspectRatio: false,
+            //             responsive: true,
+            //             legend: false
+            //         }
+            //     }
+            // );
+        },
+        load_line_chart() {
+            let ticksStyle = {
+                fontColor: "#495057",
+                fontStyle: "bold"
+            };
+
+            this.lineChartOptions = {
+                // hoverBorderWidth: 20,
+                // legend: false
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: "index",
+                    intersect: false,
+                    position: "nearest"
+                },
+                hover: {
+                    mode: "index",
+                    intersect: true
+                },
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [
+                        {
+                            // display: false,
+                            gridLines: {
+                                display: true,
+                                lineWidth: "4px",
+                                color: "rgba(0, 0, 0, .2)",
+                                zeroLineColor: "transparent"
+                            },
+                            ticks: $.extend(
+                                {
+                                    beginAtZero: true,
+                                    suggestedMax: 200
+                                },
+                                ticksStyle
+                            )
+                        }
+                    ],
+                    xAxes: [
+                        {
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: ticksStyle
+                        }
+                    ]
+                }
+            };
+            this.lineChartData = {
+                labels: [],
+                datasets: [
+                    {
+                        // label: "",
+                        // backgroundColor: [],
+                        // data: [],
+                        type: "line",
+                        data: [],
+                        backgroundColor: "transparent",
+                        borderColor: "#4caf50",
+                        pointBorderColor: "#4caf50",
+                        pointBackgroundColor: "#4caf50",
+                        fill: false,
+                        lineTension: 0
+                    }
+                ]
+            };
+
+            // lineChart = new Chart($("#visitors-chart"), {
+            //     data: {
+            //         labels: [],
+            //         datasets: [
+            //             {
+            //                 type: "line",
+            //                 data: [],
+            //                 backgroundColor: "transparent",
+            //                 borderColor: "#007bff",
+            //                 pointBorderColor: "#007bff",
+            //                 pointBackgroundColor: "#007bff",
+            //                 fill: false,
+            //                 lineTension: 0
+            //             }
+            //             // {
+            //             //     type                : 'line',
+            //             //     data                : [],
+            //             //     backgroundColor     : 'tansparent',
+            //             //     borderColor         : '#ced4da',
+            //             //     pointBorderColor    : '#ced4da',
+            //             //     pointBackgroundColor: '#ced4da',
+            //             //     fill                : false
+            //             // }
+            //         ]
+            //     },
+            //     options: {
+            //         maintainAspectRatio: false,
+            //         tooltips: {
+            //             mode: "index",
+            //             intersect: false,
+            //             position: "nearest"
+            //         },
+            //         hover: {
+            //             mode: "index",
+            //             intersect: true
+            //         },
+            //         legend: {
+            //             display: false
+            //         },
+            //         scales: {
+            //             yAxes: [
+            //                 {
+            //                     // display: false,
+            //                     gridLines: {
+            //                         display: true,
+            //                         lineWidth: "4px",
+            //                         color: "rgba(0, 0, 0, .2)",
+            //                         zeroLineColor: "transparent"
+            //                     },
+            //                     ticks: $.extend(
+            //                         {
+            //                             beginAtZero: true,
+            //                             suggestedMax: 200
+            //                         },
+            //                         ticksStyle
+            //                     )
+            //                 }
+            //             ],
+            //             xAxes: [
+            //                 {
+            //                     display: true,
+            //                     gridLines: {
+            //                         display: false
+            //                     },
+            //                     ticks: ticksStyle
+            //                 }
+            //             ]
+            //         }
+            //     }
+            // });
+        },
+        getWeekInMonth(date) {
+            let adjustedDate = date.getDate() + date.getDay();
+            let prefixes = ["0", "1", "2", "3", "4", "5"];
+            return parseInt(prefixes[0 | (adjustedDate / 7)]) + 1;
+        },
+        updatePieChartValues(labels, data) {
+            // let colors = [];
+            // let counter = 0;
+
+            // labels.forEach(element => {
+            //     counter = counter >= this.backgroundColors.length ? 0 : counter;
+            //     colors.push(this.backgroundColors[counter]);
+            //     counter++;
+            // });
+
+            // pieChart.data.labels = labels;
+            // pieChart.data.datasets[0].data = data;
+            // pieChart.data.datasets[0].backgroundColor = colors;
+            // pieChart.update();
+
+            // const currentDataset = this.doughnutChartData.datasets[0];
+
+            let backgroundColors = [];
+            for (let i = 0; i < data.length; i++) {
+                backgroundColors.push(
+                    randomcolor({ luminosity: "light", hue: "random" })
+                );
+            }
+
+            this.doughnutChartData.labels = labels;
+
+            this.doughnutChartData.datasets = [
                 {
-                    label: "000000000000000",
-                    backgroundColor: [randomcolor(), randomcolor()],
-                    data: [40, 60]
+                    label: "",
+                    backgroundColor: backgroundColors,
+                    data: data
                 }
             ];
+
             this.$refs.donut_chart.update();
+        },
+        updateLineChartValues(labels, data) {
+            // lineChart.data.labels = labels;
+            // lineChart.data.datasets[0].data = data;
+            // lineChart.update();
+
+            // console.log(labels, data);
+
+            this.lineChartData.labels = labels;
+
+            this.lineChartData.datasets[0].data = data;
+
+            // this.lineChartData.datasets = [
+            //     {
+            //         data: data
+            //     }
+            // ];
+
+            this.$refs.line_chart.update();
+        },
+        onDateChange(start, end) {
+            this.expenses_by_category = [];
+            this.start_date = start;
+            this.end_date = end;
+
+            this.onCategoryChange();
+            this.load_expense_reports(
+                this.start_date.format("YYYY-MM-DD"),
+                this.end_date.format("YYYY-MM-DD")
+            );
+            this.onTimeUnitChange();
+        },
+        onCategoryChange() {
+            let start = this.date_range[0];
+            let end = this.date_range[1];
+
+            switch (this.filter) {
+                case "expense_type":
+                    this.load_expense_types_expenses(start, end);
+                    break;
+                case "department":
+                    this.load_department_expenses(start, end);
+                    break;
+                case "employee":
+                    this.load_employees_expenses(start, end);
+                    break;
+                default:
+                    break;
+            }
+
+            this.load_total_expenses(start, end);
+        },
+        onTimeUnitChange() {
+            // console.log([this.date_range[0], this.date_range[1], this.groupBy]);
+            this.load_expenses_summary(
+                this.date_range[0],
+                this.date_range[1],
+                this.groupBy
+            );
+            this.load_total_expenses(this.date_range[0], this.date_range[1]);
+        },
+        updateDates(e) {
+            this.date_range = e;
+
+            this.expenses_by_category = [];
+
+            this.onCategoryChange();
+            // this.load_expense_reports(
+            //     this.start_date.format("YYYY-MM-DD"),
+            //     this.end_date.format("YYYY-MM-DD")
+            // );
+            this.onTimeUnitChange();
         }
+        // updateChart() {
+        //     this.$refs.donut_chart.update();
+        // },
+        // updateDonut() {
+        //     const currentDataset = this.chartData.datasets[0];
+
+        //     this.chartData.labels = ["Blue"];
+        //     this.chartData.datasets = [
+        //         {
+        //             label: "000000000000000",
+        //             backgroundColor: [randomcolor(), randomcolor()],
+        //             data: [40, 60]
+        //         }
+        //     ];
+        //     this.$refs.donut_chart.update();
+        // }
     },
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        // axios.get("/api/user").then(response => {
-        //     console.log(response);
-        // });
+        this.load_total_expenses(this.date_range[0], this.date_range[1]);
+        // this.load_employees_expenses(this.date_range[0], this.date_range[1]);
+        // this.load_department_expenses(this.date_range[0], this.date_range[1]);
+        this.load_expense_types_expenses(
+            this.date_range[0],
+            this.date_range[1]
+        );
+
+        this.load_line_chart();
+        this.load_pie_chart();
+
+        this.load_expenses_summary(
+            this.date_range[0],
+            this.date_range[1],
+            this.groupBy
+        );
     }
 };
 </script>
