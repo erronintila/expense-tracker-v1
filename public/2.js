@@ -113,22 +113,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -148,23 +132,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       total_expenses: 0,
-      // category: "expense_type",
-      // time_unit: "week",
-      // start_date: moment()
-      //     .startOf("month")
-      //     .format("YYYY-MM-DD"),
-      // end_date: moment()
-      //     .endOf("month")
-      //     .format("YYYY-MM-DD"),
-      // expenses_by_category: [],
-      // expense_reports: [],
-      // expenses_summary: [],
-      // pieChart: "",
-      // pieChart_labels: [],
-      // pieChart_data: [],
-      // lineChart: "",
-      // lineChart_labels: [],
-      // lineChart_data: [],
       backgroundColors: ["#36a2eb", "#ff6384", "#ff9f40", "#4bc0c0", "#ffcd56"],
       doughnutChartOptions: {},
       doughnutChartData: {},
@@ -184,11 +151,11 @@ __webpack_require__.r(__webpack_exports__);
         text: "Expenses per department",
         value: "department"
       }],
-      groupBy: {
-        text: "Week",
-        value: "week"
-      },
+      groupBy: "month",
       groupByItems: [{
+        text: "Day",
+        value: "day"
+      }, {
         text: "Week",
         value: "week"
       }, {
@@ -201,7 +168,7 @@ __webpack_require__.r(__webpack_exports__);
         text: "Year",
         value: "year"
       }],
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"]
     };
@@ -311,7 +278,6 @@ __webpack_require__.r(__webpack_exports__);
           time_unit: time_unit
         }
       }).then(function (response) {
-        // console.log(response.data);
         switch (_this.groupBy) {
           case "day":
             _this.lineChart_labels = response.data.map(function (item) {
@@ -349,7 +315,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.lineChart_data = response.data.map(function (item) {
           return item.value;
-        }); // console.log([_this.lineChart_labels, _this.lineChart_data]);
+        });
 
         _this5.updateLineChartValues(_this.lineChart_labels, _this.lineChart_data);
       })["catch"](function (error) {
@@ -369,30 +335,7 @@ __webpack_require__.r(__webpack_exports__);
           backgroundColor: [],
           data: []
         }]
-      }; // let _this = this;
-      // pieChart = new Chart(
-      //     $("#pieChart")
-      //         .get(0)
-      //         .getContext("2d"),
-      //     {
-      //         type: "doughnut",
-      //         // type: "pie",
-      //         data: {
-      //             labels: [],
-      //             datasets: [
-      //                 {
-      //                     data: [],
-      //                     backgroundColor: []
-      //                 }
-      //             ]
-      //         },
-      //         options: {
-      //             maintainAspectRatio: false,
-      //             responsive: true,
-      //             legend: false
-      //         }
-      //     }
-      // );
+      };
     },
     load_line_chart: function load_line_chart() {
       var ticksStyle = {
@@ -441,88 +384,16 @@ __webpack_require__.r(__webpack_exports__);
       this.lineChartData = {
         labels: [],
         datasets: [{
-          // label: "",
-          // backgroundColor: [],
-          // data: [],
           type: "line",
           data: [],
-          backgroundColor: "transparent",
+          backgroundColor: "#dbffe5",
           borderColor: "#4caf50",
           pointBorderColor: "#4caf50",
           pointBackgroundColor: "#4caf50",
-          fill: false,
+          fill: true,
           lineTension: 0
         }]
-      }; // lineChart = new Chart($("#visitors-chart"), {
-      //     data: {
-      //         labels: [],
-      //         datasets: [
-      //             {
-      //                 type: "line",
-      //                 data: [],
-      //                 backgroundColor: "transparent",
-      //                 borderColor: "#007bff",
-      //                 pointBorderColor: "#007bff",
-      //                 pointBackgroundColor: "#007bff",
-      //                 fill: false,
-      //                 lineTension: 0
-      //             }
-      //             // {
-      //             //     type                : 'line',
-      //             //     data                : [],
-      //             //     backgroundColor     : 'tansparent',
-      //             //     borderColor         : '#ced4da',
-      //             //     pointBorderColor    : '#ced4da',
-      //             //     pointBackgroundColor: '#ced4da',
-      //             //     fill                : false
-      //             // }
-      //         ]
-      //     },
-      //     options: {
-      //         maintainAspectRatio: false,
-      //         tooltips: {
-      //             mode: "index",
-      //             intersect: false,
-      //             position: "nearest"
-      //         },
-      //         hover: {
-      //             mode: "index",
-      //             intersect: true
-      //         },
-      //         legend: {
-      //             display: false
-      //         },
-      //         scales: {
-      //             yAxes: [
-      //                 {
-      //                     // display: false,
-      //                     gridLines: {
-      //                         display: true,
-      //                         lineWidth: "4px",
-      //                         color: "rgba(0, 0, 0, .2)",
-      //                         zeroLineColor: "transparent"
-      //                     },
-      //                     ticks: $.extend(
-      //                         {
-      //                             beginAtZero: true,
-      //                             suggestedMax: 200
-      //                         },
-      //                         ticksStyle
-      //                     )
-      //                 }
-      //             ],
-      //             xAxes: [
-      //                 {
-      //                     display: true,
-      //                     gridLines: {
-      //                         display: false
-      //                     },
-      //                     ticks: ticksStyle
-      //                 }
-      //             ]
-      //         }
-      //     }
-      // });
+      };
     },
     getWeekInMonth: function getWeekInMonth(date) {
       var adjustedDate = date.getDate() + date.getDay();
@@ -530,18 +401,6 @@ __webpack_require__.r(__webpack_exports__);
       return parseInt(prefixes[0 | adjustedDate / 7]) + 1;
     },
     updatePieChartValues: function updatePieChartValues(labels, data) {
-      // let colors = [];
-      // let counter = 0;
-      // labels.forEach(element => {
-      //     counter = counter >= this.backgroundColors.length ? 0 : counter;
-      //     colors.push(this.backgroundColors[counter]);
-      //     counter++;
-      // });
-      // pieChart.data.labels = labels;
-      // pieChart.data.datasets[0].data = data;
-      // pieChart.data.datasets[0].backgroundColor = colors;
-      // pieChart.update();
-      // const currentDataset = this.doughnutChartData.datasets[0];
       var backgroundColors = [];
 
       for (var i = 0; i < data.length; i++) {
@@ -560,17 +419,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.donut_chart.update();
     },
     updateLineChartValues: function updateLineChartValues(labels, data) {
-      // lineChart.data.labels = labels;
-      // lineChart.data.datasets[0].data = data;
-      // lineChart.update();
-      // console.log(labels, data);
       this.lineChartData.labels = labels;
-      this.lineChartData.datasets[0].data = data; // this.lineChartData.datasets = [
-      //     {
-      //         data: data
-      //     }
-      // ];
-
+      this.lineChartData.datasets[0].data = data;
       this.$refs.line_chart.update();
     },
     onDateChange: function onDateChange(start, end) {
@@ -618,31 +468,15 @@ __webpack_require__.r(__webpack_exports__);
       // );
 
       this.onTimeUnitChange();
-    } // updateChart() {
-    //     this.$refs.donut_chart.update();
-    // },
-    // updateDonut() {
-    //     const currentDataset = this.chartData.datasets[0];
-    //     this.chartData.labels = ["Blue"];
-    //     this.chartData.datasets = [
-    //         {
-    //             label: "000000000000000",
-    //             backgroundColor: [randomcolor(), randomcolor()],
-    //             data: [40, 60]
-    //         }
-    //     ];
-    //     this.$refs.donut_chart.update();
-    // }
-
+    }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.load_total_expenses(this.date_range[0], this.date_range[1]); // this.load_employees_expenses(this.date_range[0], this.date_range[1]);
-    // this.load_department_expenses(this.date_range[0], this.date_range[1]);
-
+    this.load_total_expenses(this.date_range[0], this.date_range[1]);
     this.load_expense_types_expenses(this.date_range[0], this.date_range[1]);
     this.load_line_chart();
-    this.load_pie_chart();
+    this.load_pie_chart(); // this.onTimeUnitChange();
+
     this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy);
   }
 });
@@ -887,8 +721,37 @@ var render = function() {
                 [
                   _c(
                     "v-col",
+                    { attrs: { cols: "12", md: "8" } },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "text-h5 success--text mb-10" },
+                        [
+                          _vm._v(
+                            "\n                        Total Expenses : " +
+                              _vm._s(_vm.total_expenses) +
+                              "\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("LineChart", {
+                        ref: "line_chart",
+                        attrs: {
+                          data: _vm.lineChartData,
+                          options: _vm.lineChartOptions
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
                     { attrs: { cols: "12", md: "4" } },
                     [
+                      _c("div", { staticClass: "mb-md-10" }),
+                      _vm._v(" "),
                       _c("DoughnutChart", {
                         ref: "donut_chart",
                         attrs: {
@@ -903,26 +766,7 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c(
-                "v-row",
-                [
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12" } },
-                    [
-                      _c("LineChart", {
-                        ref: "line_chart",
-                        attrs: {
-                          data: _vm.lineChartData,
-                          options: _vm.lineChartOptions
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
+              _c("v-row", [_c("v-col", { attrs: { cols: "12" } })], 1)
             ],
             1
           )

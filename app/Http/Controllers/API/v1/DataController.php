@@ -24,7 +24,10 @@ class DataController extends Controller
 {
     public function test()
     {
-        return "test";
+        $expenses = Expense::all();
+
+
+        return $expenses;
     }
 
     public function employees()
@@ -63,6 +66,17 @@ class DataController extends Controller
     public function expenses(Request $request)
     {
         $expenses = Expense::orderBy('date', 'desc');
+
+        if (request()->has("summary")) {
+            if ($request->summary) {
+
+                $expenses = $expenses->where("id", $request->id);
+                return $expenses;
+            }
+
+            $expenses = $expenses->where("id", $request->id);
+            return $expenses;
+        }
 
         if (request()->has("id")) {
             $expenses = $expenses->where("id", $request->id);

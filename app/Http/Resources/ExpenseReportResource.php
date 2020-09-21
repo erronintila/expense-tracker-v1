@@ -35,7 +35,9 @@ class ExpenseReportResource extends JsonResource
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'deleted_at' => Carbon::parse($this->deleted_at)->toDateTimeString(),
-            'total' => $this->expenses()->withTrashed()->get()->sum('amount')
+            'total' => $this->expenses()->withTrashed()->get()->sum('amount'),
+            'from' => $this->min_start_date(),
+            'to' => $this->max_end_date(),
         ];
     }
 }

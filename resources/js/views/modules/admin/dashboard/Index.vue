@@ -55,38 +55,19 @@
             <v-card-subtitle> </v-card-subtitle>
 
             <v-container>
-                <!-- <v-row>
-                    <v-col cols="12" md="4">
-                        <v-select
-                            v-model="filter"
-                            label="Filter"
-                            :items="filterItems"
-                            item-text="text"
-                            item-value="value"
-                            @change="onCategoryChange"
-                        ></v-select>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <DateRangePicker
-                            :preset="preset"
-                            :presets="presets"
-                            :value="date_range"
-                            @updateDates="updateDates"
-                        ></DateRangePicker>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <v-select
-                            v-model="groupBy"
-                            label="Group by"
-                            :items="groupByItems"
-                            item-text="text"
-                            item-value="value"
-                            @change="onTimeUnitChange"
-                        ></v-select>
-                    </v-col>
-                </v-row> -->
                 <v-row>
+                    <v-col cols="12" md="8">
+                        <div class="text-h5 success--text mb-10">
+                            Total Expenses : {{ total_expenses }}
+                        </div>
+                        <LineChart
+                            ref="line_chart"
+                            :data="lineChartData"
+                            :options="lineChartOptions"
+                        ></LineChart>
+                    </v-col>
                     <v-col cols="12" md="4">
+                        <div class="mb-md-10"></div>
                         <DoughnutChart
                             ref="donut_chart"
                             :data="doughnutChartData"
@@ -94,7 +75,7 @@
                         ></DoughnutChart>
                     </v-col>
                 </v-row>
-                <v-row>
+                <!-- <v-row>
                     <v-col cols="12">
                         <LineChart
                             ref="line_chart"
@@ -102,6 +83,9 @@
                             :options="lineChartOptions"
                         ></LineChart>
                     </v-col>
+                </v-row> -->
+                <v-row>
+                    <v-col cols="12"> </v-col>
                 </v-row>
             </v-container>
         </v-card>
@@ -129,28 +113,6 @@ export default {
     data() {
         return {
             total_expenses: 0,
-            // category: "expense_type",
-            // time_unit: "week",
-
-            // start_date: moment()
-            //     .startOf("month")
-            //     .format("YYYY-MM-DD"),
-            // end_date: moment()
-            //     .endOf("month")
-            //     .format("YYYY-MM-DD"),
-
-            // expenses_by_category: [],
-            // expense_reports: [],
-            // expenses_summary: [],
-
-            // pieChart: "",
-            // pieChart_labels: [],
-            // pieChart_data: [],
-
-            // lineChart: "",
-            // lineChart_labels: [],
-            // lineChart_data: [],
-
             backgroundColors: [
                 "#36a2eb",
                 "#ff6384",
@@ -171,8 +133,9 @@ export default {
                 { text: "Expenses per department", value: "department" }
             ],
 
-            groupBy: { text: "Week", value: "week" },
+            groupBy: "month",
             groupByItems: [
+                { text: "Day", value: "day" },
                 { text: "Week", value: "week" },
                 { text: "Month", value: "month" },
                 { text: "Quarter", value: "quarter" },
@@ -181,10 +144,10 @@ export default {
 
             date_range: [
                 moment()
-                    .startOf("month")
+                    .startOf("year")
                     .format("YYYY-MM-DD"),
                 moment()
-                    .endOf("month")
+                    .endOf("year")
                     .format("YYYY-MM-DD")
             ],
 
@@ -324,8 +287,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    // console.log(response.data);
-
                     switch (_this.groupBy) {
                         case "day":
                             _this.lineChart_labels = response.data.map(
@@ -368,8 +329,6 @@ export default {
                         item => item.value
                     );
 
-                    // console.log([_this.lineChart_labels, _this.lineChart_data]);
-
                     this.updateLineChartValues(
                         _this.lineChart_labels,
                         _this.lineChart_data
@@ -395,31 +354,6 @@ export default {
                     }
                 ]
             };
-            // let _this = this;
-
-            // pieChart = new Chart(
-            //     $("#pieChart")
-            //         .get(0)
-            //         .getContext("2d"),
-            //     {
-            //         type: "doughnut",
-            //         // type: "pie",
-            //         data: {
-            //             labels: [],
-            //             datasets: [
-            //                 {
-            //                     data: [],
-            //                     backgroundColor: []
-            //                 }
-            //             ]
-            //         },
-            //         options: {
-            //             maintainAspectRatio: false,
-            //             responsive: true,
-            //             legend: false
-            //         }
-            //     }
-            // );
         },
         load_line_chart() {
             let ticksStyle = {
@@ -477,91 +411,17 @@ export default {
                 labels: [],
                 datasets: [
                     {
-                        // label: "",
-                        // backgroundColor: [],
-                        // data: [],
                         type: "line",
                         data: [],
-                        backgroundColor: "transparent",
+                        backgroundColor: "#dbffe5",
                         borderColor: "#4caf50",
                         pointBorderColor: "#4caf50",
                         pointBackgroundColor: "#4caf50",
-                        fill: false,
+                        fill: true,
                         lineTension: 0
                     }
                 ]
             };
-
-            // lineChart = new Chart($("#visitors-chart"), {
-            //     data: {
-            //         labels: [],
-            //         datasets: [
-            //             {
-            //                 type: "line",
-            //                 data: [],
-            //                 backgroundColor: "transparent",
-            //                 borderColor: "#007bff",
-            //                 pointBorderColor: "#007bff",
-            //                 pointBackgroundColor: "#007bff",
-            //                 fill: false,
-            //                 lineTension: 0
-            //             }
-            //             // {
-            //             //     type                : 'line',
-            //             //     data                : [],
-            //             //     backgroundColor     : 'tansparent',
-            //             //     borderColor         : '#ced4da',
-            //             //     pointBorderColor    : '#ced4da',
-            //             //     pointBackgroundColor: '#ced4da',
-            //             //     fill                : false
-            //             // }
-            //         ]
-            //     },
-            //     options: {
-            //         maintainAspectRatio: false,
-            //         tooltips: {
-            //             mode: "index",
-            //             intersect: false,
-            //             position: "nearest"
-            //         },
-            //         hover: {
-            //             mode: "index",
-            //             intersect: true
-            //         },
-            //         legend: {
-            //             display: false
-            //         },
-            //         scales: {
-            //             yAxes: [
-            //                 {
-            //                     // display: false,
-            //                     gridLines: {
-            //                         display: true,
-            //                         lineWidth: "4px",
-            //                         color: "rgba(0, 0, 0, .2)",
-            //                         zeroLineColor: "transparent"
-            //                     },
-            //                     ticks: $.extend(
-            //                         {
-            //                             beginAtZero: true,
-            //                             suggestedMax: 200
-            //                         },
-            //                         ticksStyle
-            //                     )
-            //                 }
-            //             ],
-            //             xAxes: [
-            //                 {
-            //                     display: true,
-            //                     gridLines: {
-            //                         display: false
-            //                     },
-            //                     ticks: ticksStyle
-            //                 }
-            //             ]
-            //         }
-            //     }
-            // });
         },
         getWeekInMonth(date) {
             let adjustedDate = date.getDate() + date.getDay();
@@ -569,22 +429,6 @@ export default {
             return parseInt(prefixes[0 | (adjustedDate / 7)]) + 1;
         },
         updatePieChartValues(labels, data) {
-            // let colors = [];
-            // let counter = 0;
-
-            // labels.forEach(element => {
-            //     counter = counter >= this.backgroundColors.length ? 0 : counter;
-            //     colors.push(this.backgroundColors[counter]);
-            //     counter++;
-            // });
-
-            // pieChart.data.labels = labels;
-            // pieChart.data.datasets[0].data = data;
-            // pieChart.data.datasets[0].backgroundColor = colors;
-            // pieChart.update();
-
-            // const currentDataset = this.doughnutChartData.datasets[0];
-
             let backgroundColors = [];
             for (let i = 0; i < data.length; i++) {
                 backgroundColors.push(
@@ -605,21 +449,9 @@ export default {
             this.$refs.donut_chart.update();
         },
         updateLineChartValues(labels, data) {
-            // lineChart.data.labels = labels;
-            // lineChart.data.datasets[0].data = data;
-            // lineChart.update();
-
-            // console.log(labels, data);
-
             this.lineChartData.labels = labels;
 
             this.lineChartData.datasets[0].data = data;
-
-            // this.lineChartData.datasets = [
-            //     {
-            //         data: data
-            //     }
-            // ];
 
             this.$refs.line_chart.update();
         },
@@ -676,30 +508,12 @@ export default {
             // );
             this.onTimeUnitChange();
         }
-        // updateChart() {
-        //     this.$refs.donut_chart.update();
-        // },
-        // updateDonut() {
-        //     const currentDataset = this.chartData.datasets[0];
-
-        //     this.chartData.labels = ["Blue"];
-        //     this.chartData.datasets = [
-        //         {
-        //             label: "000000000000000",
-        //             backgroundColor: [randomcolor(), randomcolor()],
-        //             data: [40, 60]
-        //         }
-        //     ];
-        //     this.$refs.donut_chart.update();
-        // }
     },
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
         this.load_total_expenses(this.date_range[0], this.date_range[1]);
-        // this.load_employees_expenses(this.date_range[0], this.date_range[1]);
-        // this.load_department_expenses(this.date_range[0], this.date_range[1]);
         this.load_expense_types_expenses(
             this.date_range[0],
             this.date_range[1]
@@ -707,6 +521,8 @@ export default {
 
         this.load_line_chart();
         this.load_pie_chart();
+
+        // this.onTimeUnitChange();
 
         this.load_expenses_summary(
             this.date_range[0],

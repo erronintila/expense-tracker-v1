@@ -246,6 +246,8 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.$refs.form.resetValidation();
+            this.loadExpenseTypes();
+            this.loadVendors();
         },
         onSave() {
             let _this = this;
