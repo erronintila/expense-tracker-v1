@@ -1,14 +1,24 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[4],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var randomcolor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! randomcolor */ "./node_modules/randomcolor/randomColor.js");
+/* harmony import */ var randomcolor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(randomcolor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+/* harmony import */ var _components_DoughnutChart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/DoughnutChart */ "./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue");
+/* harmony import */ var _components_BarChart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/BarChart */ "./resources/js/views/modules/admin/dashboard/components/BarChart.vue");
+/* harmony import */ var _components_LineChart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/LineChart */ "./resources/js/views/modules/admin/dashboard/components/LineChart.vue");
 //
 //
 //
@@ -103,501 +113,459 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
+
+
+ // import PieChart from "./components/PieChart";
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    employeeid: {
-      type: Number,
-      "default": 0
-    }
+  components: {
+    DoughnutChart: _components_DoughnutChart__WEBPACK_IMPORTED_MODULE_4__["default"],
+    // PieChart,
+    BarChart: _components_BarChart__WEBPACK_IMPORTED_MODULE_5__["default"],
+    LineChart: _components_LineChart__WEBPACK_IMPORTED_MODULE_6__["default"],
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
-      dialog: false,
-      valid: false,
-      menu: false,
-      code: null,
-      description: null,
-      amount: 0,
-      receipt_number: null,
-      date: null,
-      remarks: "",
-      is_active: true,
-      expense_type: null,
-      expense_types: [],
-      employee: null,
-      employees: [],
-      vendor: null,
-      vendors: [],
-      rules: {
-        description: [function (v) {
-          return !!v || "Description is required";
-        }],
-        amount: [function (v) {
-          return !!v || "Amount is required";
-        }],
-        receipt_number: [function (v) {
-          return !!v || "Receipt Number is required";
-        }],
-        date: [function (v) {
-          return !!v || "Date is required";
-        }],
-        remarks: [],
-        is_active: [],
-        expense_type: [function (v) {
-          return !!v || "Expense Type is required";
-        }],
-        vendor: [function (v) {
-          return !!v || "Vendor is required";
-        }]
+      total_expenses: 0,
+      backgroundColors: ["#36a2eb", "#ff6384", "#ff9f40", "#4bc0c0", "#ffcd56"],
+      doughnutChartOptions: {},
+      doughnutChartData: {},
+      lineChartOptions: {},
+      lineChartData: {},
+      filter: {
+        text: "Expenses by type",
+        value: "expense_type"
       },
-      errors: {
-        description: [],
-        amount: [],
-        receipt_number: [],
-        date: [],
-        remarks: [],
-        is_active: [],
-        expense_type_id: [],
-        vendor_id: []
-      }
+      filterItems: [{
+        text: "Expenses by type",
+        value: "expense_type"
+      }, {
+        text: "Expenses per employee",
+        value: "employee"
+      }, {
+        text: "Expenses per department",
+        value: "department"
+      }],
+      groupBy: "month",
+      groupByItems: [{
+        text: "Day",
+        value: "day"
+      }, {
+        text: "Week",
+        value: "week"
+      }, {
+        text: "Month",
+        value: "month"
+      }, {
+        text: "Quarter",
+        value: "quarter"
+      }, {
+        text: "Year",
+        value: "year"
+      }],
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")],
+      preset: "",
+      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"]
     };
   },
   methods: {
-    openDialog: function openDialog() {
-      this.dialog = true;
-    },
-    loadExpenseTypes: function loadExpenseTypes() {
+    load_total_expenses: function load_total_expenses(start, end) {
       var _this = this;
 
-      axios.get("/api/data/expense_types").then(function (response) {
-        _this.expense_types = response.data.data;
+      axios.get("/api/data/total_expenses", {
+        params: {
+          start_date: start,
+          end_date: end
+        }
+      }).then(function (response) {
+        _this.total_expenses = response.data;
       })["catch"](function (error) {
         console.log(error);
+        console.log(error.response);
       });
     },
-    loadVendors: function loadVendors() {
+    load_department_expenses: function load_department_expenses(start, end) {
+      var _this2 = this;
+
       var _this = this;
 
-      axios.get("/api/data/vendors").then(function (response) {
-        _this.vendors = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-      this.$refs.form.resetValidation();
-      this.loadExpenseTypes();
-      this.loadVendors();
-    },
-    onSave: function onSave() {
-      var _this = this;
-
-      _this.$refs.form.validate();
-
-      if (_this.$refs.form.validate()) {
-        axios.post("/api/expenses", {
-          code: _this.code,
-          description: _this.description,
-          amount: _this.amount,
-          receipt_number: _this.receipt_number,
-          date: _this.date,
-          remarks: _this.remarks,
-          is_active: _this.is_active,
-          expense_type_id: _this.expense_type,
-          employee_id: _this.employeeid,
-          vendor_id: _this.vendor
-        }).then(function (response) {
-          _this.onRefresh();
-
-          _this.$dialog.message.success("Expense created successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
-
-          _this.$emit("onSaveExpense");
-
-          _this.dialog = false;
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-          _this.errors = error.response.data.errors;
+      axios.get("/api/data/departments_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end
+        }
+      }).then(function (response) {
+        _this.expenses_by_category = response.data;
+        _this.pieChart_labels = response.data.map(function (item) {
+          return item.text;
         });
-        return;
+        _this.pieChart_data = response.data.map(function (item) {
+          return item.value;
+        });
+
+        _this2.updatePieChartValues(_this.pieChart_labels, _this.pieChart_data);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    load_expense_types_expenses: function load_expense_types_expenses(start, end) {
+      var _this3 = this;
+
+      var _this = this;
+
+      axios.get("/api/data/expense_types_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end
+        }
+      }).then(function (response) {
+        _this.expenses_by_category = response.data;
+        _this.pieChart_labels = response.data.map(function (item) {
+          return item.text;
+        });
+        _this.pieChart_data = response.data.map(function (item) {
+          return item.value;
+        });
+
+        _this3.updatePieChartValues(_this.pieChart_labels, _this.pieChart_data);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    load_employees_expenses: function load_employees_expenses(start, end) {
+      var _this4 = this;
+
+      var _this = this;
+
+      axios.get("/api/data/employees_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end
+        }
+      }).then(function (response) {
+        _this.expenses_by_category = response.data;
+        _this.pieChart_labels = response.data.map(function (item) {
+          return item.text;
+        });
+        _this.pieChart_data = response.data.map(function (item) {
+          return item.value;
+        });
+
+        _this4.updatePieChartValues(_this.pieChart_labels, _this.pieChart_data);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    load_expenses_summary: function load_expenses_summary(start, end, time_unit) {
+      var _this5 = this;
+
+      console.log([start, end, time_unit]);
+
+      var _this = this;
+
+      axios.get("/api/data/expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          time_unit: time_unit
+        }
+      }).then(function (response) {
+        switch (_this.groupBy) {
+          case "day":
+            _this.lineChart_labels = response.data.map(function (item) {
+              return item.text;
+            });
+            break;
+
+          case "week":
+            _this.lineChart_labels = response.data.map(function (item) {
+              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY-MM"), " W:").concat(_this5.getWeekInMonth(new Date(item.text)));
+            });
+            break;
+
+          case "month":
+            _this.lineChart_labels = response.data.map(function (item) {
+              return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("MMM YYYY");
+            });
+            break;
+
+          case "quarter":
+            _this.lineChart_labels = response.data.map(function (item) {
+              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY"), " Q:").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("Q"));
+            });
+            break;
+
+          case "year":
+            _this.lineChart_labels = response.data.map(function (item) {
+              return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY");
+            });
+            break;
+
+          default:
+            break;
+        }
+
+        _this.lineChart_data = response.data.map(function (item) {
+          return item.value;
+        });
+
+        _this5.updateLineChartValues(_this.lineChart_labels, _this.lineChart_data);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    load_pie_chart: function load_pie_chart() {
+      this.doughnutChartOptions = {
+        hoverBorderWidth: 20,
+        legend: false
+      };
+      this.doughnutChartData = {
+        labels: [],
+        datasets: [{
+          label: "",
+          backgroundColor: [],
+          data: []
+        }]
+      };
+    },
+    load_line_chart: function load_line_chart() {
+      var ticksStyle = {
+        fontColor: "#495057",
+        fontStyle: "bold"
+      };
+      this.lineChartOptions = {
+        // hoverBorderWidth: 20,
+        // legend: false
+        maintainAspectRatio: false,
+        tooltips: {
+          mode: "index",
+          intersect: false,
+          position: "nearest"
+        },
+        hover: {
+          mode: "index",
+          intersect: true
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+          yAxes: [{
+            // display: false,
+            gridLines: {
+              display: true,
+              lineWidth: "4px",
+              color: "rgba(0, 0, 0, .2)",
+              zeroLineColor: "transparent"
+            },
+            ticks: $.extend({
+              beginAtZero: true,
+              suggestedMax: 200
+            }, ticksStyle)
+          }],
+          xAxes: [{
+            display: true,
+            gridLines: {
+              display: false
+            },
+            ticks: ticksStyle
+          }]
+        }
+      };
+      this.lineChartData = {
+        labels: [],
+        datasets: [{
+          type: "line",
+          data: [],
+          backgroundColor: "#dbffe5",
+          borderColor: "#4caf50",
+          pointBorderColor: "#4caf50",
+          pointBackgroundColor: "#4caf50",
+          fill: true,
+          lineTension: 0
+        }]
+      };
+    },
+    getWeekInMonth: function getWeekInMonth(date) {
+      var adjustedDate = date.getDate() + date.getDay();
+      var prefixes = ["0", "1", "2", "3", "4", "5"];
+      return parseInt(prefixes[0 | adjustedDate / 7]) + 1;
+    },
+    updatePieChartValues: function updatePieChartValues(labels, data) {
+      var backgroundColors = [];
+
+      for (var i = 0; i < data.length; i++) {
+        backgroundColors.push(randomcolor__WEBPACK_IMPORTED_MODULE_1___default()({
+          luminosity: "light",
+          hue: "random"
+        }));
       }
+
+      this.doughnutChartData.labels = labels;
+      this.doughnutChartData.datasets = [{
+        label: "",
+        backgroundColor: backgroundColors,
+        data: data
+      }];
+      this.$refs.donut_chart.update();
+    },
+    updateLineChartValues: function updateLineChartValues(labels, data) {
+      this.lineChartData.labels = labels;
+      this.lineChartData.datasets[0].data = data;
+      this.$refs.line_chart.update();
+    },
+    onDateChange: function onDateChange(start, end) {
+      this.expenses_by_category = [];
+      this.start_date = start;
+      this.end_date = end;
+      this.onCategoryChange();
+      this.load_expense_reports(this.start_date.format("YYYY-MM-DD"), this.end_date.format("YYYY-MM-DD"));
+      this.onTimeUnitChange();
+    },
+    onCategoryChange: function onCategoryChange() {
+      var start = this.date_range[0];
+      var end = this.date_range[1];
+
+      switch (this.filter) {
+        case "expense_type":
+          this.load_expense_types_expenses(start, end);
+          break;
+
+        case "department":
+          this.load_department_expenses(start, end);
+          break;
+
+        case "employee":
+          this.load_employees_expenses(start, end);
+          break;
+
+        default:
+          break;
+      }
+
+      this.load_total_expenses(start, end);
+    },
+    onTimeUnitChange: function onTimeUnitChange() {
+      // console.log([this.date_range[0], this.date_range[1], this.groupBy]);
+      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy);
+      this.load_total_expenses(this.date_range[0], this.date_range[1]);
+    },
+    updateDates: function updateDates(e) {
+      this.date_range = e;
+      this.expenses_by_category = [];
+      this.onCategoryChange(); // this.load_expense_reports(
+      //     this.start_date.format("YYYY-MM-DD"),
+      //     this.end_date.format("YYYY-MM-DD")
+      // );
+
+      this.onTimeUnitChange();
     }
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadExpenseTypes();
-    this.loadVendors();
+    this.load_total_expenses(this.date_range[0], this.date_range[1]);
+    this.load_expense_types_expenses(this.date_range[0], this.date_range[1]);
+    this.load_line_chart();
+    this.load_pie_chart(); // this.onTimeUnitChange();
+
+    this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy);
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/components/BarChart.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/dashboard/components/BarChart.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Bar"],
+  props: ["data", "options"],
+  methods: {
+    update: function update() {
+      this.$data._chart.update();
+    }
+  },
+  mounted: function mounted() {
+    this.renderChart(this.data, this.options);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Doughnut"],
+  props: ["data", "options"],
+  methods: {
+    update: function update() {
+      this.$data._chart.update();
+    }
+  },
+  mounted: function mounted() {
+    this.renderChart(this.data, this.options);
+    this.$emit("updateChart");
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/components/LineChart.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/dashboard/components/LineChart.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    employeeid: {
-      type: Number,
-      "default": 0
-    }
-  },
-  data: function data() {
-    return {
-      dialog: false,
-      valid: false,
-      menu: false,
-      id: null,
-      code: null,
-      description: null,
-      amount: 0,
-      receipt_number: null,
-      date: null,
-      remarks: "",
-      is_active: true,
-      expense_type: null,
-      expense_types: [],
-      employee: null,
-      employees: [],
-      vendor: null,
-      vendors: [],
-      rules: {
-        description: [function (v) {
-          return !!v || "Description is required";
-        }],
-        amount: [function (v) {
-          return !!v || "Amount is required";
-        }],
-        receipt_number: [function (v) {
-          return !!v || "Receipt Number is required";
-        }],
-        date: [function (v) {
-          return !!v || "Date is required";
-        }],
-        remarks: [],
-        is_active: [],
-        expense_type: [function (v) {
-          return !!v || "Expense Type is required";
-        }],
-        vendor: [function (v) {
-          return !!v || "Vendor is required";
-        }]
-      },
-      errors: {
-        description: [],
-        amount: [],
-        receipt_number: [],
-        date: [],
-        remarks: [],
-        is_active: [],
-        expense_type_id: [],
-        vendor_id: []
-      }
-    };
-  },
+  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Line"],
+  props: ["data", "options"],
   methods: {
-    openDialog: function openDialog(item) {
-      var _this = this;
-
-      _this.dialog = true;
-      axios.get("/api/expenses/" + item.id).then(function (response) {
-        var data = response.data.data;
-        _this.id = data.id;
-        _this.code = data.code;
-        _this.description = data.description;
-        _this.amount = data.amount;
-        _this.receipt_number = data.receipt_number;
-        _this.date = data.date;
-        _this.remarks = data.remarks;
-        _this.is_active = data.is_active;
-        _this.expense_type = data.expense_type.id;
-        _this.employee = data.employee.id;
-        _this.vendor = data.vendor.id;
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    },
-    loadExpenseTypes: function loadExpenseTypes() {
-      var _this = this;
-
-      axios.get("/api/data/expense_types").then(function (response) {
-        _this.expense_types = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    },
-    loadVendors: function loadVendors() {
-      var _this = this;
-
-      axios.get("/api/data/vendors").then(function (response) {
-        _this.vendors = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-      this.$refs.form.resetValidation();
-      this.loadExpenseTypes();
-      this.loadVendors();
-    },
-    onSave: function onSave() {
-      var _this = this;
-
-      _this.$refs.form.validate();
-
-      if (_this.$refs.form.validate()) {
-        axios.put("/api/expenses/" + _this.id, {
-          code: _this.code,
-          description: _this.description,
-          amount: _this.amount,
-          receipt_number: _this.receipt_number,
-          date: _this.date,
-          remarks: _this.remarks,
-          is_active: _this.is_active,
-          expense_type_id: _this.expense_type,
-          employee_id: _this.employeeid,
-          vendor_id: _this.vendor
-        }).then(function (response) {
-          _this.onRefresh();
-
-          _this.$dialog.message.success("Expense updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
-
-          _this.$emit("onSaveExpense");
-
-          _this.dialog = false;
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-          _this.errors = error.response.data.errors;
-        });
-        return;
-      }
+    update: function update() {
+      this.$data._chart.update();
     }
   },
-  created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.loadExpenseTypes();
-    this.loadVendors();
+  mounted: function mounted() {
+    this.renderChart(this.data, this.options);
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=template&id=7c368b8c&":
-/*!********************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=template&id=7c368b8c& ***!
-  \********************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=template&id=6ece2240&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=template&id=6ece2240& ***!
+  \***************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -613,382 +581,125 @@ var render = function() {
     "v-app",
     [
       _c(
-        "v-dialog",
-        {
-          attrs: { persistent: "", "max-width": "600px" },
-          model: {
-            value: _vm.dialog,
-            callback: function($$v) {
-              _vm.dialog = $$v
-            },
-            expression: "dialog"
-          }
-        },
+        "v-card",
+        { staticClass: "elevation-0 pt-0" },
         [
           _c(
-            "v-card",
+            "v-card-title",
+            { staticClass: "pt-0" },
             [
+              _c("h4", { staticClass: "title green--text" }, [
+                _vm._v("Dashboard")
+              ]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
               _c(
-                "v-form",
+                "v-menu",
                 {
-                  ref: "form",
-                  model: {
-                    value: _vm.valid,
-                    callback: function($$v) {
-                      _vm.valid = $$v
-                    },
-                    expression: "valid"
-                  }
+                  attrs: {
+                    "close-on-content-click": false,
+                    "nudge-width": 200,
+                    "offset-y": "",
+                    left: "",
+                    bottom: ""
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              _vm._b(
+                                { attrs: { icon: "" } },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
+                            1
+                          )
+                        ]
+                      }
+                    }
+                  ])
                 },
                 [
-                  _c("v-card-title", [
-                    _c("span", { staticClass: "headline" }, [
-                      _vm._v("New Expense")
-                    ])
-                  ]),
                   _vm._v(" "),
                   _c(
-                    "v-card-text",
+                    "v-card",
                     [
                       _c(
-                        "v-container",
+                        "v-list",
                         [
                           _c(
-                            "v-row",
+                            "v-list-item",
                             [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-autocomplete", {
-                                    attrs: {
-                                      rules: _vm.rules.expense_type,
-                                      items: _vm.expense_types,
-                                      "error-messages":
-                                        _vm.errors.expense_type_id,
-                                      "item-value": "id",
-                                      "item-text": "name",
-                                      label: "Expense Type *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.expense_type_id = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.expense_type,
-                                      callback: function($$v) {
-                                        _vm.expense_type = $$v
-                                      },
-                                      expression: "expense_type"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-autocomplete", {
-                                    attrs: {
-                                      rules: _vm.rules.vendor,
-                                      items: _vm.vendors,
-                                      "error-messages": _vm.errors.vendor_id,
-                                      "item-value": "id",
-                                      "item-text": "name",
-                                      label: "Vendor *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.vendor_id = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.vendor,
-                                      callback: function($$v) {
-                                        _vm.vendor = $$v
-                                      },
-                                      expression: "vendor"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
+                              _c("DateRangePicker", {
+                                attrs: {
+                                  preset: _vm.preset,
+                                  presets: _vm.presets,
+                                  value: _vm.date_range
+                                },
+                                on: { updateDates: _vm.updateDates }
+                              })
                             ],
                             1
                           ),
                           _vm._v(" "),
                           _c(
-                            "v-row",
+                            "v-list-item",
                             [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "8" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      rules: _vm.rules.description,
-                                      counter: 100,
-                                      "error-messages": _vm.errors.description,
-                                      label: "Description *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.description = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.description,
-                                      callback: function($$v) {
-                                        _vm.description = $$v
-                                      },
-                                      expression: "description"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c(
-                                    "v-menu",
-                                    {
-                                      ref: "menu",
-                                      attrs: {
-                                        transition: "scale-transition",
-                                        "offset-y": "",
-                                        "min-width": "290px"
-                                      },
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "activator",
-                                          fn: function(ref) {
-                                            var on = ref.on
-                                            var attrs = ref.attrs
-                                            return [
-                                              _c(
-                                                "v-text-field",
-                                                _vm._g(
-                                                  _vm._b(
-                                                    {
-                                                      attrs: {
-                                                        rules: _vm.rules.date,
-                                                        "error-messages":
-                                                          _vm.errors.date,
-                                                        label: "Date *",
-                                                        readonly: ""
-                                                      },
-                                                      on: {
-                                                        input: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.errors.date = []
-                                                        }
-                                                      },
-                                                      model: {
-                                                        value: _vm.date,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.date = $$v
-                                                        },
-                                                        expression: "date"
-                                                      }
-                                                    },
-                                                    "v-text-field",
-                                                    attrs,
-                                                    false
-                                                  ),
-                                                  on
-                                                )
-                                              )
-                                            ]
-                                          }
-                                        }
-                                      ]),
-                                      model: {
-                                        value: _vm.menu,
-                                        callback: function($$v) {
-                                          _vm.menu = $$v
-                                        },
-                                        expression: "menu"
-                                      }
-                                    },
-                                    [
-                                      _vm._v(" "),
-                                      _c("v-date-picker", {
-                                        attrs: {
-                                          "no-title": "",
-                                          scrollable: "",
-                                          color: "success"
-                                        },
-                                        model: {
-                                          value: _vm.date,
-                                          callback: function($$v) {
-                                            _vm.date = $$v
-                                          },
-                                          expression: "date"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
+                              _c("v-select", {
+                                attrs: {
+                                  label: "Filter",
+                                  items: _vm.filterItems,
+                                  "item-text": "text",
+                                  "item-value": "value"
+                                },
+                                on: { change: _vm.onCategoryChange },
+                                model: {
+                                  value: _vm.filter,
+                                  callback: function($$v) {
+                                    _vm.filter = $$v
+                                  },
+                                  expression: "filter"
+                                }
+                              })
                             ],
                             1
                           ),
                           _vm._v(" "),
                           _c(
-                            "v-row",
+                            "v-list-item",
                             [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      rules: _vm.rules.receipt_number,
-                                      "error-messages":
-                                        _vm.errors.receipt_number,
-                                      label: "Receipt No. *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.receipt_number = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.receipt_number,
-                                      callback: function($$v) {
-                                        _vm.receipt_number = $$v
-                                      },
-                                      expression: "receipt_number"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      rules: _vm.rules.amount,
-                                      "error-messages": _vm.errors.amount,
-                                      label: "Amount *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.amount = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.amount,
-                                      callback: function($$v) {
-                                        _vm.amount = $$v
-                                      },
-                                      expression: "amount"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
+                              _c("v-select", {
+                                attrs: {
+                                  label: "Group by",
+                                  items: _vm.groupByItems,
+                                  "item-text": "text",
+                                  "item-value": "value"
+                                },
+                                on: { change: _vm.onTimeUnitChange },
+                                model: {
+                                  value: _vm.groupBy,
+                                  callback: function($$v) {
+                                    _vm.groupBy = $$v
+                                  },
+                                  expression: "groupBy"
+                                }
+                              })
                             ],
                             1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12" } },
-                                [
-                                  _c("v-textarea", {
-                                    attrs: {
-                                      rows: "1",
-                                      label: "Remarks",
-                                      "error-messages": _vm.errors.remarks
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.remarks = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.remarks,
-                                      callback: function($$v) {
-                                        _vm.remarks = $$v
-                                      },
-                                      expression: "remarks"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("small", { staticClass: "text--secondary" }, [
-                            _vm._v(
-                              "\n                            * indicates required field\n                        "
-                            )
-                          ])
+                          )
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "primary", text: "" },
-                          on: {
-                            click: function($event) {
-                              _vm.dialog = false
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Close\n                    "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "primary", text: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Save\n                    "
-                          )
-                        ]
                       )
                     ],
                     1
@@ -996,6 +707,66 @@ var render = function() {
                 ],
                 1
               )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-card-subtitle"),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            [
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "8" } },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "text-h5 success--text mb-10" },
+                        [
+                          _vm._v(
+                            "\n                        Total Expenses : " +
+                              _vm._s(_vm.total_expenses) +
+                              "\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("LineChart", {
+                        ref: "line_chart",
+                        attrs: {
+                          data: _vm.lineChartData,
+                          options: _vm.lineChartOptions
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("div", { staticClass: "mb-md-10" }),
+                      _vm._v(" "),
+                      _c("DoughnutChart", {
+                        ref: "donut_chart",
+                        attrs: {
+                          data: _vm.doughnutChartData,
+                          options: _vm.doughnutChartOptions
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-row", [_c("v-col", { attrs: { cols: "12" } })], 1)
             ],
             1
           )
@@ -1013,437 +784,18 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=template&id=8fcdcc28&":
-/*!******************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=template&id=8fcdcc28& ***!
-  \******************************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-app",
-    [
-      _c(
-        "v-dialog",
-        {
-          attrs: { persistent: "", "max-width": "600px" },
-          model: {
-            value: _vm.dialog,
-            callback: function($$v) {
-              _vm.dialog = $$v
-            },
-            expression: "dialog"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c(
-                "v-form",
-                {
-                  ref: "form",
-                  model: {
-                    value: _vm.valid,
-                    callback: function($$v) {
-                      _vm.valid = $$v
-                    },
-                    expression: "valid"
-                  }
-                },
-                [
-                  _c("v-card-title", [
-                    _c("span", { staticClass: "headline" }, [
-                      _vm._v("Edit Expense")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
-                    [
-                      _c(
-                        "v-container",
-                        [
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-autocomplete", {
-                                    attrs: {
-                                      rules: _vm.rules.expense_type,
-                                      items: _vm.expense_types,
-                                      "error-messages":
-                                        _vm.errors.expense_type_id,
-                                      "item-value": "id",
-                                      "item-text": "name",
-                                      label: "Expense Type *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.expense_type_id = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.expense_type,
-                                      callback: function($$v) {
-                                        _vm.expense_type = $$v
-                                      },
-                                      expression: "expense_type"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-autocomplete", {
-                                    attrs: {
-                                      rules: _vm.rules.vendor,
-                                      items: _vm.vendors,
-                                      "error-messages": _vm.errors.vendor_id,
-                                      "item-value": "id",
-                                      "item-text": "name",
-                                      label: "Vendor *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.vendor_id = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.vendor,
-                                      callback: function($$v) {
-                                        _vm.vendor = $$v
-                                      },
-                                      expression: "vendor"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "8" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      rules: _vm.rules.description,
-                                      counter: 100,
-                                      "error-messages": _vm.errors.description,
-                                      label: "Description *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.description = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.description,
-                                      callback: function($$v) {
-                                        _vm.description = $$v
-                                      },
-                                      expression: "description"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c(
-                                    "v-menu",
-                                    {
-                                      ref: "menu",
-                                      attrs: {
-                                        transition: "scale-transition",
-                                        "offset-y": "",
-                                        "min-width": "290px"
-                                      },
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "activator",
-                                          fn: function(ref) {
-                                            var on = ref.on
-                                            var attrs = ref.attrs
-                                            return [
-                                              _c(
-                                                "v-text-field",
-                                                _vm._g(
-                                                  _vm._b(
-                                                    {
-                                                      attrs: {
-                                                        rules: _vm.rules.date,
-                                                        "error-messages":
-                                                          _vm.errors.date,
-                                                        label: "Date *",
-                                                        readonly: ""
-                                                      },
-                                                      on: {
-                                                        input: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.errors.date = []
-                                                        }
-                                                      },
-                                                      model: {
-                                                        value: _vm.date,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.date = $$v
-                                                        },
-                                                        expression: "date"
-                                                      }
-                                                    },
-                                                    "v-text-field",
-                                                    attrs,
-                                                    false
-                                                  ),
-                                                  on
-                                                )
-                                              )
-                                            ]
-                                          }
-                                        }
-                                      ]),
-                                      model: {
-                                        value: _vm.menu,
-                                        callback: function($$v) {
-                                          _vm.menu = $$v
-                                        },
-                                        expression: "menu"
-                                      }
-                                    },
-                                    [
-                                      _vm._v(" "),
-                                      _c("v-date-picker", {
-                                        attrs: {
-                                          "no-title": "",
-                                          scrollable: "",
-                                          color: "success"
-                                        },
-                                        model: {
-                                          value: _vm.date,
-                                          callback: function($$v) {
-                                            _vm.date = $$v
-                                          },
-                                          expression: "date"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      rules: _vm.rules.receipt_number,
-                                      "error-messages":
-                                        _vm.errors.receipt_number,
-                                      label: "Receipt No. *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.receipt_number = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.receipt_number,
-                                      callback: function($$v) {
-                                        _vm.receipt_number = $$v
-                                      },
-                                      expression: "receipt_number"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      rules: _vm.rules.amount,
-                                      "error-messages": _vm.errors.amount,
-                                      label: "Amount *",
-                                      required: ""
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.amount = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.amount,
-                                      callback: function($$v) {
-                                        _vm.amount = $$v
-                                      },
-                                      expression: "amount"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12" } },
-                                [
-                                  _c("v-textarea", {
-                                    attrs: {
-                                      rows: "1",
-                                      label: "Remarks",
-                                      "error-messages": _vm.errors.remarks
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        _vm.errors.remarks = []
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.remarks,
-                                      callback: function($$v) {
-                                        _vm.remarks = $$v
-                                      },
-                                      expression: "remarks"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("small", { staticClass: "text--secondary" }, [
-                            _vm._v(
-                              "\n                            * indicates required field\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "primary", text: "" },
-                          on: {
-                            click: function($event) {
-                              _vm.dialog = false
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Close\n                    "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "primary", text: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Save\n                    "
-                          )
-                        ]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./resources/js/views/modules/admin/reports/components/CreateExpense.vue":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/reports/components/CreateExpense.vue ***!
-  \*******************************************************************************/
+/***/ "./resources/js/views/modules/admin/dashboard/Index.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/views/modules/admin/dashboard/Index.vue ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _CreateExpense_vue_vue_type_template_id_7c368b8c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreateExpense.vue?vue&type=template&id=7c368b8c& */ "./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=template&id=7c368b8c&");
-/* harmony import */ var _CreateExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreateExpense.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Index_vue_vue_type_template_id_6ece2240___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=6ece2240& */ "./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=template&id=6ece2240&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -1452,9 +804,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _CreateExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _CreateExpense_vue_vue_type_template_id_7c368b8c___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _CreateExpense_vue_vue_type_template_id_7c368b8c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Index_vue_vue_type_template_id_6ece2240___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_6ece2240___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1464,66 +816,165 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/reports/components/CreateExpense.vue"
+component.options.__file = "resources/js/views/modules/admin/dashboard/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************/
+/***/ "./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../../node_modules/vue-loader/lib??vue-loader-options!./CreateExpense.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=template&id=7c368b8c&":
-/*!**************************************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=template&id=7c368b8c& ***!
-  \**************************************************************************************************************/
+/***/ "./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=template&id=6ece2240&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=template&id=6ece2240& ***!
+  \*********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateExpense_vue_vue_type_template_id_7c368b8c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../node_modules/vue-loader/lib??vue-loader-options!./CreateExpense.vue?vue&type=template&id=7c368b8c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/CreateExpense.vue?vue&type=template&id=7c368b8c&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateExpense_vue_vue_type_template_id_7c368b8c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_6ece2240___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=6ece2240& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/Index.vue?vue&type=template&id=6ece2240&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_6ece2240___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateExpense_vue_vue_type_template_id_7c368b8c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_6ece2240___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/reports/components/EditExpense.vue":
+/***/ "./resources/js/views/modules/admin/dashboard/components/BarChart.vue":
+/*!****************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/dashboard/components/BarChart.vue ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BarChart.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/dashboard/components/BarChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  _BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"],
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/modules/admin/dashboard/components/BarChart.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/dashboard/components/BarChart.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/dashboard/components/BarChart.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../../node_modules/vue-loader/lib??vue-loader-options!./BarChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/components/BarChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DoughnutChart.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  _DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"],
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../../node_modules/vue-loader/lib??vue-loader-options!./DoughnutChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/components/DoughnutChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/dashboard/components/LineChart.vue":
 /*!*****************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/reports/components/EditExpense.vue ***!
+  !*** ./resources/js/views/modules/admin/dashboard/components/LineChart.vue ***!
   \*****************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _EditExpense_vue_vue_type_template_id_8fcdcc28___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditExpense.vue?vue&type=template&id=8fcdcc28& */ "./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=template&id=8fcdcc28&");
-/* harmony import */ var _EditExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditExpense.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
+/* harmony import */ var _LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LineChart.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/dashboard/components/LineChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
 
 
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _EditExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _EditExpense_vue_vue_type_template_id_8fcdcc28___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _EditExpense_vue_vue_type_template_id_8fcdcc28___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  _LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"],
+  render,
+  staticRenderFns,
   false,
   null,
   null,
@@ -1533,40 +984,22 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/reports/components/EditExpense.vue"
+component.options.__file = "resources/js/views/modules/admin/dashboard/components/LineChart.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/views/modules/admin/dashboard/components/LineChart.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/views/modules/admin/dashboard/components/LineChart.vue?vue&type=script&lang=js& ***!
   \******************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditExpense.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditExpense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=template&id=8fcdcc28&":
-/*!************************************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=template&id=8fcdcc28& ***!
-  \************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditExpense_vue_vue_type_template_id_8fcdcc28___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditExpense.vue?vue&type=template&id=8fcdcc28& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/reports/components/EditExpense.vue?vue&type=template&id=8fcdcc28&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditExpense_vue_vue_type_template_id_8fcdcc28___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditExpense_vue_vue_type_template_id_8fcdcc28___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../../node_modules/vue-loader/lib??vue-loader-options!./LineChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/dashboard/components/LineChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ })
 

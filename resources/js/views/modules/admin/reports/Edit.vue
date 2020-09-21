@@ -190,7 +190,7 @@
             </v-form>
         </v-card>
 
-        <!-- <CreateExpense
+        <CreateExpense
             ref="createExpense"
             :employeeid="employee"
             @onSaveExpense="loadExpenses"
@@ -200,7 +200,7 @@
             ref="editExpense"
             :employeeid="employee"
             @onSaveExpense="loadExpenses"
-        ></EditExpense> -->
+        ></EditExpense>
     </v-app>
 </template>
 
@@ -293,20 +293,21 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenses();
+            this.loadExpenses(this.employee);
         },
         getData() {
             let _this = this;
             axios
                 .get(`/api/expense_reports/${_this.$route.params.id}`)
                 .then(response => {
+
                     let data = response.data.data;
 
                     _this.code = data.code;
                     _this.description = data.description;
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
-                    _this.employee = data.employee;
+                    _this.employee = data.employee.id;
                     _this.status = data.status;
                     _this.expenses = data.expenses;
                     _this.submitted_at = data.submitted_at;
@@ -318,16 +319,20 @@ export default {
                     _this.deleted_at = data.deleted_at;
                     _this.total = data.total;
 
-                    console.log([_this.from, _this.to]);
+                    // _this.date_range = [_this.from, _this.to];
+                    console.log(["date range", _this.from, _this.to]);
 
-                    _this.date_range = [_this.from, _this.to];
+                    _this.selected.splice(0, 0, ...data.expenses);
+
+                    _this.loadExpenses(data.employee.id);
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
                 });
         },
-        loadExpenses() {
+        loadExpenses(emp_id) {
+            // let emp_id = emp_id == null ? this.employee : emp_id;
             let start_date = this.date_range[0];
             let end_date = this.date_range[1];
             let _this = this;
@@ -335,8 +340,8 @@ export default {
             axios
                 .get("/api/data/expenses", {
                     params: {
-                        create_report: true,
-                        employee_id: _this.employee,
+                        update_report: true,
+                        employee_id: emp_id,
                         start_date: start_date,
                         end_date: end_date,
                         expense_report_id: _this.$route.params.id
@@ -381,7 +386,7 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 axios
-                    .post("/api/expense_reports", {
+                    .put("/api/expense_reports/" + _this.$route.params.id, {
                         code: _this.code,
                         description: _this.description,
                         remarks: _this.remarks,
@@ -393,7 +398,7 @@ export default {
                         // _this.onRefresh();
 
                         _this.$dialog.message.success(
-                            "Expense Report created successfully.",
+                            "Expense Report updated successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
@@ -404,6 +409,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
                     });
 
                 return;
@@ -448,7 +454,7 @@ export default {
                                 }
                             );
 
-                            _this.loadExpenses();
+                            _this.loadExpenses(_this.employee);
                         })
                         .catch(function(error) {
                             console.log(error.response);
@@ -473,7 +479,7 @@ export default {
 
         this.getData();
 
-        this.loadExpenses();
+        // this.loadExpenses();
     }
 };
 </script>
