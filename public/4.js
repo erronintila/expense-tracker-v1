@@ -234,6 +234,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -885,7 +888,10 @@ var render = function() {
                                     staticClass: "mx-auto",
                                     attrs: {
                                       elevation: hover ? 5 : 2,
-                                      to: "/admin/expenses"
+                                      to: {
+                                        name: "admin.expenses.index",
+                                        params: { status: "Archived" }
+                                      }
                                     }
                                   },
                                   [

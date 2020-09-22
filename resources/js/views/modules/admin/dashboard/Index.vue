@@ -40,7 +40,10 @@
                             <v-card
                                 :elevation="hover ? 5 : 2"
                                 class="mx-auto"
-                                to="/admin/expenses"
+                                :to="{
+                                    name: 'admin.expenses.index',
+                                    params: { status: 'Archived' }
+                                }"
                             >
                                 <v-card-title>{{
                                     total_expenses

@@ -278,7 +278,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       employees: [],
       expense_type: 0,
       expense_types: [],
-      status: "Active",
+      status: this.$route.params.status || "Active",
       statuses: ["Active", "Archived"],
       selected: [],
       search: "",
@@ -372,6 +372,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.status = "Active";
       this.loadEmployees();
       this.loadExpenseTypes();
     },
@@ -506,6 +507,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     this.loadEmployees();
     this.loadExpenseTypes();
+    console.log(this.$route.params.status);
   }
 });
 

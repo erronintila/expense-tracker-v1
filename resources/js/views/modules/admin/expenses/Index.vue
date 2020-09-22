@@ -265,7 +265,7 @@ export default {
             employees: [],
             expense_type: 0,
             expense_types: [],
-            status: "Active",
+            status: this.$route.params.status || "Active",
             statuses: ["Active", "Archived"],
             selected: [],
             search: "",
@@ -361,7 +361,7 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
+            this.status = "Active";
             this.loadEmployees();
             this.loadExpenseTypes();
         },
@@ -500,6 +500,8 @@ export default {
 
         this.loadEmployees();
         this.loadExpenseTypes();
+
+        console.log(this.$route.params.status);
     }
 };
 </script>
