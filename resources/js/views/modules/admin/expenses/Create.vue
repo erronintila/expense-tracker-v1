@@ -61,7 +61,7 @@
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="8">
+                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="description"
                                 :rules="rules.description"
@@ -69,6 +69,17 @@
                                 :error-messages="errors.description"
                                 @input="errors.description = []"
                                 label="Description *"
+                                required
+                            ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="receipt_number"
+                                :rules="rules.receipt_number"
+                                :error-messages="errors.receipt_number"
+                                @input="errors.receipt_number = []"
+                                label="Receipt No. *"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -105,17 +116,109 @@
                     </v-row>
 
                     <v-row>
+                        <v-col cols="12">
+                            <v-data-table
+                                :headers="headers"
+                                :items="items"
+                                :items-per-page="5"
+                                :footer-props="{
+                                    itemsPerPageOptions: [5, 10, 20]
+                                }"
+                            >
+                                <template v-slot:top>
+                                    <v-toolbar flat color="white">
+                                        Expense Details
+                                        <v-spacer></v-spacer>
+                                        <v-dialog
+                                            v-model="dialog"
+                                            max-width="500px"
+                                        >
+                                            <template
+                                                v-slot:activator="{ on, attrs }"
+                                            >
+                                                <v-btn
+                                                    color="primary"
+                                                    dark
+                                                    class="mb-2"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >New Item</v-btn
+                                                >
+                                            </template>
+                                            <v-card>
+                                                <v-card-title>
+                                                    <!-- <span class="headline">{{ formTitle }}</span> -->
+                                                </v-card-title>
+
+                                                <v-card-text>
+                                                    <v-container>
+                                                        <v-row>
+                                                            <v-col cols="12">
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        particular
+                                                                    "
+                                                                    label="Particular"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="12">
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        particular_amount
+                                                                    "
+                                                                    label="Amount"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-container>
+                                                </v-card-text>
+
+                                                <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn
+                                                        color="primary"
+                                                        text
+                                                        @click="dialog = false"
+                                                        >Cancel</v-btn
+                                                    >
+                                                    <v-btn
+                                                        color="primary"
+                                                        text
+                                                        @click="addItem"
+                                                        >Add</v-btn
+                                                    >
+                                                </v-card-actions>
+                                            </v-card>
+                                        </v-dialog>
+                                    </v-toolbar>
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            () => {
+                                                onRemove(item);
+                                            }
+                                        "
+                                    >
+                                        mdi-delete
+                                    </v-icon>
+                                </template></v-data-table
+                            >
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="receipt_number"
-                                :rules="rules.receipt_number"
-                                :error-messages="errors.receipt_number"
-                                @input="errors.receipt_number = []"
-                                label="Receipt No. *"
-                                required
+                                label="Subtotal"
+                                type="number"
                             ></v-text-field>
                         </v-col>
+                    </v-row>
 
+                    <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="amount"
@@ -123,13 +226,14 @@
                                 :error-messages="errors.amount"
                                 @input="errors.amount = []"
                                 label="Amount *"
+                                type="number"
                                 required
                             ></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12">
+                        <v-col cols="12" md="4">
                             <v-textarea
                                 rows="1"
                                 label="Remarks"
@@ -159,6 +263,7 @@
 export default {
     data() {
         return {
+            dialog: false,
             valid: false,
             menu: false,
             code: null,
@@ -174,6 +279,8 @@ export default {
             employees: [],
             vendor: null,
             vendors: [],
+            particular: "",
+            particular_amount: 0,
             rules: {
                 description: [v => !!v || "Description is required"],
                 amount: [v => !!v || "Amount is required"],
@@ -195,7 +302,13 @@ export default {
                 expense_type_id: [],
                 employee_id: [],
                 vendor_id: []
-            }
+            },
+            headers: [
+                { text: "Particulars", value: "particular", sortable: false },
+                { text: "Amount", value: "particular_amount", sortable: false },
+                { text: "", value: "actions", sortable: false }
+            ],
+            items: []
         };
     },
     methods: {
@@ -278,6 +391,28 @@ export default {
 
                 return;
             }
+        },
+        addItem() {
+            this.items.push({
+                particular: this.particular,
+                particular_amount: this.particular_amount
+            });
+            this.dialog = false;
+            this.particular = "";
+            this.particular_amount = 0;
+        },
+        onRemove(item) {
+            const index = this.items.indexOf(item);
+            confirm("Are you sure you want to remove this item?") &&
+                this.items.splice(index, 1);
+        }
+    },
+    watch: {
+        items() {
+            this.amount = this.items.reduce((total, item) => parseFloat(total) + parseFloat(item.particular_amount), 0);
+            // this.amount = this.formatNumber(
+            //     this.items.reduce((total, item) => total + item.amount, 0)
+            // );
         }
     },
     created() {

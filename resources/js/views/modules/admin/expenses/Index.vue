@@ -158,9 +158,9 @@
                             <v-container>
                                 <table>
                                     <tr>
-                                        <td><strong>Type</strong></td>
+                                        <td><strong>Description</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.expense_type.name }}</td>
+                                        <td>{{ item.description }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Receipt</strong></td>
@@ -252,7 +252,7 @@ export default {
                 "Last 5 Years"
             ],
             headers: [
-                { text: "Expense", value: "description" },
+                { text: "Expense", value: "expense_type.name" },
                 { text: "Employee", value: "employee_name" },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },

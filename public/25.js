@@ -252,7 +252,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       headers: [{
         text: "Expense",
-        value: "description"
+        value: "expense_type.name"
       }, {
         text: "Employee",
         value: "employee_name"
@@ -869,13 +869,13 @@ var render = function() {
                                   _c("table", [
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Type")])
+                                        _c("strong", [_vm._v("Description")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(_vm._s(item.expense_type.name))
+                                        _vm._v(_vm._s(item.description))
                                       ])
                                     ]),
                                     _vm._v(" "),
