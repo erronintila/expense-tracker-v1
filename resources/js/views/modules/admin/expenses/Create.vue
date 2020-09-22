@@ -212,7 +212,64 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
+                                dense
+                                reverse
+                                readonly
+                                @change="calculateTotal"
+                                @input="calculateTotal"
+                                v-model="subtotal"
+                                type="number"
                                 label="Subtotal"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                dense
+                                reverse
+                                @change="calculateTotal"
+                                @input="calculateTotal"
+                                v-model="discount"
+                                type="number"
+                                label="Discount"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                dense
+                                reverse
+                                @change="calculateTotal"
+                                @input="calculateTotal"
+                                v-model="tax_rate"
+                                label="(Tax rate)"
+                                type="number"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                dense
+                                reverse
+                                @change="calculateTotal"
+                                @input="calculateTotal"
+                                v-model="tax"
+                                label="TAX"
+                                type="number"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                dense
+                                reverse
+                                readonly
+                                v-model="amount"
+                                label="Total Amount"
                                 type="number"
                             ></v-text-field>
                         </v-col>
@@ -268,6 +325,10 @@ export default {
             menu: false,
             code: null,
             description: null,
+            subtotal: 0,
+            discount: 0,
+            tax: 0,
+            tax_rate: 0,
             amount: 0,
             receipt_number: null,
             date: null,
@@ -405,14 +466,31 @@ export default {
             const index = this.items.indexOf(item);
             confirm("Are you sure you want to remove this item?") &&
                 this.items.splice(index, 1);
+        },
+        isEmpty(item) {
+            if (item) {
+                return parseFloat(item);
+            }
+            return 0;
+        },
+        calculateTotal() {
+            let subtotal = this.isEmpty(this.subtotal);
+            let discount = this.isEmpty(this.discount);
+            let tax = this.isEmpty(this.tax);
+            let tax_rate = this.isEmpty(this.tax_rate);
+
+            this.amount = subtotal - (discount + tax + tax_rate);
         }
     },
     watch: {
         items() {
-            this.amount = this.items.reduce((total, item) => parseFloat(total) + parseFloat(item.particular_amount), 0);
-            // this.amount = this.formatNumber(
-            //     this.items.reduce((total, item) => total + item.amount, 0)
-            // );
+            this.subtotal = this.items.reduce(
+                (total, item) =>
+                    parseFloat(total) + parseFloat(item.particular_amount),
+                0
+            );
+
+            this.calculateTotal();
         }
     },
     created() {

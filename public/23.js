@@ -270,6 +270,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -278,6 +335,10 @@ __webpack_require__.r(__webpack_exports__);
       menu: false,
       code: null,
       description: null,
+      subtotal: 0,
+      discount: 0,
+      tax: 0,
+      tax_rate: 0,
       amount: 0,
       receipt_number: null,
       date: null,
@@ -421,15 +482,28 @@ __webpack_require__.r(__webpack_exports__);
     onRemove: function onRemove(item) {
       var index = this.items.indexOf(item);
       confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
+    },
+    isEmpty: function isEmpty(item) {
+      if (item) {
+        return parseFloat(item);
+      }
+
+      return 0;
+    },
+    calculateTotal: function calculateTotal() {
+      var subtotal = this.isEmpty(this.subtotal);
+      var discount = this.isEmpty(this.discount);
+      var tax = this.isEmpty(this.tax);
+      var tax_rate = this.isEmpty(this.tax_rate);
+      this.amount = subtotal - (discount + tax + tax_rate);
     }
   },
   watch: {
     items: function items() {
-      this.amount = this.items.reduce(function (total, item) {
+      this.subtotal = this.items.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.particular_amount);
-      }, 0); // this.amount = this.formatNumber(
-      //     this.items.reduce((total, item) => total + item.amount, 0)
-      // );
+      }, 0);
+      this.calculateTotal();
     }
   },
   created: function created() {
@@ -1013,7 +1087,153 @@ var render = function() {
                         { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "Subtotal", type: "number" }
+                            attrs: {
+                              dense: "",
+                              reverse: "",
+                              readonly: "",
+                              type: "number",
+                              label: "Subtotal"
+                            },
+                            on: {
+                              change: _vm.calculateTotal,
+                              input: _vm.calculateTotal
+                            },
+                            model: {
+                              value: _vm.subtotal,
+                              callback: function($$v) {
+                                _vm.subtotal = $$v
+                              },
+                              expression: "subtotal"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              dense: "",
+                              reverse: "",
+                              type: "number",
+                              label: "Discount"
+                            },
+                            on: {
+                              change: _vm.calculateTotal,
+                              input: _vm.calculateTotal
+                            },
+                            model: {
+                              value: _vm.discount,
+                              callback: function($$v) {
+                                _vm.discount = $$v
+                              },
+                              expression: "discount"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              dense: "",
+                              reverse: "",
+                              label: "(Tax rate)",
+                              type: "number"
+                            },
+                            on: {
+                              change: _vm.calculateTotal,
+                              input: _vm.calculateTotal
+                            },
+                            model: {
+                              value: _vm.tax_rate,
+                              callback: function($$v) {
+                                _vm.tax_rate = $$v
+                              },
+                              expression: "tax_rate"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              dense: "",
+                              reverse: "",
+                              label: "TAX",
+                              type: "number"
+                            },
+                            on: {
+                              change: _vm.calculateTotal,
+                              input: _vm.calculateTotal
+                            },
+                            model: {
+                              value: _vm.tax,
+                              callback: function($$v) {
+                                _vm.tax = $$v
+                              },
+                              expression: "tax"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              dense: "",
+                              reverse: "",
+                              readonly: "",
+                              label: "Total Amount",
+                              type: "number"
+                            },
+                            model: {
+                              value: _vm.amount,
+                              callback: function($$v) {
+                                _vm.amount = $$v
+                              },
+                              expression: "amount"
+                            }
                           })
                         ],
                         1
