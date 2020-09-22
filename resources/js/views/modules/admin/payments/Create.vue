@@ -288,7 +288,7 @@ export default {
                 "Last 30 Days",
                 "This Week",
                 "This Month",
-                "This Year",
+                "This Year"
             ],
             code: "",
             reference_no: "",
@@ -361,7 +361,20 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/payments", {
-                        // name: _this.name
+                        code: _this.code,
+                        reference_no: _this.reference_no,
+                        voucher_no: _this.voucher_no,
+                        description: _this.description,
+                        date: _this.date,
+                        cheque_no: _this.cheque_no,
+                        cheque_date: _this.cheque_date,
+                        amount: _this.amount,
+                        payee: _this.payee,
+                        payee_address: _this.payee_address,
+                        payee_phone: _this.payee_phone,
+                        remarks: _this.remarks,
+                        notes: _this.notes,
+                        expense_reports: _this.selected
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -376,6 +389,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
                     });
 
                 return;

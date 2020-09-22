@@ -81,15 +81,27 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onRestore">
+                        <v-list-item @click="onUpdate('approve', 'put')">
                             <v-list-item-title>
-                                Restore
+                                Approve Payment(s)
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item @click="onDelete">
+                        <v-list-item @click="onUpdate('release', 'put')">
                             <v-list-item-title>
-                                Move to archive
+                                Release Payment(s)
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onUpdate('receive', 'put')">
+                            <v-list-item-title>
+                                Receive Payment(s)
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onUpdate('cancel', 'delete')">
+                            <v-list-item-title>
+                                Cancel Payment(s)
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -129,8 +141,51 @@
                 >
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
-                            {{ item }}
+                            <v-container>
+                                <table>
+                                    <tr>
+                                        <td><strong>Code</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Reference No.</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.reference_no }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Voucher No.</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.voucher_no }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Payee</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.payee }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Remarks</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.remarks }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Created at</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.created_at }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.status.remarks }}</td>
+                                    </tr>
+                                </table>
+                            </v-container>
                         </td>
+                    </template>
+                    <template v-slot:[`item.status.status`]="{ item }">
+                        <v-chip :color="item.status.color" dark small>{{
+                            item.status.status
+                        }}</v-chip>
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{ getHumanDate(item.created_at) }}
@@ -146,6 +201,26 @@
                             mdi-pencil
                         </v-icon>
                     </template>
+                    <template slot="body.append" v-if="items.length > 0">
+                        <tr class="green--text hidden-md-and-up">
+                            <td class="title">
+                                Total: <strong>{{ totalAmount }}</strong>
+                            </td>
+                        </tr>
+                        <tr class="green--text hidden-sm-and-down">
+                            <td class="title">Total</td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <strong>{{ totalAmount }}</strong>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
@@ -154,23 +229,28 @@
 
 <script>
 import moment from "moment";
+import numeral from "numeral";
+import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 
 export default {
-    props: {},
+    components: { DateRangePicker },
     data() {
         return {
             loading: true,
             headers: [
                 { text: "Description", value: "description" },
                 { text: "Date", value: "date" },
+                { text: "Amount", value: "amount" },
                 { text: "Created", value: "created_at" },
                 { text: "Updated", value: "updated_at" },
+                { text: "Status", value: "status.status" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
+            totalAmount: 0,
             items: [],
             status: "Active",
-            statuses: ["Active", "Archived"],
+            statuses: ["Active", "Approved", "Released", "Received", "Cancelled"],
             selected: [],
             search: "",
             totalItems: 0,
@@ -179,10 +259,21 @@ export default {
                 sortDesc: [false],
                 page: 1,
                 itemsPerPage: 10
-            }
+            },
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ]
         };
     },
     methods: {
+        updateDates(e) {
+            this.date_range = e;
+        },
         getDataFromApi() {
             let _this = this;
 
@@ -235,7 +326,47 @@ export default {
                 params: { id: item.id }
             });
         },
-        onDelete() {
+        // onDelete() {
+        //     let _this = this;
+
+        //     if (_this.selected.length == 0) {
+        //         this.$dialog.message.error("No item(s) selected", {
+        //             position: "top-right",
+        //             timeout: 2000
+        //         });
+        //         return;
+        //     }
+
+        //     this.$confirm("do you want to cancel payment?").then(res => {
+        //         if (res) {
+        //             axios
+        //                 .delete(`/api/payments/${_this.selected[0].id}`, {
+        //                     params: {
+        //                         ids: _this.selected.map(item => {
+        //                             return item.id;
+        //                         })
+        //                     }
+        //                 })
+        //                 .then(function(response) {
+        //                     _this.$dialog.message.success(
+        //                         "Item(s) moved to archive.",
+        //                         {
+        //                             position: "top-right",
+        //                             timeout: 2000
+        //                         }
+        //                     );
+        //                     _this.getDataFromApi().then(data => {
+        //                         _this.items = data.items;
+        //                         _this.totalItems = data.total;
+        //                     });
+        //                 })
+        //                 .catch(function(error) {
+        //                     console.log(error);
+        //                 });
+        //         }
+        //     });
+        // },
+        onUpdate(action, method) {
             let _this = this;
 
             if (_this.selected.length == 0) {
@@ -246,19 +377,23 @@ export default {
                 return;
             }
 
-            this.$confirm("Move item(s) to archive?").then(res => {
+            this.$confirm(`Do you want to ${action} payment(s)?`).then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/payments/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                    let ids = _this.selected.map(item => {
+                        return item.id;
+                    });
+
+                    axios({
+                        method: method,
+                        url: `/api/payments/${_this.selected[0].id}`,
+                        data: {
+                            ids: ids,
+                            action: action
+                        }
+                    })
                         .then(function(response) {
                             _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
+                                response.data.message,
                                 {
                                     position: "top-right",
                                     timeout: 2000
@@ -275,44 +410,11 @@ export default {
                 }
             });
         },
-        onRestore() {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
-
-            this.$confirm("Do you want to restore account(s)?").then(res => {
-                if (res) {
-                    axios
-                        .put(`/api/payments/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "restore"
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        });
-                }
-            });
-        },
         getHumanDate(date) {
             return moment(date).fromNow();
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     watch: {
@@ -324,6 +426,11 @@ export default {
                 });
             },
             deep: true
+        },
+        items() {
+            this.totalAmount = this.formatNumber(
+                this.items.reduce((total, item) => total + item.amount, 0)
+            );
         }
     },
     computed: {

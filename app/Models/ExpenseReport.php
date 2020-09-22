@@ -71,18 +71,18 @@ class ExpenseReport extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    public function payment_requests()
-    {
-        // return $this->belongsToMany(PaymentRequest::class);
-        return $this->belongsToMany(
-            PaymentRequest::class,
-            'expense_report_payment_request',
-            'expense_report_id',
-            'payment_request_id',
-        )
-            ->withPivot('remarks', 'is_cancelled')
-            ->withTimestamps();
-    }
+    // public function payment_requests()
+    // {
+    //     // return $this->belongsToMany(PaymentRequest::class);
+    //     return $this->belongsToMany(
+    //         PaymentRequest::class,
+    //         'expense_report_payment_request',
+    //         'expense_report_id',
+    //         'payment_request_id',
+    //     )
+    //         ->withPivot('remarks', 'is_cancelled')
+    //         ->withTimestamps();
+    // }
 
     /**
      * Displays the status of Expense Report
@@ -120,11 +120,23 @@ class ExpenseReport extends Model
 
         if (!$paid) {
 
-            $arr = [
-                'color' => 'green',
-                'remarks' => 'Payment successfully delivered',
-                'status' => 'Paid',
-            ];
+            switch ($this->payment->status()["status"]) {
+                case 'Completed':
+                    $arr = [
+                        'color' => 'green',
+                        'remarks' => 'Payment transaction was completed',
+                        'status' => 'Paid/Reimbursed',
+                    ];
+                    break;
+
+                default:
+                    $arr = [
+                        'color' => 'green',
+                        'remarks' => 'Processing Payment',
+                        'status' => 'Approved',
+                    ];
+                    break;
+            }
 
             return $arr;
         }

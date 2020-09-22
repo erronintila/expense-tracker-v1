@@ -14,7 +14,6 @@
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn icon v-bind="attrs" v-on="on">
                             <v-icon>mdi-dots-vertical</v-icon>
-                            <!-- <v-icon>mdi-filter</v-icon> -->
                         </v-btn>
                     </template>
 
@@ -28,26 +27,6 @@
                                     @updateDates="updateDates"
                                 ></DateRangePicker>
                             </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="filter"
-                                    label="Filter"
-                                    :items="filterItems"
-                                    item-text="text"
-                                    item-value="value"
-                                    @change="onCategoryChange"
-                                ></v-select>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="groupBy"
-                                    label="Group by"
-                                    :items="groupByItems"
-                                    item-text="text"
-                                    item-value="value"
-                                    @change="onTimeUnitChange"
-                                ></v-select>
-                            </v-list-item>
                         </v-list>
                     </v-card>
                 </v-menu>
@@ -56,37 +35,179 @@
 
             <v-container>
                 <v-row>
-                    <v-col cols="12" md="8">
-                        <div class="text-h5 success--text mb-10">
-                            Total Expenses : {{ total_expenses }}
-                        </div>
-                        <LineChart
-                            ref="line_chart"
-                            :data="lineChartData"
-                            :options="lineChartOptions"
-                        ></LineChart>
+                    <v-col cols="12" md="3">
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card
+                                :elevation="hover ? 5 : 2"
+                                class="mx-auto"
+                                to="/admin/expenses"
+                            >
+                                <v-card-title>{{
+                                    total_expenses
+                                }}</v-card-title>
+                                <v-card-subtitle
+                                    >Total Expenses</v-card-subtitle
+                                >
+                                <v-card-text>Hello world</v-card-text>
+                            </v-card>
+                        </v-hover>
                     </v-col>
-                    <v-col cols="12" md="4">
-                        <div class="mb-md-10"></div>
-                        <DoughnutChart
-                            ref="donut_chart"
-                            :data="doughnutChartData"
-                            :options="doughnutChartOptions"
-                        ></DoughnutChart>
+                    <v-col cols="12" md="3">
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card
+                                :elevation="hover ? 5 : 2"
+                                class="mx-auto"
+                                to="/admin/payments"
+                            >
+                                <v-card-title>0.00</v-card-title>
+                                <v-card-subtitle
+                                    >Reimbursements</v-card-subtitle
+                                >
+                                <v-card-text>Hello world</v-card-text>
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card
+                                :elevation="hover ? 5 : 2"
+                                class="mx-auto"
+                                to="/admin/reports"
+                            >
+                                <v-card-title>0.00</v-card-title>
+                                <v-card-subtitle
+                                    >Pending Expense Reports</v-card-subtitle
+                                >
+                                <v-card-text>Hello world</v-card-text>
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card :elevation="hover ? 5 : 2" class="mx-auto">
+                                <v-card-title>0.00</v-card-title>
+                                <v-card-subtitle
+                                    >Secondary text</v-card-subtitle
+                                >
+                                <v-card-text>Hello world</v-card-text>
+                            </v-card>
+                        </v-hover>
                     </v-col>
                 </v-row>
-                <!-- <v-row>
-                    <v-col cols="12">
-                        <LineChart
-                            ref="line_chart"
-                            :data="lineChartData"
-                            :options="lineChartOptions"
-                        ></LineChart>
-                    </v-col>
-                </v-row> -->
-                <v-row>
-                    <v-col cols="12"> </v-col>
-                </v-row>
+                <v-hover v-slot:default="{ hover }">
+                    <v-card :elevation="hover ? 5 : 2" class="mx-auto">
+                        <v-toolbar flat dense>
+                            <v-toolbar-title>
+                                Expenses by category
+                            </v-toolbar-title>
+
+                            <v-spacer></v-spacer>
+
+                            <v-menu
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                offset-y
+                                left
+                                bottom
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on">
+                                        <v-icon>mdi-dots-vertical</v-icon>
+                                    </v-btn>
+                                </template>
+
+                                <v-card>
+                                    <v-list>
+                                        <v-list-item>
+                                            <v-select
+                                                v-model="filter"
+                                                label="Filter"
+                                                :items="filterItems"
+                                                item-text="text"
+                                                item-value="value"
+                                                @change="onCategoryChange"
+                                            ></v-select>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-card>
+                            </v-menu>
+                        </v-toolbar>
+                        <v-row class="ml-4 mb-4">
+                            <v-col md="4" class="mt-5">
+                                <DoughnutChart
+                                    ref="donut_chart"
+                                    :data="doughnutChartData"
+                                    :options="doughnutChartOptions"
+                                ></DoughnutChart>
+                            </v-col>
+                            <v-col cols="12" md="8">
+                                <v-card
+                                    flat
+                                    class="overflow-y-auto"
+                                    max-height="500"
+                                >
+                                    <v-card-text>
+                                        <HorizontalBarChart
+                                            ref="horizontalBar_chart"
+                                            :data="horizontalBarChartData"
+                                            :options="horizontalBarChartOptions"
+                                        ></HorizontalBarChart>
+                                    </v-card-text>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-hover>
+
+                <v-hover v-slot:default="{ hover }">
+                    <v-card :elevation="hover ? 5 : 2" class="mx-auto">
+                        <v-toolbar flat dense>
+                            <v-toolbar-title>
+                                Expenses by date
+                            </v-toolbar-title>
+
+                            <v-spacer></v-spacer>
+
+                            <v-menu
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                offset-y
+                                left
+                                bottom
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on">
+                                        <v-icon>mdi-dots-vertical</v-icon>
+                                    </v-btn>
+                                </template>
+
+                                <v-card>
+                                    <v-list>
+                                        <v-list-item>
+                                            <v-select
+                                                v-model="groupBy"
+                                                label="Group by"
+                                                :items="groupByItems"
+                                                item-text="text"
+                                                item-value="value"
+                                                @change="onTimeUnitChange"
+                                            ></v-select>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-card>
+                            </v-menu>
+                        </v-toolbar>
+                        <v-row>
+                            <v-col cols="12">
+                                <LineChart
+                                    ref="line_chart"
+                                    :data="lineChartData"
+                                    :options="lineChartOptions"
+                                ></LineChart>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-hover>
             </v-container>
         </v-card>
     </v-app>
@@ -99,14 +220,16 @@ import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import DoughnutChart from "./components/DoughnutChart";
 // import PieChart from "./components/PieChart";
-import BarChart from "./components/BarChart";
+// import BarChart from "./components/BarChart";
+import HorizontalBarChart from "./components/HorizontalBarChart";
 import LineChart from "./components/LineChart";
 
 export default {
     components: {
         DoughnutChart,
         // PieChart,
-        BarChart,
+        // BarChart,
+        HorizontalBarChart,
         LineChart,
         DateRangePicker
     },
@@ -120,6 +243,10 @@ export default {
                 "#4bc0c0",
                 "#ffcd56"
             ],
+
+            horizontalBarChartOptions: {},
+            horizontalBarChartData: {},
+
             doughnutChartOptions: {},
             doughnutChartData: {},
 
@@ -166,7 +293,22 @@ export default {
                 "Last Quarter",
                 "Last Year",
                 "Last 5 Years"
-            ]
+            ],
+
+            headers: [
+                {
+                    text: "Dessert (100g serving)",
+                    align: "start",
+                    sortable: false,
+                    value: "name"
+                },
+                { text: "Calories", value: "calories" },
+                { text: "Fat (g)", value: "fat" },
+                { text: "Carbs (g)", value: "carbs" },
+                { text: "Protein (g)", value: "protein" },
+                { text: "Iron (%)", value: "iron" }
+            ],
+            items: []
         };
     },
     methods: {
@@ -201,15 +343,15 @@ export default {
                 .then(response => {
                     _this.expenses_by_category = response.data;
 
-                    _this.pieChart_labels = response.data.map(
-                        item => item.text
+                    let labels = response.data.map(item => item.text);
+                    let data = response.data.map(item => item.value);
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
                     );
-                    _this.pieChart_data = response.data.map(item => item.value);
 
-                    this.updatePieChartValues(
-                        _this.pieChart_labels,
-                        _this.pieChart_data
-                    );
+                    this.updatePieChartValues(labels, data, backgroundColors);
+
+                    this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
                     console.log(error);
@@ -229,16 +371,15 @@ export default {
                 .then(response => {
                     _this.expenses_by_category = response.data;
 
-                    _this.pieChart_labels = response.data.map(
-                        item => item.text
+                    let labels = response.data.map(item => item.text);
+                    let data = response.data.map(item => item.value);
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
                     );
 
-                    _this.pieChart_data = response.data.map(item => item.value);
+                    this.updatePieChartValues(labels, data, backgroundColors);
 
-                    this.updatePieChartValues(
-                        _this.pieChart_labels,
-                        _this.pieChart_data
-                    );
+                    this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
                     console.log(error);
@@ -258,15 +399,15 @@ export default {
                 .then(response => {
                     _this.expenses_by_category = response.data;
 
-                    _this.pieChart_labels = response.data.map(
-                        item => item.text
+                    let labels = response.data.map(item => item.text);
+                    let data = response.data.map(item => item.value);
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
                     );
-                    _this.pieChart_data = response.data.map(item => item.value);
 
-                    this.updatePieChartValues(
-                        _this.pieChart_labels,
-                        _this.pieChart_data
-                    );
+                    this.updatePieChartValues(labels, data, backgroundColors);
+
+                    this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
                     console.log(error);
@@ -274,8 +415,6 @@ export default {
                 });
         },
         load_expenses_summary(start, end, time_unit) {
-            console.log([start, end, time_unit]);
-
             let _this = this;
 
             axios
@@ -339,6 +478,29 @@ export default {
                     console.log(error.response);
                 });
         },
+        load_bar_chart() {
+            this.horizontalBarChartOptions = {
+                maintainAspectRatio: false,
+                legend: false
+                // scales: {
+                //     yAxes: [
+                //         {
+                //             maxBarThickness: 10
+                //         }
+                //     ]
+                // }
+            };
+            this.horizontalBarChartData = {
+                labels: [],
+                datasets: [
+                    {
+                        label: "",
+                        backgroundColor: [],
+                        data: []
+                    }
+                ]
+            };
+        },
         load_pie_chart() {
             this.doughnutChartOptions = {
                 hoverBorderWidth: 20,
@@ -358,12 +520,14 @@ export default {
         load_line_chart() {
             let ticksStyle = {
                 fontColor: "#495057",
-                fontStyle: "bold"
+                fontStyle: "bold",
+                maxRotation: 0,
+                minRotation: 0
             };
 
             this.lineChartOptions = {
                 // hoverBorderWidth: 20,
-                // legend: false
+                // legend: false,
                 maintainAspectRatio: false,
                 tooltips: {
                     mode: "index",
@@ -428,14 +592,29 @@ export default {
             let prefixes = ["0", "1", "2", "3", "4", "5"];
             return parseInt(prefixes[0 | (adjustedDate / 7)]) + 1;
         },
-        updatePieChartValues(labels, data) {
+        getBackgroundColors(length) {
             let backgroundColors = [];
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0; i < length; i++) {
                 backgroundColors.push(
                     randomcolor({ luminosity: "light", hue: "random" })
                 );
             }
+            return backgroundColors;
+        },
+        updateBarChartValues(labels, data, backgroundColors) {
+            this.horizontalBarChartData.labels = labels;
 
+            this.horizontalBarChartData.datasets = [
+                {
+                    label: "",
+                    backgroundColor: backgroundColors,
+                    data: data
+                }
+            ];
+
+            this.$refs.horizontalBar_chart.update();
+        },
+        updatePieChartValues(labels, data, backgroundColors) {
             this.doughnutChartData.labels = labels;
 
             this.doughnutChartData.datasets = [
@@ -519,8 +698,9 @@ export default {
             this.date_range[1]
         );
 
-        this.load_line_chart();
         this.load_pie_chart();
+        this.load_bar_chart();
+        this.load_line_chart();
 
         // this.onTimeUnitChange();
 

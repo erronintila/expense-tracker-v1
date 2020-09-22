@@ -363,7 +363,21 @@ __webpack_require__.r(__webpack_exports__);
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
-        axios.post("/api/payments", {// name: _this.name
+        axios.post("/api/payments", {
+          code: _this.code,
+          reference_no: _this.reference_no,
+          voucher_no: _this.voucher_no,
+          description: _this.description,
+          date: _this.date,
+          cheque_no: _this.cheque_no,
+          cheque_date: _this.cheque_date,
+          amount: _this.amount,
+          payee: _this.payee,
+          payee_address: _this.payee_address,
+          payee_phone: _this.payee_phone,
+          remarks: _this.remarks,
+          notes: _this.notes,
+          expense_reports: _this.selected
         }).then(function (response) {
           _this.onRefresh();
 
@@ -373,6 +387,7 @@ __webpack_require__.r(__webpack_exports__);
           });
         })["catch"](function (error) {
           console.log(error);
+          console.log(error.response);
         });
         return;
       }

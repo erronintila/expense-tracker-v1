@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Payment extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * The attributes that are not mass assignable.
      *
@@ -41,29 +41,19 @@ class Payment extends Model
         return $this->hasMany(ExpenseReport::class);
     }
 
-    public function status() {
+    public function status()
+    {
 
         $approved = is_null($this->approved_at);
-        $cancelled = is_null($this->cancelled_at);
-        $deleted = is_null($this->deleted_at);
+        $cancelled = is_null($this->deleted_at);
         $released = is_null($this->released_at);
         $received = is_null($this->received_at);
 
-        if (!$deleted) {
-            $arr = [
-                'text' => 'Archived',
-                'status' => 'Archived',
-                'badge' => '<span class="badge badge-danger">Archived</span>'
-            ];
-
-            return $arr;
-        }
-
         if (!$cancelled) {
             $arr = [
-                'text' => 'Cancelled',
+                'color' => 'red',
+                'remarks' => 'Payment was cancelled',
                 'status' => 'Cancelled',
-                'badge' => '<span class="badge badge-danger">Cancelled</span>'
             ];
 
             return $arr;
@@ -71,9 +61,9 @@ class Payment extends Model
 
         if (!$received) {
             $arr = [
-                'text' => 'Payment Received',
-                'status' => 'Payment Delivered',
-                'badge' => '<span class="badge badge-success">Payment Delivered</span>'
+                'color' => 'green',
+                'remarks' => 'Payment was received',
+                'status' => 'Completed',
             ];
 
             return $arr;
@@ -81,9 +71,9 @@ class Payment extends Model
 
         if (!$released) {
             $arr = [
-                'text' => 'Payment Released',
-                'status' => 'Waiting for Recipient Confirmation',
-                'badge' => '<span class="badge badge-primary">Waiting for Recipient Confirmation</span>'
+                'color' => 'orange',
+                'remarks' => 'Payment was released',
+                'status' => 'Released',
             ];
 
             return $arr;
@@ -91,18 +81,18 @@ class Payment extends Model
 
         if (!$approved) {
             $arr = [
-                'text' => 'Approved',
-                'status' => 'Waiting for Release',
-                'badge' => '<span class="badge badge-primary">Waiting for Release</span>'
+                'color' => 'orange',
+                'remarks' => 'Payment was approved and waiting for release',
+                'status' => 'Approved',
             ];
 
             return $arr;
         }
 
         $arr = [
-            'text' => 'Pending',
-            'status' => 'For Approval',
-            'badge' => '<span class="badge badge-warning">For Approval</span>'
+            'color' => 'blue',
+            'remarks' => 'Payment waiting for approval',
+            'status' => 'Pending',
         ];
 
         return $arr;

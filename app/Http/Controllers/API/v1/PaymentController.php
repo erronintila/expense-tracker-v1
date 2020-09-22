@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaymentResource;
+use App\Models\ExpenseReport;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +27,7 @@ class PaymentController extends Controller
             "date" => ['required'],
             "cheque_no" => ['nullable', 'max:255'],
             "cheque_date" => ['nullable'],
-            "amount" => ['required', 'number'],
+            "amount" => ['required'],
             "payee" => ['required', 'string', 'max:255'],
             "payee_address" => ['nullable', 'max:255'],
             "payee_phone" => ['nullable', 'max:255'],
@@ -51,8 +52,17 @@ class PaymentController extends Controller
 
         if (request()->has('status')) {
             switch ($request->status) {
-                case 'Archived':
+                case 'Cancelled':
                     $payments = $payments->onlyTrashed();
+                    break;
+                case 'Received':
+                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
+                    break;
+                case 'Released':
+                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", null);
+                    break;
+                case 'Approved':
+                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", null)->where("received_at", null);
                     break;
                 default:
                     $payments = $payments;
@@ -102,6 +112,12 @@ class PaymentController extends Controller
 
         $payment->save();
 
+        foreach ($request->expense_reports as $key => $value) {
+            $expense_report = ExpenseReport::findOrFail($value["id"]);
+            $expense_report->payment_id = $payment->id;
+            $expense_report->save();
+        }
+
         return response(
             [
                 'data' => new PaymentResource($payment),
@@ -139,11 +155,37 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $message = "Updated successfully";
+
         switch ($request->action) {
-            case 'restore':
-                $payment = Payment::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+            case 'approve':
+                foreach ($request->ids as $id) {
+                    $payment = Payment::withTrashed()->findOrFail($id);
+                    $payment->approved_at = now();
+                    $payment->save();
+                }
+
+                $message = "Payment(s) approved successfully";
+
+                break;
+            case 'release':
+                foreach ($request->ids as $id) {
+                    $payment = Payment::withTrashed()->findOrFail($id);
+                    $payment->released_at = now();
+                    $payment->save();
+                }
+
+                $message = "Payment(s) released successfully";
+
+                break;
+            case 'receive':
+                foreach ($request->ids as $id) {
+                    $payment = Payment::withTrashed()->findOrFail($id);
+                    $payment->received_at = now();
+                    $payment->save();
+                }
+
+                $message = "Payment(s) received successfully";
 
                 break;
             default:
@@ -167,12 +209,25 @@ class PaymentController extends Controller
 
                 $payment->save();
 
+                // set existing references to null
+                foreach ($payment->expense_reports as $key => $value) {
+                    $expense_report = ExpenseReport::findOrFail($value["id"]);
+                    $expense_report->payment_id = null;
+                    $expense_report->save();
+                }
+
+                foreach ($request->expense_reports as $key => $value) {
+                    $expense_report = ExpenseReport::findOrFail($value["id"]);
+                    $expense_report->payment_id = $payment->id;
+                    $expense_report->save();
+                }
+
                 break;
         }
 
         return response(
             [
-                'message' => 'Updated successfully'
+                'message' => $message
             ],
             201
         );
@@ -186,11 +241,19 @@ class PaymentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $payment = Payment::whereIn('id', $request->ids)->delete();
+        foreach ($request->ids as $id) {
+            $payment = Payment::findOrFail($id);
+            $payment->delete();
+
+            foreach ($payment->expense_reports as $expense_report) {
+                $expense_report->payment_id = null;
+                $expense_report->save();
+            }
+        }
 
         return response(
             [
-                'message' => 'Deleted successfully'
+                'message' => 'Payment Cancelled successfully'
             ],
             200
         );
