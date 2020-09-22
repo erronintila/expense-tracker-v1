@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[15],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Create.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Create.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -193,16 +193,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
-      first_name: null,
+      first_name: "",
       middle_name: "",
-      last_name: null,
+      last_name: "",
       suffix: "",
-      gender: null,
+      gender: "",
       birthdate: null,
       job: null,
       jobs: [],
@@ -215,7 +214,7 @@ __webpack_require__.r(__webpack_exports__);
         first_name: [function (v) {
           return !!v || "First name is required";
         }, function (v) {
-          return !!v && v.length <= 100 || "First name must be less than 100 characters";
+          return v.length <= 100 || "First name must be less than 100 characters";
         }],
         middle_name: [function (v) {
           return v !== null && v.length <= 100 || "Middle name must be less than 100 characters";
@@ -223,12 +222,9 @@ __webpack_require__.r(__webpack_exports__);
         last_name: [function (v) {
           return !!v || "Last name is required";
         }, function (v) {
-          return v && v.length <= 100 || "Last name must be less than 100 characters";
+          return v.length <= 100 || "Last name must be less than 100 characters";
         }],
-        suffix: [// v =>
-          //     (v !== null && v.length <= 30) ||
-          //     "Suffix must be less than 30 characters"
-        ],
+        suffix: [],
         gender: [function (v) {
           return !!v || "Gender is required";
         }],
@@ -240,8 +236,6 @@ __webpack_require__.r(__webpack_exports__);
         }],
         mobile_number: [function (v) {
           return !!v || "Mobile number is required";
-        }, function (v) {
-          return !!v && v.length <= 30 || "Mobile number must be less than 30 characters";
         }],
         telephone_number: [function (v) {
           return v !== null && v.length <= 30 || "Telephone number must be less than 30 characters";
@@ -271,6 +265,26 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getData: function getData() {
+      var _this = this;
+
+      axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
+        var data = response.data.data;
+        _this.first_name = data.first_name;
+        _this.middle_name = data.middle_name;
+        _this.last_name = data.last_name;
+        _this.suffix = data.suffix;
+        _this.gender = data.gender;
+        _this.birthdate = data.birthdate;
+        _this.job = data.job.id;
+        _this.mobile_number = data.mobile_number;
+        _this.telephone_number = data.telephone_number;
+        _this.email = data.email;
+        _this.address = data.address;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     loadJobs: function loadJobs() {
       var _this = this;
 
@@ -289,7 +303,8 @@ __webpack_require__.r(__webpack_exports__);
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
-        axios.post("/api/employees", {
+        axios.put("/api/employees/" + _this.$route.params.id, {
+          action: "update",
           first_name: _this.first_name,
           middle_name: _this.middle_name,
           last_name: _this.last_name,
@@ -303,7 +318,7 @@ __webpack_require__.r(__webpack_exports__);
           address: _this.address
         }).then(function (response) {
           // _this.onRefresh();
-          _this.$dialog.message.success("Employee created successfully.", {
+          _this.$dialog.message.success("Employee updated successfully.", {
             position: "top-right",
             timeout: 2000
           });
@@ -322,15 +337,16 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     this.loadJobs();
+    this.getData();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Create.vue?vue&type=template&id=2f24ca26&":
-/*!****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Create.vue?vue&type=template&id=2f24ca26& ***!
-  \****************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b& ***!
+  \**************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -366,7 +382,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title success--text" }, [
-                _vm._v("New Employee")
+                _vm._v("Edit Employee")
               ])
             ],
             1
@@ -696,8 +712,7 @@ var render = function() {
                               rules: _vm.rules.telephone_number,
                               counter: 30,
                               "error-messages": _vm.errors.telephone_number,
-                              label: "Telephone Number",
-                              type: "number"
+                              label: "Telephone Number"
                             },
                             on: {
                               input: function($event) {
@@ -826,17 +841,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Create.vue":
-/*!***************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Create.vue ***!
-  \***************************************************************/
+/***/ "./resources/js/views/modules/admin/employees/Edit.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Edit.vue ***!
+  \*************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Create_vue_vue_type_template_id_2f24ca26___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=2f24ca26& */ "./resources/js/views/modules/admin/employees/Create.vue?vue&type=template&id=2f24ca26&");
-/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/employees/Create.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=2b19b33b& */ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&");
+/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -846,9 +861,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Create_vue_vue_type_template_id_2f24ca26___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Create_vue_vue_type_template_id_2f24ca26___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -858,38 +873,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/employees/Create.vue"
+component.options.__file = "resources/js/views/modules/admin/employees/Edit.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Create.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Create.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************/
+/***/ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Create.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Create.vue?vue&type=template&id=2f24ca26&":
-/*!**********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Create.vue?vue&type=template&id=2f24ca26& ***!
-  \**********************************************************************************************/
+/***/ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b& ***!
+  \********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_2f24ca26___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=2f24ca26& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Create.vue?vue&type=template&id=2f24ca26&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_2f24ca26___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=2b19b33b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_2f24ca26___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

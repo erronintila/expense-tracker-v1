@@ -24,7 +24,7 @@ export default {
             let _this = this;
 
             axios
-                .get(`/api/users/${_this.$route.params.id}`)
+                .get(`/api/expenses/${_this.$route.params.id}`)
                 .then(function(response) {
                     console.log(response.data);
                 })

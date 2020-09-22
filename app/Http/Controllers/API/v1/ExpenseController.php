@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
+use App\Models\ExpenseDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -22,13 +23,14 @@ class ExpenseController extends Controller
     {
         return Validator::make($data, [
             'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
-            'description' => ['required', 'max:255'],
+            'description' => ['nullable', 'max:255'],
             'receipt_number' => ['required', 'max:255'],
             'date' => ['required'],
             'amount' => ['required', 'numeric', 'gt:0'],
             'remarks' => ['nullable'],
             'expense_type_id' => ['required'],
             'employee_id' => ['required'],
+            'expense_details' => ['required']
         ]);
     }
 
@@ -109,6 +111,14 @@ class ExpenseController extends Controller
 
         $expense->save();
 
+        foreach ($request->expense_details as $key => $value) {
+            $expense_detail = new ExpenseDetail();
+            $expense_detail->description = $value["particular"];
+            $expense_detail->amount = $value["particular_amount"];
+            $expense_detail->expense_id = $expense->id;
+            $expense_detail->save();
+        }
+
         return response(
             [
                 'data' => new ExpenseResource($expense),
@@ -168,6 +178,34 @@ class ExpenseController extends Controller
                 $expense->vendor_id  = $request->vendor_id;
 
                 $expense->save();
+
+                foreach ($expense->expense_details as $expense_detail) {
+                    $expense_detail->delete();
+                }
+
+                foreach ($request->expense_details as $key => $value) {
+                    $expense_detail = ExpenseDetail::withTrashed()->updateOrCreate(
+                        ['id' => $value["id"]],
+                        [
+                            'description' => $value["description"],
+                            'amount' => $value["amount"],
+                            'expense_id' => $expense->id,
+                            'deleted_at' => null,
+                        ]
+                    );
+                }
+
+                // foreach ($request->expense_details as $key => $value) {
+                //     $expense_detail = ExpenseDetail::updateOrCreate(
+                //         ['description' => 'Oakland', 'destination' => 'San Diego'],
+                //         ['price' => 99, 'discounted' => 1]
+                //     );
+
+                //     // $expense_detail = new ExpenseDetail();
+                //     // $expense_detail->description = $value["particular"];
+                //     // $expense_detail->amount = $value["particular_amount"];
+                //     // $expense_detail->save();
+                // }
 
                 break;
         }

@@ -61,7 +61,7 @@
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="description"
                                 :rules="rules.description"
@@ -71,7 +71,7 @@
                                 label="Description *"
                                 required
                             ></v-text-field>
-                        </v-col>
+                        </v-col> -->
 
                         <v-col cols="12" md="4">
                             <v-text-field
@@ -125,6 +125,24 @@
                                     itemsPerPageOptions: [5, 10, 20]
                                 }"
                             >
+                                <template
+                                    slot="body.append"
+                                    v-if="items.length > 0"
+                                >
+                                    <tr class="green--text hidden-md-and-up">
+                                        <td class="title">
+                                            Total:
+                                            <strong>{{ amount }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="green--text hidden-sm-and-down">
+                                        <td class="title">Total</td>
+                                        <td>
+                                            <strong>{{ amount }}</strong>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </template>
                                 <template v-slot:top>
                                     <v-toolbar flat color="white">
                                         Expense Details
@@ -204,12 +222,12 @@
                                     >
                                         mdi-delete
                                     </v-icon>
-                                </template></v-data-table
-                            >
+                                </template>
+                            </v-data-table>
                         </v-col>
                     </v-row>
 
-                    <v-row>
+                    <!-- <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
                                 dense
@@ -273,9 +291,9 @@
                                 type="number"
                             ></v-text-field>
                         </v-col>
-                    </v-row>
+                    </v-row> -->
 
-                    <v-row>
+                    <!-- <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="amount"
@@ -287,7 +305,7 @@
                                 required
                             ></v-text-field>
                         </v-col>
-                    </v-row>
+                    </v-row> -->
 
                     <v-row>
                         <v-col cols="12" md="4">
@@ -325,10 +343,10 @@ export default {
             menu: false,
             code: null,
             description: null,
-            subtotal: 0,
-            discount: 0,
-            tax: 0,
-            tax_rate: 0,
+            // subtotal: 0,
+            // discount: 0,
+            // tax: 0,
+            // tax_rate: 0,
             amount: 0,
             receipt_number: null,
             date: null,
@@ -429,7 +447,8 @@ export default {
                         is_active: _this.is_active,
                         expense_type_id: _this.expense_type,
                         employee_id: _this.employee,
-                        vendor_id: _this.vendor
+                        vendor_id: _this.vendor,
+                        expense_details: _this.items
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -446,6 +465,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.errors = error.response.data.errors;
                     });
@@ -472,25 +492,30 @@ export default {
                 return parseFloat(item);
             }
             return 0;
-        },
-        calculateTotal() {
-            let subtotal = this.isEmpty(this.subtotal);
-            let discount = this.isEmpty(this.discount);
-            let tax = this.isEmpty(this.tax);
-            let tax_rate = this.isEmpty(this.tax_rate);
-
-            this.amount = subtotal - (discount + tax + tax_rate);
         }
+        // calculateTotal() {
+        //     let subtotal = this.isEmpty(this.subtotal);
+        //     let discount = this.isEmpty(this.discount);
+        //     let tax = this.isEmpty(this.tax);
+        //     let tax_rate = this.isEmpty(this.tax_rate);
+
+        //     this.amount = subtotal - (discount + tax + tax_rate);
+        // }
     },
     watch: {
         items() {
-            this.subtotal = this.items.reduce(
+            this.amount = this.items.reduce(
                 (total, item) =>
                     parseFloat(total) + parseFloat(item.particular_amount),
                 0
             );
+            // this.subtotal = this.items.reduce(
+            //     (total, item) =>
+            //         parseFloat(total) + parseFloat(item.particular_amount),
+            //     0
+            // );
 
-            this.calculateTotal();
+            // this.calculateTotal();
         }
     },
     created() {

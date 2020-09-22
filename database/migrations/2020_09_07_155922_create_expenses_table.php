@@ -16,7 +16,7 @@ class CreateExpensesTable extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->string('description', 100);
+            $table->string('description', 100)->nullable();
             $table->double('amount', 10, 2);
             $table->string('receipt_number');
             $table->date('date');

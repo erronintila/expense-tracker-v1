@@ -78,6 +78,11 @@ class Expense extends Model
         return $this->belongsTo(ExpenseReport::class);
     }
 
+    public function expense_details()
+    {
+        return $this->hasMany(ExpenseDetail::class);
+    }
+
     /**
      * Displays the current status of expense.
      *
