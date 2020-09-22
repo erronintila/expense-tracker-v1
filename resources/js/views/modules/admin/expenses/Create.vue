@@ -361,7 +361,7 @@ export default {
             particular: "",
             particular_amount: 0,
             rules: {
-                description: [v => !!v || "Description is required"],
+                description: [],
                 amount: [v => !!v || "Amount is required"],
                 receipt_number: [v => !!v || "Receipt Number is required"],
                 date: [v => !!v || "Date is required"],
@@ -434,6 +434,14 @@ export default {
             let _this = this;
 
             _this.$refs.form.validate();
+
+            if (this.items.length == 0) {
+                _this.$dialog.message.error("No Expense detail added", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
             if (_this.$refs.form.validate()) {
                 axios

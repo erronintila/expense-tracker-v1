@@ -300,9 +300,7 @@ __webpack_require__.r(__webpack_exports__);
       }],
       items: [],
       rules: {
-        description: [function (v) {
-          return !!v || "Description is required";
-        }],
+        description: [],
         amount: [function (v) {
           return !!v || "Amount is required";
         }],
@@ -354,7 +352,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.employee = data.employee.id;
         _this.vendor = data.vendor.id;
         _this.items = data.expense_details;
-        console.log(data.expense_details);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -394,6 +391,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _this.$refs.form.validate();
+
+      if (this.items.length == 0) {
+        _this.$dialog.message.error("No Expense detail added", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
 
       if (_this.$refs.form.validate()) {
         axios.put("/api/expenses/" + _this.$route.params.id, {

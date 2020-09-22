@@ -131,7 +131,7 @@ class ExpenseReport extends Model
 
                 default:
                     $arr = [
-                        'color' => 'green',
+                        'color' => 'blue',
                         'remarks' => 'Processing Payment',
                         'status' => 'Approved',
                     ];
@@ -143,7 +143,7 @@ class ExpenseReport extends Model
 
         if (!$approved) {
             $arr = [
-                'color' => 'green',
+                'color' => 'blue',
                 'remarks' => 'Processing Payment',
                 'status' => 'Approved',
             ];
@@ -172,7 +172,7 @@ class ExpenseReport extends Model
         }
 
         $arr = [
-            'color' => 'blue',
+            'color' => 'orange',
             'remarks' => 'Expense Report for submission',
             'status' => 'For Submission',
         ];

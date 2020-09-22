@@ -371,9 +371,7 @@ __webpack_require__.r(__webpack_exports__);
       particular: "",
       particular_amount: 0,
       rules: {
-        description: [function (v) {
-          return !!v || "Description is required";
-        }],
+        description: [],
         amount: [function (v) {
           return !!v || "Amount is required";
         }],
@@ -457,6 +455,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _this.$refs.form.validate();
+
+      if (this.items.length == 0) {
+        _this.$dialog.message.error("No Expense detail added", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/expenses", {

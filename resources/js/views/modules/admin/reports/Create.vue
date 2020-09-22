@@ -132,12 +132,12 @@
                                             <table>
                                                 <tr>
                                                     <td>
-                                                        <strong>Date</strong>
+                                                        <strong>Description</strong>
                                                     </td>
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            item.date
+                                                            item.description
                                                         }}
                                                     </td>
                                                 </tr>
@@ -249,11 +249,12 @@ export default {
             ],
             selected: [],
             headers: [
-                {
-                    text: "Expense",
-                    value: "description"
-                },
-                { text: "Type", value: "expense_type.name" },
+                // {
+                //     text: "Expense",
+                //     value: "description"
+                // },
+                { text: "Expense", value: "expense_type.name" },
+                { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }

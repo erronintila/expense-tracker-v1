@@ -282,7 +282,7 @@ export default {
             ],
             items: [],
             rules: {
-                description: [v => !!v || "Description is required"],
+                description: [],
                 amount: [v => !!v || "Amount is required"],
                 receipt_number: [v => !!v || "Receipt Number is required"],
                 date: [v => !!v || "Date is required"],
@@ -325,8 +325,6 @@ export default {
                     _this.employee = data.employee.id;
                     _this.vendor = data.vendor.id;
                     _this.items = data.expense_details;
-
-                    console.log(data.expense_details);
                 })
                 .catch(error => {
                     console.log(error);
@@ -378,6 +376,14 @@ export default {
 
             _this.$refs.form.validate();
 
+            if (this.items.length == 0) {
+                _this.$dialog.message.error("No Expense detail added", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if (_this.$refs.form.validate()) {
                 axios
                     .put("/api/expenses/" + _this.$route.params.id, {
@@ -418,7 +424,7 @@ export default {
         },
         addItem() {
             this.items.push({
-                id: null,   
+                id: null,
                 description: this.particular,
                 amount: this.particular_amount
             });

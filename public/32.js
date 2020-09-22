@@ -249,6 +249,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -288,7 +302,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       totalAmount: 0,
       items: [],
       status: "Active",
-      statuses: ["Active", "Approved", "Released", "Received", "Cancelled"],
+      statuses: ["Active", "Approved", "Released", "Received", "Cancelled", "Completed"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -298,7 +312,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         page: 1,
         itemsPerPage: 10
       },
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")]
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
+      preset: "",
+      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"]
     };
   },
   methods: {
@@ -321,6 +337,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
+        var range = _this.date_range;
         axios.get("/api/payments", {
           params: {
             search: search,
@@ -328,7 +345,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            status: status
+            status: status,
+            start_date: range[0],
+            end_date: range[1]
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -468,9 +487,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, "query", this.status));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     }
   },
   mounted: function mounted() {
@@ -604,6 +625,21 @@ var render = function() {
                       _c(
                         "v-list",
                         [
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("DateRangePicker", {
+                                attrs: {
+                                  preset: _vm.preset,
+                                  presets: _vm.presets,
+                                  value: _vm.date_range
+                                },
+                                on: { updateDates: _vm.updateDates }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
                           _c(
                             "v-list-item",
                             [
@@ -753,6 +789,25 @@ var render = function() {
                           _c("v-list-item-title", [
                             _vm._v(
                               "\n                            Cancel Payment(s)\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onUpdate("complete", "put")
+                            }
+                          }
+                        },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Complete Transaction(s)\n                        "
                             )
                           ])
                         ],

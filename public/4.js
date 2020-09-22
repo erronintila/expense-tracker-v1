@@ -903,7 +903,7 @@ var render = function() {
                                       _vm._v("Total Expenses")
                                     ]),
                                     _vm._v(" "),
-                                    _c("v-card-text", [_vm._v("Hello world")])
+                                    _c("v-card-text", [_vm._v("---")])
                                   ],
                                   1
                                 )
@@ -943,7 +943,7 @@ var render = function() {
                                       _vm._v("Reimbursements")
                                     ]),
                                     _vm._v(" "),
-                                    _c("v-card-text", [_vm._v("Hello world")])
+                                    _c("v-card-text", [_vm._v("---")])
                                   ],
                                   1
                                 )
@@ -983,7 +983,7 @@ var render = function() {
                                       _vm._v("Pending Expense Reports")
                                     ]),
                                     _vm._v(" "),
-                                    _c("v-card-text", [_vm._v("Hello world")])
+                                    _c("v-card-text", [_vm._v("---")])
                                   ],
                                   1
                                 )
@@ -1016,11 +1016,9 @@ var render = function() {
                                   [
                                     _c("v-card-title", [_vm._v("0.00")]),
                                     _vm._v(" "),
-                                    _c("v-card-subtitle", [
-                                      _vm._v("Secondary text")
-                                    ]),
+                                    _c("v-card-subtitle", [_vm._v("------")]),
                                     _vm._v(" "),
-                                    _c("v-card-text", [_vm._v("Hello world")])
+                                    _c("v-card-text", [_vm._v("---")])
                                   ],
                                   1
                                 )

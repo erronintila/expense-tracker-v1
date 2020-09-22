@@ -252,11 +252,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       selected: [],
       headers: [{
-        text: "Expense",
-        value: "description"
-      }, {
         text: "Type",
         value: "expense_type.name"
+      }, {
+        text: "Date",
+        value: "date"
       }, {
         text: "Amount",
         value: "amount"

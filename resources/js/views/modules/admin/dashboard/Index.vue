@@ -51,7 +51,7 @@
                                 <v-card-subtitle
                                     >Total Expenses</v-card-subtitle
                                 >
-                                <v-card-text>Hello world</v-card-text>
+                                <v-card-text>---</v-card-text>
                             </v-card>
                         </v-hover>
                     </v-col>
@@ -66,7 +66,7 @@
                                 <v-card-subtitle
                                     >Reimbursements</v-card-subtitle
                                 >
-                                <v-card-text>Hello world</v-card-text>
+                                <v-card-text>---</v-card-text>
                             </v-card>
                         </v-hover>
                     </v-col>
@@ -81,7 +81,7 @@
                                 <v-card-subtitle
                                     >Pending Expense Reports</v-card-subtitle
                                 >
-                                <v-card-text>Hello world</v-card-text>
+                                <v-card-text>---</v-card-text>
                             </v-card>
                         </v-hover>
                     </v-col>
@@ -90,9 +90,9 @@
                             <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                                 <v-card-title>0.00</v-card-title>
                                 <v-card-subtitle
-                                    >Secondary text</v-card-subtitle
+                                    >------</v-card-subtitle
                                 >
-                                <v-card-text>Hello world</v-card-text>
+                                <v-card-text>---</v-card-text>
                             </v-card>
                         </v-hover>
                     </v-col>

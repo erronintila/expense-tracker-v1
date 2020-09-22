@@ -55,6 +55,9 @@ class PaymentController extends Controller
                 case 'Cancelled':
                     $payments = $payments->onlyTrashed();
                     break;
+                case 'Completed':
+                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
+                    break;
                 case 'Received':
                     $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
                     break;
@@ -68,6 +71,10 @@ class PaymentController extends Controller
                     $payments = $payments;
                     break;
             }
+        }
+
+        if (request()->has("start_date") && request()->has("end_date")) {
+            $payments = $payments->whereBetween("date", [$request->start_date, $request->end_date]);
         }
 
         $payments = $payments->where(function ($query) use ($search) {
@@ -181,6 +188,18 @@ class PaymentController extends Controller
             case 'receive':
                 foreach ($request->ids as $id) {
                     $payment = Payment::withTrashed()->findOrFail($id);
+                    $payment->received_at = now();
+                    $payment->save();
+                }
+
+                $message = "Payment(s) received successfully";
+
+                break;
+            case 'complete':
+                foreach ($request->ids as $id) {
+                    $payment = Payment::withTrashed()->findOrFail($id);
+                    $payment->approved_at = now();
+                    $payment->released_at = now();
                     $payment->received_at = now();
                     $payment->save();
                 }

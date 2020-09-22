@@ -241,12 +241,16 @@ __webpack_require__.r(__webpack_exports__);
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       selected: [],
-      headers: [{
+      headers: [// {
+      //     text: "Expense",
+      //     value: "description"
+      // },
+      {
         text: "Expense",
-        value: "description"
-      }, {
-        text: "Type",
         value: "expense_type.name"
+      }, {
+        text: "Date",
+        value: "date"
       }, {
         text: "Amount",
         value: "amount"
@@ -679,7 +683,7 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Date")
+                                                      _vm._v("Description")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -688,7 +692,9 @@ var render = function() {
                                                   _c("td", [
                                                     _vm._v(
                                                       "\n                                                    " +
-                                                        _vm._s(item.date) +
+                                                        _vm._s(
+                                                          item.description
+                                                        ) +
                                                         "\n                                                "
                                                     )
                                                   ])

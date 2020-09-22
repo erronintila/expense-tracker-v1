@@ -1,141 +1,278 @@
 <template>
     <v-app>
-        <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-dialog
+            v-model="dialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+        >
             <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="dialog = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Edit Expense</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn dark text @click="onSave">Save</v-btn>
+                    </v-toolbar-items>
+                </v-toolbar>
                 <v-form ref="form" v-model="valid">
-                    <v-card-title>
-                        <span class="headline">Edit Expense</span>
-                    </v-card-title>
                     <v-card-text>
-                        <v-container>
-                            <v-row>
-                                <v-col cols="12" md="4">
-                                    <v-autocomplete
-                                        v-model="expense_type"
-                                        :rules="rules.expense_type"
-                                        :items="expense_types"
-                                        :error-messages="errors.expense_type_id"
-                                        @input="errors.expense_type_id = []"
-                                        item-value="id"
-                                        item-text="name"
-                                        label="Expense Type *"
-                                        required
-                                    >
-                                    </v-autocomplete>
-                                </v-col>
+                        <v-tabs>
+                            <v-tab>Basic Info</v-tab>
+                            <v-tab>Expense Details</v-tab>
+                            <v-tab-item>
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="12" md="4">
+                                            <v-autocomplete
+                                                v-model="expense_type"
+                                                :rules="rules.expense_type"
+                                                :items="expense_types"
+                                                :error-messages="
+                                                    errors.expense_type_id
+                                                "
+                                                @input="
+                                                    errors.expense_type_id = []
+                                                "
+                                                item-value="id"
+                                                item-text="name"
+                                                label="Expense Type *"
+                                                required
+                                            >
+                                            </v-autocomplete>
+                                        </v-col>
 
-                                <v-col cols="12" md="4">
-                                    <v-autocomplete
-                                        v-model="vendor"
-                                        :rules="rules.vendor"
-                                        :items="vendors"
-                                        :error-messages="errors.vendor_id"
-                                        @input="errors.vendor_id = []"
-                                        item-value="id"
-                                        item-text="name"
-                                        label="Vendor *"
-                                        required
-                                    >
-                                    </v-autocomplete>
-                                </v-col>
-                            </v-row>
+                                        <v-col cols="12" md="8">
+                                            <v-autocomplete
+                                                v-model="vendor"
+                                                :rules="rules.vendor"
+                                                :items="vendors"
+                                                :error-messages="
+                                                    errors.vendor_id
+                                                "
+                                                @input="errors.vendor_id = []"
+                                                item-value="id"
+                                                item-text="name"
+                                                label="Vendor *"
+                                                required
+                                            >
+                                            </v-autocomplete>
+                                        </v-col>
+                                    </v-row>
 
-                            <v-row>
-                                <v-col cols="12" md="8">
-                                    <v-text-field
-                                        v-model="description"
-                                        :rules="rules.description"
-                                        :counter="100"
-                                        :error-messages="errors.description"
-                                        @input="errors.description = []"
-                                        label="Description *"
-                                        required
-                                    ></v-text-field>
-                                </v-col>
-
-                                <v-col cols="12" md="4">
-                                    <v-menu
-                                        ref="menu"
-                                        v-model="menu"
-                                        transition="scale-transition"
-                                        offset-y
-                                        min-width="290px"
-                                    >
-                                        <template
-                                            v-slot:activator="{ on, attrs }"
-                                        >
+                                    <v-row>
+                                        <v-col cols="12" md="4">
                                             <v-text-field
-                                                v-model="date"
-                                                :rules="rules.date"
-                                                :error-messages="errors.date"
-                                                @input="errors.date = []"
-                                                label="Date *"
-                                                readonly
-                                                v-bind="attrs"
-                                                v-on="on"
+                                                v-model="receipt_number"
+                                                :rules="rules.receipt_number"
+                                                :error-messages="
+                                                    errors.receipt_number
+                                                "
+                                                @input="
+                                                    errors.receipt_number = []
+                                                "
+                                                label="Receipt No. *"
+                                                required
                                             ></v-text-field>
-                                        </template>
-                                        <v-date-picker
-                                            v-model="date"
-                                            no-title
-                                            scrollable
-                                            color="success"
+                                        </v-col>
+
+                                        <v-col cols="12" md="4">
+                                            <v-menu
+                                                ref="menu"
+                                                v-model="menu"
+                                                transition="scale-transition"
+                                                offset-y
+                                                min-width="290px"
+                                            >
+                                                <template
+                                                    v-slot:activator="{
+                                                        on,
+                                                        attrs
+                                                    }"
+                                                >
+                                                    <v-text-field
+                                                        v-model="date"
+                                                        :rules="rules.date"
+                                                        :error-messages="
+                                                            errors.date
+                                                        "
+                                                        @input="
+                                                            errors.date = []
+                                                        "
+                                                        label="Date *"
+                                                        readonly
+                                                        v-bind="attrs"
+                                                        v-on="on"
+                                                    ></v-text-field>
+                                                </template>
+                                                <v-date-picker
+                                                    v-model="date"
+                                                    no-title
+                                                    scrollable
+                                                    color="success"
+                                                >
+                                                </v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+
+                                    <v-row>
+                                        <v-col cols="12" md="4">
+                                            <v-textarea
+                                                rows="1"
+                                                label="Remarks"
+                                                v-model="remarks"
+                                                :error-messages="errors.remarks"
+                                                @input="errors.remarks = []"
+                                            ></v-textarea>
+                                        </v-col>
+                                    </v-row>
+
+                                    <small class="text--secondary">
+                                        * indicates required field
+                                    </small>
+                                </v-container>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="items"
+                                            :items-per-page="5"
+                                            :footer-props="{
+                                                itemsPerPageOptions: [5, 10, 20]
+                                            }"
                                         >
-                                        </v-date-picker>
-                                    </v-menu>
-                                </v-col>
-                            </v-row>
+                                            <template
+                                                slot="body.append"
+                                                v-if="items.length > 0"
+                                            >
+                                                <tr
+                                                    class="green--text hidden-md-and-up"
+                                                >
+                                                    <td class="title">
+                                                        Total:
+                                                        <strong>{{
+                                                            amount
+                                                        }}</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr
+                                                    class="green--text hidden-sm-and-down"
+                                                >
+                                                    <td class="title">Total</td>
+                                                    <td>
+                                                        <strong>{{
+                                                            amount
+                                                        }}</strong>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </template>
+                                            <template v-slot:top>
+                                                <v-toolbar flat color="white">
+                                                    Expense Details
+                                                    <v-spacer></v-spacer>
+                                                    <v-dialog
+                                                        v-model="dialogDetail"
+                                                        max-width="500px"
+                                                    >
+                                                        <template
+                                                            v-slot:activator="{
+                                                                on,
+                                                                attrs
+                                                            }"
+                                                        >
+                                                            <v-btn
+                                                                color="primary"
+                                                                dark
+                                                                class="mb-2"
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                                >New Item</v-btn
+                                                            >
+                                                        </template>
+                                                        <v-card>
+                                                            <v-card-title>
+                                                                <!-- <span class="headline">{{ formTitle }}</span> -->
+                                                            </v-card-title>
 
-                            <v-row>
-                                <v-col cols="12" md="4">
-                                    <v-text-field
-                                        v-model="receipt_number"
-                                        :rules="rules.receipt_number"
-                                        :error-messages="errors.receipt_number"
-                                        @input="errors.receipt_number = []"
-                                        label="Receipt No. *"
-                                        required
-                                    ></v-text-field>
-                                </v-col>
+                                                            <v-card-text>
+                                                                <v-container>
+                                                                    <v-row>
+                                                                        <v-col
+                                                                            cols="12"
+                                                                        >
+                                                                            <v-text-field
+                                                                                v-model="
+                                                                                    particular
+                                                                                "
+                                                                                label="Particular"
+                                                                            ></v-text-field>
+                                                                        </v-col>
+                                                                        <v-col
+                                                                            cols="12"
+                                                                        >
+                                                                            <v-text-field
+                                                                                v-model="
+                                                                                    particular_amount
+                                                                                "
+                                                                                label="Amount"
+                                                                            ></v-text-field>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </v-container>
+                                                            </v-card-text>
 
-                                <v-col cols="12" md="4">
-                                    <v-text-field
-                                        v-model="amount"
-                                        :rules="rules.amount"
-                                        :error-messages="errors.amount"
-                                        @input="errors.amount = []"
-                                        label="Amount *"
-                                        required
-                                    ></v-text-field>
-                                </v-col>
-                            </v-row>
-
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-textarea
-                                        rows="1"
-                                        label="Remarks"
-                                        v-model="remarks"
-                                        :error-messages="errors.remarks"
-                                        @input="errors.remarks = []"
-                                    ></v-textarea>
-                                </v-col>
-                            </v-row>
-
-                            <small class="text--secondary">
-                                * indicates required field
-                            </small>
-                        </v-container>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn
+                                                                    color="primary"
+                                                                    text
+                                                                    @click="
+                                                                        dialogDetail = false
+                                                                    "
+                                                                    >Cancel</v-btn
+                                                                >
+                                                                <v-btn
+                                                                    color="primary"
+                                                                    text
+                                                                    @click="
+                                                                        addItem
+                                                                    "
+                                                                    >Add</v-btn
+                                                                >
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-toolbar>
+                                            </template>
+                                            <template
+                                                v-slot:[`item.actions`]="{
+                                                    item
+                                                }"
+                                            >
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="
+                                                        () => {
+                                                            onRemove(item);
+                                                        }
+                                                    "
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+                            </v-tab-item>
+                        </v-tabs>
                     </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary" text @click="dialog = false">
-                            Close
-                        </v-btn>
-                        <v-btn color="primary" text @click="onSave">
-                            Save
-                        </v-btn>
-                    </v-card-actions>
                 </v-form>
             </v-card>
         </v-dialog>
@@ -152,6 +289,7 @@ export default {
     },
     data() {
         return {
+            dialogDetail: false,
             dialog: false,
             valid: false,
             menu: false,
@@ -169,6 +307,14 @@ export default {
             employees: [],
             vendor: null,
             vendors: [],
+            particular: "",
+            particular_amount: 0,
+            headers: [
+                { text: "Particulars", value: "description", sortable: false },
+                { text: "Amount", value: "amount", sortable: false },
+                { text: "", value: "actions", sortable: false }
+            ],
+            items: [],
             rules: {
                 description: [v => !!v || "Description is required"],
                 amount: [v => !!v || "Amount is required"],
@@ -213,6 +359,9 @@ export default {
                     _this.expense_type = data.expense_type.id;
                     _this.employee = data.employee.id;
                     _this.vendor = data.vendor.id;
+                    _this.items = data.expense_details;
+
+                    console.log(data.expense_details);
                 })
                 .catch(error => {
                     console.log(error);
@@ -254,6 +403,14 @@ export default {
 
             _this.$refs.form.validate();
 
+            if (this.items.length == 0) {
+                _this.$dialog.message.error("No Expense detail added", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if (_this.$refs.form.validate()) {
                 axios
                     .put("/api/expenses/" + _this.id, {
@@ -266,7 +423,8 @@ export default {
                         is_active: _this.is_active,
                         expense_type_id: _this.expense_type,
                         employee_id: _this.employeeid,
-                        vendor_id: _this.vendor
+                        vendor_id: _this.vendor,
+                        expense_details: _this.items
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -293,6 +451,30 @@ export default {
 
                 return;
             }
+        },
+        addItem() {
+            this.items.push({
+                id: null,
+                description: this.particular,
+                amount: this.particular_amount
+            });
+            this.dialogDetail = false;
+            this.particular = "";
+            this.particular_amount = 0;
+        },
+        onRemove(item) {
+            const index = this.items.indexOf(item);
+            confirm("Are you sure you want to remove this item?") &&
+                this.items.splice(index, 1);
+        },
+    },
+    watch: {
+        items() {
+            this.amount = this.items.reduce(
+                (total, item) =>
+                    parseFloat(total) + parseFloat(item.amount),
+                0
+            );
         }
     },
     created() {

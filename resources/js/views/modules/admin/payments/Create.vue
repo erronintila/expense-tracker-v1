@@ -165,24 +165,20 @@
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
-                                        <v-col cols="12" md="4">
-                                            Expense Reports
-                                        </v-col>
+                                        Expense Reports
 
                                         <v-spacer></v-spacer>
 
-                                        <v-col cols="12" md="4">
-                                            <DateRangePicker
-                                                :preset="preset"
-                                                :presets="presets"
-                                                :value="date_range"
-                                                :solo="true"
-                                                :buttonType="true"
-                                                :buttonColor="'white'"
-                                                :buttonDark="false"
-                                                @updateDates="updateDates"
-                                            ></DateRangePicker>
-                                        </v-col>
+                                        <DateRangePicker
+                                            :preset="preset"
+                                            :presets="presets"
+                                            :value="date_range"
+                                            :solo="true"
+                                            :buttonType="true"
+                                            :buttonColor="'white'"
+                                            :buttonDark="false"
+                                            @updateDates="updateDates"
+                                        ></DateRangePicker>
                                     </v-row>
                                     <v-row>
                                         <v-col>
@@ -224,7 +220,7 @@
                                                     :key="item.id"
                                                 >
                                                     {{
-                                                        `${item.description} (${item.expense_type.name}): ${item.amount}`
+                                                        `${item.date} (${item.expense_type.name}): ${item.amount}`
                                                     }}
                                                 </div>
                                             </v-card>

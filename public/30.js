@@ -269,10 +269,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -821,43 +817,25 @@ var render = function() {
                                         _c(
                                           "v-row",
                                           [
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: { cols: "12", md: "4" }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                        Expense Reports\n                                    "
-                                                )
-                                              ]
+                                            _vm._v(
+                                              "\n                                    Expense Reports\n\n                                    "
                                             ),
-                                            _vm._v(" "),
                                             _c("v-spacer"),
                                             _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: { cols: "12", md: "4" }
+                                            _c("DateRangePicker", {
+                                              attrs: {
+                                                preset: _vm.preset,
+                                                presets: _vm.presets,
+                                                value: _vm.date_range,
+                                                solo: true,
+                                                buttonType: true,
+                                                buttonColor: "white",
+                                                buttonDark: false
                                               },
-                                              [
-                                                _c("DateRangePicker", {
-                                                  attrs: {
-                                                    preset: _vm.preset,
-                                                    presets: _vm.presets,
-                                                    value: _vm.date_range,
-                                                    solo: true,
-                                                    buttonType: true,
-                                                    buttonColor: "white",
-                                                    buttonDark: false
-                                                  },
-                                                  on: {
-                                                    updateDates: _vm.updateDates
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            )
+                                              on: {
+                                                updateDates: _vm.updateDates
+                                              }
+                                            })
                                           ],
                                           1
                                         ),
@@ -955,7 +933,7 @@ var render = function() {
                                                             _vm._v(
                                                               "\n                                                " +
                                                                 _vm._s(
-                                                                  item.description +
+                                                                  item.date +
                                                                     " (" +
                                                                     item
                                                                       .expense_type

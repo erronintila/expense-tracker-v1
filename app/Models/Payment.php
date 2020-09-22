@@ -62,7 +62,7 @@ class Payment extends Model
         if (!$received) {
             $arr = [
                 'color' => 'green',
-                'remarks' => 'Payment was received',
+                'remarks' => 'Payment transaction was completed',
                 'status' => 'Completed',
             ];
 
