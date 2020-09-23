@@ -2,7 +2,7 @@ const userRoutes = [
     /** Dashboard */
     {
         path: "/",
-        name: "user",
+        name: "home",
         component: () => import("../../views/modules/user/Index.vue"),
         meta: {
             requiresAuth: true,

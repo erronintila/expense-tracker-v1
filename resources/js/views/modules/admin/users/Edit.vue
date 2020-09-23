@@ -139,7 +139,9 @@ export default {
                     _this.username = data.username;
                     _this.email = data.email;
                     _this.is_admin = data.is_admin;
-                    _this.employee = data.employee;
+                    _this.employee = data.employee !== null ? data.employee.id : 0;
+
+                    console.log(_this.employee);
                 })
                 .catch(error => {
                     console.log(error);
@@ -165,6 +167,9 @@ export default {
         onSave() {
             let _this = this;
 
+            console.log(_this.employee);
+
+            // return;
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
@@ -175,7 +180,7 @@ export default {
                         username: _this.username,
                         email: _this.email,
                         is_admin: _this.is_admin,
-                        employee_id: _this.employee
+                        employee_id: _this.employee !== null ? _this.employee : 0
                     })
                     .then(function(response) {
                         // _this.onRefresh();
@@ -192,6 +197,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.errors = error.response.data.errors;
                     });

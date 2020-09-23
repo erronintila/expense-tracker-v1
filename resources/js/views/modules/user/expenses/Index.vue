@@ -3,7 +3,6 @@
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Expenses</h4>
-
                 <v-spacer></v-spacer>
 
                 <v-btn
@@ -253,7 +252,7 @@ export default {
             ],
             items: [],
             employee: 0,
-            employees: [],
+            // employees: [],
             expense_type: 0,
             expense_types: [],
             status: "Active",
@@ -271,18 +270,29 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    // _this.user = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
+        // getCurrentUser() {
+        //     let _this = this;
+
+        //     return new Promise((resolve, reject) => {
+        //         axios
+        //             .get("/api/user")
+        //             .then(response => {
+        //                 console.log(response);
+
+        //                 let emp = response.data.data.employee;
+
+        //                 _this.employee = null ? 0 : emp.id;
+
+        //                 resolve(_this.employee);
+        //             })
+        //             .catch(error => {
+        //                 console.log(error);
+        //                 console.log(error.response);
+
+        //                 reject();
+        //             });
+        //     });
+        // },
         updateDates(e) {
             this.date_range = e;
         },
@@ -296,37 +306,52 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let employee_id = _this.employee;
                 let expense_type_id = _this.expense_type;
                 let range = _this.date_range;
 
                 axios
-                    .get("/api/expenses", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            employee_id: employee_id,
-                            expense_type_id: expense_type_id,
-                            start_date: range[0],
-                            end_date: range[1]
-                        }
-                    })
+                    .get("/api/user")
                     .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
+                        let emp = response.data.data.employee;
 
-                        _this.loading = false;
+                        _this.employee = emp == null ? 0 : emp.id;
 
-                        resolve({ items, total });
+                        let employee_id = _this.employee;
+
+                        axios
+                            .get("/api/expenses", {
+                                params: {
+                                    search: search,
+                                    sortBy: sortBy[0],
+                                    sortType: sortDesc[0] ? "desc" : "asc",
+                                    page: page,
+                                    itemsPerPage: itemsPerPage,
+                                    status: status,
+                                    employee_id: employee_id,
+                                    expense_type_id: expense_type_id,
+                                    start_date: range[0],
+                                    end_date: range[1]
+                                }
+                            })
+                            .then(response => {
+                                let items = response.data.data;
+                                let total = response.data.meta.total;
+
+                                _this.loading = false;
+
+                                resolve({ items, total });
+                            })
+                            .catch(error => {
+                                console.log(error);
+
+                                _this.loading = false;
+                            });
                     })
                     .catch(error => {
                         console.log(error);
+                        console.log(error.response);
 
-                        _this.loading = false;
+                        reject();
                     });
             });
         },
@@ -470,7 +495,8 @@ export default {
                 query: this.search,
                 query: this.status,
                 query: this.expense_type,
-                query: this.date_range
+                query: this.date_range,
+                query: this.employee
             };
         }
     },
@@ -484,7 +510,7 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        this.getCurrentUser();
+        // this.getCurrentUser();
         this.loadExpenseTypes();
     }
 };

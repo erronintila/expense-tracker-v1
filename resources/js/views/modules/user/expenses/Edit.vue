@@ -16,21 +16,6 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-autocomplete
-                                v-model="employee"
-                                :rules="rules.employee"
-                                :items="employees"
-                                :error-messages="errors.employee_id"
-                                @input="errors.employee_id = []"
-                                item-value="id"
-                                item-text="fullname"
-                                label="Employee *"
-                                required
-                            >
-                            </v-autocomplete>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-autocomplete
                                 v-model="expense_type"
                                 :rules="rules.expense_type"
                                 :items="expense_types"
@@ -58,30 +43,6 @@
                             >
                             </v-autocomplete>
                         </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="receipt_number"
-                                :rules="rules.receipt_number"
-                                :error-messages="errors.receipt_number"
-                                @input="errors.receipt_number = []"
-                                label="Receipt No. *"
-                                required
-                            ></v-text-field>
-                        </v-col>
-                        <!-- <v-col cols="12" md="8">
-                            <v-text-field
-                                v-model="description"
-                                :rules="rules.description"
-                                :counter="100"
-                                :error-messages="errors.description"
-                                @input="errors.description = []"
-                                label="Description *"
-                                required
-                            ></v-text-field>
-                        </v-col> -->
 
                         <v-col cols="12" md="4">
                             <v-menu
@@ -111,6 +72,17 @@
                                 >
                                 </v-date-picker>
                             </v-menu>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="receipt_number"
+                                :rules="rules.receipt_number"
+                                :error-messages="errors.receipt_number"
+                                @input="errors.receipt_number = []"
+                                label="Receipt No. *"
+                                required
+                            ></v-text-field>
                         </v-col>
                     </v-row>
 
@@ -311,7 +283,9 @@ export default {
             axios
                 .get("/api/user")
                 .then(response => {
-                    // _this.user = response.data.data;
+                    let emp = response.data.data.employee;
+
+                    _this.employee = emp == null ? null : emp.id;
                 })
                 .catch(error => {
                     console.log(error);
@@ -354,18 +328,18 @@ export default {
                     console.log(error);
                 });
         },
-        loadEmployees() {
-            let _this = this;
+        // loadEmployees() {
+        //     let _this = this;
 
-            axios
-                .get("/api/data/employees")
-                .then(response => {
-                    _this.employees = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
+        //     axios
+        //         .get("/api/data/employees")
+        //         .then(response => {
+        //             _this.employees = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //         });
+        // },
         loadVendors() {
             let _this = this;
 
@@ -385,6 +359,14 @@ export default {
         },
         onSave() {
             let _this = this;
+
+            if(_this.employee == null || _this.employee <= 0) {
+                _this.$dialog.message.error("User Account Unauthorized", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
             _this.$refs.form.validate();
 
@@ -470,7 +452,7 @@ export default {
 
         this.getCurrentUser();
         this.loadExpenseTypes();
-        this.loadEmployees();
+        // this.loadEmployees();
         this.loadVendors();
         this.getData();
     }

@@ -380,6 +380,14 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
+            if(_this.employee == null || _this.employee <= 0) {
+                _this.$dialog.message.error("User Account Unauthorized", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             let _this = this;
 
             _this.$refs.form.validate();

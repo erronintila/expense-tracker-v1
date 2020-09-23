@@ -449,7 +449,7 @@ export default {
                 is_admin: "",
                 updated_at: "",
                 employee: {
-                    id: null,
+                    id: 0,
                     fullname: "",
                     first_name: "",
                     middle_name: "",
@@ -543,9 +543,7 @@ export default {
             axios
                 .get("/api/user")
                 .then(response => {
-                    console.log(response);
                     _this.user = response.data.data;
-                    console.log(_this.user.is_admin);
                 })
                 .catch(error => {
                     console.log(error);
@@ -564,9 +562,11 @@ export default {
                         name: _this.user.name,
                         username: _this.user.username,
                         email: _this.user.email,
-                        is_admin: _this.user.is_admin
+                        is_admin: _this.user.is_admin,
+                        employee_id: 0
                     })
                     .then(function(response) {
+                        console.log(response);
                         // _this.onRefresh();
 
                         _this.$dialog.message.success(
@@ -593,6 +593,7 @@ export default {
                         name: `${_this.user.employee.last_name}, ${_this.user.employee.first_name} ${_this.user.employee.middle_name}`,
                         email: _this.user.employee.email,
                         username: _this.user.username,
+                        is_admin: _this.user.is_admin,
                         employee: {
                             first_name: _this.user.employee.first_name,
                             middle_name: _this.user.employee.middle_name,
@@ -605,7 +606,8 @@ export default {
                                 _this.user.employee.telephone_number,
                             email: _this.user.employee.email,
                             address: _this.user.employee.address
-                        }
+                        },
+                        employee_id: _this.user.employee.id
                     })
                     .then(response => {
                         _this.$dialog.message.success(
@@ -666,7 +668,7 @@ export default {
             this.old_password = "";
             this.password = "";
             this.password_confirmation = "";
-            this.$refs.form_password.resetValidation()
+            this.$refs.form_password.resetValidation();
         }
     },
     created() {
@@ -674,7 +676,6 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
         this.getCurrentUser();
-
     }
 };
 </script>

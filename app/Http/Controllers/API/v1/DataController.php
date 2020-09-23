@@ -195,7 +195,10 @@ class DataController extends Controller
 
     public function expense_types_expenses_summary(Request $request)
     {
-        $expense_types = ExpenseType::with(['expenses.expense_report' => function ($q) {
+        $expense_types = ExpenseType::with(['expenses.expense_report' => function ($q) use ($request) {
+            if (request()->has("employee_id")) {
+                $q->where('employee_id', $request->employee_id);
+            }
             $q->where('approved_at', '<>', null);
             $q->where('deleted_at', null);
         }])->get();

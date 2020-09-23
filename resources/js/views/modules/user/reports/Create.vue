@@ -350,6 +350,14 @@ export default {
         onSave() {
             let _this = this;
 
+            if(_this.employee == null || _this.employee <= 0) {
+                _this.$dialog.message.error("User Account Unauthorized", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             _this.$refs.form.validate();
 
             if (_this.selected.length == 0) {

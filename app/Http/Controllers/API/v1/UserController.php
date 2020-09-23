@@ -183,10 +183,10 @@ class UserController extends Controller
 
                 $user = User::findOrFail($id);
 
-                $user->name     = $request['name'];
-                $user->username = $request['username'];
-                $user->email    = $request['email'];
-                $user->is_admin = $request['is_admin'];
+                $user->name = $request->name;
+                $user->username = $request->username;
+                $user->email = $request->email;
+                $user->is_admin = $request->is_admin;
 
                 $user->save();
 
@@ -197,7 +197,8 @@ class UserController extends Controller
 
                 if(request()->has("employee_id")) {
                     if($request->employee_id > 0) {
-                        $employee = Employee::find($request->employee_id);
+                        $empid = $request->employee_id;
+                        $employee = Employee::find($empid);
                         $employee->user_id = $user->id;
                         $employee->save();
                     }

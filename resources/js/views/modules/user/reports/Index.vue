@@ -277,18 +277,18 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    // _this.user = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
+        // getCurrentUser() {
+        //     let _this = this;
+        //     axios
+        //         .get("/api/user")
+        //         .then(response => {
+        //             // _this.user = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+        //         });
+        // },
         updateDates(e) {
             this.date_range = e;
         },
@@ -302,36 +302,52 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let employee_id = _this.employee;
+                // let employee_id = _this.employee;
                 let range = _this.date_range;
 
                 axios
-                    .get("/api/expense_reports", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            employee_id: employee_id,
-                            start_date: range[0],
-                            end_date: range[1]
-                        }
-                    })
+                    .get("/api/user")
                     .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
+                        let emp = response.data.data.employee;
 
-                        _this.loading = false;
+                        _this.employee = emp ==  null ? 0 : emp.id;
 
-                        resolve({ items, total });
+                        let employee_id = _this.employee;
+
+                        axios
+                            .get("/api/expense_reports", {
+                                params: {
+                                    search: search,
+                                    sortBy: sortBy[0],
+                                    sortType: sortDesc[0] ? "desc" : "asc",
+                                    page: page,
+                                    itemsPerPage: itemsPerPage,
+                                    status: status,
+                                    employee_id: employee_id,
+                                    start_date: range[0],
+                                    end_date: range[1]
+                                }
+                            })
+                            .then(response => {
+                                let items = response.data.data;
+                                let total = response.data.meta.total;
+
+                                _this.loading = false;
+
+                                resolve({ items, total });
+                            })
+                            .catch(error => {
+                                console.log(error);
+                                console.log(error.response);
+
+                                _this.loading = false;
+                            });
                     })
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.loading = false;
+                        reject();
                     });
             });
         },
@@ -482,7 +498,7 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        this.getCurrentUser();
+        // this.getCurrentUser();
     }
 };
 </script>

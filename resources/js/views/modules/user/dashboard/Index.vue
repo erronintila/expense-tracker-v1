@@ -220,9 +220,7 @@ export default {
             lineChartData: {},
 
             filter: { text: "Expenses by type", value: "expense_type" },
-            filterItems: [
-                { text: "Expenses by type", value: "expense_type" },
-            ],
+            filterItems: [{ text: "Expenses by type", value: "expense_type" }],
 
             groupBy: "month",
             groupByItems: [
@@ -278,107 +276,132 @@ export default {
     methods: {
         getCurrentUser() {
             let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    // _this.user = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
+
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/user")
+                    .then(response => {
+                        let emp = response.data.data.employee;
+
+                        _this.employee = emp == null ? 0 : emp.id;
+
+                        let employee_id = _this.employee;
+
+                        resolve(employee_id);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        reject();
+                    });
+            });
         },
         load_expense_types_expenses(start, end) {
             let _this = this;
 
-            axios
-                .get("/api/data/expense_types_expenses_summary", {
-                    params: {
-                        start_date: start,
-                        end_date: end
-                    }
-                })
-                .then(response => {
-                    _this.expenses_by_category = response.data;
+            _this.getCurrentUser().then(data => {
+                axios
+                    .get("/api/data/expense_types_expenses_summary", {
+                        params: {
+                            start_date: start,
+                            end_date: end,
+                            employee_id: data
+                        }
+                    })
+                    .then(response => {
+                        _this.expenses_by_category = response.data;
 
-                    let labels = response.data.map(item => item.text);
-                    let data = response.data.map(item => item.value);
-                    let backgroundColors = _this.getBackgroundColors(
-                        data.length
-                    );
+                        let labels = response.data.map(item => item.text);
+                        let data = response.data.map(item => item.value);
+                        let backgroundColors = _this.getBackgroundColors(
+                            data.length
+                        );
 
-                    this.updatePieChartValues(labels, data, backgroundColors);
+                        this.updatePieChartValues(
+                            labels,
+                            data,
+                            backgroundColors
+                        );
 
-                    this.updateBarChartValues(labels, data, backgroundColors);
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
+                        this.updateBarChartValues(
+                            labels,
+                            data,
+                            backgroundColors
+                        );
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
         },
         load_expenses_summary(start, end, time_unit) {
             let _this = this;
 
-            axios
-                .get("/api/data/expenses_summary", {
-                    params: {
-                        start_date: start,
-                        end_date: end,
-                        time_unit: time_unit
-                    }
-                })
-                .then(response => {
-                    switch (_this.groupBy) {
-                        case "day":
-                            _this.lineChart_labels = response.data.map(
-                                item => item.text
-                            );
-                            break;
-                        case "week":
-                            _this.lineChart_labels = response.data.map(
-                                item =>
-                                    `${moment(item.text).format(
-                                        "YYYY-MM"
-                                    )} W:${this.getWeekInMonth(
-                                        new Date(item.text)
-                                    )}`
-                            );
-                            break;
-                        case "month":
-                            _this.lineChart_labels = response.data.map(item =>
-                                moment(item.text).format("MMM YYYY")
-                            );
-                            break;
-                        case "quarter":
-                            _this.lineChart_labels = response.data.map(
-                                item =>
-                                    `${moment(item.text).format(
-                                        "YYYY"
-                                    )} Q:${moment(item.text).format("Q")}`
-                            );
-                            break;
-                        case "year":
-                            _this.lineChart_labels = response.data.map(item =>
-                                moment(item.text).format("YYYY")
-                            );
-                            break;
-                        default:
-                            break;
-                    }
+            _this.getCurrentUser().then(data => {
+                axios
+                    .get("/api/data/expenses_summary", {
+                        params: {
+                            start_date: start,
+                            end_date: end,
+                            time_unit: time_unit,
+                            employee_id: data
+                        }
+                    })
+                    .then(response => {
+                        switch (_this.groupBy) {
+                            case "day":
+                                _this.lineChart_labels = response.data.map(
+                                    item => item.text
+                                );
+                                break;
+                            case "week":
+                                _this.lineChart_labels = response.data.map(
+                                    item =>
+                                        `${moment(item.text).format(
+                                            "YYYY-MM"
+                                        )} W:${this.getWeekInMonth(
+                                            new Date(item.text)
+                                        )}`
+                                );
+                                break;
+                            case "month":
+                                _this.lineChart_labels = response.data.map(
+                                    item => moment(item.text).format("MMM YYYY")
+                                );
+                                break;
+                            case "quarter":
+                                _this.lineChart_labels = response.data.map(
+                                    item =>
+                                        `${moment(item.text).format(
+                                            "YYYY"
+                                        )} Q:${moment(item.text).format("Q")}`
+                                );
+                                break;
+                            case "year":
+                                _this.lineChart_labels = response.data.map(
+                                    item => moment(item.text).format("YYYY")
+                                );
+                                break;
+                            default:
+                                break;
+                        }
 
-                    _this.lineChart_data = response.data.map(
-                        item => item.value
-                    );
+                        _this.lineChart_data = response.data.map(
+                            item => item.value
+                        );
 
-                    this.updateLineChartValues(
-                        _this.lineChart_labels,
-                        _this.lineChart_data
-                    );
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
+                        this.updateLineChartValues(
+                            _this.lineChart_labels,
+                            _this.lineChart_data
+                        );
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
         },
         load_bar_chart() {
             this.horizontalBarChartOptions = {
@@ -575,20 +598,38 @@ export default {
         getExpenseStats(start, end) {
             let _this = this;
 
-            axios
-                .get(
-                    `/api/data/expense_stats?start_date=${start}&end_date=${end}`
-                )
-                .then(response => {
-                    _this.total_expenses = response.data.summary.total;
-                    _this.total_reimbursements =
-                        response.data.summary.reimbursements;
-                    _this.total_pending_reports = response.data.summary.pending;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
+            _this.getCurrentUser().then(data => {
+                axios
+                    .get(
+                        `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${data}`
+                    )
+                    .then(response => {
+                        _this.total_expenses = response.data.summary.total;
+                        _this.total_reimbursements =
+                            response.data.summary.reimbursements;
+                        _this.total_pending_reports =
+                            response.data.summary.pending;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
+
+            // axios
+            //     .get("/api/user")
+            //     .then(response => {
+            //         let emp = response.data.data.employee;
+
+            //         _this.employee = null ? 0 : emp.id;
+
+            //         let employee_id = _this.employee;
+
+            //     })
+            //     .catch(error => {
+            //         console.log(error);
+            //         console.log(error.response);
+            //     });
         }
     },
     created() {
