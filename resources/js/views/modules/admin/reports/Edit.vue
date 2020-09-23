@@ -247,8 +247,10 @@ export default {
             ],
             selected: [],
             headers: [
-                { text: "Type", value: "expense_type.name" },
                 { text: "Date", value: "date" },
+                { text: "Description", value: "expense_type.name" },
+                { text: "Receipt", value: "receipt_number" },
+                { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }

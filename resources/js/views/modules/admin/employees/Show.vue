@@ -56,7 +56,11 @@
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text color="green">
+                                    <v-btn
+                                        text
+                                        color="green"
+                                        @click="editEmployee"
+                                    >
                                         Edit Info
                                     </v-btn>
                                 </v-card-actions>
@@ -73,36 +77,35 @@
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                     >
-                                        <v-card-title
-                                            >Revolving Fund</v-card-title
-                                        >
+                                        <v-card-title>{{total_expenses}}</v-card-title>
                                         <v-card-subtitle>
-                                            Secondary text
+                                            Expenses (This Month)
                                         </v-card-subtitle>
                                         <v-card-text>
-                                            Go to user profile and configure.
+                                            ~ {{start_date}} - {{end_date}}
                                         </v-card-text>
                                     </v-card>
                                 </v-hover>
                             </v-col>
+
                             <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
                                         outlined
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
-                                        to="/admin/expenses"
                                     >
-                                        <v-card-title>Expenses</v-card-title>
+                                        <v-card-title>{{total_reimbursements}}</v-card-title>
                                         <v-card-subtitle>
-                                            Secondary text
+                                            Reimbursements
                                         </v-card-subtitle>
                                         <v-card-text>
-                                            Go to user profile and configure.
+                                            ~ Amount to be compensated.
                                         </v-card-text>
                                     </v-card>
                                 </v-hover>
                             </v-col>
+
                             <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
@@ -111,18 +114,18 @@
                                         :elevation="hover ? 5 : 2"
                                     >
                                         <v-card-title>
-                                            Reimbursements
+                                            {{total_pending_reports}}
                                         </v-card-title>
                                         <v-card-subtitle>
-                                            Secondary text
+                                            Pending Expense Reports
                                         </v-card-subtitle>
                                         <v-card-text>
-                                            Go to user profile and configure.
+                                            ~ Reports waiting for approval.
                                         </v-card-text>
                                     </v-card>
                                 </v-hover>
                             </v-col>
-                            <v-col cols="6" md="6">
+                            <!-- <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
                                         outlined
@@ -139,7 +142,7 @@
                                         </v-card-text>
                                     </v-card>
                                 </v-hover>
-                            </v-col>
+                            </v-col> -->
                         </v-row>
                     </v-col>
                 </v-row>
@@ -149,7 +152,11 @@
                         <div>
                             <v-hover v-slot:default="{ hover }">
                                 <v-card outlined :elevation="hover ? 5 : 2">
-                                    <v-expansion-panels v-model="panel" hover accordion>
+                                    <v-expansion-panels
+                                        v-model="panel"
+                                        hover
+                                        accordion
+                                    >
                                         <v-expansion-panel>
                                             <v-expansion-panel-header>
                                                 Other Details
@@ -206,7 +213,7 @@
                                                 </v-simple-table>
                                             </v-expansion-panel-content>
                                         </v-expansion-panel>
-                                        <v-expansion-panel>
+                                        <!-- <v-expansion-panel>
                                             <v-expansion-panel-header>
                                                 Itinerary
                                             </v-expansion-panel-header>
@@ -235,7 +242,7 @@
                                                 laboris nisi ut aliquip ex ea
                                                 commodo consequat.
                                             </v-expansion-panel-content>
-                                        </v-expansion-panel>
+                                        </v-expansion-panel> -->
                                     </v-expansion-panels>
                                 </v-card>
                             </v-hover>
@@ -248,9 +255,20 @@
 </template>
 
 <script>
+import moment from "moment";
+import randomcolor from "randomcolor";
+import numeral from "numeral";
+
 export default {
     data() {
         return {
+            start_date: moment().startOf("month").format("ll"),
+            end_date: moment().endOf("month").format("ll"),
+
+            total_expenses: 0,
+            total_reimbursements: 0,
+            total_pending_reports: 0,
+
             selection: 1,
             panel: [0, 1],
             fullname: "",
@@ -294,6 +312,35 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                 });
+        },
+        editEmployee() {
+            this.$router.push({
+                name: "admin.employees.edit",
+                params: { id: this.$route.params.id }
+            });
+        },
+        getExpenseStats() {
+            let _this = this;
+            let start_date = moment().startOf('month').format("YYYY-MM-DD");
+            let end_date = moment().startOf('month').format("YYYY-MM-DD");
+            let employee_id = this.$route.params.id;
+
+            axios
+                .get(
+                    `/api/data/expense_stats?start_date=${start_date}&end_date=${end_date}&employee_id=${employee_id}`
+                )
+                .then(response => {
+                    console.log(response);
+
+                    _this.total_expenses = response.data.summary.total;
+                    _this.total_reimbursements =
+                        response.data.summary.reimbursements;
+                    _this.total_pending_reports = response.data.summary.pending;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
         }
     },
     created() {
@@ -301,6 +348,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
         this.getData();
+        this.getExpenseStats();
     }
 };
 </script>

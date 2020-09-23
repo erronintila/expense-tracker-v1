@@ -35,70 +35,69 @@
 
             <v-container>
                 <v-row>
-                    <v-col cols="12" md="3">
+                    <v-col cols="12" md="4">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
                                 class="mx-auto"
-                                :to="{
-                                    name: 'admin.expenses.index',
-                                    params: { status: 'Archived' }
-                                }"
+                                style="border-left: 2px solid #7dff81 !important"
                             >
                                 <v-card-title>{{
                                     total_expenses
                                 }}</v-card-title>
-                                <v-card-subtitle
-                                    >Total Expenses</v-card-subtitle
-                                >
-                                <v-card-text>---</v-card-text>
+                                <v-card-subtitle>
+                                    Total Expenses
+                                </v-card-subtitle>
+                                <!-- <v-card-text>Last Updated: </v-card-text> -->
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="12" md="3">
+                    <v-col cols="12" md="4">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
                                 class="mx-auto"
-                                to="/admin/payments"
+                                style="border-left: 2px solid #7dff81 !important"
                             >
-                                <v-card-title>0.00</v-card-title>
-                                <v-card-subtitle
-                                    >Reimbursements</v-card-subtitle
-                                >
-                                <v-card-text>---</v-card-text>
+                                <v-card-title>{{
+                                    total_reimbursements
+                                }}</v-card-title>
+                                <v-card-subtitle>
+                                    Reimbursements
+                                </v-card-subtitle>
+                                <!-- <v-card-text>---</v-card-text> -->
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="12" md="3">
+                    <v-col cols="12" md="4">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
                                 class="mx-auto"
-                                to="/admin/reports"
+                                style="border-left: 2px solid #7dff81 !important"
                             >
-                                <v-card-title>0.00</v-card-title>
-                                <v-card-subtitle
-                                    >Pending Expense Reports</v-card-subtitle
-                                >
-                                <v-card-text>---</v-card-text>
+                                <v-card-title>{{
+                                    total_pending_reports
+                                }}</v-card-title>
+                                <v-card-subtitle>
+                                    Pending Expense Reports
+                                </v-card-subtitle>
+                                <!-- <v-card-text>---</v-card-text> -->
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="12" md="3">
+                    <!-- <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                                 <v-card-title>0.00</v-card-title>
-                                <v-card-subtitle
-                                    >------</v-card-subtitle
-                                >
+                                <v-card-subtitle>------</v-card-subtitle>
                                 <v-card-text>---</v-card-text>
                             </v-card>
                         </v-hover>
-                    </v-col>
+                    </v-col> -->
                 </v-row>
                 <v-hover v-slot:default="{ hover }">
-                    <v-card :elevation="hover ? 5 : 2" class="mx-auto">
+                    <v-card :elevation="hover ? 5 : 0" class="mx-auto">
                         <v-toolbar flat dense>
                             <v-toolbar-title>
                                 Expenses by category
@@ -163,7 +162,7 @@
                 </v-hover>
 
                 <v-hover v-slot:default="{ hover }">
-                    <v-card :elevation="hover ? 5 : 2" class="mx-auto">
+                    <v-card :elevation="hover ? 5 : 0" class="mx-auto">
                         <v-toolbar flat dense>
                             <v-toolbar-title>
                                 Expenses by date
@@ -239,6 +238,9 @@ export default {
     data() {
         return {
             total_expenses: 0,
+            total_reimbursements: 0,
+            total_pending_reports: 0,
+
             backgroundColors: [
                 "#36a2eb",
                 "#ff6384",
@@ -315,24 +317,24 @@ export default {
         };
     },
     methods: {
-        load_total_expenses(start, end) {
-            let _this = this;
+        // load_total_expenses(start, end) {
+        //     let _this = this;
 
-            axios
-                .get("/api/data/total_expenses", {
-                    params: {
-                        start_date: start,
-                        end_date: end
-                    }
-                })
-                .then(response => {
-                    _this.total_expenses = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
+        //     axios
+        //         .get("/api/data/total_expenses", {
+        //             params: {
+        //                 start_date: start,
+        //                 end_date: end
+        //             }
+        //         })
+        //         .then(response => {
+        //             _this.total_expenses = response.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+        //         });
+        // },
         load_department_expenses(start, end) {
             let _this = this;
 
@@ -664,10 +666,11 @@ export default {
                     this.load_employees_expenses(start, end);
                     break;
                 default:
+                    this.load_expense_types_expenses(start, end);
                     break;
             }
 
-            this.load_total_expenses(start, end);
+            // this.load_total_expenses(start, end);
         },
         onTimeUnitChange() {
             // console.log([this.date_range[0], this.date_range[1], this.groupBy]);
@@ -676,7 +679,7 @@ export default {
                 this.date_range[1],
                 this.groupBy
             );
-            this.load_total_expenses(this.date_range[0], this.date_range[1]);
+            // this.load_total_expenses(this.date_range[0], this.date_range[1]);
         },
         updateDates(e) {
             this.date_range = e;
@@ -684,18 +687,37 @@ export default {
             this.expenses_by_category = [];
 
             this.onCategoryChange();
-            // this.load_expense_reports(
-            //     this.start_date.format("YYYY-MM-DD"),
-            //     this.end_date.format("YYYY-MM-DD")
-            // );
+
             this.onTimeUnitChange();
+
+            this.getExpenseStats(this.date_range[0], this.date_range[1]);
+        },
+        getExpenseStats(start, end) {
+            let _this = this;
+
+            axios
+                .get(
+                    `/api/data/expense_stats?start_date=${start}&end_date=${end}`
+                )
+                .then(response => {
+                    console.log(response);
+
+                    _this.total_expenses = response.data.summary.total;
+                    _this.total_reimbursements =
+                        response.data.summary.reimbursements;
+                    _this.total_pending_reports = response.data.summary.pending;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
         }
     },
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        this.load_total_expenses(this.date_range[0], this.date_range[1]);
+        // this.load_total_expenses(this.date_range[0], this.date_range[1]);
         this.load_expense_types_expenses(
             this.date_range[0],
             this.date_range[1]
@@ -712,6 +734,14 @@ export default {
             this.date_range[1],
             this.groupBy
         );
+
+        this.getExpenseStats(this.date_range[0], this.date_range[1]);
     }
 };
 </script>
+
+<style scoped>
+/* .theme--light .v-card {
+    border-left: 3px solid green !important;
+} */
+</style>

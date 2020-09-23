@@ -117,6 +117,13 @@ class PaymentController extends Controller
         $payment->remarks = $request->remarks;
         $payment->notes = $request->notes;
 
+
+        ////////// TEMP
+        $payment->approved_at = now();
+        $payment->released_at = now();
+        $payment->received_at = now();
+        //////////
+
         $payment->save();
 
         foreach ($request->expense_reports as $key => $value) {

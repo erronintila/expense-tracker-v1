@@ -265,7 +265,7 @@ export default {
             employees: [],
             expense_type: 0,
             expense_types: [],
-            status: this.$route.params.status || "Active",
+            status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
             search: "",

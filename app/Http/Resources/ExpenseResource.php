@@ -24,7 +24,7 @@ class ExpenseResource extends JsonResource
             'amount' => $this->amount,
             'remarks' => $this->remarks,
             'expense_type' => $this->expense_type,
-            'employee' => $this->employee,
+            'employee' => new EmployeeResource($this->employee),
             'vendor' => $this->vendor,
             'employee_name' => $this->employee->first_name . " " . $this->employee->last_name,
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),

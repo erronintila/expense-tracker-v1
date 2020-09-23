@@ -110,19 +110,19 @@
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item @click="onUpdate('cancel', 'put')">
+                        <v-list-item @click="onDelete">
                             <v-list-item-title>
                                 Cancel Report(s)
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item>
+                        <v-list-item @click="onUpdate('duplicate', 'put')">
                             <v-list-item-title>
                                 Duplicate
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item @click="onDelete">
+                        <!-- <v-list-item @click="onDelete">
                             <v-list-item-title>
                                 Move to archive
                             </v-list-item-title>
@@ -132,7 +132,7 @@
                             <v-list-item-title>
                                 Restore
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
                     </v-list>
                 </v-menu>
             </v-card-title>
@@ -289,7 +289,7 @@ export default {
                 "Pending",
                 "Approved",
                 "Cancelled",
-                "Archived"
+                // "Archived"
             ],
             selected: [],
             search: "",
@@ -343,6 +343,7 @@ export default {
                     })
                     .catch(error => {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.loading = false;
                     });
@@ -392,7 +393,7 @@ export default {
                 return;
             }
 
-            this.$confirm("Move item(s) to archive?").then(res => {
+            this.$confirm("Do you want to cancel report(s)?").then(res => {
                 if (res) {
                     axios
                         .delete(
@@ -407,7 +408,7 @@ export default {
                         )
                         .then(function(response) {
                             _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
+                                "Expense report(s) cancelled successfully",
                                 {
                                     position: "top-right",
                                     timeout: 2000
@@ -424,49 +425,49 @@ export default {
                 }
             });
         },
-        onRestore() {
-            let _this = this;
+        // onRestore() {
+        //     let _this = this;
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
+        //     if (_this.selected.length == 0) {
+        //         this.$dialog.message.error("No item(s) selected", {
+        //             position: "top-right",
+        //             timeout: 2000
+        //         });
+        //         return;
+        //     }
 
-            this.$confirm("Do you want to restore report(s)?").then(res => {
-                if (res) {
-                    let ids = _this.selected.map(item => {
-                        return item.id;
-                    });
+        //     this.$confirm("Do you want to restore report(s)?").then(res => {
+        //         if (res) {
+        //             let ids = _this.selected.map(item => {
+        //                 return item.id;
+        //             });
 
-                    axios
-                        .put(
-                            `/api/expense_reports/${_this.selected[0].id}?action=restore`,
-                            {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        )
-                        .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
-                        })
-                        .catch(function(error) {
-                            // console.log(error);
-                            console.log(error.response);
-                        });
-                }
-            });
-        },
+        //             axios
+        //                 .put(
+        //                     `/api/expense_reports/${_this.selected[0].id}?action=restore`,
+        //                     {
+        //                         ids: _this.selected.map(item => {
+        //                             return item.id;
+        //                         })
+        //                     }
+        //                 )
+        //                 .then(function(response) {
+        //                     _this.$dialog.message.success("Item(s) restored.", {
+        //                         position: "top-right",
+        //                         timeout: 2000
+        //                     });
+        //                     _this.getDataFromApi().then(data => {
+        //                         _this.items = data.items;
+        //                         _this.totalItems = data.total;
+        //                     });
+        //                 })
+        //                 .catch(function(error) {
+        //                     // console.log(error);
+        //                     console.log(error.response);
+        //                 });
+        //         }
+        //     });
+        // },
         onUpdate(action, method) {
             let _this = this;
             // let action = action;
@@ -507,8 +508,8 @@ export default {
                             });
                         })
                         .catch(function(error) {
-                            // console.log(error);
                             console.log(error);
+                            console.log(error.response);
                         });
 
                     // axios

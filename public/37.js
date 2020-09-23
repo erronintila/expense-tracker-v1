@@ -298,7 +298,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       totalAmount: 0,
       status: "Active",
-      statuses: ["Active", "For Submission", "Pending", "Approved", "Cancelled", "Archived"],
+      statuses: ["Active", "For Submission", "Pending", "Approved", "Cancelled" // "Archived"
+      ],
       selected: [],
       search: "",
       totalItems: 0,
@@ -354,6 +355,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         })["catch"](function (error) {
           console.log(error);
+          console.log(error.response);
           _this.loading = false;
         });
       });
@@ -403,7 +405,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.$confirm("Move item(s) to archive?").then(function (res) {
+      this.$confirm("Do you want to cancel report(s)?").then(function (res) {
         if (res) {
           axios["delete"]("/api/expense_reports/".concat(_this.selected[0].id), {
             params: {
@@ -412,7 +414,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               })
             }
           }).then(function (response) {
-            _this.$dialog.message.success("Item(s) moved to archive.", {
+            _this.$dialog.message.success("Expense report(s) cancelled successfully", {
               position: "top-right",
               timeout: 2000
             });
@@ -427,44 +429,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    onRestore: function onRestore() {
-      var _this = this;
-
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      this.$confirm("Do you want to restore report(s)?").then(function (res) {
-        if (res) {
-          var ids = _this.selected.map(function (item) {
-            return item.id;
-          });
-
-          axios.put("/api/expense_reports/".concat(_this.selected[0].id, "?action=restore"), {
-            ids: _this.selected.map(function (item) {
-              return item.id;
-            })
-          }).then(function (response) {
-            _this.$dialog.message.success("Item(s) restored.", {
-              position: "top-right",
-              timeout: 2000
-            });
-
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
-            });
-          })["catch"](function (error) {
-            // console.log(error);
-            console.log(error.response);
-          });
-        }
-      });
-    },
+    // onRestore() {
+    //     let _this = this;
+    //     if (_this.selected.length == 0) {
+    //         this.$dialog.message.error("No item(s) selected", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     this.$confirm("Do you want to restore report(s)?").then(res => {
+    //         if (res) {
+    //             let ids = _this.selected.map(item => {
+    //                 return item.id;
+    //             });
+    //             axios
+    //                 .put(
+    //                     `/api/expense_reports/${_this.selected[0].id}?action=restore`,
+    //                     {
+    //                         ids: _this.selected.map(item => {
+    //                             return item.id;
+    //                         })
+    //                     }
+    //                 )
+    //                 .then(function(response) {
+    //                     _this.$dialog.message.success("Item(s) restored.", {
+    //                         position: "top-right",
+    //                         timeout: 2000
+    //                     });
+    //                     _this.getDataFromApi().then(data => {
+    //                         _this.items = data.items;
+    //                         _this.totalItems = data.total;
+    //                     });
+    //                 })
+    //                 .catch(function(error) {
+    //                     // console.log(error);
+    //                     console.log(error.response);
+    //                 });
+    //         }
+    //     });
+    // },
     onUpdate: function onUpdate(action, method) {
       var _this = this; // let action = action;
 
@@ -501,8 +505,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            // console.log(error);
             console.log(error);
+            console.log(error.response);
           }); // axios
           //     .put(
           //         `/api/expense_reports/${_this.selected[0].id}?action=restore`,
@@ -851,13 +855,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("cancel", "put")
-                            }
-                          }
-                        },
+                        { on: { click: _vm.onDelete } },
                         [
                           _c("v-list-item-title", [
                             _vm._v(
@@ -870,36 +868,17 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-item",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onUpdate("duplicate", "put")
+                            }
+                          }
+                        },
                         [
                           _c("v-list-item-title", [
                             _vm._v(
                               "\n                            Duplicate\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { on: { click: _vm.onDelete } },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Move to archive\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { on: { click: _vm.onRestore } },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Restore\n                        "
                             )
                           ])
                         ],

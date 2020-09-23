@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -84,7 +85,7 @@ class UserController extends Controller
         $user->name     = $request['name'];
         $user->username = $request['username'];
         $user->email    = $request['email'];
-        $user->is_admin     = $request['is_admin'];
+        $user->is_admin = $request['is_admin'];
         $user->password = Hash::make($request['password']);
 
         $user->save();
@@ -143,6 +144,27 @@ class UserController extends Controller
                     ->update(array('email_verified_at' => now()));
 
                 break;
+            case 'change_password':
+                $validator = Validator::make($request->all(), [
+                    'old_password' => [
+                        'required', function ($attribute, $value, $fail) {
+                            if (!Hash::check($value, Auth::user()->password)) {
+                                $fail('Old Password didn\'t match');
+                            }
+                        },
+                    ],
+                    'password' => ['required', 'confirmed', 'string', 'max:255'],
+                ]);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withInput()->withErrors($validator);
+                }
+
+                $user = User::find($id);
+                $user->password = Hash::make($request->password);
+                $user->save();
+
+                break;
             default:
                 $request->validate([
                     'name'      => ['required', 'max:200'],
@@ -155,10 +177,23 @@ class UserController extends Controller
                 $user->name     = $request['name'];
                 $user->username = $request['username'];
                 $user->email    = $request['email'];
-                $user->is_admin     = $request['is_admin'];
-                $user->password = Hash::make($request['password']);
+                $user->is_admin = $request['is_admin'];
 
                 $user->save();
+
+                if (request()->has('employee') && $user->employee != null) {
+                    $user->employee->first_name = $request->employee["first_name"];
+                    $user->employee->middle_name = $request->employee["middle_name"];
+                    $user->employee->last_name = $request->employee["last_name"];
+                    $user->employee->suffix = $request->employee["suffix"];
+                    $user->employee->gender = $request->employee["gender"];
+                    $user->employee->birthdate = $request->employee["birthdate"];
+                    $user->employee->mobile_number = $request->employee["mobile_number"];
+                    $user->employee->telephone_number = $request->employee["telephone_number"];
+                    $user->employee->email = $request->employee["email"];
+                    $user->employee->address = $request->employee["address"];
+                    $user->employee->save();
+                }
 
                 break;
         }

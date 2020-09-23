@@ -272,7 +272,7 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     axios.get("/api/user").then(function (response) {
-      _this2.user = response.data;
+      _this2.user = response.data.data;
     });
   }
 });

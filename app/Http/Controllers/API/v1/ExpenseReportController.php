@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReportResource;
 use App\Models\Expense;
+use App\Models\ExpenseDetail;
 use App\Models\ExpenseReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +52,8 @@ class ExpenseReportController extends Controller
                     $expense_reports = $expense_reports->onlyTrashed();
                     break;
                 case 'Cancelled':
-                    $expense_reports = $expense_reports->where("cancelled_at", '<>', null);
+                    $expense_reports = $expense_reports->onlyTrashed();
+                    // $expense_reports = $expense_reports->where("cancelled_at", '<>', null);
                     break;
                 case 'Approved':
                     $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null);
@@ -167,6 +169,7 @@ class ExpenseReportController extends Controller
             case 'approve':
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report->submitted_at = $expense_report->submitted_at == null ? now() : $expense_report->submitted_at;
                     $expense_report->approved_at = now();
                     $expense_report->cancelled_at = null;
                     $expense_report->save();
@@ -175,20 +178,59 @@ class ExpenseReportController extends Controller
                 $message = "Expense Report(s) approved successfully";
 
                 break;
-            case 'cancel':
-                foreach ($request->ids as $id) {
-                    $expense_report = ExpenseReport::withTrashed()->find($id);
-                    $expense_report->cancelled_at = now();
-                    $expense_report->save();
+            case 'duplicate':
+                foreach ($request->ids as $value) {
+                    $expense_report = ExpenseReport::find($value);
 
-                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                        $expense->delete();
+                    $new_report = $expense_report->replicate();
+                    $new_report->code = null;
+
+                    $new_report->submitted_at = null;
+                    $new_report->approved_at = null;
+                    $new_report->cancelled_at = null;
+                    $new_report->deleted_at = null;
+
+                    $new_report->submitted_by_user_id = null;
+                    $new_report->approved_by_user_id = null;
+                    $new_report->cancelled_by_user_id = null;
+                    $new_report->deleted_by_user_id = null;
+
+                    $new_report->save();
+
+                    foreach ($expense_report->expenses as $key => $value) {
+                        $expense = Expense::find($value["id"]);
+                        $new_expense = $expense->replicate();
+                        $new_expense->deleted_at = null;
+                        $new_expense->expense_report_id = $new_report->id;
+                        $new_expense->save();
+
+                        foreach ($expense->expense_details as $key => $value) {
+                            $expense_detail = ExpenseDetail::find($value["id"]);
+                            $new_expense_detail = $expense_detail->replicate();
+                            $new_expense_detail->deleted_at = null;
+                            $new_expense_detail->expense_id = $new_expense->id;
+                            $new_expense_detail->save();
+                        }
                     }
                 }
 
-                $message = "Expense Report(s) cancelled successfully";
+                $message = "Expense Report(s) duplicated successfully";
 
                 break;
+                // case 'cancel':
+                //     foreach ($request->ids as $id) {
+                //         $expense_report = ExpenseReport::withTrashed()->find($id);
+                //         $expense_report->cancelled_at = now();
+                //         $expense_report->save();
+
+                //         foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                //             $expense->delete();
+                //         }
+                //     }
+
+                //     $message = "Expense Report(s) cancelled successfully";
+
+                //     break;
             case 'restore':
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->find($id);

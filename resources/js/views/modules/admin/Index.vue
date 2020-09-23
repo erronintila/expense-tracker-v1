@@ -243,7 +243,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
         axios.get("/api/user").then(response => {
-            this.user = response.data;
+            this.user = response.data.data;
         });
     }
 };

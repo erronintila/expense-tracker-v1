@@ -5,308 +5,9 @@
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Show.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      selection: 1,
-      panel: [0, 1],
-      fullname: "",
-      first_name: "",
-      middle_name: "",
-      last_name: "",
-      suffix: "",
-      gender: "",
-      birthdate: "",
-      mobile_number: "",
-      telephone_number: "",
-      email: "",
-      address: "",
-      job: "",
-      department: ""
-    };
-  },
-  methods: {
-    getData: function getData() {
-      var _this = this;
-
-      axios.get("/api/employees/".concat(_this.$route.params.id)).then(function (response) {
-        var data = response.data.data;
-        _this.fullname = data.fullname;
-        _this.first_name = data.first_name;
-        _this.middle_name = data.middle_name;
-        _this.last_name = data.last_name;
-        _this.suffix = data.suffix;
-        _this.gender = data.gender;
-        _this.birthdate = data.birthdate;
-        _this.mobile_number = data.mobile_number;
-        _this.telephone_number = data.telephone_number;
-        _this.email = data.email;
-        _this.address = data.address;
-        _this.job = data.job.name;
-        _this.department = data.department.name;
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    }
-  },
-  created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.getData();
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\resources\\js\\views\\modules\\admin\\employees\\Show.vue: Unexpected token, expected \",\" (265:59)\n\n\u001b[0m \u001b[90m 263 | \u001b[39m    data() {\u001b[0m\n\u001b[0m \u001b[90m 264 | \u001b[39m        \u001b[36mreturn\u001b[39m {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 | \u001b[39m            start_date\u001b[33m:\u001b[39m moment()\u001b[33m.\u001b[39mstartOf(\u001b[32m\"month\"\u001b[39m)\u001b[33m.\u001b[39mfromNow()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 266 | \u001b[39m            total_expenses\u001b[33m:\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 267 | \u001b[39m            total_reimbursements\u001b[33m:\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 268 | \u001b[39m            total_pending_reports\u001b[33m:\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n    at Parser._raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:766:17)\n    at Parser.raiseWithData (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:759:17)\n    at Parser.raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:753:17)\n    at Parser.unexpected (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8966:16)\n    at Parser.expect (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8952:28)\n    at Parser.parseObjectLike (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10655:14)\n    at Parser.parseExprAtom (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10198:23)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at Parser.parseExpressionBase (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9564:23)\n    at C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:39\n    at Parser.allowInAnd (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11297:16)\n    at Parser.parseExpression (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:17)\n    at Parser.parseReturnStatement (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11800:28)\n    at Parser.parseStatementContent (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11479:21)\n    at Parser.parseStatement (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11431:17)\n    at Parser.parseBlockOrModuleBlockBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:12013:25)\n    at Parser.parseBlockBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11999:10)\n    at Parser.parseBlock (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11983:10)\n    at Parser.parseFunctionBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10963:24)\n    at Parser.parseFunctionBodyAndFinish (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10946:10)\n    at Parser.parseMethod (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10883:10)\n    at Parser.parseObjectMethod (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10808:19)\n    at Parser.parseObjPropValue (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10841:23)\n    at Parser.parsePropertyDefinition (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10772:10)\n    at Parser.parseObjectLike (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10664:25)\n    at Parser.parseExprAtom (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10198:23)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)");
 
 /***/ }),
 
@@ -492,7 +193,8 @@ var render = function() {
                                         _c(
                                           "v-btn",
                                           {
-                                            attrs: { text: "", color: "green" }
+                                            attrs: { text: "", color: "green" },
+                                            on: { click: _vm.editEmployee }
                                           },
                                           [
                                             _vm._v(
@@ -544,67 +246,22 @@ var render = function() {
                                           },
                                           [
                                             _c("v-card-title", [
-                                              _vm._v("Revolving Fund")
+                                              _vm._v(_vm._s(_vm.total_expenses))
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-subtitle", [
                                               _vm._v(
-                                                "\n                                        Secondary text\n                                    "
+                                                "\n                                        Expenses (This Month)\n                                    "
                                               )
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-text", [
                                               _vm._v(
-                                                "\n                                        Go to user profile and configure.\n                                    "
-                                              )
-                                            ])
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ])
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "6", md: "6" } },
-                            [
-                              _c("v-hover", {
-                                scopedSlots: _vm._u([
-                                  {
-                                    key: "default",
-                                    fn: function(ref) {
-                                      var hover = ref.hover
-                                      return [
-                                        _c(
-                                          "v-card",
-                                          {
-                                            staticClass: "mx-auto",
-                                            attrs: {
-                                              outlined: "",
-                                              elevation: hover ? 5 : 2,
-                                              to: "/admin/expenses"
-                                            }
-                                          },
-                                          [
-                                            _c("v-card-title", [
-                                              _vm._v("Expenses")
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("v-card-subtitle", [
-                                              _vm._v(
-                                                "\n                                        Secondary text\n                                    "
-                                              )
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("v-card-text", [
-                                              _vm._v(
-                                                "\n                                        Go to user profile and configure.\n                                    "
+                                                "\n                                        ~ " +
+                                                  _vm._s(_vm.start_date) +
+                                                  " - " +
+                                                  _vm._s(_vm.end_date) +
+                                                  "\n                                    "
                                               )
                                             ])
                                           ],
@@ -642,19 +299,19 @@ var render = function() {
                                           [
                                             _c("v-card-title", [
                                               _vm._v(
-                                                "\n                                        Reimbursements\n                                    "
+                                                _vm._s(_vm.total_reimbursements)
                                               )
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-subtitle", [
                                               _vm._v(
-                                                "\n                                        Secondary text\n                                    "
+                                                "\n                                        Reimbursements\n                                    "
                                               )
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-text", [
                                               _vm._v(
-                                                "\n                                        Go to user profile and configure.\n                                    "
+                                                "\n                                        ~ Amount to be collected.\n                                    "
                                               )
                                             ])
                                           ],
@@ -686,24 +343,29 @@ var render = function() {
                                             staticClass: "mx-auto",
                                             attrs: {
                                               outlined: "",
-                                              elevation: hover ? 5 : 2,
-                                              to: "/admin/reports"
+                                              elevation: hover ? 5 : 2
                                             }
                                           },
                                           [
                                             _c("v-card-title", [
-                                              _vm._v("Reports")
+                                              _vm._v(
+                                                "\n                                        " +
+                                                  _vm._s(
+                                                    _vm.total_pending_reports
+                                                  ) +
+                                                  "\n                                    "
+                                              )
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-subtitle", [
                                               _vm._v(
-                                                "\n                                        Secondary text\n                                    "
+                                                "\n                                        Pending Expense Reports\n                                    "
                                               )
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-text", [
                                               _vm._v(
-                                                "\n                                        Go to user profile and configure.\n                                    "
+                                                "\n                                        ~ Reports waiting for approval.\n                                    "
                                               )
                                             ])
                                           ],
@@ -885,42 +547,6 @@ var render = function() {
                                                 ],
                                                 1
                                               )
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-expansion-panel",
-                                            [
-                                              _c("v-expansion-panel-header", [
-                                                _vm._v(
-                                                  "\n                                            Itinerary\n                                        "
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("v-expansion-panel-content", [
-                                                _vm._v(
-                                                  "\n                                            Lorem ipsum dolor sit amet,\n                                            consectetur adipiscing elit, sed\n                                            do eiusmod tempor incididunt ut\n                                            labore et dolore magna aliqua.\n                                            Ut enim ad minim veniam, quis\n                                            nostrud exercitation ullamco\n                                            laboris nisi ut aliquip ex ea\n                                            commodo consequat.\n                                        "
-                                                )
-                                              ])
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-expansion-panel",
-                                            [
-                                              _c("v-expansion-panel-header", [
-                                                _vm._v(
-                                                  "\n                                            Activities\n                                        "
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("v-expansion-panel-content", [
-                                                _vm._v(
-                                                  "\n                                            Lorem ipsum dolor sit amet,\n                                            consectetur adipiscing elit, sed\n                                            do eiusmod tempor incididunt ut\n                                            labore et dolore magna aliqua.\n                                            Ut enim ad minim veniam, quis\n                                            nostrud exercitation ullamco\n                                            laboris nisi ut aliquip ex ea\n                                            commodo consequat.\n                                        "
-                                                )
-                                              ])
                                             ],
                                             1
                                           )

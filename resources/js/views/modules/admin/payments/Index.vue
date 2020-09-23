@@ -89,7 +89,7 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onUpdate('approve', 'put')">
+                        <!-- <v-list-item @click="onUpdate('approve', 'put')">
                             <v-list-item-title>
                                 Approve Payment(s)
                             </v-list-item-title>
@@ -105,7 +105,7 @@
                             <v-list-item-title>
                                 Receive Payment(s)
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <v-list-item @click="onUpdate('cancel', 'delete')">
                             <v-list-item-title>
@@ -113,11 +113,11 @@
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item  @click="onUpdate('complete', 'put')">
+                        <!-- <v-list-item  @click="onUpdate('complete', 'put')">
                             <v-list-item-title>
                                 Complete Transaction(s)
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
                     </v-list>
                 </v-menu>
             </v-card-title>
@@ -187,20 +187,20 @@
                                         <td>:</td>
                                         <td>{{ item.created_at }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td><strong>Status</strong></td>
                                         <td>:</td>
                                         <td>{{ item.status.remarks }}</td>
-                                    </tr>
+                                    </tr> -->
                                 </table>
                             </v-container>
                         </td>
                     </template>
-                    <template v-slot:[`item.status.status`]="{ item }">
+                    <!-- <template v-slot:[`item.status.status`]="{ item }">
                         <v-chip :color="item.status.color" dark small>{{
                             item.status.status
                         }}</v-chip>
-                    </template>
+                    </template> -->
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{ getHumanDate(item.created_at) }}
                     </template>
@@ -211,9 +211,9 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)">
+                        <!-- <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
-                        </v-icon>
+                        </v-icon> -->
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -231,7 +231,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <!-- <td></td> -->
                             <td></td>
                         </tr>
                     </template>
@@ -257,7 +257,7 @@ export default {
                 { text: "Amount", value: "amount" },
                 { text: "Created", value: "created_at" },
                 { text: "Updated", value: "updated_at" },
-                { text: "Status", value: "status.status" },
+                // { text: "Status", value: "status.status" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -266,11 +266,11 @@ export default {
             status: "Active",
             statuses: [
                 "Active",
-                "Approved",
-                "Released",
-                "Received",
+                // "Approved",
+                // "Released",
+                // "Received",
                 "Cancelled",
-                "Completed"
+                // "Completed"
             ],
             selected: [],
             search: "",

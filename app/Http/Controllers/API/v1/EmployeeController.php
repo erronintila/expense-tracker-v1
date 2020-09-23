@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\Job;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -116,6 +117,17 @@ class EmployeeController extends Controller
         $employee->email = $request->email;
         $employee->job_id = $request->job_id;
         $employee->address = $request->address;
+
+        $user = new User();
+        $user->name     = $request->last_name . ', ' . $request->first_name . ' ' . $request->middle_name;
+        $user->username = $employee->email;
+        $user->email    = $employee->email;
+        $user->email_verified_at = null;
+        $user->is_admin = false;
+        $user->password = Hash::make("password");
+        $user->save();
+
+        $employee->user_id = $user->id;
         $employee->save();
 
         return response(
@@ -180,6 +192,13 @@ class EmployeeController extends Controller
                 $employee->job_id = $request->job_id;
                 $employee->address = $request->address;
                 $employee->save();
+
+                if ($employee->user_id != null) {
+                    $user = User::find($employee->user_id);
+                    $user->name = $request->last_name . ', ' . $request->first_name . ' ' . $request->middle_name;
+                    $user->email = $employee->email;
+                    $user->save();
+                }
 
                 break;
         }

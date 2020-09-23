@@ -11,118 +11,242 @@
                 <h4 class="title green--text">Expense Report Details</h4>
             </v-card-title>
 
-            <v-container>
-                <v-row>
-                    <v-spacer></v-spacer>
-                    <v-col cols="12" md="4">
-                        <v-select
-                            v-model="summary"
-                            :items="report_views"
-                            label="Report View"
-                        >
-                        </v-select>
-                    </v-col>
-                </v-row>
-            </v-container>
+            <v-form ref="form" v-model="valid">
+                <v-container>
+                    <v-row>
+                        <v-spacer></v-spacer>
+                    </v-row>
 
-            <v-container>
-                <v-row>
-                    <v-col>
-                        Expense Report <br />
-                        {{ employee }} <br />
-                        {{ description }} <br />
-                    </v-col>
-                    <v-spacer></v-spacer>
-                    <v-col>
-                        {{ code }} <br />
-                        Date : 2020-01-01 ~ 2020-01-31
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-simple-table dense>
-                            <template v-slot:default>
-                                <thead>
-                                    <tr>
-                                        <th v-for="item in headers" :key="item.value">
-                                            {{ item.text }}
-                                        </th>
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="employee"
+                                label="Employee"
+                                required
+                            >
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="8">
+                            <v-text-field
+                                v-model="description"
+                                label="Description"
+                                required
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12">
+                            <v-data-table
+                                elevation="0"
+                                :headers="headers"
+                                :items="items"
+                                :hide-default-footer="true"
+                                disable-pagination
+                                item-key="id"
+                                single-expand
+                                show-expand
+                                class="elevation-0"
+                            >
+                                <template
+                                    slot="body.append"
+                                    v-if="items.length > 0"
+                                >
+                                    <tr class="green--text hidden-md-and-up">
+                                        <td class="title">
+                                            Total:
+                                            <strong>{{ total }}</strong>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="item in expenses" :key="item.id">
-                                        <td>{{ item.description }}</td>
-                                        <td>{{ item.date }}</td>
-                                        <td>{{ item.amount }}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3"><hr /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Total</td>
+                                    <tr class="green--text hidden-sm-and-down">
+                                        <td class="title">Total</td>
                                         <td></td>
-                                        <td>{{ total }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <strong>{{ total }}</strong>
+                                        </td>
+                                        <td></td>
                                     </tr>
-                                </tfoot>
-                            </template>
-                        </v-simple-table>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-btn>Print Report</v-btn>
-                    </v-col>
-                </v-row>
-            </v-container>
+                                </template>
+                                <template v-slot:top>
+                                    <v-row>
+                                        Expenses
+                                        <v-spacer></v-spacer>
+                                    </v-row>
+                                </template>
+                                <template
+                                    v-slot:expanded-item="{ headers, item }"
+                                >
+                                    <td :colspan="headers.length">
+                                        <v-container>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Date</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ item.date }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Receipt</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            item.receipt_number
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Vendor</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ item.vendor.name }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </v-container>
+                                    </td>
+                                </template>
+                            </v-data-table>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" md="6">
+                            <v-textarea
+                                :rows="remarks == '' ? 1 : 2"
+                                v-model="remarks"
+                                label="Remarks"
+                                readonly
+                            >
+                            </v-textarea>
+                        </v-col>
+                    </v-row>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green" dark @click="onEdit"
+                            >Print Report</v-btn
+                        >
+                        <v-btn color="green" dark @click="onEdit"
+                            >Print Summary</v-btn
+                        >
+                        <v-btn color="green" dark @click="onEdit"
+                            >Edit Details</v-btn
+                        >
+                    </v-card-actions>
+                </v-container>
+            </v-form>
         </v-card>
     </v-app>
 </template>
 
 <script>
+import moment from "moment";
+import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import CreateExpense from "./components/CreateExpense";
+import EditExpense from "./components/EditExpense";
+
 export default {
+    components: {
+        DateRangePicker,
+        CreateExpense,
+        EditExpense
+    },
     data() {
         return {
+            dialogCreate: false,
+            dialogEdit: false,
+            valid: false,
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ],
+            preset: "",
+            presets: [
+                "Today",
+                "Yesterday",
+                "Last 7 Days",
+                "Last 30 Days",
+                "This Week",
+                "This Month",
+                "This Quarter",
+                "This Year",
+                "Last Week",
+                "Last Month",
+                "Last Quarter",
+                "Last Year",
+                "Last 5 Years"
+            ],
+            selected: [],
+            headers: [
+                { text: "Date", value: "date", sortable: false },
+                {
+                    text: "Description",
+                    value: "expense_type.name",
+                    sortable: false
+                },
+                { text: "Receipt", value: "receipt_number", sortable: false },
+                { text: "Vendor", value: "vendor.name", sortable: false },
+                { text: "Amount", value: "amount", sortable: false },
+                { text: "", value: "data-table-expand" }
+            ],
+            items: [],
+            total: 0,
             code: "",
             description: "",
             remarks: "",
             notes: "",
-            employee: "",
-            status: "",
+            employee: 0,
+            employees: [],
             expenses: [],
-            submitted_at: "",
-            reviewed_at: "",
-            approved_at: "",
-            cancelled_at: "",
-            created_at: "",
-            updated_at: "",
-            deleted_at: "",
-            total: 0,
-            headers: [
-                { text: "Expense", value: "description" },
-                { text: "Date", value: "date" },
-                { text: "Amount", value: "amount" }
-            ],
-            summary: 0,
-            report_views: [
-                { text: "Detailed Report", value: 0 },
-                { text: "Summary Report", value: 1 }
-            ]
+            rules: {
+                date_range: [],
+                code: [],
+                description: [
+                    v => !!v || "Description is required",
+                    v =>
+                        (!!v && v.length <= 100) ||
+                        "Description must be less than 100 characters"
+                ],
+                remarks: [],
+                notes: [],
+                employee: [v => !!v || "Employee is required"],
+                expenses: []
+            },
+            errors: {
+                date_range: [],
+                code: [],
+                description: [],
+                remarks: [],
+                notes: [],
+                employee: [],
+                expenses: []
+            }
         };
     },
     methods: {
-        loadItem() {
+        updateDates(e) {
+            this.date_range = e;
+            this.loadExpenses(this.employee);
+        },
+        getData() {
             let _this = this;
-
             axios
                 .get(`/api/expense_reports/${_this.$route.params.id}`)
-                .then(function(response) {
-                    console.log(response.data);
-
+                .then(response => {
                     let data = response.data.data;
-
-                    console.log(data.expenses);
 
                     _this.code = data.code;
                     _this.description = data.description;
@@ -139,37 +263,58 @@ export default {
                     _this.updated_at = data.updated_at;
                     _this.deleted_at = data.deleted_at;
                     _this.total = data.total;
+
+                    _this.selected.splice(0, 0, ...data.expenses);
+
+                    _this.loadExpenses(data.employee.id);
                 })
-                .catch(function(error) {
+                .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
-        viewReport() {
+        loadExpenses(emp_id) {
+            let start_date = this.date_range[0];
+            let end_date = this.date_range[1];
             let _this = this;
-            let url = "";
-
-            if (_this.summary) {
-                url = "";
-            }
 
             axios
-                .get("/api/data/expense_reports", {
-                    id: _this.$route.params.id
+                .get("/api/data/expenses", {
+                    params: {
+                        update_report: true,
+                        employee_id: emp_id,
+                        start_date: start_date,
+                        end_date: end_date,
+                        expense_report_id: _this.$route.params.id
+                    }
                 })
                 .then(response => {
-                    _this.expenses = response.data.data;
+                    _this.items = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
                 });
+        },
+        onEdit() {
+            this.$router.push({
+                name: "admin.reports.edit",
+                params: { id: this.$route.params.id }
+            });
+        }
+    },
+    watch: {
+        selected() {
+            this.total = this.selected.reduce(
+                (total, item) => total + item.amount,
+                0
+            );
         }
     },
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        this.loadItem();
-    },
-    mounted() {}
+        this.getData();
+    }
 };
 </script>

@@ -288,10 +288,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: "Updated",
         value: "updated_at"
-      }, {
-        text: "Status",
-        value: "status.status"
-      }, {
+      }, // { text: "Status", value: "status.status" },
+      {
         text: "Actions",
         value: "actions",
         sortable: false
@@ -302,7 +300,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       totalAmount: 0,
       items: [],
       status: "Active",
-      statuses: ["Active", "Approved", "Released", "Received", "Cancelled", "Completed"],
+      statuses: ["Active", // "Approved",
+      // "Released",
+      // "Received",
+      "Cancelled" // "Completed"
+      ],
       selected: [],
       search: "",
       totalItems: 0,
@@ -724,63 +726,6 @@ var render = function() {
                         {
                           on: {
                             click: function($event) {
-                              return _vm.onUpdate("approve", "put")
-                            }
-                          }
-                        },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Approve Payment(s)\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("release", "put")
-                            }
-                          }
-                        },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Release Payment(s)\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("receive", "put")
-                            }
-                          }
-                        },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Receive Payment(s)\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
                               return _vm.onUpdate("cancel", "delete")
                             }
                           }
@@ -789,25 +734,6 @@ var render = function() {
                           _c("v-list-item-title", [
                             _vm._v(
                               "\n                            Cancel Payment(s)\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("complete", "put")
-                            }
-                          }
-                        },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Complete Transaction(s)\n                        "
                             )
                           ])
                         ],
@@ -954,42 +880,11 @@ var render = function() {
                                       _c("td", [
                                         _vm._v(_vm._s(item.created_at))
                                       ])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Status")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(_vm._s(item.status.remarks))
-                                      ])
                                     ])
                                   ])
                                 ])
                               ],
                               1
-                            )
-                          ]
-                        }
-                      },
-                      {
-                        key: "item.status.status",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            _c(
-                              "v-chip",
-                              {
-                                attrs: {
-                                  color: item.status.color,
-                                  dark: "",
-                                  small: ""
-                                }
-                              },
-                              [_vm._v(_vm._s(item.status.status))]
                             )
                           ]
                         }
@@ -1041,24 +936,6 @@ var render = function() {
                                   "\n                        mdi-eye\n                    "
                                 )
                               ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-icon",
-                              {
-                                staticClass: "mr-2",
-                                attrs: { small: "" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.onEdit(item)
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                        mdi-pencil\n                    "
-                                )
-                              ]
                             )
                           ]
                         }
@@ -1076,7 +953,6 @@ var render = function() {
                   }
                 },
                 [
-                  _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
@@ -1109,8 +985,6 @@ var render = function() {
                             _c("td", [
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
-                            _vm._v(" "),
-                            _c("td"),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),

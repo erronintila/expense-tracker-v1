@@ -16,6 +16,7 @@ use App\Models\Expense;
 use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
 use App\Models\Job;
+use App\Models\Payment;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,7 +116,7 @@ class DataController extends Controller
                     $q->where("expense_report_id", $request->expense_report_id);
                     $q->orWhere("expense_report_id", null);
                 })
-                ->where(function($q) use($request) {
+                ->where(function ($q) use ($request) {
                     $q->whereBetween("date", [$request->start_date, $request->end_date]);
                     $q->orWhere("expense_report_id", $request->expense_report_id);
                 })
@@ -151,7 +152,11 @@ class DataController extends Controller
         }
 
         if (request()->has("create_payment")) {
-            $expense_reports = $expense_reports->where("payment_id", null);
+            $expense_reports = $expense_reports
+                ->where("approved_at", "<>", null)
+                ->where("submitted_at", "<>", null)
+                ->where("cancelled_at", null)
+                ->where("payment_id", null);
         }
 
         if (request()->has("employee_id")) {
@@ -295,8 +300,6 @@ class DataController extends Controller
 
     public function expenses_summary(Request $request)
     {
-
-
         $expenses = Expense::whereBetween('expenses.date', [$request->start_date, $request->end_date])
             ->where('expense_reports.approved_at', '<>', null)
             ->where('expense_reports.deleted_at', null)
@@ -345,5 +348,67 @@ class DataController extends Controller
         }
 
         return "";
+    }
+
+    public function expense_stats(Request $request)
+    {
+        $total_expenses = Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', "<>", null);
+            $q->where('approved_at', '<>', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null)
+            ->whereBetween('date', [$request->start_date, $request->end_date]);
+
+        $pending_expenses = Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', "<>", null);
+            $q->where('approved_at', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null)
+            ->whereBetween('date', [$request->start_date, $request->end_date]);
+
+        $reimbursements = Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', "<>", null);
+            $q->where('approved_at', '<>', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+            $q->where('payment_id', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null)
+            ->whereBetween('date', [$request->start_date, $request->end_date]);
+
+        if (request()->has('employee_id')) {
+            $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
+            $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
+            $reimbursements = $reimbursements->where('employee_id', $request->employee_id);
+        }
+
+        $total_expenses = $total_expenses->sum("amount");
+        $pending_expenses = $pending_expenses->sum("amount");
+        $reimbursements = $reimbursements->sum("amount");
+
+        $stats = [
+            "summary" => [
+                "total" => $total_expenses,
+                "pending" => $pending_expenses,
+                "reimbursements" => $reimbursements
+            ],
+            // "data" => [
+            //     "expenses" => $total_expenses,
+            //     "pending_expenses" => $pending_expenses,
+            //     "reimbursements" => $reimbursements
+            // ]
+        ];
+
+        return $stats;
     }
 }

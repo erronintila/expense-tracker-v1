@@ -24,6 +24,8 @@ class ExpenseReportResource extends JsonResource
             'description' => $this->description,
             'remarks' => $this->remarks,
             'notes' => $this->notes,
+            // 'employee' => new EmployeeResource($this->employee),
+            // 'payment' => new PaymentResource($this->payment),
             'employee' => $this->employee,
             'payment' => $this->payment,
             'expenses' => ExpenseResource::collection($this->expenses()->withTrashed()->get()),
