@@ -538,7 +538,7 @@ export default {
         };
     },
     methods: {
-        getData() {
+        getCurrentUser() {
             let _this = this;
             axios
                 .get("/api/user")
@@ -673,8 +673,8 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        this.getData();
-        
+        this.getCurrentUser();
+
     }
 };
 </script>

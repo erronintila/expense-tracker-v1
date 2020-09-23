@@ -48,6 +48,17 @@
                                 required
                             ></v-text-field>
                         </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-select
+                                v-model="employee"
+                                :items="employees"
+                                item-text="fullname"
+                                item-value="id"
+                                label="Link Employee Info"
+                            >
+                            </v-select>
+                        </v-col>
                     </v-row>
 
                     <v-row>
@@ -86,6 +97,8 @@ export default {
             name: "",
             username: "",
             email: "",
+            employee: 0,
+            employees: [],
             rules: {
                 is_admin: [],
                 name: [
@@ -126,9 +139,24 @@ export default {
                     _this.username = data.username;
                     _this.email = data.email;
                     _this.is_admin = data.is_admin;
+                    _this.employee = data.employee;
                 })
                 .catch(error => {
                     console.log(error);
+                });
+        },
+        loadEmployees() {
+            let _this = this;
+            axios
+                .get(`/api/data/employees?no_user=true&user_id=${_this.$route.params.id}`)
+                .then(response => {
+                    _this.employees = response.data.data;
+
+                    _this.employees.unshift({ id: 0, fullname: "None" });
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -146,7 +174,8 @@ export default {
                         name: _this.name,
                         username: _this.username,
                         email: _this.email,
-                        is_admin: _this.is_admin
+                        is_admin: _this.is_admin,
+                        employee_id: _this.employee
                     })
                     .then(function(response) {
                         // _this.onRefresh();
@@ -176,6 +205,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
         this.getData();
+        this.loadEmployees();
     }
 };
 </script>

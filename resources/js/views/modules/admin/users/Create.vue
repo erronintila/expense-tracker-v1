@@ -88,6 +88,17 @@
                                 "
                             ></v-text-field>
                         </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-select
+                                v-model="employee"
+                                :items="employees"
+                                item-text="fullname"
+                                item-value="id"
+                                label="Link Employee Info"
+                            >
+                            </v-select>
+                        </v-col>
                     </v-row>
 
                     <v-row>
@@ -128,6 +139,8 @@ export default {
             email: "",
             password: "",
             password_confirmation: "",
+            employee: 0,
+            employees: [],
             rules: {
                 is_admin: [],
                 name: [
@@ -173,6 +186,20 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
+        loadEmployees() {
+            let _this = this;
+            axios
+                .get(`/api/data/employees?no_user=true&user_id=${null}`)
+                .then(response => {
+                    _this.employees = response.data.data;
+
+                    _this.employees.unshift({id: 0, fullname: "None"});
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         onSave() {
             let _this = this;
 
@@ -186,7 +213,8 @@ export default {
                         email: _this.email,
                         password: _this.password,
                         password_confirmation: _this.password_confirmation,
-                        is_admin: _this.is_admin
+                        is_admin: _this.is_admin,
+                        employee_id: _this.employee
                     })
                     .then(function(response) {
                         // _this.onRefresh();
@@ -214,6 +242,8 @@ export default {
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
+
+        this.loadEmployees();
     }
 };
 </script>

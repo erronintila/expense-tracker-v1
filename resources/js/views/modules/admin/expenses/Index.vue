@@ -428,7 +428,7 @@ export default {
                 return;
             }
 
-            this.$confirm("Do you want to restore account(s)?").then(res => {
+            this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
                     axios
                         .put(`/api/expenses/${_this.selected[0].id}`, {

@@ -157,8 +157,6 @@ export default {
         user: { name: "", username: "", email: "" },
         dialog: false,
         drawer: null,
-        admin_items: [],
-        user_items: [],
         items: [
             {
                 icon: "mdi-chart-areaspline",

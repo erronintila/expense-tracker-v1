@@ -27,13 +27,18 @@ class DataController extends Controller
     {
         $expenses = Expense::all();
 
-
         return $expenses;
     }
 
-    public function employees()
+    public function employees(Request $request)
     {
-        return EmployeeResource::collection(Employee::orderBy("last_name")->get());
+        $employee = Employee::orderBy("last_name");
+
+        if (request()->has("no_user") && request()->has("user_id")) {
+            $employee->where("user_id", null)->orwhere("user_id", $request->user_id);
+        }
+
+        return EmployeeResource::collection($employee->get());
     }
 
     public function vendors()
@@ -372,7 +377,7 @@ class DataController extends Controller
             ->whereHas('expense_report')
             ->get()
             ->where('expense_report', '<>', null);
-            // ->whereBetween('date', [$request->start_date, $request->end_date]);
+        // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
         $reimbursements = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
@@ -384,7 +389,7 @@ class DataController extends Controller
             ->whereHas('expense_report')
             ->get()
             ->where('expense_report', '<>', null);
-            // ->whereBetween('date', [$request->start_date, $request->end_date]);
+        // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
         if (request()->has('employee_id')) {
             $total_expenses = $total_expenses->where('employee_id', $request->employee_id);

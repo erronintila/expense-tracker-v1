@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -89,6 +90,14 @@ class UserController extends Controller
         $user->password = Hash::make($request['password']);
 
         $user->save();
+
+        if(request()->has("employee_id")) {
+            if($request->employee_id > 0) {
+                $employee = Employee::find($request->employee_id);
+                $employee->user_id = $user->id;
+                $employee->save();
+            }
+        }
 
         return response(
             [
@@ -180,6 +189,19 @@ class UserController extends Controller
                 $user->is_admin = $request['is_admin'];
 
                 $user->save();
+
+                if($user->employee !== null) {
+                    $user->employee->user_id = null;
+                    $user->employee->save();
+                }
+
+                if(request()->has("employee_id")) {
+                    if($request->employee_id > 0) {
+                        $employee = Employee::find($request->employee_id);
+                        $employee->user_id = $user->id;
+                        $employee->save();
+                    }
+                }
 
                 if (request()->has('employee') && $user->employee != null) {
                     $user->employee->first_name = $request->employee["first_name"];
