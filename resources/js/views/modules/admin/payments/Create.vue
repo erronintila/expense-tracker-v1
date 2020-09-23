@@ -122,15 +122,15 @@
                             ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="amount"
+                                v-model="total"
                                 :rules="rules.amount"
                                 :counter="100"
                                 label="Amount"
                                 required
                             ></v-text-field>
-                        </v-col>
+                        </v-col> -->
                     </v-row>
 
                     <v-row>
@@ -364,7 +364,7 @@ export default {
                         date: _this.date,
                         cheque_no: _this.cheque_no,
                         cheque_date: _this.cheque_date,
-                        amount: _this.amount,
+                        amount: _this.total,
                         payee: _this.payee,
                         payee_address: _this.payee_address,
                         payee_phone: _this.payee_phone,

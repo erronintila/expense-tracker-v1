@@ -122,6 +122,12 @@
                             </v-list-item-title>
                         </v-list-item>
 
+                        <v-list-item>
+                            <v-list-item-title>
+                                Generate Payment Request
+                            </v-list-item-title>
+                        </v-list-item>
+
                         <!-- <v-list-item @click="onDelete">
                             <v-list-item-title>
                                 Move to archive

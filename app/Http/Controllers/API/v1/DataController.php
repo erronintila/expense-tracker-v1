@@ -371,8 +371,8 @@ class DataController extends Controller
         }])
             ->whereHas('expense_report')
             ->get()
-            ->where('expense_report', '<>', null)
-            ->whereBetween('date', [$request->start_date, $request->end_date]);
+            ->where('expense_report', '<>', null);
+            // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
         $reimbursements = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
@@ -383,8 +383,8 @@ class DataController extends Controller
         }])
             ->whereHas('expense_report')
             ->get()
-            ->where('expense_report', '<>', null)
-            ->whereBetween('date', [$request->start_date, $request->end_date]);
+            ->where('expense_report', '<>', null);
+            // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
         if (request()->has('employee_id')) {
             $total_expenses = $total_expenses->where('employee_id', $request->employee_id);

@@ -367,7 +367,7 @@ __webpack_require__.r(__webpack_exports__);
           date: _this.date,
           cheque_no: _this.cheque_no,
           cheque_date: _this.cheque_date,
-          amount: _this.amount,
+          amount: _this.total,
           payee: _this.payee,
           payee_address: _this.payee_address,
           payee_phone: _this.payee_phone,
@@ -754,29 +754,6 @@ var render = function() {
                                 _vm.voucher_no = $$v
                               },
                               expression: "voucher_no"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.rules.amount,
-                              counter: 100,
-                              label: "Amount",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.amount,
-                              callback: function($$v) {
-                                _vm.amount = $$v
-                              },
-                              expression: "amount"
                             }
                           })
                         ],
