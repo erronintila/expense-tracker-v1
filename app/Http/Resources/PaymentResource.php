@@ -32,7 +32,7 @@ class PaymentResource extends JsonResource
             "payee_phone" => $this->payee_phone,
             "remarks"  => $this->remarks,
             "notes" => $this->notes,
-            "exense_reports" => ExpenseReportResource::collection($this->expense_reports()->withTrashed()->get()),
+            "expense_reports" => ExpenseReportResource::collection($this->expense_reports()->withTrashed()->get()),
             'approved_at' => Carbon::parse($this->approved_at)->toDateTimeString(),
             'cancelled_at' => Carbon::parse($this->cancelled_at)->toDateTimeString(),
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
