@@ -64,9 +64,9 @@ class ExpenseController extends Controller
         }
 
         if (request()->has('employee_id')) {
-            // if ($request->employee_id > 0) {
+            if ($request->employee_id > 0) {
                 $expenses = $expenses->where("employee_id", $request->employee_id);
-            // }
+            }
         }
 
         if (request()->has('expense_type_id')) {

@@ -310,38 +310,47 @@ export default {
                     .then(response => {
                         let emp = response.data.data.employee;
 
-                        _this.employee = emp ==  null ? 0 : emp.id;
+                        _this.employee = emp == null ? 0 : emp.id;
 
                         let employee_id = _this.employee;
 
-                        axios
-                            .get("/api/expense_reports", {
-                                params: {
-                                    search: search,
-                                    sortBy: sortBy[0],
-                                    sortType: sortDesc[0] ? "desc" : "asc",
-                                    page: page,
-                                    itemsPerPage: itemsPerPage,
-                                    status: status,
-                                    employee_id: employee_id,
-                                    start_date: range[0],
-                                    end_date: range[1]
-                                }
-                            })
-                            .then(response => {
-                                let items = response.data.data;
-                                let total = response.data.meta.total;
+                        if (employee_id !== 0) {
+                            axios
+                                .get("/api/expense_reports", {
+                                    params: {
+                                        search: search,
+                                        sortBy: sortBy[0],
+                                        sortType: sortDesc[0] ? "desc" : "asc",
+                                        page: page,
+                                        itemsPerPage: itemsPerPage,
+                                        status: status,
+                                        employee_id: employee_id,
+                                        start_date: range[0],
+                                        end_date: range[1]
+                                    }
+                                })
+                                .then(response => {
+                                    let items = response.data.data;
+                                    let total = response.data.meta.total;
 
-                                _this.loading = false;
+                                    _this.loading = false;
 
-                                resolve({ items, total });
-                            })
-                            .catch(error => {
-                                console.log(error);
-                                console.log(error.response);
+                                    resolve({ items, total });
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                    console.log(error.response);
 
-                                _this.loading = false;
-                            });
+                                    _this.loading = false;
+                                });
+                        } else {
+                            let items = [];
+                            let total = 0;
+
+                            resolve({ items, total });
+
+                            _this.loading = false;
+                        }
                     })
                     .catch(error => {
                         console.log(error);

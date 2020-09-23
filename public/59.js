@@ -323,31 +323,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var emp = response.data.data.employee;
           _this.employee = emp == null ? 0 : emp.id;
           var employee_id = _this.employee;
-          axios.get("/api/expense_reports", {
-            params: {
-              search: search,
-              sortBy: sortBy[0],
-              sortType: sortDesc[0] ? "desc" : "asc",
-              page: page,
-              itemsPerPage: itemsPerPage,
-              status: status,
-              employee_id: employee_id,
-              start_date: range[0],
-              end_date: range[1]
-            }
-          }).then(function (response) {
-            var items = response.data.data;
-            var total = response.data.meta.total;
-            _this.loading = false;
+
+          if (employee_id !== 0) {
+            axios.get("/api/expense_reports", {
+              params: {
+                search: search,
+                sortBy: sortBy[0],
+                sortType: sortDesc[0] ? "desc" : "asc",
+                page: page,
+                itemsPerPage: itemsPerPage,
+                status: status,
+                employee_id: employee_id,
+                start_date: range[0],
+                end_date: range[1]
+              }
+            }).then(function (response) {
+              var items = response.data.data;
+              var total = response.data.meta.total;
+              _this.loading = false;
+              resolve({
+                items: items,
+                total: total
+              });
+            })["catch"](function (error) {
+              console.log(error);
+              console.log(error.response);
+              _this.loading = false;
+            });
+          } else {
+            var items = [];
+            var total = 0;
             resolve({
               items: items,
               total: total
             });
-          })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
             _this.loading = false;
-          });
+          }
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);

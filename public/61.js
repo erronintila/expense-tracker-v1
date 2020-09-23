@@ -1,20 +1,20 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[61],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/reports/Index.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/reports/Index.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expenses/Index.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expenses/Index.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\resources\\js\\views\\modules\\user\\reports\\Index.vue: Unexpected token, expected \";\" (313:45)\n\n\u001b[0m \u001b[90m 311 | \u001b[39m                        let emp \u001b[33m=\u001b[39m response\u001b[33m.\u001b[39mdata\u001b[33m.\u001b[39mdata\u001b[33m.\u001b[39memployee\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 312 | \u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 313 | \u001b[39m                        _this\u001b[33m.\u001b[39memployee \u001b[33m=\u001b[39m emp \u001b[36mnull\u001b[39m \u001b[33m?\u001b[39m \u001b[35m0\u001b[39m \u001b[33m:\u001b[39m emp\u001b[33m.\u001b[39mid\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 314 | \u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 315 | \u001b[39m                        let employee_id \u001b[33m=\u001b[39m _this\u001b[33m.\u001b[39memployee\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 316 | \u001b[39m\u001b[0m\n    at Parser._raise (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:766:17)\n    at Parser.raiseWithData (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:759:17)\n    at Parser.raise (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:753:17)\n    at Parser.unexpected (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8966:16)\n    at Parser.semicolon (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8948:40)\n    at Parser.parseExpressionStatement (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11971:10)\n    at Parser.parseStatementContent (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11567:19)\n    at Parser.parseStatement (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11431:17)\n    at Parser.parseBlockOrModuleBlockBody (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:12013:25)\n    at Parser.parseBlockBody (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11999:10)\n    at Parser.parseBlock (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11983:10)\n    at Parser.parseFunctionBody (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10963:24)\n    at Parser.parseArrowExpression (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10932:10)\n    at Parser.parseExprAtom (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10135:25)\n    at Parser.parseExprSubscripts (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:39\n    at Parser.allowInAnd (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11303:12)\n    at Parser.parseMaybeAssignAllowIn (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:17)\n    at Parser.parseExprListItem (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11051:18)\n    at Parser.parseCallExpressionArguments (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10053:22)\n    at Parser.parseCoverCallAndAsyncArrowHead (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9960:29)\n    at Parser.parseSubscript (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9896:19)\n    at Parser.parseSubscripts (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9867:19)\n    at Parser.parseExprSubscripts (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9850:17)\n    at Parser.parseUpdate (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at Parser.parseExpressionBase (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9564:23)\n    at C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:39");
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\resources\\js\\views\\modules\\user\\expenses\\Index.vue: Unexpected token (355:45)\n\n\u001b[0m \u001b[90m 353 | \u001b[39m                            let items \u001b[33m=\u001b[39m []\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 354 | \u001b[39m                            let total \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 355 | \u001b[39m                            resolve({items\u001b[33m,\u001b[39m \u001b[35m0\u001b[39m})\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 356 | \u001b[39m                        }\u001b[0m\n\u001b[0m \u001b[90m 357 | \u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 358 | \u001b[39m\u001b[0m\n    at Parser._raise (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:766:17)\n    at Parser.raiseWithData (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:759:17)\n    at Parser.raise (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:753:17)\n    at Parser.unexpected (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8966:16)\n    at Parser.parseObjPropValue (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10842:21)\n    at Parser.parsePropertyDefinition (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10772:10)\n    at Parser.parseObjectLike (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10664:25)\n    at Parser.parseExprAtom (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10198:23)\n    at Parser.parseExprSubscripts (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:39\n    at Parser.allowInAnd (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11303:12)\n    at Parser.parseMaybeAssignAllowIn (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:17)\n    at Parser.parseExprListItem (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11051:18)\n    at Parser.parseCallExpressionArguments (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10053:22)\n    at Parser.parseCoverCallAndAsyncArrowHead (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9960:29)\n    at Parser.parseSubscript (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9896:19)\n    at Parser.parseSubscripts (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9867:19)\n    at Parser.parseExprSubscripts (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9850:17)\n    at Parser.parseUpdate (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at Parser.parseExpressionBase (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9564:23)\n    at C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:39\n    at Parser.allowInAnd (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11303:12)\n    at Parser.parseExpression (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:17)\n    at Parser.parseStatementContent (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11562:23)\n    at Parser.parseStatement (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11431:17)\n    at Parser.parseBlockOrModuleBlockBody (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:12013:25)\n    at Parser.parseBlockBody (C:\\Users\\Erron Intila\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11999:10)");
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/reports/Index.vue?vue&type=template&id=1aa3a436&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/reports/Index.vue?vue&type=template&id=1aa3a436& ***!
-  \************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expenses/Index.vue?vue&type=template&id=0cd8a9cb&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expenses/Index.vue?vue&type=template&id=0cd8a9cb& ***!
+  \*************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -38,7 +38,7 @@ var render = function() {
             { staticClass: "pt-0" },
             [
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Expense Reports")
+                _vm._v("Expenses")
               ]),
               _vm._v(" "),
               _c("v-spacer"),
@@ -49,7 +49,7 @@ var render = function() {
                   staticClass: "elevation-3 mr-2",
                   attrs: {
                     color: "green",
-                    to: "/reports/create",
+                    to: "/expenses/create",
                     dark: "",
                     fab: "",
                     "x-small": ""
@@ -157,6 +157,28 @@ var render = function() {
                               })
                             ],
                             1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.expense_types,
+                                  "item-text": "name",
+                                  "item-value": "id",
+                                  label: "Expense Types"
+                                },
+                                model: {
+                                  value: _vm.expense_type,
+                                  callback: function($$v) {
+                                    _vm.expense_type = $$v
+                                  },
+                                  expression: "expense_type"
+                                }
+                              })
+                            ],
+                            1
                           )
                         ],
                         1
@@ -223,17 +245,11 @@ var render = function() {
                     [
                       _c(
                         "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("submit", "put")
-                            }
-                          }
-                        },
+                        { on: { click: _vm.onRestore } },
                         [
                           _c("v-list-item-title", [
                             _vm._v(
-                              "\n                            Submit Report(s)\n                        "
+                              "\n                            Restore\n                        "
                             )
                           ])
                         ],
@@ -246,26 +262,7 @@ var render = function() {
                         [
                           _c("v-list-item-title", [
                             _vm._v(
-                              "\n                            Cancel Report(s)\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("duplicate", "put")
-                            }
-                          }
-                        },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Duplicate\n                        "
+                              "\n                            Move to archive\n                        "
                             )
                           ])
                         ],
@@ -337,25 +334,6 @@ var render = function() {
                   scopedSlots: _vm._u(
                     [
                       {
-                        key: "item.status.status",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            _c(
-                              "v-chip",
-                              {
-                                attrs: {
-                                  color: item.status.color,
-                                  dark: "",
-                                  small: ""
-                                }
-                              },
-                              [_vm._v(_vm._s(item.status.status))]
-                            )
-                          ]
-                        }
-                      },
-                      {
                         key: "expanded-item",
                         fn: function(ref) {
                           var headers = ref.headers
@@ -369,59 +347,43 @@ var render = function() {
                                   _c("table", [
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Code")])
+                                        _c("strong", [_vm._v("Description")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(item.code))])
+                                      _c("td", [
+                                        _vm._v(_vm._s(item.description))
+                                      ])
                                     ]),
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Status")])
+                                        _c("strong", [_vm._v("Receipt")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(_vm._s(item.status.remarks))
+                                        _vm._v(_vm._s(item.receipt_number))
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Vendor")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(_vm._s(item.vendor.name))
                                       ])
                                     ])
                                   ])
                                 ])
                               ],
                               1
-                            )
-                          ]
-                        }
-                      },
-                      {
-                        key: "item.total",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            _vm._v(
-                              "\n                    " +
-                                _vm._s(_vm.formatNumber(item.total)) +
-                                "\n                "
-                            )
-                          ]
-                        }
-                      },
-                      {
-                        key: "item.employee",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            _vm._v(
-                              "\n                    " +
-                                _vm._s(
-                                  item.employee.last_name +
-                                    ", " +
-                                    item.employee.first_name
-                                ) +
-                                "\n                "
                             )
                           ]
                         }
@@ -434,6 +396,19 @@ var render = function() {
                             _vm._v(
                               "\n                    " +
                                 _vm._s(_vm.getHumanDate(item.created_at)) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.amount",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(_vm.formatNumber(item.amount)) +
                                 "\n                "
                             )
                           ]
@@ -499,8 +474,6 @@ var render = function() {
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
-                  _vm._v(" "),
-                  _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
                         _c(
@@ -526,11 +499,11 @@ var render = function() {
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
                             _c("td", [
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
-                            _vm._v(" "),
-                            _c("td"),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),
@@ -561,17 +534,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/reports/Index.vue":
-/*!***********************************************************!*\
-  !*** ./resources/js/views/modules/user/reports/Index.vue ***!
-  \***********************************************************/
+/***/ "./resources/js/views/modules/user/expenses/Index.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/views/modules/user/expenses/Index.vue ***!
+  \************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_1aa3a436___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=1aa3a436& */ "./resources/js/views/modules/user/reports/Index.vue?vue&type=template&id=1aa3a436&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/user/reports/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_0cd8a9cb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=0cd8a9cb& */ "./resources/js/views/modules/user/expenses/Index.vue?vue&type=template&id=0cd8a9cb&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/user/expenses/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -582,8 +555,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_1aa3a436___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_1aa3a436___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_template_id_0cd8a9cb___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_0cd8a9cb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -593,38 +566,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/user/reports/Index.vue"
+component.options.__file = "resources/js/views/modules/user/expenses/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/reports/Index.vue?vue&type=script&lang=js&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/views/modules/user/reports/Index.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************/
+/***/ "./resources/js/views/modules/user/expenses/Index.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expenses/Index.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/reports/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expenses/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/reports/Index.vue?vue&type=template&id=1aa3a436&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/views/modules/user/reports/Index.vue?vue&type=template&id=1aa3a436& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/views/modules/user/expenses/Index.vue?vue&type=template&id=0cd8a9cb&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expenses/Index.vue?vue&type=template&id=0cd8a9cb& ***!
+  \*******************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_1aa3a436___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=1aa3a436& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/reports/Index.vue?vue&type=template&id=1aa3a436&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_1aa3a436___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_0cd8a9cb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=0cd8a9cb& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expenses/Index.vue?vue&type=template&id=0cd8a9cb&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_0cd8a9cb___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_1aa3a436___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_0cd8a9cb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

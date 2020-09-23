@@ -71,9 +71,9 @@ class ExpenseReportController extends Controller
         }
 
         if (request()->has("employee_id")) {
-            // if ($request->employee_id > 0) {
+            if ($request->employee_id > 0) {
                 $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
-            // }
+            }
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {

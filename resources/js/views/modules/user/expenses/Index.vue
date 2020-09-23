@@ -318,7 +318,10 @@ export default {
 
                         let employee_id = _this.employee;
 
-                        axios
+                        console.log(employee_id);
+
+                        if(employee_id !== 0) {
+                            axios
                             .get("/api/expenses", {
                                 params: {
                                     search: search,
@@ -346,6 +349,15 @@ export default {
 
                                 _this.loading = false;
                             });
+                        } else {
+                            let items = [];
+                            let total = 0;
+
+                            resolve({items, total});
+
+                            _this.loading = false;
+                        }
+
                     })
                     .catch(error => {
                         console.log(error);
