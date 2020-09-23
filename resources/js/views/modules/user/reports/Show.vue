@@ -1,5 +1,7 @@
 <template>
     <v-app>
+        <PrintDetailed></PrintDetailed>
+
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn :to="{ name: 'user.reports.index' }" class="mr-3" icon>
@@ -153,12 +155,16 @@ import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import CreateExpense from "./components/CreateExpense";
 import EditExpense from "./components/EditExpense";
+import PrintDetailed from "./components/PrintDetailed";
+import PrintSummary from "./components/PrintSummary";
 
 export default {
     components: {
         DateRangePicker,
         CreateExpense,
-        EditExpense
+        EditExpense,
+        PrintDetailed,
+        PrintSummary
     },
     data() {
         return {

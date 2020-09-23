@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/data/test', 'API\v1\DataController@test');
+
 Route::post('/register', 'API\v1\AuthController@register');
 
 Route::post('/login', 'API\v1\AuthController@login');
@@ -60,8 +62,6 @@ Route::get('/data/jobs', 'API\v1\DataController@jobs');
 Route::get('/data/expenses', 'API\v1\DataController@expenses');
 
 Route::get('/data/expense_reports', 'API\v1\DataController@expense_reports');
-
-Route::get('/data/test', 'API\v1\DataController@test');
 
 Route::get('/data/expense_types_expenses_summary', 'API\v1\DataController@expense_types_expenses_summary');
 

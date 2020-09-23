@@ -31,7 +31,7 @@ router.beforeEach((to, from, next) => {
                 if (store.getters.isAdmin) {
                     next();
                 } else {
-                    next({ name: "home" });
+                    next({ name: "user.dashboard.index" });
                 }
             } else {
                 next();
@@ -42,9 +42,9 @@ router.beforeEach((to, from, next) => {
             next();
         } else {
             if (store.getters.isAdmin) {
-                next({ name: "admin" });
+                next({ name: "admin.dashboard.index" });
             } else {
-                next({ name: "home" });
+                next({ name: "user.dashboard.index" });
             }
         }
     } else {

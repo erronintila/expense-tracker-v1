@@ -25,9 +25,44 @@ class DataController extends Controller
 {
     public function test()
     {
-        $expenses = Expense::all();
+        $expense_report = ExpenseReport::where("id", 1);
 
-        return $expenses;
+        $expense_report = new ExpenseReportResource($expense_report->first());
+
+        return $expense_report->expenses->groupBy("date")->map(function ($row) {
+            return $row->groupBy('expense_type_id')->map(function ($row) {
+                return $row->sum("amount");
+            });
+        });
+
+        // return $expense_report->expenses->groupBy(function ($item, $key) {
+
+        //     return $item['date'].$item['expense_type_id'];
+
+        // });
+
+        return $expense_report->expenses->groupBy(function ($item, $key) {
+            return $item["expense_type_id"];
+        });
+
+
+
+        // $expense_types = ExpenseType::all();
+
+        // // return $expense_types;
+
+        // // $expense_report = $expense_report->groupBy("id");
+
+        // $data = new ExpenseReportResource($expense_report->first());
+
+        // return $data->expenses;
+
+        // return $data->expenses->with("expense_type");
+
+        $expenses = Expense::where("expense_report_id", 1);
+        $expenses = $expenses->groupBy("date");
+
+        return ExpenseResource::collection($expenses->get());
     }
 
     public function employees(Request $request)
