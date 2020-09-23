@@ -309,8 +309,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       search: "",
       totalItems: 0,
       options: {
-        sortBy: ["reference_no"],
-        sortDesc: [false],
+        sortBy: ["updated_at"],
+        sortDesc: [true],
         page: 1,
         itemsPerPage: 10
       },
@@ -923,6 +923,14 @@ var render = function() {
                             _c(
                               "v-icon",
                               {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.status == "Active",
+                                    expression: "status == 'Active'"
+                                  }
+                                ],
                                 staticClass: "mr-2",
                                 attrs: { small: "" },
                                 on: {

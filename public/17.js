@@ -172,6 +172,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -199,19 +201,24 @@ __webpack_require__.r(__webpack_exports__);
       notes: "",
       headers: [{
         text: "Employee",
-        value: "employee"
+        value: "employee",
+        sortable: false
       }, {
         text: "Description",
-        value: "description"
+        value: "description",
+        sortable: false
       }, {
         text: "Amount",
-        value: "total"
+        value: "total",
+        sortable: false
       }, {
         text: "Created",
-        value: "created_at"
+        value: "created_at",
+        sortable: false
       }, {
         text: "",
-        value: "data-table-expand"
+        value: "data-table-expand",
+        sortable: false
       }],
       items: [],
       total: 0
@@ -242,6 +249,33 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+      });
+    },
+    cancelPayment: function cancelPayment() {
+      var _this = this;
+
+      this.$confirm("Do you want to cancel this payment?").then(function (res) {
+        if (res) {
+          axios({
+            method: "delete",
+            url: "/api/payments/".concat(_this.$route.params.id),
+            data: {
+              ids: [_this.$route.params.id]
+            }
+          }).then(function (response) {
+            _this.$dialog.message.success(response.data.message, {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.$router.push({
+              name: "admin.payments.index"
+            });
+          })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+          });
+        }
       });
     }
   },
@@ -637,7 +671,7 @@ var render = function() {
                         "v-btn",
                         {
                           attrs: { color: "green", dark: "" },
-                          on: { click: function() {} }
+                          on: { click: _vm.cancelPayment }
                         },
                         [_vm._v("Cancel Payment")]
                       )

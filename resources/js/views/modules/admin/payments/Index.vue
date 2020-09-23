@@ -208,7 +208,7 @@
                         {{ getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onShow(item)">
+                        <v-icon v-show="status == 'Active'" small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
                         <!-- <v-icon small class="mr-2" @click="onEdit(item)">
@@ -276,8 +276,8 @@ export default {
             search: "",
             totalItems: 0,
             options: {
-                sortBy: ["reference_no"],
-                sortDesc: [false],
+                sortBy: ["updated_at"],
+                sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
             },

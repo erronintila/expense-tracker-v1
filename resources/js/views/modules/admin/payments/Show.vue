@@ -23,7 +23,7 @@
                         </v-col>
 
                         <v-col cols="12" md="4">
-                           <v-text-field
+                            <v-text-field
                                 v-model="date"
                                 label="Date"
                                 readonly
@@ -150,7 +150,9 @@
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="()=>{}">Cancel Payment</v-btn>
+                        <v-btn color="green" dark @click="cancelPayment"
+                            >Cancel Payment</v-btn
+                        >
                     </v-card-actions>
                 </v-container>
             </v-form>
@@ -193,14 +195,14 @@ export default {
             remarks: "",
             notes: "",
             headers: [
-                { text: "Employee", value: "employee" },
-                { text: "Description", value: "description" },
-                { text: "Amount", value: "total" },
-                { text: "Created", value: "created_at" },
-                { text: "", value: "data-table-expand" }
+                { text: "Employee", value: "employee", sortable: false },
+                { text: "Description", value: "description", sortable: false },
+                { text: "Amount", value: "total", sortable: false },
+                { text: "Created", value: "created_at", sortable: false },
+                { text: "", value: "data-table-expand", sortable: false }
             ],
             items: [],
-            total: 0,
+            total: 0
         };
     },
     methods: {
@@ -225,7 +227,7 @@ export default {
                     _this.payee_phone = data.payee_phone;
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
-                    _this.items = data.expense_reports
+                    _this.items = data.expense_reports;
 
                     // _this.selected.splice(0, 0, ...data.expenses);
 
@@ -236,6 +238,38 @@ export default {
                     console.log(error.response);
                 });
         },
+        cancelPayment() {
+            let _this = this;
+
+            this.$confirm(`Do you want to cancel this payment?`).then(res => {
+                if (res) {
+                    axios({
+                        method: "delete",
+                        url: `/api/payments/${_this.$route.params.id}`,
+                        data: {
+                            ids: [_this.$route.params.id],
+                        }
+                    })
+                        .then(function(response) {
+                            _this.$dialog.message.success(
+                                response.data.message,
+                                {
+                                    position: "top-right",
+                                    timeout: 2000
+                                }
+                            );
+
+                            _this.$router.push({
+                                name: "admin.payments.index"
+                            });
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                            console.log(error.response);
+                        });
+                }
+            });
+        }
     },
     watch: {
         items() {
