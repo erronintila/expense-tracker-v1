@@ -702,15 +702,6 @@ var render = function() {
                           on: { click: _vm.onEdit }
                         },
                         [_vm._v("Print Summary")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "green", dark: "" },
-                          on: { click: _vm.onEdit }
-                        },
-                        [_vm._v("Edit Details")]
                       )
                     ],
                     1

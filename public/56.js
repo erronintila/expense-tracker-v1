@@ -184,9 +184,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
 
 
 
@@ -281,8 +278,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     updateDates: function updateDates(e) {
-      this.date_range = e;
-      this.loadExpenses(this.employee);
+      this.date_range = e; // this.loadExpenses(this.employee);
     },
     getData: function getData() {
       var _this = this;
@@ -297,6 +293,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this.notes = data.notes;
         _this.employee = "".concat(data.employee.last_name, ", ").concat(data.employee.first_name, " ").concat(data.employee.suffix);
         _this.status = data.status;
+        _this.items = data.expenses;
         _this.expenses = data.expenses;
         _this.submitted_at = data.submitted_at;
         _this.reviewed_at = data.reviewed_at;
@@ -307,35 +304,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this.deleted_at = data.deleted_at;
         _this.total = data.total;
 
-        (_this$selected = _this.selected).splice.apply(_this$selected, [0, 0].concat(_toConsumableArray(data.expenses)));
+        (_this$selected = _this.selected).splice.apply(_this$selected, [0, 0].concat(_toConsumableArray(data.expenses))); // _this.loadExpenses(data.employee.id);
 
-        _this.loadExpenses(data.employee.id);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
       });
     },
-    loadExpenses: function loadExpenses(emp_id) {
-      var start_date = this.date_range[0];
-      var end_date = this.date_range[1];
-
-      var _this = this;
-
-      axios.get("/api/data/expenses", {
-        params: {
-          update_report: true,
-          employee_id: emp_id,
-          start_date: start_date,
-          end_date: end_date,
-          expense_report_id: _this.$route.params.id
-        }
-      }).then(function (response) {
-        _this.items = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
-    },
+    // loadExpenses(emp_id) {
+    //     let start_date = this.date_range[0];
+    //     let end_date = this.date_range[1];
+    //     let _this = this;
+    //     axios
+    //         .get("/api/data/expenses", {
+    //             params: {
+    //                 update_report: true,
+    //                 employee_id: emp_id,
+    //                 start_date: start_date,
+    //                 end_date: end_date,
+    //                 expense_report_id: _this.$route.params.id
+    //             }
+    //         })
+    //         .then(response => {
+    //             _this.items = response.data.data;
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //         });
+    // },
     onEdit: function onEdit() {
       this.$router.push({
         name: "user.reports.edit",
@@ -487,8 +484,6 @@ var render = function() {
   return _c(
     "v-app",
     [
-      _c("PrintDetailed"),
-      _vm._v(" "),
       _c(
         "v-card",
         { staticClass: "elevation-0 pt-0" },
@@ -829,15 +824,6 @@ var render = function() {
                           on: { click: _vm.onEdit }
                         },
                         [_vm._v("Print Summary")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "green", dark: "" },
-                          on: { click: _vm.onEdit }
-                        },
-                        [_vm._v("Edit Details")]
                       )
                     ],
                     1

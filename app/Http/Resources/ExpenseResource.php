@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ExpenseReport;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,7 +30,10 @@ class ExpenseResource extends JsonResource
             'employee_name' => $this->employee->first_name . " " . $this->employee->last_name,
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
-            'expense_details' => $this->expense_details
+            'deleted_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
+            'expense_details' => $this->expense_details,
+            'expense_report_id' => $this->expense_report_id,
+            'expense_report' => $this->expense_report
         ];
     }
 }

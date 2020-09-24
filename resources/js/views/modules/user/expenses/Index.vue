@@ -148,9 +148,9 @@
                             <v-container>
                                 <table>
                                     <tr>
-                                        <td><strong>Description</strong></td>
+                                        <td><strong>Expense Report</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.description }}</td>
+                                        <td>{{ item.expense_report == null ? "" : item.expense_report.code }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Receipt</strong></td>
@@ -404,6 +404,16 @@ export default {
         onDelete() {
             let _this = this;
 
+            console.log(this.selected);
+
+            if(!_this.selected.map(item => item.expense_report_id).includes(null)) {
+                this.$dialog.message.error("Expense(s) can't be deleted", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
@@ -444,6 +454,8 @@ export default {
         },
         onRestore() {
             let _this = this;
+
+            console.log(_this.selected)
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {

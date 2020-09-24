@@ -394,6 +394,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onEdit: function onEdit(item) {
+      if (item.status.status == "Cancelled") {
+        this.$dialog.message.error("Report has been cancelled", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
       this.$router.push({
         name: "admin.reports.edit",
         params: {
@@ -478,11 +486,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //     });
     // },
     onUpdate: function onUpdate(action, method) {
-      var _this = this; // let action = action;
-
+      var _this = this;
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (action == "submit" && !this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("For Submission")) {
+        this.$dialog.message.error("Action can't be completed", {
           position: "top-right",
           timeout: 2000
         });
@@ -868,25 +885,6 @@ var render = function() {
                           _c("v-list-item-title", [
                             _vm._v(
                               "\n                            Cancel Report(s)\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("duplicate", "put")
-                            }
-                          }
-                        },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Duplicate\n                        "
                             )
                           ])
                         ],

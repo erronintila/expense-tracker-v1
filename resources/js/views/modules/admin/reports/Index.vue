@@ -116,11 +116,11 @@
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item @click="onUpdate('duplicate', 'put')">
+                        <!-- <v-list-item @click="onUpdate('duplicate', 'put')">
                             <v-list-item-title>
                                 Duplicate
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <v-list-item>
                             <v-list-item-title>
@@ -384,6 +384,14 @@ export default {
             });
         },
         onEdit(item) {
+            if(item.status.status == "Cancelled") {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             this.$router.push({
                 name: "admin.reports.edit",
                 params: { id: item.id }
@@ -478,10 +486,17 @@ export default {
         // },
         onUpdate(action, method) {
             let _this = this;
-            // let action = action;
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "submit" && !this.selected.map(item => item.status.status).includes("For Submission")) {
+                this.$dialog.message.error("Action can't be completed", {
                     position: "top-right",
                     timeout: 2000
                 });

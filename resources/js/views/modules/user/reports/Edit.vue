@@ -18,7 +18,7 @@
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-autocomplete
                                 v-model="employee"
                                 :rules="rules.employee"
@@ -32,7 +32,7 @@
                                 required
                             >
                             </v-autocomplete>
-                        </v-col>
+                        </v-col> -->
                         <v-col cols="12" md="8">
                             <v-text-field
                                 v-model="description"
@@ -275,7 +275,7 @@ export default {
                 ],
                 remarks: [],
                 notes: [],
-                employee: [v => !!v || "Employee is required"],
+                employee: [],
                 expenses: []
             },
             errors: {
@@ -285,7 +285,7 @@ export default {
                 remarks: [],
                 notes: [],
                 employee: [],
-                expenses: []
+                expenses: []    
             }
         };
     },
@@ -296,6 +296,11 @@ export default {
                 .get("/api/user")
                 .then(response => {
                     // _this.user = response.data.data;
+                    let data  = response.data.data;
+                    
+                    let employee_id = data.employee == null ? 0 : data.employee.id;
+
+                    _this.employee = employee_id;
                 })
                 .catch(error => {
                     console.log(error);
@@ -382,6 +387,8 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
+            let _this = this;
+
             if(_this.employee == null || _this.employee <= 0) {
                 _this.$dialog.message.error("User Account Unauthorized", {
                     position: "top-right",
@@ -389,8 +396,6 @@ export default {
                 });
                 return;
             }
-
-            let _this = this;
 
             _this.$refs.form.validate();
 
@@ -476,6 +481,7 @@ export default {
                             _this.loadExpenses(_this.employee);
                         })
                         .catch(function(error) {
+                            console.log(error);
                             console.log(error.response);
                         });
                 }

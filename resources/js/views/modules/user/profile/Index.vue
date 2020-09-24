@@ -37,7 +37,28 @@
                                                 </v-avatar>
                                             </v-col>
                                         </v-row>
-                                        <v-row v-if="user.employee !== null">
+
+                                        <v-row v-if="user.employee === null">
+                                            <v-col
+                                                cols="12"
+                                                align="center"
+                                                justify="center"
+                                            >
+                                                <div>
+                                                    {{ user.username }}
+                                                </div>
+                                                <p
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{ user.name }}
+                                                </p>
+                                                <div class="text--primary">
+                                                    {{ user.email }}
+                                                </div>
+                                            </v-col>
+                                        </v-row>
+
+                                        <v-row v-else>
                                             <v-col
                                                 cols="12"
                                                 align="center"
@@ -68,25 +89,7 @@
                                                 </div>
                                             </v-col>
                                         </v-row>
-                                        <v-row v-else>
-                                            <v-col
-                                                cols="12"
-                                                align="center"
-                                                justify="center"
-                                            >
-                                                <div>
-                                                    {{ user.username }}
-                                                </div>
-                                                <p
-                                                    class="display-1 text--primary"
-                                                >
-                                                    {{ user.name }}
-                                                </p>
-                                                <div class="text--primary">
-                                                    {{ user.email }}
-                                                </div>
-                                            </v-col>
-                                        </v-row>
+                                        
                                     </v-card-text>
 
                                     <v-dialog
@@ -566,7 +569,6 @@ export default {
                         employee_id: 0
                     })
                     .then(function(response) {
-                        console.log(response);
                         // _this.onRefresh();
 
                         _this.$dialog.message.success(

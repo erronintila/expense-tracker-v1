@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <PrintDetailed></PrintDetailed>
+        <!-- <PrintDetailed></PrintDetailed> -->
 
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
@@ -145,9 +145,6 @@
                         <v-btn color="green" dark @click="onEdit"
                             >Print Summary</v-btn
                         >
-                        <v-btn color="green" dark @click="onEdit"
-                            >Edit Details</v-btn
-                        >
                     </v-card-actions>
                 </v-container>
             </v-form>
@@ -263,7 +260,7 @@ export default {
         },
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenses(this.employee);
+            // this.loadExpenses(this.employee);
         },
         getData() {
             let _this = this;
@@ -278,6 +275,7 @@ export default {
                     _this.notes = data.notes;
                     _this.employee = `${data.employee.last_name}, ${data.employee.first_name} ${data.employee.suffix}`;
                     _this.status = data.status;
+                    _this.items = data.expenses;
                     _this.expenses = data.expenses;
                     _this.submitted_at = data.submitted_at;
                     _this.reviewed_at = data.reviewed_at;
@@ -290,36 +288,36 @@ export default {
 
                     _this.selected.splice(0, 0, ...data.expenses);
 
-                    _this.loadExpenses(data.employee.id);
+                    // _this.loadExpenses(data.employee.id);
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
                 });
         },
-        loadExpenses(emp_id) {
-            let start_date = this.date_range[0];
-            let end_date = this.date_range[1];
-            let _this = this;
+        // loadExpenses(emp_id) {
+        //     let start_date = this.date_range[0];
+        //     let end_date = this.date_range[1];
+        //     let _this = this;
 
-            axios
-                .get("/api/data/expenses", {
-                    params: {
-                        update_report: true,
-                        employee_id: emp_id,
-                        start_date: start_date,
-                        end_date: end_date,
-                        expense_report_id: _this.$route.params.id
-                    }
-                })
-                .then(response => {
-                    _this.items = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
+        //     axios
+        //         .get("/api/data/expenses", {
+        //             params: {
+        //                 update_report: true,
+        //                 employee_id: emp_id,
+        //                 start_date: start_date,
+        //                 end_date: end_date,
+        //                 expense_report_id: _this.$route.params.id
+        //             }
+        //         })
+        //         .then(response => {
+        //             _this.items = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+        //         });
+        // },
         onEdit() {
             this.$router.push({
                 name: "user.reports.edit",

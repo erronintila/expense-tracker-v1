@@ -378,6 +378,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onEdit: function onEdit(item) {
+      if (item.status.status == "Approved") {
+        this.$dialog.message.error("Report has been approved", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (item.status.status == "Cancelled") {
+        this.$dialog.message.error("Report has been cancelled", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
       this.$router.push({
         name: "user.reports.edit",
         params: {
@@ -387,6 +403,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onDelete: function onDelete() {
       var _this = this;
+
+      if (this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Approved")) {
+        this.$dialog.message.error("Report has been approved", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Cancelled")) {
+        this.$dialog.message.error("Report has already been cancelled", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -426,6 +462,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (action == "submit" && this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Approved")) {
+        this.$dialog.message.error("Report has been approved", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (action == "submit" && this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Cancelled")) {
+        this.$dialog.message.error("Report has been cancelled", {
           position: "top-right",
           timeout: 2000
         });
@@ -751,25 +807,6 @@ var render = function() {
                           ])
                         ],
                         1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("duplicate", "put")
-                            }
-                          }
-                        },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Duplicate\n                        "
-                            )
-                          ])
-                        ],
-                        1
                       )
                     ],
                     1
@@ -965,6 +1002,14 @@ var render = function() {
                             _c(
                               "v-icon",
                               {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.status !== "Cancelled",
+                                    expression: "status !== 'Cancelled'"
+                                  }
+                                ],
                                 staticClass: "mr-2",
                                 attrs: { small: "" },
                                 on: {

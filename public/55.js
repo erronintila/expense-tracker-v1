@@ -410,6 +410,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onDelete: function onDelete() {
       var _this = this;
 
+      console.log(this.selected);
+
+      if (!_this.selected.map(function (item) {
+        return item.expense_report_id;
+      }).includes(null)) {
+        this.$dialog.message.error("Expense(s) can't be deleted", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
@@ -445,6 +457,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRestore: function onRestore() {
       var _this = this;
+
+      console.log(_this.selected);
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -865,13 +879,19 @@ var render = function() {
                                   _c("table", [
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Description")])
+                                        _c("strong", [_vm._v("Expense Report")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(_vm._s(item.description))
+                                        _vm._v(
+                                          _vm._s(
+                                            item.expense_report == null
+                                              ? ""
+                                              : item.expense_report.code
+                                          )
+                                        )
                                       ])
                                     ]),
                                     _vm._v(" "),

@@ -14,21 +14,6 @@
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-row>
-                        <!-- <v-col cols="12" md="4">
-                            <v-autocomplete
-                                v-model="employee"
-                                :rules="rules.employee"
-                                :items="employees"
-                                :error-messages="errors.employee_id"
-                                @input="errors.employee_id = []"
-                                item-value="id"
-                                item-text="fullname"
-                                label="Employee *"
-                                required
-                            >
-                            </v-autocomplete>
-                        </v-col> -->
-
                         <v-col cols="12" md="4">
                             <v-autocomplete
                                 v-model="expense_type"
@@ -96,6 +81,7 @@
                                 :error-messages="errors.receipt_number"
                                 @input="errors.receipt_number = []"
                                 label="Receipt No. *"
+                                type="number"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -150,10 +136,6 @@
                                                 >
                                             </template>
                                             <v-card>
-                                                <v-card-title>
-                                                    <!-- <span class="headline">{{ formTitle }}</span> -->
-                                                </v-card-title>
-
                                                 <v-card-text>
                                                     <v-container>
                                                         <v-row>
@@ -171,6 +153,7 @@
                                                                         particular_amount
                                                                     "
                                                                     label="Amount"
+                                                                    type="number"
                                                                 ></v-text-field>
                                                             </v-col>
                                                         </v-row>
@@ -257,7 +240,6 @@ export default {
             expense_type: null,
             expense_types: [],
             employee: null,
-            // employees: [],
             vendor: null,
             vendors: [],
             particular: "",
@@ -320,18 +302,6 @@ export default {
                     console.log(error.response);
                 });
         },
-        // loadEmployees() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/employees")
-        //         .then(response => {
-        //             _this.employees = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //         });
-        // },
         loadVendors() {
             let _this = this;
 
@@ -443,7 +413,6 @@ export default {
 
         this.getCurrentUser();
         this.loadExpenseTypes();
-        // this.loadEmployees();
         this.loadVendors();
     }
 };

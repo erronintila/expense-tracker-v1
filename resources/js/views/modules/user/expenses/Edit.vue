@@ -135,10 +135,6 @@
                                                 >
                                             </template>
                                             <v-card>
-                                                <v-card-title>
-                                                    <!-- <span class="headline">{{ formTitle }}</span> -->
-                                                </v-card-title>
-
                                                 <v-card-text>
                                                     <v-container>
                                                         <v-row>
@@ -330,18 +326,6 @@ export default {
                     console.log(error.response);
                 });
         },
-        // loadEmployees() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/employees")
-        //         .then(response => {
-        //             _this.employees = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //         });
-        // },
         loadVendors() {
             let _this = this;
 
@@ -357,8 +341,6 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-            // this.$refs.form.reset();
-            // this.$refs.form.resetValidation();
         },
         onSave() {
             let _this = this;
@@ -455,7 +437,6 @@ export default {
 
         this.getCurrentUser();
         this.loadExpenseTypes();
-        // this.loadEmployees();
         this.loadVendors();
         this.getData();
     }

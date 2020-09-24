@@ -301,7 +301,11 @@ __webpack_require__.r(__webpack_exports__);
     getCurrentUser: function getCurrentUser() {
       var _this = this;
 
-      axios.get("/api/user").then(function (response) {// _this.user = response.data.data;
+      axios.get("/api/user").then(function (response) {
+        // _this.user = response.data.data;
+        var data = response.data.data;
+        var employee_id = data.employee == null ? 0 : data.employee.id;
+        _this.employee = employee_id;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -517,38 +521,6 @@ var render = function() {
                   _c(
                     "v-row",
                     [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-autocomplete", {
-                            attrs: {
-                              rules: _vm.rules.employee,
-                              items: _vm.employees,
-                              "error-messages": _vm.errors.employee,
-                              "item-value": "id",
-                              "item-text": "fullname",
-                              label: "Employee *",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.employee = []
-                              },
-                              change: _vm.loadExpenses
-                            },
-                            model: {
-                              value: _vm.employee,
-                              callback: function($$v) {
-                                _vm.employee = $$v
-                              },
-                              expression: "employee"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c(
                         "v-col",
                         { attrs: { cols: "12", md: "8" } },

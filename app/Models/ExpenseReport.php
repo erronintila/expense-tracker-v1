@@ -101,8 +101,8 @@ class ExpenseReport extends Model
         if (!$deleted) {
             $arr = [
                 'color' => 'red',
-                'remarks' => 'Expense Report was moved to archive',
-                'status' => 'Archived',
+                'remarks' => 'Expense Report was cancelled',
+                'status' => 'Cancelled',
             ];
 
             return $arr;

@@ -234,23 +234,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -267,7 +250,6 @@ __webpack_require__.r(__webpack_exports__);
       expense_type: null,
       expense_types: [],
       employee: null,
-      // employees: [],
       vendor: null,
       vendors: [],
       particular: "",
@@ -344,17 +326,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    // loadEmployees() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/employees")
-    //         .then(response => {
-    //             _this.employees = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         });
-    // },
     loadVendors: function loadVendors() {
       var _this = this;
 
@@ -454,8 +425,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     this.getCurrentUser();
-    this.loadExpenseTypes(); // this.loadEmployees();
-
+    this.loadExpenseTypes();
     this.loadVendors();
   }
 });
@@ -681,6 +651,7 @@ var render = function() {
                               rules: _vm.rules.receipt_number,
                               "error-messages": _vm.errors.receipt_number,
                               label: "Receipt No. *",
+                              type: "number",
                               required: ""
                             },
                             on: {
@@ -787,8 +758,6 @@ var render = function() {
                                                 _c(
                                                   "v-card",
                                                   [
-                                                    _c("v-card-title"),
-                                                    _vm._v(" "),
                                                     _c(
                                                       "v-card-text",
                                                       [
@@ -843,7 +812,9 @@ var render = function() {
                                                                       {
                                                                         attrs: {
                                                                           label:
-                                                                            "Amount"
+                                                                            "Amount",
+                                                                          type:
+                                                                            "number"
                                                                         },
                                                                         model: {
                                                                           value:

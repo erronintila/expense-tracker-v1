@@ -293,9 +293,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }],
         remarks: [],
         notes: [],
-        employee: [function (v) {
-          return !!v || "Employee is required";
-        }],
+        employee: [],
         expenses: []
       },
       errors: {
@@ -313,7 +311,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     getCurrentUser: function getCurrentUser() {
       var _this = this;
 
-      axios.get("/api/user").then(function (response) {// _this.user = response.data.data;
+      axios.get("/api/user").then(function (response) {
+        // _this.user = response.data.data;
+        var data = response.data.data;
+        var employee_id = data.employee == null ? 0 : data.employee.id;
+        _this.employee = employee_id;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -390,6 +392,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
+      var _this = this;
+
       if (_this.employee == null || _this.employee <= 0) {
         _this.$dialog.message.error("User Account Unauthorized", {
           position: "top-right",
@@ -398,8 +402,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         return;
       }
-
-      var _this = this;
 
       _this.$refs.form.validate();
 
@@ -472,6 +474,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
             _this.loadExpenses(_this.employee);
           })["catch"](function (error) {
+            console.log(error);
             console.log(error.response);
           });
         }
@@ -561,38 +564,6 @@ var render = function() {
                   _c(
                     "v-row",
                     [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-autocomplete", {
-                            attrs: {
-                              rules: _vm.rules.employee,
-                              items: _vm.employees,
-                              "error-messages": _vm.errors.employee,
-                              "item-value": "id",
-                              "item-text": "fullname",
-                              label: "Employee *",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.employee = []
-                              },
-                              change: _vm.loadExpenses
-                            },
-                            model: {
-                              value: _vm.employee,
-                              callback: function($$v) {
-                                _vm.employee = $$v
-                              },
-                              expression: "employee"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c(
                         "v-col",
                         { attrs: { cols: "12", md: "8" } },

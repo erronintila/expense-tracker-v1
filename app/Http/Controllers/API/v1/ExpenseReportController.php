@@ -131,7 +131,7 @@ class ExpenseReportController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense_report = ExpenseReport::findOrFail($id);
+        $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
         return response(
             [
@@ -180,7 +180,7 @@ class ExpenseReportController extends Controller
                 break;
             case 'duplicate':
                 foreach ($request->ids as $value) {
-                    $expense_report = ExpenseReport::find($value);
+                    $expense_report = ExpenseReport::withTrashed()->find($value);
 
                     $new_report = $expense_report->replicate();
                     $new_report->code = null;
@@ -197,14 +197,14 @@ class ExpenseReportController extends Controller
 
                     $new_report->save();
 
-                    foreach ($expense_report->expenses as $key => $value) {
-                        $expense = Expense::find($value["id"]);
+                    foreach ($expense_report->expenses->withTrashed()->get() as $key => $value) {
+                        $expense = Expense::withTrashed()->find($value["id"]);
                         $new_expense = $expense->replicate();
                         $new_expense->deleted_at = null;
                         $new_expense->expense_report_id = $new_report->id;
                         $new_expense->save();
 
-                        foreach ($expense->expense_details as $key => $value) {
+                        foreach ($expense->expense_details->withTrashed()->get() as $key => $value) {
                             $expense_detail = ExpenseDetail::find($value["id"]);
                             $new_expense_detail = $expense_detail->replicate();
                             $new_expense_detail->deleted_at = null;

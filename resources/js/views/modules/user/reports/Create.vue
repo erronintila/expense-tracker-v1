@@ -18,7 +18,7 @@
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-autocomplete
                                 v-model="employee"
                                 :rules="rules.employee"
@@ -32,7 +32,7 @@
                                 required
                             >
                             </v-autocomplete>
-                        </v-col>
+                        </v-col> -->
                         <v-col cols="12" md="8">
                             <v-text-field
                                 v-model="description"
@@ -300,6 +300,11 @@ export default {
                 .get("/api/user")
                 .then(response => {
                     // _this.user = response.data.data;
+                    let data  = response.data.data;
+                    
+                    let employee_id = data.employee == null ? 0 : data.employee.id;
+
+                    _this.employee = employee_id;
                 })
                 .catch(error => {
                     console.log(error);

@@ -141,9 +141,9 @@
                         <v-btn color="green" dark @click="onEdit"
                             >Print Summary</v-btn
                         >
-                        <v-btn color="green" dark @click="onEdit"
+                        <!-- <v-btn color="green" dark @click="onEdit"
                             >Edit Details</v-btn
-                        >
+                        > -->
                     </v-card-actions>
                 </v-container>
             </v-form>

@@ -232,10 +232,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -350,17 +346,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    // loadEmployees() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/employees")
-    //         .then(response => {
-    //             _this.employees = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         });
-    // },
     loadVendors: function loadVendors() {
       var _this = this;
 
@@ -372,8 +357,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this)); // this.$refs.form.reset();
-      // this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
@@ -462,8 +446,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     this.getCurrentUser();
-    this.loadExpenseTypes(); // this.loadEmployees();
-
+    this.loadExpenseTypes();
     this.loadVendors();
     this.getData();
   }
@@ -796,8 +779,6 @@ var render = function() {
                                                 _c(
                                                   "v-card",
                                                   [
-                                                    _c("v-card-title"),
-                                                    _vm._v(" "),
                                                     _c(
                                                       "v-card-text",
                                                       [
