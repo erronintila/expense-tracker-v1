@@ -49,7 +49,7 @@
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text color="green">
+                                    <v-btn text color="green" @click="editData">
                                         Edit Info
                                     </v-btn>
                                 </v-card-actions>
@@ -59,7 +59,7 @@
 
                     <v-col cols="12" md="6">
                         <v-row>
-                            <v-col cols="12" md="12">
+                            <!-- <v-col cols="12" md="12">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
                                         outlined
@@ -79,7 +79,7 @@
                                         <br /><br /><br /><br /><br />
                                     </v-card>
                                 </v-hover>
-                            </v-col>
+                            </v-col> -->
                             <!-- <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
@@ -227,8 +227,6 @@ export default {
             axios
                 .get(`/api/vendors/${_this.$route.params.id}`)
                 .then(function(response) {
-                    console.log(response.data);
-
                     let data = response.data.data;
 
                     _this.code = data.code;
@@ -245,7 +243,14 @@ export default {
                 })
                 .catch(function(error) {
                     console.log(error);
+                    console.log(error.response);
                 });
+        },
+        editData() {
+            this.$router.push({
+                name: "admin.vendors.edit",
+                params: { id: this.$route.params.id }
+            });
         }
     },
     created() {

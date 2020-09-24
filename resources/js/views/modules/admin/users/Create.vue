@@ -231,6 +231,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.errors = error.response.data.errors;
                     });

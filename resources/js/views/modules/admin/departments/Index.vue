@@ -195,6 +195,7 @@ export default {
                     })
                     .catch(error => {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.loading = false;
                     });
@@ -252,6 +253,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
@@ -292,7 +294,7 @@ export default {
                             //     position: "top-right",
                             //     timeout: 2000
                             // });
-
+                            console.log(error);
                             console.log(error.response);
                         });
                 }

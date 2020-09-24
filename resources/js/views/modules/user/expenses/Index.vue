@@ -318,8 +318,6 @@ export default {
 
                         let employee_id = _this.employee;
 
-                        console.log(employee_id);
-
                         if(employee_id !== 0) {
                             axios
                             .get("/api/expenses", {
@@ -346,6 +344,7 @@ export default {
                             })
                             .catch(error => {
                                 console.log(error);
+                                console.log(error.response);
 
                                 _this.loading = false;
                             });
@@ -381,6 +380,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -437,6 +437,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
@@ -473,6 +474,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });

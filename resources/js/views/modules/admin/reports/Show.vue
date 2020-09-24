@@ -48,6 +48,9 @@
                                 show-expand
                                 class="elevation-0"
                             >
+                                <template v-slot:[`item.amount`]="{ item }">
+                                    {{ formatNumber(item.amount) }}
+                                </template>
                                 <template
                                     slot="body.append"
                                     v-if="items.length > 0"
@@ -64,7 +67,7 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            <strong>{{ total }}</strong>
+                                            <strong>{{ formatNumber(total) }}</strong>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -150,6 +153,7 @@
 
 <script>
 import moment from "moment";
+import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import CreateExpense from "./components/CreateExpense";
 import EditExpense from "./components/EditExpense";
@@ -293,6 +297,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         onEdit() {
@@ -300,6 +305,9 @@ export default {
                 name: "admin.reports.edit",
                 params: { id: this.$route.params.id }
             });
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     watch: {

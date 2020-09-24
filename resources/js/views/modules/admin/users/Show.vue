@@ -37,7 +37,7 @@
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text color="green">
+                                    <v-btn text color="green" @click="editData">
                                         Edit Info
                                     </v-btn>
                                 </v-card-actions>
@@ -122,7 +122,7 @@
                 </v-row>
 
                 <v-row>
-                    <v-col cols="12">
+                    <!-- <v-col cols="12">
                         <v-hover v-slot:default="{ hover }">
                             <v-card outlined :elevation="hover ? 5 : 2">
                                 <v-expansion-panels v-model="panel" hover>
@@ -152,7 +152,7 @@
                                 </v-expansion-panels>
                             </v-card>
                         </v-hover>
-                    </v-col>
+                    </v-col> -->
                 </v-row>
             </v-card-text>
         </v-card>
@@ -186,7 +186,11 @@ export default {
                 })
                 .catch(function(error) {
                     console.log(error);
+                    console.log(error.response);
                 });
+        },
+        editData() {
+            this.$router.push({name: "admin.users.edit", params: {id: this.$route.params.id}});
         }
     },
     created() {

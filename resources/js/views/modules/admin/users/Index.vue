@@ -228,6 +228,7 @@ export default {
                     })
                     .catch(error => {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.loading = false;
                     });
@@ -283,6 +284,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
@@ -327,6 +329,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
@@ -363,6 +366,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
@@ -399,6 +403,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });

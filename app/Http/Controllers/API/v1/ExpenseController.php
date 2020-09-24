@@ -83,7 +83,7 @@ class ExpenseController extends Controller
         });
         $expenses = $expenses->paginate($itemsPerPage);
 
-        $expenses->appends(['sort' => 'votes'])->links();
+        // $expenses->appends(['sort' => 'votes'])->links();
 
         return ExpenseResource::collection($expenses);
     }

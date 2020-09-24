@@ -50,13 +50,9 @@
                                 readonly
                             ></v-text-field>
                         </v-col>
-                        
+
                         <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="date"
-                                label="Date"
-                                readonly
-                            >
+                            <v-text-field v-model="date" label="Date" readonly>
                             </v-text-field>
                         </v-col>
                     </v-row>
@@ -71,6 +67,9 @@
                                     itemsPerPageOptions: [5, 10, 20]
                                 }"
                             >
+                                <template v-slot:[`item.amount`]="{ item }">
+                                    {{ formatNumber(item.amount) }}
+                                </template>
                                 <template
                                     slot="body.append"
                                     v-if="items.length > 0"
@@ -115,7 +114,9 @@
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="editDetails">Edit Details</v-btn>
+                        <v-btn color="green" dark @click="editDetails"
+                            >Edit Details</v-btn
+                        >
                     </v-card-actions>
                 </v-container>
             </v-form>
@@ -124,6 +125,8 @@
 </template>
 
 <script>
+import numeral from "numeral";
+
 export default {
     data() {
         return {
@@ -146,9 +149,9 @@ export default {
             particular_amount: 0,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
-                { text: "Amount", value: "amount", sortable: false },
+                { text: "Amount", value: "amount", sortable: false }
             ],
-            items: [],
+            items: []
         };
     },
     methods: {
@@ -174,7 +177,11 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         },
         isEmpty(item) {
             if (item) {
@@ -183,15 +190,20 @@ export default {
             return 0;
         },
         editDetails() {
-            this.$router.push({name: "admin.expenses.edit", params: {id: this.$route.params.id}});
+            this.$router.push({
+                name: "admin.expenses.edit",
+                params: { id: this.$route.params.id }
+            });
         }
     },
     watch: {
         items() {
-            this.amount = this.items.reduce(
-                (total, item) =>
-                    parseFloat(total) + parseFloat(item.amount),
-                0
+            this.amount = this.formatNumber(
+                this.items.reduce(
+                    (total, item) =>
+                        parseFloat(total) + parseFloat(item.amount),
+                    0
+                )
             );
         }
     },

@@ -80,6 +80,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         onSave() {
@@ -109,6 +110,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.errors = error.response.data.errors;
                     });

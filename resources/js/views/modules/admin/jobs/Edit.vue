@@ -85,8 +85,6 @@ export default {
             axios
                 .get("/api/jobs/" + _this.$route.params.id)
                 .then(response => {
-                    console.log(response);
-
                     let data = response.data.data;
 
                     _this.name = data.name;
@@ -94,6 +92,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         loadDepartments() {
@@ -111,6 +110,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         // onRefresh() {
@@ -147,6 +147,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.errors = error.response.data.errors;
                     });

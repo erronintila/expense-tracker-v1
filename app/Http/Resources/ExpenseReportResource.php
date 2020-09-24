@@ -28,7 +28,7 @@ class ExpenseReportResource extends JsonResource
             // 'payment' => new PaymentResource($this->payment),
             'employee' => $this->employee,
             'payment' => $this->payment,
-            'expenses' => ExpenseResource::collection($this->expenses()->withTrashed()->get()),
+            'expenses' => ExpenseResource::collection($this->expenses),
             'status' => $this->status(),
             'submitted_at' => Carbon::parse($this->submitted_at)->toDateTimeString(),
             'reviewed_at' => Carbon::parse($this->reviewed_at)->toDateTimeString(),

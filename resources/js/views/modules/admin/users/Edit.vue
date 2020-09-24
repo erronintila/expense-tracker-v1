@@ -140,11 +140,10 @@ export default {
                     _this.email = data.email;
                     _this.is_admin = data.is_admin;
                     _this.employee = data.employee !== null ? data.employee.id : 0;
-
-                    console.log(_this.employee);
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         loadEmployees() {

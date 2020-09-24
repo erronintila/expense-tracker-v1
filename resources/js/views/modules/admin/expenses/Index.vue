@@ -322,6 +322,7 @@ export default {
                     })
                     .catch(error => {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.loading = false;
                     });
@@ -341,6 +342,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         loadExpenseTypes() {
@@ -357,6 +359,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -413,6 +416,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
@@ -449,6 +453,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });
@@ -500,8 +505,6 @@ export default {
 
         this.loadEmployees();
         this.loadExpenseTypes();
-
-        console.log(this.$route.params.status);
     }
 };
 </script>

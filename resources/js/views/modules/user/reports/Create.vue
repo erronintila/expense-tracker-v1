@@ -330,6 +330,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         loadEmployees() {
@@ -342,6 +343,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -394,6 +396,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
                     });
 
                 return;
@@ -441,6 +444,7 @@ export default {
                             _this.loadExpenses();
                         })
                         .catch(function(error) {
+                            console.log(error);
                             console.log(error.response);
                         });
                 }

@@ -84,11 +84,17 @@
                                         <td class="title">Total</td>
                                         <td></td>
                                         <td>
-                                            <strong>{{ total }}</strong>
+                                            <strong>{{
+                                                formatNumber(total)
+                                            }}</strong>
                                         </td>
                                         <td></td>
                                         <td></td>
                                     </tr>
+                                </template>
+
+                                <template v-slot:[`item.total`]="{ item }">
+                                    {{ formatNumber(item.total) }}
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
@@ -162,6 +168,7 @@
 
 <script>
 import moment from "moment";
+import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 
 export default {
@@ -211,8 +218,6 @@ export default {
             axios
                 .get(`/api/payments/${_this.$route.params.id}`)
                 .then(response => {
-                    console.log(response);
-
                     let data = response.data.data;
                     _this.code = data.code;
                     _this.reference_no = data.reference_no;
@@ -247,7 +252,7 @@ export default {
                         method: "delete",
                         url: `/api/payments/${_this.$route.params.id}`,
                         data: {
-                            ids: [_this.$route.params.id],
+                            ids: [_this.$route.params.id]
                         }
                     })
                         .then(function(response) {
@@ -269,6 +274,9 @@ export default {
                         });
                 }
             });
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     watch: {

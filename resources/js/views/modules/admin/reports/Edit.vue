@@ -319,7 +319,7 @@ export default {
                     _this.total = data.total;
 
                     // _this.date_range = [_this.from, _this.to];
-                    console.log(["date range", _this.from, _this.to]);
+                    // console.log(["date range", _this.from, _this.to]);
 
                     _this.selected.splice(0, 0, ...data.expenses);
 
@@ -352,6 +352,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         loadEmployees() {
@@ -364,6 +365,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         onRefresh() {
@@ -456,6 +458,7 @@ export default {
                             _this.loadExpenses(_this.employee);
                         })
                         .catch(function(error) {
+                            console.log(error);
                             console.log(error.response);
                         });
                 }

@@ -190,8 +190,6 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    console.log(data);
-
                     _this.code = data.code;
                     _this.name = data.name;
                     _this.email = data.email;
@@ -244,6 +242,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.errors = error.response.data.errors;
                     });

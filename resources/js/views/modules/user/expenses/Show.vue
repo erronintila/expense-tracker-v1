@@ -67,6 +67,9 @@
                                     itemsPerPageOptions: [5, 10, 20]
                                 }"
                             >
+                                <template v-slot:[`item.amount`]="{ item }">
+                                    {{ formatNumber(item.amount) }}
+                                </template>
                                 <template
                                     slot="body.append"
                                     v-if="items.length > 0"
@@ -74,13 +77,17 @@
                                     <tr class="green--text hidden-md-and-up">
                                         <td class="title">
                                             Total:
-                                            <strong>{{ amount }}</strong>
+                                            <strong>{{
+                                                formatNumber(amount)
+                                            }}</strong>
                                         </td>
                                     </tr>
                                     <tr class="green--text hidden-sm-and-down">
                                         <td class="title">Total</td>
                                         <td>
-                                            <strong>{{ amount }}</strong>
+                                            <strong>{{
+                                                formatNumber(amount)
+                                            }}</strong>
                                         </td>
                                     </tr>
                                 </template>
@@ -122,6 +129,8 @@
 </template>
 
 <script>
+import numeral from "numeral";
+
 export default {
     data() {
         return {
@@ -184,6 +193,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    console.log(error.response);
                 });
         },
         isEmpty(item) {
@@ -197,6 +207,9 @@ export default {
                 name: "user.expenses.edit",
                 params: { id: this.$route.params.id }
             });
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     watch: {

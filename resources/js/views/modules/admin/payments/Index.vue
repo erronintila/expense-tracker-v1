@@ -208,12 +208,20 @@
                         {{ getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon v-show="status == 'Active'" small class="mr-2" @click="onShow(item)">
+                        <v-icon
+                            v-show="status == 'Active'"
+                            small
+                            class="mr-2"
+                            @click="onShow(item)"
+                        >
                             mdi-eye
                         </v-icon>
                         <!-- <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
                         </v-icon> -->
+                    </template>
+                    <template v-slot:[`item.amount`]="{ item }">
+                        {{ formatNumber(item.amount) }}
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -269,7 +277,7 @@ export default {
                 // "Approved",
                 // "Released",
                 // "Received",
-                "Cancelled",
+                "Cancelled"
                 // "Completed"
             ],
             selected: [],
@@ -304,7 +312,7 @@ export default {
                 "Last Quarter",
                 "Last Year",
                 "Last 5 Years"
-            ],
+            ]
         };
     },
     methods: {
@@ -346,6 +354,7 @@ export default {
                     })
                     .catch(error => {
                         console.log(error);
+                        console.log(error.response);
 
                         _this.loading = false;
                     });
@@ -402,6 +411,7 @@ export default {
         //                 })
         //                 .catch(function(error) {
         //                     console.log(error);
+        //                      console.log(error.response);
         //                 });
         //         }
         //     });
@@ -446,6 +456,7 @@ export default {
                         })
                         .catch(function(error) {
                             console.log(error);
+                            console.log(error.response);
                         });
                 }
             });

@@ -382,6 +382,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$router.push({name: "admin.payments.index"});
                     })
                     .catch(function(error) {
                         console.log(error);

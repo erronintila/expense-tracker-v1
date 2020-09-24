@@ -43,7 +43,7 @@
                                 style="border-left: 2px solid #7dff81 !important"
                             >
                                 <v-card-title>{{
-                                    total_expenses
+                                    formatNumber(total_expenses)
                                 }}</v-card-title>
                                 <v-card-subtitle>
                                     Total Expenses
@@ -60,7 +60,7 @@
                                 style="border-left: 2px solid #7dff81 !important"
                             >
                                 <v-card-title>{{
-                                    total_reimbursements
+                                    formatNumber(total_reimbursements)
                                 }}</v-card-title>
                                 <v-card-subtitle>
                                     Reimbursements
@@ -77,7 +77,7 @@
                                 style="border-left: 2px solid #7dff81 !important"
                             >
                                 <v-card-title>{{
-                                    total_pending_reports
+                                    formatNumber(total_pending_reports)
                                 }}</v-card-title>
                                 <v-card-subtitle>
                                     Pending Expense Reports
@@ -630,6 +630,9 @@ export default {
             //         console.log(error);
             //         console.log(error.response);
             //     });
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     created() {
