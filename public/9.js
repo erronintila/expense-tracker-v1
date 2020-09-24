@@ -392,9 +392,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      total: 0,
       headers: [],
       items: []
     };
@@ -408,7 +421,7 @@ __webpack_require__.r(__webpack_exports__);
           response.data.data.forEach(function (element) {
             _this.headers.push({
               text: element.name,
-              value: element.name.replace(/\s+/g, '_').toLowerCase(),
+              value: element.name.replace(/\s+/g, "_").toLowerCase(),
               sortable: false
             });
           });
@@ -416,6 +429,12 @@ __webpack_require__.r(__webpack_exports__);
           _this.headers.unshift({
             text: "Date",
             value: "date",
+            sortable: false
+          });
+
+          _this.headers.push({
+            text: "Total",
+            value: "total",
             sortable: false
           });
 
@@ -883,15 +902,44 @@ var render = function() {
       _c(
         "div",
         [
-          _c("v-data-table", {
-            attrs: {
-              dense: "",
-              "hide-default-footer": true,
-              "disable-pagination": "",
-              headers: _vm.headers,
-              items: _vm.items
-            }
-          })
+          _c(
+            "v-data-table",
+            {
+              attrs: {
+                dense: "",
+                "hide-default-footer": true,
+                "disable-pagination": "",
+                headers: _vm.headers,
+                items: _vm.items
+              }
+            },
+            [
+              _vm.items.length > 0
+                ? _c("template", { slot: "body.append" }, [
+                    _c("tr", { staticClass: "green--text hidden-md-and-up" }, [
+                      _c("td", { staticClass: "title" }, [
+                        _vm._v("\n                            Total: "),
+                        _c("strong", [_vm._v(_vm._s(_vm.total))])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "tr",
+                      { staticClass: "green--text hidden-sm-and-down" },
+                      [
+                        _c("td", [_vm._v("Total")]),
+                        _vm._v(" "),
+                        _vm._l(_vm.items.length - 1, function(item) {
+                          return _c("td", { key: item.name })
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                : _vm._e()
+            ],
+            2
+          )
         ],
         1
       )

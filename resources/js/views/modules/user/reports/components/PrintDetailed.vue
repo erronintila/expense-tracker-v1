@@ -14,7 +14,19 @@
                     disable-pagination
                     :headers="headers"
                     :items="items"
-                ></v-data-table>
+                >
+                    <template slot="body.append" v-if="items.length > 0">
+                        <tr class="green--text hidden-md-and-up">
+                            <td class="title">
+                                Total: <strong>{{ total }}</strong>
+                            </td>
+                        </tr>
+                        <tr class="green--text hidden-sm-and-down">
+                            <td>Total</td>
+                            <td v-for="item in items.length - 1" :key="item.name"></td>
+                        </tr>
+                    </template>
+                </v-data-table>
             </div>
         </div>
     </v-app>
@@ -24,6 +36,7 @@
 export default {
     data() {
         return {
+            total: 0,
             headers: [],
             items: []
         };
@@ -39,7 +52,9 @@ export default {
                         response.data.data.forEach(element => {
                             _this.headers.push({
                                 text: element.name,
-                                value: element.name.replace(/\s+/g, '_').toLowerCase(),
+                                value: element.name
+                                    .replace(/\s+/g, "_")
+                                    .toLowerCase(),
                                 sortable: false
                             });
                         });
@@ -47,6 +62,12 @@ export default {
                         _this.headers.unshift({
                             text: "Date",
                             value: "date",
+                            sortable: false
+                        });
+
+                        _this.headers.push({
+                            text: "Total",
+                            value: "total",
                             sortable: false
                         });
 
