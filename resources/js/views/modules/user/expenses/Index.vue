@@ -150,7 +150,13 @@
                                     <tr>
                                         <td><strong>Expense Report</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.expense_report == null ? "" : item.expense_report.code }}</td>
+                                        <td>
+                                            {{
+                                                item.expense_report == null
+                                                    ? ""
+                                                    : `${item.expense_report.description} (Code:${item.expense_report.code})`
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Receipt</strong></td>
@@ -270,29 +276,6 @@ export default {
         };
     },
     methods: {
-        // getCurrentUser() {
-        //     let _this = this;
-
-        //     return new Promise((resolve, reject) => {
-        //         axios
-        //             .get("/api/user")
-        //             .then(response => {
-        //                 console.log(response);
-
-        //                 let emp = response.data.data.employee;
-
-        //                 _this.employee = null ? 0 : emp.id;
-
-        //                 resolve(_this.employee);
-        //             })
-        //             .catch(error => {
-        //                 console.log(error);
-        //                 console.log(error.response);
-
-        //                 reject();
-        //             });
-        //     });
-        // },
         updateDates(e) {
             this.date_range = e;
         },
@@ -318,45 +301,44 @@ export default {
 
                         let employee_id = _this.employee;
 
-                        if(employee_id !== 0) {
+                        if (employee_id !== 0) {
                             axios
-                            .get("/api/expenses", {
-                                params: {
-                                    search: search,
-                                    sortBy: sortBy[0],
-                                    sortType: sortDesc[0] ? "desc" : "asc",
-                                    page: page,
-                                    itemsPerPage: itemsPerPage,
-                                    status: status,
-                                    employee_id: employee_id,
-                                    expense_type_id: expense_type_id,
-                                    start_date: range[0],
-                                    end_date: range[1]
-                                }
-                            })
-                            .then(response => {
-                                let items = response.data.data;
-                                let total = response.data.meta.total;
+                                .get("/api/expenses", {
+                                    params: {
+                                        search: search,
+                                        sortBy: sortBy[0],
+                                        sortType: sortDesc[0] ? "desc" : "asc",
+                                        page: page,
+                                        itemsPerPage: itemsPerPage,
+                                        status: status,
+                                        employee_id: employee_id,
+                                        expense_type_id: expense_type_id,
+                                        start_date: range[0],
+                                        end_date: range[1]
+                                    }
+                                })
+                                .then(response => {
+                                    let items = response.data.data;
+                                    let total = response.data.meta.total;
 
-                                _this.loading = false;
+                                    _this.loading = false;
 
-                                resolve({ items, total });
-                            })
-                            .catch(error => {
-                                console.log(error);
-                                console.log(error.response);
+                                    resolve({ items, total });
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                    console.log(error.response);
 
-                                _this.loading = false;
-                            });
+                                    _this.loading = false;
+                                });
                         } else {
                             let items = [];
                             let total = 0;
 
-                            resolve({items, total});
+                            resolve({ items, total });
 
                             _this.loading = false;
                         }
-
                     })
                     .catch(error => {
                         console.log(error);
@@ -386,7 +368,6 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.status = "Active";
-            // this.loadEmployees();
             this.loadExpenseTypes();
         },
         onShow(item) {
@@ -404,18 +385,20 @@ export default {
         onDelete() {
             let _this = this;
 
-            console.log(this.selected);
-
-            if(!_this.selected.map(item => item.expense_report_id).includes(null)) {
-                this.$dialog.message.error("Expense(s) can't be deleted", {
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
                 });
                 return;
             }
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
+            if (
+                !_this.selected
+                    .map(item => item.expense_report_id)
+                    .includes(null)
+            ) {
+                this.$dialog.message.error("Expense(s) can't be deleted", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -454,8 +437,6 @@ export default {
         },
         onRestore() {
             let _this = this;
-
-            console.log(_this.selected)
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -536,7 +517,6 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        // this.getCurrentUser();
         this.loadExpenseTypes();
     }
 };

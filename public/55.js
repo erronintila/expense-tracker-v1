@@ -227,6 +227,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -283,24 +289,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
-    // getCurrentUser() {
-    //     let _this = this;
-    //     return new Promise((resolve, reject) => {
-    //         axios
-    //             .get("/api/user")
-    //             .then(response => {
-    //                 console.log(response);
-    //                 let emp = response.data.data.employee;
-    //                 _this.employee = null ? 0 : emp.id;
-    //                 resolve(_this.employee);
-    //             })
-    //             .catch(error => {
-    //                 console.log(error);
-    //                 console.log(error.response);
-    //                 reject();
-    //             });
-    //     });
-    // },
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
@@ -387,8 +375,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.status = "Active"; // this.loadEmployees();
-
+      this.status = "Active";
       this.loadExpenseTypes();
     },
     onShow: function onShow(item) {
@@ -410,20 +397,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onDelete: function onDelete() {
       var _this = this;
 
-      console.log(this.selected);
-
-      if (!_this.selected.map(function (item) {
-        return item.expense_report_id;
-      }).includes(null)) {
-        this.$dialog.message.error("Expense(s) can't be deleted", {
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
           timeout: 2000
         });
         return;
       }
 
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
+      if (!_this.selected.map(function (item) {
+        return item.expense_report_id;
+      }).includes(null)) {
+        this.$dialog.message.error("Expense(s) can't be deleted", {
           position: "top-right",
           timeout: 2000
         });
@@ -457,8 +442,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRestore: function onRestore() {
       var _this = this;
-
-      console.log(_this.selected);
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -535,8 +518,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // this.getCurrentUser();
-
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     this.loadExpenseTypes();
   }
 });
@@ -886,11 +868,17 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            item.expense_report == null
-                                              ? ""
-                                              : item.expense_report.code
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.expense_report == null
+                                                ? ""
+                                                : item.expense_report
+                                                    .description +
+                                                    " (Code:" +
+                                                    item.expense_report.code +
+                                                    ")"
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),

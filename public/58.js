@@ -301,14 +301,19 @@ __webpack_require__.r(__webpack_exports__);
     getCurrentUser: function getCurrentUser() {
       var _this = this;
 
-      axios.get("/api/user").then(function (response) {
-        // _this.user = response.data.data;
-        var data = response.data.data;
-        var employee_id = data.employee == null ? 0 : data.employee.id;
-        _this.employee = employee_id;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/user").then(function (response) {
+          // _this.user = response.data.data;
+          var data = response.data.data;
+          var employee_id = data.employee == null ? 0 : data.employee.id;
+          _this.employee = employee_id; // console.log(response);
+
+          resolve(employee_id);
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+          reject();
+        });
       });
     },
     updateDates: function updateDates(e) {
@@ -321,30 +326,34 @@ __webpack_require__.r(__webpack_exports__);
 
       var _this = this;
 
-      axios.get("/api/data/expenses", {
-        params: {
-          create_report: true,
-          employee_id: _this.employee,
-          start_date: start_date,
-          end_date: end_date
-        }
-      }).then(function (response) {
-        _this.items = response.data.data; // _this.total = response.data.total;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      this.getCurrentUser().then(function (item) {
+        axios.get("/api/data/expenses", {
+          params: {
+            create_report: true,
+            employee_id: item,
+            start_date: start_date,
+            end_date: end_date
+          }
+        }).then(function (response) {
+          _this.items = response.data.data;
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+        });
       });
     },
-    loadEmployees: function loadEmployees() {
-      var _this = this;
-
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
-    },
+    // loadEmployees() {
+    //     let _this = this;
+    //     axios
+    //         .get("/api/data/employees")
+    //         .then(response => {
+    //             _this.employees = response.data.data;
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //         });
+    // },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
@@ -446,9 +455,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.getCurrentUser();
-    this.loadEmployees();
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // this.loadEmployees();
+
     this.loadExpenses();
   }
 });

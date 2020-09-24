@@ -296,20 +296,30 @@ export default {
     methods: {
         getCurrentUser() {
             let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    // _this.user = response.data.data;
-                    let data  = response.data.data;
-                    
-                    let employee_id = data.employee == null ? 0 : data.employee.id;
 
-                    _this.employee = employee_id;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/user")
+                    .then(response => {
+                        // _this.user = response.data.data;
+                        let data = response.data.data;
+
+                        let employee_id =
+                            data.employee == null ? 0 : data.employee.id;
+
+                        _this.employee = employee_id;
+
+                        // console.log(response);
+
+                        resolve(employee_id);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        reject();
+                    });
+            });
         },
         updateDates(e) {
             this.date_range = e;
@@ -320,44 +330,45 @@ export default {
             let end_date = this.date_range[1];
             let _this = this;
 
-            axios
-                .get("/api/data/expenses", {
-                    params: {
-                        create_report: true,
-                        employee_id: _this.employee,
-                        start_date: start_date,
-                        end_date: end_date
-                    }
-                })
-                .then(response => {
-                    _this.items = response.data.data;
-                    // _this.total = response.data.total;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
+            this.getCurrentUser().then(item => {
+                axios
+                    .get("/api/data/expenses", {
+                        params: {
+                            create_report: true,
+                            employee_id: item,
+                            start_date: start_date,
+                            end_date: end_date
+                        }
+                    })
+                    .then(response => {
+                        _this.items = response.data.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
         },
-        loadEmployees() {
-            let _this = this;
+        // loadEmployees() {
+        //     let _this = this;
 
-            axios
-                .get("/api/data/employees")
-                .then(response => {
-                    _this.employees = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
+        //     axios
+        //         .get("/api/data/employees")
+        //         .then(response => {
+        //             _this.employees = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+        //         });
+        // },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
             let _this = this;
 
-            if(_this.employee == null || _this.employee <= 0) {
+            if (_this.employee == null || _this.employee <= 0) {
                 _this.$dialog.message.error("User Account Unauthorized", {
                     position: "top-right",
                     timeout: 2000
@@ -468,8 +479,7 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        this.getCurrentUser();
-        this.loadEmployees();
+        // this.loadEmployees();
         this.loadExpenses();
     }
 };

@@ -18,6 +18,7 @@ use App\Models\ExpenseType;
 use App\Models\Job;
 use App\Models\Payment;
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,35 +30,30 @@ class DataController extends Controller
 
         $expense_report = new ExpenseReportResource($expense_report->first());
 
-        return $expense_report->expenses->groupBy("date")->map(function ($row) {
-            return $row->groupBy('expense_type_id')->map(function ($row) {
+        $data =  $expense_report->expenses->sortBy("date")->groupBy("date")->map(function ($row) {
+            return $row->groupBy('expense_type.name')->map(function ($row) {
                 return $row->sum("amount");
             });
         });
 
-        // return $expense_report->expenses->groupBy(function ($item, $key) {
+        $main = [];
 
-        //     return $item['date'].$item['expense_type_id'];
+        foreach ($data as $key => $value) {
+            $temp = [];
 
-        // });
+            $temp['date'] = $key;
 
-        return $expense_report->expenses->groupBy(function ($item, $key) {
-            return $item["expense_type_id"];
-        });
+            foreach ($value as $key => $value) {
+                $temp[str_replace(' ', '_', strtolower($key))] = $value;
+            }
 
+            array_push($main, $temp);
+        }
 
+        return $main;
 
-        // $expense_types = ExpenseType::all();
+        return $data;
 
-        // // return $expense_types;
-
-        // // $expense_report = $expense_report->groupBy("id");
-
-        // $data = new ExpenseReportResource($expense_report->first());
-
-        // return $data->expenses;
-
-        // return $data->expenses->with("expense_type");
 
         $expenses = Expense::where("expense_report_id", 1);
         $expenses = $expenses->groupBy("date");

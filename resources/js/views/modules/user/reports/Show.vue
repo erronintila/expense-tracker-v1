@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <!-- <PrintDetailed></PrintDetailed> -->
+        <PrintDetailed></PrintDetailed>
 
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
