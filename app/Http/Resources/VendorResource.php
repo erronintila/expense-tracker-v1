@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ExpenseType;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,6 +33,7 @@ class VendorResource extends JsonResource
             'address' => $this->address,
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
+            'expense_types' => $this->expense_types
         ];
     }
 }

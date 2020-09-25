@@ -507,8 +507,6 @@ var render = function() {
   return _c(
     "v-app",
     [
-      _c("PrintDetailed"),
-      _vm._v(" "),
       _c(
         "v-card",
         { staticClass: "elevation-0 pt-0" },

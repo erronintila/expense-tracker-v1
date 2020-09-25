@@ -13,15 +13,15 @@ $factory->define(Expense::class, function (Faker $faker) {
 
     $expenses = $faker->randomElement(
         [
-            ["type" => "Delivery Expense", "description" => "Lazada Delivery", "amount" => 1000],
+            ["type" => "Delivery Expense", "description" => "Delivery Expense", "amount" => 1000],
             ["type" => "Gas & Oil", "description" => "Gas & Oil Expense", "amount" => 500],
             ["type" => "Meal & Lodging", "description" => "Lunch", "amount" => 70],
             ["type" => "Postage, Telephone & Fax", "description" => "PLDT Expense", "amount" => 3000],
-            ["type" => "Repairs & Maintenance", "description" => "New Machine Parts", "amount" => 5000],
+            ["type" => "Repairs & Maintenance", "description" => "Machine Parts", "amount" => 5000],
             ["type" => "Representation", "description" => "Representation Expense", "amount" => 400],
             ["type" => "Supplies", "description" => "Office Supplies", "amount" => 500],
             ["type" => "Transportation", "description" => "Bus Fare", "amount" => 400],
-            ["type" => "Miscellaneous", "description" => "Bus Fare", "amount" => 400],
+            ["type" => "Miscellaneous", "description" => "Miscellaneous Expense", "amount" => 400],
         ]
     );
 

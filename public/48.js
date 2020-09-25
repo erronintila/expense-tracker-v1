@@ -139,6 +139,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -154,6 +176,8 @@ __webpack_require__.r(__webpack_exports__);
       website: "",
       is_vat_inclusive: false,
       address: "",
+      selected_expense_types: [],
+      expense_types: [],
       rules: {
         code: [],
         name: [function (v) {
@@ -194,6 +218,16 @@ __webpack_require__.r(__webpack_exports__);
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
+    loadExpenseTypes: function loadExpenseTypes() {
+      var _this = this;
+
+      axios.get("/api/data/expense_types").then(function (response) {
+        _this.expense_types = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
     onSave: function onSave() {
       var _this = this;
 
@@ -211,7 +245,8 @@ __webpack_require__.r(__webpack_exports__);
           remarks: _this.remarks,
           website: _this.website,
           is_vat_inclusive: _this.is_vat_inclusive,
-          address: _this.address
+          address: _this.address,
+          expense_types: _this.selected_expense_types
         }).then(function (response) {
           // _this.onRefresh();
           _this.$dialog.message.success("Vendor created successfully.", {
@@ -233,6 +268,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    this.loadExpenseTypes();
   }
 });
 
@@ -474,6 +510,65 @@ var render = function() {
                                 _vm.website = $$v
                               },
                               expression: "website"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-select", {
+                            attrs: {
+                              items: _vm.expense_types,
+                              "item-text": "name",
+                              "item-value": "id",
+                              label: "Link with Expense Types",
+                              multiple: ""
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "selection",
+                                fn: function(ref) {
+                                  var item = ref.item
+                                  var index = ref.index
+                                  return [
+                                    index === 0
+                                      ? _c("v-chip", { attrs: { small: "" } }, [
+                                          _c("span", [
+                                            _vm._v(_vm._s(item.name))
+                                          ])
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    index === 1
+                                      ? _c(
+                                          "span",
+                                          { staticClass: "grey--text caption" },
+                                          [
+                                            _vm._v(
+                                              "(+" +
+                                                _vm._s(
+                                                  _vm.selected_expense_types
+                                                    .length - 1
+                                                ) +
+                                                " others)"
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e()
+                                  ]
+                                }
+                              }
+                            ]),
+                            model: {
+                              value: _vm.selected_expense_types,
+                              callback: function($$v) {
+                                _vm.selected_expense_types = $$v
+                              },
+                              expression: "selected_expense_types"
                             }
                           })
                         ],

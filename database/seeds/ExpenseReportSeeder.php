@@ -14,7 +14,9 @@ class ExpenseReportSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 10; $i++) {
+        $count = count(Employee::all());
+
+        for ($i = 1; $i <= $count; $i++) {
 
             $expenses = Expense::where('employee_id', $i)->get();
 

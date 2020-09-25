@@ -40,4 +40,9 @@ class Vendor extends Model
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function expense_types()
+    {
+        return $this->belongsToMany(ExpenseType::class)->withTimestamps();
+    }
 }

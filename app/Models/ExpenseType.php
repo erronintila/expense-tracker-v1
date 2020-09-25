@@ -45,4 +45,9 @@ class ExpenseType extends Model
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class)->withTimestamps();
+    }
 }

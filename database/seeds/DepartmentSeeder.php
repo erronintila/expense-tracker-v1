@@ -13,7 +13,7 @@ class DepartmentSeeder extends Seeder
     public function run()
     {
         // factory(Department::class, 5000)->create();
-
+        
         $departments = [
             ['name' => 'Administrative Department'],
             ['name' => 'Sales & Marketing Department'],
@@ -22,6 +22,8 @@ class DepartmentSeeder extends Seeder
             ['name' => 'Technical & Services Department'],
             ['name' => 'Financial Administrative Department'],
             ['name' => 'Human Resource Department'],
+            ['name' => 'Utility and Maintenance Department'],
+            ['name' => 'Logistics Department'],
         ];
 
         foreach ($departments as $department) {

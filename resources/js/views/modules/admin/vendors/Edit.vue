@@ -87,6 +87,31 @@
                                 label="Website"
                             ></v-text-field>
                         </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-select
+                                v-model="selected_expense_types"
+                                :items="expense_types"
+                                item-text="name"
+                                item-value="id"
+                                label="Link with Expense Types"
+                                multiple
+                            >
+                                <template v-slot:selection="{ item, index }">
+                                    <v-chip v-if="index === 0" small>
+                                        <span>{{ item.name }}</span>
+                                    </v-chip>
+                                    <span
+                                        v-if="index === 1"
+                                        class="grey--text caption"
+                                        >(+{{
+                                            selected_expense_types.length - 1
+                                        }}
+                                        others)</span
+                                    >
+                                </template>
+                            </v-select>
+                        </v-col>
                     </v-row>
 
                     <v-row>
@@ -143,6 +168,8 @@ export default {
             website: "",
             is_vat_inclusive: false,
             address: "",
+            selected_expense_types: [],
+            expense_types: [],
             rules: {
                 code: [],
                 name: [
@@ -201,8 +228,21 @@ export default {
                     _this.website = data.website;
                     _this.is_vat_inclusive = data.is_vat_inclusive;
                     _this.address = data.address;
+                    _this.selected_expense_types = data.expense_types.map(item => item.id)
                 })
                 .catch(error => {});
+        },
+        loadExpenseTypes() {
+            let _this = this;
+            axios
+                .get("/api/data/expense_types")
+                .then(response => {
+                    _this.expense_types = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
@@ -225,7 +265,8 @@ export default {
                         remarks: _this.remarks,
                         website: _this.website,
                         is_vat_inclusive: _this.is_vat_inclusive,
-                        address: _this.address
+                        address: _this.address,
+                        expense_types: _this.selected_expense_types,
                     })
                     .then(function(response) {
                         // _this.onRefresh();
@@ -255,6 +296,7 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
+        this.loadExpenseTypes();
         this.getData();
     }
 };

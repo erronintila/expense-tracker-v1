@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
+use App\Models\ExpenseType;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -98,6 +99,12 @@ class VendorController extends Controller
         $vendor->address = $request->address;
         $vendor->save();
 
+        if (request()->has("expense_types")) {
+            $vendor->expense_types()->sync($request->expense_types);
+            // $expense_types = ExpenseType::find($request->expense_types);
+            // $vendor->expense_types()->attach($expense_types);
+        }
+
         return response(
             [
                 'data' => new VendorResource($vendor),
@@ -159,6 +166,10 @@ class VendorController extends Controller
                 $vendor->is_vat_inclusive = $request->is_vat_inclusive;
                 $vendor->address = $request->address;
                 $vendor->save();
+
+                if (request()->has("expense_types")) {
+                    $vendor->expense_types()->sync($request->expense_types);
+                }
 
                 break;
         }

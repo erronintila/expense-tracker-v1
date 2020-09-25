@@ -208,7 +208,7 @@ class UserController extends Controller
                     $user->employee->first_name = $request->employee["first_name"];
                     $user->employee->middle_name = $request->employee["middle_name"];
                     $user->employee->last_name = $request->employee["last_name"];
-                    $user->employee->suffix = $request->employee["suffix"];
+                    $user->employee->suffix = $request->employee["suffix"] == null ? "" : $request->employee["suffix"];
                     $user->employee->gender = $request->employee["gender"];
                     $user->employee->birthdate = $request->employee["birthdate"];
                     $user->employee->mobile_number = $request->employee["mobile_number"];

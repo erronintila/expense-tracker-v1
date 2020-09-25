@@ -18,13 +18,20 @@ class JobSeeder extends Seeder
             ["department" => "Financial Administrative Department", "job" => "Accounts Payable Specialist"],
             ["department" => "Information Technology Department", "job" => "Junior Software Developer"],
             ["department" => "Information Technology Department", "job" => "Senior Software Developer"],
+            ["department" => "Information Technology Department", "job" => "Junior Technical Support"],
             ["department" => "Technical & Services Department", "job" => "Field Service Engineer"],
             ["department" => "Technical & Services Department", "job" => "Field Service Technician"],
             ["department" => "Sales & Marketing Department", "job" => "Sales & Marketing Representative"],
+            ["department" => "Sales & Marketing Department", "job" => "Junior Sales & Marketing Representative"],
             ["department" => "Sales & Marketing Department", "job" => "Sales & Marketing Officer"],
             ["department" => "Warehouse Department", "job" => "Stock Personnel"],
             ["department" => "Warehouse Department", "job" => "Warehouse Officer"],
+            ["department" => "Warehouse Department", "job" => "Inventory Personnel"],
+            ["department" => "Warehouse Department", "job" => "Inventory, Warehouse, and Purchasing Officer"],
             ["department" => "Human Resource Department", "job" => "Human Resource Officer"],
+            ["department" => "Logistics Department", "job" => "Operations Services and Logistics Officer"],
+            ["department" => "Logistics Department", "job" => "Logistics Coordinator"],
+            ["department" => "Utility and Maintenance Department", "job" => "Utility and Maintenance"],
         ];
 
         foreach ($jobs as $key => $value) {
