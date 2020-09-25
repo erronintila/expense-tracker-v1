@@ -15,8 +15,12 @@ class CreateExpenseDetailsTable extends Migration
     {
         Schema::create('expense_details', function (Blueprint $table) {
             $table->id();
-            $table->string('description', 100)->nullable();
-            $table->double('amount', 10, 2);
+            $table->string('product', 100)->nullable();
+            $table->string('description')->nullable();
+            $table->integer('quantity')->default(1);
+            $table->double('unit_cost', 10, 2)->default(0);
+            $table->double('tax', 10, 2)->default(0);
+            $table->double('amount', 10, 2)->default(0);
 
             $table->unsignedBigInteger('expense_id')->unsigned();
 

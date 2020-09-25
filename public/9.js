@@ -404,10 +404,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       total: 0,
+      total_amounts: [],
       headers: [],
       items: []
     };
@@ -419,24 +427,34 @@ __webpack_require__.r(__webpack_exports__);
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/expense_types").then(function (response) {
           response.data.data.forEach(function (element) {
+            var header = element.name;
+
             _this.headers.push({
               text: element.name,
               value: element.name.replace(/\s+/g, "_").toLowerCase(),
-              sortable: false
+              sortable: false,
+              divider: true
+            });
+
+            _this.total_amounts.push({
+              name: header,
+              value: 0
             });
           });
 
           _this.headers.unshift({
             text: "Date",
             value: "date",
-            sortable: false
+            sortable: false,
+            divider: true
           });
 
           _this.headers.push({
             text: "Total",
             value: "total",
             sortable: false
-          });
+          }); // _this.total_amounts.push({header : 0});
+
 
           resolve();
         })["catch"](function (error) {
@@ -458,6 +476,20 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error.response);
         });
       });
+    }
+  },
+  watch: {
+    items: function items() {
+      var _this2 = this;
+
+      this.total_amounts.forEach(function (element) {
+        element.value = _this2.items.reduce(function (total, item) {
+          return total + item.total;
+        }, 0);
+      });
+      this.total = this.items.reduce(function (total, item) {
+        return total + item.total;
+      }, 0);
     }
   },
   created: function created() {
@@ -927,8 +959,14 @@ var render = function() {
                       [
                         _c("td", [_vm._v("Total")]),
                         _vm._v(" "),
-                        _vm._l(_vm.items.length - 1, function(item) {
-                          return _c("td", { key: item.name })
+                        _vm._l(_vm.headers.length - 1, function(item) {
+                          return _c("td", { key: item.name }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(0) +
+                                "\n                        "
+                            )
+                          ])
                         })
                       ],
                       2
@@ -937,7 +975,8 @@ var render = function() {
                 : _vm._e()
             ],
             2
-          )
+          ),
+          _vm._v("\n            " + _vm._s(_vm.headers) + "\n        ")
         ],
         1
       )

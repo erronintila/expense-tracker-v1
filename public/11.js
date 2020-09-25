@@ -283,22 +283,6 @@ var render = function() {
                           _c(
                             "v-card-actions",
                             [
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    color: "green",
-                                    text: "",
-                                    to: "/register"
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                Register\n                            "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
                               _c("v-spacer"),
                               _vm._v(" "),
                               _c(

@@ -108,6 +108,9 @@ class ExpenseReportController extends Controller
 
         $expense_report->save();
 
+        $expense_report->code = "ER" . date("Y") . str_pad($expense_report->id, 5, '0', STR_PAD_LEFT);
+        $expense_report->save();
+
         foreach ($request->expenses as $key => $value) {
             $expense = Expense::find($value["id"]);
             $expense->expense_report_id = $expense_report->id;

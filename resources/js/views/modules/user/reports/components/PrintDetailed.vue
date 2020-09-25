@@ -23,10 +23,17 @@
                         </tr>
                         <tr class="green--text hidden-sm-and-down">
                             <td>Total</td>
-                            <td v-for="item in items.length - 1" :key="item.name"></td>
+                            <td
+                                v-for="item in headers.length - 1"
+                                :key="item.name"
+                            >
+                                {{ 0 }}
+                            </td>
+                            <!-- <td>{{ total }}</td> -->
                         </tr>
                     </template>
                 </v-data-table>
+                {{ headers }}
             </div>
         </div>
     </v-app>
@@ -37,6 +44,7 @@ export default {
     data() {
         return {
             total: 0,
+            total_amounts: [],
             headers: [],
             items: []
         };
@@ -50,19 +58,28 @@ export default {
                     .get("/api/data/expense_types")
                     .then(response => {
                         response.data.data.forEach(element => {
+                            let header = element.name;
+
                             _this.headers.push({
                                 text: element.name,
                                 value: element.name
                                     .replace(/\s+/g, "_")
                                     .toLowerCase(),
-                                sortable: false
+                                sortable: false,
+                                divider: true
+                            });
+
+                            _this.total_amounts.push({
+                                name: header,
+                                value: 0
                             });
                         });
 
                         _this.headers.unshift({
                             text: "Date",
                             value: "date",
-                            sortable: false
+                            sortable: false,
+                            divider: true
                         });
 
                         _this.headers.push({
@@ -70,6 +87,8 @@ export default {
                             value: "total",
                             sortable: false
                         });
+
+                        // _this.total_amounts.push({header : 0});
 
                         resolve();
                     })
@@ -97,6 +116,21 @@ export default {
                         console.log(error.response);
                     });
             });
+        }
+    },
+    watch: {
+        items() {
+            this.total_amounts.forEach(element => {
+                element.value = this.items.reduce(
+                    (total, item) => total + item.total,
+                    0
+                );
+            });
+
+            this.total = this.items.reduce(
+                (total, item) => total + item.total,
+                0
+            );
         }
     },
     created() {

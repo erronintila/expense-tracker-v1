@@ -40,12 +40,14 @@ class DataController extends Controller
 
         foreach ($data as $key => $value) {
             $temp = [];
-
-            $temp['date'] = $key;
+            $date = $key;
 
             foreach ($value as $key => $value) {
                 $temp[str_replace(' ', '_', strtolower($key))] = $value;
             }
+            
+            $temp["total"] = array_sum(array_values($temp));
+            $temp['date'] = $date;
 
             array_push($main, $temp);
         }

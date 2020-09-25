@@ -7,14 +7,14 @@ const routes = [
             requiresVisitor: true,
         }
     },
-    {
-        path: "/register",
-        name: "register",
-        component: () => import("../../views/auth/Register"),
-        meta: {
-            requiresVisitor: true
-        }
-    },
+    // {
+    //     path: "/register",
+    //     name: "register",
+    //     component: () => import("../../views/auth/Register"),
+    //     meta: {
+    //         requiresVisitor: true
+    //     }
+    // },
     {
         path: "/logout",
         name: "logout",

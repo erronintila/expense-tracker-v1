@@ -61,9 +61,9 @@
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
-                                <v-btn color="green" text to="/register">
+                                <!-- <v-btn color="green" text to="/register">
                                     Register
-                                </v-btn>
+                                </v-btn> -->
                                 <v-spacer></v-spacer>
                                 <v-btn color="green" dark @click="onLogin">
                                     Login

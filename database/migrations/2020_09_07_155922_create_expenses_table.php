@@ -22,6 +22,9 @@ class CreateExpensesTable extends Migration
             $table->date('date');
             $table->text('remarks')->nullable();
 
+            $table->boolean("is_reimbursable")->default(true);
+            $table->string("payment_account");
+
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('employee_id')->unsigned();
             $table->unsignedBigInteger('vendor_id')->unsigned();

@@ -103,7 +103,7 @@ class PaymentController extends Controller
 
         $payment = new Payment();
 
-        $payment->code = $request->code;
+        // $payment->code = $request->code;
         $payment->reference_no = $request->reference_no;
         $payment->voucher_no = $request->voucher_no;
         $payment->description = $request->description;
@@ -124,6 +124,9 @@ class PaymentController extends Controller
         $payment->received_at = now();
         //////////
 
+        $payment->save();
+
+        $payment->code = "PR" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
         $payment->save();
 
         foreach ($request->expense_reports as $key => $value) {
