@@ -35,7 +35,7 @@
 
             <v-container>
                 <v-row>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
@@ -52,7 +52,22 @@
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="3">
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card
+                                :elevation="hover ? 5 : 2"
+                                class="mx-auto"
+                                style="border-left: 2px solid #7dff81 !important"
+                            >
+                                <v-card-title>0.00</v-card-title>
+                                <v-card-subtitle>
+                                    Replenishments
+                                </v-card-subtitle>
+                                <!-- <v-card-text>Last Updated: </v-card-text> -->
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
@@ -69,7 +84,7 @@
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"

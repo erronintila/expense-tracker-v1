@@ -12,7 +12,7 @@
                 <v-list-item two-line>
                     <v-list-item-avatar>
                         <img
-                            src="https://randomuser.me/api/portraits/men/81.jpg"
+                            :src="require('../../../assets/img/user.png')"
                         />
                     </v-list-item-avatar>
 

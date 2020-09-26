@@ -337,8 +337,7 @@ var render = function() {
                       _c("v-list-item-avatar", [
                         _c("img", {
                           attrs: {
-                            src:
-                              "https://randomuser.me/api/portraits/men/81.jpg"
+                            src: __webpack_require__(/*! ../../../assets/img/user.png */ "./resources/js/assets/img/user.png")
                           }
                         })
                       ]),
@@ -639,6 +638,17 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/js/assets/img/user.png":
+/*!******************************************!*\
+  !*** ./resources/js/assets/img/user.png ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/user.png?5405d77c51fb46a0cbf26cb96fe4da4d";
 
 /***/ }),
 

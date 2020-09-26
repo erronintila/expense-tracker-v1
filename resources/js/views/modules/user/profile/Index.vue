@@ -32,8 +32,10 @@
                                                     size="200"
                                                 >
                                                     <v-img
-                                                        src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
-                                                    ></v-img>
+                                                        :src="
+                                                            require('../../../../assets/img/user.png')
+                                                        "
+                                                    />
                                                 </v-avatar>
                                             </v-col>
                                         </v-row>
@@ -89,7 +91,6 @@
                                                 </div>
                                             </v-col>
                                         </v-row>
-                                        
                                     </v-card-text>
 
                                     <v-dialog
