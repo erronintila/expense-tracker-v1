@@ -17,8 +17,9 @@ class CreateAdjustmentsTable extends Migration
             $table->id();
             $table->string("reference");
             $table->string("code");
-            $table->string("description", 100);
-            $table->double("amount", 10, 2)->default(0);
+            $table->string("description", 150);
+            $table->double("add_amount", 10, 2)->default(0);
+            $table->double("subract_amount", 10, 2)->default(0);
             $table->string("type");
             $table->text("remarks");
             $table->timestamps();

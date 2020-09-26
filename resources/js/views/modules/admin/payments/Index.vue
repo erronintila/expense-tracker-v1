@@ -187,6 +187,11 @@
                                         <td>:</td>
                                         <td>{{ item.created_at }}</td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>Cancelled</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.deleted_at }}</td>
+                                    </tr>
                                     <!-- <tr>
                                         <td><strong>Status</strong></td>
                                         <td>:</td>
@@ -238,7 +243,6 @@
                             </td>
                             <td></td>
                             <td></td>
-                            <td></td>
                             <!-- <td></td> -->
                             <td></td>
                         </tr>
@@ -263,8 +267,7 @@ export default {
                 { text: "Description", value: "description" },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Created", value: "created_at" },
-                { text: "Updated", value: "updated_at" },
+                { text: "Last Updated", value: "updated_at" },
                 // { text: "Status", value: "status.status" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }

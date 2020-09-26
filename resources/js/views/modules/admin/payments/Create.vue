@@ -2,7 +2,7 @@
     <v-app>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <v-btn :to="{ name: 'admin.payments.index' }" class="mr-3" icon>
+                <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -245,7 +245,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn :to="{ name: 'admin.payments.index' }">
+                        <v-btn @click="$router.go(-1)">
                             Cancel
                         </v-btn>
                     </v-card-actions>

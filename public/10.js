@@ -305,6 +305,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/employees/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
+        console.log(data);
         _this.fullname = data.fullname;
         _this.first_name = data.first_name;
         _this.middle_name = data.middle_name;
@@ -684,7 +685,12 @@ var render = function() {
                 "v-btn",
                 {
                   staticClass: "mr-3",
-                  attrs: { to: { name: "admin.employees.index" }, icon: "" }
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.go(-1)
+                    }
+                  }
                 },
                 [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
@@ -786,11 +792,13 @@ var render = function() {
                                                     _vm._v(
                                                       "\n                                            " +
                                                         _vm._s(
-                                                          _vm.last_name +
+                                                          (_vm.last_name ||
+                                                            "") +
                                                             ", " +
-                                                            _vm.first_name +
+                                                            (_vm.first_name ||
+                                                              "") +
                                                             " " +
-                                                            _vm.suffix
+                                                            (_vm.suffix || "")
                                                         ) +
                                                         "\n                                        "
                                                     )

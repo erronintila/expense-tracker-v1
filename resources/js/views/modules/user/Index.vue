@@ -170,8 +170,8 @@ export default {
             },
             {
                 icon: "mdi-file-chart",
-                text: "Reports",
-                link: { name: "user.reports.index" }
+                text: "Expense Reports",
+                link: { name: "user.expense_reports.index" }
             }
         ]
     }),

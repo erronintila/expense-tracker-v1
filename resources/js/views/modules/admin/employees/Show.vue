@@ -3,7 +3,7 @@
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn
-                    :to="{ name: 'admin.employees.index' }"
+                    @click="$router.go(-1)"
                     class="mr-3"
                     icon
                 >
@@ -44,7 +44,7 @@
                                             </div>
                                             <p class="display-1 text--primary">
                                                 {{
-                                                    `${last_name}, ${first_name} ${suffix}`
+                                                    `${last_name || ""}, ${first_name || ""} ${suffix || ""}`
                                                 }}
                                             </p>
                                             <p>{{ job }}</p>
@@ -294,6 +294,8 @@ export default {
                 .get(`/api/employees/${_this.$route.params.id}`)
                 .then(function(response) {
                     let data = response.data.data;
+
+                    console.log(data);
 
                     _this.fullname = data.fullname;
                     _this.first_name = data.first_name;

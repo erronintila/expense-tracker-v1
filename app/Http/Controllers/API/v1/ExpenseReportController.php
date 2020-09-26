@@ -40,7 +40,7 @@ class ExpenseReportController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
-        $sortBy = $request->sortBy ?? "created_at";
+        $sortBy = $request->sortBy ?? "updated_at";
         $sortType = $request->sortType ?? "desc";
         $itemsPerPage = $request->itemsPerPage ?? 10;
 

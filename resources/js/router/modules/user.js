@@ -3,6 +3,7 @@ const userRoutes = [
     {
         path: "/",
         name: "home",
+        redirect: "/dashboard",
         component: () => import("../../views/modules/user/Index.vue"),
         meta: {
             requiresAuth: true,
@@ -74,28 +75,28 @@ const userRoutes = [
              *
              */
             {
-                path: "/reports",
-                name: "user.reports.index",
+                path: "/expense_reports",
+                name: "user.expense_reports.index",
                 component: () =>
-                    import("../../views/modules/user/reports/Index.vue")
+                    import("../../views/modules/user/expense_reports/Index.vue")
             },
             {
-                path: "/reports/create",
-                name: "user.reports.create",
+                path: "/expense_reports/create",
+                name: "user.expense_reports.create",
                 component: () =>
-                    import("../../views/modules/user/reports/Create.vue")
+                    import("../../views/modules/user/expense_reports/Create.vue")
             },
             {
-                path: "/reports/:id/edit",
-                name: "user.reports.edit",
+                path: "/expense_reports/:id/edit",
+                name: "user.expense_reports.edit",
                 component: () =>
-                    import("../../views/modules/user/reports/Edit.vue")
+                    import("../../views/modules/user/expense_reports/Edit.vue")
             },
             {
-                path: "/reports/:id",
-                name: "user.reports.show",
+                path: "/expense_reports/:id",
+                name: "user.expense_reports.show",
                 component: () =>
-                    import("../../views/modules/user/reports/Show.vue")
+                    import("../../views/modules/user/expense_reports/Show.vue")
             },
         ]
     }

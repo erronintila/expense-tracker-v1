@@ -115,7 +115,7 @@
 
                         <v-list-item @click="onDelete">
                             <v-list-item-title>
-                                Move to archive
+                                Cancel
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -158,6 +158,22 @@
                             <v-container>
                                 <table>
                                     <tr>
+                                        <td><strong>Expense Report</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                item.expense_report == null
+                                                    ? ""
+                                                    : `${item.expense_report.description} (Code:${item.expense_report.code})`
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Code</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.code }}</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Description</strong></td>
                                         <td>:</td>
                                         <td>{{ item.description }}</td>
@@ -172,12 +188,27 @@
                                         <td>:</td>
                                         <td>{{ item.vendor.name }}</td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>Remarks</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.remarks }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Created</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.created_at }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cancelled</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.deleted_at }}</td>
+                                    </tr>
                                 </table>
                             </v-container>
                         </td>
                     </template>
-                    <template v-slot:[`item.created_at`]="{ item }">
-                        {{ getHumanDate(item.created_at) }}
+                    <template v-slot:[`item.updated_at`]="{ item }">
+                        {{ getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ formatNumber(item.amount) }}
@@ -256,7 +287,7 @@ export default {
                 { text: "Employee", value: "employee_name" },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Created", value: "created_at" },
+                { text: "Last Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -266,7 +297,7 @@ export default {
             expense_type: 0,
             expense_types: [],
             status: "Active",
-            statuses: ["Active", "Archived"],
+            statuses: ["Active", "Cancelled"],
             selected: [],
             search: "",
             totalItems: 0,
@@ -313,6 +344,8 @@ export default {
                         }
                     })
                     .then(response => {
+                        console.log(response);
+                        
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
@@ -391,7 +424,7 @@ export default {
                 return;
             }
 
-            this.$confirm("Move item(s) to archive?").then(res => {
+            this.$confirm("Cancel expense(s)?").then(res => {
                 if (res) {
                     axios
                         .delete(`/api/expenses/${_this.selected[0].id}`, {
@@ -403,7 +436,7 @@ export default {
                         })
                         .then(function(response) {
                             _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
+                                "Cancelled successfully.",
                                 {
                                     position: "top-right",
                                     timeout: 2000

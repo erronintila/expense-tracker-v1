@@ -42,7 +42,7 @@ class ExpenseController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
-        $sortBy = $request->sortBy ?? "created_at";
+        $sortBy = $request->sortBy ?? "updated_at";
         $sortType = $request->sortType ?? "desc";
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
@@ -50,7 +50,7 @@ class ExpenseController extends Controller
 
         if (request()->has('status')) {
             switch ($request->status) {
-                case 'Archived':
+                case 'Cancelled':
                     $expenses = $expenses->onlyTrashed();
                     break;
                 default:

@@ -2,7 +2,7 @@
     <v-app>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <v-btn to="/admin/vendors" class="mr-3" icon>
+                <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -144,7 +144,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn to="/admin/vendors">Cancel</v-btn>
+                        <v-btn @click="$router.go(-1)">Cancel</v-btn>
                     </v-card-actions>
                 </v-container>
             </v-form>

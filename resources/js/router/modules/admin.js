@@ -3,6 +3,7 @@ const adminRoutes = [
     {
         path: "/admin",
         name: "admin",
+        redirect: "/admin/dashboard",
         component: () => import("../../views/modules/admin/Index.vue"),
         meta: {
             requiresAuth: true,
@@ -34,6 +35,37 @@ const adminRoutes = [
                 name: "admin.profile.index",
                 component: () =>
                     import("../../views/modules/admin/profile/Index.vue")
+            },
+            /**
+             *
+             *
+             * Adjustments
+             *
+             *
+             */
+            {
+                path: "/admin/adjustments",
+                name: "admin.adjustments.index",
+                component: () =>
+                    import("../../views/modules/admin/adjustments/Index.vue")
+            },
+            {
+                path: "/admin/adjustments/create",
+                name: "admin.adjustments.create",
+                component: () =>
+                    import("../../views/modules/admin/adjustments/Create.vue")
+            },
+            {
+                path: "/admin/adjustments/:id/edit",
+                name: "admin.adjustments.edit",
+                component: () =>
+                    import("../../views/modules/admin/adjustments/Edit.vue")
+            },
+            {
+                path: "/admin/adjustments/:id",
+                name: "admin.adjustments.show",
+                component: () =>
+                    import("../../views/modules/admin/adjustments/Show.vue")
             },
             /**
              *
@@ -229,28 +261,28 @@ const adminRoutes = [
              *
              */
             {
-                path: "/admin/reports",
-                name: "admin.reports.index",
+                path: "/admin/expense_reports",
+                name: "admin.expense_reports.index",
                 component: () =>
-                    import("../../views/modules/admin/reports/Index.vue")
+                    import("../../views/modules/admin/expense_reports/Index.vue")
             },
             {
-                path: "/admin/reports/create",
-                name: "admin.reports.create",
+                path: "/admin/expense_reports/create",
+                name: "admin.expense_reports.create",
                 component: () =>
-                    import("../../views/modules/admin/reports/Create.vue")
+                    import("../../views/modules/admin/expense_reports/Create.vue")
             },
             {
-                path: "/admin/reports/:id/edit",
-                name: "admin.reports.edit",
+                path: "/admin/expense_reports/:id/edit",
+                name: "admin.expense_reports.edit",
                 component: () =>
-                    import("../../views/modules/admin/reports/Edit.vue")
+                    import("../../views/modules/admin/expense_reports/Edit.vue")
             },
             {
-                path: "/admin/reports/:id",
-                name: "admin.reports.show",
+                path: "/admin/expense_reports/:id",
+                name: "admin.expense_reports.show",
                 component: () =>
-                    import("../../views/modules/admin/reports/Show.vue")
+                    import("../../views/modules/admin/expense_reports/Show.vue")
             },
             /**
              *

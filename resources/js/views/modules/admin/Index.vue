@@ -164,19 +164,19 @@ export default {
                 link: { name: "admin.dashboard.index" }
             },
             {
-                icon: "mdi-cash-multiple",
-                text: "Expenses",
-                link: { name: "admin.expenses.index" }
-            },
-            {
                 icon: "mdi-clipboard-account",
                 text: "Employees",
                 link: { name: "admin.employees.index" }
             },
             {
+                icon: "mdi-cash-multiple",
+                text: "Expenses",
+                link: { name: "admin.expenses.index" }
+            },
+            {
                 icon: "mdi-file-chart",
-                text: "Reports",
-                link: { name: "admin.reports.index" }
+                text: "Expense Reports",
+                link: { name: "admin.expense_reports.index" }
             },
             {
                 icon: "mdi-currency-usd",
@@ -213,6 +213,11 @@ export default {
                         icon: "mdi-circle-medium",
                         text: "Expense Types",
                         link: { name: "admin.expense_types.index" }
+                    },
+                    {
+                        icon: "mdi-circle-medium",
+                        text: "Adjustments",
+                        link: { name: "admin.adjustments.index" }
                     }
                 ]
             }
@@ -224,6 +229,17 @@ export default {
         }
     },
     methods: {
+        getCurrentUser() {
+            axios
+                .get("/api/user")
+                .then(response => {
+                    this.user = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error
             this.$router.push({ name: "admin.profile.index" }, () => {});
@@ -240,9 +256,7 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        axios.get("/api/user").then(response => {
-            this.user = response.data.data;
-        });
+        this.getCurrentUser();
     }
 };
 </script>
