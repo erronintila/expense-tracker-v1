@@ -38,6 +38,7 @@ class ExpenseReportResource extends JsonResource
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'deleted_at' => Carbon::parse($this->deleted_at)->toDateTimeString(),
             'total' => $this->expenses()->withTrashed()->get()->sum('amount'),
+            'total_reimbursable' => $this->expenses()->withTrashed()->get()->sum('reimbursable_amount'),
         ];
     }
 }

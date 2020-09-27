@@ -25,7 +25,7 @@ class CreateEmployeesTable extends Migration
             $table->string('mobile_number', 30)->nullable();
             $table->string('telephone_number', 30)->nullable();
             $table->string('email')->unique()->nullable();
-            
+
             $table->text('address')->nullable();
             // $table->string('building_address', 100)->nullable();
             // $table->string('street_name', 100)->nullable();
@@ -38,7 +38,7 @@ class CreateEmployeesTable extends Migration
             // $table->string('zip', 10)->nullable();
 
             $table->double('fund', 10, 2)->default(0);
-            $table->double('remaining_fund', 10, 2)->default(0);
+            // $table->double('remaining_fund', 10, 2)->default(0);
 
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('user_id')->nullable();

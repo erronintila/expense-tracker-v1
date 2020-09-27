@@ -59,11 +59,12 @@
                                 class="mx-auto"
                                 style="border-left: 2px solid #7dff81 !important"
                             >
-                                <v-card-title>0.00</v-card-title>
+                                <v-card-title class="d-inline-block"
+                                    >0.00</v-card-title
+                                >/ 2,500.00
                                 <v-card-subtitle>
-                                    Replenishments
+                                    Remaining Funds
                                 </v-card-subtitle>
-                                <!-- <v-card-text>Last Updated: </v-card-text> -->
                             </v-card>
                         </v-hover>
                     </v-col>
@@ -466,8 +467,6 @@ export default {
             };
 
             this.lineChartOptions = {
-                // hoverBorderWidth: 20,
-                // legend: false,
                 maintainAspectRatio: false,
                 tooltips: {
                     mode: "index",
@@ -518,6 +517,7 @@ export default {
                         type: "line",
                         data: [],
                         backgroundColor: "#dbffe5",
+                        // backgroundColor: "transparent",
                         borderColor: "#4caf50",
                         pointBorderColor: "#4caf50",
                         pointBackgroundColor: "#4caf50",

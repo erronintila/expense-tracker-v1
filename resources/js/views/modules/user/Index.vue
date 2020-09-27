@@ -189,6 +189,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.$router.push({ name: "login" });
                 });
         },
         toProfile() {

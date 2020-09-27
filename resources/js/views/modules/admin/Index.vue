@@ -11,9 +11,7 @@
             <v-list dense shaped>
                 <v-list-item two-line>
                     <v-list-item-avatar>
-                        <img
-                            :src="require('../../../assets/img/user.png')"
-                        />
+                        <img :src="require('../../../assets/img/user.png')" />
                     </v-list-item-avatar>
 
                     <v-list-item-content>
@@ -189,6 +187,11 @@ export default {
                 text: "More",
                 model: false,
                 children: [
+                    // {
+                    //     icon: "mdi-circle-medium",
+                    //     text: "Adjustments",
+                    //     link: { name: "admin.adjustments.index" }
+                    // },
                     {
                         icon: "mdi-circle-medium",
                         text: "Users",
@@ -213,11 +216,6 @@ export default {
                         icon: "mdi-circle-medium",
                         text: "Expense Types",
                         link: { name: "admin.expense_types.index" }
-                    },
-                    {
-                        icon: "mdi-circle-medium",
-                        text: "Adjustments",
-                        link: { name: "admin.adjustments.index" }
                     }
                 ]
             }
@@ -230,6 +228,7 @@ export default {
     },
     methods: {
         getCurrentUser() {
+            let _this = this;
             axios
                 .get("/api/user")
                 .then(response => {
@@ -238,6 +237,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.$router.push({ name: "login" });
                 });
         },
         toProfile() {

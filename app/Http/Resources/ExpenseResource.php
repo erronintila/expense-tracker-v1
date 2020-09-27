@@ -23,6 +23,7 @@ class ExpenseResource extends JsonResource
             'receipt_number' => $this->receipt_number,
             'date' => $this->date,
             'amount' => $this->amount,
+            'reimbursable_amount' => $this->reimbursable_amount,
             'remarks' => $this->remarks,
             'expense_type' => $this->expense_type,
             'employee' => new EmployeeResource($this->employee),

@@ -15,13 +15,13 @@ class CreateAdjustmentsTable extends Migration
     {
         Schema::create('adjustments', function (Blueprint $table) {
             $table->id();
-            $table->string("reference");
-            $table->string("code");
+            $table->string("reference")->nullable();
+            $table->string("code")->nullable();
             $table->string("description", 150);
             $table->double("add_amount", 10, 2)->default(0);
-            $table->double("subract_amount", 10, 2)->default(0);
+            $table->double("subtract_amount", 10, 2)->default(0);
             $table->string("type");
-            $table->text("remarks");
+            $table->text("remarks")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

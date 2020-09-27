@@ -17,13 +17,11 @@ class CreateExpensesTable extends Migration
             $table->id();
             $table->string('code')->unique()->nullable();
             $table->string('description', 100)->nullable();
-            $table->double('amount', 10, 2);
+            $table->double('amount', 10, 2)->default(0);
+            $table->double('reimbursable_amount', 10, 2)->default(0);
             $table->string('receipt_number');
             $table->date('date');
             $table->text('remarks')->nullable();
-
-            $table->boolean("is_reimbursable")->default(true);
-            $table->string("payment_account");
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('employee_id')->unsigned();

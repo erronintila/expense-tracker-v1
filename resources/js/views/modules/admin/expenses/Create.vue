@@ -138,6 +138,11 @@
                                     <tr class="green--text hidden-sm-and-down">
                                         <td class="title">Total</td>
                                         <td>
+                                            <strong>{{
+                                                reimbursable_amount
+                                            }}</strong>
+                                        </td>
+                                        <td>
                                             <strong>{{ amount }}</strong>
                                         </td>
                                         <td></td>
@@ -185,6 +190,33 @@
                                                                         particular_amount
                                                                     "
                                                                     label="Amount"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="12">
+                                                                <v-checkbox
+                                                                    v-model="
+                                                                        is_reimbursable
+                                                                    "
+                                                                    label="Reimbursable"
+                                                                    @click="
+                                                                        is_reimbursable
+                                                                            ? (particular_reimbursable_amount = particular_amount)
+                                                                            : (particular_reimbursable_amount = 0)
+                                                                    "
+                                                                ></v-checkbox>
+                                                            </v-col>
+                                                            <v-col cols="12">
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        particular_reimbursable_amount
+                                                                    "
+                                                                    label="Reimbursable Amount"
+                                                                    v-show="
+                                                                        is_reimbursable
+                                                                    "
+                                                                    :rules="
+                                                                        rules.particular_reimbursable_amount
+                                                                    "
                                                                 ></v-text-field>
                                                             </v-col>
                                                         </v-row>
@@ -348,6 +380,7 @@ export default {
             // tax: 0,
             // tax_rate: 0,
             amount: 0,
+            reimbursable_amount: 0,
             receipt_number: null,
             date: null,
             remarks: "",
@@ -360,9 +393,21 @@ export default {
             vendors: [],
             particular: "",
             particular_amount: 0,
+            particular_reimbursable_amount: 0,
+            is_reimbursable: false,
             rules: {
                 description: [],
                 amount: [v => !!v || "Amount is required"],
+                reimbursable_amount: [
+                    v =>
+                        parseFloat(v) <= this.amount ||
+                        "Reimbursable Amount should not be greater than the actual amount"
+                ],
+                particular_reimbursable_amount: [
+                    v =>
+                        parseFloat(v) <= this.particular_amount ||
+                        "Reimbursable Amount should not be greater than the actual amount"
+                ],
                 receipt_number: [v => !!v || "Receipt Number is required"],
                 date: [v => !!v || "Date is required"],
                 remarks: [],
@@ -374,6 +419,7 @@ export default {
             errors: {
                 description: [],
                 amount: [],
+                reimbursable_amount: [],
                 receipt_number: [],
                 date: [],
                 remarks: [],
@@ -384,6 +430,11 @@ export default {
             },
             headers: [
                 { text: "Particulars", value: "particular", sortable: false },
+                {
+                    text: "Reimbursable Amount",
+                    value: "particular_reimbursable_amount",
+                    sortable: false
+                },
                 { text: "Amount", value: "particular_amount", sortable: false },
                 { text: "", value: "actions", sortable: false }
             ],
@@ -452,6 +503,7 @@ export default {
                         code: _this.code,
                         description: _this.description,
                         amount: _this.amount,
+                        reimbursable_amount: _this.reimbursable_amount,
                         receipt_number: _this.receipt_number,
                         date: _this.date,
                         remarks: _this.remarks,
@@ -485,13 +537,22 @@ export default {
             }
         },
         addItem() {
-            this.items.push({
-                particular: this.particular,
-                particular_amount: this.particular_amount
-            });
+            if (
+                parseFloat(this.particular_amount) >=
+                parseFloat(this.particular_reimbursable_amount)
+            ) {
+                this.items.push({
+                    particular: this.particular,
+                    particular_amount: this.particular_amount,
+                    particular_reimbursable_amount: this
+                        .particular_reimbursable_amount
+                });
+            }
+
             this.dialog = false;
             this.particular = "";
             this.particular_amount = 0;
+            this.particular_reimbursable_amount = 0;
         },
         onRemove(item) {
             const index = this.items.indexOf(item);
@@ -518,6 +579,13 @@ export default {
             this.amount = this.items.reduce(
                 (total, item) =>
                     parseFloat(total) + parseFloat(item.particular_amount),
+                0
+            );
+
+            this.reimbursable_amount = this.items.reduce(
+                (total, item) =>
+                    parseFloat(total) +
+                    parseFloat(item.particular_reimbursable_amount),
                 0
             );
             // this.subtotal = this.items.reduce(

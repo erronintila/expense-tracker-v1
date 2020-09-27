@@ -16,14 +16,14 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->string('reference_no')->nullable();
-            $table->string('voucher_no')->nullable();
+            $table->string('reference_no')->unique()->nullable();
+            $table->string('voucher_no')->unique()->nullable();
             $table->date('date');
             $table->string('description');
             $table->string('cheque_no')->nullable();
             $table->date('cheque_date')->nullable();
-            $table->double('amount', 10, 2);
-            $table->string('payee', 150);
+            $table->double('amount', 10, 2)->default(0);
+            $table->string('payee', 150)->nullable();
             $table->string('payee_address')->nullable();
             $table->string('payee_phone', 50)->nullable();
             $table->text('notes')->nullable();

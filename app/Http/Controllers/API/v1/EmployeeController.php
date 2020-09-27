@@ -35,6 +35,7 @@ class EmployeeController extends Controller
             'email' => ['nullable', 'email', Rule::unique('employees')->ignore($id, 'id')],
             'job_id' => ['required'],
             'address' => ['nullable'],
+            'fund' => ['required'],
         ]);
     }
 
@@ -117,6 +118,8 @@ class EmployeeController extends Controller
         $employee->email = $request->email;
         $employee->job_id = $request->job_id;
         $employee->address = $request->address;
+        $employee->fund = $request->fund;
+        // $employee->remaining_fund = $request->fund;
 
         $user = new User();
         $user->name     = $request->last_name . ', ' . $request->first_name . ' ' . $request->middle_name;
@@ -191,6 +194,8 @@ class EmployeeController extends Controller
                 $employee->email = $request->email;
                 $employee->job_id = $request->job_id;
                 $employee->address = $request->address;
+                // $employee->remaining_fund = $request->fund < $employee->remaining_fund ? $request->fund : $employee->remaining_fund;
+                $employee->fund = $request->fund;
                 $employee->save();
 
                 if ($employee->user_id != null) {

@@ -168,6 +168,19 @@
                         </v-col>
                     </v-row>
 
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="fund"
+                                :rules="rules.fund"
+                                :counter="30"
+                                :error-messages="errors.fund"
+                                @input="errors.fund = []"
+                                label="Revolving Fund *"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+
                     <small class="text--secondary">
                         * indicates required field
                     </small>
@@ -200,6 +213,7 @@ export default {
             telephone_number: "",
             email: null,
             address: null,
+            fund: 0,
             menu: false,
             rules: {
                 first_name: [
@@ -242,7 +256,8 @@ export default {
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail is not valid"
                 ],
-                address: [v => !!v || "Address is required"]
+                address: [v => !!v || "Address is required"],
+                fund: [v => parseFloat(v) >= 0 || "This field is required"]
             },
             errors: {
                 first_name: [],
@@ -255,7 +270,8 @@ export default {
                 mobile_number: [],
                 telephone_number: [],
                 email: [],
-                address: []
+                address: [],
+                fund: []
             }
         };
     },
@@ -294,7 +310,8 @@ export default {
                         mobile_number: _this.mobile_number,
                         telephone_number: _this.telephone_number,
                         email: _this.email,
-                        address: _this.address
+                        address: _this.address,
+                        fund: _this.fund
                     })
                     .then(function(response) {
                         // _this.onRefresh();

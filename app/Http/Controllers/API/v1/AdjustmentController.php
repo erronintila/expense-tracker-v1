@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdjustmentResource;
 use App\Models\Adjustment;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,11 +20,11 @@ class AdjustmentController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
-            'reference' => ['sometimes', 'max:150'],
-            'code' => ['sometimes'],
+            'reference' => ['nullable', 'max:150'],
+            'code' => ['nullable'],
             'description' => ['required', 'max:150'],
-            'add_amount' => ['sometimes'],
-            'subtract_amount' => ['sometimes'],
+            'add_amount' => ['required'],
+            'subtract_amount' => ['required'],
             'type' => ['required', 'max:150'],
             'remarks' => ['nullable'],
         ]);
@@ -86,6 +87,24 @@ class AdjustmentController extends Controller
         $adjustment->remarks = $request->remarks;
 
         $adjustment->save();
+
+        if (request()->has("type")) {
+            switch ($request->type) {
+                case 'Revolving Fund':
+
+                    $employee = Employee::findOrFail($request->employee_id);
+
+                    $employee->fund = ($employee->fund + $request->add_amount) - $request->subtract_amount;
+                    $employee->remaining_fund = ($employee->remaining_fund + $request->add_amount) - $request->subtract_amount;
+
+                    $employee->save();
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
 
         return response(
             [

@@ -26,6 +26,28 @@ class DataController extends Controller
 {
     public function test()
     {
+        $employee = Employee::findOrFail(7);
+
+        return $employee->remaining_fund();
+
+        $expense_reports = ExpenseReport::where("approved_at", "<>", null)
+            ->where("deleted_at", null)
+            ->doesntHave("payment")
+            ->with("expenses")
+            ->get()
+            ->sum(function ($expense_report) {
+                $amount = $expense_report->expenses->sum('amount');
+                $reimbursable_amount = $expense_report->expenses->sum('reimbursable_amount');
+                $total = $amount - $reimbursable_amount;
+                return $total;
+            });
+
+        return $expense_reports;
+
+        return ExpenseReportResource::collection($expense_reports)->map(function ($q) {
+            return $q->sum($q["total"]);
+        });
+
         $expense_report = ExpenseReport::where("id", 1);
 
         $expense_report = new ExpenseReportResource($expense_report->first());
@@ -45,7 +67,7 @@ class DataController extends Controller
             foreach ($value as $key => $value) {
                 $temp[str_replace(' ', '_', strtolower($key))] = $value;
             }
-            
+
             $temp["total"] = array_sum(array_values($temp));
             $temp['date'] = $date;
 

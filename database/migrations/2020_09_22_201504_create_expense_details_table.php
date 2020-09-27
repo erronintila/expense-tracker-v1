@@ -21,8 +21,9 @@ class CreateExpenseDetailsTable extends Migration
             $table->double('unit_cost', 10, 2)->default(0);
             $table->double('tax', 10, 2)->default(0);
             $table->double('amount', 10, 2)->default(0);
+            $table->double('reimbursable_amount', 10, 2)->default(0);
 
-            $table->unsignedBigInteger('expense_id')->unsigned();
+            $table->unsignedBigInteger('expense_id');
 
             $table->timestamps();
             $table->softDeletes();

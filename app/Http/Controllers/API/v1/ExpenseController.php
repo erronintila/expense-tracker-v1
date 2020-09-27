@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseResource;
+use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseDetail;
 use Illuminate\Http\Request;
@@ -19,14 +20,15 @@ class ExpenseController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data, $id)
+    protected function validator(array $data, $id, $fund)
     {
         return Validator::make($data, [
             'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
             'description' => ['nullable', 'max:255'],
             'receipt_number' => ['required', 'max:255'],
             'date' => ['required'],
-            'amount' => ['required', 'numeric', 'gt:0'],
+            'amount' => ['required', 'numeric', 'gt:0',],
+            'reimbursable_amount' => ['required', 'numeric'],
             'remarks' => ['nullable'],
             'expense_type_id' => ['required'],
             'employee_id' => ['required'],
@@ -96,7 +98,13 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all(), null)->validate();
+        Validator::make($request->all(), [
+            'employee_id' => ['required'],
+        ]);
+
+        $employee = Employee::findOrFail($request->employee_id);
+
+        $this->validator($request->all(), null, $employee->remaining_fund)->validate();
 
         $expense = new Expense();
 
@@ -104,6 +112,7 @@ class ExpenseController extends Controller
         $expense->receipt_number = $request->receipt_number;
         $expense->date = $request->date;
         $expense->amount = $request->amount;
+        $expense->reimbursable_amount = $request->reimbursable_amount;
         $expense->remarks = $request->remarks;
         $expense->expense_type_id = $request->expense_type_id;
         $expense->employee_id  = $request->employee_id;
@@ -115,6 +124,7 @@ class ExpenseController extends Controller
             $expense_detail = new ExpenseDetail();
             $expense_detail->description = $value["particular"];
             $expense_detail->amount = $value["particular_amount"];
+            $expense_detail->reimbursable_amount = $value["particular_reimbursable_amount"];
             $expense_detail->expense_id = $expense->id;
             $expense_detail->save();
         }
@@ -164,7 +174,13 @@ class ExpenseController extends Controller
 
                 break;
             default:
-                $this->validator($request->all(), null)->validate();
+                Validator::make($request->all(), [
+                    'employee_id' => ['required'],
+                ]);
+
+                $employee = Employee::findOrFail($request->employee_id);
+
+                $this->validator($request->all(), null, $employee->remaining_fund)->validate();
 
                 $expense = Expense::findOrFail($id);
 
@@ -172,6 +188,7 @@ class ExpenseController extends Controller
                 $expense->receipt_number = $request->receipt_number;
                 $expense->date = $request->date;
                 $expense->amount = $request->amount;
+                $expense->reimbursable_amount = $request->reimbursable_amount;
                 $expense->remarks = $request->remarks;
                 $expense->expense_type_id = $request->expense_type_id;
                 $expense->employee_id  = $request->employee_id;
@@ -189,6 +206,7 @@ class ExpenseController extends Controller
                         [
                             'description' => $value["description"],
                             'amount' => $value["amount"],
+                            'reimbursable_amount' => $value["particular_reimbursable_amount"],
                             'expense_id' => $expense->id,
                             'deleted_at' => null,
                         ]

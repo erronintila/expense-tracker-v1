@@ -28,7 +28,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResources(
         [
-            'adjustments' => 'API\v1\AdjustmentController',
+            // 'adjustments' => 'API\v1\AdjustmentController',
 
             'departments' => 'API\v1\DepartmentController',
 
@@ -51,7 +51,7 @@ Route::middleware('auth:api')->group(function () {
     );
 });
 
-Route::get('/data/adjustments', 'API\v1\DataController@adjustments');
+// Route::get('/data/adjustments', 'API\v1\DataController@adjustments');
 
 Route::get('/data/employees', 'API\v1\DataController@employees');
 

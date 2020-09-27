@@ -43,30 +43,30 @@ const adminRoutes = [
              *
              *
              */
-            {
-                path: "/admin/adjustments",
-                name: "admin.adjustments.index",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Index.vue")
-            },
-            {
-                path: "/admin/adjustments/create",
-                name: "admin.adjustments.create",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Create.vue")
-            },
-            {
-                path: "/admin/adjustments/:id/edit",
-                name: "admin.adjustments.edit",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Edit.vue")
-            },
-            {
-                path: "/admin/adjustments/:id",
-                name: "admin.adjustments.show",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Show.vue")
-            },
+            // {
+            //     path: "/admin/adjustments",
+            //     name: "admin.adjustments.index",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Index.vue")
+            // },
+            // {
+            //     path: "/admin/adjustments/create",
+            //     name: "admin.adjustments.create",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Create.vue")
+            // },
+            // {
+            //     path: "/admin/adjustments/:id/edit",
+            //     name: "admin.adjustments.edit",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Edit.vue")
+            // },
+            // {
+            //     path: "/admin/adjustments/:id",
+            //     name: "admin.adjustments.show",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Show.vue")
+            // },
             /**
              *
              *
