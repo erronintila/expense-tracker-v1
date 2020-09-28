@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[24],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/departments/Index.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/departments/Index.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -156,26 +156,114 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {},
   data: function data() {
     return {
+      expanded: [],
       loading: true,
       headers: [{
         text: "Name",
-        value: "name"
+        value: "fullname"
+      }, // { text: "First Name", value: "first_name" },
+      {
+        text: "Job Designation",
+        value: "job.name"
       }, {
+        text: "Department",
+        value: "department.name"
+      }, {
+        text: "Revolving Fund",
+        value: "revolving_fund"
+      }, // { text: "Contact", value: "mobile_number" },
+      // { text: "Created", value: "created_at" },
+      // { text: "Updated", value: "updated_at" },
+      {
         text: "Actions",
         value: "actions",
         sortable: false
+      }, {
+        text: "",
+        value: "data-table-expand"
       }],
       items: [],
+      department: 0,
+      departments: [],
+      job: 0,
+      jobs: [],
       status: "Active",
       statuses: ["Active", "Archived"],
       selected: [],
       search: "",
       totalItems: 0,
       options: {
-        sortBy: ["name"],
+        sortBy: ["last_name"],
         sortDesc: [false],
         page: 1,
         itemsPerPage: 10
@@ -198,15 +286,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var search = _this.search.trim().toLowerCase();
 
+        var department_id = _this.department;
+        var job_id = _this.job;
         var status = _this.status;
-        axios.get("/api/departments", {
+        axios.get("/api/employees", {
           params: {
             search: search,
             sortBy: sortBy[0],
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            status: status
+            status: status,
+            department_id: department_id,
+            job_id: job_id
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -223,12 +315,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+    loadDepartments: function loadDepartments() {
+      var _this = this;
+
+      axios.get("/api/data/departments").then(function (response) {
+        _this.departments = response.data.data;
+
+        _this.departments.unshift({
+          id: 0,
+          name: "All Departments"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    loadJobs: function loadJobs() {
+      var _this = this;
+
+      axios.get("/api/data/jobs", {
+        params: {
+          department_id: _this.department
+        }
+      }).then(function (response) {
+        _this.jobs = response.data.data;
+
+        _this.jobs.unshift({
+          id: 0,
+          name: "All Job Designations"
+        });
+
+        _this.job = 0;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    updateDepartment: function updateDepartment() {
+      this.loadJobs();
+    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.loadDepartments();
+      this.loadJobs();
     },
     onShow: function onShow(item) {
       this.$router.push({
-        name: "admin.departments.show",
+        name: "admin.employees.show",
         params: {
           id: item.id
         }
@@ -236,7 +369,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onEdit: function onEdit(item) {
       this.$router.push({
-        name: "admin.departments.edit",
+        name: "admin.employees.edit",
         params: {
           id: item.id
         }
@@ -255,7 +388,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/departments/".concat(_this.selected[0].id), {
+          axios["delete"]("/api/employees/".concat(_this.selected[0].id), {
             params: {
               ids: _this.selected.map(function (item) {
                 return item.id;
@@ -291,7 +424,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/departments/".concat(_this.selected[0].id), {
+          axios.put("/api/employees/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
             }),
@@ -307,10 +440,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
           })["catch"](function (error) {
-            // _this.$dialog.message.error(error, {
-            //     position: "top-right",
-            //     timeout: 2000
-            // });
             console.log(error);
             console.log(error.response);
           });
@@ -333,9 +462,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, "query", this.status));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
     }
   },
   mounted: function mounted() {
@@ -348,15 +479,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    this.loadDepartments();
+    this.loadJobs();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/departments/Index.vue?vue&type=template&id=26544ae6&":
-/*!*****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/departments/Index.vue?vue&type=template&id=26544ae6& ***!
-  \*****************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1& ***!
+  \***************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -380,7 +513,7 @@ var render = function() {
             { staticClass: "pt-0" },
             [
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Departments")
+                _vm._v("Employees")
               ]),
               _vm._v(" "),
               _c("v-spacer"),
@@ -391,7 +524,7 @@ var render = function() {
                   staticClass: "elevation-3 mr-2",
                   attrs: {
                     color: "green",
-                    to: { name: "admin.departments.create" },
+                    to: "/admin/employees/create",
                     dark: "",
                     fab: "",
                     "x-small": ""
@@ -484,6 +617,51 @@ var render = function() {
                               })
                             ],
                             1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.departments,
+                                  "item-text": "name",
+                                  "item-value": "id",
+                                  label: "Department"
+                                },
+                                on: { change: _vm.loadJobs },
+                                model: {
+                                  value: _vm.department,
+                                  callback: function($$v) {
+                                    _vm.department = $$v
+                                  },
+                                  expression: "department"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.jobs,
+                                  "item-text": "name",
+                                  "item-value": "id",
+                                  label: "Job Designation"
+                                },
+                                model: {
+                                  value: _vm.job,
+                                  callback: function($$v) {
+                                    _vm.job = $$v
+                                  },
+                                  expression: "job"
+                                }
+                              })
+                            ],
+                            1
                           )
                         ],
                         1
@@ -554,6 +732,19 @@ var render = function() {
                         [
                           _c("v-list-item-title", [
                             _vm._v(
+                              "\n                            Manage Revolving Fund\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onRestore } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
                               "\n                            Restore\n                        "
                             )
                           ])
@@ -586,20 +777,33 @@ var render = function() {
           _c(
             "v-card-subtitle",
             [
-              _c("v-text-field", {
-                attrs: {
-                  "append-icon": "mdi-magnify",
-                  label: "Search",
-                  "single-line": "",
-                  "hide-details": ""
-                },
-                model: {
-                  value: _vm.search,
-                  callback: function($$v) {
-                    _vm.search = $$v
-                  },
-                  expression: "search"
-                }
+              _c("v-hover", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var hover = ref.hover
+                      return [
+                        _c("v-text-field", {
+                          attrs: {
+                            elevation: hover ? 5 : 2,
+                            "append-icon": "mdi-magnify",
+                            label: "Search",
+                            "single-line": "",
+                            "hide-details": ""
+                          },
+                          model: {
+                            value: _vm.search,
+                            callback: function($$v) {
+                              _vm.search = $$v
+                            },
+                            expression: "search"
+                          }
+                        })
+                      ]
+                    }
+                  }
+                ])
               })
             ],
             1
@@ -611,8 +815,6 @@ var render = function() {
               _c("v-data-table", {
                 staticClass: "elevation-0",
                 attrs: {
-                  "show-select": "",
-                  "item-key": "id",
                   headers: _vm.headers,
                   items: _vm.items,
                   loading: _vm.loading,
@@ -625,7 +827,11 @@ var render = function() {
                     lastIcon: "mdi-page-last",
                     prevIcon: "mdi-chevron-left",
                     nextIcon: "mdi-chevron-right"
-                  }
+                  },
+                  "show-expand": "",
+                  "single-expand": "",
+                  "show-select": "",
+                  "item-key": "id"
                 },
                 on: {
                   "update:options": function($event) {
@@ -635,10 +841,112 @@ var render = function() {
                 scopedSlots: _vm._u(
                   [
                     {
+                      key: "expanded-item",
+                      fn: function(ref) {
+                        var headers = ref.headers
+                        var item = ref.item
+                        return [
+                          _c(
+                            "td",
+                            { attrs: { colspan: headers.length } },
+                            [
+                              _c("v-container", [
+                                _c("table", [
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Gender")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.gender))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Birthdate")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.birthdate))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Email Address")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.email))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Telephone #")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(item.telephone_number))
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Address")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.address))])
+                                  ])
+                                ])
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "item.revolving_fund",
+                      fn: function(ref) {
+                        var item = ref.item
+                        return [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(item.remaining_fund + " / " + item.fund) +
+                              "\n                "
+                          )
+                        ]
+                      }
+                    },
+                    {
                       key: "item.actions",
                       fn: function(ref) {
                         var item = ref.item
                         return [
+                          _c(
+                            "v-icon",
+                            {
+                              staticClass: "mr-2",
+                              attrs: { small: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onShow(item)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        mdi-eye\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
                           _c(
                             "v-icon",
                             {
@@ -688,17 +996,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/departments/Index.vue":
-/*!****************************************************************!*\
-  !*** ./resources/js/views/modules/admin/departments/Index.vue ***!
-  \****************************************************************/
+/***/ "./resources/js/views/modules/admin/employees/Index.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Index.vue ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_26544ae6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=26544ae6& */ "./resources/js/views/modules/admin/departments/Index.vue?vue&type=template&id=26544ae6&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/departments/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=79d46df1& */ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -709,8 +1017,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_26544ae6___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_26544ae6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -720,38 +1028,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/departments/Index.vue"
+component.options.__file = "resources/js/views/modules/admin/employees/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/departments/Index.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/departments/Index.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************/
+/***/ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/departments/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/departments/Index.vue?vue&type=template&id=26544ae6&":
-/*!***********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/departments/Index.vue?vue&type=template&id=26544ae6& ***!
-  \***********************************************************************************************/
+/***/ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1& ***!
+  \*********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_26544ae6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=26544ae6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/departments/Index.vue?vue&type=template&id=26544ae6&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_26544ae6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=79d46df1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_26544ae6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

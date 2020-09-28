@@ -27,18 +27,19 @@
                                                 class="profile"
                                                 color="grey"
                                                 size="200"
-                                                tile
                                             >
                                                 <v-img
-                                                    src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
-                                                ></v-img>
+                                                    :src="
+                                                        require('../../../../assets/img/user.png')
+                                                    "
+                                                />
                                             </v-avatar>
                                         </v-col>
                                         <v-col cols="12" sm="7">
                                             <div>TIN : {{ tin }}</div>
-                                            <p class="display-1 text--primary">
+                                            <h3 class="display-1 green--text">
                                                 {{ name }}
-                                            </p>
+                                            </h3>
                                             <p>{{ email }}</p>
                                             <div class="text--primary">
                                                 Contact Person:

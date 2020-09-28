@@ -51,13 +51,11 @@
                                                             .name
                                                     }}
                                                 </div>
-                                                <p
-                                                    class="display-1 text--primary"
-                                                >
+                                                <h3 class="display-1 green--text">
                                                     {{
-                                                        `${user.employee.last_name}, ${user.employee.first_name} ${user.employee.suffix}`
+                                                        `${user.employee.last_name}, ${user.employee.first_name || ""} ${user.employee.suffix || ""}`
                                                     }}
-                                                </p>
+                                                </h3>
                                                 <p>
                                                     {{ user.employee.job.name }}
                                                 </p>

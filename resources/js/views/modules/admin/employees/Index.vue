@@ -188,6 +188,9 @@
                             </v-container>
                         </td>
                     </template>
+                     <template v-slot:[`item.revolving_fund`]="{ item }">
+                        {{ `${item.remaining_fund} / ${item.fund}` }}
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
@@ -214,7 +217,8 @@ export default {
                 // { text: "First Name", value: "first_name" },
                 { text: "Job Designation", value: "job.name" },
                 { text: "Department", value: "department.name" },
-                { text: "Contact", value: "mobile_number" },
+                { text: "Revolving Fund", value: "revolving_fund" },
+                // { text: "Contact", value: "mobile_number" },
                 // { text: "Created", value: "created_at" },
                 // { text: "Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },

@@ -55,8 +55,11 @@ class ExpenseReportController extends Controller
                     $expense_reports = $expense_reports->onlyTrashed();
                     // $expense_reports = $expense_reports->where("cancelled_at", '<>', null);
                     break;
+                case 'Completed':
+                    $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null)->where("payment_id", "<>", null);
+                    break;
                 case 'Approved':
-                    $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null);
+                    $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null)->where("payment_id", null);
                     break;
                 case 'Pending':
                     $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("approved_at", null)->where("cancelled_at", null);
@@ -65,7 +68,12 @@ class ExpenseReportController extends Controller
                     $expense_reports = $expense_reports->where("submitted_at", null)->where("approved_at", null)->where("cancelled_at", null);
                     break;
                 default:
-                    $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("cancelled_at", null);
+                    if (request()->has("admin_page")) {
+                        $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("cancelled_at", null);
+                        break;
+                    }
+
+                    $expense_reports = $expense_reports->where("cancelled_at", null);
                     break;
             }
         }

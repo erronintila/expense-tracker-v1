@@ -271,6 +271,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -280,6 +329,7 @@ __webpack_require__.r(__webpack_exports__);
       start_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("ll"),
       end_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("ll"),
       total_expenses: 0,
+      total_replenishments: 0,
       total_reimbursements: 0,
       total_pending_reports: 0,
       selection: 1,
@@ -295,6 +345,8 @@ __webpack_require__.r(__webpack_exports__);
       telephone_number: "",
       email: "",
       address: "",
+      fund: 0,
+      remaining_fund: 0,
       job: "",
       department: ""
     };
@@ -317,6 +369,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.telephone_number = data.telephone_number;
         _this.email = data.email;
         _this.address = data.address;
+        _this.fund = data.fund;
+        _this.remaining_fund = data.remaining_fund;
         _this.job = data.job.name;
         _this.department = data.department.name;
       })["catch"](function (error) {
@@ -335,17 +389,21 @@ __webpack_require__.r(__webpack_exports__);
     getExpenseStats: function getExpenseStats() {
       var _this = this;
 
-      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf('month').format("YYYY-MM-DD");
-      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf('month').format("YYYY-MM-DD");
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
       var employee_id = this.$route.params.id;
       axios.get("/api/data/expense_stats?start_date=".concat(start_date, "&end_date=").concat(end_date, "&employee_id=").concat(employee_id)).then(function (response) {
         _this.total_expenses = response.data.summary.total;
+        _this.total_replenishments = response.data.summary.replenishments;
         _this.total_reimbursements = response.data.summary.reimbursements;
         _this.total_pending_reports = response.data.summary.pending;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
       });
+    },
+    formatNumber: function formatNumber(data) {
+      return numeral__WEBPACK_IMPORTED_MODULE_2___default()(data).format("0,0.00");
     }
   },
   created: function created() {
@@ -750,15 +808,13 @@ var render = function() {
                                                     staticClass: "profile",
                                                     attrs: {
                                                       color: "grey",
-                                                      size: "200",
-                                                      tile: ""
+                                                      size: "200"
                                                     }
                                                   },
                                                   [
                                                     _c("v-img", {
                                                       attrs: {
-                                                        src:
-                                                          "https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                                                        src: __webpack_require__(/*! ../../../../assets/img/user.png */ "./resources/js/assets/img/user.png")
                                                       }
                                                     })
                                                   ],
@@ -783,10 +839,10 @@ var render = function() {
                                                 ]),
                                                 _vm._v(" "),
                                                 _c(
-                                                  "p",
+                                                  "h3",
                                                   {
                                                     staticClass:
-                                                      "display-1 text--primary"
+                                                      "display-1 green--text"
                                                   },
                                                   [
                                                     _vm._v(
@@ -825,6 +881,37 @@ var render = function() {
                                                     _vm._v(
                                                       "\n                                            " +
                                                         _vm._s(_vm.email) +
+                                                        "\n                                        "
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(
+                                                  "\n                                        Revolving Fund:\n                                        "
+                                                ),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "text-sm-body-2 text-md-body-1 text-lg-h6 text-xl-h4 green--text"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                            " +
+                                                        _vm._s(
+                                                          _vm.remaining_fund ==
+                                                            _vm.fund
+                                                            ? "" +
+                                                                _vm.formatNumber(
+                                                                  _vm.remaining_fund
+                                                                )
+                                                            : _vm.formatNumber(
+                                                                _vm.remaining_fund
+                                                              ) +
+                                                                " / " +
+                                                                _vm.formatNumber(
+                                                                  _vm.fund
+                                                                )
+                                                        ) +
                                                         "\n                                        "
                                                     )
                                                   ]
@@ -896,9 +983,19 @@ var render = function() {
                                             }
                                           },
                                           [
-                                            _c("v-card-title", [
-                                              _vm._v(_vm._s(_vm.total_expenses))
-                                            ]),
+                                            _c(
+                                              "v-card-title",
+                                              { staticClass: "green--text" },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.formatNumber(
+                                                      _vm.total_expenses
+                                                    )
+                                                  )
+                                                )
+                                              ]
+                                            ),
                                             _vm._v(" "),
                                             _c("v-card-subtitle", [
                                               _vm._v(
@@ -948,21 +1045,31 @@ var render = function() {
                                             }
                                           },
                                           [
-                                            _c("v-card-title", [
-                                              _vm._v(
-                                                _vm._s(_vm.total_reimbursements)
-                                              )
-                                            ]),
+                                            _c(
+                                              "v-card-title",
+                                              { staticClass: "green--text" },
+                                              [
+                                                _vm._v(
+                                                  "\n                                        " +
+                                                    _vm._s(
+                                                      _vm.formatNumber(
+                                                        _vm.total_pending_reports
+                                                      )
+                                                    ) +
+                                                    "\n                                    "
+                                                )
+                                              ]
+                                            ),
                                             _vm._v(" "),
                                             _c("v-card-subtitle", [
                                               _vm._v(
-                                                "\n                                        Reimbursements\n                                    "
+                                                "\n                                        Pending Expense Reports\n                                    "
                                               )
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-text", [
                                               _vm._v(
-                                                "\n                                        ~ Amount to be compensated.\n                                    "
+                                                "\n                                        ~ Reports waiting for approval.\n                                    "
                                               )
                                             ])
                                           ],
@@ -998,25 +1105,89 @@ var render = function() {
                                             }
                                           },
                                           [
-                                            _c("v-card-title", [
-                                              _vm._v(
-                                                "\n                                        " +
-                                                  _vm._s(
-                                                    _vm.total_pending_reports
-                                                  ) +
-                                                  "\n                                    "
-                                              )
-                                            ]),
+                                            _c(
+                                              "v-card-title",
+                                              { staticClass: "green--text" },
+                                              [
+                                                _vm._v(
+                                                  "\n                                        " +
+                                                    _vm._s(
+                                                      _vm.formatNumber(
+                                                        _vm.total_replenishments
+                                                      )
+                                                    ) +
+                                                    "\n                                    "
+                                                )
+                                              ]
+                                            ),
                                             _vm._v(" "),
                                             _c("v-card-subtitle", [
                                               _vm._v(
-                                                "\n                                        Pending Expense Reports\n                                    "
+                                                "\n                                        Replenishments\n                                    "
                                               )
                                             ]),
                                             _vm._v(" "),
                                             _c("v-card-text", [
                                               _vm._v(
-                                                "\n                                        ~ Reports waiting for approval.\n                                    "
+                                                "\n                                        ~ Amount to replenish the revolving\n                                        fund\n                                    "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ])
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6", md: "6" } },
+                            [
+                              _c("v-hover", {
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var hover = ref.hover
+                                      return [
+                                        _c(
+                                          "v-card",
+                                          {
+                                            staticClass: "mx-auto",
+                                            attrs: {
+                                              outlined: "",
+                                              elevation: hover ? 5 : 2
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-card-title",
+                                              { staticClass: "green--text" },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.formatNumber(
+                                                      _vm.total_reimbursements
+                                                    )
+                                                  )
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("v-card-subtitle", [
+                                              _vm._v(
+                                                "\n                                        Reimbursements\n                                    "
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("v-card-text", [
+                                              _vm._v(
+                                                "\n                                        ~ Amount to be compensated.\n                                    "
                                               )
                                             ])
                                           ],
@@ -1233,6 +1404,17 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/js/assets/img/user.png":
+/*!******************************************!*\
+  !*** ./resources/js/assets/img/user.png ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/user.png?5405d77c51fb46a0cbf26cb96fe4da4d";
 
 /***/ }),
 

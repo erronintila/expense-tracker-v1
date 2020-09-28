@@ -31,7 +31,7 @@ class EmployeeResource extends JsonResource
             'email' => $this->email,
             'address' => $this->address,
             'fund' => $this->fund,
-            'remaining_fund' => $this->remaining_fund,
+            'remaining_fund' => $this->remaining_fund(),
             'job' => $this->job,
             'department' => $this->job->department,
             'fullname' => $this->last_name . ", " . $this->first_name . " " . $this->middle_name . " " . ($this->suffix ?? ""),

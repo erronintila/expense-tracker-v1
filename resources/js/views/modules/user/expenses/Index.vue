@@ -159,6 +159,11 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Reimbursable</strong></td>
+                                        <td>:</td>
+                                        <td>{{ formatNumber(item.reimbursable_amount) }}</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Code</strong></td>
                                         <td>:</td>
                                         <td>{{ item.code }}</td>

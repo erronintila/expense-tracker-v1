@@ -35,7 +35,7 @@
 
             <v-container>
                 <v-row>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
@@ -52,16 +52,33 @@
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
                                 class="mx-auto"
                                 style="border-left: 2px solid #7dff81 !important"
                             >
-                                <v-card-title>{{
-                                    formatNumber(total_reimbursements)
-                                }}</v-card-title>
+                                <v-card-title>
+                                    {{ formatNumber(total_replenishments) }}
+                                </v-card-title>
+                                <v-card-subtitle>
+                                    Replenishments
+                                </v-card-subtitle>
+                                <!-- <v-card-text>---</v-card-text> -->
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <v-hover v-slot:default="{ hover }">
+                            <v-card
+                                :elevation="hover ? 5 : 2"
+                                class="mx-auto"
+                                style="border-left: 2px solid #7dff81 !important"
+                            >
+                                <v-card-title>
+                                    {{ formatNumber(total_reimbursements) }}
+                                </v-card-title>
                                 <v-card-subtitle>
                                     Reimbursements
                                 </v-card-subtitle>
@@ -69,16 +86,16 @@
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card
                                 :elevation="hover ? 5 : 2"
                                 class="mx-auto"
                                 style="border-left: 2px solid #7dff81 !important"
                             >
-                                <v-card-title>{{
-                                    formatNumber(total_pending_reports)
-                                }}</v-card-title>
+                                <v-card-title>
+                                    {{ formatNumber(total_pending_reports) }}
+                                </v-card-title>
                                 <v-card-subtitle>
                                     Pending Expense Reports
                                 </v-card-subtitle>
@@ -238,6 +255,7 @@ export default {
     data() {
         return {
             total_expenses: 0,
+            total_replenishments: 0,
             total_reimbursements: 0,
             total_pending_reports: 0,
 
@@ -700,7 +718,9 @@ export default {
                     `/api/data/expense_stats?start_date=${start}&end_date=${end}`
                 )
                 .then(response => {
+                    console.log(response);
                     _this.total_expenses = response.data.summary.total;
+                    _this.total_replenishments = response.data.summary.replenishments;
                     _this.total_reimbursements =
                         response.data.summary.reimbursements;
                     _this.total_pending_reports = response.data.summary.pending;

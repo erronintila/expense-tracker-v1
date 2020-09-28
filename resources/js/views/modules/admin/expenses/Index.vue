@@ -169,6 +169,11 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Reimbursable</strong></td>
+                                        <td>:</td>
+                                        <td>{{ formatNumber(item.reimbursable_amount) }}</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Code</strong></td>
                                         <td>:</td>
                                         <td>{{ item.code }}</td>
@@ -344,8 +349,6 @@ export default {
                         }
                     })
                     .then(response => {
-                        console.log(response);
-                        
                         let items = response.data.data;
                         let total = response.data.meta.total;
 

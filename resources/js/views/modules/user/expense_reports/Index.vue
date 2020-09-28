@@ -156,6 +156,11 @@
                                         <td>{{ item.code }}</td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Reimbursable</strong></td>
+                                        <td>:</td>
+                                        <td>{{ formatNumber(item.total_reimbursable) }}</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Status</strong></td>
                                         <td>:</td>
                                         <td>{{ item.status.remarks }}</td>
@@ -286,7 +291,8 @@ export default {
                 "For Submission",
                 "Pending",
                 "Approved",
-                "Cancelled"
+                "Cancelled",
+                "Completed"
             ],
             selected: [],
             search: "",

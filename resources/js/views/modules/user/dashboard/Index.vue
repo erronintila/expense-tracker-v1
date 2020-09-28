@@ -59,11 +59,12 @@
                                 class="mx-auto"
                                 style="border-left: 2px solid #7dff81 !important"
                             >
-                                <v-card-title class="d-inline-block"
-                                    >0.00</v-card-title
-                                >/ 2,500.00
+                                <v-card-title class="d-inline-block">
+                                    {{ formatNumber(remaining_fund) }}
+                                </v-card-title>
+                                {{ remaining_fund == fund ? "" : `/ ${formatNumber(fund)}` }}
                                 <v-card-subtitle>
-                                    Remaining Funds
+                                    Revolving Fund
                                 </v-card-subtitle>
                             </v-card>
                         </v-hover>
@@ -218,6 +219,9 @@ export default {
             total_reimbursements: 0,
             total_pending_reports: 0,
 
+            fund: 0,
+            remaining_fund: 0,
+
             backgroundColors: [
                 "#36a2eb",
                 "#ff6384",
@@ -297,9 +301,13 @@ export default {
                 axios
                     .get("/api/user")
                     .then(response => {
+                        console.log(response);
                         let emp = response.data.data.employee;
 
                         _this.employee = emp == null ? 0 : emp.id;
+                        _this.fund = emp == null ? 0 : emp.fund;
+                        _this.remaining_fund =
+                            emp == null ? 0 : emp.remaining_fund;
 
                         let employee_id = _this.employee;
 

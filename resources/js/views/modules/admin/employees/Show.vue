@@ -2,11 +2,7 @@
     <v-app>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <v-btn
-                    @click="$router.go(-1)"
-                    class="mr-3"
-                    icon
-                >
+                <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -31,26 +27,45 @@
                                                 class="profile"
                                                 color="grey"
                                                 size="200"
-                                                tile
                                             >
                                                 <v-img
-                                                    src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
-                                                ></v-img>
+                                                    :src="
+                                                        require('../../../../assets/img/user.png')
+                                                    "
+                                                />
                                             </v-avatar>
                                         </v-col>
                                         <v-col cols="12" sm="7">
                                             <div>
                                                 {{ department }}
                                             </div>
-                                            <p class="display-1 text--primary">
+                                            <h3 class="display-1 green--text">
                                                 {{
-                                                    `${last_name || ""}, ${first_name || ""} ${suffix || ""}`
+                                                    `${last_name ||
+                                                        ""}, ${first_name ||
+                                                        ""} ${suffix || ""}`
                                                 }}
-                                            </p>
+                                            </h3>
                                             <p>{{ job }}</p>
                                             <div class="text--primary">
                                                 {{ mobile_number }}<br />
                                                 {{ email }}
+                                            </div>
+                                            Revolving Fund:
+                                            <div
+                                                class="text-sm-body-2 text-md-body-1 text-lg-h6 text-xl-h4 green--text"
+                                            >
+                                                {{
+                                                    remaining_fund == fund
+                                                        ? `${formatNumber(
+                                                              remaining_fund
+                                                          )}`
+                                                        : `${formatNumber(
+                                                              remaining_fund
+                                                          )} / ${formatNumber(
+                                                              fund
+                                                          )}`
+                                                }}
                                             </div>
                                         </v-col>
                                     </v-row>
@@ -77,12 +92,14 @@
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                     >
-                                        <v-card-title>{{total_expenses}}</v-card-title>
+                                        <v-card-title class="green--text">{{
+                                            formatNumber(total_expenses)
+                                        }}</v-card-title>
                                         <v-card-subtitle>
                                             Expenses (This Month)
                                         </v-card-subtitle>
                                         <v-card-text>
-                                            ~ {{start_date}} - {{end_date}}
+                                            ~ {{ start_date }} - {{ end_date }}
                                         </v-card-text>
                                     </v-card>
                                 </v-hover>
@@ -95,26 +112,12 @@
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
                                     >
-                                        <v-card-title>{{total_reimbursements}}</v-card-title>
-                                        <v-card-subtitle>
-                                            Reimbursements
-                                        </v-card-subtitle>
-                                        <v-card-text>
-                                            ~ Amount to be compensated.
-                                        </v-card-text>
-                                    </v-card>
-                                </v-hover>
-                            </v-col>
-
-                            <v-col cols="6" md="6">
-                                <v-hover v-slot:default="{ hover }">
-                                    <v-card
-                                        outlined
-                                        class="mx-auto"
-                                        :elevation="hover ? 5 : 2"
-                                    >
-                                        <v-card-title>
-                                            {{total_pending_reports}}
+                                        <v-card-title class="green--text">
+                                            {{
+                                                formatNumber(
+                                                    total_pending_reports
+                                                )
+                                            }}
                                         </v-card-title>
                                         <v-card-subtitle>
                                             Pending Expense Reports
@@ -125,6 +128,52 @@
                                     </v-card>
                                 </v-hover>
                             </v-col>
+
+                            <v-col cols="6" md="6">
+                                <v-hover v-slot:default="{ hover }">
+                                    <v-card
+                                        outlined
+                                        class="mx-auto"
+                                        :elevation="hover ? 5 : 2"
+                                    >
+                                        <v-card-title class="green--text">
+                                            {{
+                                                formatNumber(
+                                                    total_replenishments
+                                                )
+                                            }}
+                                        </v-card-title>
+                                        <v-card-subtitle>
+                                            Replenishments
+                                        </v-card-subtitle>
+                                        <v-card-text>
+                                            ~ Amount to replenish the revolving
+                                            fund
+                                        </v-card-text>
+                                    </v-card>
+                                </v-hover>
+                            </v-col>
+
+                            <v-col cols="6" md="6">
+                                <v-hover v-slot:default="{ hover }">
+                                    <v-card
+                                        outlined
+                                        class="mx-auto"
+                                        :elevation="hover ? 5 : 2"
+                                    >
+                                        <v-card-title class="green--text">{{
+                                            formatNumber(total_reimbursements)
+                                        }}</v-card-title>
+                                        <v-card-subtitle>
+                                            Reimbursements
+                                        </v-card-subtitle>
+                                        <v-card-text>
+                                            ~ Amount to be compensated.
+                                        </v-card-text>
+                                    </v-card>
+                                </v-hover>
+                            </v-col>
+
                             <!-- <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
                                     <v-card
@@ -262,10 +311,15 @@ import numeral from "numeral";
 export default {
     data() {
         return {
-            start_date: moment().startOf("month").format("ll"),
-            end_date: moment().endOf("month").format("ll"),
+            start_date: moment()
+                .startOf("month")
+                .format("ll"),
+            end_date: moment()
+                .endOf("month")
+                .format("ll"),
 
             total_expenses: 0,
+            total_replenishments: 0,
             total_reimbursements: 0,
             total_pending_reports: 0,
 
@@ -282,6 +336,8 @@ export default {
             telephone_number: "",
             email: "",
             address: "",
+            fund: 0,
+            remaining_fund: 0,
             job: "",
             department: ""
         };
@@ -308,6 +364,8 @@ export default {
                     _this.telephone_number = data.telephone_number;
                     _this.email = data.email;
                     _this.address = data.address;
+                    _this.fund = data.fund;
+                    _this.remaining_fund = data.remaining_fund;
                     _this.job = data.job.name;
                     _this.department = data.department.name;
                 })
@@ -324,8 +382,12 @@ export default {
         },
         getExpenseStats() {
             let _this = this;
-            let start_date = moment().startOf('month').format("YYYY-MM-DD");
-            let end_date = moment().startOf('month').format("YYYY-MM-DD");
+            let start_date = moment()
+                .startOf("month")
+                .format("YYYY-MM-DD");
+            let end_date = moment()
+                .startOf("month")
+                .format("YYYY-MM-DD");
             let employee_id = this.$route.params.id;
 
             axios
@@ -334,6 +396,8 @@ export default {
                 )
                 .then(response => {
                     _this.total_expenses = response.data.summary.total;
+                    _this.total_replenishments =
+                        response.data.summary.replenishments;
                     _this.total_reimbursements =
                         response.data.summary.reimbursements;
                     _this.total_pending_reports = response.data.summary.pending;
@@ -342,6 +406,9 @@ export default {
                     console.log(error);
                     console.log(error.response);
                 });
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
         }
     },
     created() {

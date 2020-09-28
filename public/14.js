@@ -445,10 +445,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -817,10 +813,10 @@ var render = function() {
                                                         ]),
                                                         _vm._v(" "),
                                                         _c(
-                                                          "p",
+                                                          "h3",
                                                           {
                                                             staticClass:
-                                                              "display-1 text--primary"
+                                                              "display-1 green--text"
                                                           },
                                                           [
                                                             _vm._v(
@@ -881,10 +877,10 @@ var render = function() {
                                                         ]),
                                                         _vm._v(" "),
                                                         _c(
-                                                          "p",
+                                                          "h3",
                                                           {
                                                             staticClass:
-                                                              "display-1 text--primary"
+                                                              "display-1 green--text"
                                                           },
                                                           [
                                                             _vm._v(
@@ -898,9 +894,10 @@ var render = function() {
                                                                       .employee
                                                                       .first_name +
                                                                     " " +
-                                                                    _vm.user
+                                                                    (_vm.user
                                                                       .employee
-                                                                      .suffix
+                                                                      .suffix ||
+                                                                      "")
                                                                 ) +
                                                                 "\n                                            "
                                                             )

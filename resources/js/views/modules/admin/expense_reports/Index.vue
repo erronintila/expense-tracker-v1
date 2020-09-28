@@ -189,6 +189,11 @@
                                         <td>{{ item.code }}</td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Reimbursable</strong></td>
+                                        <td>:</td>
+                                        <td>{{ formatNumber(item.total_reimbursable) }}</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Status</strong></td>
                                         <td>:</td>
                                         <td>{{ item.status.remarks }}</td>
@@ -320,6 +325,7 @@ export default {
                 "Pending",
                 "Approved",
                 "Cancelled",
+                "Completed"
                 // "Archived"
             ],
             selected: [],
@@ -361,12 +367,11 @@ export default {
                             status: status,
                             employee_id: employee_id,
                             start_date: range[0],
-                            end_date: range[1]
+                            end_date: range[1],
+                            admin_page: true,
                         }
                     })
                     .then(response => {
-                        console.log(response);
-
                         let items = response.data.data;
                         let total = response.data.meta.total;
 

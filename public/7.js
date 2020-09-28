@@ -236,6 +236,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -257,6 +274,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       total_expenses: 0,
+      total_replenishments: 0,
       total_reimbursements: 0,
       total_pending_reports: 0,
       backgroundColors: ["#36a2eb", "#ff6384", "#ff9f40", "#4bc0c0", "#ffcd56"],
@@ -667,7 +685,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end)).then(function (response) {
+        console.log(response);
         _this.total_expenses = response.data.summary.total;
+        _this.total_replenishments = response.data.summary.replenishments;
         _this.total_reimbursements = response.data.summary.reimbursements;
         _this.total_pending_reports = response.data.summary.pending;
       })["catch"](function (error) {
@@ -787,7 +807,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../node_module
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* .theme--light .v-card {\r\n    border-left: 3px solid green !important;\r\n} */\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* .theme--light .v-card {\r\n    border-left: 3px solid green !important;\r\n} */\r\n", ""]);
 
 // exports
 
@@ -937,7 +957,7 @@ var render = function() {
                 [
                   _c(
                     "v-col",
-                    { attrs: { cols: "12", md: "4" } },
+                    { attrs: { cols: "12", md: "3" } },
                     [
                       _c("v-hover", {
                         scopedSlots: _vm._u([
@@ -984,7 +1004,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-col",
-                    { attrs: { cols: "12", md: "4" } },
+                    { attrs: { cols: "12", md: "3" } },
                     [
                       _c("v-hover", {
                         scopedSlots: _vm._u([
@@ -1006,11 +1026,64 @@ var render = function() {
                                   [
                                     _c("v-card-title", [
                                       _vm._v(
-                                        _vm._s(
-                                          _vm.formatNumber(
-                                            _vm.total_reimbursements
-                                          )
-                                        )
+                                        "\n                                " +
+                                          _vm._s(
+                                            _vm.formatNumber(
+                                              _vm.total_replenishments
+                                            )
+                                          ) +
+                                          "\n                            "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-card-subtitle", [
+                                      _vm._v(
+                                        "\n                                Replenishments\n                            "
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "3" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto",
+                                    staticStyle: {
+                                      "border-left":
+                                        "2px solid #7dff81 !important"
+                                    },
+                                    attrs: { elevation: hover ? 5 : 2 }
+                                  },
+                                  [
+                                    _c("v-card-title", [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(
+                                            _vm.formatNumber(
+                                              _vm.total_reimbursements
+                                            )
+                                          ) +
+                                          "\n                            "
                                       )
                                     ]),
                                     _vm._v(" "),
@@ -1033,7 +1106,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-col",
-                    { attrs: { cols: "12", md: "4" } },
+                    { attrs: { cols: "12", md: "3" } },
                     [
                       _c("v-hover", {
                         scopedSlots: _vm._u([
@@ -1055,11 +1128,13 @@ var render = function() {
                                   [
                                     _c("v-card-title", [
                                       _vm._v(
-                                        _vm._s(
-                                          _vm.formatNumber(
-                                            _vm.total_pending_reports
-                                          )
-                                        )
+                                        "\n                                " +
+                                          _vm._s(
+                                            _vm.formatNumber(
+                                              _vm.total_pending_reports
+                                            )
+                                          ) +
+                                          "\n                            "
                                       )
                                     ]),
                                     _vm._v(" "),

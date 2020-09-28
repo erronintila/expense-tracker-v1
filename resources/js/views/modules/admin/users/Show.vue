@@ -26,9 +26,9 @@
                                             <div>
                                                 Administrator
                                             </div>
-                                            <p class="display-1 text--primary">
+                                            <h3 class="display-1 green--text">
                                                 {{ name }}
-                                            </p>
+                                            </h3>
                                             <p>{{ username }}</p>
                                             <div class="text--primary">
                                                 {{ email }} <br />
