@@ -23,8 +23,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
@@ -66,39 +64,33 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-app",
+    "v-card",
+    { staticClass: "elevation-0 pt-0" },
     [
       _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
+        "v-card-title",
+        { staticClass: "pt-0" },
         [
           _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
-            [
-              _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                1
-              ),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("User Details")
-              ])
-            ],
+            "v-btn",
+            {
+              staticClass: "mr-3",
+              attrs: { icon: "" },
+              on: {
+                click: function($event) {
+                  return _vm.$router.go(-1)
+                }
+              }
+            },
+            [_c("v-icon", [_vm._v("mdi-arrow-left")])],
             1
-          )
+          ),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c("h4", { staticClass: "title green--text" }, [
+            _vm._v("User Details")
+          ])
         ],
         1
       )

@@ -618,15 +618,7 @@ var render = function() {
         [
           _c(
             "v-container",
-            { staticClass: "fill-height", attrs: { fluid: "" } },
-            [
-              _c(
-                "v-row",
-                { attrs: { align: "center", justify: "center" } },
-                [_c("v-col", [_c("router-view")], 1)],
-                1
-              )
-            ],
+            [_c("v-row", [_c("v-col", [_c("router-view")], 1)], 1)],
             1
           )
         ],

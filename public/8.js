@@ -214,6 +214,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -703,7 +705,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../node_module
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* .theme--light .v-card {\r\n    border-left: 3px solid green !important;\r\n} */\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* .theme--light .v-card {\r\n    border-left: 3px solid green !important;\r\n} */\r\n", ""]);
 
 // exports
 
@@ -756,80 +758,72 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-app",
+    "v-card",
+    { staticClass: "elevation-0 pt-0" },
     [
       _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
+        "v-card-title",
+        { staticClass: "pt-0" },
         [
+          _c("h4", { staticClass: "title green--text" }, [_vm._v("Dashboard")]),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
           _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+            "v-menu",
+            {
+              attrs: {
+                "close-on-content-click": false,
+                "nudge-width": 200,
+                "offset-y": "",
+                left: "",
+                bottom: ""
+              },
+              scopedSlots: _vm._u([
+                {
+                  key: "activator",
+                  fn: function(ref) {
+                    var on = ref.on
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._g(
+                          _vm._b(
+                            { attrs: { icon: "" } },
+                            "v-btn",
+                            attrs,
+                            false
+                          ),
+                          on
+                        ),
+                        [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
+                        1
+                      )
+                    ]
+                  }
+                }
+              ])
+            },
             [
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Dashboard")
-              ]),
-              _vm._v(" "),
-              _c("v-spacer"),
               _vm._v(" "),
               _c(
-                "v-menu",
-                {
-                  attrs: {
-                    "close-on-content-click": false,
-                    "nudge-width": 200,
-                    "offset-y": "",
-                    left: "",
-                    bottom: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                { attrs: { icon: "" } },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                },
+                "v-card",
                 [
-                  _vm._v(" "),
                   _c(
-                    "v-card",
+                    "v-list",
                     [
                       _c(
-                        "v-list",
+                        "v-list-item",
                         [
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("DateRangePicker", {
-                                attrs: {
-                                  preset: _vm.preset,
-                                  presets: _vm.presets,
-                                  value: _vm.date_range
-                                },
-                                on: { updateDates: _vm.updateDates }
-                              })
-                            ],
-                            1
-                          )
+                          _c("DateRangePicker", {
+                            attrs: {
+                              preset: _vm.preset,
+                              presets: _vm.presets,
+                              value: _vm.date_range
+                            },
+                            on: { updateDates: _vm.updateDates }
+                          })
                         ],
                         1
                       )
@@ -841,296 +835,408 @@ var render = function() {
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("v-card-subtitle"),
-          _vm._v(" "),
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("v-card-subtitle"),
+      _vm._v(" "),
+      _c(
+        "v-container",
+        [
           _c(
-            "v-container",
+            "v-row",
             [
               _c(
-                "v-row",
+                "v-col",
+                { attrs: { cols: "12", md: "3" } },
                 [
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "3" } },
-                    [
-                      _c("v-hover", {
-                        scopedSlots: _vm._u([
-                          {
-                            key: "default",
-                            fn: function(ref) {
-                              var hover = ref.hover
-                              return [
-                                _c(
-                                  "v-card",
-                                  {
-                                    staticClass: "mx-auto",
-                                    staticStyle: {
-                                      "border-left":
-                                        "2px solid #7dff81 !important"
-                                    },
-                                    attrs: { elevation: hover ? 5 : 2 }
-                                  },
-                                  [
-                                    _c("v-card-title", [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm.formatNumber(_vm.total_expenses)
-                                        )
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("v-card-subtitle", [
-                                      _vm._v(
-                                        "\n                                Total Expenses\n                            "
-                                      )
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "3" } },
-                    [
-                      _c("v-hover", {
-                        scopedSlots: _vm._u([
-                          {
-                            key: "default",
-                            fn: function(ref) {
-                              var hover = ref.hover
-                              return [
-                                _c(
-                                  "v-card",
-                                  {
-                                    staticClass: "mx-auto",
-                                    staticStyle: {
-                                      "border-left":
-                                        "2px solid #7dff81 !important"
-                                    },
-                                    attrs: { elevation: hover ? 5 : 2 }
-                                  },
-                                  [
-                                    _c(
-                                      "v-card-title",
-                                      { staticClass: "d-inline-block" },
-                                      [
-                                        _vm._v(
-                                          "\n                                " +
-                                            _vm._s(
-                                              _vm.formatNumber(
-                                                _vm.remaining_fund
-                                              )
-                                            ) +
-                                            "\n                            "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(
-                                      "\n                            " +
-                                        _vm._s(
-                                          _vm.remaining_fund == _vm.fund
-                                            ? ""
-                                            : "/ " + _vm.formatNumber(_vm.fund)
-                                        ) +
-                                        "\n                            "
-                                    ),
-                                    _c("v-card-subtitle", [
-                                      _vm._v(
-                                        "\n                                Revolving Fund\n                            "
-                                      )
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "3" } },
-                    [
-                      _c("v-hover", {
-                        scopedSlots: _vm._u([
-                          {
-                            key: "default",
-                            fn: function(ref) {
-                              var hover = ref.hover
-                              return [
-                                _c(
-                                  "v-card",
-                                  {
-                                    staticClass: "mx-auto",
-                                    staticStyle: {
-                                      "border-left":
-                                        "2px solid #7dff81 !important"
-                                    },
-                                    attrs: { elevation: hover ? 5 : 2 }
-                                  },
-                                  [
-                                    _c("v-card-title", [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm.formatNumber(
-                                            _vm.total_reimbursements
-                                          )
-                                        )
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("v-card-subtitle", [
-                                      _vm._v(
-                                        "\n                                Reimbursements\n                            "
-                                      )
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "3" } },
-                    [
-                      _c("v-hover", {
-                        scopedSlots: _vm._u([
-                          {
-                            key: "default",
-                            fn: function(ref) {
-                              var hover = ref.hover
-                              return [
-                                _c(
-                                  "v-card",
-                                  {
-                                    staticClass: "mx-auto",
-                                    staticStyle: {
-                                      "border-left":
-                                        "2px solid #7dff81 !important"
-                                    },
-                                    attrs: { elevation: hover ? 5 : 2 }
-                                  },
-                                  [
-                                    _c("v-card-title", [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm.formatNumber(
-                                            _vm.total_pending_reports
-                                          )
-                                        )
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("v-card-subtitle", [
-                                      _vm._v(
-                                        "\n                                Pending Expense Reports\n                            "
-                                      )
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  )
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
+                            _c(
+                              "v-card",
+                              {
+                                staticClass: "mx-auto",
+                                staticStyle: {
+                                  "border-left": "2px solid #7dff81 !important"
+                                },
+                                attrs: { elevation: hover ? 5 : 2 }
+                              },
+                              [
+                                _c("v-card-title", [
+                                  _vm._v(
+                                    _vm._s(_vm.formatNumber(_vm.total_expenses))
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("v-card-subtitle", [
+                                  _vm._v(
+                                    "\n                            Total Expenses\n                        "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
                 ],
                 1
               ),
               _vm._v(" "),
-              _c("v-hover", {
-                scopedSlots: _vm._u([
-                  {
-                    key: "default",
-                    fn: function(ref) {
-                      var hover = ref.hover
-                      return [
-                        _c(
-                          "v-card",
-                          {
-                            staticClass: "mx-auto",
-                            attrs: { elevation: hover ? 5 : 0 }
-                          },
-                          [
+              _c(
+                "v-col",
+                { attrs: { cols: "12", md: "3" } },
+                [
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
                             _c(
-                              "v-toolbar",
-                              { attrs: { flat: "", dense: "" } },
+                              "v-card",
+                              {
+                                staticClass: "mx-auto",
+                                staticStyle: {
+                                  "border-left": "2px solid #7dff81 !important"
+                                },
+                                attrs: { elevation: hover ? 5 : 2 }
+                              },
                               [
-                                _c("v-toolbar-title", [
+                                _c(
+                                  "v-card-title",
+                                  { staticClass: "d-inline-block" },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(
+                                          _vm.formatNumber(_vm.remaining_fund)
+                                        ) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(
+                                      _vm.remaining_fund == _vm.fund
+                                        ? ""
+                                        : "/ " + _vm.formatNumber(_vm.fund)
+                                    ) +
+                                    "\n                        "
+                                ),
+                                _c("v-card-subtitle", [
                                   _vm._v(
-                                    "\n                            Expenses by category\n                        "
+                                    "\n                            Revolving Fund\n                        "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { attrs: { cols: "12", md: "3" } },
+                [
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
+                            _c(
+                              "v-card",
+                              {
+                                staticClass: "mx-auto",
+                                staticStyle: {
+                                  "border-left": "2px solid #7dff81 !important"
+                                },
+                                attrs: { elevation: hover ? 5 : 2 }
+                              },
+                              [
+                                _c("v-card-title", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.formatNumber(_vm.total_reimbursements)
+                                    )
                                   )
                                 ]),
                                 _vm._v(" "),
-                                _c("v-spacer")
+                                _c("v-card-subtitle", [
+                                  _vm._v(
+                                    "\n                            Reimbursements\n                        "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { attrs: { cols: "12", md: "3" } },
+                [
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
+                            _c(
+                              "v-card",
+                              {
+                                staticClass: "mx-auto",
+                                staticStyle: {
+                                  "border-left": "2px solid #7dff81 !important"
+                                },
+                                attrs: { elevation: hover ? 5 : 2 }
+                              },
+                              [
+                                _c("v-card-title", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.formatNumber(
+                                        _vm.total_pending_reports
+                                      )
+                                    )
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("v-card-subtitle", [
+                                  _vm._v(
+                                    "\n                            Pending Expense Reports\n                        "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-hover", {
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(ref) {
+                  var hover = ref.hover
+                  return [
+                    _c(
+                      "v-card",
+                      {
+                        staticClass: "mx-auto",
+                        attrs: { elevation: hover ? 5 : 0 }
+                      },
+                      [
+                        _c(
+                          "v-toolbar",
+                          { attrs: { flat: "", dense: "" } },
+                          [
+                            _c("v-toolbar-title", [
+                              _vm._v(
+                                "\n                        Expenses by category\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("v-spacer")
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-row",
+                          { staticClass: "ml-4 mb-4" },
+                          [
+                            _c(
+                              "v-col",
+                              { staticClass: "mt-5", attrs: { md: "4" } },
+                              [
+                                _c("DoughnutChart", {
+                                  ref: "donut_chart",
+                                  attrs: {
+                                    data: _vm.doughnutChartData,
+                                    options: _vm.doughnutChartOptions
+                                  }
+                                })
                               ],
                               1
                             ),
                             _vm._v(" "),
                             _c(
-                              "v-row",
-                              { staticClass: "ml-4 mb-4" },
+                              "v-col",
+                              { attrs: { cols: "12", md: "8" } },
                               [
                                 _c(
-                                  "v-col",
-                                  { staticClass: "mt-5", attrs: { md: "4" } },
-                                  [
-                                    _c("DoughnutChart", {
-                                      ref: "donut_chart",
-                                      attrs: {
-                                        data: _vm.doughnutChartData,
-                                        options: _vm.doughnutChartOptions
-                                      }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "12", md: "8" } },
+                                  "v-card",
+                                  {
+                                    staticClass: "overflow-y-auto",
+                                    attrs: { flat: "", "max-height": "500" }
+                                  },
                                   [
                                     _c(
-                                      "v-card",
-                                      {
-                                        staticClass: "overflow-y-auto",
-                                        attrs: { flat: "", "max-height": "500" }
-                                      },
+                                      "v-card-text",
+                                      [
+                                        _c("HorizontalBarChart", {
+                                          ref: "horizontalBar_chart",
+                                          attrs: {
+                                            data: _vm.horizontalBarChartData,
+                                            options:
+                                              _vm.horizontalBarChartOptions
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c("v-hover", {
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(ref) {
+                  var hover = ref.hover
+                  return [
+                    _c(
+                      "v-card",
+                      {
+                        staticClass: "mx-auto",
+                        attrs: { elevation: hover ? 5 : 0 }
+                      },
+                      [
+                        _c(
+                          "v-toolbar",
+                          { attrs: { flat: "", dense: "" } },
+                          [
+                            _c("v-toolbar-title", [
+                              _vm._v(
+                                "\n                        Expenses by date\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-menu",
+                              {
+                                attrs: {
+                                  "close-on-content-click": false,
+                                  "nudge-width": 200,
+                                  "offset-y": "",
+                                  left: "",
+                                  bottom: ""
+                                },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "activator",
+                                      fn: function(ref) {
+                                        var on = ref.on
+                                        var attrs = ref.attrs
+                                        return [
+                                          _c(
+                                            "v-btn",
+                                            _vm._g(
+                                              _vm._b(
+                                                { attrs: { icon: "" } },
+                                                "v-btn",
+                                                attrs,
+                                                false
+                                              ),
+                                              on
+                                            ),
+                                            [
+                                              _c("v-icon", [
+                                                _vm._v("mdi-dots-vertical")
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              },
+                              [
+                                _vm._v(" "),
+                                _c(
+                                  "v-card",
+                                  [
+                                    _c(
+                                      "v-list",
                                       [
                                         _c(
-                                          "v-card-text",
+                                          "v-list-item",
                                           [
-                                            _c("HorizontalBarChart", {
-                                              ref: "horizontalBar_chart",
+                                            _c("v-select", {
                                               attrs: {
-                                                data:
-                                                  _vm.horizontalBarChartData,
-                                                options:
-                                                  _vm.horizontalBarChartOptions
+                                                label: "Group by",
+                                                items: _vm.groupByItems,
+                                                "item-text": "text",
+                                                "item-value": "value"
+                                              },
+                                              on: {
+                                                change: _vm.onTimeUnitChange
+                                              },
+                                              model: {
+                                                value: _vm.groupBy,
+                                                callback: function($$v) {
+                                                  _vm.groupBy = $$v
+                                                },
+                                                expression: "groupBy"
                                               }
                                             })
                                           ],
@@ -1147,159 +1253,36 @@ var render = function() {
                             )
                           ],
                           1
-                        )
-                      ]
-                    }
-                  }
-                ])
-              }),
-              _vm._v(" "),
-              _c("v-hover", {
-                scopedSlots: _vm._u([
-                  {
-                    key: "default",
-                    fn: function(ref) {
-                      var hover = ref.hover
-                      return [
+                        ),
+                        _vm._v(" "),
                         _c(
-                          "v-card",
-                          {
-                            staticClass: "mx-auto",
-                            attrs: { elevation: hover ? 5 : 0 }
-                          },
+                          "v-row",
                           [
                             _c(
-                              "v-toolbar",
-                              { attrs: { flat: "", dense: "" } },
+                              "v-col",
+                              { attrs: { cols: "12" } },
                               [
-                                _c("v-toolbar-title", [
-                                  _vm._v(
-                                    "\n                            Expenses by date\n                        "
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("v-spacer"),
-                                _vm._v(" "),
-                                _c(
-                                  "v-menu",
-                                  {
-                                    attrs: {
-                                      "close-on-content-click": false,
-                                      "nudge-width": 200,
-                                      "offset-y": "",
-                                      left: "",
-                                      bottom: ""
-                                    },
-                                    scopedSlots: _vm._u(
-                                      [
-                                        {
-                                          key: "activator",
-                                          fn: function(ref) {
-                                            var on = ref.on
-                                            var attrs = ref.attrs
-                                            return [
-                                              _c(
-                                                "v-btn",
-                                                _vm._g(
-                                                  _vm._b(
-                                                    { attrs: { icon: "" } },
-                                                    "v-btn",
-                                                    attrs,
-                                                    false
-                                                  ),
-                                                  on
-                                                ),
-                                                [
-                                                  _c("v-icon", [
-                                                    _vm._v("mdi-dots-vertical")
-                                                  ])
-                                                ],
-                                                1
-                                              )
-                                            ]
-                                          }
-                                        }
-                                      ],
-                                      null,
-                                      true
-                                    )
-                                  },
-                                  [
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-card",
-                                      [
-                                        _c(
-                                          "v-list",
-                                          [
-                                            _c(
-                                              "v-list-item",
-                                              [
-                                                _c("v-select", {
-                                                  attrs: {
-                                                    label: "Group by",
-                                                    items: _vm.groupByItems,
-                                                    "item-text": "text",
-                                                    "item-value": "value"
-                                                  },
-                                                  on: {
-                                                    change: _vm.onTimeUnitChange
-                                                  },
-                                                  model: {
-                                                    value: _vm.groupBy,
-                                                    callback: function($$v) {
-                                                      _vm.groupBy = $$v
-                                                    },
-                                                    expression: "groupBy"
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-row",
-                              [
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "12" } },
-                                  [
-                                    _c("LineChart", {
-                                      ref: "line_chart",
-                                      attrs: {
-                                        data: _vm.lineChartData,
-                                        options: _vm.lineChartOptions
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
+                                _c("LineChart", {
+                                  ref: "line_chart",
+                                  attrs: {
+                                    data: _vm.lineChartData,
+                                    options: _vm.lineChartOptions
+                                  }
+                                })
                               ],
                               1
                             )
                           ],
                           1
                         )
-                      ]
-                    }
-                  }
-                ])
-              })
-            ],
-            1
-          )
+                      ],
+                      1
+                    )
+                  ]
+                }
+              }
+            ])
+          })
         ],
         1
       )

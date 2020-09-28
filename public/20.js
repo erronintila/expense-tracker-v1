@@ -154,8 +154,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -369,207 +367,116 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-app",
+    "v-card",
+    { staticClass: "elevation-0 pt-0" },
     [
       _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
+        "v-card-title",
+        { staticClass: "pt-0" },
         [
+          _c("h4", { staticClass: "title green--text" }, [
+            _vm._v("Departments")
+          ]),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
           _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
-            [
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Departments")
-              ]),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c(
-                "v-btn",
+            "v-btn",
+            {
+              staticClass: "elevation-3 mr-2",
+              attrs: {
+                color: "green",
+                to: { name: "admin.departments.create" },
+                dark: "",
+                fab: "",
+                "x-small": ""
+              }
+            },
+            [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-plus")])],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              staticClass: "elevation-3 mr-2",
+              attrs: { color: "green", dark: "", fab: "", "x-small": "" },
+              on: { click: _vm.onRefresh }
+            },
+            [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-reload")])],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-menu",
+            {
+              attrs: {
+                transition: "scale-transition",
+                "close-on-content-click": false,
+                "nudge-width": 200,
+                "offset-y": "",
+                left: "",
+                bottom: ""
+              },
+              scopedSlots: _vm._u([
                 {
-                  staticClass: "elevation-3 mr-2",
-                  attrs: {
-                    color: "green",
-                    to: { name: "admin.departments.create" },
-                    dark: "",
-                    fab: "",
-                    "x-small": ""
-                  }
-                },
-                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-plus")])],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  staticClass: "elevation-3 mr-2",
-                  attrs: { color: "green", dark: "", fab: "", "x-small": "" },
-                  on: { click: _vm.onRefresh }
-                },
-                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-reload")])],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                {
-                  attrs: {
-                    transition: "scale-transition",
-                    "close-on-content-click": false,
-                    "nudge-width": 200,
-                    "offset-y": "",
-                    left: "",
-                    bottom: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                {
-                                  staticClass: "elevation-3 mr-2",
-                                  attrs: {
-                                    color: "green",
-                                    dark: "",
-                                    fab: "",
-                                    "x-small": ""
-                                  }
-                                },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-filter")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-card",
-                    [
+                  key: "activator",
+                  fn: function(ref) {
+                    var on = ref.on
+                    var attrs = ref.attrs
+                    return [
                       _c(
-                        "v-list",
+                        "v-btn",
+                        _vm._g(
+                          _vm._b(
+                            {
+                              staticClass: "elevation-3 mr-2",
+                              attrs: {
+                                color: "green",
+                                dark: "",
+                                fab: "",
+                                "x-small": ""
+                              }
+                            },
+                            "v-btn",
+                            attrs,
+                            false
+                          ),
+                          on
+                        ),
                         [
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("v-select", {
-                                attrs: { items: _vm.statuses, label: "Status" },
-                                model: {
-                                  value: _vm.status,
-                                  callback: function($$v) {
-                                    _vm.status = $$v
-                                  },
-                                  expression: "status"
-                                }
-                              })
-                            ],
-                            1
-                          )
+                          _c("v-icon", { attrs: { dark: "" } }, [
+                            _vm._v("mdi-filter")
+                          ])
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
+                    ]
+                  }
+                }
+              ])
+            },
+            [
               _vm._v(" "),
               _c(
-                "v-menu",
-                {
-                  attrs: {
-                    "offset-y": "",
-                    transition: "scale-transition",
-                    left: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                {
-                                  staticClass: "elevation-3",
-                                  attrs: {
-                                    color: "green",
-                                    dark: "",
-                                    fab: "",
-                                    "x-small": ""
-                                  }
-                                },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v(
-                                  "\n                            mdi-format-list-bulleted-square\n                        "
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                },
+                "v-card",
                 [
-                  _vm._v(" "),
                   _c(
                     "v-list",
                     [
                       _c(
                         "v-list-item",
-                        { on: { click: _vm.onRestore } },
                         [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Restore\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { on: { click: _vm.onDelete } },
-                        [
-                          _c("v-list-item-title", [
-                            _vm._v(
-                              "\n                            Move to archive\n                        "
-                            )
-                          ])
+                          _c("v-select", {
+                            attrs: { items: _vm.statuses, label: "Status" },
+                            model: {
+                              value: _vm.status,
+                              callback: function($$v) {
+                                _vm.status = $$v
+                              },
+                              expression: "status"
+                            }
+                          })
                         ],
                         1
                       )
@@ -584,96 +491,181 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
-            "v-card-subtitle",
-            [
-              _c("v-text-field", {
-                attrs: {
-                  "append-icon": "mdi-magnify",
-                  label: "Search",
-                  "single-line": "",
-                  "hide-details": ""
-                },
-                model: {
-                  value: _vm.search,
-                  callback: function($$v) {
-                    _vm.search = $$v
-                  },
-                  expression: "search"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
-            [
-              _c("v-data-table", {
-                staticClass: "elevation-0",
-                attrs: {
-                  "show-select": "",
-                  "item-key": "id",
-                  headers: _vm.headers,
-                  items: _vm.items,
-                  loading: _vm.loading,
-                  options: _vm.options,
-                  "server-items-length": _vm.totalItems,
-                  "footer-props": {
-                    itemsPerPageOptions: [10, 20, 50, 100],
-                    showFirstLastPage: true,
-                    firstIcon: "mdi-page-first",
-                    lastIcon: "mdi-page-last",
-                    prevIcon: "mdi-chevron-left",
-                    nextIcon: "mdi-chevron-right"
-                  }
-                },
-                on: {
-                  "update:options": function($event) {
-                    _vm.options = $event
-                  }
-                },
-                scopedSlots: _vm._u(
-                  [
-                    {
-                      key: "item.actions",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _c(
-                            "v-icon",
+            "v-menu",
+            {
+              attrs: {
+                "offset-y": "",
+                transition: "scale-transition",
+                left: ""
+              },
+              scopedSlots: _vm._u([
+                {
+                  key: "activator",
+                  fn: function(ref) {
+                    var on = ref.on
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._g(
+                          _vm._b(
                             {
-                              staticClass: "mr-2",
-                              attrs: { small: "" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.onEdit(item)
-                                }
+                              staticClass: "elevation-3",
+                              attrs: {
+                                color: "green",
+                                dark: "",
+                                fab: "",
+                                "x-small": ""
                               }
                             },
-                            [
-                              _vm._v(
-                                "\n                        mdi-pencil\n                    "
-                              )
-                            ]
-                          )
-                        ]
-                      }
-                    }
-                  ],
-                  null,
-                  true
-                ),
-                model: {
-                  value: _vm.selected,
-                  callback: function($$v) {
-                    _vm.selected = $$v
-                  },
-                  expression: "selected"
+                            "v-btn",
+                            attrs,
+                            false
+                          ),
+                          on
+                        ),
+                        [
+                          _c("v-icon", { attrs: { dark: "" } }, [
+                            _vm._v(
+                              "\n                        mdi-format-list-bulleted-square\n                    "
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ]
+                  }
                 }
-              })
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c(
+                "v-list",
+                [
+                  _c(
+                    "v-list-item",
+                    { on: { click: _vm.onRestore } },
+                    [
+                      _c("v-list-item-title", [
+                        _vm._v(
+                          "\n                        Restore\n                    "
+                        )
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { on: { click: _vm.onDelete } },
+                    [
+                      _c("v-list-item-title", [
+                        _vm._v(
+                          "\n                        Move to archive\n                    "
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-card-subtitle",
+        [
+          _c("v-text-field", {
+            attrs: {
+              "append-icon": "mdi-magnify",
+              label: "Search",
+              "single-line": "",
+              "hide-details": ""
+            },
+            model: {
+              value: _vm.search,
+              callback: function($$v) {
+                _vm.search = $$v
+              },
+              expression: "search"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-card-text",
+        [
+          _c("v-data-table", {
+            staticClass: "elevation-0",
+            attrs: {
+              "show-select": "",
+              "item-key": "id",
+              headers: _vm.headers,
+              items: _vm.items,
+              loading: _vm.loading,
+              options: _vm.options,
+              "server-items-length": _vm.totalItems,
+              "footer-props": {
+                itemsPerPageOptions: [10, 20, 50, 100],
+                showFirstLastPage: true,
+                firstIcon: "mdi-page-first",
+                lastIcon: "mdi-page-last",
+                prevIcon: "mdi-chevron-left",
+                nextIcon: "mdi-chevron-right"
+              }
+            },
+            on: {
+              "update:options": function($event) {
+                _vm.options = $event
+              }
+            },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "item.actions",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-2",
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.onEdit(item)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    mdi-pencil\n                "
+                          )
+                        ]
+                      )
+                    ]
+                  }
+                }
+              ],
+              null,
+              true
+            ),
+            model: {
+              value: _vm.selected,
+              callback: function($$v) {
+                _vm.selected = $$v
+              },
+              expression: "selected"
+            }
+          })
         ],
         1
       )

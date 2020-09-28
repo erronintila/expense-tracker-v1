@@ -1,5 +1,5 @@
 <template>
-    <v-app id="inspire">
+    <div>
         <!-- Navigation Drawer -->
         <v-navigation-drawer
             v-model="drawer"
@@ -133,8 +133,8 @@
 
         <!-- Main View -->
         <v-main>
-            <v-container class="fill-height" fluid>
-                <v-row align="center" justify="center">
+            <v-container>
+                <v-row>
                     <v-col>
                         <router-view></router-view>
                     </v-col>
@@ -142,7 +142,7 @@
             </v-container>
         </v-main>
         <!-- End of Main View -->
-    </v-app>
+    </div>
 </template>
 
 <script>

@@ -254,8 +254,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-app",
-    { attrs: { id: "inspire" } },
+    "div",
     [
       _vm.loggedIn
         ? _c(
@@ -565,15 +564,7 @@ var render = function() {
         [
           _c(
             "v-container",
-            { staticClass: "fill-height", attrs: { fluid: "" } },
-            [
-              _c(
-                "v-row",
-                { attrs: { align: "center", justify: "center" } },
-                [_c("v-col", [_c("router-view")], 1)],
-                1
-              )
-            ],
+            [_c("v-row", [_c("v-col", [_c("router-view")], 1)], 1)],
             1
           )
         ],

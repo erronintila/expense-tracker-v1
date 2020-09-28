@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Expense Reports</h4>
@@ -236,7 +236,7 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
-    </v-app>
+    </div>
 </template>
 
 <script>

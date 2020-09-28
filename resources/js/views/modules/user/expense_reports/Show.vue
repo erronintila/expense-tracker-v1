@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <!-- <PrintDetailed></PrintDetailed> -->
 
         <v-card class="elevation-0 pt-0">
@@ -149,7 +149,7 @@
                 </v-container>
             </v-form>
         </v-card>
-    </v-app>
+    </div>
 </template>
 
 <script>

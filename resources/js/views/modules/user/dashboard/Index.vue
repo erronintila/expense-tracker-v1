@@ -1,196 +1,198 @@
 <template>
-    <v-app>
-        <v-card class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Dashboard</h4>
-                <v-spacer></v-spacer>
-                <v-menu
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                    </template>
+    <v-card class="elevation-0 pt-0">
+        <v-card-title class="pt-0">
+            <h4 class="title green--text">Dashboard</h4>
+            <v-spacer></v-spacer>
+            <v-menu
+                :close-on-content-click="false"
+                :nudge-width="200"
+                offset-y
+                left
+                bottom
+            >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                </template>
 
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-            </v-card-title>
-            <v-card-subtitle> </v-card-subtitle>
+                <v-card>
+                    <v-list>
+                        <v-list-item>
+                            <DateRangePicker
+                                :preset="preset"
+                                :presets="presets"
+                                :value="date_range"
+                                @updateDates="updateDates"
+                            ></DateRangePicker>
+                        </v-list-item>
+                    </v-list>
+                </v-card>
+            </v-menu>
+        </v-card-title>
+        <v-card-subtitle> </v-card-subtitle>
 
-            <v-container>
-                <v-row>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
+        <v-container>
+            <v-row>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title>{{
+                                formatNumber(total_expenses)
+                            }}</v-card-title>
+                            <v-card-subtitle>
+                                Total Expenses
+                            </v-card-subtitle>
+                            <!-- <v-card-text>Last Updated: </v-card-text> -->
+                        </v-card>
+                    </v-hover>
+                </v-col>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title class="d-inline-block">
+                                {{ formatNumber(remaining_fund) }}
+                            </v-card-title>
+                            {{
+                                remaining_fund == fund
+                                    ? ""
+                                    : `/ ${formatNumber(fund)}`
+                            }}
+                            <v-card-subtitle>
+                                Revolving Fund
+                            </v-card-subtitle>
+                        </v-card>
+                    </v-hover>
+                </v-col>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title>{{
+                                formatNumber(total_reimbursements)
+                            }}</v-card-title>
+                            <v-card-subtitle>
+                                Reimbursements
+                            </v-card-subtitle>
+                            <!-- <v-card-text>---</v-card-text> -->
+                        </v-card>
+                    </v-hover>
+                </v-col>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title>{{
+                                formatNumber(total_pending_reports)
+                            }}</v-card-title>
+                            <v-card-subtitle>
+                                Pending Expense Reports
+                            </v-card-subtitle>
+                            <!-- <v-card-text>---</v-card-text> -->
+                        </v-card>
+                    </v-hover>
+                </v-col>
+            </v-row>
+            <v-hover v-slot:default="{ hover }">
+                <v-card :elevation="hover ? 5 : 0" class="mx-auto">
+                    <v-toolbar flat dense>
+                        <v-toolbar-title>
+                            Expenses by category
+                        </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-row class="ml-4 mb-4">
+                        <v-col md="4" class="mt-5">
+                            <DoughnutChart
+                                ref="donut_chart"
+                                :data="doughnutChartData"
+                                :options="doughnutChartOptions"
+                            ></DoughnutChart>
+                        </v-col>
+                        <v-col cols="12" md="8">
                             <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
+                                flat
+                                class="overflow-y-auto"
+                                max-height="500"
                             >
-                                <v-card-title>{{
-                                    formatNumber(total_expenses)
-                                }}</v-card-title>
-                                <v-card-subtitle>
-                                    Total Expenses
-                                </v-card-subtitle>
-                                <!-- <v-card-text>Last Updated: </v-card-text> -->
+                                <v-card-text>
+                                    <HorizontalBarChart
+                                        ref="horizontalBar_chart"
+                                        :data="horizontalBarChartData"
+                                        :options="horizontalBarChartOptions"
+                                    ></HorizontalBarChart>
+                                </v-card-text>
                             </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
-                            >
-                                <v-card-title class="d-inline-block">
-                                    {{ formatNumber(remaining_fund) }}
-                                </v-card-title>
-                                {{ remaining_fund == fund ? "" : `/ ${formatNumber(fund)}` }}
-                                <v-card-subtitle>
-                                    Revolving Fund
-                                </v-card-subtitle>
+                        </v-col>
+                    </v-row>
+                </v-card>
+            </v-hover>
+
+            <v-hover v-slot:default="{ hover }">
+                <v-card :elevation="hover ? 5 : 0" class="mx-auto">
+                    <v-toolbar flat dense>
+                        <v-toolbar-title>
+                            Expenses by date
+                        </v-toolbar-title>
+
+                        <v-spacer></v-spacer>
+
+                        <v-menu
+                            :close-on-content-click="false"
+                            :nudge-width="200"
+                            offset-y
+                            left
+                            bottom
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                            </template>
+
+                            <v-card>
+                                <v-list>
+                                    <v-list-item>
+                                        <v-select
+                                            v-model="groupBy"
+                                            label="Group by"
+                                            :items="groupByItems"
+                                            item-text="text"
+                                            item-value="value"
+                                            @change="onTimeUnitChange"
+                                        ></v-select>
+                                    </v-list-item>
+                                </v-list>
                             </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
-                            >
-                                <v-card-title>{{
-                                    formatNumber(total_reimbursements)
-                                }}</v-card-title>
-                                <v-card-subtitle>
-                                    Reimbursements
-                                </v-card-subtitle>
-                                <!-- <v-card-text>---</v-card-text> -->
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
-                            >
-                                <v-card-title>{{
-                                    formatNumber(total_pending_reports)
-                                }}</v-card-title>
-                                <v-card-subtitle>
-                                    Pending Expense Reports
-                                </v-card-subtitle>
-                                <!-- <v-card-text>---</v-card-text> -->
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                </v-row>
-                <v-hover v-slot:default="{ hover }">
-                    <v-card :elevation="hover ? 5 : 0" class="mx-auto">
-                        <v-toolbar flat dense>
-                            <v-toolbar-title>
-                                Expenses by category
-                            </v-toolbar-title>
-                            <v-spacer></v-spacer>
-                        </v-toolbar>
-                        <v-row class="ml-4 mb-4">
-                            <v-col md="4" class="mt-5">
-                                <DoughnutChart
-                                    ref="donut_chart"
-                                    :data="doughnutChartData"
-                                    :options="doughnutChartOptions"
-                                ></DoughnutChart>
-                            </v-col>
-                            <v-col cols="12" md="8">
-                                <v-card
-                                    flat
-                                    class="overflow-y-auto"
-                                    max-height="500"
-                                >
-                                    <v-card-text>
-                                        <HorizontalBarChart
-                                            ref="horizontalBar_chart"
-                                            :data="horizontalBarChartData"
-                                            :options="horizontalBarChartOptions"
-                                        ></HorizontalBarChart>
-                                    </v-card-text>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                    </v-card>
-                </v-hover>
-
-                <v-hover v-slot:default="{ hover }">
-                    <v-card :elevation="hover ? 5 : 0" class="mx-auto">
-                        <v-toolbar flat dense>
-                            <v-toolbar-title>
-                                Expenses by date
-                            </v-toolbar-title>
-
-                            <v-spacer></v-spacer>
-
-                            <v-menu
-                                :close-on-content-click="false"
-                                :nudge-width="200"
-                                offset-y
-                                left
-                                bottom
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on">
-                                        <v-icon>mdi-dots-vertical</v-icon>
-                                    </v-btn>
-                                </template>
-
-                                <v-card>
-                                    <v-list>
-                                        <v-list-item>
-                                            <v-select
-                                                v-model="groupBy"
-                                                label="Group by"
-                                                :items="groupByItems"
-                                                item-text="text"
-                                                item-value="value"
-                                                @change="onTimeUnitChange"
-                                            ></v-select>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-card>
-                            </v-menu>
-                        </v-toolbar>
-                        <v-row>
-                            <v-col cols="12">
-                                <LineChart
-                                    ref="line_chart"
-                                    :data="lineChartData"
-                                    :options="lineChartOptions"
-                                ></LineChart>
-                            </v-col>
-                        </v-row>
-                    </v-card>
-                </v-hover>
-            </v-container>
-        </v-card>
-    </v-app>
+                        </v-menu>
+                    </v-toolbar>
+                    <v-row>
+                        <v-col cols="12">
+                            <LineChart
+                                ref="line_chart"
+                                :data="lineChartData"
+                                :options="lineChartOptions"
+                            ></LineChart>
+                        </v-col>
+                    </v-row>
+                </v-card>
+            </v-hover>
+        </v-container>
+    </v-card>
 </template>
 
 <script>
