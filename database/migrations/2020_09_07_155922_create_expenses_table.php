@@ -19,14 +19,14 @@ class CreateExpensesTable extends Migration
             $table->string('description', 100)->nullable();
             $table->double('amount', 10, 2)->default(0);
             $table->double('reimbursable_amount', 10, 2)->default(0);
-            $table->string('receipt_number');
+            $table->string('receipt_number')->nullable();
             $table->date('date');
             $table->text('remarks')->nullable();
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('employee_id')->unsigned();
-            $table->unsignedBigInteger('vendor_id')->unsigned();
-            $table->unsignedBigInteger('expense_report_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('vendor_id')->nullable();
+            $table->unsignedBigInteger('expense_report_id')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

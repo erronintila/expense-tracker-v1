@@ -25,7 +25,7 @@ class ExpenseController extends Controller
         return Validator::make($data, [
             'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
             'description' => ['nullable', 'max:255'],
-            'receipt_number' => ['required', 'max:255'],
+            'receipt_number' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
             'date' => ['required'],
             'amount' => ['required', 'numeric', 'gt:0',],
             'reimbursable_amount' => ['required', 'numeric'],
@@ -180,7 +180,7 @@ class ExpenseController extends Controller
 
                 $employee = Employee::findOrFail($request->employee_id);
 
-                $this->validator($request->all(), null, $employee->remaining_fund)->validate();
+                $this->validator($request->all(), $id, $employee->remaining_fund())->validate();
 
                 $expense = Expense::findOrFail($id);
 
@@ -206,7 +206,7 @@ class ExpenseController extends Controller
                         [
                             'description' => $value["description"],
                             'amount' => $value["amount"],
-                            'reimbursable_amount' => $value["particular_reimbursable_amount"],
+                            'reimbursable_amount' => $value["reimbursable_amount"],
                             'expense_id' => $expense->id,
                             'deleted_at' => null,
                         ]

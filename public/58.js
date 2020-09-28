@@ -969,7 +969,13 @@ var render = function() {
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(_vm._s(item.vendor.name))
+                                        _vm._v(
+                                          _vm._s(
+                                            item.vendor == null
+                                              ? ""
+                                              : item.vendor.name
+                                          )
+                                        )
                                       ])
                                     ]),
                                     _vm._v(" "),

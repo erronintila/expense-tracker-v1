@@ -191,7 +191,7 @@
                                     <tr>
                                         <td><strong>Vendor</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.vendor.name }}</td>
+                                        <td>{{ item.vendor == null ? "" : item.vendor.name }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Remarks</strong></td>

@@ -694,13 +694,13 @@ export default {
                         parseFloat(v) <= this.particular_amount ||
                         "Reimbursable Amount should not be greater than the actual amount"
                 ],
-                receipt_number: [v => !!v || "Receipt Number is required"],
+                receipt_number: [],
                 date: [v => !!v || "Date is required"],
                 remarks: [],
                 is_active: [],
                 expense_type: [v => !!v || "Expense Type is required"],
                 employee: [v => !!v || "Employee is required"],
-                vendor: [v => !!v || "Vendor is required"]
+                vendor: []
             },
             errors: {
                 description: [],
@@ -817,6 +817,8 @@ export default {
                 .get("/api/data/vendors")
                 .then(response => {
                     _this.vendors = response.data.data;
+
+                    _this.vendors.unshift({id: null, name: "No Vendor", tin: ""});
                 })
                 .catch(error => {
                     console.log(error);

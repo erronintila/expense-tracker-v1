@@ -1,5 +1,9 @@
 <template>
-    <v-app>
+<v-app>
+    
+</v-app>
+
+    <!-- <v-app>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
@@ -39,7 +43,7 @@
                 </v-container>
             </v-form>
         </v-card>
-    </v-app>
+    </v-app> -->
 </template>
 
 <script>

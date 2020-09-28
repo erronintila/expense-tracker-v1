@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-card class="elevation-0 pt-0">
+        <v-card class="elevation-0 p-0 m-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Employees</h4>
 

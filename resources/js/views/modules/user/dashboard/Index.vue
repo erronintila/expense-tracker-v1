@@ -301,7 +301,6 @@ export default {
                 axios
                     .get("/api/user")
                     .then(response => {
-                        console.log(response);
                         let emp = response.data.data.employee;
 
                         _this.employee = emp == null ? 0 : emp.id;

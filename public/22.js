@@ -368,7 +368,7 @@ var render = function() {
     [
       _c(
         "v-card",
-        { staticClass: "elevation-0 pt-0" },
+        { staticClass: "elevation-0" },
         [
           _c(
             "v-card-title",

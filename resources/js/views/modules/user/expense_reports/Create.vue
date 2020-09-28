@@ -158,7 +158,7 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.vendor.name }}
+                                                        {{ item.vendor == null ? "" : item.vendor.name }}
                                                     </td>
                                                 </tr>
                                             </table>

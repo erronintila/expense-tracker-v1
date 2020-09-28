@@ -709,9 +709,7 @@ __webpack_require__.r(__webpack_exports__);
         particular_reimbursable_amount: [function (v) {
           return parseFloat(v) <= _this2.particular_amount || "Reimbursable Amount should not be greater than the actual amount";
         }],
-        receipt_number: [function (v) {
-          return !!v || "Receipt Number is required";
-        }],
+        receipt_number: [],
         date: [function (v) {
           return !!v || "Date is required";
         }],
@@ -723,9 +721,7 @@ __webpack_require__.r(__webpack_exports__);
         employee: [function (v) {
           return !!v || "Employee is required";
         }],
-        vendor: [function (v) {
-          return !!v || "Vendor is required";
-        }]
+        vendor: []
       },
       errors: {
         description: [],
@@ -839,6 +835,12 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/data/vendors").then(function (response) {
         _this.vendors = response.data.data;
+
+        _this.vendors.unshift({
+          id: null,
+          name: "No Vendor",
+          tin: ""
+        });
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

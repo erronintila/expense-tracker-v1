@@ -742,7 +742,9 @@ var render = function() {
                                                     _vm._v(
                                                       "\n                                                    " +
                                                         _vm._s(
-                                                          item.vendor.name
+                                                          item.vendor == null
+                                                            ? ""
+                                                            : item.vendor.name
                                                         ) +
                                                         "\n                                                "
                                                     )
