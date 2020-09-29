@@ -30,6 +30,7 @@
                                 item-text="fullname"
                                 label="Employee *"
                                 required
+                                return-object
                             >
                             </v-autocomplete>
                         </v-col>
@@ -39,6 +40,7 @@
                                 :rules="rules.description"
                                 :counter="100"
                                 label="Description"
+                                readonly
                                 required
                             ></v-text-field>
                         </v-col>
@@ -70,6 +72,8 @@
                                     </tr>
                                     <tr class="green--text hidden-sm-and-down">
                                         <td class="title">Total</td>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td>
@@ -132,13 +136,13 @@
                                             <table>
                                                 <tr>
                                                     <td>
-                                                        <strong>Description</strong>
+                                                        <strong
+                                                            >Description</strong
+                                                        >
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{
-                                                            item.description
-                                                        }}
+                                                        {{ item.description }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -158,7 +162,12 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.vendor == null ? "" : item.vendor.name }}
+                                                        {{
+                                                            item.vendor == null
+                                                                ? ""
+                                                                : item.vendor
+                                                                      .name
+                                                        }}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -194,15 +203,15 @@
 
         <CreateExpense
             ref="createExpense"
-            :employeeid="employee"
+            :employee="employee"
             @onSaveExpense="loadExpenses"
         ></CreateExpense>
 
-        <EditExpense
+        <!-- <EditExpense
             ref="editExpense"
             :employeeid="employee"
             @onSaveExpense="loadExpenses"
-        ></EditExpense>
+        ></EditExpense> -->
     </div>
 </template>
 
@@ -210,13 +219,13 @@
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import CreateExpense from "./components/CreateExpense";
-import EditExpense from "./components/EditExpense";
+// import EditExpense from "./components/EditExpense";
 
 export default {
     components: {
         DateRangePicker,
         CreateExpense,
-        EditExpense
+        // EditExpense
     },
     data() {
         return {
@@ -249,12 +258,10 @@ export default {
             ],
             selected: [],
             headers: [
-                // {
-                //     text: "Expense",
-                //     value: "description"
-                // },
-                { text: "Expense", value: "expense_type.name" },
                 { text: "Date", value: "date" },
+                { text: "Description", value: "expense_type.name" },
+                { text: "Receipt", value: "receipt_number" },
+                { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -262,10 +269,10 @@ export default {
             items: [],
             total: 0,
             code: "",
-            description: "",
+            // description: "",
             remarks: "",
             notes: "",
-            employee: 0,
+            employee: { id: 0, remaining_fund: 0, fund: 0 },
             employees: [],
             expenses: [],
             rules: {
@@ -307,12 +314,13 @@ export default {
                 .get("/api/data/expenses", {
                     params: {
                         create_report: true,
-                        employee_id: _this.employee,
+                        employee_id: _this.employee.id,
                         start_date: start_date,
                         end_date: end_date
                     }
                 })
                 .then(response => {
+                    console.log(response);
                     _this.items = response.data.data;
                     // _this.total = response.data.total;
                 })
@@ -336,8 +344,6 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
-
         },
         onSave() {
             let _this = this;
@@ -360,7 +366,7 @@ export default {
                         description: _this.description,
                         remarks: _this.remarks,
                         notes: _this.notes,
-                        employee_id: _this.employee,
+                        employee_id: _this.employee.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
@@ -374,7 +380,9 @@ export default {
                             }
                         );
 
-                        _this.$router.push({ name: "admin.expense_reports.index" });
+                        _this.$router.push({
+                            name: "admin.expense_reports.index"
+                        });
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -385,8 +393,8 @@ export default {
             }
         },
         onCreate() {
-            if(this.employee == 0) {
-                 this.$dialog.message.error("No Employee selected", {
+            if (this.employee.id == 0) {
+                this.$dialog.message.error("No Employee selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -396,12 +404,8 @@ export default {
 
             this.$refs.createExpense.openDialog();
         },
-        // onSaveExpense() {
-        //     console.log("Expense saved");
-        //     this.loadExpenses();
-        // },
         onEdit(item) {
-            this.$refs.editExpense.openDialog(item);
+            // this.$refs.editExpense.openDialog(item);
         },
         onDelete(item) {
             let _this = this;
@@ -431,6 +435,11 @@ export default {
                         });
                 }
             });
+        }
+    },
+    computed: {
+        description() {
+            return `Expense Report Summary (${moment(this.date_range[0]).format('LL')} - ${moment(this.date_range[1]).format('LL')})`
         }
     },
     watch: {

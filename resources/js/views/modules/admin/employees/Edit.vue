@@ -167,7 +167,7 @@
                         </v-col>
                     </v-row>
 
-                    <v-row>
+                    <!-- <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="fund"
@@ -178,7 +178,7 @@
                                 label="Revolving Fund *"
                             ></v-text-field>
                         </v-col>
-                    </v-row>
+                    </v-row> -->
 
                     <small class="text--secondary">
                         * indicates required field
@@ -213,8 +213,8 @@ export default {
             email: null,
             address: null,
             menu: false,
-            fund: 0,
-            remaining_fund: 0,
+            // fund: 0,
+            // remaining_fund: 0,
             rules: {
                 first_name: [
                     v => !!v || "First name is required",
@@ -248,7 +248,7 @@ export default {
                     v => /.+@.+/.test(v) || "E-mail is not valid"
                 ],
                 address: [v => !!v || "Address is required"],
-                fund: [v => parseFloat(v) >= 0 || "This field is required"]
+                // fund: [v => parseFloat(v) >= 0 || "This field is required"]
             },
             errors: {
                 first_name: [],
@@ -262,7 +262,7 @@ export default {
                 telephone_number: [],
                 email: [],
                 address: [],
-                fund: []
+                // fund: []
             }
         };
     },
@@ -286,8 +286,8 @@ export default {
                     _this.telephone_number = data.telephone_number;
                     _this.email = data.email;
                     _this.address = data.address;
-                    _this.fund = data.fund;
-                    _this.remaining_fund = data.remaining_fund;
+                    // _this.fund = data.fund;
+                    // _this.remaining_fund = data.remaining_fund;
                 })
                 .catch(error => {
                     console.log(error);
@@ -330,7 +330,7 @@ export default {
                         telephone_number: _this.telephone_number,
                         email: _this.email,
                         address: _this.address,
-                        fund: _this.fund,
+                        // fund: _this.fund,
                     })
                     .then(function(response) {
                         // _this.onRefresh();

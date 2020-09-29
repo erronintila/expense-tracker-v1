@@ -30,6 +30,7 @@
                                 item-text="fullname"
                                 label="Employee *"
                                 required
+                                return-object
                             >
                             </v-autocomplete>
                         </v-col>
@@ -76,7 +77,7 @@
                                             <strong>{{ total }}</strong>
                                         </td>
                                         <td></td>
-                                        <td></td>
+                                        <!-- <td></td> -->
                                     </tr>
                                 </template>
                                 <template v-slot:[`item.actions`]="{ item }">
@@ -192,15 +193,15 @@
 
         <CreateExpense
             ref="createExpense"
-            :employeeid="employee"
+            :employee="employee"
             @onSaveExpense="loadExpenses"
         ></CreateExpense>
 
-        <EditExpense
+        <!-- <EditExpense
             ref="editExpense"
             :employeeid="employee"
             @onSaveExpense="loadExpenses"
-        ></EditExpense>
+        ></EditExpense> -->
     </div>
 </template>
 
@@ -208,13 +209,13 @@
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import CreateExpense from "./components/CreateExpense";
-import EditExpense from "./components/EditExpense";
+// import EditExpense from "./components/EditExpense";
 
 export default {
     components: {
         DateRangePicker,
         CreateExpense,
-        EditExpense
+        // EditExpense
     },
     data() {
         return {
@@ -252,7 +253,7 @@ export default {
                 { text: "Receipt", value: "receipt_number" },
                 { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },
-                { text: "Actions", value: "actions", sortable: false },
+                // { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
@@ -261,7 +262,7 @@ export default {
             description: "",
             remarks: "",
             notes: "",
-            employee: 0,
+            employee: { id: 0, remaining_fund: 0, fund: 0 },
             employees: [],
             expenses: [],
             rules: {
@@ -292,7 +293,7 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenses(this.employee);
+            this.loadExpenses(this.employee.id);
         },
         getData() {
             let _this = this;
@@ -306,7 +307,7 @@ export default {
                     _this.description = data.description;
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
-                    _this.employee = data.employee.id;
+                    _this.employee = data.employee;
                     _this.status = data.status;
                     _this.expenses = data.expenses;
                     _this.submitted_at = data.submitted_at;
@@ -392,7 +393,7 @@ export default {
                         description: _this.description,
                         remarks: _this.remarks,
                         notes: _this.notes,
-                        employee_id: _this.employee,
+                        employee_id: _this.employee.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
@@ -417,7 +418,7 @@ export default {
             }
         },
         onCreate() {
-            if (this.employee == 0) {
+            if (this.employee.id == 0) {
                 this.$dialog.message.error("No Employee selected", {
                     position: "top-right",
                     timeout: 2000
@@ -433,7 +434,7 @@ export default {
         //     this.loadExpenses();
         // },
         onEdit(item) {
-            this.$refs.editExpense.openDialog(item);
+            // this.$refs.editExpense.openDialog(item);
         },
         onDelete(item) {
             let _this = this;
@@ -455,7 +456,7 @@ export default {
                                 }
                             );
 
-                            _this.loadExpenses(_this.employee);
+                            _this.loadExpenses(_this.employee.id);
                         })
                         .catch(function(error) {
                             console.log(error);

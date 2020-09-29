@@ -54,12 +54,12 @@ class AdjustmentController extends Controller
             }
         }
 
-        $adjustments = $adjustments->where(function ($q) use ($search) {
-            $q->where('reference', "like", "%" . $search . "%");
-            $q->where('code', "like", "%" . $search . "%");
-            $q->where('description', "like", "%" . $search . "%");
-            $q->where('type', "like", "%" . $search . "%");
-        });
+        // $adjustments = $adjustments->where(function ($q) use ($search) {
+        //     $q->where('reference', "like", "%" . $search . "%");
+        //     $q->where('code', "like", "%" . $search . "%");
+        //     $q->where('description', "like", "%" . $search . "%");
+        //     $q->where('type', "like", "%" . $search . "%");
+        // });
         $adjustments = $adjustments->paginate($itemsPerPage);
 
         return AdjustmentResource::collection($adjustments);
@@ -79,6 +79,7 @@ class AdjustmentController extends Controller
         $adjustment->reference = $request->reference;
         $adjustment->code = $request->code;
         $adjustment->remarks = $request->remarks;
+        $adjustment->employee_id = $request->employee_id;
 
         if (request()->has("type")) {
             switch ($request->type) {
@@ -89,9 +90,11 @@ class AdjustmentController extends Controller
                     $amount = $request->amount;
                     $fund = $employee->fund;
 
-                    $adjustment->description = ($employee->fund > $request->amount) ? "Decreased Revolving Fund" : "Increased Revolving Fund";
-                    $adjustment->add_amount = ($employee->fund > $request->amount) ? 0 : ($fund - $amount);
-                    $adjustment->subtract_amount = ($employee->fund > $request->amount) ? $amount : 0;
+                    $adjustment->description = ($employee->fund > $request->amount) ?
+                        "Decreased Revolving Fund for {$employee->last_name}, {$employee->first_name}" :
+                        "Added Revolving Fund for {$employee->last_name}, {$employee->first_name}";
+                    $adjustment->add_amount = ($employee->fund > $request->amount) ? 0 : ($amount - $fund);
+                    $adjustment->subtract_amount = ($employee->fund > $request->amount) ? ($fund - $amount) : 0;
                     $adjustment->type = $request->type;
                     $adjustment->save();
 
@@ -101,7 +104,6 @@ class AdjustmentController extends Controller
                     break;
 
                 default:
-
                     $adjustment->save();
                     break;
             }
@@ -195,22 +197,22 @@ class AdjustmentController extends Controller
             foreach ($request->ids as $id) {
                 $adjustment = Adjustment::findOrFail($id);
 
-                switch ($request->type) {
+                switch ($adjustment->type) {
                     case 'Manage Revolving Fund':
+                        $fund = $adjustment->employee->fund;
+                        $added = $adjustment->add_amount;
+                        $subtracted = $adjustment->subtract_amount;
+                        $amount = $added == 0 ? $fund + $subtracted : $fund - $added;
 
-                        $employee = Employee::findOrFail($request->employee_id);
-
-                        $amount = ($employee->fund + $adjustment->add_amount) - $adjustment->subtract_amount;
-
-                        $employee->fund = $amount;
-                        $employee->save();
+                        $adjustment->employee->fund = $amount;
+                        $adjustment->employee->save();
 
                         $adjustment->delete();
 
                         break;
 
                     default:
-                        $adjustment->delete();
+                        // $adjustment->delete();
                         break;
                 }
             }

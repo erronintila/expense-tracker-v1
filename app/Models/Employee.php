@@ -106,6 +106,10 @@ class Employee extends Model
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    public function adjustments() {
+        return $this->hasMany(Adjustment::class);
+    }
+
     /**
      * Displays the Expense Reports associated with employee.
      *

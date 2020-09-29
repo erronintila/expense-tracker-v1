@@ -6,55 +6,6 @@
 
                 <v-spacer></v-spacer>
 
-                <!-- <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    :to="{ name: 'admin.adjustments.create' }"
-                    dark
-                    fab
-                    x-small
-                >
-                    <v-icon dark>mdi-plus</v-icon>
-                </v-btn> -->
-
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>
-                                <!-- mdi-format-list-bulleted-square -->
-                                mdi-plus
-                            </v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onCreate('revolving_fund')">
-                            <v-list-item-title>
-                                Manage Revolving Fund
-                            </v-list-item-title>
-                        </v-list-item>
-                        <!-- <v-list-item @click="onRestore">
-                            <v-list-item-title>
-                                Restore
-                            </v-list-item-title>
-                        </v-list-item> -->
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-title>
-                                Cancel Adjustment(s)
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
-
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
@@ -100,6 +51,39 @@
                         </v-list>
                     </v-card>
                 </v-menu>
+
+                <v-menu offset-y transition="scale-transition" left>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3"
+                            color="green"
+                            dark
+                            fab
+                            x-small
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>
+                                mdi-format-list-bulleted-square
+                                <!-- mdi-plus -->
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-list>
+                        <v-list-item @click="onCreate('revolving_fund')">
+                            <v-list-item-title>
+                                Manage Revolving Fund
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item @click="onDelete">
+                            <v-list-item-title>
+                                Cancel Adjustment(s)
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
             </v-card-title>
             <v-card-subtitle>
                 <v-text-field
@@ -131,6 +115,13 @@
                         nextIcon: 'mdi-chevron-right'
                     }"
                 >
+                    <template v-slot:[`item.amount`]="{ item }">
+                        {{
+                            item.add_amount > 0
+                                ? item.add_amount
+                                : item.subtract_amount
+                        }}
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
@@ -154,7 +145,7 @@ export default {
                 { text: "Reference", value: "reference" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount", sortable: false },
-                { text: "Last Updated", value: "updated_at" },
+                { text: "Last Updated", value: "updated_at" }
             ],
             items: [],
             status: "Active",
@@ -163,8 +154,8 @@ export default {
             search: "",
             totalItems: 0,
             options: {
-                sortBy: ["name"],
-                sortDesc: [false],
+                sortBy: ["updated_at"],
+                sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
             }
@@ -194,6 +185,7 @@ export default {
                         }
                     })
                     .then(response => {
+                        console.log(response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
@@ -227,9 +219,11 @@ export default {
         onCreate(transaction_type) {
             switch (transaction_type) {
                 case "revolving_fund":
-                    this.$router.push({name: "admin.adjustments.manage.fund"});
+                    this.$router.push({
+                        name: "admin.adjustments.manage.fund"
+                    });
                     break;
-            
+
                 default:
                     break;
             }
@@ -252,7 +246,7 @@ export default {
                             params: {
                                 ids: _this.selected.map(item => {
                                     return item.id;
-                                })
+                                }),
                             }
                         })
                         .then(function(response) {
@@ -275,49 +269,7 @@ export default {
                         });
                 }
             });
-        },
-        // onRestore() {
-        //     let _this = this;
-
-        //     if (_this.selected.length == 0) {
-        //         this.$dialog.message.error("No item(s) selected", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     this.$confirm("Do you want to restore account(s)?").then(res => {
-        //         if (res) {
-        //             axios
-        //                 .put(`/api/adjustments/${_this.selected[0].id}`, {
-        //                     ids: _this.selected.map(item => {
-        //                         return item.id;
-        //                     }),
-        //                     action: "restore"
-        //                 })
-        //                 .then(function(response) {
-        //                     _this.$dialog.message.success("Item(s) restored.", {
-        //                         position: "top-right",
-        //                         timeout: 2000
-        //                     });
-
-        //                     _this.getDataFromApi().then(data => {
-        //                         _this.items = data.items;
-        //                         _this.totalItems = data.total;
-        //                     });
-        //                 })
-        //                 .catch(function(error) {
-        //                     // _this.$dialog.message.error(error, {
-        //                     //     position: "top-right",
-        //                     //     timeout: 2000
-        //                     // });
-        //                     console.log(error);
-        //                     console.log(error.response);
-        //                 });
-        //         }
-        //     });
-        // }
+        }
     },
     watch: {
         params: {

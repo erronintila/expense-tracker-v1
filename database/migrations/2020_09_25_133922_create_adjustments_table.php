@@ -22,8 +22,16 @@ class CreateAdjustmentsTable extends Migration
             $table->double("subtract_amount", 10, 2)->default(0);
             $table->string("type");
             $table->text("remarks")->nullable();
+
+            $table->unsignedBigInteger('employee_id')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('employee_id')
+                ->references('id')
+                ->on('employees')
+                ->onDelete('cascade');
         });
     }
 
