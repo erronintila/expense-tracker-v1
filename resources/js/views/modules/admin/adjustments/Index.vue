@@ -6,7 +6,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn
+                <!-- <v-btn
                     class="elevation-3 mr-2"
                     color="green"
                     :to="{ name: 'admin.adjustments.create' }"
@@ -15,7 +15,45 @@
                     x-small
                 >
                     <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
+                </v-btn> -->
+
+                <v-menu offset-y transition="scale-transition" left>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3 mr-2"
+                            color="green"
+                            dark
+                            fab
+                            x-small
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>
+                                <!-- mdi-format-list-bulleted-square -->
+                                mdi-plus
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-list>
+                        <v-list-item @click="onCreate('revolving_fund')">
+                            <v-list-item-title>
+                                Manage Revolving Fund
+                            </v-list-item-title>
+                        </v-list-item>
+                        <!-- <v-list-item @click="onRestore">
+                            <v-list-item-title>
+                                Restore
+                            </v-list-item-title>
+                        </v-list-item> -->
+
+                        <v-list-item @click="onDelete">
+                            <v-list-item-title>
+                                Cancel Adjustment(s)
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
 
                 <v-btn
                     class="elevation-3 mr-2"
@@ -61,38 +99,6 @@
                             </v-list-item>
                         </v-list>
                     </v-card>
-                </v-menu>
-
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>
-                                mdi-format-list-bulleted-square
-                            </v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onRestore">
-                            <v-list-item-title>
-                                Restore
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-title>
-                                Cancel
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
                 </v-menu>
             </v-card-title>
             <v-card-subtitle>
@@ -145,8 +151,10 @@ export default {
         return {
             loading: true,
             headers: [
-                { text: "Name", value: "name" },
-                { text: "Actions", value: "actions", sortable: false }
+                { text: "Reference", value: "reference" },
+                { text: "Description", value: "description" },
+                { text: "Amount", value: "amount", sortable: false },
+                { text: "Last Updated", value: "updated_at" },
             ],
             items: [],
             status: "Active",
@@ -216,6 +224,16 @@ export default {
                 params: { id: item.id }
             });
         },
+        onCreate(transaction_type) {
+            switch (transaction_type) {
+                case "revolving_fund":
+                    this.$router.push({name: "admin.adjustments.manage.fund"});
+                    break;
+            
+                default:
+                    break;
+            }
+        },
         onDelete() {
             let _this = this;
 
@@ -258,48 +276,48 @@ export default {
                 }
             });
         },
-        onRestore() {
-            let _this = this;
+        // onRestore() {
+        //     let _this = this;
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
+        //     if (_this.selected.length == 0) {
+        //         this.$dialog.message.error("No item(s) selected", {
+        //             position: "top-right",
+        //             timeout: 2000
+        //         });
+        //         return;
+        //     }
 
-            this.$confirm("Do you want to restore account(s)?").then(res => {
-                if (res) {
-                    axios
-                        .put(`/api/adjustments/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "restore"
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
+        //     this.$confirm("Do you want to restore account(s)?").then(res => {
+        //         if (res) {
+        //             axios
+        //                 .put(`/api/adjustments/${_this.selected[0].id}`, {
+        //                     ids: _this.selected.map(item => {
+        //                         return item.id;
+        //                     }),
+        //                     action: "restore"
+        //                 })
+        //                 .then(function(response) {
+        //                     _this.$dialog.message.success("Item(s) restored.", {
+        //                         position: "top-right",
+        //                         timeout: 2000
+        //                     });
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
-                        })
-                        .catch(function(error) {
-                            // _this.$dialog.message.error(error, {
-                            //     position: "top-right",
-                            //     timeout: 2000
-                            // });
-                            console.log(error);
-                            console.log(error.response);
-                        });
-                }
-            });
-        }
+        //                     _this.getDataFromApi().then(data => {
+        //                         _this.items = data.items;
+        //                         _this.totalItems = data.total;
+        //                     });
+        //                 })
+        //                 .catch(function(error) {
+        //                     // _this.$dialog.message.error(error, {
+        //                     //     position: "top-right",
+        //                     //     timeout: 2000
+        //                     // });
+        //                     console.log(error);
+        //                     console.log(error.response);
+        //                 });
+        //         }
+        //     });
+        // }
     },
     watch: {
         params: {

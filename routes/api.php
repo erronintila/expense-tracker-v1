@@ -28,7 +28,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResources(
         [
-            // 'adjustments' => 'API\v1\AdjustmentController',
+            'adjustments' => 'API\v1\AdjustmentController',
 
             'departments' => 'API\v1\DepartmentController',
 

@@ -38,22 +38,24 @@
 
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-select
+                            <v-autocomplete
                                 v-model="employee"
                                 label="Employee *"
                                 :items="employees"
                                 item-text="fullname"
                                 item-value="id"
                                 return-object
+                                @change="amount = employee.fund"
                             >
-                            </v-select>
+                            </v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="employee.fund"
-                                label="Revolving Fund"
-                                readonly
+                                v-model="amount"
+                                label="Amount"
+                                :hint="`Current Amount : ${employee.fund}`"
+                                persistent-hint
                             >
                             </v-text-field>
                         </v-col>
@@ -70,7 +72,7 @@
                             </v-text-field>
                         </v-col> -->
 
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-row class="m-0 p-0">
                                 <v-col cols="4" md="5">
                                     <v-select
@@ -91,6 +93,12 @@
                                     </v-text-field>
                                 </v-col>
                             </v-row>
+                        </v-col> -->
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-textarea label="Remarks" rows="2"></v-textarea>
                         </v-col>
                     </v-row>
 
@@ -114,8 +122,8 @@ export default {
     data() {
         return {
             valid: false,
-            transaction_type: "Revolving Fund",
-            transaction_types: ["Revolving Fund"],
+            transaction_type: "Manage Revolving Fund",
+            transaction_types: ["Manage Revolving Fund"],
             revolving_fund_trans: "Add",
             employee: { id: null, fullname: "", fund: 0 },
             employees: [],
@@ -155,6 +163,7 @@ export default {
                 .get("/api/data/employees")
                 .then(response => {
                     console.log(response);
+
                     _this.employees = response.data.data;
                 })
                 .catch(error => {
@@ -164,9 +173,6 @@ export default {
         },
         onSave() {
             let _this = this;
-
-            // console.log(_this.employee);
-            // return;
 
             if (this.transaction_type == "Revolving Fund") {
                 if (

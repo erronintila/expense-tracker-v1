@@ -187,11 +187,11 @@ export default {
                 text: "More",
                 model: false,
                 children: [
-                    // {
-                    //     icon: "mdi-circle-medium",
-                    //     text: "Adjustments",
-                    //     link: { name: "admin.adjustments.index" }
-                    // },
+                    {
+                        icon: "mdi-circle-medium",
+                        text: "Adjustments",
+                        link: { name: "admin.adjustments.index" }
+                    },
                     {
                         icon: "mdi-circle-medium",
                         text: "Users",

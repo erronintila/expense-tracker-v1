@@ -22,9 +22,8 @@ class AdjustmentController extends Controller
         return Validator::make($data, [
             'reference' => ['nullable', 'max:150'],
             'code' => ['nullable'],
-            'description' => ['required', 'max:150'],
-            'add_amount' => ['required'],
-            'subtract_amount' => ['required'],
+            'description' => [],
+            'amount' => ['required'],
             'type' => ['required', 'max:150'],
             'remarks' => ['nullable'],
         ]);
@@ -77,31 +76,33 @@ class AdjustmentController extends Controller
         $this->validator($request->all(), null)->validate();
 
         $adjustment = new Adjustment();
-
         $adjustment->reference = $request->reference;
         $adjustment->code = $request->code;
-        $adjustment->description = $request->description;
-        $adjustment->add_amount = $request->add_amount;
-        $adjustment->subtract_amount = $request->subtract_amount;
-        $adjustment->type = $request->type;
         $adjustment->remarks = $request->remarks;
-
-        $adjustment->save();
 
         if (request()->has("type")) {
             switch ($request->type) {
-                case 'Revolving Fund':
+                case 'Manage Revolving Fund':
 
                     $employee = Employee::findOrFail($request->employee_id);
 
-                    $employee->fund = ($employee->fund + $request->add_amount) - $request->subtract_amount;
-                    $employee->remaining_fund = ($employee->remaining_fund + $request->add_amount) - $request->subtract_amount;
+                    $amount = $request->amount;
+                    $fund = $employee->fund;
 
+                    $adjustment->description = ($employee->fund > $request->amount) ? "Decreased Revolving Fund" : "Increased Revolving Fund";
+                    $adjustment->add_amount = ($employee->fund > $request->amount) ? 0 : ($fund - $amount);
+                    $adjustment->subtract_amount = ($employee->fund > $request->amount) ? $amount : 0;
+                    $adjustment->type = $request->type;
+                    $adjustment->save();
+
+                    $employee->fund = $request->amount;
                     $employee->save();
+
                     break;
 
                 default:
-                    # code...
+
+                    $adjustment->save();
                     break;
             }
         }
@@ -193,11 +194,26 @@ class AdjustmentController extends Controller
         if (request()->has("ids")) {
             foreach ($request->ids as $id) {
                 $adjustment = Adjustment::findOrFail($id);
-                $adjustment->delete();
+
+                switch ($request->type) {
+                    case 'Manage Revolving Fund':
+
+                        $employee = Employee::findOrFail($request->employee_id);
+
+                        $amount = ($employee->fund + $adjustment->add_amount) - $adjustment->subtract_amount;
+
+                        $employee->fund = $amount;
+                        $employee->save();
+
+                        $adjustment->delete();
+
+                        break;
+
+                    default:
+                        $adjustment->delete();
+                        break;
+                }
             }
-        } else {
-            $adjustment = Adjustment::findOrFail($id);
-            $adjustment->delete();
         }
 
         return response(
