@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-card class="elevation-0 pt-0">
-
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-row class="mt-5">
@@ -661,7 +660,7 @@ export default {
     props: {
         employee: {
             type: Object,
-            default: { id: null, remaining_fund: 0, fund: 0 },
+            default: { id: null, remaining_fund: 0, fund: 0 }
         }
     },
     data() {
@@ -821,7 +820,11 @@ export default {
                 .then(response => {
                     _this.vendors = response.data.data;
 
-                    _this.vendors.unshift({id: null, name: "No Vendor", tin: ""});
+                    _this.vendors.unshift({
+                        id: null,
+                        name: "No Vendor",
+                        tin: ""
+                    });
                 })
                 .catch(error => {
                     console.log(error);

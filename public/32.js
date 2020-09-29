@@ -13,7 +13,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
 /* harmony import */ var _components_CreateExpense__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/CreateExpense */ "./resources/js/views/modules/admin/expense_reports/components/CreateExpense.vue");
-/* harmony import */ var _components_EditExpense__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/EditExpense */ "./resources/js/views/modules/admin/expense_reports/components/EditExpense.vue");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -235,7 +234,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 
 
-
+ // import EditExpense from "./components/EditExpense";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -437,8 +436,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     //     console.log("Expense saved");
     //     this.loadExpenses();
     // },
-    onEdit: function onEdit(item) {
-      this.$refs.editExpense.openDialog(item);
+    onEdit: function onEdit(item) {// this.$refs.editExpense.openDialog(item);
     },
     onDelete: function onDelete(item) {
       var _this = this;
@@ -688,6 +686,20 @@ var render = function() {
                                             ),
                                             _vm._v(" "),
                                             _c("v-spacer"),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: { color: "white" },
+                                                on: { click: _vm.onCreate }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                        New Item\n                                    "
+                                                )
+                                              ]
+                                            ),
                                             _vm._v(" "),
                                             _c("DateRangePicker", {
                                               attrs: {

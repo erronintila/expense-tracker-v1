@@ -35,14 +35,24 @@
                             </v-autocomplete>
                         </v-col>
                         <v-col cols="12" md="8">
-                            <v-text-field
+                            <!-- <v-text-field
                                 v-model="description"
                                 :rules="rules.description"
                                 :counter="100"
                                 label="Description"
                                 readonly
                                 required
-                            ></v-text-field>
+                            ></v-text-field> -->
+
+                            <v-combobox
+                                v-model="description"
+                                :rules="rules.description"
+                                :counter="100"
+                                :items="[default_description]"
+                                :error-messages="errors.description"
+                                @input="errors.description = []"
+                                label="Description"
+                            ></v-combobox>
                         </v-col>
                     </v-row>
 
@@ -207,11 +217,10 @@
             @onSaveExpense="loadExpenses"
         ></CreateExpense>
 
-        <!-- <EditExpense
+        <EditExpense
             ref="editExpense"
-            :employeeid="employee"
             @onSaveExpense="loadExpenses"
-        ></EditExpense> -->
+        ></EditExpense>
     </div>
 </template>
 
@@ -219,13 +228,13 @@
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import CreateExpense from "./components/CreateExpense";
-// import EditExpense from "./components/EditExpense";
+import EditExpense from "./components/EditExpense";
 
 export default {
     components: {
         DateRangePicker,
         CreateExpense,
-        // EditExpense
+        EditExpense
     },
     data() {
         return {
@@ -269,7 +278,7 @@ export default {
             items: [],
             total: 0,
             code: "",
-            // description: "",
+            description: "",
             remarks: "",
             notes: "",
             employee: { id: 0, remaining_fund: 0, fund: 0 },
@@ -320,7 +329,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log(response);
                     _this.items = response.data.data;
                     // _this.total = response.data.total;
                 })
@@ -405,7 +413,7 @@ export default {
             this.$refs.createExpense.openDialog();
         },
         onEdit(item) {
-            // this.$refs.editExpense.openDialog(item);
+            this.$refs.editExpense.openDialog(item);
         },
         onDelete(item) {
             let _this = this;
@@ -438,7 +446,7 @@ export default {
         }
     },
     computed: {
-        description() {
+        default_description() {
             return `Expense Report Summary (${moment(this.date_range[0]).format('LL')} - ${moment(this.date_range[1]).format('LL')})`
         }
     },

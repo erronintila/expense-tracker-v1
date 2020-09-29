@@ -1,19 +1,9 @@
 <template>
     <div>
         <v-card class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <v-btn @click="$router.go(-1)" class="mr-3" icon>
-                    <v-icon>mdi-arrow-left</v-icon>
-                </v-btn>
-
-                <v-spacer></v-spacer>
-
-                <h4 class="title green--text">Edit Expense</h4>
-            </v-card-title>
-
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <v-row>
+                    <v-row class="mt-5">
                         <v-spacer></v-spacer>
                         <h3 class="title green--text mr-2">
                             Remaining Funds:
@@ -21,22 +11,6 @@
                         </h3>
                     </v-row>
                     <v-row>
-                        <v-col cols="12" md="4">
-                            <v-autocomplete
-                                v-model="employee"
-                                :rules="rules.employee"
-                                :items="employees"
-                                :error-messages="errors.employee_id"
-                                @input="errors.employee_id = []"
-                                item-value="id"
-                                item-text="fullname"
-                                label="Employee *"
-                                return-object
-                                required
-                            >
-                            </v-autocomplete>
-                        </v-col>
-
                         <v-col cols="12" md="4">
                             <v-form
                                 ref="vendorForm"
@@ -684,12 +658,6 @@
                     <small class="text--secondary">
                         * indicates required field
                     </small>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn @click="$router.go(-1)">Cancel</v-btn>
-                    </v-card-actions>
                 </v-container>
             </v-form>
         </v-card>
@@ -700,6 +668,12 @@
 import numeral from "numeral";
 
 export default {
+    props: {
+        expense_id: {
+            type: Number,
+            default: 0
+        }
+    },
     data() {
         return {
             dialog: false,
@@ -827,31 +801,28 @@ export default {
         getData() {
             let _this = this;
 
-            this.loadEmployees().then(
-                axios
-                    .get("/api/expenses/" + _this.$route.params.id)
-                    .then(response => {
-                        console.log(response);
-                        let data = response.data.data;
+            axios
+                .get("/api/expenses/" + _this.expense_id)
+                .then(response => {
+                    let data = response.data.data;
 
-                        _this.code = data.code;
-                        _this.description = data.description;
-                        _this.amount = data.amount;
-                        _this.reimbursable_amount = data.reimbursable_amount;
-                        _this.receipt_number = data.receipt_number;
-                        _this.date = data.date;
-                        _this.remarks = data.remarks;
-                        _this.is_active = data.is_active;
-                        _this.expense_type = data.expense_type.id;
-                        _this.employee = data.employee;
-                        _this.vendor = data.vendor == null ? null : data.vendor.id;
-                        _this.items = data.expense_details;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-                    })
-            );
+                    _this.code = data.code;
+                    _this.description = data.description;
+                    _this.amount = data.amount;
+                    _this.reimbursable_amount = data.reimbursable_amount;
+                    _this.receipt_number = data.receipt_number;
+                    _this.date = data.date;
+                    _this.remarks = data.remarks;
+                    _this.is_active = data.is_active;
+                    _this.expense_type = data.expense_type.id;
+                    _this.employee = data.employee;
+                    _this.vendor = data.vendor == null ? null : data.vendor.id;
+                    _this.items = data.expense_details;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
         },
         loadExpenseTypes() {
             let _this = this;
@@ -866,25 +837,6 @@ export default {
                     console.log(error.response);
                 });
         },
-        loadEmployees() {
-            let _this = this;
-
-            return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/data/employees")
-                    .then(response => {
-                        _this.employees = response.data.data;
-
-                        resolve();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        reject();
-                    });
-            });
-        },
         loadVendors() {
             let _this = this;
 
@@ -893,7 +845,11 @@ export default {
                 .then(response => {
                     _this.vendors = response.data.data;
 
-                    _this.vendors.unshift({id: null, name: "No Vendor", tin: ""});
+                    _this.vendors.unshift({
+                        id: null,
+                        name: "No Vendor",
+                        tin: ""
+                    });
                 })
                 .catch(error => {
                     console.log(error);
@@ -902,8 +858,6 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-            // this.$refs.form.reset();
-            // this.$refs.form.resetValidation();
         },
         onSave() {
             let _this = this;
@@ -934,7 +888,7 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 axios
-                    .put("/api/expenses/" + _this.$route.params.id, {
+                    .put("/api/expenses/" + _this.expense_id, {
                         code: _this.code,
                         description: _this.description,
                         amount: _this.amount,
@@ -959,7 +913,7 @@ export default {
                             }
                         );
 
-                        _this.$router.push({ name: "admin.expenses.index" });
+                        _this.$emit("editedExpense");
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -980,8 +934,7 @@ export default {
                     id: 0,
                     description: this.particular,
                     amount: this.particular_amount,
-                    reimbursable_amount: this
-                        .particular_reimbursable_amount
+                    reimbursable_amount: this.particular_reimbursable_amount
                 });
             }
 
