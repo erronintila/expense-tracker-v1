@@ -25,7 +25,7 @@ class ExpenseController extends Controller
         return Validator::make($data, [
             'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
             'description' => ['nullable', 'max:255'],
-            'receipt_number' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
+            'receipt_number' => ['nullable', 'max:255'],
             'date' => ['required'],
             'amount' => ['required', 'numeric', 'gt:0',],
             'reimbursable_amount' => ['required', 'numeric'],
@@ -146,7 +146,7 @@ class ExpenseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense = Expense::findOrFail($id);
+        $expense = Expense::withTrashed()->findOrFail($id);
 
         return response(
             [

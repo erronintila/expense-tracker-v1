@@ -150,7 +150,7 @@ class EmployeeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $employee = Employee::findOrFail($id);
+        $employee = Employee::withTrashed()->findOrFail($id);
 
         return response(
             [

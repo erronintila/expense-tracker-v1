@@ -101,11 +101,11 @@
                             </v-list-item-title>
                         </v-list-item>
 
-                        <!-- <v-list-item @click="onUpdate('duplicate', 'put')">
+                        <v-list-item @click="onUpdate('duplicate', 'put')">
                             <v-list-item-title>
-                                Duplicate
+                                Duplicate Report(s)
                             </v-list-item-title>
-                        </v-list-item> -->
+                        </v-list-item>
                     </v-list>
                 </v-menu>
             </v-card-title>
@@ -499,7 +499,7 @@ export default {
                 return;
             }
 
-            
+
             if(action == "submit" && this.selected.map(item => item.status.status).includes("Cancelled")) {
                 this.$dialog.message.error("Report has been cancelled", {
                     position: "top-right",

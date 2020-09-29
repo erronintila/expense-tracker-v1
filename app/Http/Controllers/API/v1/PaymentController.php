@@ -152,7 +152,7 @@ class PaymentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $payment = Payment::findOrFail($id);
+        $payment = Payment::withTrashed()->findOrFail($id);
 
         return response(
             [

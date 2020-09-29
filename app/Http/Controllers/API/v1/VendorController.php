@@ -122,7 +122,7 @@ class VendorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $vendor = Vendor::findOrFail($id);
+        $vendor = Vendor::withTrashed()->findOrFail($id);
 
         return response(
             [

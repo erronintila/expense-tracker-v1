@@ -107,15 +107,15 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onRestore">
+                        <!-- <v-list-item @click="onRestore">
                             <v-list-item-title>
                                 Restore
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <v-list-item @click="onDelete">
                             <v-list-item-title>
-                                Cancel
+                                Cancel Expense(s)
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -411,6 +411,41 @@ export default {
             });
         },
         onEdit(item) {
+            if (item.expense_report) {
+                if (item.expense_report.approved_at) {
+                    this.$dialog.message.error(
+                        "Expense with an approved report can't be edited",
+                        {
+                            position: "top-right",
+                            timeout: 2000
+                        }
+                    );
+                    return;
+                }
+
+                if (item.expense_report.deleted_at) {
+                    this.$dialog.message.error(
+                        "Expense with a deleted report can't be edited",
+                        {
+                            position: "top-right",
+                            timeout: 2000
+                        }
+                    );
+                    return;
+                }
+            }
+
+            if (this.status == "Cancelled") {
+                this.$dialog.message.error(
+                    "Expense has been deleted.",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
+
             this.$router.push({
                 name: "admin.expenses.edit",
                 params: { id: item.id }
@@ -421,6 +456,18 @@ export default {
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                !_this.selected
+                    .map(item => item.expense_report_id)
+                    .includes(null)
+            ) {
+                this.$dialog.message.error("Expense(s) can't be cancelled", {
                     position: "top-right",
                     timeout: 2000
                 });

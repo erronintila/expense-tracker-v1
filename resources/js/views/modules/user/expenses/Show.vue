@@ -116,12 +116,12 @@
                         * indicates required field
                     </small>
 
-                    <v-card-actions>
+                    <!-- <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="editDetails"
                             >Edit Details</v-btn
                         >
-                    </v-card-actions>
+                    </v-card-actions> -->
                 </v-container>
             </v-form>
         </v-card>

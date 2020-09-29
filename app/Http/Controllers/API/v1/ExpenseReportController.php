@@ -208,16 +208,21 @@ class ExpenseReportController extends Controller
 
                     $new_report->save();
 
-                    foreach ($expense_report->expenses->withTrashed()->get() as $key => $value) {
+                    $new_report->code = "ER" . date("Y") . str_pad($new_report->id, 5, '0', STR_PAD_LEFT);
+                    $new_report->save();
+
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $key => $value) {
                         $expense = Expense::withTrashed()->find($value["id"]);
                         $new_expense = $expense->replicate();
+
                         $new_expense->deleted_at = null;
                         $new_expense->expense_report_id = $new_report->id;
                         $new_expense->save();
 
-                        foreach ($expense->expense_details->withTrashed()->get() as $key => $value) {
+                        foreach ($expense->expense_details as $key => $value) {
                             $expense_detail = ExpenseDetail::find($value["id"]);
                             $new_expense_detail = $expense_detail->replicate();
+
                             $new_expense_detail->deleted_at = null;
                             $new_expense_detail->expense_id = $new_expense->id;
                             $new_expense_detail->save();

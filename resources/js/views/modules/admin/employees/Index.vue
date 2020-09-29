@@ -100,11 +100,11 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onRestore">
+                        <!-- <v-list-item @click="onRestore">
                             <v-list-item-title>
                                 Manage Revolving Fund
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <v-list-item @click="onRestore">
                             <v-list-item-title>

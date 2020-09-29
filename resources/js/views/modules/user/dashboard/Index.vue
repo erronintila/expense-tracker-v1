@@ -32,7 +32,7 @@
         </v-card-title>
         <v-card-subtitle> </v-card-subtitle>
 
-        <v-container>
+        <div>
             <v-row>
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
@@ -191,7 +191,7 @@
                     </v-row>
                 </v-card>
             </v-hover>
-        </v-container>
+        </div>
     </v-card>
 </template>
 

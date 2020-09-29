@@ -101,7 +101,7 @@ class JobController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $job = Job::findOrFail($id);
+        $job = Job::withTrashed()->findOrFail($id);
 
         return response(
             [

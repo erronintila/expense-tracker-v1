@@ -134,13 +134,13 @@
                     </v-row>
 
                     <v-card-actions>
-                        <v-spacer></v-spacer>
+                        <!-- <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onEdit"
                             >Print Report</v-btn
                         >
                         <v-btn color="green" dark @click="onEdit"
                             >Print Summary</v-btn
-                        >
+                        > -->
                         <!-- <v-btn color="green" dark @click="onEdit"
                             >Edit Details</v-btn
                         > -->
@@ -256,7 +256,7 @@ export default {
                     _this.description = data.description;
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
-                    _this.employee = `${data.employee.last_name}, ${data.employee.first_name} ${data.employee.suffix}`;
+                    _this.employee = `${data.employee.last_name || ""}, ${data.employee.first_name || ""} ${data.employee.suffix || ""}`;
                     _this.status = data.status;
                     _this.expenses = data.expenses;
                     _this.submitted_at = data.submitted_at;

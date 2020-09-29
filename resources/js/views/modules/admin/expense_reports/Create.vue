@@ -90,7 +90,7 @@
                                             <strong>{{ total }}</strong>
                                         </td>
                                         <td></td>
-                                        <td></td>
+                                        <!-- <td></td> -->
                                     </tr>
                                 </template>
                                 <template v-slot:[`item.actions`]="{ item }">
@@ -118,13 +118,13 @@
                                         <v-spacer></v-spacer>
 
                                         <!-- <v-col cols="12" md="4"> -->
-                                        <v-btn
+                                        <!-- <v-btn
                                             @click="onCreate"
                                             color="white"
                                             class="mr-2"
                                         >
                                             New Item
-                                        </v-btn>
+                                        </v-btn> -->
                                         <DateRangePicker
                                             :preset="preset"
                                             :presets="presets"
@@ -211,7 +211,7 @@
             </v-form>
         </v-card>
 
-        <CreateExpense
+        <!-- <CreateExpense
             ref="createExpense"
             :employee="employee"
             @onSaveExpense="loadExpenses"
@@ -220,21 +220,21 @@
         <EditExpense
             ref="editExpense"
             @onSaveExpense="loadExpenses"
-        ></EditExpense>
+        ></EditExpense> -->
     </div>
 </template>
 
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import CreateExpense from "./components/CreateExpense";
-import EditExpense from "./components/EditExpense";
+// import CreateExpense from "./components/CreateExpense";
+// import EditExpense from "./components/EditExpense";
 
 export default {
     components: {
         DateRangePicker,
-        CreateExpense,
-        EditExpense
+        // CreateExpense,
+        // EditExpense
     },
     data() {
         return {
@@ -272,7 +272,7 @@ export default {
                 { text: "Receipt", value: "receipt_number" },
                 { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },
-                { text: "Actions", value: "actions", sortable: false },
+                // { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],

@@ -116,17 +116,23 @@
                             </v-list-item-title>
                         </v-list-item>
 
+                        <v-list-item @click="onUpdate('duplicate', 'put')">
+                            <v-list-item-title>
+                                Duplicate Report(s)
+                            </v-list-item-title>
+                        </v-list-item>
+
                         <!-- <v-list-item @click="onUpdate('duplicate', 'put')">
                             <v-list-item-title>
                                 Duplicate
                             </v-list-item-title>
                         </v-list-item> -->
 
-                        <v-list-item>
+                        <!-- <v-list-item>
                             <v-list-item-title>
                                 Generate Payment Request
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <!-- <v-list-item @click="onDelete">
                             <v-list-item-title>
@@ -416,6 +422,14 @@ export default {
             });
         },
         onEdit(item) {
+            if(item.status.status == "Approved") {
+                this.$dialog.message.error("Report has been approved", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if(item.status.status == "Cancelled") {
                 this.$dialog.message.error("Report has been cancelled", {
                     position: "top-right",
@@ -431,6 +445,14 @@ export default {
         },
         onDelete() {
             let _this = this;
+
+            if(this.selected.map(item => item.status.status).includes("Cancelled")) {
+                this.$dialog.message.error("Report has already been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -529,6 +551,46 @@ export default {
 
             if(action == "submit" && !this.selected.map(item => item.status.status).includes("For Submission")) {
                 this.$dialog.message.error("Action can't be completed", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "submit" && this.selected.map(item => item.status.status).includes("Approved")) {
+                this.$dialog.message.error("Report has been approved", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "approve" && this.selected.map(item => item.status.status).includes("Approved")) {
+                this.$dialog.message.error("Report has been approved", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "approve" && this.selected.map(item => item.status.status).includes("Cancelled")) {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "submit" && this.selected.map(item => item.status.status).includes("Cancelled")) {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "cancel" && this.selected.map(item => item.status.status).includes("Cancelled")) {
+                this.$dialog.message.error("Report has been cancelled", {
                     position: "top-right",
                     timeout: 2000
                 });

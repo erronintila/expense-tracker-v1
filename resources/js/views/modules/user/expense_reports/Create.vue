@@ -34,13 +34,22 @@
                             </v-autocomplete>
                         </v-col> -->
                         <v-col cols="12" md="8">
-                            <v-text-field
+                            <!-- <v-text-field
                                 v-model="description"
                                 :rules="rules.description"
                                 :counter="100"
                                 label="Description"
                                 required
-                            ></v-text-field>
+                            ></v-text-field> -->
+                            <v-combobox
+                                v-model="description"
+                                :rules="rules.description"
+                                :counter="100"
+                                :items="[default_description]"
+                                :error-messages="errors.description"
+                                @input="errors.description = []"
+                                label="Description"
+                            ></v-combobox>
                         </v-col>
                     </v-row>
 
@@ -76,7 +85,7 @@
                                             <strong>{{ total }}</strong>
                                         </td>
                                         <td></td>
-                                        <td></td>
+                                        <!-- <td></td> -->
                                     </tr>
                                 </template>
                                 <template v-slot:[`item.actions`]="{ item }">
@@ -104,13 +113,13 @@
                                         <v-spacer></v-spacer>
 
                                         <!-- <v-col cols="12" md="4"> -->
-                                        <v-btn
+                                        <!-- <v-btn
                                             @click="onCreate"
                                             color="white"
                                             class="mr-2"
                                         >
                                             New Item
-                                        </v-btn>
+                                        </v-btn> -->
                                         <DateRangePicker
                                             :preset="preset"
                                             :presets="presets"
@@ -256,7 +265,7 @@ export default {
                 { text: "Expense", value: "expense_type.name" },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Actions", value: "actions", sortable: false },
+                // { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
@@ -473,6 +482,11 @@ export default {
                 (total, item) => total + item.amount,
                 0
             );
+        }
+    },
+    computed: {
+        default_description() {
+            return `Expense Report Summary (${moment(this.date_range[0]).format('LL')} - ${moment(this.date_range[1]).format('LL')})`
         }
     },
     created() {

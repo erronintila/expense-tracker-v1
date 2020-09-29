@@ -97,15 +97,15 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onRestore">
+                        <!-- <v-list-item @click="onRestore">
                             <v-list-item-title>
                                 Restore
                             </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <v-list-item @click="onDelete">
                             <v-list-item-title>
-                                Cancel
+                                Cancel Expense(s)
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -161,7 +161,13 @@
                                     <tr>
                                         <td><strong>Reimbursable</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatNumber(item.reimbursable_amount) }}</td>
+                                        <td>
+                                            {{
+                                                formatNumber(
+                                                    item.reimbursable_amount
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Code</strong></td>
@@ -181,7 +187,13 @@
                                     <tr>
                                         <td><strong>Vendor</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.vendor == null ? "" : item.vendor.name }}</td>
+                                        <td>
+                                            {{
+                                                item.vendor == null
+                                                    ? ""
+                                                    : item.vendor.name
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Remarks</strong></td>
@@ -405,6 +417,41 @@ export default {
             });
         },
         onEdit(item) {
+            if (item.expense_report) {
+                if (item.expense_report.approved_at) {
+                    this.$dialog.message.error(
+                        "Expense with an approved report can't be edited",
+                        {
+                            position: "top-right",
+                            timeout: 2000
+                        }
+                    );
+                    return;
+                }
+
+                if (item.expense_report.deleted_at) {
+                    this.$dialog.message.error(
+                        "Expense with a deleted report can't be edited",
+                        {
+                            position: "top-right",
+                            timeout: 2000
+                        }
+                    );
+                    return;
+                }
+            }
+
+            if (this.status == "Cancelled") {
+                this.$dialog.message.error(
+                    "Expense has been deleted.",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
+
             this.$router.push({
                 name: "user.expenses.edit",
                 params: { id: item.id }
@@ -426,7 +473,7 @@ export default {
                     .map(item => item.expense_report_id)
                     .includes(null)
             ) {
-                this.$dialog.message.error("Expense(s) can't be deleted", {
+                this.$dialog.message.error("Expense(s) can't be cancelled", {
                     position: "top-right",
                     timeout: 2000
                 });

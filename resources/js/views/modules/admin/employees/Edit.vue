@@ -222,11 +222,7 @@ export default {
                         v.length <= 100 ||
                         "First name must be less than 100 characters"
                 ],
-                middle_name: [
-                    v =>
-                        (v !== null && v.length <= 100) ||
-                        "Middle name must be less than 100 characters"
-                ],
+                middle_name: [],
                 last_name: [
                     v => !!v || "Last name is required",
                     v =>
@@ -237,12 +233,8 @@ export default {
                 gender: [v => !!v || "Gender is required"],
                 birthdate: [v => !!v || "Birthdate is required"],
                 job: [v => !!v || "Job designation is required"],
-                mobile_number: [v => !!v || "Mobile number is required"],
-                telephone_number: [
-                    v =>
-                        (v !== null && v.length <= 30) ||
-                        "Telephone number must be less than 30 characters"
-                ],
+                mobile_number: [],
+                telephone_number: [],
                 email: [
                     v => !!v || "E-mail is required",
                     v => /.+@.+/.test(v) || "E-mail is not valid"

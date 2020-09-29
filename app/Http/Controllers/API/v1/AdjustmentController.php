@@ -126,7 +126,7 @@ class AdjustmentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $adjustment = Adjustment::findOrFail($id);
+        $adjustment = Adjustment::withTrashed()->findOrFail($id);
 
         return response(
             [

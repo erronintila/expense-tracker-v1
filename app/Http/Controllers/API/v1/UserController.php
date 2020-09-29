@@ -116,7 +116,7 @@ class UserController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::withTrashed()->findOrFail($id);
 
         return response(
             [

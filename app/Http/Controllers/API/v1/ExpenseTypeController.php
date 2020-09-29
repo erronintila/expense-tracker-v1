@@ -89,7 +89,7 @@ class ExpenseTypeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense_type = ExpenseType::findOrFail($id);
+        $expense_type = ExpenseType::withTrashed()->findOrFail($id);
 
         return response(
             [

@@ -88,7 +88,7 @@ class DepartmentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $department = Department::findOrFail($id);
+        $department = Department::withTrashed()->findOrFail($id);
 
         return response(
             [
