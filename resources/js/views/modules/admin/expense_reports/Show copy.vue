@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn :to="{ name: 'admin.reports.index' }" class="mr-3" icon>
@@ -77,7 +77,7 @@
                 </v-row>
             </v-container>
         </v-card>
-    </v-app>
+    </div>
 </template>
 
 <script>

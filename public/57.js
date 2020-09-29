@@ -5,9 +5,1038 @@
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expenses/Edit.vue?vue&type=script&lang=js& ***!
   \********************************************************************************************************************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\resources\\js\\views\\modules\\user\\expenses\\Edit.vue: Unexpected token (831:63)\n\n\u001b[0m \u001b[90m 829 | \u001b[39m                    _this\u001b[33m.\u001b[39mexpense_type \u001b[33m=\u001b[39m data\u001b[33m.\u001b[39mexpense_type\u001b[33m.\u001b[39mid\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 830 | \u001b[39m                    _this\u001b[33m.\u001b[39memployee \u001b[33m=\u001b[39m data\u001b[33m.\u001b[39memployee\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 831 | \u001b[39m                    _this\u001b[33m.\u001b[39mvendor \u001b[33m=\u001b[39m data\u001b[33m.\u001b[39mvendor \u001b[33m==\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m?\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m:\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m                                                               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 832 | \u001b[39m                    _this\u001b[33m.\u001b[39mitems \u001b[33m=\u001b[39m data\u001b[33m.\u001b[39mexpense_details\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 833 | \u001b[39m                })\u001b[0m\n\u001b[0m \u001b[90m 834 | \u001b[39m                \u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(error \u001b[33m=>\u001b[39m {\u001b[0m\n    at Parser._raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:766:17)\n    at Parser.raiseWithData (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:759:17)\n    at Parser.raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:753:17)\n    at Parser.unexpected (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8966:16)\n    at Parser.parseExprAtom (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10282:20)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at Parser.parseConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9672:29)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9663:17)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9644:25)\n    at Parser.parseExpressionBase (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9564:23)\n    at C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:39\n    at Parser.allowInAnd (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11303:12)\n    at Parser.parseExpression (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:17)\n    at Parser.parseStatementContent (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11562:23)\n    at Parser.parseStatement (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11431:17)\n    at Parser.parseBlockOrModuleBlockBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:12013:25)\n    at Parser.parseBlockBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11999:10)\n    at Parser.parseBlock (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11983:10)\n    at Parser.parseFunctionBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10963:24)\n    at Parser.parseArrowExpression (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10932:10)\n    at Parser.parseExprAtom (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10135:25)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:39\n    at Parser.allowInAnd (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11303:12)\n    at Parser.parseMaybeAssignAllowIn (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:17)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    var _this2 = this;
+
+    return {
+      dialog: false,
+      valid: false,
+      menu: false,
+      code: null,
+      description: null,
+      amount: 0,
+      reimbursable_amount: 0,
+      receipt_number: null,
+      date: null,
+      remarks: null,
+      is_active: true,
+      expense_type: null,
+      expense_types: [],
+      employee: {
+        id: null,
+        remaining_fund: 0,
+        fund: 0
+      },
+      employees: [],
+      vendor: null,
+      vendors: [],
+      particular: "",
+      particular_amount: 0,
+      particular_reimbursable_amount: 0,
+      is_reimbursable: false,
+      headers: [{
+        text: "Particulars",
+        value: "description",
+        sortable: false
+      }, {
+        text: "Reimbursable Amount",
+        value: "reimbursable_amount",
+        sortable: false
+      }, {
+        text: "Amount",
+        value: "amount",
+        sortable: false
+      }, {
+        text: "",
+        value: "actions",
+        sortable: false
+      }],
+      items: [],
+      rules: {
+        description: [],
+        amount: [function (v) {
+          return !!v || "Amount is required";
+        }],
+        reimbursable_amount: [function (v) {
+          return parseFloat(v) <= _this2.amount || "Reimbursable Amount should not be greater than the actual amount";
+        }],
+        particular_reimbursable_amount: [function (v) {
+          return parseFloat(v) <= _this2.particular_amount || "Reimbursable Amount should not be greater than the actual amount";
+        }],
+        receipt_number: [],
+        date: [function (v) {
+          return !!v || "Date is required";
+        }],
+        remarks: [],
+        is_active: [],
+        expense_type: [function (v) {
+          return !!v || "Expense Type is required";
+        }],
+        employee: [function (v) {
+          return !!v || "Employee is required";
+        }],
+        vendor: []
+      },
+      errors: {
+        description: [],
+        amount: [],
+        reimbursable_amount: [],
+        receipt_number: [],
+        date: [],
+        remarks: [],
+        is_active: [],
+        expense_type_id: [],
+        employee_id: [],
+        vendor_id: []
+      },
+      // Create Vendor
+      vendorOptions: {
+        dialog: false,
+        valid: false,
+        code: "",
+        name: "",
+        email: "",
+        tin: "",
+        contact_person: "",
+        mobile_number: "",
+        telephone_number: "",
+        remarks: "",
+        website: "",
+        is_vat_inclusive: false,
+        address: "",
+        selected_expense_types: [],
+        expense_types: [],
+        rules: {
+          code: [],
+          name: [function (v) {
+            return !!v || "Name is required";
+          }, function (v) {
+            return v.length <= 150 || "Name must be less than 100 characters";
+          }],
+          email: [],
+          tin: [function (v) {
+            return !!v || "TIN is required";
+          }, function (v) {
+            return v.length <= 150 || "Name must be less than 100 characters";
+          }],
+          contact_person: [],
+          mobile_number: [],
+          telephone_number: [],
+          remarks: [],
+          website: [],
+          is_vat_inclusive: [],
+          address: []
+        },
+        errors: {
+          code: [],
+          name: [],
+          email: [],
+          tin: [],
+          contact_person: [],
+          mobile_number: [],
+          telephone_number: [],
+          remarks: [],
+          website: [],
+          is_vat_inclusive: [],
+          address: []
+        }
+      }
+    };
+  },
+  methods: {
+    getCurrentUser: function getCurrentUser() {
+      var _this = this;
+
+      axios.get("/api/user").then(function (response) {
+        var emp = response.data.data.employee;
+        _this.employee = emp == null ? null : emp;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    getData: function getData() {
+      var _this = this;
+
+      axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
+        var data = response.data.data;
+        _this.code = data.code;
+        _this.description = data.description;
+        _this.amount = data.amount;
+        _this.receipt_number = data.receipt_number;
+        _this.date = data.date;
+        _this.remarks = data.remarks;
+        _this.is_active = data.is_active;
+        _this.expense_type = data.expense_type.id;
+        _this.employee = data.employee;
+        _this.vendor = data.vendor == null ? null : data.vendor.id;
+        _this.items = data.expense_details;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    loadExpenseTypes: function loadExpenseTypes() {
+      var _this = this;
+
+      axios.get("/api/data/expense_types").then(function (response) {
+        _this.expense_types = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    loadVendors: function loadVendors() {
+      var _this = this;
+
+      axios.get("/api/data/vendors").then(function (response) {
+        _this.vendors = response.data.data;
+
+        _this.vendors.unshift({
+          id: null,
+          name: "No Vendor",
+          tin: ""
+        });
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
+    onSave: function onSave() {
+      var _this = this;
+
+      if (_this.employee == null || _this.employee <= 0) {
+        _this.$dialog.message.error("User Account Unauthorized", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
+
+      _this.$refs.form.validate();
+
+      if (parseFloat(this.amount) - parseFloat(this.reimbursable_amount) > parseFloat(this.employee.remaining_fund)) {
+        _this.$dialog.message.error("Expense actual amount is greater than remaining funds", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
+
+      if (this.items.length == 0) {
+        _this.$dialog.message.error("No Expense detail added", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
+
+      if (_this.$refs.form.validate()) {
+        axios.put("/api/expenses/" + _this.$route.params.id, {
+          code: _this.code,
+          description: _this.description,
+          amount: _this.amount,
+          reimbursable_amount: _this.reimbursable_amount,
+          receipt_number: _this.receipt_number,
+          date: _this.date,
+          remarks: _this.remarks,
+          is_active: _this.is_active,
+          expense_type_id: _this.expense_type,
+          employee_id: _this.employee.id,
+          vendor_id: _this.vendor,
+          expense_details: _this.items
+        }).then(function (response) {
+          _this.onRefresh();
+
+          _this.$dialog.message.success("Expense updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "user.expenses.index"
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+          _this.errors = error.response.data.errors;
+        });
+        return;
+      }
+    },
+    addItem: function addItem() {
+      if (parseFloat(this.particular_amount) >= parseFloat(this.particular_reimbursable_amount)) {
+        this.items.push({
+          id: 0,
+          description: this.particular,
+          amount: this.particular_amount,
+          reimbursable_amount: this.particular_reimbursable_amount
+        });
+      }
+
+      this.dialog = false;
+      this.particular = "";
+      this.particular_amount = 0;
+    },
+    onRemove: function onRemove(item) {
+      var index = this.items.indexOf(item);
+      confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
+    },
+    isEmpty: function isEmpty(item) {
+      if (item) {
+        return parseFloat(item);
+      }
+
+      return 0;
+    },
+    onCreateVendor: function onCreateVendor() {
+      var _this = this;
+
+      _this.$refs.vendorForm.validate();
+
+      if (_this.$refs.vendorForm.validate()) {
+        axios.post("/api/vendors", {
+          code: _this.vendorOptions.code,
+          name: _this.vendorOptions.name,
+          email: _this.vendorOptions.email,
+          tin: _this.vendorOptions.tin,
+          contact_person: _this.vendorOptions.contact_person,
+          mobile_number: _this.vendorOptions.mobile_number,
+          telephone_number: _this.vendorOptions.telephone_number,
+          remarks: _this.vendorOptions.remarks,
+          website: _this.vendorOptions.website,
+          is_vat_inclusive: _this.vendorOptions.is_vat_inclusive,
+          address: _this.vendorOptions.address,
+          expense_types: _this.vendorOptions.selected_expense_types
+        }).then(function (response) {
+          // _this.onRefresh();
+          _this.$dialog.message.success("Vendor created successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$refs.vendorForm.reset();
+
+          _this.$refs.vendorForm.resetValidation();
+
+          _this.vendorOptions.dialog = false;
+
+          _this.loadVendors();
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+          _this.vendorOptions.errors = error.response.data.errors;
+        });
+        return;
+      }
+    },
+    formatNumber: function formatNumber(data) {
+      return numeral__WEBPACK_IMPORTED_MODULE_0___default()(data).format("0,0.00");
+    }
+  },
+  watch: {
+    items: function items() {
+      this.amount = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.amount);
+      }, 0);
+      this.reimbursable_amount = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.reimbursable_amount);
+      }, 0);
+    }
+  },
+  created: function created() {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    this.getCurrentUser();
+    this.loadExpenseTypes();
+    this.loadVendors();
+    this.getData();
+  }
+});
 
 /***/ }),
 
@@ -27,7 +1056,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-app",
+    "div",
     [
       _c(
         "v-card",

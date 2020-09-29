@@ -1,9 +1,9 @@
 <template>
-    <v-app>
+    <div>
         <!-- <v-overlay :value="overlay" opacity="100" color="success">
             <v-progress-circular indeterminate size="80"> </v-progress-circular>
         </v-overlay> -->
-    </v-app>
+    </div>
 </template>
 
 <script>

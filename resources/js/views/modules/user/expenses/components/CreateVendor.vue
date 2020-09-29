@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <v-dialog v-model="dialogVendor" persistent max-width="600px">
             <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -135,7 +135,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </v-app>
+    </div>
 </template>
 
 <script>

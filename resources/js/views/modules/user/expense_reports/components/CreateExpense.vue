@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <v-dialog
             v-model="dialog"
             fullscreen
@@ -300,7 +300,7 @@
                 </v-form>
             </v-card>
         </v-dialog>
-    </v-app>
+    </div>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <div>
             <div>
                 Expense Report Summary <br />
@@ -36,7 +36,7 @@
                 {{ headers }}
             </div>
         </div>
-    </v-app>
+    </div>
 </template>
 
 <script>

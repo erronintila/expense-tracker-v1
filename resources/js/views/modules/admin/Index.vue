@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <!-- Navigation Drawer -->
         <v-navigation-drawer
             v-model="drawer"
@@ -142,7 +142,7 @@
             </v-container>
         </v-main>
         <!-- End of Main View -->
-    </v-app>
+    </div>
 </template>
 
 <script>

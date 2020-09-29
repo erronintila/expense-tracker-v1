@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
@@ -203,7 +203,7 @@
             :employeeid="employee"
             @onSaveExpense="loadExpenses"
         ></EditExpense>
-    </v-app>
+    </div>
 </template>
 
 <script>

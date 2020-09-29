@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <v-card class="elevation-0 p-0 m-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Employees</h4>
@@ -202,7 +202,7 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
-    </v-app>
+    </div>
 </template>
 
 <script>
