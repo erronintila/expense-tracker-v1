@@ -185,12 +185,12 @@
                                     <tr>
                                         <td><strong>Created at</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.created_at }}</td>
+                                        <td>{{ formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.deleted_at }}</td>
+                                        <td>{{ formatDate(item.deleted_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr>
                                     <!-- <tr>
                                         <td><strong>Status</strong></td>
@@ -466,6 +466,9 @@ export default {
         },
         getHumanDate(date) {
             return moment(date).fromNow();
+        },
+        formatDate(date, format) {
+            return date == null ? "" : moment(date).format(format);
         },
         formatNumber(data) {
             return numeral(data).format("0,0.00");

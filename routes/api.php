@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/data/test', 'API\v1\DataController@test');
-
 Route::post('/register', 'API\v1\AuthController@register');
 
 Route::post('/login', 'API\v1\AuthController@login');
@@ -50,6 +48,10 @@ Route::middleware('auth:api')->group(function () {
         ]
     );
 });
+
+Route::get('/data/test', 'API\v1\DataController@test');
+
+Route::get('/data/print', 'API\v1\DataController@print');
 
 // Route::get('/data/adjustments', 'API\v1\DataController@adjustments');
 

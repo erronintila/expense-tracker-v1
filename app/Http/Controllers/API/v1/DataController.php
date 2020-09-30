@@ -26,6 +26,29 @@ class DataController extends Controller
 {
     public function test()
     {
+        $start_date = Carbon::parse("2020-09-01")->startOfDay();
+        $end_date = Carbon::parse("2020-09-30")->endOfDay();
+
+        $expense_reports = ExpenseReport::withTrashed()->whereBetween("created_at", [$start_date, $end_date])->get();
+
+        return $expense_reports;
+
+        // $expense_types = ExpenseType::all();
+        // $temp = ["supplies" => 0];
+
+        // foreach ($expense_types as $key => $value) {
+        //     if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp)) {
+        //         $temp[str_replace(' ', '_', strtolower($value["name"]))] = 0;
+        //     }
+        // }
+
+        // return "hello";
+
+        // return $temp;
+
+
+
+
         ///////////////////////
 
         $employee = Employee::findOrFail(7);
@@ -56,6 +79,8 @@ class DataController extends Controller
 
         ///////////////////////////
 
+        $expense_types = ExpenseType::all();
+
         $expense_report = ExpenseReport::where("id", 1);
 
         $expense_report = new ExpenseReportResource($expense_report->first());
@@ -79,6 +104,12 @@ class DataController extends Controller
             $temp["total"] = array_sum(array_values($temp));
             $temp['date'] = $date;
 
+            foreach ($expense_types as $key => $value) {
+                if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp)) {
+                    $temp[str_replace(' ', '_', strtolower($value["name"]))] = 0;
+                }
+            }
+
             array_push($main, $temp);
         }
 
@@ -91,6 +122,57 @@ class DataController extends Controller
         $expenses = $expenses->groupBy("date");
 
         return ExpenseResource::collection($expenses->get());
+    }
+
+    public function print(Request $request)
+    {
+        if (request()->has("expense_report_detailed")) {
+
+            $expense_types = ExpenseType::withTrashed()->get();
+            $expense_report = ExpenseReport::withTrashed()->where("id", $request->expense_report_id);
+
+            $expense_report = new ExpenseReportResource($expense_report->first());
+
+            $data =  $expense_report->expenses()->withTrashed()->get()
+                ->sortBy("date")->groupBy("date")
+                ->map(function ($row) {
+                    return $row->groupBy('expense_type.name')->map(function ($row) {
+                        return $row->sum("amount");
+                    });
+                });
+
+            $main = [];
+
+            foreach ($data as $key => $value) {
+                $temp = [];
+                $date = $key;
+
+                foreach ($value as $key => $value) {
+                    $temp[str_replace(' ', '_', strtolower($key))] = $value;
+                }
+
+                $temp["total"] = array_sum(array_values($temp));
+                $temp['date'] = Carbon::parse($date)->toDate()->format("Y-m-d");
+
+                foreach ($expense_types as $key => $value) {
+                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp)) {
+                        $temp[str_replace(' ', '_', strtolower($value["name"]))] = 0;
+                    }
+                }
+
+                array_push($main, $temp);
+            }
+
+            return response()->json([
+                "data" => $main,
+                "expense_report" => $expense_report,
+                "min_date" => collect($main)->min("date"),
+                "max_date" => collect($main)->max("date")
+            ]);
+        }
+
+        if (request()->has("expense_report_summary")) {
+        }
     }
 
     public function employees(Request $request)

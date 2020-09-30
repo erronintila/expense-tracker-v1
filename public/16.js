@@ -563,8 +563,9 @@ var render = function() {
         "v-main",
         [
           _c(
-            "v-container",
-            [_c("v-row", [_c("v-col", [_c("router-view")], 1)], 1)],
+            "v-row",
+            { staticClass: "ml-2 mr-2 mt-4" },
+            [_c("v-col", [_c("router-view")], 1)],
             1
           )
         ],

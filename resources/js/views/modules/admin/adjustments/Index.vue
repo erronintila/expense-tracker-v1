@@ -115,6 +115,9 @@
                         nextIcon: 'mdi-chevron-right'
                     }"
                 >
+                    <template v-slot:[`item.updated_at`]="{ item }">
+                        {{ formatDate(item.updated_at, "YYYY-MM-DD HH:mm:ss") }}
+                    </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{
                             item.add_amount > 0
@@ -137,6 +140,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
     data() {
         return {
@@ -246,7 +251,7 @@ export default {
                             params: {
                                 ids: _this.selected.map(item => {
                                     return item.id;
-                                }),
+                                })
                             }
                         })
                         .then(function(response) {
@@ -269,6 +274,9 @@ export default {
                         });
                 }
             });
+        },
+        formatDate(date, format) {
+            return date == null ? "" : moment(date).format(format);
         }
     },
     watch: {

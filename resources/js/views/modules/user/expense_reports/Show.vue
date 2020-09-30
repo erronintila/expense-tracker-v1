@@ -137,15 +137,16 @@
                         </v-col>
                     </v-row>
 
-                    <!-- <v-card-actions>
+                    <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="onEdit"
-                            >Print Report</v-btn
+                        <v-btn
+                            color="green"
+                            dark
+                            :to="{ name: 'user.expense_reports.print' }"
                         >
-                        <v-btn color="green" dark @click="onEdit"
-                            >Print Summary</v-btn
-                        >
-                    </v-card-actions> -->
+                            Print Report
+                        </v-btn>
+                    </v-card-actions>
                 </v-container>
             </v-form>
         </v-card>

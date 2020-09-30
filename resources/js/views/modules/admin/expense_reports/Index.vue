@@ -212,22 +212,22 @@
                                     <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.created_at }}</td>
+                                        <td>{{ formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Submitted</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.submitted_at }}</td>
+                                        <td>{{ formatDate(item.submitted_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Approved</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.approved_at }}</td>
+                                        <td>{{ formatDate(item.approved_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.deleted_at }}</td>
+                                        <td>{{ formatDate(item.deleted_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr>
                                 </table>
                             </v-container>
@@ -668,6 +668,9 @@ export default {
         },
         getHumanDate(date) {
             return moment(date).fromNow();
+        },
+        formatDate(date, format) {
+            return date == null ? "" : moment(date).format(format);
         },
         formatNumber(data) {
             return numeral(data).format("0,0.00");

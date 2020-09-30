@@ -1,52 +1,110 @@
 <template>
     <div>
         <div>
-            <div>
-                Expense Report Summary <br />
-                Employee: <br />
-                Period: <br />
-            </div>
+            <v-row>
+                <v-col>
+                    <div class="title green--text">Expense Summary Report</div>
+                    <div>
+                        Employee:
+                        {{
+                            `${
+                                expense_report.employee.last_name
+                            }, ${expense_report.employee.first_name ||
+                                ""} ${expense_report.employee.suffix || ""}`
+                        }}
+                    </div>
+                    <div>
+                        Description: {{ expense_report.description || "" }}
+                    </div>
+                    <div>Period: {{ `${min_date} ~ ${max_date}` }}</div>
+                </v-col>
+                <v-col class="text-right">
+                    <div class="title green--text">
+                        # {{ expense_report.code }}
+                    </div>
+                </v-col>
+            </v-row>
 
-            <div>
-                <v-data-table
-                    dense
-                    :hide-default-footer="true"
-                    disable-pagination
-                    :headers="headers"
-                    :items="items"
-                >
-                    <template slot="body.append" v-if="items.length > 0">
-                        <tr class="green--text hidden-md-and-up">
-                            <td class="title">
-                                Total: <strong>{{ total }}</strong>
-                            </td>
-                        </tr>
-                        <tr class="green--text hidden-sm-and-down">
-                            <td>Total</td>
-                            <td
-                                v-for="item in headers.length - 1"
-                                :key="item.name"
-                            >
-                                {{ 0 }}
-                            </td>
-                            <!-- <td>{{ total }}</td> -->
-                        </tr>
-                    </template>
-                </v-data-table>
-                {{ headers }}
-            </div>
+            <v-row class="mt-5">
+                <v-col>
+                    <v-data-table
+                        dense
+                        :hide-default-footer="true"
+                        disable-pagination
+                        :headers="headers"
+                        :items="items"
+                    >
+                        <template slot="body.append" v-if="items.length > 0">
+                            <tr class="green--text hidden-md-and-up">
+                                <td class="title">
+                                    Total: <strong>{{ 0 }}</strong>
+                                </td>
+                            </tr>
+                            <tr class="green--text hidden-sm-and-down">
+                                <td>Total</td>
+                                <td
+                                    v-for="(value, name) in column_headers"
+                                    :key="name"
+                                >
+                                    {{ value }}
+                                </td>
+                            </tr>
+                        </template>
+                    </v-data-table>
+                </v-col>
+            </v-row>
+
+            <v-row>
+                <v-col>
+                    <div>Grand Total :</div>
+                </v-col>
+                <v-col class="text-right">
+                    <div class="headline green--text">₱ {{ total_amount }}</div>
+                </v-col>
+            </v-row>
         </div>
     </div>
 </template>
 
 <script>
+import moment from "moment";
+import numeral from "numeral";
+
 export default {
     data() {
         return {
             total: 0,
             total_amounts: [],
             headers: [],
-            items: []
+            items: [],
+            expense_report: {
+                id: "",
+                code: "",
+                description: "",
+                remarks: "",
+                notes: "",
+                employee: {
+                    last_name: "",
+                    first_name: "",
+                    middle_name: "",
+                    suffix: ""
+                },
+                payment: {},
+                expenses: {},
+                status: "",
+                submitted_at: "",
+                reviewed_at: "",
+                approved_at: "",
+                cancelled_at: "",
+                created_at: "",
+                updated_at: "",
+                deleted_at: "",
+                total: 0,
+                total_reimbursable: 0
+            },
+            min_date: "",
+            max_date: "",
+            column_headers: {}
         };
     },
     methods: {
@@ -59,6 +117,12 @@ export default {
                     .then(response => {
                         response.data.data.forEach(element => {
                             let header = element.name;
+
+                            let identifier = element.name
+                                .replace(/\s+/g, "_")
+                                .toLowerCase();
+
+                            _this.column_headers[identifier] = 0;
 
                             _this.headers.push({
                                 text: element.name,
@@ -88,11 +152,12 @@ export default {
                             sortable: false
                         });
 
-                        // _this.total_amounts.push({header : 0});
+                        _this.column_headers["total"] = 0;
 
                         resolve();
                     })
                     .catch(error => {
+                        console.log(error);
                         console.log(error.response);
                         reject();
                     });
@@ -103,41 +168,59 @@ export default {
 
             _this.loadExpenseTypes().then(() => {
                 axios
-                    .get("/api/data/test")
+                    .get(
+                        `/api/data/print?expense_report_detailed=true&expense_report_id=${_this.$route.params.id}`
+                    )
                     .then(response => {
-                        let rows = response.data;
+                        console.log(response);
+
+                        let rows = response.data.data;
 
                         _this.items = rows;
-
-                        console.log(_this.items);
+                        _this.expense_report = response.data.expense_report;
+                        _this.min_date = response.data.min_date;
+                        _this.max_date = response.data.max_date;
                     })
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
                     });
             });
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
+        }
+    },
+    computed: {
+        total_amount() {
+            return this.formatNumber(this.expense_report.total);
         }
     },
     watch: {
         items() {
-            this.total_amounts.forEach(element => {
-                element.value = this.items.reduce(
-                    (total, item) => total + item.total,
+            for (const key in this.column_headers) {
+                this.column_headers[key] = this.items.reduce(
+                    (total, item) => total + item[key],
                     0
                 );
-            });
-
-            this.total = this.items.reduce(
-                (total, item) => total + item.total,
-                0
-            );
+            }
         }
     },
     created() {
         let _this = this;
 
-        // _this.loadExpenseTypes();
         _this.loadExpenses();
     }
 };
 </script>
+
+<style scoped>
+@media print {
+    body {
+        overflow: auto;
+        height: auto;
+    }
+}
+
+@page { size: Legal landscape; }
+</style>

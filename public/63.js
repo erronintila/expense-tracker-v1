@@ -542,6 +542,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getHumanDate: function getHumanDate(date) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).fromNow();
     },
+    formatDate: function formatDate(date, format) {
+      return date == null ? "" : moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
+    },
     formatNumber: function formatNumber(data) {
       return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
     }
@@ -1026,7 +1029,14 @@ var render = function() {
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(_vm._s(item.created_at))
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.formatDate(
+                                              item.created_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          )
+                                        )
                                       ])
                                     ]),
                                     _vm._v(" "),
@@ -1038,7 +1048,14 @@ var render = function() {
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(_vm._s(item.deleted_at))
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.formatDate(
+                                              item.deleted_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          )
+                                        )
                                       ])
                                     ])
                                   ])

@@ -6,7 +6,7 @@ const userRoutes = [
         redirect: "/dashboard",
         component: () => import("../../views/modules/user/Index.vue"),
         meta: {
-            requiresAuth: true,
+            requiresAuth: true
             // requiresAdmin: true
         },
         children: [
@@ -84,7 +84,9 @@ const userRoutes = [
                 path: "/expense_reports/create",
                 name: "user.expense_reports.create",
                 component: () =>
-                    import("../../views/modules/user/expense_reports/Create.vue")
+                    import(
+                        "../../views/modules/user/expense_reports/Create.vue"
+                    )
             },
             {
                 path: "/expense_reports/:id/edit",
@@ -98,8 +100,14 @@ const userRoutes = [
                 component: () =>
                     import("../../views/modules/user/expense_reports/Show.vue")
             },
+            {
+                path: "/expense_reports/print/:id",
+                name: "user.expense_reports.print",
+                component: () =>
+                    import("../../views/modules/user/expense_reports/Print.vue")
+            },
         ]
-    }
+    },
 ];
 
 export default userRoutes.map(route => {
