@@ -158,7 +158,13 @@
                                     <tr>
                                         <td><strong>Reimbursable</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatNumber(item.total_reimbursable) }}</td>
+                                        <td>
+                                            {{
+                                                formatNumber(
+                                                    item.total_reimbursable
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Status</strong></td>
@@ -211,7 +217,12 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon v-show="status !== 'Cancelled'" small class="mr-2" @click="onEdit(item)">
+                        <v-icon
+                            v-show="status !== 'Cancelled'"
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -399,7 +410,7 @@ export default {
             });
         },
         onEdit(item) {
-            if(item.status.status == "Approved") {
+            if (item.status.status == "Approved") {
                 this.$dialog.message.error("Report has been approved", {
                     position: "top-right",
                     timeout: 2000
@@ -407,11 +418,22 @@ export default {
                 return;
             }
 
-            if(item.status.status == "Cancelled") {
+            if (item.status.status == "Cancelled") {
                 this.$dialog.message.error("Report has been cancelled", {
                     position: "top-right",
                     timeout: 2000
                 });
+                return;
+            }
+
+            if (item.status.status == "Paid/Reimbursed") {
+                this.$dialog.message.error(
+                    "Paid/reimbursed expense report can't be edited",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
                 return;
             }
 
@@ -423,7 +445,11 @@ export default {
         onDelete() {
             let _this = this;
 
-            if(this.selected.map(item => item.status.status).includes("Approved")) {
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
                 this.$dialog.message.error("Report has been approved", {
                     position: "top-right",
                     timeout: 2000
@@ -431,11 +457,18 @@ export default {
                 return;
             }
 
-            if(this.selected.map(item => item.status.status).includes("Cancelled")) {
-                this.$dialog.message.error("Report has already been cancelled", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Cancelled")
+            ) {
+                this.$dialog.message.error(
+                    "Report has already been cancelled",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
                 return;
             }
 
@@ -447,38 +480,40 @@ export default {
                 return;
             }
 
-            this.$confirm("Do you want to cancel expense report(s)?").then(res => {
-                if (res) {
-                    axios
-                        .delete(
-                            `/api/expense_reports/${_this.selected[0].id}`,
-                            {
-                                params: {
-                                    ids: _this.selected.map(item => {
-                                        return item.id;
-                                    })
-                                }
-                            }
-                        )
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Expense report(s) cancelled successfully",
+            this.$confirm("Do you want to cancel expense report(s)?").then(
+                res => {
+                    if (res) {
+                        axios
+                            .delete(
+                                `/api/expense_reports/${_this.selected[0].id}`,
                                 {
-                                    position: "top-right",
-                                    timeout: 2000
+                                    params: {
+                                        ids: _this.selected.map(item => {
+                                            return item.id;
+                                        })
+                                    }
                                 }
-                            );
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            )
+                            .then(function(response) {
+                                _this.$dialog.message.success(
+                                    "Expense report(s) cancelled successfully",
+                                    {
+                                        position: "top-right",
+                                        timeout: 2000
+                                    }
+                                );
+                                _this.getDataFromApi().then(data => {
+                                    _this.items = data.items;
+                                    _this.totalItems = data.total;
+                                });
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                                console.log(error.response);
                             });
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-                        });
+                    }
                 }
-            });
+            );
         },
         onUpdate(action, method) {
             let _this = this;
@@ -491,7 +526,12 @@ export default {
                 return;
             }
 
-            if(action == "submit" && this.selected.map(item => item.status.status).includes("Approved")) {
+            if (
+                action == "submit" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
                 this.$dialog.message.error("Report has been approved", {
                     position: "top-right",
                     timeout: 2000
@@ -499,8 +539,12 @@ export default {
                 return;
             }
 
-
-            if(action == "submit" && this.selected.map(item => item.status.status).includes("Cancelled")) {
+            if (
+                action == "submit" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Cancelled")
+            ) {
                 this.$dialog.message.error("Report has been cancelled", {
                     position: "top-right",
                     timeout: 2000
@@ -508,39 +552,41 @@ export default {
                 return;
             }
 
-            this.$confirm(`Do you want to ${action} expense report(s)?`).then(res => {
-                if (res) {
-                    let ids = _this.selected.map(item => {
-                        return item.id;
-                    });
-
-                    axios({
-                        method: method,
-                        url: `/api/expense_reports/${_this.selected[0].id}`,
-                        data: {
-                            ids: ids,
-                            action: action
-                        }
-                    })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                response.data.message,
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
+            this.$confirm(`Do you want to ${action} expense report(s)?`).then(
+                res => {
+                    if (res) {
+                        let ids = _this.selected.map(item => {
+                            return item.id;
                         });
+
+                        axios({
+                            method: method,
+                            url: `/api/expense_reports/${_this.selected[0].id}`,
+                            data: {
+                                ids: ids,
+                                action: action
+                            }
+                        })
+                            .then(function(response) {
+                                _this.$dialog.message.success(
+                                    response.data.message,
+                                    {
+                                        position: "top-right",
+                                        timeout: 2000
+                                    }
+                                );
+                                _this.getDataFromApi().then(data => {
+                                    _this.items = data.items;
+                                    _this.totalItems = data.total;
+                                });
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                                console.log(error.response);
+                            });
+                    }
                 }
-            });
+            );
         },
         getHumanDate(date) {
             return moment(date).fromNow();

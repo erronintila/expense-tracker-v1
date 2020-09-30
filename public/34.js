@@ -447,6 +447,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (item.status.status == "Paid/Reimbursed") {
+        this.$dialog.message.error("Paid/reimbursed expense report can't be edited", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
       this.$router.push({
         name: "admin.expense_reports.edit",
         params: {

@@ -336,7 +336,7 @@ var render = function() {
                         { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "Vendor", required: "" },
+                            attrs: { label: "Vendor", readonly: "" },
                             model: {
                               value: _vm.vendor,
                               callback: function($$v) {

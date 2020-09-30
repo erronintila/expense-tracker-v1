@@ -261,6 +261,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -414,6 +425,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (item.status.status == "Cancelled") {
         this.$dialog.message.error("Report has been cancelled", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (item.status.status == "Paid/Reimbursed") {
+        this.$dialog.message.error("Paid/reimbursed expense report can't be edited", {
           position: "top-right",
           timeout: 2000
         });
@@ -968,11 +987,13 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatNumber(
-                                              item.total_reimbursable
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatNumber(
+                                                item.total_reimbursable
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),

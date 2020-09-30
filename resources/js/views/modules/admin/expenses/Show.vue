@@ -36,7 +36,7 @@
                             <v-text-field
                                 v-model="vendor"
                                 label="Vendor"
-                                required
+                                readonly
                             >
                             </v-text-field>
                         </v-col>
