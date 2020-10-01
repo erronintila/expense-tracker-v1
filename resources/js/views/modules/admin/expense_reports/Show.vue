@@ -134,7 +134,8 @@
                     </v-row>
 
                     <v-card-actions>
-                        <!-- <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>
+                        <!--
                         <v-btn color="green" dark @click="onEdit"
                             >Print Report</v-btn
                         >
@@ -144,6 +145,13 @@
                         <!-- <v-btn color="green" dark @click="onEdit"
                             >Edit Details</v-btn
                         > -->
+                        <v-btn
+                            color="green"
+                            dark
+                            :to="{ name: 'admin.expense_reports.print' }"
+                        >
+                            View Summary
+                        </v-btn>
                     </v-card-actions>
                 </v-container>
             </v-form>

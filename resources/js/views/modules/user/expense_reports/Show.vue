@@ -144,7 +144,7 @@
                             dark
                             :to="{ name: 'user.expense_reports.print' }"
                         >
-                            Print Report
+                            View Summary
                         </v-btn>
                     </v-card-actions>
                 </v-container>

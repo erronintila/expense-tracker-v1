@@ -290,6 +290,12 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expense_reports/Show.vue")
             },
+            {
+                path: "/admin/expense_reports/print/:id",
+                name: "admin.expense_reports.print",
+                component: () =>
+                    import("../../views/modules/admin/expense_reports/Print.vue")
+            },
             /**
              *
              *

@@ -181,6 +181,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1783,7 +1791,29 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-card-actions")
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "green",
+                            dark: "",
+                            to: { name: "admin.expense_reports.print" }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        View Summary\n                    "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
                 ],
                 1
               )

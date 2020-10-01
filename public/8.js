@@ -391,7 +391,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    load_department_expenses: function load_department_expenses(start, end) {
+    load_department_expenses: function load_department_expenses(start, end, employee) {
       var _this2 = this;
 
       var _this = this;
@@ -399,7 +399,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/data/departments_expenses_summary", {
         params: {
           start_date: start,
-          end_date: end
+          end_date: end,
+          employee_id: employee
         }
       }).then(function (response) {
         _this.expenses_by_category = response.data;
@@ -432,7 +433,6 @@ __webpack_require__.r(__webpack_exports__);
           employee_id: employee
         }
       }).then(function (response) {
-        console.log(response);
         _this.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;
@@ -451,7 +451,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    load_employees_expenses: function load_employees_expenses(start, end) {
+    load_employees_expenses: function load_employees_expenses(start, end, employee) {
       var _this4 = this;
 
       var _this = this;
@@ -459,7 +459,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/data/employees_expenses_summary", {
         params: {
           start_date: start,
-          end_date: end
+          end_date: end,
+          employee_id: employee
         }
       }).then(function (response) {
         _this.expenses_by_category = response.data;
@@ -480,7 +481,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    load_expenses_summary: function load_expenses_summary(start, end, time_unit) {
+    load_expenses_summary: function load_expenses_summary(start, end, time_unit, employee) {
       var _this5 = this;
 
       var _this = this;
@@ -489,7 +490,8 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           start_date: start,
           end_date: end,
-          time_unit: time_unit
+          time_unit: time_unit,
+          employee_id: employee
         }
       }).then(function (response) {
         switch (_this.groupBy) {
@@ -690,11 +692,11 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case "department":
-          this.load_department_expenses(start, end);
+          this.load_department_expenses(start, end, this.employee.id);
           break;
 
         case "employee":
-          this.load_employees_expenses(start, end);
+          this.load_employees_expenses(start, end, this.employee.id);
           break;
 
         default:
@@ -705,7 +707,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onTimeUnitChange: function onTimeUnitChange() {
       // console.log([this.date_range[0], this.date_range[1], this.groupBy]);
-      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy); // this.load_total_expenses(this.date_range[0], this.date_range[1]);
+      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.employee.id); // this.load_total_expenses(this.date_range[0], this.date_range[1]);
     },
     updateDates: function updateDates(e) {
       this.date_range = e;
@@ -715,13 +717,14 @@ __webpack_require__.r(__webpack_exports__);
       this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
     },
     updateEmployee: function updateEmployee() {
+      this.onCategoryChange();
+      this.onTimeUnitChange();
       this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
     },
     getExpenseStats: function getExpenseStats(start, end, emp) {
       var _this = this;
 
       axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&employee_id=").concat(emp)).then(function (response) {
-        console.log(response);
         _this.total_expenses = response.data.summary.total;
         _this.total_replenishments = response.data.summary.replenishments;
         _this.total_reimbursements = response.data.summary.reimbursements;
@@ -744,7 +747,7 @@ __webpack_require__.r(__webpack_exports__);
     this.load_bar_chart();
     this.load_line_chart(); // this.onTimeUnitChange();
 
-    this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy);
+    this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.employee.id);
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
   }
 });
@@ -844,7 +847,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../node_module
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* .theme--light .v-card {\r\n    border-left: 3px solid green !important;\r\n} */\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .theme--light .v-card {\n    border-left: 3px solid green !important;\n} */\n", ""]);
 
 // exports
 

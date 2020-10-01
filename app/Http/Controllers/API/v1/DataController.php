@@ -378,7 +378,12 @@ class DataController extends Controller
 
     public function employees_expenses_summary(Request $request)
     {
-        $employees = Employee::with(['expenses.expense_report' => function ($q) {
+        $employees = Employee::with(['expenses.expense_report' => function ($q) use ($request) {
+            if (request()->has("employee_id")) {
+                if ($request->employee_id > 0) {
+                    $q->where('employee_id', $request->employee_id);
+                }
+            }
             $q->where('approved_at', '<>', null);
             $q->where('deleted_at', null);
         }])->get();
@@ -404,7 +409,12 @@ class DataController extends Controller
 
     public function departments_expenses_summary(Request $request)
     {
-        $departments = Department::with(['jobs.employees.expenses.expense_report' => function ($q) {
+        $departments = Department::with(['jobs.employees.expenses.expense_report' => function ($q) use ($request) {
+            if (request()->has("employee_id")) {
+                if ($request->employee_id > 0) {
+                    $q->where('employee_id', $request->employee_id);
+                }
+            }
             $q->where('approved_at', '<>', null);
             $q->where('deleted_at', null);
         }])->get();

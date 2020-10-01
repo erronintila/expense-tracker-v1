@@ -720,7 +720,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                        Print Report\n                    "
+                            "\n                        View Summary\n                    "
                           )
                         ]
                       )

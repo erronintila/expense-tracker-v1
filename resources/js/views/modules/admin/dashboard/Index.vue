@@ -385,14 +385,15 @@ export default {
                     console.log(error.response);
                 });
         },
-        load_department_expenses(start, end) {
+        load_department_expenses(start, end, employee) {
             let _this = this;
 
             axios
                 .get("/api/data/departments_expenses_summary", {
                     params: {
                         start_date: start,
-                        end_date: end
+                        end_date: end,
+                        employee_id: employee
                     }
                 })
                 .then(response => {
@@ -425,7 +426,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log(response);
                     _this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
@@ -443,14 +443,15 @@ export default {
                     console.log(error.response);
                 });
         },
-        load_employees_expenses(start, end) {
+        load_employees_expenses(start, end, employee) {
             let _this = this;
 
             axios
                 .get("/api/data/employees_expenses_summary", {
                     params: {
                         start_date: start,
-                        end_date: end
+                        end_date: end,
+                        employee_id: employee
                     }
                 })
                 .then(response => {
@@ -471,7 +472,7 @@ export default {
                     console.log(error.response);
                 });
         },
-        load_expenses_summary(start, end, time_unit) {
+        load_expenses_summary(start, end, time_unit, employee) {
             let _this = this;
 
             axios
@@ -479,7 +480,8 @@ export default {
                     params: {
                         start_date: start,
                         end_date: end,
-                        time_unit: time_unit
+                        time_unit: time_unit,
+                        employee_id: employee
                     }
                 })
                 .then(response => {
@@ -716,10 +718,10 @@ export default {
                     );
                     break;
                 case "department":
-                    this.load_department_expenses(start, end);
+                    this.load_department_expenses(start, end, this.employee.id);
                     break;
                 case "employee":
-                    this.load_employees_expenses(start, end);
+                    this.load_employees_expenses(start, end, this.employee.id);
                     break;
                 default:
                     this.load_expense_types_expenses(
@@ -737,7 +739,8 @@ export default {
             this.load_expenses_summary(
                 this.date_range[0],
                 this.date_range[1],
-                this.groupBy
+                this.groupBy,
+                this.employee.id
             );
             // this.load_total_expenses(this.date_range[0], this.date_range[1]);
         },
@@ -757,6 +760,10 @@ export default {
             );
         },
         updateEmployee() {
+            this.onCategoryChange();
+
+            this.onTimeUnitChange();
+
             this.getExpenseStats(
                 this.date_range[0],
                 this.date_range[1],
@@ -771,7 +778,6 @@ export default {
                     `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${emp}`
                 )
                 .then(response => {
-                    console.log(response);
                     _this.total_expenses = response.data.summary.total;
                     _this.total_replenishments =
                         response.data.summary.replenishments;
@@ -810,7 +816,8 @@ export default {
         this.load_expenses_summary(
             this.date_range[0],
             this.date_range[1],
-            this.groupBy
+            this.groupBy,
+            this.employee.id
         );
 
         this.getExpenseStats(
