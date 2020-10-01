@@ -27,6 +27,17 @@
                                     @updateDates="updateDates"
                                 ></DateRangePicker>
                             </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    label="Employee"
+                                    v-model="employee"
+                                    :items="employees"
+                                    item-text="fullname"
+                                    item-value="id"
+                                    return-object
+                                    @change="updateEmployee"
+                                ></v-select>
+                            </v-list-item>
                         </v-list>
                     </v-card>
                 </v-menu>
@@ -331,7 +342,10 @@ export default {
                 { text: "Protein (g)", value: "protein" },
                 { text: "Iron (%)", value: "iron" }
             ],
-            items: []
+            items: [],
+
+            employee: { id: 0, fullname: "All Employees" },
+            employees: []
         };
     },
     methods: {
@@ -353,6 +367,24 @@ export default {
         //             console.log(error.response);
         //         });
         // },
+        loadEmployees() {
+            let _this = this;
+
+            axios
+                .get("/api/data/employees")
+                .then(response => {
+                    _this.employees = response.data.data;
+
+                    _this.employees.unshift({
+                        id: 0,
+                        fullname: "All Employees"
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         load_department_expenses(start, end) {
             let _this = this;
 
@@ -381,17 +413,19 @@ export default {
                     console.log(error.response);
                 });
         },
-        load_expense_types_expenses(start, end) {
+        load_expense_types_expenses(start, end, employee) {
             let _this = this;
 
             axios
                 .get("/api/data/expense_types_expenses_summary", {
                     params: {
                         start_date: start,
-                        end_date: end
+                        end_date: end,
+                        employee_id: employee
                     }
                 })
                 .then(response => {
+                    console.log(response);
                     _this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
@@ -675,7 +709,11 @@ export default {
 
             switch (this.filter) {
                 case "expense_type":
-                    this.load_expense_types_expenses(start, end);
+                    this.load_expense_types_expenses(
+                        start,
+                        end,
+                        this.employee.id
+                    );
                     break;
                 case "department":
                     this.load_department_expenses(start, end);
@@ -684,7 +722,11 @@ export default {
                     this.load_employees_expenses(start, end);
                     break;
                 default:
-                    this.load_expense_types_expenses(start, end);
+                    this.load_expense_types_expenses(
+                        start,
+                        end,
+                        this.employee.id
+                    );
                     break;
             }
 
@@ -708,19 +750,31 @@ export default {
 
             this.onTimeUnitChange();
 
-            this.getExpenseStats(this.date_range[0], this.date_range[1]);
+            this.getExpenseStats(
+                this.date_range[0],
+                this.date_range[1],
+                this.employee.id
+            );
         },
-        getExpenseStats(start, end) {
+        updateEmployee() {
+            this.getExpenseStats(
+                this.date_range[0],
+                this.date_range[1],
+                this.employee.id
+            );
+        },
+        getExpenseStats(start, end, emp) {
             let _this = this;
 
             axios
                 .get(
-                    `/api/data/expense_stats?start_date=${start}&end_date=${end}`
+                    `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${emp}`
                 )
                 .then(response => {
                     console.log(response);
                     _this.total_expenses = response.data.summary.total;
-                    _this.total_replenishments = response.data.summary.replenishments;
+                    _this.total_replenishments =
+                        response.data.summary.replenishments;
                     _this.total_reimbursements =
                         response.data.summary.reimbursements;
                     _this.total_pending_reports = response.data.summary.pending;
@@ -738,10 +792,13 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
+        this.loadEmployees();
+
         // this.load_total_expenses(this.date_range[0], this.date_range[1]);
         this.load_expense_types_expenses(
             this.date_range[0],
-            this.date_range[1]
+            this.date_range[1],
+            this.employee.id
         );
 
         this.load_pie_chart();
@@ -756,7 +813,11 @@ export default {
             this.groupBy
         );
 
-        this.getExpenseStats(this.date_range[0], this.date_range[1]);
+        this.getExpenseStats(
+            this.date_range[0],
+            this.date_range[1],
+            this.employee.id
+        );
     }
 };
 </script>

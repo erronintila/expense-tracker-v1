@@ -545,7 +545,7 @@ export default {
         onUpdateData() {
             let _this = this;
 
-            _this.$refs.form.validate();
+            // _this.$refs.form.validate();
 
             if (_this.$refs.form.validate() && this.user.employee == null) {
                 axios
@@ -664,6 +664,9 @@ export default {
             this.$refs.form_password.resetValidation();
         }
     },
+    // mounted() {
+    //     this.$refs.form.reset();
+    // },
     created() {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
