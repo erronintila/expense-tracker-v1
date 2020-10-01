@@ -182,6 +182,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -285,6 +287,9 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    formatDate: function formatDate(date, format) {
+      return date == null ? "" : moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
     },
     formatNumber: function formatNumber(data) {
       return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
@@ -508,6 +513,24 @@ var render = function() {
                               },
                               scopedSlots: _vm._u(
                                 [
+                                  {
+                                    key: "item.created_at",
+                                    fn: function(ref) {
+                                      var item = ref.item
+                                      return [
+                                        _vm._v(
+                                          "\n                                " +
+                                            _vm._s(
+                                              _vm.formatDate(
+                                                item.created_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                            "
+                                        )
+                                      ]
+                                    }
+                                  },
                                   {
                                     key: "item.total",
                                     fn: function(ref) {

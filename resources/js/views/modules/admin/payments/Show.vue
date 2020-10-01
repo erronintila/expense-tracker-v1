@@ -92,7 +92,9 @@
                                         <td></td>
                                     </tr>
                                 </template>
-
+                                <template v-slot:[`item.created_at`]="{ item }">
+                                    {{ formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}
+                                </template>
                                 <template v-slot:[`item.total`]="{ item }">
                                     {{ formatNumber(item.total) }}
                                 </template>
@@ -274,6 +276,9 @@ export default {
                         });
                 }
             });
+        },
+        formatDate(date, format) {
+            return date == null ? "" : moment(date).format(format);
         },
         formatNumber(data) {
             return numeral(data).format("0,0.00");
