@@ -124,7 +124,7 @@
                                 ? item.add_amount
                                 : item.subtract_amount
                         }}
-                    </template>
+                    </template>  
                     <template v-slot:[`item.actions`]="{ item }">
                         <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
