@@ -171,7 +171,13 @@
                                     <tr>
                                         <td><strong>Reimbursable</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatNumber(item.reimbursable_amount) }}</td>
+                                        <td>
+                                            {{
+                                                formatNumber(
+                                                    item.reimbursable_amount
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Code</strong></td>
@@ -191,7 +197,13 @@
                                     <tr>
                                         <td><strong>Vendor</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.vendor == null ? "" : item.vendor.name }}</td>
+                                        <td>
+                                            {{
+                                                item.vendor == null
+                                                    ? ""
+                                                    : item.vendor.name
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Remarks</strong></td>
@@ -201,12 +213,26 @@
                                     <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.deleted_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                 </table>
                             </v-container>
@@ -217,6 +243,9 @@
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ formatNumber(item.amount) }}
+                    </template>
+                    <template v-slot:[`item.expense_report`]="{ item }">
+                        {{ item.expense_report == null ? "None" : item.expense_report.code }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
@@ -240,6 +269,7 @@
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -292,6 +322,7 @@ export default {
                 { text: "Employee", value: "employee_name" },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
+                { text: "Report", value: "expense_report" },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -436,13 +467,10 @@ export default {
             }
 
             if (this.status == "Cancelled") {
-                this.$dialog.message.error(
-                    "Expense has been deleted.",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
+                this.$dialog.message.error("Expense has been deleted.", {
+                    position: "top-right",
+                    timeout: 2000
+                });
                 return;
             }
 
@@ -453,6 +481,9 @@ export default {
         },
         onDelete() {
             let _this = this;
+            let arr = this.selected.map(
+                item => item.expense_report_id === null
+            );
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -462,14 +493,7 @@ export default {
                 return;
             }
 
-            console.log(this.selected);
-            return;
-
-            if (
-                !_this.selected
-                    .map(item => item.expense_report_id)
-                    .includes(null)
-            ) {
+            if (arr.includes(false)) {
                 this.$dialog.message.error("Expense(s) can't be cancelled", {
                     position: "top-right",
                     timeout: 2000

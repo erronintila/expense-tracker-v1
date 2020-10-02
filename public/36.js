@@ -299,6 +299,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -518,46 +530,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    // onRestore() {
-    //     let _this = this;
-    //     if (_this.selected.length == 0) {
-    //         this.$dialog.message.error("No item(s) selected", {
-    //             position: "top-right",
-    //             timeout: 2000
-    //         });
-    //         return;
-    //     }
-    //     this.$confirm("Do you want to restore report(s)?").then(res => {
-    //         if (res) {
-    //             let ids = _this.selected.map(item => {
-    //                 return item.id;
-    //             });
-    //             axios
-    //                 .put(
-    //                     `/api/expense_reports/${_this.selected[0].id}?action=restore`,
-    //                     {
-    //                         ids: _this.selected.map(item => {
-    //                             return item.id;
-    //                         })
-    //                     }
-    //                 )
-    //                 .then(function(response) {
-    //                     _this.$dialog.message.success("Item(s) restored.", {
-    //                         position: "top-right",
-    //                         timeout: 2000
-    //                     });
-    //                     _this.getDataFromApi().then(data => {
-    //                         _this.items = data.items;
-    //                         _this.totalItems = data.total;
-    //                     });
-    //                 })
-    //                 .catch(function(error) {
-    //                     // console.log(error);
-    //                     console.log(error.response);
-    //                 });
-    //         }
-    //     });
-    // },
     onUpdate: function onUpdate(action, method) {
       var _this = this;
 
@@ -675,29 +647,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
-          }); // axios
-          //     .put(
-          //         `/api/expense_reports/${_this.selected[0].id}?action=restore`,
-          //         {
-          //             ids: _this.selected.map(item => {
-          //                 return item.id;
-          //             })
-          //         }
-          //     )
-          //     .then(function(response) {
-          //         _this.$dialog.message.success("Item(s) restored.", {
-          //             position: "top-right",
-          //             timeout: 2000
-          //         });
-          //         _this.getDataFromApi().then(data => {
-          //             _this.items = data.items;
-          //             _this.totalItems = data.total;
-          //         });
-          //     })
-          //     .catch(function(error) {
-          //         // console.log(error);
-          //         console.log(error.response);
-          //     });
+          });
         }
       });
     },
@@ -1170,11 +1120,13 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatNumber(
-                                              item.total_reimbursable
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatNumber(
+                                                item.total_reimbursable
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
@@ -1210,12 +1162,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatDate(
-                                              item.created_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatDate(
+                                                item.created_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
@@ -1229,12 +1183,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatDate(
-                                              item.submitted_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatDate(
+                                                item.submitted_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
@@ -1248,12 +1204,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatDate(
-                                              item.approved_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatDate(
+                                                item.approved_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
@@ -1267,12 +1225,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatDate(
-                                              item.deleted_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatDate(
+                                                item.deleted_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ])
@@ -1396,7 +1356,7 @@ var render = function() {
                           { staticClass: "green--text hidden-md-and-up" },
                           [
                             _c("td", { staticClass: "title" }, [
-                              _vm._v("Total: "),
+                              _vm._v("\n                            Total: "),
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ])
                           ]

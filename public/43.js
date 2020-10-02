@@ -273,6 +273,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -298,6 +328,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: "Amount",
         value: "amount"
+      }, {
+        text: "Report",
+        value: "expense_report"
       }, {
         text: "Last Updated",
         value: "updated_at"
@@ -460,6 +493,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onDelete: function onDelete() {
       var _this = this;
 
+      var arr = this.selected.map(function (item) {
+        return item.expense_report_id === null;
+      });
+
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
@@ -468,12 +505,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      console.log(this.selected);
-      return;
-
-      if (!_this.selected.map(function (item) {
-        return item.expense_report_id;
-      }).includes(null)) {
+      if (arr.includes(false)) {
         this.$dialog.message.error("Expense(s) can't be cancelled", {
           position: "top-right",
           timeout: 2000
@@ -971,11 +1003,13 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatNumber(
-                                              item.reimbursable_amount
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatNumber(
+                                                item.reimbursable_amount
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
@@ -1023,11 +1057,13 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            item.vendor == null
-                                              ? ""
-                                              : item.vendor.name
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.vendor == null
+                                                ? ""
+                                                : item.vendor.name
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
@@ -1051,12 +1087,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatDate(
-                                              item.created_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatDate(
+                                                item.created_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
@@ -1070,12 +1108,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.formatDate(
-                                              item.deleted_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatDate(
+                                                item.deleted_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ])
@@ -1108,6 +1148,23 @@ var render = function() {
                             _vm._v(
                               "\n                    " +
                                 _vm._s(_vm.formatNumber(item.amount)) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.expense_report",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(
+                                  item.expense_report == null
+                                    ? "None"
+                                    : item.expense_report.code
+                                ) +
                                 "\n                "
                             )
                           ]
@@ -1173,6 +1230,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
+                  _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
                         _c(
@@ -1203,6 +1261,8 @@ var render = function() {
                             _c("td", [
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
+                            _vm._v(" "),
+                            _c("td"),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),
