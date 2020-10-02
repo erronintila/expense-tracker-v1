@@ -465,6 +465,14 @@ export default {
                 return;
             }
 
+            if(this.selected.map(item => item.status.status).includes("Paid/Reimbursed")) {
+                this.$dialog.message.error("Paid/reimbursed expense reports can't be cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
@@ -576,6 +584,22 @@ export default {
                 return;
             }
 
+            if(action == "submit" && this.selected.map(item => item.status.status).includes("Paid/Reimbursed")) {
+                this.$dialog.message.error("Report has been paid/reimbursed", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "submit" && this.selected.map(item => item.status.status).includes("Cancelled")) {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if(action == "approve" && this.selected.map(item => item.status.status).includes("Approved")) {
                 this.$dialog.message.error("Report has been approved", {
                     position: "top-right",
@@ -592,8 +616,8 @@ export default {
                 return;
             }
 
-            if(action == "submit" && this.selected.map(item => item.status.status).includes("Cancelled")) {
-                this.$dialog.message.error("Report has been cancelled", {
+            if(action == "approve" && this.selected.map(item => item.status.status).includes("Paid/Reimbursed")) {
+                this.$dialog.message.error("Report has been paid/reimbursed", {
                     position: "top-right",
                     timeout: 2000
                 });

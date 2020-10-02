@@ -370,7 +370,6 @@ export default {
                                     }
                                 })
                                 .then(response => {
-                                    console.log(response);
                                     let items = response.data.data;
                                     let total = response.data.meta.total;
 
@@ -473,6 +472,14 @@ export default {
                 return;
             }
 
+            if(this.selected.map(item => item.status.status).includes("Paid/Reimbursed")) {
+                this.$dialog.message.error("Report has been paid/reimbursed", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
@@ -527,6 +534,14 @@ export default {
                 return;
             }
 
+            if(action == "submit" && !this.selected.map(item => item.status.status).includes("For Submission")) {
+                this.$dialog.message.error("Action can't be completed", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
             if (
                 action == "submit" &&
                 this.selected
@@ -547,6 +562,14 @@ export default {
                     .includes("Cancelled")
             ) {
                 this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if(action == "submit" && this.selected.map(item => item.status.status).includes("Paid/Reimbursed")) {
+                this.$dialog.message.error("Report has been paid/reimbursed", {
                     position: "top-right",
                     timeout: 2000
                 });

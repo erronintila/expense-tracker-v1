@@ -116,8 +116,6 @@ export default {
             axios
                 .get("/api/data/employees")
                 .then(response => {
-                    console.log(response);
-
                     _this.employees = response.data.data;
                 })
                 .catch(error => {

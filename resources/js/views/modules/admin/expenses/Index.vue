@@ -462,6 +462,9 @@ export default {
                 return;
             }
 
+            console.log(this.selected);
+            return;
+
             if (
                 !_this.selected
                     .map(item => item.expense_report_id)
