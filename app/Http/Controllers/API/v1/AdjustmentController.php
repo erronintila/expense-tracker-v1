@@ -54,12 +54,12 @@ class AdjustmentController extends Controller
             }
         }
 
-        // $adjustments = $adjustments->where(function ($q) use ($search) {
-        //     $q->where('reference', "like", "%" . $search . "%");
-        //     $q->where('code', "like", "%" . $search . "%");
-        //     $q->where('description', "like", "%" . $search . "%");
-        //     $q->where('type', "like", "%" . $search . "%");
-        // });
+        $adjustments = $adjustments->where(function ($q) use ($search) {
+            $q->where('reference', "like", "%" . $search . "%");
+            // $q->orWhere('code', "like", "%" . $search . "%");
+            $q->orWhere('description', "like", "%" . $search . "%");
+            $q->orWhere('type', "like", "%" . $search . "%");
+        });
         $adjustments = $adjustments->paginate($itemsPerPage);
 
         return AdjustmentResource::collection($adjustments);

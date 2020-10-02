@@ -185,6 +185,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -228,6 +236,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }, {
         text: "Amount",
         value: "amount",
+        sortable: false
+      }, {
+        text: "Actions",
+        value: "actions",
         sortable: false
       }, {
         text: "",
@@ -489,9 +501,7 @@ var render = function() {
                                 items: _vm.items,
                                 "hide-default-footer": true,
                                 "disable-pagination": "",
-                                "item-key": "id",
-                                "single-expand": "",
-                                "show-expand": ""
+                                "item-key": "id"
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -506,6 +516,33 @@ var render = function() {
                                               _vm.formatNumber(item.amount)
                                             ) +
                                             "\n                            "
+                                        )
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    key: "item.actions",
+                                    fn: function(ref) {
+                                      var item = ref.item
+                                      return [
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            staticClass: "mr-2",
+                                            attrs: { small: "" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.$router.push(
+                                                  "/expenses/" + item.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    mdi-eye\n                                "
+                                            )
+                                          ]
                                         )
                                       ]
                                     }
@@ -614,6 +651,7 @@ var render = function() {
                             },
                             [
                               _vm._v(" "),
+                              _vm._v(" "),
                               _vm.items.length > 0
                                 ? _c("template", { slot: "body.append" }, [
                                     _c(
@@ -660,6 +698,8 @@ var render = function() {
                                             )
                                           ])
                                         ]),
+                                        _vm._v(" "),
+                                        _c("td"),
                                         _vm._v(" "),
                                         _c("td")
                                       ]

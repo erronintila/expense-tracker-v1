@@ -241,6 +241,26 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
  // import EditExpense from "./components/EditExpense";
@@ -275,8 +295,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }, {
         text: "Amount",
         value: "amount"
-      }, // { text: "Actions", value: "actions", sortable: false },
-      {
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
+      }, {
         text: "",
         value: "data-table-expand"
       }],
@@ -645,9 +668,7 @@ var render = function() {
                                 items: _vm.items,
                                 "items-per-page": 5,
                                 "item-key": "id",
-                                "show-select": "",
-                                "single-expand": "",
-                                "show-expand": ""
+                                "show-select": ""
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -663,13 +684,15 @@ var render = function() {
                                             attrs: { small: "" },
                                             on: {
                                               click: function($event) {
-                                                return _vm.onEdit(item)
+                                                return _vm.$router.push(
+                                                  "/admin/expenses/" + item.id
+                                                )
                                               }
                                             }
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    mdi-pencil\n                                "
+                                              "\n                                    mdi-eye\n                                "
                                             )
                                           ]
                                         ),
@@ -681,13 +704,17 @@ var render = function() {
                                             attrs: { small: "" },
                                             on: {
                                               click: function($event) {
-                                                return _vm.onDelete(item)
+                                                return _vm.$router.push(
+                                                  "/admin/expenses/" +
+                                                    item.id +
+                                                    "/edit"
+                                                )
                                               }
                                             }
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    mdi-delete\n                                "
+                                              "\n                                    mdi-pencil\n                                "
                                             )
                                           ]
                                         )
@@ -706,6 +733,24 @@ var render = function() {
                                             ),
                                             _vm._v(" "),
                                             _c("v-spacer"),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: {
+                                                  to: {
+                                                    name:
+                                                      "admin.expenses.create"
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                        New Item\n                                    "
+                                                )
+                                              ]
+                                            ),
                                             _vm._v(" "),
                                             _c("DateRangePicker", {
                                               attrs: {
@@ -857,11 +902,17 @@ var render = function() {
                                         _vm._v(" "),
                                         _c("td"),
                                         _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
                                         _c("td", [
                                           _c("strong", [
                                             _vm._v(_vm._s(_vm.total))
                                           ])
                                         ]),
+                                        _vm._v(" "),
+                                        _c("td"),
                                         _vm._v(" "),
                                         _c("td")
                                       ]

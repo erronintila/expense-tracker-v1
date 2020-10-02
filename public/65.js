@@ -936,11 +936,10 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("Expense updated successfully.", {
             position: "top-right",
             timeout: 2000
-          });
+          }); // _this.$router.push({ name: "user.expenses.index" });
 
-          _this.$router.push({
-            name: "user.expenses.index"
-          });
+
+          _this.$router.go(-1);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);

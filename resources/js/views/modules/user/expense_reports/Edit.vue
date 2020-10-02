@@ -63,8 +63,6 @@
                                 :items-per-page="5"
                                 item-key="id"
                                 show-select
-                                single-expand
-                                show-expand
                                 class="elevation-0"
                             >
                                 <template
@@ -85,11 +83,27 @@
                                             <strong>{{ total }}</strong>
                                         </td>
                                         <td></td>
-                                        <!-- <td></td> -->
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                 </template>
                                 <template v-slot:[`item.actions`]="{ item }">
                                     <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="$router.push(`/expenses/${item.id}`)"
+                                    >
+                                        mdi-eye
+                                    </v-icon>
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="$router.push(`/expenses/${item.id}/edit`)"
+                                    >
+                                        mdi-pencil
+                                    </v-icon>
+                                    <!-- <v-icon
                                         small
                                         class="mr-2"
                                         @click="onEdit(item)"
@@ -102,7 +116,7 @@
                                         @click="onDelete(item)"
                                     >
                                         mdi-delete
-                                    </v-icon>
+                                    </v-icon> -->
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
@@ -113,10 +127,19 @@
                                         <v-spacer></v-spacer>
 
                                         <!-- <v-col cols="12" md="4"> -->
-                                        <v-btn
+                                        <!-- <v-btn
                                             @click="onCreate"
                                             color="white"
                                             class="mr-2"
+                                        >
+                                            New Item
+                                        </v-btn> -->
+
+                                        <v-btn
+                                            class="mr-2"
+                                            :to="{
+                                                name: 'user.expenses.create'
+                                            }"
                                         >
                                             New Item
                                         </v-btn>
@@ -165,7 +188,12 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.vendor == null ? "" : item.vendor.name }}
+                                                        {{
+                                                            item.vendor == null
+                                                                ? ""
+                                                                : item.vendor
+                                                                      .name
+                                                        }}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -199,7 +227,7 @@
             </v-form>
         </v-card>
 
-        <CreateExpense
+        <!-- <CreateExpense
             ref="createExpense"
             :employeeid="employee"
             @onSaveExpense="loadExpenses"
@@ -209,21 +237,21 @@
             ref="editExpense"
             :employeeid="employee"
             @onSaveExpense="loadExpenses"
-        ></EditExpense>
+        ></EditExpense> -->
     </div>
 </template>
 
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import CreateExpense from "./components/CreateExpense";
-import EditExpense from "./components/EditExpense";
+// import CreateExpense from "./components/CreateExpense";
+// import EditExpense from "./components/EditExpense";
 
 export default {
     components: {
         DateRangePicker,
-        CreateExpense,
-        EditExpense
+        // CreateExpense,
+        // EditExpense
     },
     data() {
         return {
@@ -261,7 +289,7 @@ export default {
                 { text: "Receipt", value: "receipt_number" },
                 { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },
-                // { text: "Actions", value: "actions", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
@@ -305,9 +333,10 @@ export default {
                 .get("/api/user")
                 .then(response => {
                     // _this.user = response.data.data;
-                    let data  = response.data.data;
+                    let data = response.data.data;
 
-                    let employee_id = data.employee == null ? 0 : data.employee.id;
+                    let employee_id =
+                        data.employee == null ? 0 : data.employee.id;
 
                     _this.employee = employee_id;
                 })
@@ -398,7 +427,7 @@ export default {
         onSave() {
             let _this = this;
 
-            if(_this.employee == null || _this.employee <= 0) {
+            if (_this.employee == null || _this.employee <= 0) {
                 _this.$dialog.message.error("User Account Unauthorized", {
                     position: "top-right",
                     timeout: 2000
@@ -438,7 +467,9 @@ export default {
                             }
                         );
 
-                        _this.$router.push({ name: "user.expense_reports.index" });
+                        _this.$router.push({
+                            name: "user.expense_reports.index"
+                        });
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -458,14 +489,14 @@ export default {
                 return;
             }
 
-            this.$refs.createExpense.openDialog();
+            // this.$refs.createExpense.openDialog();
         },
         // onSaveExpense() {
         //     console.log("Expense saved");
         //     this.loadExpenses();
         // },
         onEdit(item) {
-            this.$refs.editExpense.openDialog(item);
+            // this.$refs.editExpense.openDialog(item);
         },
         onDelete(item) {
             let _this = this;
@@ -499,7 +530,9 @@ export default {
     },
     computed: {
         default_description() {
-            return `Expense Report Summary (${moment(this.date_range[0]).format('LL')} - ${moment(this.date_range[1]).format('LL')})`
+            return `Expense Report Summary (${moment(this.date_range[0]).format(
+                "LL"
+            )} - ${moment(this.date_range[1]).format("LL")})`;
         }
     },
     watch: {

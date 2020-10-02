@@ -241,6 +241,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -275,8 +304,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }, {
         text: "Amount",
         value: "amount"
-      }, // { text: "Actions", value: "actions", sortable: false },
-      {
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
+      }, {
         text: "",
         value: "data-table-expand"
       }],
@@ -489,7 +521,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   computed: {
     default_description: function default_description() {
-      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format('LL'), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format('LL'), ")");
+      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
     }
   },
   watch: {
@@ -647,13 +679,15 @@ var render = function() {
                                             attrs: { small: "" },
                                             on: {
                                               click: function($event) {
-                                                return _vm.onEdit(item)
+                                                return _vm.$router.push(
+                                                  "/expenses/" + item.id
+                                                )
                                               }
                                             }
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    mdi-pencil\n                                "
+                                              "\n                                    mdi-eye\n                                "
                                             )
                                           ]
                                         ),
@@ -665,13 +699,17 @@ var render = function() {
                                             attrs: { small: "" },
                                             on: {
                                               click: function($event) {
-                                                return _vm.onDelete(item)
+                                                return _vm.$router.push(
+                                                  "/expenses/" +
+                                                    item.id +
+                                                    "/edit"
+                                                )
                                               }
                                             }
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    mdi-delete\n                                "
+                                              "\n                                    mdi-pencil\n                                "
                                             )
                                           ]
                                         )
@@ -695,8 +733,11 @@ var render = function() {
                                               "v-btn",
                                               {
                                                 staticClass: "mr-2",
-                                                attrs: { color: "white" },
-                                                on: { click: _vm.onCreate }
+                                                attrs: {
+                                                  to: {
+                                                    name: "user.expenses.create"
+                                                  }
+                                                }
                                               },
                                               [
                                                 _vm._v(
@@ -861,6 +902,10 @@ var render = function() {
                                           ])
                                         ]),
                                         _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
                                         _c("td")
                                       ]
                                     )
@@ -944,19 +989,7 @@ var render = function() {
           )
         ],
         1
-      ),
-      _vm._v(" "),
-      _c("CreateExpense", {
-        ref: "createExpense",
-        attrs: { employeeid: _vm.employee },
-        on: { onSaveExpense: _vm.loadExpenses }
-      }),
-      _vm._v(" "),
-      _c("EditExpense", {
-        ref: "editExpense",
-        attrs: { employeeid: _vm.employee },
-        on: { onSaveExpense: _vm.loadExpenses }
-      })
+      )
     ],
     1
   )

@@ -46,12 +46,19 @@
                                 :hide-default-footer="true"
                                 disable-pagination
                                 item-key="id"
-                                single-expand
-                                show-expand
                                 class="elevation-0"
                             >
                                 <template v-slot:[`item.amount`]="{ item }">
                                     {{ formatNumber(item.amount) }}
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="$router.push(`/expenses/${item.id}`)"
+                                    >
+                                        mdi-eye
+                                    </v-icon>
                                 </template>
                                 <template
                                     slot="body.append"
@@ -73,6 +80,7 @@
                                                 formatNumber(total)
                                             }}</strong>
                                         </td>
+                                        <td></td>
                                         <td></td>
                                     </tr>
                                 </template>
@@ -210,6 +218,7 @@ export default {
                 { text: "Receipt", value: "receipt_number", sortable: false },
                 { text: "Vendor", value: "vendor.name", sortable: false },
                 { text: "Amount", value: "amount", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],

@@ -66,8 +66,6 @@
                                 :items-per-page="5"
                                 item-key="id"
                                 show-select
-                                single-expand
-                                show-expand
                                 class="elevation-0"
                             >
                                 <template
@@ -97,6 +95,28 @@
                                     <v-icon
                                         small
                                         class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/admin/expenses/${item.id}`
+                                            )
+                                        "
+                                    >
+                                        mdi-eye
+                                    </v-icon>
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/admin/expenses/${item.id}/edit`
+                                            )
+                                        "
+                                    >
+                                        mdi-pencil
+                                    </v-icon>
+                                    <!-- <v-icon
+                                        small
+                                        class="mr-2"
                                         @click="onEdit(item)"
                                     >
                                         mdi-pencil
@@ -107,7 +127,7 @@
                                         @click="onDelete(item)"
                                     >
                                         mdi-delete
-                                    </v-icon>
+                                    </v-icon> -->
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
@@ -125,6 +145,14 @@
                                         >
                                             New Item
                                         </v-btn> -->
+                                        <v-btn
+                                            class="mr-2"
+                                            :to="{
+                                                name: 'admin.expenses.create'
+                                            }"
+                                        >
+                                            New Item
+                                        </v-btn>
                                         <DateRangePicker
                                             :preset="preset"
                                             :presets="presets"
@@ -232,7 +260,7 @@ import DateRangePicker from "../../../../components/daterangepicker/DateRangePic
 
 export default {
     components: {
-        DateRangePicker,
+        DateRangePicker
         // CreateExpense,
         // EditExpense
     },
@@ -272,7 +300,7 @@ export default {
                 { text: "Receipt", value: "receipt_number" },
                 { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },
-                // { text: "Actions", value: "actions", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
@@ -447,7 +475,9 @@ export default {
     },
     computed: {
         default_description() {
-            return `Expense Report Summary (${moment(this.date_range[0]).format('LL')} - ${moment(this.date_range[1]).format('LL')})`
+            return `Expense Report Summary (${moment(this.date_range[0]).format(
+                "LL"
+            )} - ${moment(this.date_range[1]).format("LL")})`;
         }
     },
     watch: {

@@ -238,6 +238,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
  // import CreateExpense from "./components/CreateExpense";
 // import EditExpense from "./components/EditExpense";
@@ -272,8 +300,11 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Amount",
         value: "amount"
-      }, // { text: "Actions", value: "actions", sortable: false },
-      {
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
+      }, {
         text: "",
         value: "data-table-expand"
       }],
@@ -433,7 +464,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     default_description: function default_description() {
-      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format('LL'), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format('LL'), ")");
+      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
     }
   },
   watch: {
@@ -605,9 +636,7 @@ var render = function() {
                                 items: _vm.items,
                                 "items-per-page": 5,
                                 "item-key": "id",
-                                "show-select": "",
-                                "single-expand": "",
-                                "show-expand": ""
+                                "show-select": ""
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -623,13 +652,15 @@ var render = function() {
                                             attrs: { small: "" },
                                             on: {
                                               click: function($event) {
-                                                return _vm.onEdit(item)
+                                                return _vm.$router.push(
+                                                  "/admin/expenses/" + item.id
+                                                )
                                               }
                                             }
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    mdi-pencil\n                                "
+                                              "\n                                    mdi-eye\n                                "
                                             )
                                           ]
                                         ),
@@ -641,13 +672,17 @@ var render = function() {
                                             attrs: { small: "" },
                                             on: {
                                               click: function($event) {
-                                                return _vm.onDelete(item)
+                                                return _vm.$router.push(
+                                                  "/admin/expenses/" +
+                                                    item.id +
+                                                    "/edit"
+                                                )
                                               }
                                             }
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    mdi-delete\n                                "
+                                              "\n                                    mdi-pencil\n                                "
                                             )
                                           ]
                                         )
@@ -666,6 +701,24 @@ var render = function() {
                                             ),
                                             _vm._v(" "),
                                             _c("v-spacer"),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: {
+                                                  to: {
+                                                    name:
+                                                      "admin.expenses.create"
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                        New Item\n                                    "
+                                                )
+                                              ]
+                                            ),
                                             _vm._v(" "),
                                             _c("DateRangePicker", {
                                               attrs: {

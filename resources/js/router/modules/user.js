@@ -6,8 +6,9 @@ const userRoutes = [
         redirect: "/dashboard",
         component: () => import("../../views/modules/user/Index.vue"),
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
             // requiresAdmin: true
+            // keepAlive: false,
         },
         children: [
             /**
@@ -21,7 +22,10 @@ const userRoutes = [
                 path: "/dashboard",
                 name: "user.dashboard.index",
                 component: () =>
-                    import("../../views/modules/user/dashboard/Index.vue")
+                    import("../../views/modules/user/dashboard/Index.vue"),
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             /**
              *
@@ -34,7 +38,10 @@ const userRoutes = [
                 path: "/profile",
                 name: "user.profile.index",
                 component: () =>
-                    import("../../views/modules/user/profile/Index.vue")
+                    import("../../views/modules/user/profile/Index.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             /**
              *
@@ -47,25 +54,37 @@ const userRoutes = [
                 path: "/expenses",
                 name: "user.expenses.index",
                 component: () =>
-                    import("../../views/modules/user/expenses/Index.vue")
+                    import("../../views/modules/user/expenses/Index.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             {
                 path: "/expenses/create",
                 name: "user.expenses.create",
                 component: () =>
-                    import("../../views/modules/user/expenses/Create.vue")
+                    import("../../views/modules/user/expenses/Create.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             {
                 path: "/expenses/:id/edit",
                 name: "user.expenses.edit",
                 component: () =>
-                    import("../../views/modules/user/expenses/Edit.vue")
+                    import("../../views/modules/user/expenses/Edit.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             {
                 path: "/expenses/:id",
                 name: "user.expenses.show",
                 component: () =>
-                    import("../../views/modules/user/expenses/Show.vue")
+                    import("../../views/modules/user/expenses/Show.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             /**
              *
@@ -78,7 +97,10 @@ const userRoutes = [
                 path: "/expense_reports",
                 name: "user.expense_reports.index",
                 component: () =>
-                    import("../../views/modules/user/expense_reports/Index.vue")
+                    import("../../views/modules/user/expense_reports/Index.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             {
                 path: "/expense_reports/create",
@@ -86,25 +108,37 @@ const userRoutes = [
                 component: () =>
                     import(
                         "../../views/modules/user/expense_reports/Create.vue"
-                    )
+                    ),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             {
                 path: "/expense_reports/:id/edit",
                 name: "user.expense_reports.edit",
                 component: () =>
-                    import("../../views/modules/user/expense_reports/Edit.vue")
+                    import("../../views/modules/user/expense_reports/Edit.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             {
                 path: "/expense_reports/:id",
                 name: "user.expense_reports.show",
                 component: () =>
-                    import("../../views/modules/user/expense_reports/Show.vue")
+                    import("../../views/modules/user/expense_reports/Show.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
             {
                 path: "/expense_reports/print/:id",
                 name: "user.expense_reports.print",
                 component: () =>
-                    import("../../views/modules/user/expense_reports/Print.vue")
+                    import("../../views/modules/user/expense_reports/Print.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
             },
         ]
     },

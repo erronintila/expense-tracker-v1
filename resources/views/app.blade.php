@@ -15,12 +15,6 @@
         <app></app>
     </div>
     <script src="{{ mix('js/app.js') }}"></script>
-
-    {{-- <style>
-        html {
-            overflow-y: auto !important;
-        }
-    </style> --}}
 </body>
 
 </html>

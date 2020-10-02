@@ -929,7 +929,8 @@ export default {
                             }
                         );
 
-                        _this.$router.push({ name: "user.expenses.index" });
+                        // _this.$router.push({ name: "user.expenses.index" });
+                        _this.$router.go(-1);
                     })
                     .catch(function(error) {
                         console.log(error);

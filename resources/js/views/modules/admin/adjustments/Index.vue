@@ -150,6 +150,7 @@ export default {
                 { text: "Reference", value: "reference" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount", sortable: false },
+                { text: "Type", value: "type" },
                 { text: "Last Updated", value: "updated_at" }
             ],
             items: [],
