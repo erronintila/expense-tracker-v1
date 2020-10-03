@@ -35,6 +35,7 @@
                     offset-y
                     left
                     bottom
+                    eager
                 >
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
@@ -60,23 +61,34 @@
                                 ></v-select>
                             </v-list-item>
                             <v-list-item>
-                                <v-select
+                                <!-- <v-select
                                     v-model="department"
                                     :items="departments"
                                     item-text="name"
                                     item-value="id"
                                     label="Department"
                                     @change="loadJobs"
-                                ></v-select>
+                                ></v-select> -->
+                                <DepartmentData
+                                    ref="departmentData"
+                                    :showAll="true"
+                                    @changeData="changeDepartment"
+                                ></DepartmentData>
                             </v-list-item>
                             <v-list-item>
-                                <v-select
+                                <JobData
+                                    ref="jobData"
+                                    :showAll="true"
+                                    :department_id="department"
+                                    @changeData="changeJob"
+                                ></JobData>
+                                <!-- <v-select
                                     v-model="job"
                                     :items="jobs"
                                     item-text="name"
                                     item-value="id"
                                     label="Job Designation"
-                                ></v-select>
+                                ></v-select> -->
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -192,10 +204,28 @@
                         {{ `${item.remaining_fund} / ${item.fund}` }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onShow(item)">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="
+                                $router.push({
+                                    name: 'admin.employees.show',
+                                    params: { id: item.id }
+                                })
+                            "
+                        >
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="
+                                $router.push({
+                                    name: 'admin.employees.edit',
+                                    params: { id: item.id }
+                                })
+                            "
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -206,27 +236,30 @@
 </template>
 
 <script>
+import DepartmentData from "../../../../components/selector/dropdown/Departments";
+import JobData from "../../../../components/selector/dropdown/Jobs";
+
 export default {
     props: {},
+    components: {
+        DepartmentData,
+        JobData
+    },
     data() {
         return {
             expanded: [],
             loading: true,
             headers: [
                 { text: "Name", value: "fullname" },
-                // { text: "First Name", value: "first_name" },
                 { text: "Job Designation", value: "job.name" },
                 { text: "Department", value: "department.name" },
                 { text: "Revolving Fund", value: "revolving_fund" },
-                // { text: "Contact", value: "mobile_number" },
-                // { text: "Created", value: "created_at" },
-                // { text: "Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
             department: 0,
-            departments: [],
+            // departments: [],
             job: 0,
             jobs: [],
             status: "Active",
@@ -243,6 +276,15 @@ export default {
         };
     },
     methods: {
+        changeDepartment(e) {
+            this.department = e.id;
+            this.job = null;
+            // this.loadJobs();
+            this.$refs.jobData.resetData(this.department);
+        },
+        changeJob(e) {
+            this.job = e.id;
+        },
         getDataFromApi() {
             let _this = this;
 
@@ -285,63 +327,66 @@ export default {
                     });
             });
         },
-        loadDepartments() {
-            let _this = this;
+        // loadDepartments() {
+        //     let _this = this;
 
-            axios
-                .get("/api/data/departments")
-                .then(response => {
-                    _this.departments = response.data.data;
-                    _this.departments.unshift({
-                        id: 0,
-                        name: "All Departments"
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
-        loadJobs() {
-            let _this = this;
-            axios
-                .get("/api/data/jobs", {
-                    params: {
-                        department_id: _this.department
-                    }
-                })
-                .then(response => {
-                    _this.jobs = response.data.data;
-                    _this.jobs.unshift({ id: 0, name: "All Job Designations" });
+        //     axios
+        //         .get("/api/data/departments")
+        //         .then(response => {
+        //             _this.departments = response.data.data;
+        //             _this.departments.unshift({
+        //                 id: 0,
+        //                 name: "All Departments"
+        //             });
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+        //         });
+        // },
+        // loadJobs() {
+        //     let _this = this;
+        //     axios
+        //         .get("/api/data/jobs", {
+        //             params: {
+        //                 department_id: _this.department
+        //             }
+        //         })
+        //         .then(response => {
+        //             _this.jobs = response.data.data;
+        //             _this.jobs.unshift({ id: 0, name: "All Job Designations" });
 
-                    _this.job = 0;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
-        updateDepartment() {
-            this.loadJobs();
-        },
+        //             _this.job = 0;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+        //         });
+        // },
+        // updateDepartment() {
+        //     this.loadJobs();
+        // },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
 
-            this.loadDepartments();
-            this.loadJobs();
+            // this.loadDepartments();
+            // this.loadJobs();
+
+            this.$refs.departmentData.resetData();
+            this.$refs.jobData.resetData();
         },
-        onShow(item) {
-            this.$router.push({
-                name: "admin.employees.show",
-                params: { id: item.id }
-            });
-        },
-        onEdit(item) {
-            this.$router.push({
-                name: "admin.employees.edit",
-                params: { id: item.id }
-            });
-        },
+        // onShow(item) {
+        //     this.$router.push({
+        //         name: "admin.employees.show",
+        //         params: { id: item.id }
+        //     });
+        // },
+        // onEdit(item) {
+        //     this.$router.push({
+        //         name: "admin.employees.edit",
+        //         params: { id: item.id }
+        //     });
+        // },
         onDelete() {
             let _this = this;
 
@@ -453,8 +498,8 @@ export default {
         axios.defaults.headers.common["Authorization"] =
             "Bearer " + localStorage.getItem("access_token");
 
-        this.loadDepartments();
-        this.loadJobs();
+        // this.loadDepartments();
+        // this.loadJobs();
     }
 };
 </script>

@@ -55,24 +55,24 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/adjustments/AdjustFund.vue")
             },
-            {
-                path: "/admin/adjustments/create",
-                name: "admin.adjustments.create",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Create.vue")
-            },
-            {
-                path: "/admin/adjustments/:id/edit",
-                name: "admin.adjustments.edit",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Edit.vue")
-            },
-            {
-                path: "/admin/adjustments/:id",
-                name: "admin.adjustments.show",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Show.vue")
-            },
+            // {
+            //     path: "/admin/adjustments/create",
+            //     name: "admin.adjustments.create",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Create.vue")
+            // },
+            // {
+            //     path: "/admin/adjustments/:id/edit",
+            //     name: "admin.adjustments.edit",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Edit.vue")
+            // },
+            // {
+            //     path: "/admin/adjustments/:id",
+            //     name: "admin.adjustments.show",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Show.vue")
+            // },
             /**
              *
              *

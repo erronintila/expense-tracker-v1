@@ -191,9 +191,17 @@ class DataController extends Controller
         return VendorResource::collection(Vendor::orderBy("name")->get());
     }
 
-    public function departments()
+    public function departments(Request $request)
     {
-        return DepartmentResource::collection(Department::orderBy("name")->get());
+        $departments = Department::orderBy("name");
+
+        if (request()->has("department_id")) {
+            if ($request->department_id > 0) {
+                $departments = $departments->where("id", $request->department_id);
+            }
+        }
+
+        return DepartmentResource::collection($departments->get());
     }
 
     public function expense_types()

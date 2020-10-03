@@ -1,50 +1,14 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[24],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -132,41 +96,38 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       valid: false,
-      transaction_type: "Manage Revolving Fund",
-      transaction_types: ["Manage Revolving Fund"],
-      revolving_fund_trans: "Add",
       employee: {
         id: null,
         fullname: "",
-        fund: 0
+        fund: 0,
+        remaining_fund: 0
       },
       employees: [],
-      fund: 0,
       reference: "",
       code: "",
       description: "",
       amount: 0,
+      type: "Manage Revolving Fund",
+      remarks: "",
       rules: {
         employee: [function (v) {
           return !!v || "This field is required.";
         }],
-        fund: [],
-        reference: [],
-        code: [],
-        description: [function (v) {
-          return !!v || "This field is required.";
-        }],
-        amount: [function (v) {
-          return !!v || "This field is required.";
-        }]
-      },
-      errors: {
-        employee: [],
-        fund: [],
         reference: [],
         code: [],
         description: [],
-        amount: []
+        amount: [function (v) {
+          return !!v || "This field is required.";
+        }],
+        remarks: []
+      },
+      errors: {
+        employee: [],
+        reference: [],
+        code: [],
+        description: [],
+        amount: [],
+        remarks: []
       }
     };
   },
@@ -180,7 +141,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/employees").then(function (response) {
-        console.log(response);
         _this.employees = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -190,28 +150,15 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this = this;
 
-      if (this.transaction_type == "Revolving Fund") {
-        if (parseFloat(this.employee.fund) < parseFloat(this.amount) && this.revolving_fund_trans == "Subtract") {
-          _this.$dialog.message.error("Amount is lesser than revolving fund", {
-            position: "top-right",
-            timeout: 2000
-          });
-
-          return;
-        }
-
-        this.description = "".concat(this.revolving_fund_trans, " ").concat(this.transaction_type);
-      }
-
       if (_this.$refs.form.validate()) {
         axios.post("/api/adjustments", {
           employee_id: _this.employee.id,
           reference: _this.reference,
           code: _this.code,
           description: _this.description,
-          add_amount: _this.revolving_fund_trans == "Add" ? _this.amount : 0,
-          subtract_amount: _this.revolving_fund_trans == "Subtract" ? _this.amount : 0,
-          type: _this.transaction_type
+          remarks: _this.remarks,
+          amount: _this.amount,
+          type: _this.type
         }).then(function (response) {
           // _this.onRefresh();
           _this.$dialog.message.success("Adjustment created successfully.", {
@@ -238,10 +185,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=template&id=c4f3c928&":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=template&id=c4f3c928& ***!
-  \******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=template&id=1e688164&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=template&id=1e688164& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -282,7 +229,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("New Adjustment")
+                _vm._v("Fund Adjustment")
               ])
             ],
             1
@@ -307,27 +254,6 @@ var render = function() {
                   _c(
                     "v-row",
                     [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              label: "Transaction Type *",
-                              items: _vm.transaction_types
-                            },
-                            model: {
-                              value: _vm.transaction_type,
-                              callback: function($$v) {
-                                _vm.transaction_type = $$v
-                              },
-                              expression: "transaction_type"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c(
                         "v-col",
                         { attrs: { cols: "12", md: "4" } },
@@ -364,7 +290,7 @@ var render = function() {
                     [
                       _c(
                         "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        { attrs: { cols: "12", md: "6" } },
                         [
                           _c("v-autocomplete", {
                             attrs: {
@@ -398,7 +324,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               label: "Amount",
-                              hint: "Current Amount : " + _vm.employee.fund,
+                              hint:
+                                "Fund: " +
+                                _vm.employee.fund +
+                                " ~ Remaining : " +
+                                _vm.employee.remaining_fund,
                               "persistent-hint": ""
                             },
                             model: {
@@ -424,7 +354,14 @@ var render = function() {
                         { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-textarea", {
-                            attrs: { label: "Remarks", rows: "2" }
+                            attrs: { label: "Remarks", rows: "2" },
+                            model: {
+                              value: _vm.remarks,
+                              callback: function($$v) {
+                                _vm.remarks = $$v
+                              },
+                              expression: "remarks"
+                            }
                           })
                         ],
                         1
@@ -453,9 +390,15 @@ var render = function() {
                         [_vm._v("Save")]
                       ),
                       _vm._v(" "),
-                      _c("v-btn", { attrs: { to: "/admin/adjustments" } }, [
-                        _vm._v("Cancel")
-                      ])
+                      _c(
+                        "v-btn",
+                        { attrs: { to: { name: "admin.adjustments.index" } } },
+                        [
+                          _vm._v(
+                            "\n                        Cancel\n                    "
+                          )
+                        ]
+                      )
                     ],
                     1
                   )
@@ -479,17 +422,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/adjustments/Create.vue":
-/*!*****************************************************************!*\
-  !*** ./resources/js/views/modules/admin/adjustments/Create.vue ***!
-  \*****************************************************************/
+/***/ "./resources/js/views/modules/admin/adjustments/AdjustFund.vue":
+/*!*********************************************************************!*\
+  !*** ./resources/js/views/modules/admin/adjustments/AdjustFund.vue ***!
+  \*********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Create_vue_vue_type_template_id_c4f3c928___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=c4f3c928& */ "./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=template&id=c4f3c928&");
-/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=script&lang=js&");
+/* harmony import */ var _AdjustFund_vue_vue_type_template_id_1e688164___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdjustFund.vue?vue&type=template&id=1e688164& */ "./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=template&id=1e688164&");
+/* harmony import */ var _AdjustFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AdjustFund.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -499,9 +442,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Create_vue_vue_type_template_id_c4f3c928___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Create_vue_vue_type_template_id_c4f3c928___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _AdjustFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AdjustFund_vue_vue_type_template_id_1e688164___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AdjustFund_vue_vue_type_template_id_1e688164___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -511,38 +454,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/adjustments/Create.vue"
+component.options.__file = "resources/js/views/modules/admin/adjustments/AdjustFund.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdjustFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdjustFund.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdjustFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=template&id=c4f3c928&":
-/*!************************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=template&id=c4f3c928& ***!
-  \************************************************************************************************/
+/***/ "./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=template&id=1e688164&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=template&id=1e688164& ***!
+  \****************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_c4f3c928___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=c4f3c928& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/Create.vue?vue&type=template&id=c4f3c928&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_c4f3c928___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdjustFund_vue_vue_type_template_id_1e688164___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdjustFund.vue?vue&type=template&id=1e688164& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/adjustments/AdjustFund.vue?vue&type=template&id=1e688164&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdjustFund_vue_vue_type_template_id_1e688164___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_c4f3c928___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdjustFund_vue_vue_type_template_id_1e688164___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

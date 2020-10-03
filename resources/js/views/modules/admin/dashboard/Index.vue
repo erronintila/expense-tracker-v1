@@ -670,7 +670,7 @@ export default {
                     data: data
                 }
             ];
-
+            
             this.$refs.horizontalBar_chart.update();
         },
         updatePieChartValues(labels, data, backgroundColors) {
