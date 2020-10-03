@@ -96,8 +96,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onLogin: function onLogin() {
-      var _this2 = this;
-
       var _this = this;
 
       _this.$refs.form.validate();
@@ -108,9 +106,8 @@ __webpack_require__.r(__webpack_exports__);
           email: _this.form.email,
           password: _this.form.password
         }).then(function (response) {
-          _this2.$router.push({
-            name: "admin.dashboard.index"
-          });
+          var data = response.data;
+          window.location.replace(data.user.is_admin ? "/admin" : "/");
         })["catch"](function (error) {
           console.log(error);
           _this.errors = error.data;

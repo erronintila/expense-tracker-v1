@@ -17,7 +17,7 @@
                         <v-spacer></v-spacer>
                         <h3 class="title green--text mr-2">
                             Remaining Funds:
-                            {{ formatNumber(employee.remaining_fund) }}
+                            {{ formatNumber(employee == null ? 0 : employee.remaining_fund || 0) }}
                         </h3>
                     </v-row>
                     <v-row>

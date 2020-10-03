@@ -1114,7 +1114,11 @@ var render = function() {
                         _vm._v(
                           "\n                        Remaining Funds:\n                        " +
                             _vm._s(
-                              _vm.formatNumber(_vm.employee.remaining_fund)
+                              _vm.formatNumber(
+                                _vm.employee == null
+                                  ? 0
+                                  : _vm.employee.remaining_fund || 0
+                              )
                             ) +
                             "\n                    "
                         )

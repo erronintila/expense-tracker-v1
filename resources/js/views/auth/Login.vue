@@ -97,9 +97,11 @@ export default {
                         password: _this.form.password
                     })
                     .then(response => {
-                        this.$router.push({
-                            name: "admin.dashboard.index"
-                        });
+                        let data = response.data;
+
+                        window.location.replace(
+                            data.user.is_admin ? "/admin" : "/"
+                        );
                     })
                     .catch(function(error) {
                         console.log(error);
