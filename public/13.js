@@ -67,94 +67,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
     return {
       src: __webpack_require__(/*! ../../assets/img/login.svg */ "./resources/js/assets/img/login.svg"),
-      // overlay: false,
-      username: "",
-      email: "",
-      password: "",
+      form: {
+        username: "",
+        email: "",
+        password: ""
+      },
+      // username: "",
+      // email: "",
+      // password: "",
       rules: {
+        // required: [],
+        // validEmail: [],
         username: [],
         email: [function (v) {
           return !!v || "E-mail is required";
@@ -172,15 +100,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // loadingScreen() {
-    //     this.overlay = true;
-    //     setTimeout(() => {
-    //         this.overlay = false;
-    //         this.$router.push({
-    //             name: "admin.dashboard.index"
-    //         });
-    //     }, 2000);
-    // },
     onLogin: function onLogin() {
       var _this2 = this;
 
@@ -190,15 +109,16 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         this.$store.dispatch("AUTH_LOGIN", {
-          username: _this.username,
-          email: _this.email,
-          password: _this.password
+          username: _this.form.username,
+          email: _this.form.email,
+          password: _this.form.password
         }).then(function (response) {
-          // _this.loadingScreen();
           _this2.$router.push({
             name: "admin.dashboard.index"
           });
         })["catch"](function (error) {
+          console.log(error); // console.log(error.response);
+
           _this.errors = error.data;
 
           _this.$dialog.message.error("Error ".concat(error.status, " : ").concat(error.statusText), {
@@ -208,15 +128,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     }
-  } // watch: {
-  //     overlay(val) {
-  //         val &&
-  //             setTimeout(() => {
-  //                 this.overlay = false;
-  //             }, 2000);
-  //     }
-  // }
-
+  }
 });
 
 /***/ }),
@@ -321,11 +233,11 @@ var render = function() {
                                           color: "success"
                                         },
                                         model: {
-                                          value: _vm.username,
+                                          value: _vm.form.username,
                                           callback: function($$v) {
-                                            _vm.username = $$v
+                                            _vm.$set(_vm.form, "username", $$v)
                                           },
-                                          expression: "username"
+                                          expression: "form.username"
                                         }
                                       }),
                                       _vm._v(" "),
@@ -340,11 +252,11 @@ var render = function() {
                                           color: "success"
                                         },
                                         model: {
-                                          value: _vm.password,
+                                          value: _vm.form.password,
                                           callback: function($$v) {
-                                            _vm.password = $$v
+                                            _vm.$set(_vm.form, "password", $$v)
                                           },
-                                          expression: "password"
+                                          expression: "form.password"
                                         }
                                       })
                                     ],

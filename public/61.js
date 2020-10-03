@@ -12,8 +12,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
-/* harmony import */ var _components_CreateExpense__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/CreateExpense */ "./resources/js/views/modules/user/expense_reports/components/CreateExpense.vue");
-/* harmony import */ var _components_EditExpense__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/EditExpense */ "./resources/js/views/modules/user/expense_reports/components/EditExpense.vue");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -269,16 +267,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
 
-
-
+ // import CreateExpense from "./components/CreateExpense";
+// import EditExpense from "./components/EditExpense";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"],
-    CreateExpense: _components_CreateExpense__WEBPACK_IMPORTED_MODULE_2__["default"],
-    EditExpense: _components_EditExpense__WEBPACK_IMPORTED_MODULE_3__["default"]
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"] // CreateExpense,
+    // EditExpense
+
   },
   data: function data() {
     return {
@@ -484,16 +481,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           timeout: 2000
         });
         return;
-      }
+      } // this.$refs.createExpense.openDialog();
 
-      this.$refs.createExpense.openDialog();
     },
     // onSaveExpense() {
     //     console.log("Expense saved");
     //     this.loadExpenses();
     // },
-    onEdit: function onEdit(item) {
-      this.$refs.editExpense.openDialog(item);
+    onEdit: function onEdit(item) {// this.$refs.editExpense.openDialog(item);
     },
     onDelete: function onDelete(item) {
       var _this = this;
@@ -661,9 +656,7 @@ var render = function() {
                                 items: _vm.items,
                                 "items-per-page": 5,
                                 "item-key": "id",
-                                "show-select": "",
-                                "single-expand": "",
-                                "show-expand": ""
+                                "show-select": ""
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -901,6 +894,8 @@ var render = function() {
                                             _vm._v(_vm._s(_vm.total))
                                           ])
                                         ]),
+                                        _vm._v(" "),
+                                        _c("td"),
                                         _vm._v(" "),
                                         _c("td"),
                                         _vm._v(" "),

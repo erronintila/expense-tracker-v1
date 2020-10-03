@@ -248,11 +248,11 @@ import moment from "moment";
 import randomcolor from "randomcolor";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import DoughnutChart from "./components/DoughnutChart";
+import DoughnutChart from "../../../../components/chart/DoughnutChart";
 // import PieChart from "./components/PieChart";
-// import BarChart from "./components/BarChart";
-import HorizontalBarChart from "./components/HorizontalBarChart";
-import LineChart from "./components/LineChart";
+// import BarChart from "./components/BarChart"; 
+import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
+import LineChart from "../../../../components/chart/LineChart";
 
 export default {
     components: {

@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\UserResource;
-use App\Models\Employee;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -81,13 +78,6 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        // $user = User::find($request->user()->id);
-        // return $user;
-        // return new UserResource($user);
-
         return new UserResource($request->user());
-
-        // Get logged in user
-        // return response()->json($request->user());
     }
 }
