@@ -350,7 +350,11 @@ class DataController extends Controller
     {
         $expense_types = ExpenseType::with(['expenses.expense_report' => function ($q) use ($request) {
             if (request()->has("employee_id")) {
-                if ($request->employee_id > 0) {
+                if (request()->has("admin_page")) {
+                    if ($request->employee_id > 0) {
+                        $q->where('employee_id', $request->employee_id);
+                    }
+                } else {
                     $q->where('employee_id', $request->employee_id);
                 }
             }
@@ -483,7 +487,11 @@ class DataController extends Controller
             ->select(DB::raw('expenses.date as text, sum(expenses.amount) as value'));
 
         if (request()->has('employee_id')) {
-            if ($request->employee_id > 0) {
+            if (request()->has("admin_page")) {
+                if ($request->employee_id > 0) {
+                    $expenses = $expenses->where('expenses.employee_id', $request->employee_id);
+                }
+            } else {
                 $expenses = $expenses->where('expenses.employee_id', $request->employee_id);
             }
         }
@@ -574,6 +582,7 @@ class DataController extends Controller
             ->get()
             ->where('expense_report', '<>', null);
 
+        // if (request()->has('employee_id') && request()->has("admin_page")) {
         if (request()->has('employee_id')) {
             if ($request->employee_id > 0) {
                 $total_expenses_by_date = $total_expenses_by_date->where('employee_id', $request->employee_id);
@@ -582,6 +591,12 @@ class DataController extends Controller
                 $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
             }
         }
+        // elseif (request()->has('employee_id')) {
+        //     $total_expenses_by_date = $total_expenses_by_date->where('employee_id', $request->employee_id);
+        //     $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
+        //     $reimbursements = $reimbursements->where('employee_id', $request->employee_id);
+        //     $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
+        // }
 
         $total_expenses_by_date = $total_expenses_by_date->sum("amount");
         $pending_expenses = $pending_expenses->sum("amount");

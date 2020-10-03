@@ -393,7 +393,8 @@ export default {
                     params: {
                         start_date: start,
                         end_date: end,
-                        employee_id: employee
+                        employee_id: employee,
+                        admin_page: true
                     }
                 })
                 .then(response => {
@@ -422,7 +423,8 @@ export default {
                     params: {
                         start_date: start,
                         end_date: end,
-                        employee_id: employee
+                        employee_id: employee,
+                        admin_page: true
                     }
                 })
                 .then(response => {
@@ -451,7 +453,8 @@ export default {
                     params: {
                         start_date: start,
                         end_date: end,
-                        employee_id: employee
+                        employee_id: employee,
+                        admin_page: true
                     }
                 })
                 .then(response => {
@@ -481,7 +484,8 @@ export default {
                         start_date: start,
                         end_date: end,
                         time_unit: time_unit,
-                        employee_id: employee
+                        employee_id: employee,
+                        admin_page: true
                     }
                 })
                 .then(response => {
