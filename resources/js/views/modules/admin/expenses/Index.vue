@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/admin/expenses/create"
+                    :to="{ name: 'admin.expenses.create' }"
                     dark
                     fab
                     x-small
@@ -245,7 +245,11 @@
                         {{ formatNumber(item.amount) }}
                     </template>
                     <template v-slot:[`item.expense_report`]="{ item }">
-                        {{ item.expense_report == null ? "None" : item.expense_report.code }}
+                        {{
+                            item.expense_report == null
+                                ? "None"
+                                : item.expense_report.code
+                        }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">

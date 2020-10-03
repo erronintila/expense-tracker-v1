@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/admin/expense_types/create"
+                    :to="{ name: 'admin.expense_types.create' }"
                     dark
                     fab
                     x-small

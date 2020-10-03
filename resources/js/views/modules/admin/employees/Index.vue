@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/admin/employees/create"
+                    :to="{ name: 'admin.employees.create' }"
                     dark
                     fab
                     x-small
@@ -188,7 +188,7 @@
                             </v-container>
                         </td>
                     </template>
-                     <template v-slot:[`item.revolving_fund`]="{ item }">
+                    <template v-slot:[`item.revolving_fund`]="{ item }">
                         {{ `${item.remaining_fund} / ${item.fund}` }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
@@ -292,7 +292,10 @@ export default {
                 .get("/api/data/departments")
                 .then(response => {
                     _this.departments = response.data.data;
-                    _this.departments.unshift({ id: 0, name: "All Departments" });
+                    _this.departments.unshift({
+                        id: 0,
+                        name: "All Departments"
+                    });
                 })
                 .catch(error => {
                     console.log(error);

@@ -8,7 +8,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/expenses/create"
+                    :to="{ name: 'user.expenses.create' }"
                     dark
                     fab
                     x-small
@@ -243,7 +243,11 @@
                         </v-icon>
                     </template>
                     <template v-slot:[`item.expense_report`]="{ item }">
-                        {{ item.expense_report == null ? "None" : item.expense_report.code }}
+                        {{
+                            item.expense_report == null
+                                ? "None"
+                                : item.expense_report.code
+                        }}
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">

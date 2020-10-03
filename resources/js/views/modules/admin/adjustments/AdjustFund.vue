@@ -45,7 +45,9 @@
                             <v-text-field
                                 v-model="amount"
                                 label="Amount"
-                                :hint="`Fund: ${employee.fund} ~ Remaining : ${employee.remaining_fund}`"
+                                :hint="
+                                    `Fund: ${employee.fund} ~ Remaining : ${employee.remaining_fund}`
+                                "
                                 persistent-hint
                             >
                             </v-text-field>
@@ -54,7 +56,11 @@
 
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-textarea v-model="remarks" label="Remarks" rows="2"></v-textarea>
+                            <v-textarea
+                                v-model="remarks"
+                                label="Remarks"
+                                rows="2"
+                            ></v-textarea>
                         </v-col>
                     </v-row>
 
@@ -65,7 +71,9 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn to="/admin/adjustments">Cancel</v-btn>
+                        <v-btn :to="{ name: 'admin.adjustments.index' }">
+                            Cancel
+                        </v-btn>
                     </v-card-actions>
                 </v-container>
             </v-form>
@@ -100,7 +108,7 @@ export default {
                 code: [],
                 description: [],
                 amount: [],
-                remarks: [],
+                remarks: []
             }
         };
     },

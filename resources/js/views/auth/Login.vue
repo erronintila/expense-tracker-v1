@@ -67,12 +67,7 @@ export default {
                 email: "",
                 password: ""
             },
-            // username: "",
-            // email: "",
-            // password: "",
             rules: {
-                // required: [],
-                // validEmail: [],
                 username: [],
                 email: [
                     v => !!v || "E-mail is required",
@@ -108,7 +103,6 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
-                        // console.log(error.response);
 
                         _this.errors = error.data;
 

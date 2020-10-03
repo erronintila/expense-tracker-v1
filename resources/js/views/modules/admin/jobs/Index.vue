@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/admin/jobs/create"
+                    :to="{ name: 'admin.jobs.create' }"
                     dark
                     fab
                     x-small

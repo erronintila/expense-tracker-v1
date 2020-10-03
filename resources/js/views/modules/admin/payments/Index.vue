@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/admin/payments/create"
+                    :to="{ name: 'admin.payments.create' }"
                     dark
                     fab
                     x-small
@@ -185,12 +185,26 @@
                                     <tr>
                                         <td><strong>Created at</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.deleted_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <!-- <tr>
                                         <td><strong>Status</strong></td>

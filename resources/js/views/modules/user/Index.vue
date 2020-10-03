@@ -17,7 +17,7 @@
                     <v-list-item-content>
                         <v-list-item-title>
                             <router-link
-                                to="/profile"
+                                :to="{ name: 'user.profile.index' }"
                                 class="text-decoration-none"
                                 style="color: #4caf50"
                             >
@@ -116,7 +116,7 @@
             ></v-app-bar-nav-icon>
             <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
                 <router-link
-                    to="/dashboard"
+                    :to="{ name: 'user.dashboard.index' }"
                     style="text-decoration: none; color: inherit;"
                 >
                     <span class="title">Expense Tracker</span>

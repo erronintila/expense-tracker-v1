@@ -9,7 +9,7 @@
                 <v-btn
                     class="elevation-3 mr-2"
                     color="green"
-                    to="/expense_reports/create"
+                    :to="{ name: 'user.expense_reports.create' }"
                     dark
                     fab
                     x-small
@@ -179,22 +179,50 @@
                                     <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Submitted</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.submitted_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.submitted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Approved</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.approved_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.approved_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
-                                        <td>{{ formatDate(item.deleted_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                 </table>
                             </v-container>
@@ -472,7 +500,11 @@ export default {
                 return;
             }
 
-            if(this.selected.map(item => item.status.status).includes("Paid/Reimbursed")) {
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Paid/Reimbursed")
+            ) {
                 this.$dialog.message.error("Report has been paid/reimbursed", {
                     position: "top-right",
                     timeout: 2000
@@ -534,7 +566,12 @@ export default {
                 return;
             }
 
-            if(action == "submit" && !this.selected.map(item => item.status.status).includes("For Submission")) {
+            if (
+                action == "submit" &&
+                !this.selected
+                    .map(item => item.status.status)
+                    .includes("For Submission")
+            ) {
                 this.$dialog.message.error("Action can't be completed", {
                     position: "top-right",
                     timeout: 2000
@@ -568,7 +605,12 @@ export default {
                 return;
             }
 
-            if(action == "submit" && this.selected.map(item => item.status.status).includes("Paid/Reimbursed")) {
+            if (
+                action == "submit" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Paid/Reimbursed")
+            ) {
                 this.$dialog.message.error("Report has been paid/reimbursed", {
                     position: "top-right",
                     timeout: 2000

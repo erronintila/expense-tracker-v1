@@ -77,12 +77,7 @@ __webpack_require__.r(__webpack_exports__);
         email: "",
         password: ""
       },
-      // username: "",
-      // email: "",
-      // password: "",
       rules: {
-        // required: [],
-        // validEmail: [],
         username: [],
         email: [function (v) {
           return !!v || "E-mail is required";
@@ -117,8 +112,7 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.dashboard.index"
           });
         })["catch"](function (error) {
-          console.log(error); // console.log(error.response);
-
+          console.log(error);
           _this.errors = error.data;
 
           _this.$dialog.message.error("Error ".concat(error.status, " : ").concat(error.statusText), {
