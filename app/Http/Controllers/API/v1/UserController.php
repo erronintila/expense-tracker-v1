@@ -87,6 +87,7 @@ class UserController extends Controller
         $user->username = $request['username'];
         $user->email    = $request['email'];
         $user->is_admin = $request['is_admin'];
+        $user->can_login = $request['can_login'];
         $user->password = Hash::make($request['password']);
 
         $user->save();
@@ -187,6 +188,7 @@ class UserController extends Controller
                 $user->username = $request->username;
                 $user->email = $request->email;
                 $user->is_admin = $request->is_admin;
+                $user->can_login = $request->can_login;
 
                 $user->save();
 

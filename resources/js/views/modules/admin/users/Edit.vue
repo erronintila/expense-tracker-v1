@@ -69,6 +69,14 @@
                                 :error-messages="errors.is_admin"
                             ></v-checkbox>
                         </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-checkbox
+                                v-model="can_login"
+                                label="Allow Login"
+                                :error-messages="errors.can_login"
+                            ></v-checkbox>
+                        </v-col>
                     </v-row>
 
                     <small class="text--secondary">
@@ -94,6 +102,7 @@ export default {
             showPassword: false,
             showPasswordConfirmation: false,
             is_admin: false,
+            can_login: false,
             name: "",
             username: "",
             email: "",
@@ -101,6 +110,7 @@ export default {
             employees: [],
             rules: {
                 is_admin: [],
+                can_login: [],
                 name: [
                     v => !!v || "Name is required",
                     v =>
@@ -120,6 +130,7 @@ export default {
             },
             errors: {
                 is_admin: [],
+                can_login: [],
                 name: [],
                 username: [],
                 email: []
@@ -139,6 +150,7 @@ export default {
                     _this.username = data.username;
                     _this.email = data.email;
                     _this.is_admin = data.is_admin;
+                    _this.can_login = data.can_login,
                     _this.employee = data.employee !== null ? data.employee.id : 0;
                 })
                 .catch(error => {
@@ -179,6 +191,7 @@ export default {
                         username: _this.username,
                         email: _this.email,
                         is_admin: _this.is_admin,
+                        can_login: _this.can_login,
                         employee_id: _this.employee !== null ? _this.employee : 0
                     })
                     .then(function(response) {

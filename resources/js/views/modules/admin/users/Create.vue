@@ -109,6 +109,14 @@
                                 :error-messages="errors.is_admin"
                             ></v-checkbox>
                         </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-checkbox
+                                v-model="can_login"
+                                label="Allow Login"
+                                :error-messages="errors.can_login"
+                            ></v-checkbox>
+                        </v-col>
                     </v-row>
 
                     <small class="text--secondary">
@@ -134,6 +142,7 @@ export default {
             showPassword: false,
             showPasswordConfirmation: false,
             is_admin: false,
+            can_login: false,
             name: "",
             username: "",
             email: "",
@@ -143,6 +152,7 @@ export default {
             employees: [],
             rules: {
                 is_admin: [],
+                can_login: [],
                 name: [
                     v => !!v || "Name is required",
                     v =>
@@ -174,6 +184,7 @@ export default {
             },
             errors: {
                 is_admin: [],
+                can_login: [],
                 name: [],
                 username: [],
                 email: [],
@@ -214,6 +225,7 @@ export default {
                         password: _this.password,
                         password_confirmation: _this.password_confirmation,
                         is_admin: _this.is_admin,
+                        can_login: _this.can_login,
                         employee_id: _this.employee
                     })
                     .then(function(response) {

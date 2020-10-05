@@ -49,6 +49,10 @@ class AuthController extends Controller
                 return response()->json($validator->errors(), 401);
             }
 
+            if (!$authenticated_user->can_login) {
+                return response()->json($validator->errors(), 401);
+            }
+
             $user = User::find($authenticated_user->id);
 
             $token = $user->createToken('authToken')->accessToken;

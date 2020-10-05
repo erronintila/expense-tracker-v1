@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'email' => $this->email,
             'is_admin' => $this->is_admin,
+            'can_login' => $this->can_login,
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'employee' => new EmployeeResource($this->employee),

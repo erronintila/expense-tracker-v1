@@ -334,30 +334,30 @@ const adminRoutes = [
              *
              *
              */
-            // {
-            //     path: "/admin/roles",
-            //     name: "admin.roles.index",
-            //     component: () =>
-            //         import("../../views/modules/admin/roles/Index.vue")
-            // },
-            // {
-            //     path: "/admin/roles/create",
-            //     name: "admin.roles.create",
-            //     component: () =>
-            //         import("../../views/modules/admin/roles/Create.vue")
-            // },
-            // {
-            //     path: "/admin/roles/:id/edit",
-            //     name: "admin.roles.edit",
-            //     component: () =>
-            //         import("../../views/modules/admin/roles/Edit.vue")
-            // },
-            // {
-            //     path: "/admin/roles/:id",
-            //     name: "admin.roles.show",
-            //     component: () =>
-            //         import("../../views/modules/admin/roles/Show.vue")
-            // },
+            {
+                path: "/admin/roles",
+                name: "admin.roles.index",
+                component: () =>
+                    import("../../views/modules/admin/roles/Index.vue")
+            },
+            {
+                path: "/admin/roles/create",
+                name: "admin.roles.create",
+                component: () =>
+                    import("../../views/modules/admin/roles/Create.vue")
+            },
+            {
+                path: "/admin/roles/:id/edit",
+                name: "admin.roles.edit",
+                component: () =>
+                    import("../../views/modules/admin/roles/Edit.vue")
+            },
+            {
+                path: "/admin/roles/:id",
+                name: "admin.roles.show",
+                component: () =>
+                    import("../../views/modules/admin/roles/Show.vue")
+            },
             /**
              *
              *
