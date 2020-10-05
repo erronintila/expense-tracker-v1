@@ -189,16 +189,6 @@ export default {
                 children: [
                     {
                         icon: "mdi-circle-medium",
-                        text: "Adjustments",
-                        link: { name: "admin.adjustments.index" }
-                    },
-                    {
-                        icon: "mdi-circle-medium",
-                        text: "Users",
-                        link: { name: "admin.users.index" }
-                    },
-                    {
-                        icon: "mdi-circle-medium",
                         text: "Vendors",
                         link: { name: "admin.vendors.index" }
                     },
@@ -216,9 +206,57 @@ export default {
                         icon: "mdi-circle-medium",
                         text: "Expense Types",
                         link: { name: "admin.expense_types.index" }
-                    }
+                    },
+                    {
+                        icon: "mdi-circle-medium",
+                        text: "Users",
+                        link: { name: "admin.users.index" }
+                    },
+                    {
+                        icon: "mdi-circle-medium",
+                        text: "Adjustments",
+                        link: { name: "admin.adjustments.index" }
+                    },
+                    // {
+                    //     icon: "mdi-circle-medium",
+                    //     text: "Roles",
+                    //     // link: { name: "admin.roles.index" }
+                    // },
+                    // {
+                    //     icon: "mdi-circle-medium",
+                    //     text: "Permissions",
+                    //     // link: { name: "admin.permissions.index" }
+                    // },
+                    // {
+                    //     icon: "mdi-circle-medium",
+                    //     text: "Vendors",
+                    //     link: { name: "admin.vendors.index" }
+                    // },
                 ]
             }
+            // {
+            //     icon: "mdi-chevron-up",
+            //     "icon-alt": "mdi-chevron-down",
+            //     text: "Users",
+            //     model: false,
+            //     children: [
+            //         {
+            //             icon: "mdi-circle-medium",
+            //             text: "View All",
+            //             link: { name: "admin.users.index" }
+            //         },
+            //         {
+            //             icon: "mdi-circle-medium",
+            //             text: "Roles",
+            //             // link: { name: "admin.roles.index" }
+            //         },
+            //         {
+            //             icon: "mdi-circle-medium",
+            //             text: "Permissions",
+            //             // link: { name: "admin.permissions.index" }
+            //         },
+            //     ]
+            // }
         ]
     }),
     computed: {

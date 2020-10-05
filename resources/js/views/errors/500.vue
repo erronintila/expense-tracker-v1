@@ -1,27 +1,55 @@
 <template>
-    <div>
-        <v-container>
-            <v-layout row wrap>
-                <v-flex xs12>
-                    <v-card height="400" color="transparent" flat>
-                        <div class="display-3 mt-5">Internal Server Error</div>
-                        <div class="grey--text lighten-5">
-                            The page you are trying to get to never existed in
-                            this reality, or has migrated to a parallel
-                            universe.
-                        </div>
-                        <div class="paragraph-text mt-2">
-                            <br />
-                            <br />Try going back to home page and repeating your
-                            action. Or, contact helpdesk for support.
-                        </div>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </div>
+    <v-container fill-height fluid>
+        <v-row align="center" justify="center">
+            <v-col>
+                <v-row>
+                    <v-col cols="12" md="6">
+                        <v-container>
+                            <v-img :src="src" class="ml-15"></v-img>
+                        </v-container>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                        <v-container>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <v-card
+                                        class="mt-md-10"
+                                        color="transparent"
+                                        flat
+                                    >
+                                        <div class="display-3 mt-5 mb-3">
+                                            Internal Server Error.
+                                        </div>
+                                        <div class="grey--text lighten-5">
+                                            We could not find the page you were
+                                            looking for.
+                                        </div>
+                                        <!-- <div class="mt-3">
+                                            <v-btn :to="{ name: 'admin.dashboard.index' }">Go back to Dashboard</v-btn>
+                                        </div> -->
+                                        <div class="paragraph-text mt-2">
+                                            <br />
+                                            <br />Try going back to home page
+                                            and repeating your action. Or,
+                                            contact helpdesk for support.
+                                        </div>
+                                    </v-card>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            src: require("../../assets/img/500.svg")
+        };
+    }
+};
 </script>

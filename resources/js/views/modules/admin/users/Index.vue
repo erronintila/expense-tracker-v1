@@ -104,6 +104,18 @@
                                 Move to archive
                             </v-list-item-title>
                         </v-list-item>
+
+                        <!-- <v-list-item to="/admin/roles">
+                            <v-list-item-title>
+                                Roles
+                            </v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item to="/admin/permissions">
+                            <v-list-item-title>
+                                Permissions
+                            </v-list-item-title>
+                        </v-list-item> -->
                     </v-list>
                 </v-menu>
             </v-card-title>

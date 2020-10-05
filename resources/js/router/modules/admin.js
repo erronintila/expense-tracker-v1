@@ -330,6 +330,68 @@ const adminRoutes = [
             /**
              *
              *
+             * Roles
+             *
+             *
+             */
+            // {
+            //     path: "/admin/roles",
+            //     name: "admin.roles.index",
+            //     component: () =>
+            //         import("../../views/modules/admin/roles/Index.vue")
+            // },
+            // {
+            //     path: "/admin/roles/create",
+            //     name: "admin.roles.create",
+            //     component: () =>
+            //         import("../../views/modules/admin/roles/Create.vue")
+            // },
+            // {
+            //     path: "/admin/roles/:id/edit",
+            //     name: "admin.roles.edit",
+            //     component: () =>
+            //         import("../../views/modules/admin/roles/Edit.vue")
+            // },
+            // {
+            //     path: "/admin/roles/:id",
+            //     name: "admin.roles.show",
+            //     component: () =>
+            //         import("../../views/modules/admin/roles/Show.vue")
+            // },
+            /**
+             *
+             *
+             * Permissions
+             *
+             *
+             */
+            // {
+            //     path: "/admin/permissions",
+            //     name: "admin.permissions.index",
+            //     component: () =>
+            //         import("../../views/modules/admin/permissions/Index.vue")
+            // },
+            // {
+            //     path: "/admin/permissions/create",
+            //     name: "admin.permissions.create",
+            //     component: () =>
+            //         import("../../views/modules/admin/permissions/Create.vue")
+            // },
+            // {
+            //     path: "/admin/permissions/:id/edit",
+            //     name: "admin.permissions.edit",
+            //     component: () =>
+            //         import("../../views/modules/admin/permissions/Edit.vue")
+            // },
+            // {
+            //     path: "/admin/permissions/:id",
+            //     name: "admin.permissions.show",
+            //     component: () =>
+            //         import("../../views/modules/admin/permissions/Show.vue")
+            // },
+            /**
+             *
+             *
              * Vendors
              *
              *

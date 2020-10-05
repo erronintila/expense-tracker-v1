@@ -91,8 +91,8 @@ class UserController extends Controller
 
         $user->save();
 
-        if(request()->has("employee_id")) {
-            if($request->employee_id > 0) {
+        if (request()->has("employee_id")) {
+            if ($request->employee_id > 0) {
                 $employee = Employee::find($request->employee_id);
                 $employee->user_id = $user->id;
                 $employee->save();
@@ -190,13 +190,13 @@ class UserController extends Controller
 
                 $user->save();
 
-                if($user->employee !== null) {
+                if ($user->employee !== null) {
                     $user->employee->user_id = null;
                     $user->employee->save();
                 }
 
-                if(request()->has("employee_id")) {
-                    if($request->employee_id > 0) {
+                if (request()->has("employee_id")) {
+                    if ($request->employee_id > 0) {
                         $empid = $request->employee_id;
                         $employee = Employee::find($empid);
                         $employee->user_id = $user->id;
