@@ -351,8 +351,6 @@ export default {
                 .then(function(response) {
                     let data = response.data.data;
 
-                    console.log(data);
-
                     _this.fullname = data.fullname;
                     _this.first_name = data.first_name;
                     _this.middle_name = data.middle_name;

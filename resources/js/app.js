@@ -52,6 +52,23 @@ import { store } from "./store/index";
 import { router } from "./router/index";
 import App from "./views/layouts/App.vue";
 
+axios.interceptors.response.use(
+    function(response) {
+        return response;
+    },
+    function(error) {
+        if (error.response.status === 401) {
+            store.dispatch("AUTH_LOGOUT");
+            window.location.replace("/login");
+            // router.push("/login");
+        }
+        return Promise.reject(error);
+    }
+);
+
+axios.defaults.headers.common["Authorization"] =
+    "Bearer " + localStorage.getItem("access_token");
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

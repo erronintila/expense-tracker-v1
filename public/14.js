@@ -357,7 +357,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/employees/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.fullname = data.fullname;
         _this.first_name = data.first_name;
         _this.middle_name = data.middle_name;

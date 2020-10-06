@@ -193,6 +193,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -202,8 +209,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     return {
       valid: false,
       name: "",
-      rules: {},
-      errors: {},
+      rules: {
+        name: [function (v) {
+          return !!v || "This field is required.";
+        }]
+      },
+      errors: {
+        name: []
+      },
       switchSelectAll: false,
       permissions: {
         employees: ["view all employees", "view employee", "add employee", "edit employee", "delete employee"],
@@ -233,7 +246,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: {
     onSave: function onSave() {
+      var _this = this;
+
       var selectedPermissions = [];
+
+      _this.$refs.form.validate();
 
       for (var key in this.selected) {
         var _iterator = _createForOfIteratorHelper(this.selected[key]),
@@ -249,6 +266,36 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         } finally {
           _iterator.f();
         }
+      }
+
+      if (selectedPermissions.length == 0) {
+        _this.$dialog.message.error("No Permissions selected.", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
+
+      if (_this.$refs.form.validate()) {
+        axios.post("", {
+          role: _this.role,
+          permissions: selectedPermissions
+        }).then(function (response) {
+          _this.$dialog.message.success("Role and permissions created successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$router.push({
+            name: "admin.roles.index"
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+          _this.errors = error.response.data;
+        });
+        return;
       }
     }
   },
@@ -454,7 +501,24 @@ var render = function() {
                     { attrs: { cols: "12", md: "6" } },
                     [
                       _c("v-text-field", {
-                        attrs: { label: "Role *", required: "" }
+                        attrs: {
+                          label: "Role *",
+                          rules: _vm.rules.name,
+                          "error-messages": _vm.errors.name,
+                          required: ""
+                        },
+                        on: {
+                          input: function($event) {
+                            _vm.errors.name = []
+                          }
+                        },
+                        model: {
+                          value: _vm.name,
+                          callback: function($$v) {
+                            _vm.name = $$v
+                          },
+                          expression: "name"
+                        }
                       })
                     ],
                     1

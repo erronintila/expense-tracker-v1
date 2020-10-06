@@ -1,7 +1,12 @@
 <template>
     <v-card class="elevation-0 pt-0">
         <v-card-title class="pt-0">
-            <a href="/admin/users" class="title green--text text-decoration-none">Users</a>
+            <a
+                href="/admin/users"
+                class="title green--text text-decoration-none"
+            >
+                Users
+            </a>
             <div class="title green--text">&nbsp;\&nbsp;Roles</div>
 
             <v-spacer></v-spacer>
@@ -126,10 +131,10 @@
                 }"
             >
                 <template v-slot:[`item.actions`]="{ item }">
-                    <!-- <v-icon small class="mr-2" @click="onShow(item)">
-                            mdi-eye
-                        </v-icon> -->
-                    <v-icon small class="mr-2" @click="onEdit(item)">
+                    <v-icon small class="mr-2" @click="onShow(item)">
+                        mdi-eye
+                    </v-icon>
+                    <v-icon small class="mr-2" @ click="onEdit(item)">
                         mdi-pencil
                     </v-icon>
                 </template>
@@ -163,35 +168,37 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            // let _this = this;
-            // _this.loading = true;
-            // return new Promise((resolve, reject) => {
-            //     const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-            //     let search = _this.search.trim().toLowerCase();
-            //     let status = _this.status;
-            //     axios
-            //         .get("/api/departments", {
-            //             params: {
-            //                 search: search,
-            //                 sortBy: sortBy[0],
-            //                 sortType: sortDesc[0] ? "desc" : "asc",
-            //                 page: page,
-            //                 itemsPerPage: itemsPerPage,
-            //                 status: status
-            //             }
-            //         })
-            //         .then(response => {
-            //             let items = response.data.data;
-            //             let total = response.data.meta.total;
-            //             _this.loading = false;
-            //             resolve({ items, total });
-            //         })
-            //         .catch(error => {
-            //             console.log(error);
-            //             console.log(error.response);
-            //             _this.loading = false;
-            //         });
-            // });
+            let _this = this;
+
+            _this.loading = true;
+
+            return new Promise((resolve, reject) => {
+                const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+                let search = _this.search.trim().toLowerCase();
+                let status = _this.status;
+                axios
+                    .get("", {
+                        params: {
+                            search: search,
+                            sortBy: sortBy[0],
+                            sortType: sortDesc[0] ? "desc" : "asc",
+                            page: page,
+                            itemsPerPage: itemsPerPage,
+                            status: status
+                        }
+                    })
+                    .then(response => {
+                        let items = response.data.data;
+                        let total = response.data.meta.total;
+                        _this.loading = false;
+                        resolve({ items, total });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+                        _this.loading = false;
+                    });
+            });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
@@ -217,35 +224,39 @@ export default {
                 });
                 return;
             }
-            // this.$confirm("Move item(s) to archive?").then(res => {
-            //     if (res) {
-            //         axios
-            //             .delete(`/api/departments/${_this.selected[0].id}`, {
-            //                 params: {
-            //                     ids: _this.selected.map(item => {
-            //                         return item.id;
-            //                     })
-            //                 }
-            //             })
-            //             .then(function(response) {
-            //                 _this.$dialog.message.success(
-            //                     "Item(s) moved to archive.",
-            //                     {
-            //                         position: "top-right",
-            //                         timeout: 2000
-            //                     }
-            //                 );
-            //                 _this.getDataFromApi().then(data => {
-            //                     _this.items = data.items;
-            //                     _this.totalItems = data.total;
-            //                 });
-            //             })
-            //             .catch(function(error) {
-            //                 console.log(error);
-            //                 console.log(error.response);
-            //             });
-            //     }
-            // });
+            this.$confirm("Move item(s) to archive?").then(res => {
+                if (res) {
+                    axios
+                        .delete(`/api/departments/${_this.selected[0].id}`, {
+                            params: {
+                                ids: _this.selected.map(item => {
+                                    return item.id;
+                                })
+                            }
+                        })
+                        .then(function(response) {
+                            _this.$dialog.message.success(
+                                "Item(s) moved to archive.",
+                                {
+                                    position: "top-right",
+                                    timeout: 2000
+                                }
+                            );
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
+                        })
+                        .catch(function(error) {
+                            _this.$dialog.message.error(error, {
+                                position: "top-right",
+                                timeout: 2000
+                            });
+                            console.log(error);
+                            console.log(error.response);
+                        });
+                }
+            });
         },
         onRestore() {
             let _this = this;
@@ -256,62 +267,62 @@ export default {
                 });
                 return;
             }
-            // this.$confirm("Do you want to restore account(s)?").then(res => {
-            //     if (res) {
-            //         axios
-            //             .put(`/api/departments/${_this.selected[0].id}`, {
-            //                 ids: _this.selected.map(item => {
-            //                     return item.id;
-            //                 }),
-            //                 action: "restore"
-            //             })
-            //             .then(function(response) {
-            //                 _this.$dialog.message.success("Item(s) restored.", {
-            //                     position: "top-right",
-            //                     timeout: 2000
-            //                 });
-            //                 _this.getDataFromApi().then(data => {
-            //                     _this.items = data.items;
-            //                     _this.totalItems = data.total;
-            //                 });
-            //             })
-            //             .catch(function(error) {
-            //                 // _this.$dialog.message.error(error, {
-            //                 //     position: "top-right",
-            //                 //     timeout: 2000
-            //                 // });
-            //                 console.log(error);
-            //                 console.log(error.response);
-            //             });
-            //     }
-            // });
+            this.$confirm("Do you want to restore account(s)?").then(res => {
+                if (res) {
+                    axios
+                        .put(`/api/departments/${_this.selected[0].id}`, {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            }),
+                            action: "restore"
+                        })
+                        .then(function(response) {
+                            _this.$dialog.message.success("Item(s) restored.", {
+                                position: "top-right",
+                                timeout: 2000
+                            });
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
+                        })
+                        .catch(function(error) {
+                            _this.$dialog.message.error(error, {
+                                position: "top-right",
+                                timeout: 2000
+                            });
+                            console.log(error);
+                            console.log(error.response);
+                        });
+                }
+            });
         }
     },
     watch: {
         params: {
-            // handler() {
-            //     this.getDataFromApi().then(data => {
-            //         this.items = data.items;
-            //         this.totalItems = data.total;
-            //     });
-            // },
-            // deep: true
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            },
+            deep: true
         }
     },
     computed: {
         params(nv) {
-            // return {
-            //     ...this.options,
-            //     query: this.search,
-            //     query: this.status
-            // };
+            return {
+                ...this.options,
+                query: this.search,
+                query: this.status
+            };
         }
     },
     mounted() {
-        // this.getDataFromApi().then(data => {
-        //     this.items = data.items;
-        //     this.totalItems = data.total;
-        // });
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     },
     created() {
         axios.defaults.headers.common["Authorization"] =

@@ -14,7 +14,14 @@
             <v-container>
                 <v-row>
                     <v-col cols="12" md="6">
-                        <v-text-field label="Role *" required></v-text-field>
+                        <v-text-field
+                            label="Role *"
+                            v-model="name"
+                            :rules="rules.name"
+                            :error-messages="errors.name"
+                            @input="errors.name = []"
+                            required
+                        ></v-text-field>
                     </v-col>
                 </v-row>
 
@@ -77,8 +84,14 @@ export default {
         return {
             valid: false,
             name: "",
-            rules: {},
-            errors: {},
+            rules: {
+                name: [
+                    v => !!v || "This field is required."
+                ]
+            },
+            errors: {
+                name: []
+            },
             switchSelectAll: false,
             permissions: {
                 employees: [
@@ -169,12 +182,51 @@ export default {
     },
     methods: {
         onSave() {
+            let _this = this;
             let selectedPermissions = [];
+
+            _this.$refs.form.validate();
 
             for (const key in this.selected) {
                 for (const iterator of this.selected[key]) {
                     selectedPermissions.push(iterator);
                 }
+            }
+
+            if (selectedPermissions.length == 0) {
+                _this.$dialog.message.error("No Permissions selected.", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+
+                return;
+            }
+
+            if (_this.$refs.form.validate()) {
+                axios
+                    .post("", {
+                        role: _this.role,
+                        permissions: selectedPermissions
+                    })
+                    .then(response => {
+                        _this.$dialog.message.success(
+                            "Role and permissions created successfully.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+
+                        _this.$router.push({ name: "admin.roles.index" });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.errors = error.response.data;
+                    });
+
+                return;
             }
         }
     },
