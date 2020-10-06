@@ -194,29 +194,29 @@ export default {
             // });
         },
         onRefresh() {
-            // Object.assign(this.$data, this.$options.data.apply(this));
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onShow(item) {
-            // this.$router.push({
-            //     name: "admin.departments.show",
-            //     params: { id: item.id }
-            // });
+            this.$router.push({
+                name: "admin.roles.show",
+                params: { id: item.id }
+            });
         },
         onEdit(item) {
-            // this.$router.push({
-            //     name: "admin.departments.edit",
-            //     params: { id: item.id }
-            // });
+            this.$router.push({
+                name: "admin.roles.edit",
+                params: { id: item.id }
+            });
         },
         onDelete() {
-            // let _this = this;
-            // if (_this.selected.length == 0) {
-            //     this.$dialog.message.error("No item(s) selected", {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     });
-            //     return;
-            // }
+            let _this = this;
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
             // this.$confirm("Move item(s) to archive?").then(res => {
             //     if (res) {
             //         axios
@@ -248,14 +248,14 @@ export default {
             // });
         },
         onRestore() {
-            // let _this = this;
-            // if (_this.selected.length == 0) {
-            //     this.$dialog.message.error("No item(s) selected", {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     });
-            //     return;
-            // }
+            let _this = this;
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
             // this.$confirm("Do you want to restore account(s)?").then(res => {
             //     if (res) {
             //         axios

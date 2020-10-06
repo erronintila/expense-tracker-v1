@@ -206,27 +206,35 @@ __webpack_require__.r(__webpack_exports__);
       //         });
       // });
     },
-    onRefresh: function onRefresh() {// Object.assign(this.$data, this.$options.data.apply(this));
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
-    onShow: function onShow(item) {// this.$router.push({
-      //     name: "admin.departments.show",
-      //     params: { id: item.id }
-      // });
+    onShow: function onShow(item) {
+      this.$router.push({
+        name: "admin.roles.show",
+        params: {
+          id: item.id
+        }
+      });
     },
-    onEdit: function onEdit(item) {// this.$router.push({
-      //     name: "admin.departments.edit",
-      //     params: { id: item.id }
-      // });
+    onEdit: function onEdit(item) {
+      this.$router.push({
+        name: "admin.roles.edit",
+        params: {
+          id: item.id
+        }
+      });
     },
-    onDelete: function onDelete() {// let _this = this;
-      // if (_this.selected.length == 0) {
-      //     this.$dialog.message.error("No item(s) selected", {
-      //         position: "top-right",
-      //         timeout: 2000
-      //     });
-      //     return;
-      // }
-      // this.$confirm("Move item(s) to archive?").then(res => {
+    onDelete: function onDelete() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      } // this.$confirm("Move item(s) to archive?").then(res => {
       //     if (res) {
       //         axios
       //             .delete(`/api/departments/${_this.selected[0].id}`, {
@@ -255,16 +263,18 @@ __webpack_require__.r(__webpack_exports__);
       //             });
       //     }
       // });
+
     },
-    onRestore: function onRestore() {// let _this = this;
-      // if (_this.selected.length == 0) {
-      //     this.$dialog.message.error("No item(s) selected", {
-      //         position: "top-right",
-      //         timeout: 2000
-      //     });
-      //     return;
-      // }
-      // this.$confirm("Do you want to restore account(s)?").then(res => {
+    onRestore: function onRestore() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      } // this.$confirm("Do you want to restore account(s)?").then(res => {
       //     if (res) {
       //         axios
       //             .put(`/api/departments/${_this.selected[0].id}`, {
@@ -293,6 +303,7 @@ __webpack_require__.r(__webpack_exports__);
       //             });
       //     }
       // });
+
     }
   },
   watch: {
