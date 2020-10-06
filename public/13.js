@@ -193,97 +193,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -293,23 +202,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     return {
       valid: false,
       name: "",
-      headers: [{
-        text: "Name",
-        value: "name"
-      }, {
-        text: "Name",
-        value: "name"
-      }, {
-        text: "Name",
-        value: "name"
-      }, {
-        text: "Name",
-        value: "name"
-      }, {
-        text: "Name",
-        value: "name"
-      }],
-      items: [],
       rules: {},
       errors: {},
       switchSelectAll: false,
@@ -336,185 +228,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         expense_types: [],
         users: [],
         adjustments: []
-      } // permissions_employees: [
-      //     "view all employees",
-      //     "view employee",
-      //     "add employee",
-      //     "edit employee",
-      //     "delete employee"
-      // ],
-      // permissions_expenses: [
-      //     "view all expenses",
-      //     "view expenses",
-      //     "add expenses",
-      //     "edit expenses",
-      //     "delete expenses"
-      // ],
-      // permissions_expense_reports: [
-      //     "view all expense reports",
-      //     "view expense report",
-      //     "add expense report",
-      //     "edit expense report",
-      //     "approve expense report",
-      //     "delete expense report"
-      // ],
-      // permissions_payments: [
-      //     "view all payments",
-      //     "view payment",
-      //     "add payment",
-      //     "edit payment",
-      //     "delete payment"
-      // ],
-      // permissions_vendors: [
-      //     "view all vendors",
-      //     "view vendor",
-      //     "add vendor",
-      //     "edit vendor",
-      //     "delete vendor"
-      // ],
-      // permissions_departments: [
-      //     "view all departments",
-      //     "view department",
-      //     "add department",
-      //     "edit department",
-      //     "delete department"
-      // ],
-      // permissions_jobs: [
-      //     "view all jobs",
-      //     "view job",
-      //     "add job",
-      //     "edit job",
-      //     "delete job"
-      // ],
-      // permissions_expense_types: [
-      //     "view all expense types",
-      //     "view expense type",
-      //     "add expense type",
-      //     "edit expense type",
-      //     "delete expense type"
-      // ],
-      // permissions_users: [
-      //     "view all users",
-      //     "view user",
-      //     "add user",
-      //     "edit user",
-      //     "delete user"
-      // ],
-      // permissions_adjustments: [
-      //     "view all adjustments",
-      //     "view adjustment",
-      //     "add adjustment",
-      //     "edit adjustment",
-      //     "delete adjustment"
-      // ],
-      // selected_employees: [],
-      // selected_expenses: [],
-      // selected_expense_reports: [],
-      // selected_payments: [],
-      // selected_vendors: [],
-      // selected_departments: [],
-      // selected_jobs: [],
-      // selected_expense_types: [],
-      // selected_users: [],
-      // selected_adjustments: []
-
+      }
     };
   },
   methods: {
-    onSave: function onSave() {} // selectedEmployees(e) {
-    //     this.selected_employees = e;
-    //     console.log(this.selected_employees);
-    // },
-    // selectedExpenses(e) {
-    //     this.selected_expenses = e;
-    //     console.log(this.selected_expenses);
-    // },
-    // selectedExpenseReports(e) {
-    //     this.selected_expense_reports = e;
-    //     console.log(this.selected_expense_reports);
-    // },
-    // selectedPayments(e) {
-    //     this.selected_payments = e;
-    //     console.log(this.selected_payments);
-    // },
-    // selectedEmployees(e) {
-    //     this.selected_employees = e;
-    //     console.log(this.selected_employees);
-    // },
-    // selectedVendors(e) {
-    //     this.selected_vendors = e;
-    //     console.log(this.selected_vendors);
-    // },
-    // selectedDepartments(e) {
-    //     this.selected_departments = e;
-    //     console.log(this.selected_departments);
-    // },
-    // selectedJobs(e) {
-    //     this.selected_jobs = e;
-    //     console.log(this.selected_jobs);
-    // },
-    // selectedExpenseTypes(e) {
-    //     this.selected_expense_types = e;
-    //     console.log(this.selected_expense_types);
-    // },
-    // selectedUsers(e) {
-    //     this.selected_users = e;
-    //     console.log(this.selected_users);
-    // },
-    // selectedAdjustments(e) {
-    //     this.selected_adjustments = e;
-    //     console.log(this.selected_adjustments);
-    // }
+    onSave: function onSave() {
+      var selectedPermissions = [];
 
-  },
-  watch: {
-    switchSelectAll: function switchSelectAll() {
-      if (this.switchSelectAll) {
-        for (var key in this.selected) {
-          // if (object.hasOwnProperty(key)) {
-          //     const element = object[key];
-          // }
-          this.selected[key] = this.permissions[key]; // console.log(this.selected[key]);
-        } // this.selected_employees = this.permissions_employees;
-        // this.selected_expenses = this.permissions_expenses;
-        // this.selected_expense_reports = this.permissions_expense_reports;
-        // this.selected_payments = this.permissions_payments;
-        // this.selected_vendors = this.permissions_vendors;
-        // this.selected_departments = this.permissions_departments;
-        // this.selected_jobs = this.permissions_jobs;
-        // this.selected_expense_types = this.permissions_expense_types;
-        // this.selected_users = this.permissions_users;
-        // this.selected_adjustments = this.permissions_adjustments;
-
-      } else {
-        for (var _key in this.selected) {
-          // if (object.hasOwnProperty(key)) {
-          //     const element = object[key];
-          // }
-          this.selected[_key] = []; // console.log(this.selected[key]);
-        } // this.selected_employees = [];
-        // this.selected_expenses = [];
-        // this.selected_expense_reports = [];
-        // this.selected_payments = [];
-        // this.selected_vendors = [];
-        // this.selected_departments = [];
-        // this.selected_jobs = [];
-        // this.selected_expense_types = [];
-        // this.selected_users = [];
-        // this.selected_adjustments = [];
-
-      }
-
-      var combinePermissions = [];
-
-      for (var _key2 in this.selected) {
-        var _iterator = _createForOfIteratorHelper(this.selected[_key2]),
+      for (var key in this.selected) {
+        var _iterator = _createForOfIteratorHelper(this.selected[key]),
             _step;
 
         try {
           for (_iterator.s(); !(_step = _iterator.n()).done;) {
             var iterator = _step.value;
-            combinePermissions.push(iterator);
+            selectedPermissions.push(iterator);
           }
         } catch (err) {
           _iterator.e(err);
@@ -522,21 +250,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           _iterator.f();
         }
       }
-
-      console.log(combinePermissions); // let combineSelected = this.selected;
-      // let combineSelected = [
-      //     ...this.selected_employees,
-      //     ...this.selected_expenses,
-      //     ...this.selected_expense_reports,
-      //     ...this.selected_payments,
-      //     ...this.selected_vendors,
-      //     ...this.selected_departments,
-      //     ...this.selected_jobs,
-      //     ...this.selected_expense_types,
-      //     ...this.selected_users,
-      //     ...this.selected_adjustments
-      // ];
-      // console.log(combineSelected);
+    }
+  },
+  watch: {
+    switchSelectAll: function switchSelectAll() {
+      if (this.switchSelectAll) {
+        for (var key in this.selected) {
+          this.selected[key] = this.permissions[key];
+        }
+      } else {
+        for (var _key in this.selected) {
+          this.selected[_key] = [];
+        }
+      }
     }
   },
   created: function created() {
