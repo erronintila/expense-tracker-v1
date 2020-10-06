@@ -119,10 +119,41 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_select_MultiSelect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../components/select/MultiSelect */ "./resources/js/components/select/MultiSelect.vue");
-var _methods;
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -281,68 +312,233 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       items: [],
       rules: {},
       errors: {},
-      permissions_employees: ["view all employees", "view employee", "add employee", "edit employee", "delete employee"],
-      permissions_expenses: ["view all expenses", "view expenses", "add expenses", "edit expenses", "delete expenses"],
-      permissions_expense_reports: ["view all expense reports", "view expense report", "add expense report", "edit expense report", "approve expense report", "delete expense report"],
-      permissions_payments: ["view all payments", "view payment", "add payment", "edit payment", "delete payment"],
-      permissions_vendors: ["view all vendors", "view vendor", "add vendor", "edit vendor", "delete vendor"],
-      permissions_departments: ["view all departments", "view department", "add department", "edit department", "delete department"],
-      permissions_jobs: ["view all jobs", "view job", "add job", "edit job", "delete job"],
-      permissions_expense_types: ["view all expense types", "view expense type", "add expense type", "edit expense type", "delete expense type"],
-      permissions_users: ["view all users", "view user", "add user", "edit user", "delete user"],
-      permissions_adjustments: ["view all adjustments", "view adjustment", "add adjustment", "edit adjustment", "delete adjustment"],
-      selected_employees: [],
-      selected_expenses: [],
-      selected_expense_reports: [],
-      selected_payments: [],
-      selected_vendors: [],
-      selected_departments: [],
-      selected_jobs: [],
-      selected_expense_types: [],
-      selected_users: [],
-      selected_adjustments: []
+      switchSelectAll: false,
+      permissions: {
+        employees: ["view all employees", "view employee", "add employee", "edit employee", "delete employee"],
+        expenses: ["view all expenses", "view expenses", "add expenses", "edit expenses", "delete expenses"],
+        expense_reports: ["view all expense reports", "view expense report", "add expense report", "edit expense report", "approve expense report", "delete expense report"],
+        payments: ["view all payments", "view payment", "add payment", "edit payment", "delete payment"],
+        vendors: ["view all vendors", "view vendor", "add vendor", "edit vendor", "delete vendor"],
+        departments: ["view all departments", "view department", "add department", "edit department", "delete department"],
+        jobs: ["view all jobs", "view job", "add job", "edit job", "delete job"],
+        expense_types: ["view all expense types", "view expense type", "add expense type", "edit expense type", "delete expense type"],
+        users: ["view all users", "view user", "add user", "edit user", "delete user"],
+        adjustments: ["view all adjustments", "view adjustment", "add adjustment", "edit adjustment", "delete adjustment"]
+      },
+      selected: {
+        employees: [],
+        expenses: [],
+        expense_reports: [],
+        payments: [],
+        vendors: [],
+        departments: [],
+        jobs: [],
+        expense_types: [],
+        users: [],
+        adjustments: []
+      } // permissions_employees: [
+      //     "view all employees",
+      //     "view employee",
+      //     "add employee",
+      //     "edit employee",
+      //     "delete employee"
+      // ],
+      // permissions_expenses: [
+      //     "view all expenses",
+      //     "view expenses",
+      //     "add expenses",
+      //     "edit expenses",
+      //     "delete expenses"
+      // ],
+      // permissions_expense_reports: [
+      //     "view all expense reports",
+      //     "view expense report",
+      //     "add expense report",
+      //     "edit expense report",
+      //     "approve expense report",
+      //     "delete expense report"
+      // ],
+      // permissions_payments: [
+      //     "view all payments",
+      //     "view payment",
+      //     "add payment",
+      //     "edit payment",
+      //     "delete payment"
+      // ],
+      // permissions_vendors: [
+      //     "view all vendors",
+      //     "view vendor",
+      //     "add vendor",
+      //     "edit vendor",
+      //     "delete vendor"
+      // ],
+      // permissions_departments: [
+      //     "view all departments",
+      //     "view department",
+      //     "add department",
+      //     "edit department",
+      //     "delete department"
+      // ],
+      // permissions_jobs: [
+      //     "view all jobs",
+      //     "view job",
+      //     "add job",
+      //     "edit job",
+      //     "delete job"
+      // ],
+      // permissions_expense_types: [
+      //     "view all expense types",
+      //     "view expense type",
+      //     "add expense type",
+      //     "edit expense type",
+      //     "delete expense type"
+      // ],
+      // permissions_users: [
+      //     "view all users",
+      //     "view user",
+      //     "add user",
+      //     "edit user",
+      //     "delete user"
+      // ],
+      // permissions_adjustments: [
+      //     "view all adjustments",
+      //     "view adjustment",
+      //     "add adjustment",
+      //     "edit adjustment",
+      //     "delete adjustment"
+      // ],
+      // selected_employees: [],
+      // selected_expenses: [],
+      // selected_expense_reports: [],
+      // selected_payments: [],
+      // selected_vendors: [],
+      // selected_departments: [],
+      // selected_jobs: [],
+      // selected_expense_types: [],
+      // selected_users: [],
+      // selected_adjustments: []
+
     };
   },
-  methods: (_methods = {
-    onSave: function onSave() {},
-    selectedEmployees: function selectedEmployees(e) {
-      this.selected_employees = e;
-      console.log(this.selected_employees);
-    },
-    selectedExpenses: function selectedExpenses(e) {
-      this.selected_expenses = e;
-      console.log(this.selected_expenses);
-    },
-    selectedExpenseReports: function selectedExpenseReports(e) {
-      this.selected_expense_reports = e;
-      console.log(this.selected_expense_reports);
-    },
-    selectedPayments: function selectedPayments(e) {
-      this.selected_payments = e;
-      console.log(this.selected_payments);
+  methods: {
+    onSave: function onSave() {} // selectedEmployees(e) {
+    //     this.selected_employees = e;
+    //     console.log(this.selected_employees);
+    // },
+    // selectedExpenses(e) {
+    //     this.selected_expenses = e;
+    //     console.log(this.selected_expenses);
+    // },
+    // selectedExpenseReports(e) {
+    //     this.selected_expense_reports = e;
+    //     console.log(this.selected_expense_reports);
+    // },
+    // selectedPayments(e) {
+    //     this.selected_payments = e;
+    //     console.log(this.selected_payments);
+    // },
+    // selectedEmployees(e) {
+    //     this.selected_employees = e;
+    //     console.log(this.selected_employees);
+    // },
+    // selectedVendors(e) {
+    //     this.selected_vendors = e;
+    //     console.log(this.selected_vendors);
+    // },
+    // selectedDepartments(e) {
+    //     this.selected_departments = e;
+    //     console.log(this.selected_departments);
+    // },
+    // selectedJobs(e) {
+    //     this.selected_jobs = e;
+    //     console.log(this.selected_jobs);
+    // },
+    // selectedExpenseTypes(e) {
+    //     this.selected_expense_types = e;
+    //     console.log(this.selected_expense_types);
+    // },
+    // selectedUsers(e) {
+    //     this.selected_users = e;
+    //     console.log(this.selected_users);
+    // },
+    // selectedAdjustments(e) {
+    //     this.selected_adjustments = e;
+    //     console.log(this.selected_adjustments);
+    // }
+
+  },
+  watch: {
+    switchSelectAll: function switchSelectAll() {
+      if (this.switchSelectAll) {
+        for (var key in this.selected) {
+          // if (object.hasOwnProperty(key)) {
+          //     const element = object[key];
+          // }
+          this.selected[key] = this.permissions[key]; // console.log(this.selected[key]);
+        } // this.selected_employees = this.permissions_employees;
+        // this.selected_expenses = this.permissions_expenses;
+        // this.selected_expense_reports = this.permissions_expense_reports;
+        // this.selected_payments = this.permissions_payments;
+        // this.selected_vendors = this.permissions_vendors;
+        // this.selected_departments = this.permissions_departments;
+        // this.selected_jobs = this.permissions_jobs;
+        // this.selected_expense_types = this.permissions_expense_types;
+        // this.selected_users = this.permissions_users;
+        // this.selected_adjustments = this.permissions_adjustments;
+
+      } else {
+        for (var _key in this.selected) {
+          // if (object.hasOwnProperty(key)) {
+          //     const element = object[key];
+          // }
+          this.selected[_key] = []; // console.log(this.selected[key]);
+        } // this.selected_employees = [];
+        // this.selected_expenses = [];
+        // this.selected_expense_reports = [];
+        // this.selected_payments = [];
+        // this.selected_vendors = [];
+        // this.selected_departments = [];
+        // this.selected_jobs = [];
+        // this.selected_expense_types = [];
+        // this.selected_users = [];
+        // this.selected_adjustments = [];
+
+      }
+
+      var combinePermissions = [];
+
+      for (var _key2 in this.selected) {
+        var _iterator = _createForOfIteratorHelper(this.selected[_key2]),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var iterator = _step.value;
+            combinePermissions.push(iterator);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      }
+
+      console.log(combinePermissions); // let combineSelected = this.selected;
+      // let combineSelected = [
+      //     ...this.selected_employees,
+      //     ...this.selected_expenses,
+      //     ...this.selected_expense_reports,
+      //     ...this.selected_payments,
+      //     ...this.selected_vendors,
+      //     ...this.selected_departments,
+      //     ...this.selected_jobs,
+      //     ...this.selected_expense_types,
+      //     ...this.selected_users,
+      //     ...this.selected_adjustments
+      // ];
+      // console.log(combineSelected);
     }
-  }, _defineProperty(_methods, "selectedEmployees", function selectedEmployees(e) {
-    this.selected_employees = e;
-    console.log(this.selected_employees);
-  }), _defineProperty(_methods, "selectedVendors", function selectedVendors(e) {
-    this.selected_vendors = e;
-    console.log(this.selected_vendors);
-  }), _defineProperty(_methods, "selectedDepartments", function selectedDepartments(e) {
-    this.selected_departments = e;
-    console.log(this.selected_departments);
-  }), _defineProperty(_methods, "selectedJobs", function selectedJobs(e) {
-    this.selected_jobs = e;
-    console.log(this.selected_jobs);
-  }), _defineProperty(_methods, "selectedExpenseTypes", function selectedExpenseTypes(e) {
-    this.selected_expense_types = e;
-    console.log(this.selected_expense_types);
-  }), _defineProperty(_methods, "selectedUsers", function selectedUsers(e) {
-    this.selected_users = e;
-    console.log(this.selected_users);
-  }), _defineProperty(_methods, "selectedAdjustments", function selectedAdjustments(e) {
-    this.selected_adjustments = e;
-    console.log(this.selected_adjustments);
-  }), _methods),
+  },
   created: function created() {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
   }
@@ -541,173 +737,62 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("div", [
-                _vm._v("\n                Permissions\n            ")
-              ]),
-              _vm._v(" "),
               _c(
-                "v-row",
+                "div",
                 [
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Employees",
-                          items: _vm.permissions_employees,
-                          defaultSelected: _vm.selected_employees
-                        },
-                        on: { changeSelected: _vm.selectedEmployees }
-                      })
-                    ],
-                    1
-                  ),
+                  _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                    _vm._v(
+                      "\n                    Permissions\n                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
                   _vm._v(" "),
                   _c(
                     "v-col",
                     { attrs: { cols: "12", md: "4" } },
                     [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Expenses",
-                          items: _vm.permissions_expenses,
-                          defaultSelected: _vm.selected_expenses
-                        },
-                        on: { changeSelected: _vm.selectedExpenses }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Expense Reports",
-                          items: _vm.permissions_expense_reports,
-                          defaultSelected: _vm.selected_expense_reports
-                        },
-                        on: { changeSelected: _vm.selectedExpenseReports }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Payments",
-                          items: _vm.permissions_payments,
-                          defaultSelected: _vm.selected_payments
-                        },
-                        on: { changeSelected: _vm.selectedPayments }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Vendors",
-                          items: _vm.permissions_vendors,
-                          defaultSelected: _vm.selected_vendors
-                        },
-                        on: { changeSelected: _vm.selectedVendors }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Departments",
-                          items: _vm.permissions_departments,
-                          defaultSelected: _vm.selected_departments
-                        },
-                        on: { changeSelected: _vm.selectedDepartments }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Job Designations",
-                          items: _vm.permissions_jobs,
-                          defaultSelected: _vm.selected_jobs
-                        },
-                        on: { changeSelected: _vm.selectedJobs }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Expense Types",
-                          items: _vm.permissions_expense_types,
-                          defaultSelected: _vm.selected_expense_types
-                        },
-                        on: { changeSelected: _vm.selectedExpenseTypes }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Users",
-                          items: _vm.permissions_users,
-                          defaultSelected: _vm.selected_users
-                        },
-                        on: { changeSelected: _vm.selectedUsers }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("MultiSelect", {
-                        attrs: {
-                          label: "Adjustments",
-                          items: _vm.permissions_adjustments,
-                          defaultSelected: _vm.selected_adjustments
-                        },
-                        on: { changeSelected: _vm.selectedAdjustments }
+                      _c("v-switch", {
+                        attrs: { label: "Select All" },
+                        model: {
+                          value: _vm.switchSelectAll,
+                          callback: function($$v) {
+                            _vm.switchSelectAll = $$v
+                          },
+                          expression: "switchSelectAll"
+                        }
                       })
                     ],
                     1
                   )
                 ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                _vm._l(_vm.permissions, function(item, key) {
+                  return _c(
+                    "v-col",
+                    { key: item[0], attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("MultiSelect", {
+                        key: _vm.switchSelectAll,
+                        attrs: {
+                          label: key.toUpperCase(),
+                          items: item,
+                          defaultSelected: _vm.selected[key]
+                        },
+                        on: {
+                          changeSelected: function(e) {
+                            _vm.selected[key] = e
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                }),
                 1
               ),
               _vm._v(" "),
