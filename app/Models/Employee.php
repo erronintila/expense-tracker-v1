@@ -106,7 +106,8 @@ class Employee extends Model
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function adjustments() {
+    public function adjustments()
+    {
         return $this->hasMany(Adjustment::class);
     }
 
@@ -136,5 +137,10 @@ class Employee extends Model
             });
 
         return $this->fund - $expenses;
+    }
+
+    public function actual_remaining_fund()
+    {
+        $expenses = Expense::where("employee_id", $this->id);
     }
 }

@@ -38,7 +38,7 @@ class CreateEmployeesTable extends Migration
             // $table->string('zip', 10)->nullable();
 
             $table->double('fund', 10, 2)->default(0);
-            // $table->double('remaining_fund', 10, 2)->default(0);
+            $table->double('fund_remaining', 10, 2)->default(0);
 
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('user_id')->nullable();
