@@ -875,10 +875,9 @@ export default {
                     position: "top-right",
                     timeout: 2000
                 });
+                console.log("hello2");
                 return;
             }
-
-            _this.$refs.form.validate();
 
             if (
                 parseFloat(this.amount) - parseFloat(this.reimbursable_amount) >
@@ -959,6 +958,7 @@ export default {
             this.dialog = false;
             this.particular = "";
             this.particular_amount = 0;
+            this.particular_reimbursable_amount = 0;
         },
         onRemove(item) {
             const index = this.items.indexOf(item);

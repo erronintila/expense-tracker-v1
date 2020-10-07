@@ -253,7 +253,7 @@ class DataController extends Controller
 
     public function expense_types_expenses_summary(Request $request)
     {
-        $expense_types = ExpenseType::with(['expenses.expense_report' => function ($q) use ($request) {
+        $expense_types = ExpenseType::with(['expenses' => function ($q) use ($request) {
             if (request()->has("employee_id")) {
                 if (request()->has("admin_page")) {
                     if ($request->employee_id > 0) {
@@ -263,14 +263,13 @@ class DataController extends Controller
                     $q->where('employee_id', $request->employee_id);
                 }
             }
-            $q->where('approved_at', '<>', null);
-            $q->where('deleted_at', null);
         }])->get();
 
         $expense_types_summary = [];
 
         foreach ($expense_types as $key => $value) {
-            $total_expenses = $value["expenses"]->where('expense_report', '<>', null)
+            $total_expenses = $value["expenses"]->where('cancelled_at', null)
+                ->where('deleted_at', null)
                 ->whereBetween('date', [$request->start_date, $request->end_date]);
 
             if (request()->has('employee_id')) {
@@ -295,20 +294,20 @@ class DataController extends Controller
 
     public function employees_expenses_summary(Request $request)
     {
-        $employees = Employee::with(['expenses.expense_report' => function ($q) use ($request) {
+        $employees = Employee::where(function ($q) use ($request) {
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
                 }
             }
-            $q->where('approved_at', '<>', null);
-            $q->where('deleted_at', null);
-        }])->get();
+        })
+            ->get();
 
         $employees_expenses_summary = [];
 
         foreach ($employees as $key => $value) {
-            $total_expenses = $value["expenses"]->where('expense_report', '<>', null)
+            $total_expenses = $value["expenses"]->where('cancelled_at', null)
+                ->where('deleted_at', null)
                 ->whereBetween('date', [$request->start_date, $request->end_date])
                 ->sum("amount");
 
@@ -326,15 +325,14 @@ class DataController extends Controller
 
     public function departments_expenses_summary(Request $request)
     {
-        $departments = Department::with(['jobs.employees.expenses.expense_report' => function ($q) use ($request) {
+        $departments = Department::where(function ($q) use ($request) {
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
                 }
             }
-            $q->where('approved_at', '<>', null);
-            $q->where('deleted_at', null);
-        }])->get();
+        })
+            ->get();
 
         $departments_expenses_summary = [];
 
@@ -344,7 +342,8 @@ class DataController extends Controller
 
             foreach ($value["jobs"] as $key => $value) {
                 foreach ($value["employees"] as $key => $value) {
-                    $total_expenses += $value["expenses"]->where('expense_report', '<>', null)
+                    $total_expenses += $value["expenses"]->where('cancelled_at', null)
+                        ->where('deleted_at', null)
                         ->whereBetween('date', [$request->start_date, $request->end_date])
                         ->sum("amount");
                 }
@@ -364,14 +363,7 @@ class DataController extends Controller
 
     public function total_expenses(Request $request)
     {
-        $expenses = Expense::with(['expense_report' => function ($q) {
-            $q->where('approved_at', '<>', null);
-            $q->where('deleted_at', null);
-        }])
-            ->whereHas('expense_report')
-            ->get()
-            ->where('expense_report', '<>', null)
-            ->whereBetween('date', [$request->start_date, $request->end_date]);
+        $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
 
         if (request()->has('employee_id')) {
             $expenses = $expenses->where('employee_id', $request->employee_id);
@@ -384,51 +376,48 @@ class DataController extends Controller
 
     public function expenses_summary(Request $request)
     {
-        $expenses = Expense::whereBetween('expenses.date', [$request->start_date, $request->end_date])
-            ->where('expense_reports.approved_at', '<>', null)
-            ->where('expense_reports.deleted_at', null)
-            ->join('expense_reports', 'expense_reports.id', '=', 'expenses.expense_report_id')
-            ->orderBy('expenses.date')
-            ->select(DB::raw('expenses.date as text, sum(expenses.amount) as value'));
+        $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])
+            ->orderBy('date')
+            ->select(DB::raw('date as text, sum(amount) as value'));
 
         if (request()->has('employee_id')) {
             if (request()->has("admin_page")) {
                 if ($request->employee_id > 0) {
-                    $expenses = $expenses->where('expenses.employee_id', $request->employee_id);
+                    $expenses = $expenses->where('employee_id', $request->employee_id);
                 }
             } else {
-                $expenses = $expenses->where('expenses.employee_id', $request->employee_id);
+                $expenses = $expenses->where('employee_id', $request->employee_id);
             }
         }
 
         switch ($request->time_unit) {
             case 'day':
                 $expenses = $expenses
-                    ->groupBy(DB::raw('(expenses.date)'))
+                    ->groupBy(DB::raw('(date)'))
                     ->get();
                 return $expenses;
                 break;
             case 'week':
                 $expenses = $expenses
-                    ->groupBy(DB::raw('WEEK(expenses.date)'))
+                    ->groupBy(DB::raw('WEEK(date)'))
                     ->get();
                 return $expenses;
                 break;
             case 'month':
                 $expenses = $expenses
-                    ->groupBy(DB::raw('MONTH(expenses.date)'))
+                    ->groupBy(DB::raw('MONTH(date)'))
                     ->get();
                 return $expenses;
                 break;
             case 'quarter':
                 $expenses = $expenses
-                    ->groupBy(DB::raw('QUARTER(expenses.date)'))
+                    ->groupBy(DB::raw('QUARTER(date)'))
                     ->get();
                 return $expenses;
                 break;
             case 'year':
                 $expenses = $expenses
-                    ->groupBy(DB::raw('YEAR(expenses.date)'))
+                    ->groupBy(DB::raw('YEAR(date)'))
                     ->get();
                 return $expenses;
                 break;
@@ -442,16 +431,7 @@ class DataController extends Controller
 
     public function expense_stats(Request $request)
     {
-        $total_expenses_by_date = Expense::with(['expense_report' => function ($q) {
-            $q->where('submitted_at', "<>", null);
-            $q->where('approved_at', '<>', null);
-            $q->where('cancelled_at', null);
-            $q->where('deleted_at', null);
-        }])
-            ->whereHas('expense_report')
-            ->get()
-            ->where('expense_report', '<>', null)
-            ->whereBetween('date', [$request->start_date, $request->end_date]);
+        $total_expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
 
         $pending_expenses = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
@@ -464,28 +444,9 @@ class DataController extends Controller
             ->where('expense_report', '<>', null);
         // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
-        $reimbursements = Expense::with(['expense_report' => function ($q) {
-            $q->where('submitted_at', "<>", null);
-            $q->where('approved_at', '<>', null);
-            $q->where('cancelled_at', null);
-            $q->where('deleted_at', null);
-            $q->where('payment_id', null);
-        }])
-            ->whereHas('expense_report')
-            ->get()
-            ->where('expense_report', '<>', null);
-        // ->whereBetween('date', [$request->start_date, $request->end_date]);
+        $reimbursements = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
 
-        $total_expenses = Expense::with(['expense_report' => function ($q) {
-            $q->where('submitted_at', "<>", null);
-            $q->where('approved_at', '<>', null);
-            $q->where('cancelled_at', null);
-            $q->where('deleted_at', null);
-            $q->where('payment_id', null);
-        }])
-            ->whereHas('expense_report')
-            ->get()
-            ->where('expense_report', '<>', null);
+        $total_expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
 
         // if (request()->has('employee_id') && request()->has("admin_page")) {
         if (request()->has('employee_id')) {

@@ -893,10 +893,9 @@ __webpack_require__.r(__webpack_exports__);
           timeout: 2000
         });
 
+        console.log("hello2");
         return;
       }
-
-      _this.$refs.form.validate();
 
       if (parseFloat(this.amount) - parseFloat(this.reimbursable_amount) > parseFloat(this.employee.remaining_fund)) {
         _this.$dialog.message.error("Expense actual amount is greater than remaining funds", {
@@ -961,6 +960,7 @@ __webpack_require__.r(__webpack_exports__);
       this.dialog = false;
       this.particular = "";
       this.particular_amount = 0;
+      this.particular_reimbursable_amount = 0;
     },
     onRemove: function onRemove(item) {
       var index = this.items.indexOf(item);

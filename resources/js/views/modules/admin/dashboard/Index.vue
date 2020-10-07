@@ -44,7 +44,6 @@
             </v-card-title>
             <v-card-subtitle> </v-card-subtitle>
 
-            <v-container>
                 <v-row>
                     <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
@@ -238,7 +237,6 @@
                         </v-row>
                     </v-card>
                 </v-hover>
-            </v-container>
         </v-card>
     </div>
 </template>
@@ -250,7 +248,7 @@ import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import DoughnutChart from "../../../../components/chart/DoughnutChart";
 // import PieChart from "./components/PieChart";
-// import BarChart from "./components/BarChart"; 
+// import BarChart from "./components/BarChart";
 import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
 import LineChart from "../../../../components/chart/LineChart";
 
@@ -674,7 +672,7 @@ export default {
                     data: data
                 }
             ];
-            
+
             this.$refs.horizontalBar_chart.update();
         },
         updatePieChartValues(labels, data, backgroundColors) {

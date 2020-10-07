@@ -103,6 +103,13 @@
                                     >
                                         mdi-pencil
                                     </v-icon>
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="onDelete(item)"
+                                    >
+                                        mdi-delete
+                                    </v-icon>
                                     <!-- <v-icon
                                         small
                                         class="mr-2"
@@ -110,13 +117,7 @@
                                     >
                                         mdi-pencil
                                     </v-icon>
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="onDelete(item)"
-                                    >
-                                        mdi-delete
-                                    </v-icon> -->
+                                     -->
                                 </template>
                                 <template v-slot:top>
                                     <v-row>

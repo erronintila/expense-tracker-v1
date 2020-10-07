@@ -14,7 +14,9 @@ class ExpenseObserver
      */
     public function created(Expense $expense)
     {
-        $expense->employee->fund_remaining -= $expense->amount;
+        $expense_amount = $expense->amount - $expense->reimbursable_amount;
+
+        $expense->employee->fund_remaining -= $expense_amount;
 
         $expense->employee->save();
     }
@@ -27,9 +29,9 @@ class ExpenseObserver
      */
     public function updated(Expense $expense)
     {
-        $original_amount = $expense->getOriginal("amount");
+        $original_amount = $expense->getOriginal("amount") - $expense->getOriginal("reimbursable_amount");
 
-        $new_amount = $expense->amount;
+        $new_amount = $expense->amount - $expense->reimbursable_amount;
 
         $remaining_fund = $expense->employee->fund_remaining;
 
@@ -46,7 +48,9 @@ class ExpenseObserver
      */
     public function deleted(Expense $expense)
     {
-        $expense->employee->fund_remaining += $expense->amount;
+        $expense_amount = $expense->amount - $expense->reimbursable_amount;
+
+        $expense->employee->fund_remaining += $expense_amount;
 
         $expense->employee->save();
     }

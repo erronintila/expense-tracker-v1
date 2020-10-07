@@ -267,6 +267,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
  // import CreateExpense from "./components/CreateExpense";
 // import EditExpense from "./components/EditExpense";
@@ -703,6 +704,24 @@ var render = function() {
                                           [
                                             _vm._v(
                                               "\n                                    mdi-pencil\n                                "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            staticClass: "mr-2",
+                                            attrs: { small: "" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.onDelete(item)
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    mdi-delete\n                                "
                                             )
                                           ]
                                         )

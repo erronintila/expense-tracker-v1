@@ -267,7 +267,7 @@ class ExpenseReportController extends Controller
             default:
                 $this->validator($request->all(), $id)->validate();
 
-                $expense_report = ExpenseReport::findOrFail($id);
+                $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                 $expense_report->description = $request->description;
                 $expense_report->employee_id = $request->employee_id;
@@ -278,14 +278,16 @@ class ExpenseReportController extends Controller
 
                 // set existing references to null
                 foreach ($expense_report->expenses as $key => $value) {
-                    $expense = Expense::find($value["id"]);
+                    $expense = Expense::withTrashed()->find($value["id"]);
                     $expense->expense_report_id = null;
+                    $expense->deleted_at = now();
                     $expense->save();
                 }
 
                 foreach ($request->expenses as $key => $value) {
-                    $expense = Expense::find($value["id"]);
+                    $expense = Expense::withTrashed()->find($value["id"]);
                     $expense->expense_report_id = $expense_report->id;
+                    $expense->deleted_at = null;
                     $expense->save();
                 }
 
