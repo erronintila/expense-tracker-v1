@@ -17,7 +17,7 @@
                     <v-icon dark>mdi-reload</v-icon>
                 </v-btn>
 
-                <v-menu
+                <!-- <v-menu
                     transition="scale-transition"
                     :close-on-content-click="false"
                     :nudge-width="200"
@@ -50,7 +50,7 @@
                             </v-list-item>
                         </v-list>
                     </v-card>
-                </v-menu>
+                </v-menu> -->
 
                 <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on, attrs }">
@@ -74,12 +74,6 @@
                         <v-list-item @click="onCreate('revolving_fund')">
                             <v-list-item-title>
                                 Manage Revolving Fund
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-title>
-                                Cancel Adjustment(s)
                             </v-list-item-title>
                         </v-list-item>
                     </v-list>
@@ -232,48 +226,6 @@ export default {
                 default:
                     break;
             }
-        },
-        onDelete() {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
-
-            this.$confirm("Do you want to cancel adjustment(s)?").then(res => {
-                if (res) {
-                    axios
-                        .delete(`/api/adjustments/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
-
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-                        });
-                }
-            });
         },
         formatDate(date, format) {
             return date == null ? "" : moment(date).format(format);

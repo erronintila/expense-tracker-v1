@@ -257,40 +257,6 @@ var render = function() {
                     [
                       _c(
                         "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              counter: 100,
-                              rules: _vm.rules.reference,
-                              "error-messages": _vm.errors.reference[0],
-                              label: "Reference"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.reference = []
-                              }
-                            },
-                            model: {
-                              value: _vm.reference,
-                              callback: function($$v) {
-                                _vm.reference = $$v
-                              },
-                              expression: "reference"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
                         { attrs: { cols: "12", md: "6" } },
                         [
                           _c("v-autocomplete", {

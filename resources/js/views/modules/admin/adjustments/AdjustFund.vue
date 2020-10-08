@@ -13,7 +13,7 @@
 
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <v-row>
+                    <!-- <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="reference"
@@ -25,7 +25,7 @@
                             >
                             </v-text-field>
                         </v-col>
-                    </v-row>
+                    </v-row> -->
 
                     <v-row>
                         <v-col cols="12" md="6">
