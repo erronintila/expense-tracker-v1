@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Adjustment;
 use App\Models\Expense;
+use App\Models\Payment;
 use App\Observers\AdjustmentObserver;
 use App\Observers\ExpenseObserver;
+use App\Observers\PaymentObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,5 +32,7 @@ class AppServiceProvider extends ServiceProvider
         Expense::observe(ExpenseObserver::class);
 
         Adjustment::observe(AdjustmentObserver::class);
+
+        Payment::observe(PaymentObserver::class);
     }
 }

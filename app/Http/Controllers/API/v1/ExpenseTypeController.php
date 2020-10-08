@@ -21,6 +21,7 @@ class ExpenseTypeController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
+
             'name' => ['required', 'max:100', Rule::unique('expense_types')->ignore($id, 'id')],
         ]);
     }
@@ -33,24 +34,34 @@ class ExpenseTypeController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
+
         $sortBy = $request->sortBy ?? "name";
+
         $sortType = $request->sortType ?? "asc";
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
         $expense_types = ExpenseType::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
+
             switch ($request->status) {
+
                 case 'Archived':
+
                     $expense_types = $expense_types->onlyTrashed();
+
                     break;
                 default:
+
                     $expense_types = $expense_types;
+
                     break;
             }
         }
 
         $expense_types = $expense_types->where('name', "like", "%" . $search . "%");
+
         $expense_types = $expense_types->paginate($itemsPerPage);
 
         return ExpenseTypeResource::collection($expense_types);
@@ -75,6 +86,7 @@ class ExpenseTypeController extends Controller
         return response(
             [
                 'data' => new ExpenseTypeResource($expense_type),
+
                 'message' => 'Created successfully'
             ],
             201
@@ -94,6 +106,7 @@ class ExpenseTypeController extends Controller
         return response(
             [
                 'data' => new ExpenseTypeResource($expense_type),
+
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -110,13 +123,16 @@ class ExpenseTypeController extends Controller
     public function update(Request $request, $id)
     {
         switch ($request->action) {
+
             case 'restore':
+
                 $expense_type = ExpenseType::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
             default:
+
                 $this->validator($request->all(), $id)->validate();
 
                 $expense_type = ExpenseType::findOrFail($id);

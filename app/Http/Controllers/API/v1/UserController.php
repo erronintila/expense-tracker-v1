@@ -23,9 +23,13 @@ class UserController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
+
             'name'      => ['required', 'max:200'],
+
             'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:150'],
+
             'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
+
             'password'  => ['required', 'min:8', 'max:255', 'confirmed'],
         ]);
     }
@@ -38,34 +42,51 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
+
         $sortBy = $request->sortBy ?? "name";
+
         $sortType = $request->sortType ?? "asc";
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
         $users = User::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
+
             switch ($request->status) {
+
                 case 'Archived':
+
                     $users = $users->onlyTrashed();
+
                     break;
                 case 'Verified':
+
                     $users = $users->where('email_verified_at', '<>', null);
+
                     break;
                 case 'Unverified':
+
                     $users = $users->where('email_verified_at', null);
+
                     break;
                 default:
+
                     $users = $users;
+
                     break;
             }
         }
 
         $users = $users->where(function ($query) use ($search) {
+
             $query->where("name", "like", "%" . $search . "%");
+
             $query->orWhere("username", "like", "%" . $search . "%");
+
             $query->orWhere("email", "like", "%" . $search . "%");
         });
+
         $users = $users->paginate($itemsPerPage);
 
         return UserResource::collection($users);
@@ -84,18 +105,27 @@ class UserController extends Controller
         $user = new User();
 
         $user->name     = $request['name'];
+
         $user->username = $request['username'];
+
         $user->email    = $request['email'];
+
         $user->is_admin = $request['is_admin'];
+
         $user->can_login = $request['can_login'];
+
         $user->password = Hash::make($request['password']);
 
         $user->save();
 
         if (request()->has("employee_id")) {
+
             if ($request->employee_id > 0) {
+
                 $employee = Employee::find($request->employee_id);
+
                 $employee->user_id = $user->id;
+
                 $employee->save();
             }
         }
@@ -103,6 +133,7 @@ class UserController extends Controller
         return response(
             [
                 'data' => new UserResource($user),
+
                 'message' => 'Created successfully'
             ],
             201
@@ -122,6 +153,7 @@ class UserController extends Controller
         return response(
             [
                 'data' => new UserResource($user),
+
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -138,23 +170,28 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         switch ($request->action) {
+
             case 'restore':
+
                 $user = User::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
             case 'password_reset':
+
                 $user = User::whereIn('id', $request->ids)
                     ->update(array('password' => Hash::make('password')));
 
                 break;
             case 'verify':
+
                 $user = User::whereIn('id', $request->ids)
                     ->update(array('email_verified_at' => now()));
 
                 break;
             case 'change_password':
+
                 $validator = Validator::make($request->all(), [
                     'old_password' => [
                         'required', function ($attribute, $value, $fail) {
@@ -167,56 +204,84 @@ class UserController extends Controller
                 ]);
 
                 if ($validator->fails()) {
+
                     return redirect()->back()->withInput()->withErrors($validator);
                 }
 
                 $user = User::find($id);
+
                 $user->password = Hash::make($request->password);
+
                 $user->save();
 
                 break;
             default:
                 $request->validate([
+
                     'name'      => ['required', 'max:200'],
+
                     'username'  => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:150'],
+
                     'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
                 ]);
 
                 $user = User::findOrFail($id);
 
                 $user->name = $request->name;
+
                 $user->username = $request->username;
+
                 $user->email = $request->email;
+
                 $user->is_admin = $request->is_admin;
+
                 $user->can_login = $request->can_login;
 
                 $user->save();
 
                 if ($user->employee !== null) {
+
                     $user->employee->user_id = null;
+
                     $user->employee->save();
                 }
 
                 if (request()->has("employee_id")) {
+
                     if ($request->employee_id > 0) {
+
                         $empid = $request->employee_id;
+
                         $employee = Employee::find($empid);
+
                         $employee->user_id = $user->id;
+
                         $employee->save();
                     }
                 }
 
                 if (request()->has('employee') && $user->employee != null) {
+
                     $user->employee->first_name = $request->employee["first_name"];
+
                     $user->employee->middle_name = $request->employee["middle_name"];
+
                     $user->employee->last_name = $request->employee["last_name"];
+
                     $user->employee->suffix = $request->employee["suffix"] == null ? "" : $request->employee["suffix"];
+
                     $user->employee->gender = $request->employee["gender"];
+
                     $user->employee->birthdate = $request->employee["birthdate"];
+
                     $user->employee->mobile_number = $request->employee["mobile_number"];
+
                     $user->employee->telephone_number = $request->employee["telephone_number"];
+
                     $user->employee->email = $request->employee["email"];
+
                     $user->employee->address = $request->employee["address"];
+                    
                     $user->employee->save();
                 }
 

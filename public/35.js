@@ -268,6 +268,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
  // import EditExpense from "./components/EditExpense";
@@ -606,7 +607,8 @@ var render = function() {
                               "item-text": "fullname",
                               label: "Employee *",
                               required: "",
-                              "return-object": ""
+                              "return-object": "",
+                              readonly: ""
                             },
                             on: {
                               input: function($event) {

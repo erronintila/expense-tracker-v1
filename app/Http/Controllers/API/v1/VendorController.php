@@ -21,16 +21,27 @@ class VendorController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
+
             'code' => ['nullable', 'max:255', Rule::unique('vendors')->ignore($id, 'id')],
+
             'name' => ['required', 'max:150'],
+
             'email' => ['nullable', 'email', 'max:150', Rule::unique('vendors')->ignore($id, 'id')],
+
             'tin' => ['required', 'max:255', Rule::unique('vendors')->ignore($id, 'id')],
+
             'contact_person' => ['nullable', 'max:150'],
+
             'mobile_number' => ['nullable', 'max:50'],
+
             'telephone_number' => ['nullable', 'max:50'],
+
             'website' => ['nullable', 'max:150'],
+
             'remarks' => ['nullable'],
+
             'is_vat_inclusive' => ['required'],
+
             'address' => ['nullable'],
         ]);
     }
@@ -43,29 +54,44 @@ class VendorController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
+
         $sortBy = $request->sortBy ?? "name";
+
         $sortType = $request->sortType ?? "asc";
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
         $vendors = Vendor::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
+
             switch ($request->status) {
+
                 case 'Archived':
+
                     $vendors = $vendors->onlyTrashed();
+
                     break;
                 default:
+
                     $vendors = $vendors;
+
                     break;
             }
         }
 
         $vendors = $vendors->where(function ($query) use ($search) {
+
             $query->where('code', "like", "%" . $search . "%");
+
             $query->orWhere("name", "like", "%" . $search . "%");
+
             $query->orWhere("email", "like", "%" . $search . "%");
+
             $query->orWhere("tin", "like", "%" . $search . "%");
+
             $query->orWhere("mobile_number", "like", "%" . $search . "%");
+
             $query->orWhere("telephone_number", "like", "%" . $search . "%");
         });
 
@@ -87,27 +113,42 @@ class VendorController extends Controller
         $vendor = new Vendor();
 
         $vendor->code = $request->code;
+
         $vendor->name = $request->name;
+
         $vendor->email = $request->email;
+
         $vendor->tin = $request->tin;
+
         $vendor->contact_person = $request->contact_person;
+
         $vendor->mobile_number = $request->mobile_number;
+
         $vendor->telephone_number = $request->telephone_number;
+
         $vendor->website = $request->website;
+
         $vendor->remarks = $request->remarks;
+
         $vendor->is_vat_inclusive = $request->is_vat_inclusive;
+
         $vendor->address = $request->address;
+
         $vendor->save();
 
         if (request()->has("expense_types")) {
+
             $vendor->expense_types()->sync($request->expense_types);
+
             // $expense_types = ExpenseType::find($request->expense_types);
+
             // $vendor->expense_types()->attach($expense_types);
         }
 
         return response(
             [
                 'data' => new VendorResource($vendor),
+
                 'message' => 'Created successfully'
             ],
             201
@@ -127,6 +168,7 @@ class VendorController extends Controller
         return response(
             [
                 'data' => new VendorResource($vendor),
+
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -143,31 +185,46 @@ class VendorController extends Controller
     public function update(Request $request, $id)
     {
         switch ($request->action) {
+
             case 'restore':
+
                 $vendor = Vendor::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
             default:
+
                 $this->validator($request->all(), $id)->validate();
 
                 $vendor = Vendor::findOrFail($id);
 
                 $vendor->code = $request->code;
+
                 $vendor->name = $request->name;
+
                 $vendor->email = $request->email;
+
                 $vendor->tin = $request->tin;
+
                 $vendor->contact_person = $request->contact_person;
+
                 $vendor->mobile_number = $request->mobile_number;
+
                 $vendor->telephone_number = $request->telephone_number;
+
                 $vendor->website = $request->website;
+
                 $vendor->remarks = $request->remarks;
+
                 $vendor->is_vat_inclusive = $request->is_vat_inclusive;
+
                 $vendor->address = $request->address;
+
                 $vendor->save();
 
                 if (request()->has("expense_types")) {
+
                     $vendor->expense_types()->sync($request->expense_types);
                 }
 

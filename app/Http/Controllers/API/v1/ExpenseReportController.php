@@ -25,10 +25,15 @@ class ExpenseReportController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
+
             'code' => ['nullable', Rule::unique('employees')->ignore($id, 'id'), 'max:255'],
+
             'description' => ['required', 'max:255'],
+
             'employee_id' => ['required'],
+
             'remarks' => ['nullable'],
+
             'notes' => ['nullable'],
         ]);
     }
@@ -41,61 +46,90 @@ class ExpenseReportController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
+
         $sortBy = $request->sortBy ?? "updated_at";
+
         $sortType = $request->sortType ?? "desc";
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
         $expense_reports = ExpenseReport::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
+
             switch ($request->status) {
+
                 case 'Archived':
+
                     $expense_reports = $expense_reports->onlyTrashed();
+
                     break;
                 case 'Cancelled':
+
                     $expense_reports = $expense_reports->onlyTrashed();
+
                     // $expense_reports = $expense_reports->where("cancelled_at", '<>', null);
+
                     break;
                 case 'Completed':
+
                     $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null)->where("payment_id", "<>", null);
+
                     break;
                 case 'Approved':
+
                     $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null)->where("payment_id", null);
+
                     break;
                 case 'Pending':
+
                     $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("approved_at", null)->where("cancelled_at", null);
+
                     break;
                 case 'For Submission':
+
                     $expense_reports = $expense_reports->where("submitted_at", null)->where("approved_at", null)->where("cancelled_at", null);
+
                     break;
                 default:
+
                     if (request()->has("admin_page")) {
+
                         $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("cancelled_at", null);
+
                         break;
                     }
 
                     $expense_reports = $expense_reports->where("cancelled_at", null);
+
                     break;
             }
         }
 
         if (request()->has("employee_id")) {
+
             if ($request->employee_id > 0) {
+
                 $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
             }
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
+
             $start_date = Carbon::parse($request->start_date)->startOfDay();
+
             $end_date = Carbon::parse($request->end_date)->endOfDay();
 
             $expense_reports = $expense_reports->whereBetween("created_at", [$start_date, $end_date]);
         }
 
         $expense_reports = $expense_reports->where(function ($query) use ($search) {
+
             $query->where('code', "like", "%" . $search . "%");
+
             $query->orWhere('description', "like", "%" . $search . "%");
         });
+
         $expense_reports = $expense_reports->paginate($itemsPerPage);
 
         return ExpenseReportResource::collection($expense_reports);
@@ -114,24 +148,32 @@ class ExpenseReportController extends Controller
         $expense_report = new ExpenseReport();
 
         $expense_report->description = $request->description;
+
         $expense_report->employee_id = $request->employee_id;
+
         $expense_report->remarks = $request->remarks;
+
         $expense_report->notes = $request->notes;
 
         $expense_report->save();
 
         $expense_report->code = "ER" . date("Y") . str_pad($expense_report->id, 5, '0', STR_PAD_LEFT);
+
         $expense_report->save();
 
         foreach ($request->expenses as $key => $value) {
+
             $expense = Expense::find($value["id"]);
+
             $expense->expense_report_id = $expense_report->id;
+
             $expense->save();
         }
 
         return response(
             [
                 'data' => new ExpenseReportResource($expense_report),
+
                 'message' => 'Created successfully'
             ],
             201
@@ -151,6 +193,7 @@ class ExpenseReportController extends Controller
         return response(
             [
                 'data' => new ExpenseReportResource($expense_report),
+
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -169,12 +212,19 @@ class ExpenseReportController extends Controller
         $message = "Item(s) updated successfully";
 
         switch ($request->action) {
+
             case 'submit':
+
                 foreach ($request->ids as $id) {
+
                     $expense_report = ExpenseReport::withTrashed()->find($id);
+
                     $expense_report->submitted_at = now();
+
                     $expense_report->approved_at = null;
+
                     $expense_report->cancelled_at = null;
+
                     $expense_report->save();
                 }
 
@@ -182,11 +232,17 @@ class ExpenseReportController extends Controller
 
                 break;
             case 'approve':
+
                 foreach ($request->ids as $id) {
+
                     $expense_report = ExpenseReport::withTrashed()->find($id);
+
                     $expense_report->submitted_at = $expense_report->submitted_at == null ? now() : $expense_report->submitted_at;
+
                     $expense_report->approved_at = now();
+
                     $expense_report->cancelled_at = null;
+
                     $expense_report->save();
                 }
 
@@ -194,41 +250,59 @@ class ExpenseReportController extends Controller
 
                 break;
             case 'duplicate':
+
                 foreach ($request->ids as $value) {
+
                     $expense_report = ExpenseReport::withTrashed()->find($value);
 
                     $new_report = $expense_report->replicate();
+
                     $new_report->code = null;
 
                     $new_report->submitted_at = null;
+
                     $new_report->approved_at = null;
+
                     $new_report->cancelled_at = null;
+
                     $new_report->deleted_at = null;
 
                     $new_report->submitted_by_user_id = null;
+
                     $new_report->approved_by_user_id = null;
+
                     $new_report->cancelled_by_user_id = null;
+
                     $new_report->deleted_by_user_id = null;
 
                     $new_report->save();
 
                     $new_report->code = "ER" . date("Y") . str_pad($new_report->id, 5, '0', STR_PAD_LEFT);
+
                     $new_report->save();
 
                     foreach ($expense_report->expenses()->withTrashed()->get() as $key => $value) {
+
                         $expense = Expense::withTrashed()->find($value["id"]);
+
                         $new_expense = $expense->replicate();
 
                         $new_expense->deleted_at = null;
+
                         $new_expense->expense_report_id = $new_report->id;
+
                         $new_expense->save();
 
                         foreach ($expense->expense_details as $key => $value) {
+
                             $expense_detail = ExpenseDetail::find($value["id"]);
+
                             $new_expense_detail = $expense_detail->replicate();
 
                             $new_expense_detail->deleted_at = null;
+
                             $new_expense_detail->expense_id = $new_expense->id;
+
                             $new_expense_detail->save();
                         }
                     }
@@ -252,11 +326,15 @@ class ExpenseReportController extends Controller
 
                 //     break;
             case 'restore':
+
                 foreach ($request->ids as $id) {
+
                     $expense_report = ExpenseReport::withTrashed()->find($id);
+
                     $expense_report->restore();
 
                     foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+
                         $expense->restore();
                     }
                 }
@@ -265,29 +343,41 @@ class ExpenseReportController extends Controller
 
                 break;
             default:
+
                 $this->validator($request->all(), $id)->validate();
 
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                 $expense_report->description = $request->description;
+
                 $expense_report->employee_id = $request->employee_id;
+
                 $expense_report->remarks = $request->remarks;
+
                 $expense_report->notes = $request->notes;
 
                 $expense_report->save();
 
                 // set existing references to null
                 foreach ($expense_report->expenses as $key => $value) {
+
                     $expense = Expense::withTrashed()->find($value["id"]);
+
                     $expense->expense_report_id = null;
+
                     $expense->deleted_at = now();
+
                     $expense->save();
                 }
 
                 foreach ($request->expenses as $key => $value) {
+
                     $expense = Expense::withTrashed()->find($value["id"]);
+
                     $expense->expense_report_id = $expense_report->id;
+
                     $expense->deleted_at = null;
+
                     $expense->save();
                 }
 
@@ -313,10 +403,13 @@ class ExpenseReportController extends Controller
     public function destroy(Request $request, $id)
     {
         foreach ($request->ids as $id) {
+
             $expense_report = ExpenseReport::find($id);
+
             $expense_report->delete();
 
             foreach ($expense_report->expenses as $expense) {
+
                 $expense->delete();
             }
         }

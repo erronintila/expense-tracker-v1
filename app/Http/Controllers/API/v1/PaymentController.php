@@ -21,17 +21,29 @@ class PaymentController extends Controller
     {
         return Validator::make($data, [
             "code" => ['nullable', 'string', 'max:255'],
+
             "reference_no" => ['nullable', 'max:255'],
+
             "voucher_no" => ['nullable', 'max:255'],
+
             "description" => ['required', 'string', 'max:255'],
+
             "date" => ['required'],
+
             "cheque_no" => ['nullable', 'max:255'],
+
             "cheque_date" => ['nullable'],
+
             "amount" => ['required'],
+
             "payee" => ['required', 'string', 'max:255'],
+
             "payee_address" => ['nullable', 'max:255'],
+
             "payee_phone" => ['nullable', 'max:255'],
+
             "remarks"  => ['nullable'],
+
             "notes" => ['nullable'],
         ]);
     }
@@ -44,48 +56,74 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
+
         $sortBy = $request->sortBy ?? "updated_at";
+
         $sortType = $request->sortType ?? "desc";
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
         $payments = Payment::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
+
             switch ($request->status) {
+
                 case 'Cancelled':
+
                     $payments = $payments->onlyTrashed();
+
                     break;
                 case 'Completed':
+
                     $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
+
                     break;
                 case 'Received':
+
                     $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
+
                     break;
                 case 'Released':
+
                     $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", null);
+
                     break;
                 case 'Approved':
+
                     $payments = $payments->where("approved_at", "<>", null)->where("released_at", null)->where("received_at", null);
+
                     break;
                 default:
+
                     $payments = $payments;
+
                     break;
             }
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
+
             $payments = $payments->whereBetween("date", [$request->start_date, $request->end_date]);
         }
 
         $payments = $payments->where(function ($query) use ($search) {
+
             $query->where('code', "like", "%" . $search . "%");
+
             $query->orWhere('reference_no', "like", "%" . $search . "%");
+
             $query->orWhere('voucher_no', "like", "%" . $search . "%");
+
             $query->orWhere('description', "like", "%" . $search . "%");
+
             $query->orWhere('cheque_no', "like", "%" . $search . "%");
+
             $query->orWhere('amount', "like", "%" . $search . "%");
+
             $query->orWhere('payee', "like", "%" . $search . "%");
         });
+
         $payments = $payments->paginate($itemsPerPage);
 
         return PaymentResource::collection($payments);
@@ -105,18 +143,28 @@ class PaymentController extends Controller
 
         // $payment->code = $request->code;
         $payment->reference_no = $request->reference_no;
-        $payment->voucher_no = $request->voucher_no;
-        $payment->description = $request->description;
-        $payment->date = $request->date;
-        $payment->cheque_no = $request->cheque_no;
-        $payment->cheque_date = $request->cheque_date;
-        $payment->amount = $request->amount;
-        $payment->payee = $request->payee;
-        $payment->payee_address = $request->payee_address;
-        $payment->payee_phone = $request->payee_phone;
-        $payment->remarks = $request->remarks;
-        $payment->notes = $request->notes;
 
+        $payment->voucher_no = $request->voucher_no;
+
+        $payment->description = $request->description;
+
+        $payment->date = $request->date;
+
+        $payment->cheque_no = $request->cheque_no;
+
+        $payment->cheque_date = $request->cheque_date;
+
+        $payment->amount = $request->amount;
+
+        $payment->payee = $request->payee;
+
+        $payment->payee_address = $request->payee_address;
+
+        $payment->payee_phone = $request->payee_phone;
+
+        $payment->remarks = $request->remarks;
+
+        $payment->notes = $request->notes;
 
         ////////// TEMP
         $payment->approved_at = now();
@@ -127,17 +175,22 @@ class PaymentController extends Controller
         $payment->save();
 
         $payment->code = "PR" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
+
         $payment->save();
 
         foreach ($request->expense_reports as $key => $value) {
+
             $expense_report = ExpenseReport::findOrFail($value["id"]);
+
             $expense_report->payment_id = $payment->id;
+
             $expense_report->save();
         }
 
         return response(
             [
                 'data' => new PaymentResource($payment),
+
                 'message' => 'Created successfully'
             ],
             201
@@ -157,6 +210,7 @@ class PaymentController extends Controller
         return response(
             [
                 'data' => new PaymentResource($payment),
+
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -175,10 +229,15 @@ class PaymentController extends Controller
         $message = "Updated successfully";
 
         switch ($request->action) {
+
             case 'approve':
+
                 foreach ($request->ids as $id) {
+
                     $payment = Payment::withTrashed()->findOrFail($id);
+
                     $payment->approved_at = now();
+
                     $payment->save();
                 }
 
@@ -186,9 +245,13 @@ class PaymentController extends Controller
 
                 break;
             case 'release':
+
                 foreach ($request->ids as $id) {
+
                     $payment = Payment::withTrashed()->findOrFail($id);
+
                     $payment->released_at = now();
+
                     $payment->save();
                 }
 
@@ -196,9 +259,13 @@ class PaymentController extends Controller
 
                 break;
             case 'receive':
+
                 foreach ($request->ids as $id) {
+
                     $payment = Payment::withTrashed()->findOrFail($id);
+
                     $payment->received_at = now();
+
                     $payment->save();
                 }
 
@@ -206,11 +273,17 @@ class PaymentController extends Controller
 
                 break;
             case 'complete':
+
                 foreach ($request->ids as $id) {
+
                     $payment = Payment::withTrashed()->findOrFail($id);
+
                     $payment->approved_at = now();
+
                     $payment->released_at = now();
+
                     $payment->received_at = now();
+
                     $payment->save();
                 }
 
@@ -218,36 +291,55 @@ class PaymentController extends Controller
 
                 break;
             default:
+
                 $this->validator($request->all(), null)->validate();
 
                 $payment = Payment::findOrFail($id);
 
                 $payment->code = $request->code;
+
                 $payment->reference_no = $request->reference_no;
+
                 $payment->voucher_no = $request->voucher_no;
+
                 $payment->description = $request->description;
+
                 $payment->date = $request->date;
+
                 $payment->cheque_no = $request->cheque_no;
+
                 $payment->cheque_date = $request->cheque_date;
+
                 $payment->amount = $request->amount;
+
                 $payment->payee = $request->payee;
+
                 $payment->payee_address = $request->payee_address;
+
                 $payment->payee_phone = $request->payee_phone;
+
                 $payment->remarks = $request->remarks;
+
                 $payment->notes = $request->notes;
 
                 $payment->save();
 
                 // set existing references to null
                 foreach ($payment->expense_reports as $key => $value) {
+
                     $expense_report = ExpenseReport::findOrFail($value["id"]);
+
                     $expense_report->payment_id = null;
+
                     $expense_report->save();
                 }
 
                 foreach ($request->expense_reports as $key => $value) {
+
                     $expense_report = ExpenseReport::findOrFail($value["id"]);
+
                     $expense_report->payment_id = $payment->id;
+
                     $expense_report->save();
                 }
 
@@ -271,11 +363,15 @@ class PaymentController extends Controller
     public function destroy(Request $request, $id)
     {
         foreach ($request->ids as $id) {
+
             $payment = Payment::findOrFail($id);
+
             $payment->delete();
 
             foreach ($payment->expense_reports as $expense_report) {
+
                 $expense_report->payment_id = null;
+
                 $expense_report->save();
             }
         }

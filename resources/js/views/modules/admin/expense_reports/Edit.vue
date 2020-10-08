@@ -31,6 +31,7 @@
                                 label="Employee *"
                                 required
                                 return-object
+                                readonly
                             >
                             </v-autocomplete>
                         </v-col>

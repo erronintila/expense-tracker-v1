@@ -20,6 +20,7 @@ class DepartmentController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
+
             'name' => ['required', 'max:150', Rule::unique('departments')->ignore($id, 'id')],
         ]);
     }
@@ -32,24 +33,34 @@ class DepartmentController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
+
         $sortBy = $request->sortBy ?? "name";
+
         $sortType = $request->sortType ?? "asc";
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
         $departments = Department::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
+
             switch ($request->status) {
+
                 case 'Archived':
+
                     $departments = $departments->onlyTrashed();
+
                     break;
                 default:
+
                     $departments = $departments;
+
                     break;
             }
         }
 
         $departments = $departments->where('name', "like", "%" . $search . "%");
+
         $departments = $departments->paginate($itemsPerPage);
 
         return DepartmentResource::collection($departments);
@@ -74,6 +85,7 @@ class DepartmentController extends Controller
         return response(
             [
                 'data' => new DepartmentResource($department),
+
                 'message' => 'Created successfully'
             ],
             201
@@ -93,6 +105,7 @@ class DepartmentController extends Controller
         return response(
             [
                 'data' => new DepartmentResource($department),
+
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -109,13 +122,16 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         switch ($request->action) {
+
             case 'restore':
+
                 $department = Department::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
             default:
+
                 $this->validator($request->all(), $id)->validate();
 
                 $department = Department::findOrFail($id);
@@ -144,12 +160,17 @@ class DepartmentController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
+
             foreach ($request->ids as $id) {
+
                 $department = Department::findOrFail($id);
+
                 $department->delete();
             }
         } else {
+
             $department = Department::findOrFail($id);
+
             $department->delete();
         }
 

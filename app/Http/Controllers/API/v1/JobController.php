@@ -21,7 +21,9 @@ class JobController extends Controller
     protected function validator(array $data, $id)
     {
         return Validator::make($data, [
+
             'name' => ['required', 'max:255', Rule::unique('jobs')->ignore($id, 'id')],
+
             'department_id' => ['required'],
         ]);
     }
@@ -34,8 +36,11 @@ class JobController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? "";
+
         $sortBy = $request->sortBy ?? "name";
+
         $sortType = $request->sortType ?? "asc";
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
         // if($sortBy == "department.name") {
@@ -45,23 +50,32 @@ class JobController extends Controller
         // }
 
         if (request()->has('status')) {
+
             switch ($request->status) {
+
                 case 'Archived':
+
                     $jobs = $jobs->onlyTrashed();
+
                     break;
                 default:
+
                     $jobs = $jobs;
+
                     break;
             }
         }
 
         if (request()->has('department_id')) {
+
             if ($request->department_id > 0) {
+
                 $jobs = $jobs->where('department_id', $request->department_id);
             }
         }
 
         $jobs = $jobs->where('name', "like", "%" . $search . "%");
+
         $jobs = $jobs->paginate($itemsPerPage);
 
         return JobResource::collection($jobs);
@@ -80,6 +94,7 @@ class JobController extends Controller
         $job = new Job();
 
         $job->name = $request->name;
+
         $job->department_id = $request->department_id;
 
         $job->save();
@@ -87,6 +102,7 @@ class JobController extends Controller
         return response(
             [
                 'data' => new JobResource($job),
+
                 'message' => 'Created successfully'
             ],
             201
@@ -106,6 +122,7 @@ class JobController extends Controller
         return response(
             [
                 'data' => new JobResource($job),
+
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -122,18 +139,22 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         switch ($request->action) {
+
             case 'restore':
+
                 $job = Job::withTrashed()
                     ->whereIn('id', $request->ids)
                     ->restore();
 
                 break;
             default:
+
                 $this->validator($request->all(), $id)->validate();
 
                 $job = Job::findOrFail($id);
 
                 $job->name = $request->name;
+
                 $job->department_id = $request->department_id;
 
                 $job->save();
