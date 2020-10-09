@@ -27,8 +27,6 @@ class DataController extends Controller
 {
     public function test()
     {
-        return Activity::paginate(10);
-
         return "test";
     }
 
@@ -334,8 +332,7 @@ class DataController extends Controller
                     $q->where('employee_id', $request->employee_id);
                 }
             }
-        })
-            ->get();
+        })->get();
 
         $departments_expenses_summary = [];
 
@@ -447,20 +444,10 @@ class DataController extends Controller
             ->where('expense_report', '<>', null);
         // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
-        // $reimbursements = Expense::with("expense_report.payment")
-        //     ->whereBetween('date', ["2020-01-01", "2020-12-31"])
-        //     ->where(function ($q) {
-        //         $q->whereHas("expense_report", function($q) {
-        //             $q->whereDoesntHave("payment");
-        //         });
-        //         $q->orWhereDoesntHave("expense_report");
-        //     })
-        //     ->get();
-
         $total_expenses = Expense::with("expense_report.payment")
             ->whereBetween('date', ["2020-01-01", "2020-12-31"])
             ->where(function ($q) {
-                $q->whereHas("expense_report", function($q) {
+                $q->whereHas("expense_report", function ($q) {
                     $q->whereDoesntHave("payment");
                 });
                 $q->orWhereDoesntHave("expense_report");
@@ -472,7 +459,6 @@ class DataController extends Controller
             if ($request->employee_id > 0) {
                 $total_expenses_by_date = $total_expenses_by_date->where('employee_id', $request->employee_id);
                 $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
-                // $reimbursements = $total_expenses->where('employee_id', $request->employee_id);
                 $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
             }
         }
@@ -494,11 +480,6 @@ class DataController extends Controller
                 "pending" => $pending_expenses,
                 "reimbursements" => $reimbursements,
                 "replenishments" => $total_expenses - $reimbursements,
-
-                // "total" => 0,
-                // "pending" => 0,
-                // "reimbursements" => 0,
-                // "replenishments" => 0
             ],
             // "data" => [
             //     "expenses" => $total_expenses,

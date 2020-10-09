@@ -398,13 +398,25 @@ export default {
                 .then(response => {
                     _this.expenses_by_category = response.data;
 
+                    let sum = response.data.reduce(function(a, b) {
+                        return a + b.value;
+                    }, 0);
+
+                    let percentages = response.data.map(
+                        item => (item.value / sum) * 100
+                    );
+
                     let labels = response.data.map(item => item.text);
                     let data = response.data.map(item => item.value);
                     let backgroundColors = _this.getBackgroundColors(
                         data.length
                     );
 
-                    this.updatePieChartValues(labels, data, backgroundColors);
+                    this.updatePieChartValues(
+                        labels,
+                        percentages,
+                        backgroundColors
+                    );
 
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
@@ -426,20 +438,35 @@ export default {
                     }
                 })
                 .then(response => {
+                    let sum = response.data.reduce(function(a, b) {
+                        return a + b.value;
+                    }, 0);
+
                     _this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
+
                     let data = response.data.map(item => item.value);
+
+                    let percentages = response.data.map(
+                        item => (item.value / sum) * 100
+                    );
+
                     let backgroundColors = _this.getBackgroundColors(
                         data.length
                     );
 
-                    this.updatePieChartValues(labels, data, backgroundColors);
+                    this.updatePieChartValues(
+                        labels,
+                        percentages,
+                        backgroundColors
+                    );
 
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
                     console.log(error);
+
                     console.log(error.response);
                 });
         },
@@ -458,13 +485,21 @@ export default {
                 .then(response => {
                     _this.expenses_by_category = response.data;
 
+                    let sum = response.data.reduce(function(a, b) {
+                        return a + b.value;
+                    }, 0);
+
+                    let percentages = response.data.map(
+                        item => (item.value / sum) * 100
+                    );
+
                     let labels = response.data.map(item => item.text);
                     let data = response.data.map(item => item.value);
                     let backgroundColors = _this.getBackgroundColors(
                         data.length
                     );
 
-                    this.updatePieChartValues(labels, data, backgroundColors);
+                    this.updatePieChartValues(labels, percentages, backgroundColors);
 
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
@@ -588,7 +623,7 @@ export default {
                         display: function(context) {
                             return (
                                 context.dataset.data[context.dataIndex] !== 0
-                            ); 
+                            );
                         },
                         borderWidth: 2,
                         borderColor: "white",
@@ -597,7 +632,33 @@ export default {
                         font: {
                             weight: "bold"
                         },
-                        backgroundColor: "lightgray"
+                        backgroundColor: "lightgray",
+                        formatter: (value, ctx) => {
+                            return this.formatNumber(value) + " %";
+                            // let total_expense =
+                            //     this.total_expenses == null
+                            //         ? 0
+                            //         : this.total_expenses;
+
+                            // if (total_expense == 0) {
+                            //     return value;
+                            // }
+
+                            // return (
+                            //     this.formatNumber(
+                            //         (value / total_expense) * 100
+                            //     ) + " %"
+                            // );
+
+                            // let sum = 0;
+                            // let dataArr = ctx.chart.data.datasets[0].data;
+                            // dataArr.map(data => {
+                            //     sum += data;
+                            // });
+                            // let percentage =
+                            //     ((value * 100) / sum).toFixed(2) + "%";
+                            // return percentage;
+                        }
                     }
                 }
             };
