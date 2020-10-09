@@ -26,6 +26,18 @@ class DataController extends Controller
 {
     public function test()
     {
+        $total_expenses = Expense::with("expense_report.payment")
+            ->whereBetween('date', ["2020-01-01", "2020-12-31"])
+            ->where(function ($q) {
+                $q->whereHas("expense_report", function($q) {
+                    $q->whereDoesntHave("payment");
+                });
+                $q->orWhereDoesntHave("expense_report");
+            })
+            ->get();
+
+        return $total_expenses;
+
         return "test";
     }
 
@@ -444,16 +456,32 @@ class DataController extends Controller
             ->where('expense_report', '<>', null);
         // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
-        $reimbursements = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
+        // $reimbursements = Expense::with("expense_report.payment")
+        //     ->whereBetween('date', ["2020-01-01", "2020-12-31"])
+        //     ->where(function ($q) {
+        //         $q->whereHas("expense_report", function($q) {
+        //             $q->whereDoesntHave("payment");
+        //         });
+        //         $q->orWhereDoesntHave("expense_report");
+        //     })
+        //     ->get();
 
-        $total_expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
+        $total_expenses = Expense::with("expense_report.payment")
+            ->whereBetween('date', ["2020-01-01", "2020-12-31"])
+            ->where(function ($q) {
+                $q->whereHas("expense_report", function($q) {
+                    $q->whereDoesntHave("payment");
+                });
+                $q->orWhereDoesntHave("expense_report");
+            })
+            ->get();
 
         // if (request()->has('employee_id') && request()->has("admin_page")) {
         if (request()->has('employee_id')) {
             if ($request->employee_id > 0) {
                 $total_expenses_by_date = $total_expenses_by_date->where('employee_id', $request->employee_id);
                 $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
-                $reimbursements = $reimbursements->where('employee_id', $request->employee_id);
+                // $reimbursements = $total_expenses->where('employee_id', $request->employee_id);
                 $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
             }
         }
@@ -466,7 +494,7 @@ class DataController extends Controller
 
         $total_expenses_by_date = $total_expenses_by_date->sum("amount");
         $pending_expenses = $pending_expenses->sum("amount");
-        $reimbursements = $reimbursements->sum("reimbursable_amount");
+        $reimbursements = $total_expenses->sum("reimbursable_amount");
         $total_expenses = $total_expenses->sum("amount");
 
         $stats = [

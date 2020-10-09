@@ -43,7 +43,6 @@ class Payment extends Model
 
     public function status()
     {
-
         $approved = is_null($this->approved_at);
         $cancelled = is_null($this->deleted_at);
         $released = is_null($this->released_at);

@@ -141,7 +141,6 @@ class PaymentController extends Controller
 
         $payment = new Payment();
 
-        // $payment->code = $request->code;
         $payment->reference_no = $request->reference_no;
 
         $payment->voucher_no = $request->voucher_no;
@@ -166,25 +165,32 @@ class PaymentController extends Controller
 
         $payment->notes = $request->notes;
 
-        ////////// TEMP
+        ////////// TEMPORARY
         $payment->approved_at = now();
+
         $payment->released_at = now();
+
         $payment->received_at = now();
         //////////
 
         $payment->save();
 
-        $payment->code = "PR" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
+        foreach ($request->expense_reports as $expense_report) {
 
-        $payment->save();
-
-        foreach ($request->expense_reports as $key => $value) {
-
-            $expense_report = ExpenseReport::findOrFail($value["id"]);
+            $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
 
             $expense_report->payment_id = $payment->id;
 
             $expense_report->save();
+
+            foreach ($expense_report->expenses as $expense) {
+
+                $expense_amount = $expense->amount - $expense->reimbursable_amount;
+
+                $expense->employee->remaining_fund += $expense_amount;
+
+                $expense->employee->save();
+            }
         }
 
         return response(
@@ -362,7 +368,22 @@ class PaymentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        foreach ($request->ids as $id) {
+        if (request()->has('ids')) {
+
+            foreach ($request->ids as $id) {
+
+                $payment = Payment::findOrFail($id);
+
+                $payment->delete();
+
+                foreach ($payment->expense_reports as $expense_report) {
+
+                    $expense_report->payment_id = null;
+
+                    $expense_report->save();
+                }
+            }
+        } else {
 
             $payment = Payment::findOrFail($id);
 

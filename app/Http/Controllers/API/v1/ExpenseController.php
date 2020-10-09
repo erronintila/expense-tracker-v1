@@ -134,7 +134,7 @@ class ExpenseController extends Controller
 
         $employee = Employee::findOrFail($request->employee_id);
 
-        $this->validator($request->all(), null, $employee->remaining_fund())->validate();
+        $this->validator($request->all(), null, $employee->remaining_fund)->validate();
 
         $expense = new Expense();
 
@@ -230,7 +230,7 @@ class ExpenseController extends Controller
 
                 $employee = Employee::findOrFail($request->employee_id);
 
-                $this->validator($request->all(), $id, $employee->remaining_fund())->validate();
+                $this->validator($request->all(), $id, $employee->remaining_fund)->validate();
 
                 $expense = Expense::findOrFail($id);
 

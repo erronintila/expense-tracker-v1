@@ -14,17 +14,9 @@ class PaymentObserver
      */
     public function created(Payment $payment)
     {
-        foreach ($payment->expense_reports as $expense_report) {
+        $payment->code = "PR" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
 
-            foreach ($expense_report->expenses as $expense) {
-
-                $expense_amount = $expense->amount - $expense->reimbursable_amount;
-
-                $expense->employee->remaining_fund += $expense_amount;
-
-                $expense->employee->save();
-            }
-        }
+        $payment->save();
     }
 
     /**
@@ -50,7 +42,9 @@ class PaymentObserver
 
             foreach ($expense_report->expenses as $expense) {
 
-                $expense->employee->remaining_fund -= $expense->amount;
+                $expense_amount = $expense->amount - $expense->reimbursable_amount;
+
+                $expense->employee->remaining_fund -= $expense_amount;
 
                 $expense->employee->save();
             }
