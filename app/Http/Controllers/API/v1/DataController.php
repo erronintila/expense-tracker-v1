@@ -9,6 +9,7 @@ use App\Http\Resources\ExpenseReportResource;
 use App\Http\Resources\ExpenseResource;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Resources\JobResource;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\VendorResource;
 use App\Models\Department;
 use App\Models\Employee;
@@ -18,6 +19,7 @@ use App\Models\ExpenseType;
 use App\Models\Job;
 use App\Models\Payment;
 use App\Models\Vendor;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -79,6 +81,13 @@ class DataController extends Controller
 
         if (request()->has("expense_report_summary")) {
         }
+    }
+
+    public function users(Request $request)
+    {
+        $users = User::orderBy("name");
+
+        return UserResource::collection($users->get());
     }
 
     public function employees(Request $request)
@@ -469,6 +478,13 @@ class DataController extends Controller
         //     $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
         // }
 
+        $total_count = [
+            "expenses" => count($total_expenses_by_date),
+            "replenishments" => count($total_expenses->where("amount", "<>", "reimbursable_amount")),
+            "reimbursements" => count($total_expenses->where("reimbursable_amount", ">", 0)),
+            "unreported" => count($total_expenses_by_date->where("expense_report_id", null)),
+        ];
+
         $total_expenses_by_date = $total_expenses_by_date->sum("amount");
         $pending_expenses = $pending_expenses->sum("amount");
         $reimbursements = $total_expenses->sum("reimbursable_amount");
@@ -480,6 +496,7 @@ class DataController extends Controller
                 "pending" => $pending_expenses,
                 "reimbursements" => $reimbursements,
                 "replenishments" => $total_expenses - $reimbursements,
+                "total_count" => $total_count
             ],
             // "data" => [
             //     "expenses" => $total_expenses,

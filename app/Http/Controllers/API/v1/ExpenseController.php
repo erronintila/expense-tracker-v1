@@ -180,6 +180,17 @@ class ExpenseController extends Controller
             $expense_detail->save();
         }
 
+        activity()
+            ->withProperties([
+                'attributes' => [
+                    ["text" => "Description", "value" => $expense->description],
+                    ["text" => "Amount", "value" => $expense->amount],
+                ],
+                'link' => "/admin/expenses/{$expense->id}",
+                'details' => "Amount: {$expense->amount}"
+            ])
+            ->log("Created Expense");
+
         return response(
             [
                 'data' => new ExpenseResource($expense),
@@ -286,6 +297,17 @@ class ExpenseController extends Controller
                     );
                 }
 
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense->description],
+                            ["text" => "Amount", "value" => $expense->amount],
+                        ],
+                        'link' => "/admin/expenses/{$expense->id}",
+                        'details' => "Amount: {$expense->amount}"
+                    ])
+                    ->log("Updated Expense");
+
                 // foreach ($request->expense_details as $key => $value) {
                 //     $expense_detail = ExpenseDetail::updateOrCreate(
                 //         ['description' => 'Oakland', 'destination' => 'San Diego'],
@@ -324,6 +346,17 @@ class ExpenseController extends Controller
                 $expense = Expense::findOrFail($id);
 
                 $expense->delete();
+
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense->description],
+                            ["text" => "Amount", "value" => $expense->amount],
+                        ],
+                        'link' => "/admin/expenses/{$expense->id}",
+                        'details' => "Amount: {$expense->amount}"
+                    ])
+                    ->log("Cancelled Expense");
             }
         }
 

@@ -138,6 +138,18 @@ class AdjustmentController extends Controller
             }
         }
 
+        activity()
+            ->withProperties([
+                'attributes' => [
+                    ["text" => "Description", "value" => $adjustment->description],
+                    ["text" => "Added Amount", "value" => $adjustment->add_amount],
+                    ["text" => "Subtracted Amount", "value" => $adjustment->subtract_amount],
+                ],
+                'link' => "/admin/adjustments",
+                'details' => "{$adjustment->description}"
+            ])
+            ->log("Managed Revolving Fund");
+
         return response(
             [
                 'data' => new AdjustmentResource($adjustment),
@@ -177,7 +189,6 @@ class AdjustmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-
     }
 
     /**
@@ -188,6 +199,5 @@ class AdjustmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-
     }
 }

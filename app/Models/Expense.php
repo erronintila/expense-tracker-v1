@@ -8,23 +8,24 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Expense extends Model
 {
-    use SoftDeletes, LogsActivity;
+    use SoftDeletes;
+    // use LogsActivity;
 
     protected $dates = ['deleted_at'];
 
-    protected static $logUnguarded = true;
+    // protected static $logUnguarded = true;
 
-    // protected static $logAttributes = ['description', 'amount'];
+    // // protected static $logAttributes = ['description', 'amount'];
 
-    // protected static $ignoreChangedAttributes = ['text'];
+    // // protected static $ignoreChangedAttributes = ['text'];
 
-    // Logging only the changed attributes
-    protected static $logOnlyDirty = true;
+    // // Logging only the changed attributes
+    // protected static $logOnlyDirty = true;
 
-    public function getDescriptionForEvent(string $eventName): string
-    {
-        return "Record has been {$eventName}";
-    }
+    // public function getDescriptionForEvent(string $eventName): string
+    // {
+    //     return "Record has been {$eventName}";
+    // }
 
     /**
      * The attributes that are not mass assignable.

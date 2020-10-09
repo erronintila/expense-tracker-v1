@@ -45,7 +45,11 @@
                                 formatNumber(total_expenses)
                             }}</v-card-title>
                             <v-card-subtitle>
-                                Total Expenses
+                                Total Expenses <br />
+                                <small class="text--secondary">
+                                    Total No.:
+                                    {{ total_count.expenses }} Expenses
+                                </small>
                             </v-card-subtitle>
                             <!-- <v-card-text>Last Updated: </v-card-text> -->
                         </v-card>
@@ -67,7 +71,10 @@
                                     : `/ ${formatNumber(fund)}`
                             }}
                             <v-card-subtitle>
-                                Revolving Fund
+                                Revolving Fund <br />
+                                <small class="text--secondary">
+                                    Total No.: {{ total_count.replenishments }} Expenses
+                                </small>
                             </v-card-subtitle>
                         </v-card>
                     </v-hover>
@@ -83,7 +90,11 @@
                                 formatNumber(total_reimbursements)
                             }}</v-card-title>
                             <v-card-subtitle>
-                                Reimbursements
+                                Reimbursements <br />
+                                <small class="text--secondary">
+                                    Total No.:
+                                    {{ total_count.reimbursements }} Expenses
+                                </small>
                             </v-card-subtitle>
                             <!-- <v-card-text>---</v-card-text> -->
                         </v-card>
@@ -100,7 +111,11 @@
                                 formatNumber(total_pending_reports)
                             }}</v-card-title>
                             <v-card-subtitle>
-                                Pending Expense Reports
+                                Pending Expense Reports <br />
+                                <small class="text--secondary">
+                                    Unreported Expenses:
+                                    {{ total_count.unreported }}
+                                </small>
                             </v-card-subtitle>
                             <!-- <v-card-text>---</v-card-text> -->
                         </v-card>
@@ -220,6 +235,12 @@ export default {
             total_expenses: 0,
             total_reimbursements: 0,
             total_pending_reports: 0,
+            total_count: {
+                expenses: 0,
+                replenishments: 0,
+                reimbursements: 0,
+                unreported: 0
+            },
 
             fund: 0,
             remaining_fund: 0,
@@ -463,7 +484,7 @@ export default {
                         font: {
                             weight: "bold"
                         },
-                        backgroundColor: "lightgray",
+                        backgroundColor: "lightgray"
                     }
                 }
             };
@@ -680,6 +701,8 @@ export default {
                             response.data.summary.reimbursements;
                         _this.total_pending_reports =
                             response.data.summary.pending;
+
+                        _this.total_count = response.data.summary.total_count;
                     })
                     .catch(error => {
                         console.log(error);

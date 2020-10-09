@@ -170,6 +170,16 @@ class ExpenseReportController extends Controller
             $expense->save();
         }
 
+        activity()
+            ->withProperties([
+                'attributes' => [
+                    ["text" => "Description", "value" => $expense_report->description],
+                ],
+                'link' => "/admin/expense_reports/{$expense_report->id}",
+                'details' => "{$expense_report->description}"
+            ])
+            ->log("Created Expense Report");
+
         return response(
             [
                 'data' => new ExpenseReportResource($expense_report),
@@ -230,6 +240,16 @@ class ExpenseReportController extends Controller
 
                 $message = "Expense Report(s) submitted successfully";
 
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense_report->description],
+                        ],
+                        'link' => "/admin/expense_reports/{$expense_report->id}",
+                        'details' => "{$expense_report->description}"
+                    ])
+                    ->log("Submitted Expense Report");
+
                 break;
             case 'approve':
 
@@ -247,6 +267,16 @@ class ExpenseReportController extends Controller
                 }
 
                 $message = "Expense Report(s) approved successfully";
+
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense_report->description],
+                        ],
+                        'link' => "/admin/expense_reports/{$expense_report->id}",
+                        'details' => "{$expense_report->description}"
+                    ])
+                    ->log("Approved Expense Report");
 
                 break;
             case 'duplicate':
@@ -306,6 +336,16 @@ class ExpenseReportController extends Controller
                             $new_expense_detail->save();
                         }
                     }
+
+                    activity()
+                        ->withProperties([
+                            'attributes' => [
+                                ["text" => "Description", "value" => $expense_report->description],
+                            ],
+                            'link' => "/admin/expense_reports/{$expense_report->id}",
+                            'details' => "{$expense_report->description}"
+                        ])
+                        ->log("Duplicated Expense Report");
                 }
 
                 $message = "Expense Report(s) duplicated successfully";
@@ -383,6 +423,16 @@ class ExpenseReportController extends Controller
 
                 $message = "Expense Report updated successfully";
 
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense_report->description],
+                        ],
+                        'link' => "/admin/expense_reports/{$expense_report->id}",
+                        'details' => "{$expense_report->description}"
+                    ])
+                    ->log("Updated Expense Report");
+
                 break;
         }
 
@@ -412,6 +462,16 @@ class ExpenseReportController extends Controller
 
                 $expense->delete();
             }
+
+            activity()
+                ->withProperties([
+                    'attributes' => [
+                        ["text" => "Description", "value" => $expense_report->description],
+                    ],
+                    'link' => "/admin/expense_reports/{$expense_report->id}",
+                    'details' => "{$expense_report->description}"
+                ])
+                ->log("Cancelled Expense Report");
         }
 
         return response(

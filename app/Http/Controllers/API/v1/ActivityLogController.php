@@ -28,14 +28,14 @@ class ActivityLogController extends Controller
 
         $activity_logs = Activity::orderBy($sortBy, $sortType);
 
-        if (request()->has('start_date') && request()->has('end_date')) {
+        // if (request()->has('start_date') && request()->has('end_date')) {
 
-            $start_date = Carbon::parse($request->start_date)->startOfDay();
+        //     $start_date = Carbon::parse($request->start_date)->startOfDay();
 
-            $end_date = Carbon::parse($request->end_date)->endOfDay();
+        //     $end_date = Carbon::parse($request->end_date)->endOfDay();
 
-            $activity_logs = $activity_logs->whereBetween("created_at", [$start_date, $end_date]);
-        }
+        //     $activity_logs = $activity_logs->whereBetween("created_at", [$start_date, $end_date]);
+        // }
 
         if (request()->has('user_id')) {
 

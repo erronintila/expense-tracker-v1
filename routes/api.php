@@ -55,6 +55,8 @@ Route::get('/data/test', 'API\v1\DataController@test');
 
 Route::get('/data/print', 'API\v1\DataController@print');
 
+Route::get('/data/users', 'API\v1\DataController@users');
+
 // Route::get('/data/adjustments', 'API\v1\DataController@adjustments');
 
 Route::get('/data/employees', 'API\v1\DataController@employees');

@@ -198,58 +198,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       loading: true,
       headers: [{
         text: "User",
-        value: "user.name"
+        value: "user.name",
+        sortable: false
       }, {
         text: "Description",
-        value: "description"
+        value: "description",
+        sortable: false
       }, {
-        text: "Subject Type",
-        value: "subject_type"
+        text: "Details",
+        value: "properties.details",
+        sortable: false
       }, {
         text: "Created",
         value: "created_at"
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
       }, {
         text: "",
         value: "data-table-expand"
       }],
       items: [],
+      user: {
+        id: 0,
+        username: "",
+        name: "All Users",
+        email: ""
+      },
+      users: [],
       status: "Active",
       statuses: ["Active", "Archived"],
       selected: [],
@@ -257,7 +240,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       totalItems: 0,
       options: {
         sortBy: ["created_at"],
-        sortDesc: [false],
+        sortDesc: [true],
         page: 1,
         itemsPerPage: 10
       }
@@ -279,7 +262,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var search = _this.search.trim().toLowerCase();
 
-        var status = _this.status;
+        var user_id = _this.user.id;
         axios.get("/api/activity_logs", {
           params: {
             search: search,
@@ -287,10 +270,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            status: status
+            user_id: user_id
           }
         }).then(function (response) {
-          console.log(response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
@@ -305,8 +287,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+    loadUsers: function loadUsers() {
+      var _this = this;
+
+      axios.get("/api/data/users").then(function (response) {
+        console.log(response);
+        _this.users = response.data.data;
+
+        _this.users.unshift({
+          id: 0,
+          username: "",
+          name: "All Users",
+          email: ""
+        });
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.loadUsers();
     },
     onDeleteAll: function onDeleteAll() {
       var _this = this;
@@ -388,7 +389,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     params: function params(nv) {
       return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
         query: this.search
-      }, "query", this.status));
+      }, "query", this.user));
     }
   },
   mounted: function mounted() {
@@ -399,7 +400,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this4.totalItems = data.total;
     });
   },
-  created: function created() {// axios.defaults.headers.common["Authorization"] =
+  created: function created() {
+    this.loadUsers(); // axios.defaults.headers.common["Authorization"] =
     //     "Bearer " + localStorage.getItem("access_token");
   }
 });
@@ -507,13 +509,71 @@ var render = function() {
                         "v-list-item",
                         [
                           _c("v-select", {
-                            attrs: { items: _vm.statuses, label: "Status" },
+                            attrs: {
+                              items: _vm.users,
+                              label: "User",
+                              "item-value": "id",
+                              "item-text": "name",
+                              "return-object": ""
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "item",
+                                fn: function(data) {
+                                  return [
+                                    [
+                                      _c(
+                                        "v-list",
+                                        { attrs: { "max-width": "300" } },
+                                        [
+                                          _c(
+                                            "v-list-item-content",
+                                            [
+                                              _c("v-list-item-title", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    data.item.name
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-list-item-subtitle", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    "" +
+                                                      (data.item.employee ==
+                                                      null
+                                                        ? data.item.username
+                                                        : data.item.employee
+                                                            .fullname)
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-list-item-subtitle", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    data.item.email
+                                                  )
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  ]
+                                }
+                              }
+                            ]),
                             model: {
-                              value: _vm.status,
+                              value: _vm.user,
                               callback: function($$v) {
-                                _vm.status = $$v
+                                _vm.user = $$v
                               },
-                              expression: "status"
+                              expression: "user"
                             }
                           })
                         ],
@@ -659,8 +719,8 @@ var render = function() {
             attrs: {
               "show-select": "",
               "item-key": "id",
-              "show-expand": "",
               "single-expand": "",
+              "show-expand": "",
               headers: _vm.headers,
               items: _vm.items,
               loading: _vm.loading,
@@ -680,31 +740,72 @@ var render = function() {
                 _vm.options = $event
               }
             },
-            scopedSlots: _vm._u([
-              {
-                key: "expanded-item",
-                fn: function(ref) {
-                  var headers = ref.headers
-                  var item = ref.item
-                  return [
-                    _c(
-                      "td",
-                      { attrs: { colspan: headers.length } },
-                      [
-                        _c("v-container", [
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "item.actions",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-2",
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.$router.push(item.properties.link)
+                            }
+                          }
+                        },
+                        [
                           _vm._v(
-                            "\n                        " +
-                              _vm._s(item) +
-                              "\n                        "
+                            "\n                    mdi-open-in-new\n                "
                           )
-                        ])
-                      ],
-                      1
-                    )
-                  ]
+                        ]
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "expanded-item",
+                  fn: function(ref) {
+                    var headers = ref.headers
+                    var item = ref.item
+                    return [
+                      _c(
+                        "td",
+                        { attrs: { colspan: headers.length } },
+                        [
+                          _c("v-container", [
+                            _c(
+                              "table",
+                              _vm._l(item.properties.attributes, function(
+                                item
+                              ) {
+                                return _c("tr", { key: item.length }, [
+                                  _c("td", [
+                                    _c("strong", [_vm._v(_vm._s(item.text))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(" : ")]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(item.value))])
+                                ])
+                              }),
+                              0
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ]
+                  }
                 }
-              }
-            ]),
+              ],
+              null,
+              true
+            ),
             model: {
               value: _vm.selected,
               callback: function($$v) {

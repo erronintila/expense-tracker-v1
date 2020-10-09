@@ -8,17 +8,18 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Adjustment extends Model
 {
-    use SoftDeletes, LogsActivity;
+    use SoftDeletes;
+    // use LogsActivity;
 
-    protected static $logUnguarded = true;
+    // protected static $logUnguarded = true;
 
-    // Logging only the changed attributes
-    protected static $logOnlyDirty = true;
+    // // Logging only the changed attributes
+    // protected static $logOnlyDirty = true;
 
-    public function getDescriptionForEvent(string $eventName): string
-    {
-        return "Record has been {$eventName}";
-    }
+    // public function getDescriptionForEvent(string $eventName): string
+    // {
+    //     return "Record has been {$eventName}";
+    // }
 
 
     protected $guarded = [];

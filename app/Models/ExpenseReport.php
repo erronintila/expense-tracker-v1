@@ -9,17 +9,18 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class ExpenseReport extends Model
 {
-    use SoftDeletes, LogsActivity;
+    use SoftDeletes;
+    // use LogsActivity;
 
-    protected static $logFillable = true;
+    // protected static $logFillable = true;
 
-    // Logging only the changed attributes
-    protected static $logOnlyDirty = true;
+    // // Logging only the changed attributes
+    // protected static $logOnlyDirty = true;
 
-    public function getDescriptionForEvent(string $eventName): string
-    {
-        return "Record has been {$eventName}";
-    }
+    // public function getDescriptionForEvent(string $eventName): string
+    // {
+    //     return "Record has been {$eventName}";
+    // }
 
     /**
      * The attributes that should be mutated to dates.

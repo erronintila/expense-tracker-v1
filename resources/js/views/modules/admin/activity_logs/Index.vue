@@ -42,10 +42,47 @@
                     <v-list>
                         <v-list-item>
                             <v-select
+                                v-model="user"
+                                :items="users"
+                                label="User"
+                                item-value="id"
+                                item-text="name"
+                                return-object
+                            >
+                                <template v-slot:item="data">
+                                    <template>
+                                        <v-list max-width="300">
+                                            <v-list-item-content>
+                                                <v-list-item-title
+                                                    v-html="data.item.name"
+                                                ></v-list-item-title>
+                                                <v-list-item-subtitle
+                                                    v-html="
+                                                        `${
+                                                            data.item
+                                                                .employee ==
+                                                            null
+                                                                ? data.item
+                                                                      .username
+                                                                : data.item
+                                                                      .employee
+                                                                      .fullname
+                                                        }`
+                                                    "
+                                                ></v-list-item-subtitle>
+                                                <v-list-item-subtitle
+                                                    v-html="data.item.email"
+                                                ></v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list>
+                                    </template>
+                                </template>
+                            </v-select>
+                            <!-- <v-select
                                 v-model="status"
                                 :items="statuses"
                                 label="Status"
-                            ></v-select>
+                            ></v-select> -->
                         </v-list-item>
                     </v-list>
                 </v-card>
@@ -105,8 +142,8 @@
                 show-select
                 item-key="id"
                 class="elevation-0"
-                show-expand
                 single-expand
+                show-expand
                 :headers="headers"
                 :items="items"
                 :loading="loading"
@@ -121,89 +158,21 @@
                     nextIcon: 'mdi-chevron-right'
                 }"
             >
+                <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-2" @click="$router.push(item.properties.link)">
+                        mdi-open-in-new
+                    </v-icon>
+                </template>
                 <template v-slot:expanded-item="{ headers, item }">
                     <td :colspan="headers.length">
                         <v-container>
-                            {{item}}
-                            <!-- <table>
-                                <tr>
-                                    <td><strong>Expense Report</strong></td>
-                                    <td>:</td>
-                                    <td>
-                                        {{
-                                            item.expense_report == null
-                                                ? ""
-                                                : `${item.expense_report.description} (Code:${item.expense_report.code})`
-                                        }}
-                                    </td>
+                            <table>
+                                <tr v-for="item in item.properties.attributes" :key="item.length">
+                                    <td><strong>{{item.text}}</strong></td>
+                                    <td> : </td>
+                                    <td>{{item.value}}</td>
                                 </tr>
-                                <tr>
-                                    <td><strong>Reimbursable</strong></td>
-                                    <td>:</td>
-                                    <td>
-                                        {{
-                                            formatNumber(
-                                                item.reimbursable_amount
-                                            )
-                                        }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Code</strong></td>
-                                    <td>:</td>
-                                    <td>{{ item.code }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Description</strong></td>
-                                    <td>:</td>
-                                    <td>{{ item.description }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Receipt</strong></td>
-                                    <td>:</td>
-                                    <td>{{ item.receipt_number }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Vendor</strong></td>
-                                    <td>:</td>
-                                    <td>
-                                        {{
-                                            item.vendor == null
-                                                ? ""
-                                                : item.vendor.name
-                                        }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Remarks</strong></td>
-                                    <td>:</td>
-                                    <td>{{ item.remarks }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Created</strong></td>
-                                    <td>:</td>
-                                    <td>
-                                        {{
-                                            formatDate(
-                                                item.created_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                        }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Cancelled</strong></td>
-                                    <td>:</td>
-                                    <td>
-                                        {{
-                                            formatDate(
-                                                item.deleted_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                        }}
-                                    </td>
-                                </tr>
-                            </table> -->
+                            </table>
                         </v-container>
                     </td>
                 </template>
@@ -218,13 +187,16 @@ export default {
         return {
             loading: true,
             headers: [
-                { text: "User", value: "user.name" },
-                { text: "Description", value: "description" },
-                { text: "Subject Type", value: "subject_type" },
+                { text: "User", value: "user.name", sortable: false },
+                { text: "Description", value: "description", sortable: false },
+                { text: "Details", value: "properties.details", sortable: false },
                 { text: "Created", value: "created_at" },
-                { text: "", value: "data-table-expand" }
+                { text: "Actions", value: "actions", sortable: false },
+                { text: "", value: "data-table-expand" },
             ],
             items: [],
+            user: { id: 0, username: "", name: "All Users", email: "" },
+            users: [],
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
@@ -232,7 +204,7 @@ export default {
             totalItems: 0,
             options: {
                 sortBy: ["created_at"],
-                sortDesc: [false],
+                sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
             }
@@ -248,7 +220,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
+                let user_id = _this.user.id;
 
                 axios
                     .get("/api/activity_logs", {
@@ -258,12 +230,10 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            status: status
+                            user_id: user_id
                         }
                     })
                     .then(response => {
-                        console.log(response);
-
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
@@ -279,13 +249,39 @@ export default {
                     });
             });
         },
+        loadUsers() {
+            let _this = this;
+
+            axios
+                .get("/api/data/users")
+                .then(response => {
+                    console.log(response);
+
+                    _this.users = response.data.data;
+
+                    _this.users.unshift({
+                        id: 0,
+                        username: "",
+                        name: "All Users",
+                        email: ""
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.loadUsers();
         },
         onDeleteAll() {
             let _this = this;
 
-            this.$confirm("WARNING: Delete All Activity Logs? This action can't be revoked.").then(res => {
+            this.$confirm(
+                "WARNING: Delete All Activity Logs? This action can't be revoked."
+            ).then(res => {
                 if (res) {
                     axios
                         .delete(`/api/activity_logs/0`, {
@@ -325,7 +321,9 @@ export default {
                 return;
             }
 
-            this.$confirm("WARNING: Delete selected Activity Log(s)? This action can't be revoked.").then(res => {
+            this.$confirm(
+                "WARNING: Delete selected Activity Log(s)? This action can't be revoked."
+            ).then(res => {
                 if (res) {
                     axios
                         .delete(`/api/activity_logs/${_this.selected[0].id}`, {
@@ -355,7 +353,7 @@ export default {
                         });
                 }
             });
-        },
+        }
     },
     watch: {
         params: {
@@ -373,7 +371,7 @@ export default {
             return {
                 ...this.options,
                 query: this.search,
-                query: this.status
+                query: this.user
             };
         }
     },
@@ -384,6 +382,7 @@ export default {
         });
     },
     created() {
+        this.loadUsers();
         // axios.defaults.headers.common["Authorization"] =
         //     "Bearer " + localStorage.getItem("access_token");
     }
