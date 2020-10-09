@@ -431,14 +431,31 @@ export default {
         load_bar_chart() {
             this.horizontalBarChartOptions = {
                 maintainAspectRatio: false,
-                legend: false
+                legend: false,
                 // scales: {
                 //     yAxes: [
                 //         {
                 //             maxBarThickness: 10
                 //         }
                 //     ]
-                // }
+                // },
+                plugins: {
+                    datalabels: {
+                        display: function(context) {
+                            return (
+                                context.dataset.data[context.dataIndex] !== 0
+                            ); 
+                        },
+                        borderWidth: 2,
+                        borderColor: "white",
+                        borderRadius: 20,
+                        // color: 0,
+                        font: {
+                            weight: "bold"
+                        },
+                        backgroundColor: "lightgray"
+                    }
+                }
             };
             this.horizontalBarChartData = {
                 labels: [],
@@ -454,7 +471,24 @@ export default {
         load_pie_chart() {
             this.doughnutChartOptions = {
                 hoverBorderWidth: 20,
-                legend: false
+                legend: false,
+                plugins: {
+                    datalabels: {
+                        display: function(context) {
+                            return (
+                                context.dataset.data[context.dataIndex] !== 0
+                            ); 
+                        },
+                        borderWidth: 2,
+                        borderColor: "white",
+                        borderRadius: 20,
+                        // color: 0,
+                        font: {
+                            weight: "bold"
+                        },
+                        backgroundColor: "lightgray"
+                    }
+                }
             };
             this.doughnutChartData = {
                 labels: [],

@@ -17,6 +17,7 @@ import "vuetify/dist/vuetify.min.css";
 import VuetifyConfirm from "vuetify-confirm";
 import VuetifyDialog from "vuetify-dialog";
 import colors from "vuetify/lib/util/colors";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 /**
  * Load Instances
@@ -43,6 +44,9 @@ Vue.use(VuetifyDialog, {
         vuetify
     }
 });
+Vue.use(ChartDataLabels);
+
+window.Chart.plugins.unregister(ChartDataLabels);
 
 /**
  * Import Vue components/files

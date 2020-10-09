@@ -4,10 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Payment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
+
+    protected static $logUnguarded = true;
+
+    // Logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "Record has been {$eventName}";
+    }
 
     /**
      * The attributes that are not mass assignable.

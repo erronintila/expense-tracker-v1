@@ -35,14 +35,15 @@
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field
+                            <v-combobox
                                 v-model="tin"
                                 :rules="rules.tin"
                                 :error-messages="errors.tin"
                                 :counter="100"
+                                :items="['N/A']"
                                 label="Tax Identification Number (TIN) *"
                                 required
-                            ></v-text-field>
+                            ></v-combobox>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -180,10 +181,7 @@ export default {
                 ],
                 email: [],
                 tin: [
-                    v => !!v || "TIN is required",
-                    v =>
-                        v.length <= 150 ||
-                        "Name must be less than 100 characters"
+                    v => !!v || "This field is required",
                 ],
                 contact_person: [],
                 mobile_number: [],
@@ -220,7 +218,7 @@ export default {
                     _this.code = data.code;
                     _this.name = data.name;
                     _this.email = data.email;
-                    _this.tin = data.tin;
+                    _this.tin = data.tin == null ? "N/A" : data.tin;
                     _this.contact_person = data.contact_person;
                     _this.mobile_number = data.mobile_number;
                     _this.telephone_number = data.telephone_number;
@@ -228,7 +226,9 @@ export default {
                     _this.website = data.website;
                     _this.is_vat_inclusive = data.is_vat_inclusive;
                     _this.address = data.address;
-                    _this.selected_expense_types = data.expense_types.map(item => item.id)
+                    _this.selected_expense_types = data.expense_types.map(
+                        item => item.id
+                    );
                 })
                 .catch(error => {});
         },
@@ -258,7 +258,7 @@ export default {
                         code: _this.code,
                         name: _this.name,
                         email: _this.email,
-                        tin: _this.tin,
+                        tin: _this.tin == "N/A" ? null : _this.tin,
                         contact_person: _this.contact_person,
                         mobile_number: _this.mobile_number,
                         telephone_number: _this.telephone_number,
@@ -266,7 +266,7 @@ export default {
                         website: _this.website,
                         is_vat_inclusive: _this.is_vat_inclusive,
                         address: _this.address,
-                        expense_types: _this.selected_expense_types,
+                        expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
                         // _this.onRefresh();

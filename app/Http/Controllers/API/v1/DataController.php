@@ -21,22 +21,13 @@ use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 
 class DataController extends Controller
 {
     public function test()
     {
-        $total_expenses = Expense::with("expense_report.payment")
-            ->whereBetween('date', ["2020-01-01", "2020-12-31"])
-            ->where(function ($q) {
-                $q->whereHas("expense_report", function($q) {
-                    $q->whereDoesntHave("payment");
-                });
-                $q->orWhereDoesntHave("expense_report");
-            })
-            ->get();
-
-        return $total_expenses;
+        return Activity::paginate(10);
 
         return "test";
     }

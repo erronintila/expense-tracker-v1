@@ -233,7 +233,7 @@ export default {
                     _this.code = data.code;
                     _this.name = data.name;
                     _this.email = data.email;
-                    _this.tin = data.tin;
+                    _this.tin = data.tin == null ? "N/A" : data.tin;
                     _this.contact_person = data.contact_person;
                     _this.mobile_number = data.mobile_number;
                     _this.telephone_number = data.telephone_number;

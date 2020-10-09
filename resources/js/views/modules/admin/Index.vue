@@ -209,13 +209,18 @@ export default {
                     },
                     {
                         icon: "mdi-circle-medium",
+                        text: "Adjustments",
+                        link: { name: "admin.adjustments.index" }
+                    },
+                    {
+                        icon: "mdi-circle-medium",
                         text: "Users",
                         link: { name: "admin.users.index" }
                     },
                     {
                         icon: "mdi-circle-medium",
-                        text: "Adjustments",
-                        link: { name: "admin.adjustments.index" }
+                        text: "Activity Logs",
+                        link: { name: "admin.activity_logs.index" }
                     },
                     // {
                     //     icon: "mdi-circle-medium",

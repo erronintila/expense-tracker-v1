@@ -1,5 +1,9 @@
 <script>
+
 import { Doughnut } from "vue-chartjs";
+
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 export default {
     extends: Doughnut,
     props: ["data", "options"],
@@ -9,6 +13,7 @@ export default {
         }
     },
     mounted() {
+        this.addPlugin(ChartDataLabels);
         this.renderChart(this.data, this.options);
         this.$emit("updateChart");
     }

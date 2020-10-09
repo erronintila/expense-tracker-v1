@@ -4,12 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Expense extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
 
     protected $dates = ['deleted_at'];
+
+    protected static $logUnguarded = true;
+
+    // protected static $logAttributes = ['description', 'amount'];
+
+    // protected static $ignoreChangedAttributes = ['text'];
+
+    // Logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "Record has been {$eventName}";
+    }
 
     /**
      * The attributes that are not mass assignable.
@@ -17,7 +32,7 @@ class Expense extends Model
      * @var array
      */
     protected $guarded = [
-        'expense_report_id'
+        // 'expense_report_id'
     ];
 
     /**

@@ -35,14 +35,15 @@
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field
+                            <v-combobox
                                 v-model="tin"
                                 :rules="rules.tin"
                                 :error-messages="errors.tin"
                                 :counter="100"
+                                :items="['N/A']"
                                 label="Tax Identification Number (TIN) *"
                                 required
-                            ></v-text-field>
+                            ></v-combobox>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -178,10 +179,7 @@ export default {
                 ],
                 email: [],
                 tin: [
-                    v => !!v || "TIN is required",
-                    v =>
-                        v.length <= 150 ||
-                        "Name must be less than 100 characters"
+                    v => !!v || "This field is required",
                 ],
                 contact_person: [],
                 mobile_number: [],
@@ -233,7 +231,7 @@ export default {
                         code: _this.code,
                         name: _this.name,
                         email: _this.email,
-                        tin: _this.tin,
+                        tin: _this.tin == "N/A" ? null : _this.tin,
                         contact_person: _this.contact_person,
                         mobile_number: _this.mobile_number,
                         telephone_number: _this.telephone_number,

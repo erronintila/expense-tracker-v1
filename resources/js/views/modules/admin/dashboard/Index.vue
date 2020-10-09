@@ -44,76 +44,76 @@
             </v-card-title>
             <v-card-subtitle> </v-card-subtitle>
 
-                <v-row>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
-                            >
-                                <v-card-title>{{
-                                    formatNumber(total_expenses)
-                                }}</v-card-title>
-                                <v-card-subtitle>
-                                    Total Expenses
-                                </v-card-subtitle>
-                                <!-- <v-card-text>Last Updated: </v-card-text> -->
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
-                            >
-                                <v-card-title>
-                                    {{ formatNumber(total_replenishments) }}
-                                </v-card-title>
-                                <v-card-subtitle>
-                                    Replenishments
-                                </v-card-subtitle>
-                                <!-- <v-card-text>---</v-card-text> -->
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
-                            >
-                                <v-card-title>
-                                    {{ formatNumber(total_reimbursements) }}
-                                </v-card-title>
-                                <v-card-subtitle>
-                                    Reimbursements
-                                </v-card-subtitle>
-                                <!-- <v-card-text>---</v-card-text> -->
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card
-                                :elevation="hover ? 5 : 2"
-                                class="mx-auto"
-                                style="border-left: 2px solid #7dff81 !important"
-                            >
-                                <v-card-title>
-                                    {{ formatNumber(total_pending_reports) }}
-                                </v-card-title>
-                                <v-card-subtitle>
-                                    Pending Expense Reports
-                                </v-card-subtitle>
-                                <!-- <v-card-text>---</v-card-text> -->
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                    <!-- <v-col cols="12" md="3">
+            <v-row>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title>{{
+                                formatNumber(total_expenses)
+                            }}</v-card-title>
+                            <v-card-subtitle>
+                                Total Expenses
+                            </v-card-subtitle>
+                            <!-- <v-card-text>Last Updated: </v-card-text> -->
+                        </v-card>
+                    </v-hover>
+                </v-col>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title>
+                                {{ formatNumber(total_replenishments) }}
+                            </v-card-title>
+                            <v-card-subtitle>
+                                Replenishments
+                            </v-card-subtitle>
+                            <!-- <v-card-text>---</v-card-text> -->
+                        </v-card>
+                    </v-hover>
+                </v-col>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title>
+                                {{ formatNumber(total_reimbursements) }}
+                            </v-card-title>
+                            <v-card-subtitle>
+                                Reimbursements
+                            </v-card-subtitle>
+                            <!-- <v-card-text>---</v-card-text> -->
+                        </v-card>
+                    </v-hover>
+                </v-col>
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 5 : 2"
+                            class="mx-auto"
+                            style="border-left: 2px solid #7dff81 !important"
+                        >
+                            <v-card-title>
+                                {{ formatNumber(total_pending_reports) }}
+                            </v-card-title>
+                            <v-card-subtitle>
+                                Pending Expense Reports
+                            </v-card-subtitle>
+                            <!-- <v-card-text>---</v-card-text> -->
+                        </v-card>
+                    </v-hover>
+                </v-col>
+                <!-- <v-col cols="12" md="3">
                         <v-hover v-slot:default="{ hover }">
                             <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                                 <v-card-title>0.00</v-card-title>
@@ -122,121 +122,121 @@
                             </v-card>
                         </v-hover>
                     </v-col> -->
-                </v-row>
-                <v-hover v-slot:default="{ hover }">
-                    <v-card :elevation="hover ? 5 : 0" class="mx-auto">
-                        <v-toolbar flat dense>
-                            <v-toolbar-title>
-                                Expenses by category
-                            </v-toolbar-title>
+            </v-row>
+            <v-hover v-slot:default="{ hover }">
+                <v-card :elevation="hover ? 5 : 0" class="mx-auto">
+                    <v-toolbar flat dense>
+                        <v-toolbar-title>
+                            Expenses by category
+                        </v-toolbar-title>
 
-                            <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>
 
-                            <v-menu
-                                :close-on-content-click="false"
-                                :nudge-width="200"
-                                offset-y
-                                left
-                                bottom
+                        <v-menu
+                            :close-on-content-click="false"
+                            :nudge-width="200"
+                            offset-y
+                            left
+                            bottom
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                            </template>
+
+                            <v-card>
+                                <v-list>
+                                    <v-list-item>
+                                        <v-select
+                                            v-model="filter"
+                                            label="Filter"
+                                            :items="filterItems"
+                                            item-text="text"
+                                            item-value="value"
+                                            @change="onCategoryChange"
+                                        ></v-select>
+                                    </v-list-item>
+                                </v-list>
+                            </v-card>
+                        </v-menu>
+                    </v-toolbar>
+                    <v-row class="ml-4 mb-4">
+                        <v-col md="4" class="mt-5">
+                            <DoughnutChart
+                                ref="donut_chart"
+                                :data="doughnutChartData"
+                                :options="doughnutChartOptions"
+                            ></DoughnutChart>
+                        </v-col>
+                        <v-col cols="12" md="8">
+                            <v-card
+                                flat
+                                class="overflow-y-auto"
+                                max-height="500"
                             >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on">
-                                        <v-icon>mdi-dots-vertical</v-icon>
-                                    </v-btn>
-                                </template>
+                                <v-card-text>
+                                    <HorizontalBarChart
+                                        ref="horizontalBar_chart"
+                                        :data="horizontalBarChartData"
+                                        :options="horizontalBarChartOptions"
+                                    ></HorizontalBarChart>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-card>
+            </v-hover>
 
-                                <v-card>
-                                    <v-list>
-                                        <v-list-item>
-                                            <v-select
-                                                v-model="filter"
-                                                label="Filter"
-                                                :items="filterItems"
-                                                item-text="text"
-                                                item-value="value"
-                                                @change="onCategoryChange"
-                                            ></v-select>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-card>
-                            </v-menu>
-                        </v-toolbar>
-                        <v-row class="ml-4 mb-4">
-                            <v-col md="4" class="mt-5">
-                                <DoughnutChart
-                                    ref="donut_chart"
-                                    :data="doughnutChartData"
-                                    :options="doughnutChartOptions"
-                                ></DoughnutChart>
-                            </v-col>
-                            <v-col cols="12" md="8">
-                                <v-card
-                                    flat
-                                    class="overflow-y-auto"
-                                    max-height="500"
-                                >
-                                    <v-card-text>
-                                        <HorizontalBarChart
-                                            ref="horizontalBar_chart"
-                                            :data="horizontalBarChartData"
-                                            :options="horizontalBarChartOptions"
-                                        ></HorizontalBarChart>
-                                    </v-card-text>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                    </v-card>
-                </v-hover>
+            <v-hover v-slot:default="{ hover }">
+                <v-card :elevation="hover ? 5 : 0" class="mx-auto">
+                    <v-toolbar flat dense>
+                        <v-toolbar-title>
+                            Expenses by date
+                        </v-toolbar-title>
 
-                <v-hover v-slot:default="{ hover }">
-                    <v-card :elevation="hover ? 5 : 0" class="mx-auto">
-                        <v-toolbar flat dense>
-                            <v-toolbar-title>
-                                Expenses by date
-                            </v-toolbar-title>
+                        <v-spacer></v-spacer>
 
-                            <v-spacer></v-spacer>
+                        <v-menu
+                            :close-on-content-click="false"
+                            :nudge-width="200"
+                            offset-y
+                            left
+                            bottom
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                            </template>
 
-                            <v-menu
-                                :close-on-content-click="false"
-                                :nudge-width="200"
-                                offset-y
-                                left
-                                bottom
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on">
-                                        <v-icon>mdi-dots-vertical</v-icon>
-                                    </v-btn>
-                                </template>
-
-                                <v-card>
-                                    <v-list>
-                                        <v-list-item>
-                                            <v-select
-                                                v-model="groupBy"
-                                                label="Group by"
-                                                :items="groupByItems"
-                                                item-text="text"
-                                                item-value="value"
-                                                @change="onTimeUnitChange"
-                                            ></v-select>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-card>
-                            </v-menu>
-                        </v-toolbar>
-                        <v-row>
-                            <v-col cols="12">
-                                <LineChart
-                                    ref="line_chart"
-                                    :data="lineChartData"
-                                    :options="lineChartOptions"
-                                ></LineChart>
-                            </v-col>
-                        </v-row>
-                    </v-card>
-                </v-hover>
+                            <v-card>
+                                <v-list>
+                                    <v-list-item>
+                                        <v-select
+                                            v-model="groupBy"
+                                            label="Group by"
+                                            :items="groupByItems"
+                                            item-text="text"
+                                            item-value="value"
+                                            @change="onTimeUnitChange"
+                                        ></v-select>
+                                    </v-list-item>
+                                </v-list>
+                            </v-card>
+                        </v-menu>
+                    </v-toolbar>
+                    <v-row>
+                        <v-col cols="12">
+                            <LineChart
+                                ref="line_chart"
+                                :data="lineChartData"
+                                :options="lineChartOptions"
+                            ></LineChart>
+                        </v-col>
+                    </v-row>
+                </v-card>
+            </v-hover>
         </v-card>
     </div>
 </template>
@@ -542,14 +542,31 @@ export default {
         load_bar_chart() {
             this.horizontalBarChartOptions = {
                 maintainAspectRatio: false,
-                legend: false
+                legend: false,
                 // scales: {
                 //     yAxes: [
                 //         {
                 //             maxBarThickness: 10
                 //         }
                 //     ]
-                // }
+                // },
+                plugins: {
+                    datalabels: {
+                        display: function(context) {
+                            return (
+                                context.dataset.data[context.dataIndex] !== 0
+                            ); // or >= 1 or ...
+                        },
+                        borderWidth: 2,
+                        borderColor: "white",
+                        borderRadius: 20,
+                        // color: 0,
+                        font: {
+                            weight: "bold"
+                        },
+                        backgroundColor: "lightgray"
+                    }
+                }
             };
             this.horizontalBarChartData = {
                 labels: [],
@@ -565,7 +582,24 @@ export default {
         load_pie_chart() {
             this.doughnutChartOptions = {
                 hoverBorderWidth: 20,
-                legend: false
+                legend: false,
+                plugins: {
+                    datalabels: {
+                        display: function(context) {
+                            return (
+                                context.dataset.data[context.dataIndex] !== 0
+                            ); 
+                        },
+                        borderWidth: 2,
+                        borderColor: "white",
+                        borderRadius: 20,
+                        // color: 0,
+                        font: {
+                            weight: "bold"
+                        },
+                        backgroundColor: "lightgray"
+                    }
+                }
             };
             this.doughnutChartData = {
                 labels: [],

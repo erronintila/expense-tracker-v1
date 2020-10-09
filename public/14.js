@@ -392,6 +392,7 @@ __webpack_require__.r(__webpack_exports__);
       var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
       var employee_id = this.$route.params.id;
       axios.get("/api/data/expense_stats?start_date=".concat(start_date, "&end_date=").concat(end_date, "&employee_id=").concat(employee_id)).then(function (response) {
+        console.log(response);
         _this.total_expenses = response.data.summary.total;
         _this.total_replenishments = response.data.summary.replenishments;
         _this.total_reimbursements = response.data.summary.reimbursements;

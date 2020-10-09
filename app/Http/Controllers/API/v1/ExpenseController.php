@@ -7,6 +7,7 @@ use App\Http\Resources\ExpenseResource;
 use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseDetail;
+use App\Models\ExpenseType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -136,9 +137,11 @@ class ExpenseController extends Controller
 
         $this->validator($request->all(), null, $employee->remaining_fund)->validate();
 
+        $expense_type = ExpenseType::withTrashed()->findOrFail($request->expense_type_id);
+
         $expense = new Expense();
 
-        $expense->description = $request->description;
+        $expense->description = $request->description ?? $expense_type->name;
 
         $expense->receipt_number = $request->receipt_number;
 
@@ -310,7 +313,17 @@ class ExpenseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $expense = Expense::whereIn('id', $request->ids)->delete();
+        if(request()->has("ids")) {
+
+            foreach ($request->ids as $id) {
+
+                $expense = Expense::findOrFail($id);
+
+                $expense->delete();
+            }
+        }
+
+        // $expense = Expense::whereIn('id', $request->ids)->delete();
 
         return response(
             [

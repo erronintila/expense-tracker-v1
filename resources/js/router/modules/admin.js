@@ -39,6 +39,25 @@ const adminRoutes = [
             /**
              *
              *
+             * Activity Logs
+             *
+             *
+             */
+            {
+                path: "/admin/activity_logs",
+                name: "admin.activity_logs.index",
+                component: () =>
+                    import("../../views/modules/admin/activity_logs/Index.vue")
+            },
+            {
+                path: "/admin/activity_logs/:id",
+                name: "admin.activity_logs.show",
+                component: () =>
+                    import("../../views/modules/admin/activity_logs/Show.vue")
+            },
+            /**
+             *
+             *
              * Adjustments
              *
              *

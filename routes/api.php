@@ -26,6 +26,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResources(
         [
+            'activity_logs' => 'API\v1\ActivityLogController',
+
             'adjustments' => 'API\v1\AdjustmentController',
 
             'departments' => 'API\v1\DepartmentController',

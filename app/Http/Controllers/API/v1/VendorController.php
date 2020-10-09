@@ -28,7 +28,7 @@ class VendorController extends Controller
 
             'email' => ['nullable', 'email', 'max:150', Rule::unique('vendors')->ignore($id, 'id')],
 
-            'tin' => ['required', 'max:255', Rule::unique('vendors')->ignore($id, 'id')],
+            'tin' => ['nullable', 'max:255', Rule::unique('vendors')->ignore($id, 'id')],
 
             'contact_person' => ['nullable', 'max:150'],
 

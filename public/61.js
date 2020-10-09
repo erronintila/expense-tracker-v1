@@ -163,6 +163,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -189,9 +190,7 @@ __webpack_require__.r(__webpack_exports__);
         }],
         email: [],
         tin: [function (v) {
-          return !!v || "TIN is required";
-        }, function (v) {
-          return v.length <= 150 || "Name must be less than 100 characters";
+          return !!v || "This field is required";
         }],
         contact_person: [],
         mobile_number: [],
@@ -225,7 +224,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.code = data.code;
         _this.name = data.name;
         _this.email = data.email;
-        _this.tin = data.tin;
+        _this.tin = data.tin == null ? "N/A" : data.tin;
         _this.contact_person = data.contact_person;
         _this.mobile_number = data.mobile_number;
         _this.telephone_number = data.telephone_number;
@@ -261,7 +260,7 @@ __webpack_require__.r(__webpack_exports__);
           code: _this.code,
           name: _this.name,
           email: _this.email,
-          tin: _this.tin,
+          tin: _this.tin == "N/A" ? null : _this.tin,
           contact_person: _this.contact_person,
           mobile_number: _this.mobile_number,
           telephone_number: _this.telephone_number,
@@ -417,11 +416,12 @@ var render = function() {
                         "v-col",
                         { attrs: { cols: "12", md: "4" } },
                         [
-                          _c("v-text-field", {
+                          _c("v-combobox", {
                             attrs: {
                               rules: _vm.rules.tin,
                               "error-messages": _vm.errors.tin,
                               counter: 100,
+                              items: ["N/A"],
                               label: "Tax Identification Number (TIN) *",
                               required: ""
                             },
