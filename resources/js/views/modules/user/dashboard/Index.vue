@@ -338,14 +338,24 @@ export default {
                         _this.expenses_by_category = response.data;
 
                         let labels = response.data.map(item => item.text);
+
                         let data = response.data.map(item => item.value);
+
                         let backgroundColors = _this.getBackgroundColors(
                             data.length
                         );
 
+                        let sum = response.data.reduce(function(a, b) {
+                            return a + b.value;
+                        }, 0);
+
+                        let percentages = response.data.map(
+                            item => (item.value / sum) * 100
+                        );
+
                         this.updatePieChartValues(
                             labels,
-                            data,
+                            percentages,
                             backgroundColors
                         );
 
@@ -444,7 +454,7 @@ export default {
                         display: function(context) {
                             return (
                                 context.dataset.data[context.dataIndex] !== 0
-                            ); 
+                            );
                         },
                         borderWidth: 2,
                         borderColor: "white",
@@ -453,7 +463,7 @@ export default {
                         font: {
                             weight: "bold"
                         },
-                        backgroundColor: "lightgray"
+                        backgroundColor: "lightgray",
                     }
                 }
             };
@@ -477,7 +487,7 @@ export default {
                         display: function(context) {
                             return (
                                 context.dataset.data[context.dataIndex] !== 0
-                            ); 
+                            );
                         },
                         borderWidth: 2,
                         borderColor: "white",
@@ -486,7 +496,10 @@ export default {
                         font: {
                             weight: "bold"
                         },
-                        backgroundColor: "lightgray"
+                        backgroundColor: "lightgray",
+                        formatter: (value, ctx) => {
+                            return this.formatNumber(value) + " %";
+                        }
                     }
                 }
             };

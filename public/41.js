@@ -790,6 +790,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -907,8 +915,6 @@ __webpack_require__.r(__webpack_exports__);
           email: [],
           tin: [function (v) {
             return !!v || "TIN is required";
-          }, function (v) {
-            return v.length <= 150 || "Name must be less than 100 characters";
           }],
           contact_person: [],
           mobile_number: [],
@@ -1065,7 +1071,7 @@ __webpack_require__.r(__webpack_exports__);
           code: _this.vendorOptions.code,
           name: _this.vendorOptions.name,
           email: _this.vendorOptions.email,
-          tin: _this.vendorOptions.tin,
+          tin: _this.vendorOptions.tin == "N/A" ? null : _this.vendorOptions.tin,
           contact_person: _this.vendorOptions.contact_person,
           mobile_number: _this.vendorOptions.mobile_number,
           telephone_number: _this.vendorOptions.telephone_number,
@@ -1508,7 +1514,7 @@ var render = function() {
                                                                   },
                                                                   [
                                                                     _c(
-                                                                      "v-text-field",
+                                                                      "v-combobox",
                                                                       {
                                                                         attrs: {
                                                                           rules:
@@ -1522,6 +1528,9 @@ var render = function() {
                                                                               .errors
                                                                               .tin,
                                                                           counter: 100,
+                                                                          items: [
+                                                                            "N/A"
+                                                                          ],
                                                                           label:
                                                                             "Tax Identification Number (TIN) *",
                                                                           required:
@@ -1775,122 +1784,6 @@ var render = function() {
                                                                     )
                                                                   ],
                                                                   1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-select",
-                                                                      {
-                                                                        attrs: {
-                                                                          items:
-                                                                            _vm.expense_types,
-                                                                          "item-text":
-                                                                            "name",
-                                                                          "item-value":
-                                                                            "id",
-                                                                          label:
-                                                                            "Link with Expense Types",
-                                                                          multiple:
-                                                                            ""
-                                                                        },
-                                                                        scopedSlots: _vm._u(
-                                                                          [
-                                                                            {
-                                                                              key:
-                                                                                "selection",
-                                                                              fn: function(
-                                                                                ref
-                                                                              ) {
-                                                                                var item =
-                                                                                  ref.item
-                                                                                var index =
-                                                                                  ref.index
-                                                                                return [
-                                                                                  index ===
-                                                                                  0
-                                                                                    ? _c(
-                                                                                        "v-chip",
-                                                                                        {
-                                                                                          attrs: {
-                                                                                            small:
-                                                                                              ""
-                                                                                          }
-                                                                                        },
-                                                                                        [
-                                                                                          _c(
-                                                                                            "span",
-                                                                                            [
-                                                                                              _vm._v(
-                                                                                                _vm._s(
-                                                                                                  item.name
-                                                                                                )
-                                                                                              )
-                                                                                            ]
-                                                                                          )
-                                                                                        ]
-                                                                                      )
-                                                                                    : _vm._e(),
-                                                                                  _vm._v(
-                                                                                    " "
-                                                                                  ),
-                                                                                  index ===
-                                                                                  1
-                                                                                    ? _c(
-                                                                                        "span",
-                                                                                        {
-                                                                                          staticClass:
-                                                                                            "grey--text caption"
-                                                                                        },
-                                                                                        [
-                                                                                          _vm._v(
-                                                                                            "(+" +
-                                                                                              _vm._s(
-                                                                                                _vm
-                                                                                                  .vendorOptions
-                                                                                                  .selected_expense_types
-                                                                                                  .length -
-                                                                                                  1
-                                                                                              ) +
-                                                                                              "\n                                                                            others)"
-                                                                                          )
-                                                                                        ]
-                                                                                      )
-                                                                                    : _vm._e()
-                                                                                ]
-                                                                              }
-                                                                            }
-                                                                          ]
-                                                                        ),
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .selected_expense_types,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.vendorOptions,
-                                                                              "selected_expense_types",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions.selected_expense_types\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
                                                                 )
                                                               ],
                                                               1
@@ -2109,7 +2002,10 @@ var render = function() {
                                                   _c("v-list-item-subtitle", {
                                                     domProps: {
                                                       innerHTML: _vm._s(
-                                                        "TIN: " + data.item.tin
+                                                        "TIN: " +
+                                                          (data.item.tin == null
+                                                            ? "N/A"
+                                                            : data.item.tin)
                                                       )
                                                     }
                                                   }),

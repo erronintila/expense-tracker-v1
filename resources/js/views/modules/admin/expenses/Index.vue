@@ -337,7 +337,7 @@ export default {
             expense_type: 0,
             expense_types: [],
             status: "Active",
-            statuses: ["Active", "Cancelled"],
+            statuses: ["Active", "Cancelled", "Unreported Expenses"],
             selected: [],
             search: "",
             totalItems: 0,

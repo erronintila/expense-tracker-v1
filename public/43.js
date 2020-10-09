@@ -352,7 +352,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       expense_type: 0,
       expense_types: [],
       status: "Active",
-      statuses: ["Active", "Cancelled"],
+      statuses: ["Active", "Cancelled", "Unreported Expenses"],
       selected: [],
       search: "",
       totalItems: 0,

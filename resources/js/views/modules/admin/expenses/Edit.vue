@@ -141,7 +141,7 @@
                                                                     cols="12"
                                                                     md="6"
                                                                 >
-                                                                    <v-text-field
+                                                                    <v-combobox
                                                                         v-model="
                                                                             vendorOptions.tin
                                                                         "
@@ -158,9 +158,10 @@
                                                                         :counter="
                                                                             100
                                                                         "
+                                                                        :items="['N/A']"
                                                                         label="Tax Identification Number (TIN) *"
                                                                         required
-                                                                    ></v-text-field>
+                                                                    ></v-combobox>
                                                                 </v-col>
 
                                                                 <v-col
@@ -273,7 +274,7 @@
                                                                     ></v-text-field>
                                                                 </v-col>
 
-                                                                <v-col
+                                                                <!-- <v-col
                                                                     cols="12"
                                                                     md="6"
                                                                 >
@@ -324,7 +325,7 @@
                                                                             >
                                                                         </template>
                                                                     </v-select>
-                                                                </v-col>
+                                                                </v-col> -->
                                                             </v-row>
 
                                                             <v-row>
@@ -411,10 +412,13 @@
                                                         v-html="data.item.name"
                                                     ></v-list-item-title>
                                                     <v-list-item-subtitle
-                                                        v-html="
-                                                            'TIN: ' +
-                                                                data.item.tin
-                                                        "
+                                                        v-html="`TIN: ${
+                                                                data.item.tin ==
+                                                                null
+                                                                    ? 'N/A'
+                                                                    : data.item
+                                                                          .tin
+                                                            }`"
                                                     ></v-list-item-subtitle>
                                                     <v-list-item-subtitle
                                                         v-html="
@@ -795,9 +799,6 @@ export default {
                     email: [],
                     tin: [
                         v => !!v || "TIN is required",
-                        v =>
-                            v.length <= 150 ||
-                            "Name must be less than 100 characters"
                     ],
                     contact_person: [],
                     mobile_number: [],
@@ -1012,7 +1013,7 @@ export default {
                         code: _this.vendorOptions.code,
                         name: _this.vendorOptions.name,
                         email: _this.vendorOptions.email,
-                        tin: _this.vendorOptions.tin,
+                        tin: _this.vendorOptions.tin == "N/A" ? null : _this.vendorOptions.tin,
                         contact_person: _this.vendorOptions.contact_person,
                         mobile_number: _this.vendorOptions.mobile_number,
                         telephone_number: _this.vendorOptions.telephone_number,

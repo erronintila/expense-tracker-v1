@@ -73,6 +73,10 @@ class ExpenseController extends Controller
                     $expenses = $expenses->onlyTrashed();
 
                     break;
+                case 'Unreported Expenses':
+                    $expenses = $expenses->where("expense_report_id", null);
+
+                    break;
                 default:
 
                     $expenses = $expenses;
@@ -276,7 +280,7 @@ class ExpenseController extends Controller
                             'reimbursable_amount' => $value["reimbursable_amount"],
 
                             'expense_id' => $expense->id,
-                            
+
                             'deleted_at' => null,
                         ]
                     );
@@ -313,7 +317,7 @@ class ExpenseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if(request()->has("ids")) {
+        if (request()->has("ids")) {
 
             foreach ($request->ids as $id) {
 

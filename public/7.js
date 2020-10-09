@@ -1,1025 +1,1459 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[7],{
 
-/***/ "./node_modules/numeral/numeral.js":
-/*!*****************************************!*\
-  !*** ./node_modules/numeral/numeral.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Departments.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/selector/dropdown/Departments.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! @preserve
- * numeral.js
- * version : 2.0.6
- * author : Adam Draper
- * license : MIT
- * http://adamwdraper.github.com/Numeral-js/
- */
-
-(function (global, factory) {
-    if (true) {
-        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else {}
-}(this, function () {
-    /************************************
-        Variables
-    ************************************/
-
-    var numeral,
-        _,
-        VERSION = '2.0.6',
-        formats = {},
-        locales = {},
-        defaults = {
-            currentLocale: 'en',
-            zeroFormat: null,
-            nullFormat: null,
-            defaultFormat: '0,0',
-            scalePercentBy100: true
-        },
-        options = {
-            currentLocale: defaults.currentLocale,
-            zeroFormat: defaults.zeroFormat,
-            nullFormat: defaults.nullFormat,
-            defaultFormat: defaults.defaultFormat,
-            scalePercentBy100: defaults.scalePercentBy100
-        };
-
-
-    /************************************
-        Constructors
-    ************************************/
-
-    // Numeral prototype object
-    function Numeral(input, number) {
-        this._input = input;
-
-        this._value = number;
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    id: {
+      type: Number,
+      "default": null
+    },
+    parameters: {
+      type: Object,
+      "default": function _default() {}
+    },
+    showAll: {
+      type: Boolean,
+      "default": false
     }
-
-    numeral = function(input) {
-        var value,
-            kind,
-            unformatFunction,
-            regexp;
-
-        if (numeral.isNumeral(input)) {
-            value = input.value();
-        } else if (input === 0 || typeof input === 'undefined') {
-            value = 0;
-        } else if (input === null || _.isNaN(input)) {
-            value = null;
-        } else if (typeof input === 'string') {
-            if (options.zeroFormat && input === options.zeroFormat) {
-                value = 0;
-            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
-                value = null;
-            } else {
-                for (kind in formats) {
-                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
-
-                    if (regexp && input.match(regexp)) {
-                        unformatFunction = formats[kind].unformat;
-
-                        break;
-                    }
-                }
-
-                unformatFunction = unformatFunction || numeral._.stringToNumber;
-
-                value = unformatFunction(input);
-            }
-        } else {
-            value = Number(input)|| null;
-        }
-
-        return new Numeral(input, value);
+  },
+  data: function data() {
+    return {
+      defaultValue: {
+        id: null,
+        name: "All Departments"
+      },
+      data: {},
+      items: []
     };
+  },
+  methods: {
+    getData: function getData() {
+      var _this = this;
 
-    // version number
-    numeral.version = VERSION;
+      axios.get("/api/data/departments", _this.parameters).then(function (response) {
+        _this.items = response.data.data;
 
-    // compare numeral object
-    numeral.isNumeral = function(obj) {
-        return obj instanceof Numeral;
+        if (_this.showAll) {
+          _this.items.unshift(_this.defaultValue);
+
+          _this.data = _this.defaultValue;
+        }
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    changeData: function changeData() {
+      this.$emit("changeData", this.data);
+    },
+    resetData: function resetData() {
+      this.data = this.showAll ? this.defaultValue : null;
+      this.getData();
+    }
+  },
+  created: function created() {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    this.getData();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Jobs.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/selector/dropdown/Jobs.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    id: {
+      type: Number,
+      "default": null
+    },
+    department_id: {
+      type: Number,
+      "default": null
+    },
+    showAll: {
+      type: Boolean,
+      "default": false
+    }
+  },
+  data: function data() {
+    return {
+      defaultValue: {
+        id: null,
+        name: "All Job Designations"
+      },
+      data: {},
+      items: []
     };
+  },
+  methods: {
+    getData: function getData(department_id) {
+      var _this = this;
 
-    // helper functions
-    numeral._ = _ = {
-        // formats numbers separators, decimals places, signs, abbreviations
-        numberToFormat: function(value, format, roundingFunction) {
-            var locale = locales[numeral.options.currentLocale],
-                negP = false,
-                optDec = false,
-                leadingCount = 0,
-                abbr = '',
-                trillion = 1000000000000,
-                billion = 1000000000,
-                million = 1000000,
-                thousand = 1000,
-                decimal = '',
-                neg = false,
-                abbrForce, // force abbreviation
-                abs,
-                min,
-                max,
-                power,
-                int,
-                precision,
-                signed,
-                thousands,
-                output;
-
-            // make sure we never format a null value
-            value = value || 0;
-
-            abs = Math.abs(value);
-
-            // see if we should use parentheses for negative number or if we should prefix with a sign
-            // if both are present we default to parentheses
-            if (numeral._.includes(format, '(')) {
-                negP = true;
-                format = format.replace(/[\(|\)]/g, '');
-            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
-                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
-                format = format.replace(/[\+|\-]/g, '');
-            }
-
-            // see if abbreviation is wanted
-            if (numeral._.includes(format, 'a')) {
-                abbrForce = format.match(/a(k|m|b|t)?/);
-
-                abbrForce = abbrForce ? abbrForce[1] : false;
-
-                // check for space before abbreviation
-                if (numeral._.includes(format, ' a')) {
-                    abbr = ' ';
-                }
-
-                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
-
-                if (abs >= trillion && !abbrForce || abbrForce === 't') {
-                    // trillion
-                    abbr += locale.abbreviations.trillion;
-                    value = value / trillion;
-                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
-                    // billion
-                    abbr += locale.abbreviations.billion;
-                    value = value / billion;
-                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
-                    // million
-                    abbr += locale.abbreviations.million;
-                    value = value / million;
-                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
-                    // thousand
-                    abbr += locale.abbreviations.thousand;
-                    value = value / thousand;
-                }
-            }
-
-            // check for optional decimals
-            if (numeral._.includes(format, '[.]')) {
-                optDec = true;
-                format = format.replace('[.]', '.');
-            }
-
-            // break number and format
-            int = value.toString().split('.')[0];
-            precision = format.split('.')[1];
-            thousands = format.indexOf(',');
-            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
-
-            if (precision) {
-                if (numeral._.includes(precision, '[')) {
-                    precision = precision.replace(']', '');
-                    precision = precision.split('[');
-                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
-                } else {
-                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
-                }
-
-                int = decimal.split('.')[0];
-
-                if (numeral._.includes(decimal, '.')) {
-                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
-                } else {
-                    decimal = '';
-                }
-
-                if (optDec && Number(decimal.slice(1)) === 0) {
-                    decimal = '';
-                }
-            } else {
-                int = numeral._.toFixed(value, 0, roundingFunction);
-            }
-
-            // check abbreviation again after rounding
-            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
-                int = String(Number(int) / 1000);
-
-                switch (abbr) {
-                    case locale.abbreviations.thousand:
-                        abbr = locale.abbreviations.million;
-                        break;
-                    case locale.abbreviations.million:
-                        abbr = locale.abbreviations.billion;
-                        break;
-                    case locale.abbreviations.billion:
-                        abbr = locale.abbreviations.trillion;
-                        break;
-                }
-            }
-
-
-            // format number
-            if (numeral._.includes(int, '-')) {
-                int = int.slice(1);
-                neg = true;
-            }
-
-            if (int.length < leadingCount) {
-                for (var i = leadingCount - int.length; i > 0; i--) {
-                    int = '0' + int;
-                }
-            }
-
-            if (thousands > -1) {
-                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
-            }
-
-            if (format.indexOf('.') === 0) {
-                int = '';
-            }
-
-            output = int + decimal + (abbr ? abbr : '');
-
-            if (negP) {
-                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
-            } else {
-                if (signed >= 0) {
-                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
-                } else if (neg) {
-                    output = '-' + output;
-                }
-            }
-
-            return output;
-        },
-        // unformats numbers separators, decimals places, signs, abbreviations
-        stringToNumber: function(string) {
-            var locale = locales[options.currentLocale],
-                stringOriginal = string,
-                abbreviations = {
-                    thousand: 3,
-                    million: 6,
-                    billion: 9,
-                    trillion: 12
-                },
-                abbreviation,
-                value,
-                i,
-                regexp;
-
-            if (options.zeroFormat && string === options.zeroFormat) {
-                value = 0;
-            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
-                value = null;
-            } else {
-                value = 1;
-
-                if (locale.delimiters.decimal !== '.') {
-                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
-                }
-
-                for (abbreviation in abbreviations) {
-                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
-
-                    if (stringOriginal.match(regexp)) {
-                        value *= Math.pow(10, abbreviations[abbreviation]);
-                        break;
-                    }
-                }
-
-                // check for negative number
-                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
-
-                // remove non numbers
-                string = string.replace(/[^0-9\.]+/g, '');
-
-                value *= Number(string);
-            }
-
-            return value;
-        },
-        isNaN: function(value) {
-            return typeof value === 'number' && isNaN(value);
-        },
-        includes: function(string, search) {
-            return string.indexOf(search) !== -1;
-        },
-        insert: function(string, subString, start) {
-            return string.slice(0, start) + subString + string.slice(start);
-        },
-        reduce: function(array, callback /*, initialValue*/) {
-            if (this === null) {
-                throw new TypeError('Array.prototype.reduce called on null or undefined');
-            }
-
-            if (typeof callback !== 'function') {
-                throw new TypeError(callback + ' is not a function');
-            }
-
-            var t = Object(array),
-                len = t.length >>> 0,
-                k = 0,
-                value;
-
-            if (arguments.length === 3) {
-                value = arguments[2];
-            } else {
-                while (k < len && !(k in t)) {
-                    k++;
-                }
-
-                if (k >= len) {
-                    throw new TypeError('Reduce of empty array with no initial value');
-                }
-
-                value = t[k++];
-            }
-            for (; k < len; k++) {
-                if (k in t) {
-                    value = callback(value, t[k], k, t);
-                }
-            }
-            return value;
-        },
-        /**
-         * Computes the multiplier necessary to make x >= 1,
-         * effectively eliminating miscalculations caused by
-         * finite precision.
-         */
-        multiplier: function (x) {
-            var parts = x.toString().split('.');
-
-            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
-        },
-        /**
-         * Given a variable number of arguments, returns the maximum
-         * multiplier that must be used to normalize an operation involving
-         * all of them.
-         */
-        correctionFactor: function () {
-            var args = Array.prototype.slice.call(arguments);
-
-            return args.reduce(function(accum, next) {
-                var mn = _.multiplier(next);
-                return accum > mn ? accum : mn;
-            }, 1);
-        },
-        /**
-         * Implementation of toFixed() that treats floats more like decimals
-         *
-         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
-         * problems for accounting- and finance-related software.
-         */
-        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
-            var splitValue = value.toString().split('.'),
-                minDecimals = maxDecimals - (optionals || 0),
-                boundedPrecision,
-                optionalsRegExp,
-                power,
-                output;
-
-            // Use the smallest precision value possible to avoid errors from floating point representation
-            if (splitValue.length === 2) {
-              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
-            } else {
-              boundedPrecision = minDecimals;
-            }
-
-            power = Math.pow(10, boundedPrecision);
-
-            // Multiply up by precision, round accurately, then divide and use native toFixed():
-            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
-
-            if (optionals > maxDecimals - boundedPrecision) {
-                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
-                output = output.replace(optionalsRegExp, '');
-            }
-
-            return output;
+      axios.get("/api/data/jobs", {
+        params: {
+          department_id: department_id
         }
+      }).then(function (response) {
+        _this.items = response.data.data;
+
+        _this.items.unshift(_this.defaultValue);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    changeData: function changeData() {
+      this.$emit("changeData", this.data);
+      this.getData(this.department_id);
+    },
+    resetData: function resetData(department_id) {
+      this.data = this.showAll ? this.defaultValue : null;
+      this.getData(department_id);
+    }
+  },
+  created: function created() {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    this.resetData();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_selector_dropdown_Departments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../components/selector/dropdown/Departments */ "./resources/js/components/selector/dropdown/Departments.vue");
+/* harmony import */ var _components_selector_dropdown_Jobs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/selector/dropdown/Jobs */ "./resources/js/components/selector/dropdown/Jobs.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {},
+  components: {
+    DepartmentData: _components_selector_dropdown_Departments__WEBPACK_IMPORTED_MODULE_0__["default"],
+    JobData: _components_selector_dropdown_Jobs__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      expanded: [],
+      loading: true,
+      headers: [{
+        text: "Name",
+        value: "fullname"
+      }, {
+        text: "Job Designation",
+        value: "job.name"
+      }, {
+        text: "Department",
+        value: "department.name"
+      }, {
+        text: "Revolving Fund",
+        value: "revolving_fund"
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
+      }, {
+        text: "",
+        value: "data-table-expand"
+      }],
+      items: [],
+      department: 0,
+      // departments: [],
+      job: 0,
+      jobs: [],
+      status: "Active",
+      statuses: ["Active", "Archived"],
+      selected: [],
+      search: "",
+      totalItems: 0,
+      options: {
+        sortBy: ["last_name"],
+        sortDesc: [false],
+        page: 1,
+        itemsPerPage: 10
+      }
     };
+  },
+  methods: {
+    changeDepartment: function changeDepartment(e) {
+      this.department = e.id;
+      this.job = null; // this.loadJobs();
 
-    // avaliable options
-    numeral.options = options;
+      this.$refs.jobData.resetData(this.department);
+    },
+    changeJob: function changeJob(e) {
+      this.job = e.id;
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this2 = this;
 
-    // avaliable formats
-    numeral.formats = formats;
+      var _this = this;
 
-    // avaliable formats
-    numeral.locales = locales;
+      _this.loading = true;
+      return new Promise(function (resolve, reject) {
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
 
-    // This function sets the current locale.  If
-    // no arguments are passed in, it will simply return the current global
-    // locale key.
-    numeral.locale = function(key) {
-        if (key) {
-            options.currentLocale = key.toLowerCase();
-        }
+        var search = _this.search.trim().toLowerCase();
 
-        return options.currentLocale;
-    };
-
-    // This function provides access to the loaded locale data.  If
-    // no arguments are passed in, it will simply return the current
-    // global locale object.
-    numeral.localeData = function(key) {
-        if (!key) {
-            return locales[options.currentLocale];
-        }
-
-        key = key.toLowerCase();
-
-        if (!locales[key]) {
-            throw new Error('Unknown locale : ' + key);
-        }
-
-        return locales[key];
-    };
-
-    numeral.reset = function() {
-        for (var property in defaults) {
-            options[property] = defaults[property];
-        }
-    };
-
-    numeral.zeroFormat = function(format) {
-        options.zeroFormat = typeof(format) === 'string' ? format : null;
-    };
-
-    numeral.nullFormat = function (format) {
-        options.nullFormat = typeof(format) === 'string' ? format : null;
-    };
-
-    numeral.defaultFormat = function(format) {
-        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
-    };
-
-    numeral.register = function(type, name, format) {
-        name = name.toLowerCase();
-
-        if (this[type + 's'][name]) {
-            throw new TypeError(name + ' ' + type + ' already registered.');
-        }
-
-        this[type + 's'][name] = format;
-
-        return format;
-    };
-
-
-    numeral.validate = function(val, culture) {
-        var _decimalSep,
-            _thousandSep,
-            _currSymbol,
-            _valArray,
-            _abbrObj,
-            _thousandRegEx,
-            localeData,
-            temp;
-
-        //coerce val to string
-        if (typeof val !== 'string') {
-            val += '';
-
-            if (console.warn) {
-                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
-            }
-        }
-
-        //trim whitespaces from either sides
-        val = val.trim();
-
-        //if val is just digits return true
-        if (!!val.match(/^\d+$/)) {
-            return true;
-        }
-
-        //if val is empty return false
-        if (val === '') {
-            return false;
-        }
-
-        //get the decimal and thousands separator from numeral.localeData
-        try {
-            //check if the culture is understood by numeral. if not, default it to current locale
-            localeData = numeral.localeData(culture);
-        } catch (e) {
-            localeData = numeral.localeData(numeral.locale());
-        }
-
-        //setup the delimiters and currency symbol based on culture/locale
-        _currSymbol = localeData.currency.symbol;
-        _abbrObj = localeData.abbreviations;
-        _decimalSep = localeData.delimiters.decimal;
-        if (localeData.delimiters.thousands === '.') {
-            _thousandSep = '\\.';
-        } else {
-            _thousandSep = localeData.delimiters.thousands;
-        }
-
-        // validating currency symbol
-        temp = val.match(/^[^\d]+/);
-        if (temp !== null) {
-            val = val.substr(1);
-            if (temp[0] !== _currSymbol) {
-                return false;
-            }
-        }
-
-        //validating abbreviation symbol
-        temp = val.match(/[^\d]+$/);
-        if (temp !== null) {
-            val = val.slice(0, -1);
-            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
-                return false;
-            }
-        }
-
-        _thousandRegEx = new RegExp(_thousandSep + '{2}');
-
-        if (!val.match(/[^\d.,]/g)) {
-            _valArray = val.split(_decimalSep);
-            if (_valArray.length > 2) {
-                return false;
-            } else {
-                if (_valArray.length < 2) {
-                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
-                } else {
-                    if (_valArray[0].length === 1) {
-                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-                    } else {
-                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-                    }
-                }
-            }
-        }
-
-        return false;
-    };
-
-
-    /************************************
-        Numeral Prototype
-    ************************************/
-
-    numeral.fn = Numeral.prototype = {
-        clone: function() {
-            return numeral(this);
-        },
-        format: function(inputString, roundingFunction) {
-            var value = this._value,
-                format = inputString || options.defaultFormat,
-                kind,
-                output,
-                formatFunction;
-
-            // make sure we have a roundingFunction
-            roundingFunction = roundingFunction || Math.round;
-
-            // format based on value
-            if (value === 0 && options.zeroFormat !== null) {
-                output = options.zeroFormat;
-            } else if (value === null && options.nullFormat !== null) {
-                output = options.nullFormat;
-            } else {
-                for (kind in formats) {
-                    if (format.match(formats[kind].regexps.format)) {
-                        formatFunction = formats[kind].format;
-
-                        break;
-                    }
-                }
-
-                formatFunction = formatFunction || numeral._.numberToFormat;
-
-                output = formatFunction(value, format, roundingFunction);
-            }
-
-            return output;
-        },
-        value: function() {
-            return this._value;
-        },
-        input: function() {
-            return this._input;
-        },
-        set: function(value) {
-            this._value = Number(value);
-
-            return this;
-        },
-        add: function(value) {
-            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-            function cback(accum, curr, currI, O) {
-                return accum + Math.round(corrFactor * curr);
-            }
-
-            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
-
-            return this;
-        },
-        subtract: function(value) {
-            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-            function cback(accum, curr, currI, O) {
-                return accum - Math.round(corrFactor * curr);
-            }
-
-            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
-
-            return this;
-        },
-        multiply: function(value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = _.correctionFactor(accum, curr);
-                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
-            }
-
-            this._value = _.reduce([this._value, value], cback, 1);
-
-            return this;
-        },
-        divide: function(value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = _.correctionFactor(accum, curr);
-                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
-            }
-
-            this._value = _.reduce([this._value, value], cback);
-
-            return this;
-        },
-        difference: function(value) {
-            return Math.abs(numeral(this._value).subtract(value).value());
-        }
-    };
-
-    /************************************
-        Default Locale && Format
-    ************************************/
-
-    numeral.register('locale', 'en', {
-        delimiters: {
-            thousands: ',',
-            decimal: '.'
-        },
-        abbreviations: {
-            thousand: 'k',
-            million: 'm',
-            billion: 'b',
-            trillion: 't'
-        },
-        ordinal: function(number) {
-            var b = number % 10;
-            return (~~(number % 100 / 10) === 1) ? 'th' :
-                (b === 1) ? 'st' :
-                (b === 2) ? 'nd' :
-                (b === 3) ? 'rd' : 'th';
-        },
-        currency: {
-            symbol: '$'
-        }
-    });
-
-    
-
-(function() {
-        numeral.register('format', 'bps', {
-            regexps: {
-                format: /(BPS)/,
-                unformat: /(BPS)/
-            },
-            format: function(value, format, roundingFunction) {
-                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
-                    output;
-
-                value = value * 10000;
-
-                // check for space before BPS
-                format = format.replace(/\s?BPS/, '');
-
-                output = numeral._.numberToFormat(value, format, roundingFunction);
-
-                if (numeral._.includes(output, ')')) {
-                    output = output.split('');
-
-                    output.splice(-1, 0, space + 'BPS');
-
-                    output = output.join('');
-                } else {
-                    output = output + space + 'BPS';
-                }
-
-                return output;
-            },
-            unformat: function(string) {
-                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
-            }
+        var department_id = _this.department;
+        var job_id = _this.job;
+        var status = _this.status;
+        axios.get("/api/employees", {
+          params: {
+            search: search,
+            sortBy: sortBy[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
+            page: page,
+            itemsPerPage: itemsPerPage,
+            status: status,
+            department_id: department_id,
+            job_id: job_id
+          }
+        }).then(function (response) {
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this.loading = false;
+          resolve({
+            items: items,
+            total: total
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+          _this.loading = false;
         });
-})();
+      });
+    },
+    // loadDepartments() {
+    //     let _this = this;
+    //     axios
+    //         .get("/api/data/departments")
+    //         .then(response => {
+    //             _this.departments = response.data.data;
+    //             _this.departments.unshift({
+    //                 id: 0,
+    //                 name: "All Departments"
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //         });
+    // },
+    // loadJobs() {
+    //     let _this = this;
+    //     axios
+    //         .get("/api/data/jobs", {
+    //             params: {
+    //                 department_id: _this.department
+    //             }
+    //         })
+    //         .then(response => {
+    //             _this.jobs = response.data.data;
+    //             _this.jobs.unshift({ id: 0, name: "All Job Designations" });
+    //             _this.job = 0;
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //         });
+    // },
+    // updateDepartment() {
+    //     this.loadJobs();
+    // },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this)); // this.loadDepartments();
+      // this.loadJobs();
 
+      this.$refs.departmentData.resetData();
+      this.$refs.jobData.resetData();
+    },
+    // onShow(item) {
+    //     this.$router.push({
+    //         name: "admin.employees.show",
+    //         params: { id: item.id }
+    //     });
+    // },
+    // onEdit(item) {
+    //     this.$router.push({
+    //         name: "admin.employees.edit",
+    //         params: { id: item.id }
+    //     });
+    // },
+    onDelete: function onDelete() {
+      var _this = this;
 
-(function() {
-        var decimal = {
-            base: 1000,
-            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        },
-        binary = {
-            base: 1024,
-            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
-        };
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
 
-    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
-            return decimal.suffixes.indexOf(item) < 0;
-        }));
-        var unformatRegex = allSuffixes.join('|');
-        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
-        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
-
-    numeral.register('format', 'bytes', {
-        regexps: {
-            format: /([0\s]i?b)/,
-            unformat: new RegExp(unformatRegex)
-        },
-        format: function(value, format, roundingFunction) {
-            var output,
-                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
-                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
-                power,
-                min,
-                max;
-
-            // check for space before
-            format = format.replace(/\s?i?b/, '');
-
-            for (power = 0; power <= bytes.suffixes.length; power++) {
-                min = Math.pow(bytes.base, power);
-                max = Math.pow(bytes.base, power + 1);
-
-                if (value === null || value === 0 || value >= min && value < max) {
-                    suffix += bytes.suffixes[power];
-
-                    if (min > 0) {
-                        value = value / min;
-                    }
-
-                    break;
-                }
+      this.$confirm("Move item(s) to archive?").then(function (res) {
+        if (res) {
+          axios["delete"]("/api/employees/".concat(_this.selected[0].id), {
+            params: {
+              ids: _this.selected.map(function (item) {
+                return item.id;
+              })
             }
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) moved to archive.", {
+              position: "top-right",
+              timeout: 2000
+            });
 
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            return output + suffix;
-        },
-        unformat: function(string) {
-            var value = numeral._.stringToNumber(string),
-                power,
-                bytesMultiplier;
-
-            if (value) {
-                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
-                    if (numeral._.includes(string, decimal.suffixes[power])) {
-                        bytesMultiplier = Math.pow(decimal.base, power);
-
-                        break;
-                    }
-
-                    if (numeral._.includes(string, binary.suffixes[power])) {
-                        bytesMultiplier = Math.pow(binary.base, power);
-
-                        break;
-                    }
-                }
-
-                value *= (bytesMultiplier || 1);
-            }
-
-            return value;
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
+          })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+          });
         }
+      });
+    },
+    onRestore: function onRestore() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      this.$confirm("Do you want to restore account(s)?").then(function (res) {
+        if (res) {
+          axios.put("/api/employees/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "restore"
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) restored.", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
+          })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+          });
+        }
+      });
+    }
+  },
+  watch: {
+    params: {
+      handler: function handler() {
+        var _this3 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this3.items = data.items;
+          _this3.totalItems = data.total;
+        });
+      },
+      deep: true
+    }
+  },
+  computed: {
+    params: function params(nv) {
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
+        query: this.search
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
+    }
+  },
+  mounted: function mounted() {
+    var _this4 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this4.items = data.items;
+      _this4.totalItems = data.total;
     });
-})();
+  },
+  created: function created() {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // this.loadDepartments();
+    // this.loadJobs();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Departments.vue?vue&type=template&id=4c25deb8&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/selector/dropdown/Departments.vue?vue&type=template&id=4c25deb8& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("v-autocomplete", {
+    attrs: {
+      label: "Department",
+      items: _vm.items,
+      "item-value": "id",
+      "item-text": "name",
+      "return-object": ""
+    },
+    on: { change: _vm.changeData },
+    model: {
+      value: _vm.data,
+      callback: function($$v) {
+        _vm.data = $$v
+      },
+      expression: "data"
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
 
 
-(function() {
-        numeral.register('format', 'currency', {
-        regexps: {
-            format: /(\$)/
-        },
-        format: function(value, format, roundingFunction) {
-            var locale = numeral.locales[numeral.options.currentLocale],
-                symbols = {
-                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
-                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Jobs.vue?vue&type=template&id=2561af8f&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/selector/dropdown/Jobs.vue?vue&type=template&id=2561af8f& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("v-autocomplete", {
+    attrs: {
+      label: "Job Designation",
+      items: _vm.items,
+      "item-value": "id",
+      "item-text": "name",
+      "return-object": ""
+    },
+    on: { change: _vm.changeData },
+    model: {
+      value: _vm.data,
+      callback: function($$v) {
+        _vm.data = $$v
+      },
+      expression: "data"
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "v-card",
+        { staticClass: "elevation-0 p-0 m-0" },
+        [
+          _c(
+            "v-card-title",
+            { staticClass: "pt-0" },
+            [
+              _c("h4", { staticClass: "title green--text" }, [
+                _vm._v("Employees")
+              ]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "elevation-3 mr-2",
+                  attrs: {
+                    color: "green",
+                    to: { name: "admin.employees.create" },
+                    dark: "",
+                    fab: "",
+                    "x-small": ""
+                  }
                 },
-                output,
-                symbol,
-                i;
-
-            // strip format of spaces and $
-            format = format.replace(/\s?\$\s?/, '');
-
-            // format the number
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            // update the before and after based on value
-            if (value >= 0) {
-                symbols.before = symbols.before.replace(/[\-\(]/, '');
-                symbols.after = symbols.after.replace(/[\-\)]/, '');
-            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
-                symbols.before = '-' + symbols.before;
-            }
-
-            // loop through each before symbol
-            for (i = 0; i < symbols.before.length; i++) {
-                symbol = symbols.before[i];
-
-                switch (symbol) {
-                    case '$':
-                        output = numeral._.insert(output, locale.currency.symbol, i);
-                        break;
-                    case ' ':
-                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
-                        break;
+                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-plus")])],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "elevation-3 mr-2",
+                  attrs: { color: "green", dark: "", fab: "", "x-small": "" },
+                  on: { click: _vm.onRefresh }
+                },
+                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-reload")])],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    transition: "scale-transition",
+                    "close-on-content-click": false,
+                    "nudge-width": 200,
+                    "offset-y": "",
+                    left: "",
+                    bottom: "",
+                    eager: ""
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass: "elevation-3 mr-2",
+                                  attrs: {
+                                    color: "green",
+                                    dark: "",
+                                    fab: "",
+                                    "x-small": ""
+                                  }
+                                },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-filter")
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c(
+                        "v-list",
+                        [
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: { items: _vm.statuses, label: "Status" },
+                                model: {
+                                  value: _vm.status,
+                                  callback: function($$v) {
+                                    _vm.status = $$v
+                                  },
+                                  expression: "status"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("DepartmentData", {
+                                ref: "departmentData",
+                                attrs: { showAll: true },
+                                on: { changeData: _vm.changeDepartment }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("JobData", {
+                                ref: "jobData",
+                                attrs: {
+                                  showAll: true,
+                                  department_id: _vm.department
+                                },
+                                on: { changeData: _vm.changeJob }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    "offset-y": "",
+                    transition: "scale-transition",
+                    left: ""
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass: "elevation-3",
+                                  attrs: {
+                                    color: "green",
+                                    dark: "",
+                                    fab: "",
+                                    "x-small": ""
+                                  }
+                                },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v(
+                                  "\n                            mdi-format-list-bulleted-square\n                        "
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onRestore } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Restore\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onDelete } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Move to archive\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-subtitle",
+            [
+              _c("v-hover", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var hover = ref.hover
+                      return [
+                        _c("v-text-field", {
+                          attrs: {
+                            elevation: hover ? 5 : 2,
+                            "append-icon": "mdi-magnify",
+                            label: "Search",
+                            "single-line": "",
+                            "hide-details": ""
+                          },
+                          model: {
+                            value: _vm.search,
+                            callback: function($$v) {
+                              _vm.search = $$v
+                            },
+                            expression: "search"
+                          }
+                        })
+                      ]
+                    }
+                  }
+                ])
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c("v-data-table", {
+                staticClass: "elevation-0",
+                attrs: {
+                  headers: _vm.headers,
+                  items: _vm.items,
+                  loading: _vm.loading,
+                  options: _vm.options,
+                  "server-items-length": _vm.totalItems,
+                  "footer-props": {
+                    itemsPerPageOptions: [10, 20, 50, 100],
+                    showFirstLastPage: true,
+                    firstIcon: "mdi-page-first",
+                    lastIcon: "mdi-page-last",
+                    prevIcon: "mdi-chevron-left",
+                    nextIcon: "mdi-chevron-right"
+                  },
+                  "show-expand": "",
+                  "single-expand": "",
+                  "show-select": "",
+                  "item-key": "id"
+                },
+                on: {
+                  "update:options": function($event) {
+                    _vm.options = $event
+                  }
+                },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "expanded-item",
+                      fn: function(ref) {
+                        var headers = ref.headers
+                        var item = ref.item
+                        return [
+                          _c(
+                            "td",
+                            { attrs: { colspan: headers.length } },
+                            [
+                              _c("v-container", [
+                                _c("table", [
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Gender")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.gender))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Birthdate")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.birthdate))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Email Address")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.email))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Telephone #")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(item.telephone_number))
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Address")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.address))])
+                                  ])
+                                ])
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "item.revolving_fund",
+                      fn: function(ref) {
+                        var item = ref.item
+                        return [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(item.remaining_fund + " / " + item.fund) +
+                              "\n                "
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "item.actions",
+                      fn: function(ref) {
+                        var item = ref.item
+                        return [
+                          _c(
+                            "v-icon",
+                            {
+                              staticClass: "mr-2",
+                              attrs: { small: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.$router.push({
+                                    name: "admin.employees.show",
+                                    params: { id: item.id }
+                                  })
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        mdi-eye\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-icon",
+                            {
+                              staticClass: "mr-2",
+                              attrs: { small: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.$router.push({
+                                    name: "admin.employees.edit",
+                                    params: { id: item.id }
+                                  })
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        mdi-pencil\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
+                  ],
+                  null,
+                  true
+                ),
+                model: {
+                  value: _vm.selected,
+                  callback: function($$v) {
+                    _vm.selected = $$v
+                  },
+                  expression: "selected"
                 }
-            }
-
-            // loop through each after symbol
-            for (i = symbols.after.length - 1; i >= 0; i--) {
-                symbol = symbols.after[i];
-
-                switch (symbol) {
-                    case '$':
-                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
-                        break;
-                    case ' ':
-                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
-                        break;
-                }
-            }
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
 
 
-            return output;
-        }
-    });
-})();
+
+/***/ }),
+
+/***/ "./resources/js/components/selector/dropdown/Departments.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/selector/dropdown/Departments.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Departments_vue_vue_type_template_id_4c25deb8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Departments.vue?vue&type=template&id=4c25deb8& */ "./resources/js/components/selector/dropdown/Departments.vue?vue&type=template&id=4c25deb8&");
+/* harmony import */ var _Departments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Departments.vue?vue&type=script&lang=js& */ "./resources/js/components/selector/dropdown/Departments.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
-(function() {
-        numeral.register('format', 'exponential', {
-        regexps: {
-            format: /(e\+|e-)/,
-            unformat: /(e\+|e-)/
-        },
-        format: function(value, format, roundingFunction) {
-            var output,
-                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
-                parts = exponential.split('e');
-
-            format = format.replace(/e[\+|\-]{1}0/, '');
-
-            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
-
-            return output + 'e' + parts[1];
-        },
-        unformat: function(string) {
-            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
-                value = Number(parts[0]),
-                power = Number(parts[1]);
-
-            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
-
-            function cback(accum, curr, currI, O) {
-                var corrFactor = numeral._.correctionFactor(accum, curr),
-                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
-                return num;
-            }
-
-            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
-        }
-    });
-})();
 
 
-(function() {
-        numeral.register('format', 'ordinal', {
-        regexps: {
-            format: /(o)/
-        },
-        format: function(value, format, roundingFunction) {
-            var locale = numeral.locales[numeral.options.currentLocale],
-                output,
-                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
 
-            // check for space before
-            format = format.replace(/\s?o/, '');
+/* normalize component */
 
-            ordinal += locale.ordinal(value);
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Departments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Departments_vue_vue_type_template_id_4c25deb8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Departments_vue_vue_type_template_id_4c25deb8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
 
-            output = numeral._.numberToFormat(value, format, roundingFunction);
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/selector/dropdown/Departments.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
-            return output + ordinal;
-        }
-    });
-})();
+/***/ }),
 
+/***/ "./resources/js/components/selector/dropdown/Departments.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/selector/dropdown/Departments.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-(function() {
-        numeral.register('format', 'percentage', {
-        regexps: {
-            format: /(%)/,
-            unformat: /(%)/
-        },
-        format: function(value, format, roundingFunction) {
-            var space = numeral._.includes(format, ' %') ? ' ' : '',
-                output;
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Departments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Departments.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Departments.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Departments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
-            if (numeral.options.scalePercentBy100) {
-                value = value * 100;
-            }
+/***/ }),
 
-            // check for space before %
-            format = format.replace(/\s?\%/, '');
+/***/ "./resources/js/components/selector/dropdown/Departments.vue?vue&type=template&id=4c25deb8&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/selector/dropdown/Departments.vue?vue&type=template&id=4c25deb8& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-            output = numeral._.numberToFormat(value, format, roundingFunction);
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Departments_vue_vue_type_template_id_4c25deb8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Departments.vue?vue&type=template&id=4c25deb8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Departments.vue?vue&type=template&id=4c25deb8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Departments_vue_vue_type_template_id_4c25deb8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-            if (numeral._.includes(output, ')')) {
-                output = output.split('');
-
-                output.splice(-1, 0, space + '%');
-
-                output = output.join('');
-            } else {
-                output = output + space + '%';
-            }
-
-            return output;
-        },
-        unformat: function(string) {
-            var number = numeral._.stringToNumber(string);
-            if (numeral.options.scalePercentBy100) {
-                return number * 0.01;
-            }
-            return number;
-        }
-    });
-})();
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Departments_vue_vue_type_template_id_4c25deb8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-(function() {
-        numeral.register('format', 'time', {
-        regexps: {
-            format: /(:)/,
-            unformat: /(:)/
-        },
-        format: function(value, format, roundingFunction) {
-            var hours = Math.floor(value / 60 / 60),
-                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
-                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
 
-            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
-        },
-        unformat: function(string) {
-            var timeArray = string.split(':'),
-                seconds = 0;
+/***/ }),
 
-            // turn hours and minutes into seconds and add them all up
-            if (timeArray.length === 3) {
-                // hours
-                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
-                // minutes
-                seconds = seconds + (Number(timeArray[1]) * 60);
-                // seconds
-                seconds = seconds + Number(timeArray[2]);
-            } else if (timeArray.length === 2) {
-                // minutes
-                seconds = seconds + (Number(timeArray[0]) * 60);
-                // seconds
-                seconds = seconds + Number(timeArray[1]);
-            }
-            return Number(seconds);
-        }
-    });
-})();
+/***/ "./resources/js/components/selector/dropdown/Jobs.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/selector/dropdown/Jobs.vue ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-return numeral;
-}));
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Jobs_vue_vue_type_template_id_2561af8f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Jobs.vue?vue&type=template&id=2561af8f& */ "./resources/js/components/selector/dropdown/Jobs.vue?vue&type=template&id=2561af8f&");
+/* harmony import */ var _Jobs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Jobs.vue?vue&type=script&lang=js& */ "./resources/js/components/selector/dropdown/Jobs.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Jobs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Jobs_vue_vue_type_template_id_2561af8f___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Jobs_vue_vue_type_template_id_2561af8f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/selector/dropdown/Jobs.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/selector/dropdown/Jobs.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/selector/dropdown/Jobs.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Jobs.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Jobs.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/selector/dropdown/Jobs.vue?vue&type=template&id=2561af8f&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/selector/dropdown/Jobs.vue?vue&type=template&id=2561af8f& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_template_id_2561af8f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Jobs.vue?vue&type=template&id=2561af8f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/Jobs.vue?vue&type=template&id=2561af8f&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_template_id_2561af8f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_template_id_2561af8f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/employees/Index.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Index.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=79d46df1& */ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/modules/admin/employees/Index.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=79d46df1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
 
 
 /***/ })

@@ -398,18 +398,20 @@ export default {
                 .then(response => {
                     _this.expenses_by_category = response.data;
 
+                    let labels = response.data.map(item => item.text);
+
+                    let data = response.data.map(item => item.value);
+
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
+                    );
+
                     let sum = response.data.reduce(function(a, b) {
                         return a + b.value;
                     }, 0);
 
                     let percentages = response.data.map(
                         item => (item.value / sum) * 100
-                    );
-
-                    let labels = response.data.map(item => item.text);
-                    let data = response.data.map(item => item.value);
-                    let backgroundColors = _this.getBackgroundColors(
-                        data.length
                     );
 
                     this.updatePieChartValues(
@@ -438,22 +440,22 @@ export default {
                     }
                 })
                 .then(response => {
-                    let sum = response.data.reduce(function(a, b) {
-                        return a + b.value;
-                    }, 0);
-
                     _this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
 
                     let data = response.data.map(item => item.value);
 
-                    let percentages = response.data.map(
-                        item => (item.value / sum) * 100
-                    );
-
                     let backgroundColors = _this.getBackgroundColors(
                         data.length
+                    );
+
+                    let sum = response.data.reduce(function(a, b) {
+                        return a + b.value;
+                    }, 0);
+
+                    let percentages = response.data.map(
+                        item => (item.value / sum) * 100
                     );
 
                     this.updatePieChartValues(
@@ -485,6 +487,14 @@ export default {
                 .then(response => {
                     _this.expenses_by_category = response.data;
 
+                    let labels = response.data.map(item => item.text);
+
+                    let data = response.data.map(item => item.value);
+
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
+                    );
+
                     let sum = response.data.reduce(function(a, b) {
                         return a + b.value;
                     }, 0);
@@ -493,13 +503,11 @@ export default {
                         item => (item.value / sum) * 100
                     );
 
-                    let labels = response.data.map(item => item.text);
-                    let data = response.data.map(item => item.value);
-                    let backgroundColors = _this.getBackgroundColors(
-                        data.length
+                    this.updatePieChartValues(
+                        labels,
+                        percentages,
+                        backgroundColors
                     );
-
-                    this.updatePieChartValues(labels, percentages, backgroundColors);
 
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
