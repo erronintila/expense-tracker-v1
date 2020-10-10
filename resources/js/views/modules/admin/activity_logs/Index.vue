@@ -78,11 +78,6 @@
                                     </template>
                                 </template>
                             </v-select>
-                            <!-- <v-select
-                                v-model="status"
-                                :items="statuses"
-                                label="Status"
-                            ></v-select> -->
                         </v-list-item>
                     </v-list>
                 </v-card>
@@ -126,16 +121,8 @@
                 </v-list>
             </v-menu>
         </v-card-title>
-        <v-card-subtitle>
-            <!-- <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field> -->
-            <br>
-        </v-card-subtitle>
+
+        <br />
 
         <v-card-text>
             <v-data-table
@@ -160,7 +147,11 @@
                 }"
             >
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="$router.push(item.properties.link)">
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="$router.push(item.properties.link)"
+                    >
                         mdi-open-in-new
                     </v-icon>
                 </template>
@@ -168,10 +159,15 @@
                     <td :colspan="headers.length">
                         <v-container>
                             <table>
-                                <tr v-for="item in item.properties.attributes" :key="item.length">
-                                    <td><strong>{{item.text}}</strong></td>
-                                    <td> : </td>
-                                    <td>{{item.value}}</td>
+                                <tr
+                                    v-for="item in item.properties.attributes"
+                                    :key="item.length"
+                                >
+                                    <td>
+                                        <strong>{{ item.text }}</strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>{{ item.value }}</td>
                                 </tr>
                             </table>
                         </v-container>
@@ -191,16 +187,18 @@ export default {
             headers: [
                 { text: "User", value: "user.name", sortable: false },
                 { text: "Description", value: "description", sortable: false },
-                { text: "Details", value: "properties.details", sortable: false },
+                {
+                    text: "Details",
+                    value: "properties.details",
+                    sortable: false
+                },
                 { text: "Created", value: "created_at" },
                 { text: "Actions", value: "actions", sortable: false },
-                { text: "", value: "data-table-expand" },
+                { text: "", value: "data-table-expand" }
             ],
             items: [],
             user: { id: 0, username: "", name: "All Users", email: "" },
             users: [],
-            status: "Active",
-            statuses: ["Active", "Archived"],
             selected: [],
             search: "",
             totalItems: 0,
@@ -275,6 +273,8 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.loadUsers();
+
+            this.selected = [];
         },
         onDeleteAll() {
             let _this = this;
@@ -302,6 +302,8 @@ export default {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
+
+                            _this.selected = [];
                         })
                         .catch(function(error) {
                             console.log(error);
@@ -346,6 +348,8 @@ export default {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
+
+                            _this.selected = [];
                         })
                         .catch(function(error) {
                             console.log(error);

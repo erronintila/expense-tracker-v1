@@ -196,10 +196,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -235,8 +231,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         email: ""
       },
       users: [],
-      status: "Active",
-      statuses: ["Active", "Archived"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -309,6 +303,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.loadUsers();
+      this.selected = [];
     },
     onDeleteAll: function onDeleteAll() {
       var _this = this;
@@ -329,6 +324,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             });
+
+            _this.selected = [];
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -365,6 +362,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             });
+
+            _this.selected = [];
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -678,7 +677,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("v-card-subtitle", [_c("br")]),
+      _c("br"),
       _vm._v(" "),
       _c(
         "v-card-text",
@@ -757,7 +756,7 @@ var render = function() {
                                     _c("strong", [_vm._v(_vm._s(item.text))])
                                   ]),
                                   _vm._v(" "),
-                                  _c("td", [_vm._v(" : ")]),
+                                  _c("td", [_vm._v(":")]),
                                   _vm._v(" "),
                                   _c("td", [_vm._v(_vm._s(item.value))])
                                 ])

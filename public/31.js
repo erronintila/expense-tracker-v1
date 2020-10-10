@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   methods: {
-    loadItem: function loadItem() {
+    getData: function getData() {
       var _this = this;
 
       axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
@@ -42,7 +42,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     // axios.defaults.headers.common["Authorization"] =
     //     "Bearer " + localStorage.getItem("access_token");
-    this.loadItem();
+    this.getData();
   },
   mounted: function mounted() {}
 });

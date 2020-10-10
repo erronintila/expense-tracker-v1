@@ -18,7 +18,7 @@ export default {
         return {};
     },
     methods: {
-        loadItem() {
+        getData() {
             let _this = this;
 
             axios
@@ -36,7 +36,7 @@ export default {
         // axios.defaults.headers.common["Authorization"] =
         //     "Bearer " + localStorage.getItem("access_token");
 
-        this.loadItem();
+        this.getData();
     },
     mounted() {}
 };
