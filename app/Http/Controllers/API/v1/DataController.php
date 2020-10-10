@@ -241,7 +241,12 @@ class DataController extends Controller
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
-            $expense_reports = $expense_reports->whereBetween("created_at", [$request->start_date, $request->end_date]);
+            
+            $start_date = Carbon::parse($request->start_date)->startOfDay();
+
+            $end_date = Carbon::parse($request->end_date)->endOfDay();
+
+            $expense_reports = $expense_reports->whereBetween("created_at", [$start_date, $end_date]);
         }
 
         if (request()->has("status")) {
