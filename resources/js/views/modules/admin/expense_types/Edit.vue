@@ -16,8 +16,8 @@
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-text-field
-                                v-model="name"
-                                :rules="rules.name"
+                                v-model="form.name"
+                                :rules="[...validation.required, ...validation.minLength(100)]"
                                 :counter="100"
                                 :error-messages="errors.name"
                                 @input="
@@ -51,14 +51,8 @@ export default {
     data() {
         return {
             valid: false,
-            name: "",
-            rules: {
-                name: [
-                    v => !!v || "Name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
-                ]
+            form: {
+                name: "",
             },
             errors: {
                 name: []
@@ -66,17 +60,13 @@ export default {
         };
     },
     methods: {
-        // onRefresh() {
-        //     Object.assign(this.$data, this.$options.data.apply(this));
-        // },
         getData() {
             let _this = this;
 
             axios
                 .get("/api/expense_types/" + _this.$route.params.id)
                 .then(response => {
-                    // console.log(response);
-                    _this.name = response.data.data.name;
+                    _this.form.name = response.data.data.name;
                 })
                 .catch(error => {
                     console.log(error);
@@ -91,11 +81,9 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .put("/api/expense_types/" + _this.$route.params.id, {
-                        name: _this.name
+                        name: _this.form.name
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
                         _this.$dialog.message.success(
                             "Expense type updated successfully.",
                             {
@@ -120,9 +108,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
     }
 };

@@ -61,13 +61,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       valid: false,
-      name: "",
-      rules: {
-        name: [function (v) {
-          return !!v || "Name is required";
-        }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
-        }]
+      form: {
+        name: ""
       },
       errors: {
         name: []
@@ -75,15 +70,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // onRefresh() {
-    //     Object.assign(this.$data, this.$options.data.apply(this));
-    // },
     getData: function getData() {
       var _this = this;
 
       axios.get("/api/expense_types/" + _this.$route.params.id).then(function (response) {
-        // console.log(response);
-        _this.name = response.data.data.name;
+        _this.form.name = response.data.data.name;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -96,9 +87,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         axios.put("/api/expense_types/" + _this.$route.params.id, {
-          name: _this.name
+          name: _this.form.name
         }).then(function (response) {
-          // _this.onRefresh();
           _this.$dialog.message.success("Expense type updated successfully.", {
             position: "top-right",
             timeout: 2000
@@ -117,8 +107,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.getData();
   }
 });
@@ -200,7 +188,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.name,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(100)
+                              ),
                               counter: 100,
                               "error-messages": _vm.errors.name,
                               label: "Name *",
@@ -212,11 +202,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.name,
+                              value: _vm.form.name,
                               callback: function($$v) {
-                                _vm.name = $$v
+                                _vm.$set(_vm.form, "name", $$v)
                               },
-                              expression: "name"
+                              expression: "form.name"
                             }
                           })
                         ],

@@ -15,9 +15,9 @@
                 <v-row>
                     <v-col cols="12" md="12">
                         <v-text-field
-                            v-model="name"
+                            v-model="form.name"
                             :counter="100"
-                            :rules="rules.name"
+                            :rules="[...validation.required, ...validation.minLength(100)]"
                             :error-messages="errors.name[0]"
                             @input="errors.name = []"
                             label="Name *"
@@ -45,14 +45,8 @@ export default {
     data() {
         return {
             valid: false,
-            name: "",
-            rules: {
-                name: [
-                    v => !!v || "The name field is required.",
-                    v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
-                ]
+            form: {
+                name: "",
             },
             errors: {
                 name: []
@@ -66,7 +60,7 @@ export default {
             axios
                 .get("/api/departments/" + _this.$route.params.id)
                 .then(response => {
-                    _this.name = response.data.data.name;
+                    _this.form.name = response.data.data.name;
                 })
                 .catch(error => {
                     console.log(error);
@@ -80,7 +74,7 @@ export default {
                 axios
                     .put(`/api/departments/${_this.$route.params.id}`, {
                         action: "update",
-                        name: _this.name
+                        name: _this.form.name
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(
@@ -103,9 +97,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
     }
 };

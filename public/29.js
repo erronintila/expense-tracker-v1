@@ -55,13 +55,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       valid: false,
-      name: "",
-      rules: {
-        name: [function (v) {
-          return !!v || "The name field is required.";
-        }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
-        }]
+      form: {
+        name: ""
       },
       errors: {
         name: []
@@ -73,7 +68,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/departments/" + _this.$route.params.id).then(function (response) {
-        _this.name = response.data.data.name;
+        _this.form.name = response.data.data.name;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -85,7 +80,7 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.$refs.form.validate()) {
         axios.put("/api/departments/".concat(_this.$route.params.id), {
           action: "update",
-          name: _this.name
+          name: _this.form.name
         }).then(function (response) {
           _this.$dialog.message.success("Department updated successfully.", {
             position: "top-right",
@@ -104,8 +99,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.getData();
   }
 });
@@ -185,7 +178,9 @@ var render = function() {
                       _c("v-text-field", {
                         attrs: {
                           counter: 100,
-                          rules: _vm.rules.name,
+                          rules: _vm.validation.required.concat(
+                            _vm.validation.minLength(100)
+                          ),
                           "error-messages": _vm.errors.name[0],
                           label: "Name *",
                           required: ""
@@ -196,11 +191,11 @@ var render = function() {
                           }
                         },
                         model: {
-                          value: _vm.name,
+                          value: _vm.form.name,
                           callback: function($$v) {
-                            _vm.name = $$v
+                            _vm.$set(_vm.form, "name", $$v)
                           },
-                          expression: "name"
+                          expression: "form.name"
                         }
                       })
                     ],

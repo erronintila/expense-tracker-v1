@@ -16,9 +16,9 @@
                     <v-row>
                         <v-col class="d-flex" cols="12" sm="6">
                             <v-autocomplete
-                                v-model="department"
+                                v-model="form.department"
                                 :items="departments"
-                                :rules="rules.department"
+                                :rules="validation.required"
                                 :error-messages="errors.department_id"
                                 @input="errors.department_id = []"
                                 item-value="id"
@@ -29,8 +29,11 @@
 
                         <v-col cols="12" md="6">
                             <v-text-field
-                                v-model="name"
-                                :rules="rules.name"
+                                v-model="form.name"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(100)
+                                ]"
                                 :counter="100"
                                 :error-messages="errors.name"
                                 @input="errors.name = []"
@@ -60,22 +63,15 @@ export default {
     data() {
         return {
             valid: false,
-            name: "",
-            department: null,
-            departments: [],
-            rules: {
-                name: [
-                    v => !!v || "Name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
-                ],
-                department: [v => !!v || "Department is required"]
+            form: {
+                name: "",
+                department: null
             },
             errors: {
                 name: [],
                 department_id: []
-            }
+            },
+            departments: []
         };
     },
     methods: {
@@ -87,11 +83,13 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.name = data.name;
-                    _this.department = data.department.id;
+                    _this.form.name = data.name;
+
+                    _this.form.department = data.department.id;
                 })
                 .catch(error => {
                     console.log(error);
+
                     console.log(error.response);
                 });
         },
@@ -110,18 +108,12 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+
                     console.log(error.response);
                 });
         },
-        // onRefresh() {
-        //     Object.assign(this.$data, this.$options.data.apply(this));
-        //     // this.$refs.form.reset();
-        //     // this.$refs.form.resetValidation();
-        // },
         onSave() {
             let _this = this;
-
-            console.log(_this.department);
 
             _this.$refs.form.validate();
 
@@ -129,12 +121,10 @@ export default {
                 axios
                     .put("/api/jobs/" + _this.$route.params.id, {
                         action: "update",
-                        name: _this.name,
-                        department_id: _this.department
+                        name: _this.form.name,
+                        department_id: _this.form.department
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
                         _this.$dialog.message.success(
                             "Job designation updated successfully.",
                             {
@@ -147,6 +137,7 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
+
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
@@ -157,10 +148,8 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadDepartments();
+
         this.getData();
     }
 };

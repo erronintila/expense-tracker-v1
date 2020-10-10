@@ -9,7 +9,7 @@ window.Vue = require("vue");
 
 /**
  * Import Packages/Libraries
- * 
+ *
  */
 import VueRouter from "vue-router";
 import Vuex from "vuex";
@@ -24,11 +24,24 @@ import moment from "moment";
 import numeral from "numeral";
 
 /**
- * Global functions
- * 
- * 
+ * Global functions / properties / variables
+ *
+ *
  */
 Vue.mixin({
+    data() {
+        return {
+            validation: {
+                required: [v => !!v || "This field is required"],
+                minLength: value => [
+                    v =>
+                        v.length <= value ||
+                        `This field must be less than ${value} characters`
+                ],
+                email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
+            }
+        };
+    },
     methods: {
         formatNumber(value) {
             return numeral(value).format("0,0.00");
@@ -38,14 +51,14 @@ Vue.mixin({
         },
         getHumanDate(date) {
             return moment(date).fromNow();
-        },
+        }
     }
 });
 
 /**
  * Load Instances
- * 
- * 
+ *
+ *
  */
 const vuetify = new Vuetify({
     theme: {
@@ -71,8 +84,8 @@ const vuetify = new Vuetify({
 
 /**
  * Load Packages/Libraries
- * 
- * 
+ *
+ *
  */
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -89,15 +102,15 @@ Vue.use(ChartDataLabels);
 
 /**
  * Libraries configuration
- * 
- * 
+ *
+ *
  */
 window.Chart.plugins.unregister(ChartDataLabels);
 
 /**
  * Import Vue components/files
- * 
- * 
+ *
+ *
  */
 import { store } from "./store/index";
 import { router } from "./router/index";
@@ -106,7 +119,7 @@ import App from "./views/layouts/App.vue";
 /**
  * Axios configuration
  *
- * 
+ *
  */
 axios.defaults.headers.common["Authorization"] =
     "Bearer " + localStorage.getItem("access_token");

@@ -15,9 +15,9 @@
                 <v-row>
                     <v-col cols="12" md="12">
                         <v-text-field
-                            v-model="name"
+                            v-model="form.name"
                             :counter="100"
-                            :rules="rules.name"
+                            :rules="[...validation.required, ...validation.minLength(100)]"
                             :error-messages="errors.name[0]"
                             @input="errors.name = []"
                             label="Name *"
@@ -45,14 +45,8 @@ export default {
     data() {
         return {
             valid: false,
-            name: "",
-            rules: {
-                name: [
-                    v => !!v || "The name field is required.",
-                    v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
-                ]
+            form: {
+                name: "",
             },
             errors: {
                 name: []
@@ -60,22 +54,15 @@ export default {
         };
     },
     methods: {
-        // onRefresh() {
-        //     // Object.assign(this.$data, this.$options.data.apply(this));
-        //     this.$refs.form.reset();
-        //     this.$refs.form.resetValidation();
-        // },
         onSave() {
             let _this = this;
 
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/departments", {
-                        name: _this.name
+                        name: _this.form.name
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
                         _this.$dialog.message.success(
                             "Department created successfully.",
                             {
@@ -94,9 +81,5 @@ export default {
             }
         }
     },
-    created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-    }
 };
 </script>

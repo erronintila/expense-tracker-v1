@@ -55,13 +55,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       valid: false,
-      name: "",
-      rules: {
-        name: [function (v) {
-          return !!v || "The name field is required.";
-        }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
-        }]
+      form: {
+        name: ""
       },
       errors: {
         name: []
@@ -69,19 +64,13 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // onRefresh() {
-    //     // Object.assign(this.$data, this.$options.data.apply(this));
-    //     this.$refs.form.reset();
-    //     this.$refs.form.resetValidation();
-    // },
     onSave: function onSave() {
       var _this = this;
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/departments", {
-          name: _this.name
+          name: _this.form.name
         }).then(function (response) {
-          // _this.onRefresh();
           _this.$dialog.message.success("Department created successfully.", {
             position: "top-right",
             timeout: 2000
@@ -97,9 +86,6 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     }
-  },
-  created: function created() {// axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
   }
 });
 
@@ -178,7 +164,9 @@ var render = function() {
                       _c("v-text-field", {
                         attrs: {
                           counter: 100,
-                          rules: _vm.rules.name,
+                          rules: _vm.validation.required.concat(
+                            _vm.validation.minLength(100)
+                          ),
                           "error-messages": _vm.errors.name[0],
                           label: "Name *",
                           required: ""
@@ -189,11 +177,11 @@ var render = function() {
                           }
                         },
                         model: {
-                          value: _vm.name,
+                          value: _vm.form.name,
                           callback: function($$v) {
-                            _vm.name = $$v
+                            _vm.$set(_vm.form, "name", $$v)
                           },
-                          expression: "name"
+                          expression: "form.name"
                         }
                       })
                     ],

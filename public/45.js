@@ -66,27 +66,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
-      name: "",
-      department: null,
-      departments: [],
-      rules: {
-        name: [function (v) {
-          return !!v || "Name is required";
-        }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
-        }],
-        department: [function (v) {
-          return !!v || "Department is required";
-        }]
+      form: {
+        name: "",
+        department: null
       },
       errors: {
         name: [],
         department_id: []
-      }
+      },
+      departments: []
     };
   },
   methods: {
@@ -106,11 +101,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    // onRefresh() {
-    //     Object.assign(this.$data, this.$options.data.apply(this));
-    //     // this.$refs.form.reset();
-    //     // this.$refs.form.resetValidation();
-    // },
     onSave: function onSave() {
       var _this = this;
 
@@ -118,10 +108,9 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/jobs", {
-          name: _this.name,
-          department_id: _this.department
+          name: _this.form.name,
+          department_id: _this.form.department
         }).then(function (response) {
-          // _this.onRefresh();
           _this.$dialog.message.success("Job designation created successfully.", {
             position: "top-right",
             timeout: 2000
@@ -140,8 +129,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.loadDepartments();
   }
 });
@@ -227,7 +214,7 @@ var render = function() {
                           _c("v-autocomplete", {
                             attrs: {
                               items: _vm.departments,
-                              rules: _vm.rules.department,
+                              rules: _vm.validation.required,
                               "error-messages": _vm.errors.department_id,
                               "item-value": "id",
                               "item-text": "name",
@@ -239,11 +226,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.department,
+                              value: _vm.form.department,
                               callback: function($$v) {
-                                _vm.department = $$v
+                                _vm.$set(_vm.form, "department", $$v)
                               },
-                              expression: "department"
+                              expression: "form.department"
                             }
                           })
                         ],
@@ -256,7 +243,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.name,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(100)
+                              ),
                               counter: 100,
                               "error-messages": _vm.errors.name,
                               label: "Name *",
@@ -268,11 +257,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.name,
+                              value: _vm.form.name,
                               callback: function($$v) {
-                                _vm.name = $$v
+                                _vm.$set(_vm.form, "name", $$v)
                               },
-                              expression: "name"
+                              expression: "form.name"
                             }
                           })
                         ],
