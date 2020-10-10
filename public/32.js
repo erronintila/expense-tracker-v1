@@ -203,64 +203,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
-      first_name: null,
-      middle_name: "",
-      last_name: null,
-      suffix: "",
-      gender: null,
-      birthdate: null,
-      job: null,
-      jobs: [],
-      mobile_number: null,
-      telephone_number: "",
-      email: null,
-      address: null,
-      // fund: 0,
       menu: false,
-      rules: {
-        first_name: [function (v) {
-          return !!v || "First name is required";
-        }, function (v) {
-          return !!v && v.length <= 100 || "First name must be less than 100 characters";
-        }],
-        middle_name: [],
-        last_name: [function (v) {
-          return !!v || "Last name is required";
-        }, function (v) {
-          return v && v.length <= 100 || "Last name must be less than 100 characters";
-        }],
-        suffix: [// v =>
-          //     (v !== null && v.length <= 30) ||
-          //     "Suffix must be less than 30 characters"
-        ],
-        gender: [function (v) {
-          return !!v || "Gender is required";
-        }],
-        birthdate: [function (v) {
-          return !!v || "Birthdate is required";
-        }],
-        job: [function (v) {
-          return !!v || "Job designation is required";
-        }],
-        mobile_number: [],
-        telephone_number: [],
-        email: [function (v) {
-          return !!v || "E-mail is required";
-        }, function (v) {
-          return /.+@.+/.test(v) || "E-mail is not valid";
-        }],
-        address: [function (v) {
-          return !!v || "Address is required";
-        }] // fund: [v => parseFloat(v) >= 0 || "This field is required"]
-
+      jobs: [],
+      form: {
+        first_name: null,
+        middle_name: "",
+        last_name: null,
+        suffix: "",
+        gender: null,
+        birthdate: null,
+        job: null,
+        mobile_number: null,
+        telephone_number: "",
+        email: null,
+        address: null
       },
       errors: {
         first_name: [],
@@ -273,8 +233,7 @@ __webpack_require__.r(__webpack_exports__);
         mobile_number: [],
         telephone_number: [],
         email: [],
-        address: [] // fund: []
-
+        address: []
       }
     };
   },
@@ -299,20 +258,18 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/employees", {
-          first_name: _this.first_name,
-          middle_name: _this.middle_name,
-          last_name: _this.last_name,
-          suffix: _this.suffix,
-          gender: _this.gender,
-          birthdate: _this.birthdate,
-          job_id: _this.job,
-          mobile_number: _this.mobile_number,
-          telephone_number: _this.telephone_number,
-          email: _this.email,
-          address: _this.address // fund: _this.fund
-
+          first_name: _this.form.first_name,
+          middle_name: _this.form.middle_name,
+          last_name: _this.form.last_name,
+          suffix: _this.form.suffix,
+          gender: _this.form.gender,
+          birthdate: _this.form.birthdate,
+          job_id: _this.form.job,
+          mobile_number: _this.form.mobile_number,
+          telephone_number: _this.form.telephone_number,
+          email: _this.form.email,
+          address: _this.form.address
         }).then(function (response) {
-          // _this.onRefresh();
           _this.$dialog.message.success("Employee created successfully.", {
             position: "top-right",
             timeout: 2000
@@ -331,8 +288,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.loadJobs();
   }
 });
@@ -414,7 +369,7 @@ var render = function() {
                         [
                           _c("v-autocomplete", {
                             attrs: {
-                              rules: _vm.rules.job,
+                              rules: _vm.validation.required,
                               items: _vm.jobs,
                               "error-messages": _vm.errors.job_id,
                               "item-text": "name",
@@ -428,11 +383,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.job,
+                              value: _vm.form.job,
                               callback: function($$v) {
-                                _vm.job = $$v
+                                _vm.$set(_vm.form, "job", $$v)
                               },
-                              expression: "job"
+                              expression: "form.job"
                             }
                           })
                         ],
@@ -451,7 +406,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.first_name,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(100)
+                              ),
                               counter: 100,
                               "error-messages": _vm.errors.first_name,
                               label: "First Name *",
@@ -463,11 +420,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.first_name,
+                              value: _vm.form.first_name,
                               callback: function($$v) {
-                                _vm.first_name = $$v
+                                _vm.$set(_vm.form, "first_name", $$v)
                               },
-                              expression: "first_name"
+                              expression: "form.first_name"
                             }
                           })
                         ],
@@ -480,7 +437,7 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.middle_name,
+                              rules: [],
                               counter: 100,
                               "error-messages": _vm.errors.middle_name,
                               label: "Middle Name"
@@ -491,11 +448,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.middle_name,
+                              value: _vm.form.middle_name,
                               callback: function($$v) {
-                                _vm.middle_name = $$v
+                                _vm.$set(_vm.form, "middle_name", $$v)
                               },
-                              expression: "middle_name"
+                              expression: "form.middle_name"
                             }
                           })
                         ],
@@ -508,7 +465,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.last_name,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(100)
+                              ),
                               counter: 100,
                               "error-messages": _vm.errors.last_name,
                               label: "Last Name *",
@@ -520,11 +479,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.last_name,
+                              value: _vm.form.last_name,
                               callback: function($$v) {
-                                _vm.last_name = $$v
+                                _vm.$set(_vm.form, "last_name", $$v)
                               },
-                              expression: "last_name"
+                              expression: "form.last_name"
                             }
                           })
                         ],
@@ -537,7 +496,7 @@ var render = function() {
                         [
                           _c("v-combobox", {
                             attrs: {
-                              rules: _vm.rules.suffix,
+                              rules: [],
                               counter: 30,
                               items: ["Jr", "Sr", "II", "III"],
                               "error-messages": _vm.errors.suffix,
@@ -549,11 +508,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.suffix,
+                              value: _vm.form.suffix,
                               callback: function($$v) {
-                                _vm.suffix = $$v
+                                _vm.$set(_vm.form, "suffix", $$v)
                               },
-                              expression: "suffix"
+                              expression: "form.suffix"
                             }
                           })
                         ],
@@ -566,7 +525,7 @@ var render = function() {
                         [
                           _c("v-select", {
                             attrs: {
-                              rules: _vm.rules.gender,
+                              rules: _vm.validation.required,
                               items: ["Male", "Female"],
                               "error-messages": _vm.errors.gender,
                               label: "Gender *",
@@ -578,11 +537,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.gender,
+                              value: _vm.form.gender,
                               callback: function($$v) {
-                                _vm.gender = $$v
+                                _vm.$set(_vm.form, "gender", $$v)
                               },
-                              expression: "gender"
+                              expression: "form.gender"
                             }
                           })
                         ],
@@ -615,7 +574,7 @@ var render = function() {
                                           _vm._b(
                                             {
                                               attrs: {
-                                                rules: _vm.rules.birthdate,
+                                                rules: _vm.validation.required,
                                                 "error-messages":
                                                   _vm.errors.birthdate,
                                                 label: "Birthdate *",
@@ -627,11 +586,15 @@ var render = function() {
                                                 }
                                               },
                                               model: {
-                                                value: _vm.birthdate,
+                                                value: _vm.form.birthdate,
                                                 callback: function($$v) {
-                                                  _vm.birthdate = $$v
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "birthdate",
+                                                    $$v
+                                                  )
                                                 },
-                                                expression: "birthdate"
+                                                expression: "form.birthdate"
                                               }
                                             },
                                             "v-text-field",
@@ -662,11 +625,11 @@ var render = function() {
                                   color: "success"
                                 },
                                 model: {
-                                  value: _vm.birthdate,
+                                  value: _vm.form.birthdate,
                                   callback: function($$v) {
-                                    _vm.birthdate = $$v
+                                    _vm.$set(_vm.form, "birthdate", $$v)
                                   },
-                                  expression: "birthdate"
+                                  expression: "form.birthdate"
                                 }
                               })
                             ],
@@ -682,7 +645,7 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.mobile_number,
+                              rules: [],
                               counter: 30,
                               "error-messages": _vm.errors.mobile_number,
                               label: "Mobile Number *"
@@ -693,11 +656,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.mobile_number,
+                              value: _vm.form.mobile_number,
                               callback: function($$v) {
-                                _vm.mobile_number = $$v
+                                _vm.$set(_vm.form, "mobile_number", $$v)
                               },
-                              expression: "mobile_number"
+                              expression: "form.mobile_number"
                             }
                           })
                         ],
@@ -710,7 +673,7 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.telephone_number,
+                              rules: [],
                               counter: 30,
                               "error-messages": _vm.errors.telephone_number,
                               label: "Telephone Number",
@@ -722,11 +685,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.telephone_number,
+                              value: _vm.form.telephone_number,
                               callback: function($$v) {
-                                _vm.telephone_number = $$v
+                                _vm.$set(_vm.form, "telephone_number", $$v)
                               },
-                              expression: "telephone_number"
+                              expression: "form.telephone_number"
                             }
                           })
                         ],
@@ -739,7 +702,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.email,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.email
+                              ),
                               "error-messages": _vm.errors.email,
                               label: "Email Address *"
                             },
@@ -749,11 +714,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.email,
+                              value: _vm.form.email,
                               callback: function($$v) {
-                                _vm.email = $$v
+                                _vm.$set(_vm.form, "email", $$v)
                               },
-                              expression: "email"
+                              expression: "form.email"
                             }
                           })
                         ],
@@ -772,7 +737,7 @@ var render = function() {
                         [
                           _c("v-textarea", {
                             attrs: {
-                              rules: _vm.rules.address,
+                              rules: [],
                               "error-messages": _vm.errors.address,
                               label: "Address *",
                               rows: "1"
@@ -783,11 +748,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.address,
+                              value: _vm.form.address,
                               callback: function($$v) {
-                                _vm.address = $$v
+                                _vm.$set(_vm.form, "address", $$v)
                               },
-                              expression: "address"
+                              expression: "form.address"
                             }
                           })
                         ],

@@ -13,20 +13,6 @@
 
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <!-- <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="reference"
-                                :counter="100"
-                                :rules="rules.reference"
-                                :error-messages="errors.reference[0]"
-                                @input="errors.reference = []"
-                                label="Reference"
-                            >
-                            </v-text-field>
-                        </v-col>
-                    </v-row> -->
-
                     <v-row>
                         <v-col cols="12" md="6">
                             <v-autocomplete
@@ -94,14 +80,6 @@ export default {
             amount: 0,
             type: "Manage Revolving Fund",
             remarks: "",
-            rules: {
-                employee: [v => !!v || "This field is required."],
-                reference: [],
-                code: [],
-                description: [],
-                amount: [v => !!v || "This field is required."],
-                remarks: []
-            },
             errors: {
                 employee: [],
                 reference: [],
@@ -113,11 +91,6 @@ export default {
         };
     },
     methods: {
-        // onRefresh() {
-        //     // Object.assign(this.$data, this.$options.data.apply(this));
-        //     this.$refs.form.reset();
-        //     this.$refs.form.resetValidation();
-        // },
         loadEmployees() {
             let _this = this;
 
@@ -146,7 +119,6 @@ export default {
                         type: _this.type
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
 
                         _this.$dialog.message.success(
                             "Adjustment created successfully.",
@@ -168,9 +140,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadEmployees();
     }
 };

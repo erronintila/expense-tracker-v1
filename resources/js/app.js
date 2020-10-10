@@ -34,7 +34,7 @@ Vue.mixin({
             validation: {
                 required: [v => !!v || "This field is required"],
                 minLength: value => [
-                    v =>
+                    v => !!v &&
                         v.length <= value ||
                         `This field must be less than ${value} characters`
                 ],

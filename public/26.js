@@ -78,20 +78,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -109,18 +95,6 @@ __webpack_require__.r(__webpack_exports__);
       amount: 0,
       type: "Manage Revolving Fund",
       remarks: "",
-      rules: {
-        employee: [function (v) {
-          return !!v || "This field is required.";
-        }],
-        reference: [],
-        code: [],
-        description: [],
-        amount: [function (v) {
-          return !!v || "This field is required.";
-        }],
-        remarks: []
-      },
       errors: {
         employee: [],
         reference: [],
@@ -132,11 +106,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // onRefresh() {
-    //     // Object.assign(this.$data, this.$options.data.apply(this));
-    //     this.$refs.form.reset();
-    //     this.$refs.form.resetValidation();
-    // },
     loadEmployees: function loadEmployees() {
       var _this = this;
 
@@ -160,7 +129,6 @@ __webpack_require__.r(__webpack_exports__);
           amount: _this.amount,
           type: _this.type
         }).then(function (response) {
-          // _this.onRefresh();
           _this.$dialog.message.success("Adjustment created successfully.", {
             position: "top-right",
             timeout: 2000
@@ -178,8 +146,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.loadEmployees();
   }
 });
