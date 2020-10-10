@@ -187,9 +187,9 @@ export default {
                     });
             });
         },
-        formatNumber(data) {
-            return numeral(data).format("0,0.00");
-        }
+        // formatNumber(data) {
+        //     return numeral(data).format("0,0.00");
+        // }
     },
     computed: {
         total_amount() {

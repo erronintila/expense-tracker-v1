@@ -37,6 +37,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'user.expenses.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -58,6 +59,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'user.expenses.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -73,7 +75,8 @@
                             <v-card-subtitle>
                                 Revolving Fund <br />
                                 <small class="text--secondary">
-                                    Total No.: {{ total_count.replenishments }} Expenses
+                                    Total No.:
+                                    {{ total_count.replenishments }} Expenses
                                 </small>
                             </v-card-subtitle>
                         </v-card>
@@ -82,6 +85,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'user.expenses.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -103,6 +107,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'user.expense_reports.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -725,13 +730,13 @@ export default {
             //         console.log(error.response);
             //     });
         },
-        formatNumber(data) {
-            return numeral(data).format("0,0.00");
-        }
+        // formatNumber(data) {
+        //     return numeral(data).format("0,0.00");
+        // }
     },
     created() {
-        axios.defaults.headers.common["Authorization"] =
-            "Bearer " + localStorage.getItem("access_token");
+        // axios.defaults.headers.common["Authorization"] =
+            // "Bearer " + localStorage.getItem("access_token");
 
         this.getCurrentUser();
 

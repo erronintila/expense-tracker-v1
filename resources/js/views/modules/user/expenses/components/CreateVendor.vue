@@ -179,8 +179,8 @@ export default {
         onCreateVendor() {}
     },
     created() {
-        axios.defaults.headers.common["Authorization"] =
-            "Bearer " + localStorage.getItem("access_token");
+        // axios.defaults.headers.common["Authorization"] =
+        //     "Bearer " + localStorage.getItem("access_token");
 
         this.getCurrentUser();
         this.loadExpenseTypes();

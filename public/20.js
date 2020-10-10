@@ -263,7 +263,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    // axios.defaults.headers.common["Authorization"] =
+    //     "Bearer " + localStorage.getItem("access_token");
     this.getData();
   },
   mounted: function mounted() {}

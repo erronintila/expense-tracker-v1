@@ -499,8 +499,8 @@ export default {
         });
     },
     created() {
-        axios.defaults.headers.common["Authorization"] =
-            "Bearer " + localStorage.getItem("access_token");
+        // axios.defaults.headers.common["Authorization"] =
+        //     "Bearer " + localStorage.getItem("access_token");
 
         // this.loadDepartments();
         // this.loadJobs();

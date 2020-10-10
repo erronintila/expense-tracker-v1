@@ -469,8 +469,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this4.totalItems = data.total;
     });
   },
-  created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+  created: function created() {// axios.defaults.headers.common["Authorization"] =
+    //     "Bearer " + localStorage.getItem("access_token");
   }
 });
 

@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import moment from "moment";
+// import moment from "moment";
 
 export default {
     data() {
@@ -227,9 +227,9 @@ export default {
                     break;
             }
         },
-        formatDate(date, format) {
-            return date == null ? "" : moment(date).format(format);
-        }
+        // formatDate(date, format) {
+        //     return date == null ? "" : moment(date).format(format);
+        // }
     },
     watch: {
         params: {
@@ -257,9 +257,5 @@ export default {
             this.totalItems = data.total;
         });
     },
-    created() {
-        axios.defaults.headers.common["Authorization"] =
-            "Bearer " + localStorage.getItem("access_token");
-    }
 };
 </script>

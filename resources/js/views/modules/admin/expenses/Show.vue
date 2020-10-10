@@ -180,9 +180,9 @@ export default {
                     console.log(error.response);
                 });
         },
-        formatNumber(data) {
-            return numeral(data).format("0,0.00");
-        },
+        // formatNumber(data) {
+        //     return numeral(data).format("0,0.00");
+        // },
         isEmpty(item) {
             if (item) {
                 return parseFloat(item);
@@ -208,8 +208,8 @@ export default {
         }
     },
     created() {
-        axios.defaults.headers.common["Authorization"] =
-            "Bearer " + localStorage.getItem("access_token");
+        // axios.defaults.headers.common["Authorization"] =
+        //     "Bearer " + localStorage.getItem("access_token");
 
         this.getData();
     }

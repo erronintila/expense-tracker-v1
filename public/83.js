@@ -391,6 +391,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.selected = [];
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -481,22 +482,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             });
+
+            _this.selected = [];
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
           });
         }
       });
-    },
-    getHumanDate: function getHumanDate(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).fromNow();
-    },
-    formatDate: function formatDate(date, format) {
-      return date == null ? "" : moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
-    },
-    formatNumber: function formatNumber(data) {
-      return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
-    }
+    } // getHumanDate(date) {
+    //     return moment(date).fromNow();
+    // },
+    // formatDate(date, format) {
+    //     return date == null ? "" : moment(date).format(format);
+    // },
+    // formatNumber(data) {
+    //     return numeral(data).format("0,0.00");
+    // }
+
   },
   watch: {
     params: {
@@ -533,8 +536,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this4.totalItems = data.total;
     });
   },
-  created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+  created: function created() {// axios.defaults.headers.common["Authorization"] =
+    // "Bearer " + localStorage.getItem("access_token");
   }
 });
 

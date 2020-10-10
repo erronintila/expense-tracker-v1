@@ -31,7 +31,8 @@ __webpack_require__.r(__webpack_exports__);
     loadItem: function loadItem() {}
   },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    // axios.defaults.headers.common["Authorization"] =
+    //     "Bearer " + localStorage.getItem("access_token");
     this.loadItem();
   },
   mounted: function mounted() {}

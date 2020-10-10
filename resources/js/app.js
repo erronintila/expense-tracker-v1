@@ -8,7 +8,8 @@ require("./bootstrap");
 window.Vue = require("vue");
 
 /**
- * Import Vue packages
+ * Import Packages/Libraries
+ * 
  */
 import VueRouter from "vue-router";
 import Vuex from "vuex";
@@ -19,9 +20,32 @@ import VuetifyDialog from "vuetify-dialog";
 import colors from "vuetify/lib/util/colors";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 // import VueHtmlToPaper from "vue-html-to-paper";
+import moment from "moment";
+import numeral from "numeral";
+
+/**
+ * Global functions
+ * 
+ * 
+ */
+Vue.mixin({
+    methods: {
+        formatNumber(value) {
+            return numeral(value).format("0,0.00");
+        },
+        formatDate(date, format) {
+            return date == null ? "" : moment(date).format(format);
+        },
+        getHumanDate(date) {
+            return moment(date).fromNow();
+        },
+    }
+});
 
 /**
  * Load Instances
+ * 
+ * 
  */
 const vuetify = new Vuetify({
     theme: {
@@ -46,7 +70,9 @@ const vuetify = new Vuetify({
 // };
 
 /**
- * Load Plugins
+ * Load Packages/Libraries
+ * 
+ * 
  */
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -61,15 +87,29 @@ Vue.use(ChartDataLabels);
 // Vue.use(VueHtmlToPaper, options);
 // Vue.use(VueHtmlToPaper);
 
+/**
+ * Libraries configuration
+ * 
+ * 
+ */
 window.Chart.plugins.unregister(ChartDataLabels);
 
 /**
  * Import Vue components/files
+ * 
+ * 
  */
-
 import { store } from "./store/index";
 import { router } from "./router/index";
 import App from "./views/layouts/App.vue";
+
+/**
+ * Axios configuration
+ *
+ * 
+ */
+axios.defaults.headers.common["Authorization"] =
+    "Bearer " + localStorage.getItem("access_token");
 
 axios.interceptors.response.use(
     function(response) {
@@ -85,9 +125,6 @@ axios.interceptors.response.use(
     }
 );
 
-axios.defaults.headers.common["Authorization"] =
-    "Bearer " + localStorage.getItem("access_token");
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -101,7 +138,7 @@ axios.defaults.headers.common["Authorization"] =
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 // Vue.component('create-department', require('./views/modules/admin/departments/components/Create.vue').default);
 
-import components from "./components/index";
+// import components from "./components/index";
 // Vue.use(components);
 
 /**

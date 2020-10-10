@@ -293,7 +293,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/data/users").then(function (response) {
-        console.log(response);
         _this.users = response.data.data;
 
         _this.users.unshift({

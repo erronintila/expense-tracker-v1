@@ -257,8 +257,6 @@ export default {
             axios
                 .get("/api/data/users")
                 .then(response => {
-                    console.log(response);
-
                     _this.users = response.data.data;
 
                     _this.users.unshift({

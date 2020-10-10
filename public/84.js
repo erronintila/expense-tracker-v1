@@ -287,13 +287,13 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
-    },
-    formatDate: function formatDate(date, format) {
-      return date == null ? "" : moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
-    },
-    formatNumber: function formatNumber(data) {
-      return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
-    }
+    } // formatDate(date, format) {
+    //     return date == null ? "" : moment(date).format(format);
+    // },
+    // formatNumber(data) {
+    //     return numeral(data).format("0,0.00");
+    // }
+
   },
   watch: {
     items: function items() {
@@ -303,7 +303,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
+    // axios.defaults.headers.common["Authorization"] =
+    //     "Bearer " + localStorage.getItem("access_token");
     this.getData();
   }
 });

@@ -48,6 +48,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'admin.expenses.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -58,7 +59,8 @@
                             <v-card-subtitle>
                                 Total Expenses <br />
                                 <small class="text--secondary">
-                                    Total No.: {{ total_count.expenses }} Expenses
+                                    Total No.:
+                                    {{ total_count.expenses }} Expenses
                                 </small>
                             </v-card-subtitle>
                         </v-card>
@@ -67,6 +69,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'admin.expenses.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -77,7 +80,8 @@
                             <v-card-subtitle>
                                 Replenishments <br />
                                 <small class="text--secondary">
-                                    Total No.: {{ total_count.replenishments }} Expenses
+                                    Total No.:
+                                    {{ total_count.replenishments }} Expenses
                                 </small>
                             </v-card-subtitle>
                             <!-- <v-card-text>---</v-card-text> -->
@@ -87,6 +91,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'admin.expenses.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -97,7 +102,8 @@
                             <v-card-subtitle>
                                 Reimbursements <br />
                                 <small class="text--secondary">
-                                    Total No.: {{ total_count.reimbursements }} Expenses
+                                    Total No.:
+                                    {{ total_count.reimbursements }} Expenses
                                 </small>
                             </v-card-subtitle>
                             <!-- <v-card-text>---</v-card-text> -->
@@ -107,6 +113,7 @@
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
+                            :to="{ name: 'admin.expense_reports.index' }"
                             :elevation="hover ? 5 : 2"
                             class="mx-auto"
                             style="border-left: 2px solid #7dff81 !important"
@@ -117,7 +124,8 @@
                             <v-card-subtitle>
                                 Pending Expense Reports <br />
                                 <small class="text--secondary">
-                                    Unreported Expenses: {{ total_count.unreported }}
+                                    Unreported Expenses:
+                                    {{ total_count.unreported }}
                                 </small>
                             </v-card-subtitle>
                             <!-- <v-card-text>---</v-card-text> -->
@@ -258,8 +266,6 @@ import randomcolor from "randomcolor";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import DoughnutChart from "../../../../components/chart/DoughnutChart";
-// import PieChart from "./components/PieChart";
-// import BarChart from "./components/BarChart";
 import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
 import LineChart from "../../../../components/chart/LineChart";
 
@@ -857,7 +863,6 @@ export default {
             // this.load_total_expenses(start, end);
         },
         onTimeUnitChange() {
-            // console.log([this.date_range[0], this.date_range[1], this.groupBy]);
             this.load_expenses_summary(
                 this.date_range[0],
                 this.date_range[1],
@@ -914,13 +919,13 @@ export default {
                     console.log(error.response);
                 });
         },
-        formatNumber(data) {
-            return numeral(data).format("0,0.00");
-        }
+        // formatNumber(data) {
+        //     return numeral(data).format("0,0.00");
+        // }
     },
     created() {
-        axios.defaults.headers.common["Authorization"] =
-            "Bearer " + localStorage.getItem("access_token");
+        // axios.defaults.headers.common["Authorization"] =
+        //     "Bearer " + localStorage.getItem("access_token");
 
         this.loadEmployees();
 
