@@ -141,7 +141,7 @@ export default {
         return {
             loading: true,
             headers: [
-                { text: "Reference", value: "reference" },
+                // { text: "Reference", value: "reference" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount", sortable: false },
                 { text: "Type", value: "type" },

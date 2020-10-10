@@ -255,6 +255,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
  // import CreateExpense from "./components/CreateExpense";
 // import EditExpense from "./components/EditExpense";
@@ -476,6 +492,12 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    formatNumber: function formatNumber(data) {
+      return numeral(data).format("0,0.00");
+    },
+    formatDate: function formatDate(date, format) {
+      return date == null ? "" : moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
     }
   },
   watch: {
@@ -619,7 +641,9 @@ var render = function() {
                                 items: _vm.items,
                                 "items-per-page": 5,
                                 "item-key": "id",
-                                "show-select": ""
+                                "show-select": "",
+                                "show-expand": "",
+                                "single-expand": ""
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -740,6 +764,42 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
+                                                      _vm._v("Reimbursable")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      "\n                                        " +
+                                                        _vm._s(
+                                                          _vm.formatNumber(
+                                                            item.reimbursable_amount
+                                                          )
+                                                        ) +
+                                                        "\n                                    "
+                                                    )
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Code")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(_vm._s(item.code))
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
                                                       _vm._v("Description")
                                                     ])
                                                   ]),
@@ -748,11 +808,7 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(
-                                                          item.description
-                                                        ) +
-                                                        "\n                                                "
+                                                      _vm._s(item.description)
                                                     )
                                                   ])
                                                 ]),
@@ -760,7 +816,21 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Receipt")
+                                                      _vm._v("Remarks")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(_vm._s(item.remarks))
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Created")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -768,11 +838,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
+                                                      "\n                                        " +
                                                         _vm._s(
-                                                          item.receipt_number
+                                                          _vm.formatDate(
+                                                            item.created_at,
+                                                            "YYYY-MM-DD HH:mm:ss"
+                                                          )
                                                         ) +
-                                                        "\n                                                "
+                                                        "\n                                    "
                                                     )
                                                   ])
                                                 ]),
@@ -780,7 +853,7 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Vendor")
+                                                      _vm._v("Cancelled")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -788,13 +861,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
+                                                      "\n                                        " +
                                                         _vm._s(
-                                                          item.vendor == null
-                                                            ? ""
-                                                            : item.vendor.name
+                                                          _vm.formatDate(
+                                                            item.deleted_at,
+                                                            "YYYY-MM-DD HH:mm:ss"
+                                                          )
                                                         ) +
-                                                        "\n                                                "
+                                                        "\n                                    "
                                                     )
                                                   ])
                                                 ])

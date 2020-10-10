@@ -309,14 +309,13 @@ class DataController extends Controller
 
     public function employees_expenses_summary(Request $request)
     {
-        $employees = Employee::where(function ($q) use ($request) {
+        $employees = Employee::with(['expenses' => function ($q) use ($request) {
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
                 }
             }
-        })
-            ->get();
+        }])->get();
 
         $employees_expenses_summary = [];
 
@@ -340,13 +339,14 @@ class DataController extends Controller
 
     public function departments_expenses_summary(Request $request)
     {
-        $departments = Department::where(function ($q) use ($request) {
+        $departments = Department::with(['jobs.employees.expenses' => function ($q) use ($request) {
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
                 }
             }
-        })->get();
+        }])->get();
+
 
         $departments_expenses_summary = [];
 

@@ -126,6 +126,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -230,6 +246,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     formatNumber: function formatNumber(data) {
       return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
+    },
+    print: function print() {
+      this.$htmlToPaper("section-to-print");
     }
   },
   computed: {
@@ -292,7 +311,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../../node_mod
 
 
 // module
-exports.push([module.i, "\n@media print {\nbody[data-v-7070bdfc] {\r\n        overflow: auto;\r\n        height: auto;\n}\n}\n@page { size: Legal landscape;\n}\r\n", ""]);
+exports.push([module.i, "\n@media print {\nbody *[data-v-7070bdfc] {\r\n        background: white;\n}\n@page {\r\n        size: Legal landscape;\n}\n}\r\n\r\n/* table {\r\n    width: 100%;\r\n    border: 1px solid lightgrey;\r\n    border-collapse: collapse;\r\n}\r\n\r\ntable th,\r\ntable td {\r\n    border: 1px solid lightgrey;\r\n} */\r\n\r\n/* @media print {\r\n    .v-content {\r\n        padding: 0 !important;\r\n    }\r\n    body {\r\n        overflow: auto;\r\n        height: auto;\r\n    }\r\n\r\n    @page {\r\n        size: Legal landscape;\r\n    }\r\n\r\n    body * {\r\n        visibility: hidden;\r\n    }\r\n\r\n    #section-to-print,\r\n    #section-to-print * {\r\n        visibility: visible;\r\n    }\r\n\r\n    #section-to-print {\r\n        position: absolute;\r\n        left: 0;\r\n        top: 0;\r\n    } \r\n} */\r\n", ""]);
 
 // exports
 
@@ -368,139 +387,159 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      [
+  return _c(
+    "div",
+    [
+      _c("v-card", { attrs: { flat: "" } }, [
         _c(
-          "v-row",
-          [
-            _c("v-col", [
-              _c("div", { staticClass: "title green--text" }, [
-                _vm._v("Expense Summary Report")
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _vm._v(
-                  "\n                    Employee:\n                    " +
-                    _vm._s(
-                      _vm.expense_report.employee.last_name +
-                        ", " +
-                        (_vm.expense_report.employee.first_name || "") +
-                        " " +
-                        (_vm.expense_report.employee.suffix || "")
-                    ) +
-                    "\n                "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _vm._v(
-                  "\n                    Description: " +
-                    _vm._s(_vm.expense_report.description || "") +
-                    "\n                "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _vm._v("Period: " + _vm._s(_vm.min_date + " ~ " + _vm.max_date))
-              ])
-            ]),
-            _vm._v(" "),
-            _c("v-col", { staticClass: "text-right" }, [
-              _c("div", { staticClass: "title green--text" }, [
-                _vm._v(
-                  "\n                    # " +
-                    _vm._s(_vm.expense_report.code) +
-                    "\n                "
-                )
-              ])
-            ])
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "v-row",
-          { staticClass: "mt-5" },
+          "div",
+          { attrs: { id: "section-to-print" } },
           [
             _c(
-              "v-col",
+              "v-row",
+              [
+                _c("v-col", [
+                  _c("div", { staticClass: "title green--text" }, [
+                    _vm._v(
+                      "\n                        Expense Summary Report\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _vm._v(
+                      "\n                        Employee:\n                        " +
+                        _vm._s(
+                          _vm.expense_report.employee.last_name +
+                            ", " +
+                            (_vm.expense_report.employee.first_name || "") +
+                            " " +
+                            (_vm.expense_report.employee.suffix || "")
+                        ) +
+                        "\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _vm._v(
+                      "\n                        Description: " +
+                        _vm._s(_vm.expense_report.description || "") +
+                        "\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _vm._v(
+                      "Period: " + _vm._s(_vm.min_date + " ~ " + _vm.max_date)
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("v-col", { staticClass: "text-right" }, [
+                  _c("div", { staticClass: "title green--text" }, [
+                    _vm._v(
+                      "\n                        # " +
+                        _vm._s(_vm.expense_report.code) +
+                        "\n                    "
+                    )
+                  ])
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-row",
+              { staticClass: "mt-5" },
               [
                 _c(
-                  "v-data-table",
-                  {
-                    attrs: {
-                      dense: "",
-                      "hide-default-footer": true,
-                      "disable-pagination": "",
-                      headers: _vm.headers,
-                      items: _vm.items
-                    }
-                  },
+                  "v-col",
                   [
-                    _vm.items.length > 0
-                      ? _c("template", { slot: "body.append" }, [
-                          _c(
-                            "tr",
-                            { staticClass: "green--text hidden-md-and-up" },
-                            [
-                              _c("td", { staticClass: "title" }, [
-                                _vm._v(
-                                  "\n                                Total: "
-                                ),
-                                _c("strong", [_vm._v(_vm._s(0))])
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "tr",
-                            { staticClass: "green--text hidden-sm-and-down" },
-                            [
-                              _c("td", [_vm._v("Total")]),
+                    _c(
+                      "v-data-table",
+                      {
+                        attrs: {
+                          dense: "",
+                          "hide-default-footer": true,
+                          "disable-pagination": "",
+                          headers: _vm.headers,
+                          items: _vm.items
+                        }
+                      },
+                      [
+                        _vm.items.length > 0
+                          ? _c("template", { slot: "body.append" }, [
+                              _c(
+                                "tr",
+                                { staticClass: "green--text hidden-md-and-up" },
+                                [
+                                  _c("td", { staticClass: "title" }, [
+                                    _vm._v(
+                                      "\n                                    Total: "
+                                    ),
+                                    _c("strong", [_vm._v(_vm._s(0))])
+                                  ])
+                                ]
+                              ),
                               _vm._v(" "),
-                              _vm._l(_vm.column_headers, function(value, name) {
-                                return _c("td", { key: name }, [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(value) +
-                                      "\n                            "
-                                  )
-                                ])
-                              })
-                            ],
-                            2
-                          )
-                        ])
-                      : _vm._e()
+                              _c(
+                                "tr",
+                                {
+                                  staticClass: "green--text hidden-sm-and-down"
+                                },
+                                [
+                                  _c("td", [_vm._v("Total")]),
+                                  _vm._v(" "),
+                                  _vm._l(_vm.column_headers, function(
+                                    value,
+                                    name
+                                  ) {
+                                    return _c("td", { key: name }, [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(value) +
+                                          "\n                                "
+                                      )
+                                    ])
+                                  })
+                                ],
+                                2
+                              )
+                            ])
+                          : _vm._e()
+                      ],
+                      2
+                    )
                   ],
-                  2
+                  1
                 )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-row",
+              [
+                _c("v-col", [_c("div", [_vm._v("Grand Total :")])]),
+                _vm._v(" "),
+                _c("v-col", { staticClass: "text-right" }, [
+                  _c("div", { staticClass: "headline green--text" }, [
+                    _vm._v(
+                      "\n                        ₱ " +
+                        _vm._s(_vm.total_amount) +
+                        "\n                    "
+                    )
+                  ])
+                ])
               ],
               1
             )
           ],
           1
-        ),
-        _vm._v(" "),
-        _c(
-          "v-row",
-          [
-            _c("v-col", [_c("div", [_vm._v("Grand Total :")])]),
-            _vm._v(" "),
-            _c("v-col", { staticClass: "text-right" }, [
-              _c("div", { staticClass: "headline green--text" }, [
-                _vm._v("₱ " + _vm._s(_vm.total_amount))
-              ])
-            ])
-          ],
-          1
         )
-      ],
-      1
-    )
-  ])
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

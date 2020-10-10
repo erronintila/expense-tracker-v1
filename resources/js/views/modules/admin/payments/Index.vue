@@ -379,6 +379,8 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.selected = [];
         },
         onShow(item) {
             this.$router.push({
@@ -470,6 +472,8 @@ export default {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
+
+                            _this.selected = [];
                         })
                         .catch(function(error) {
                             console.log(error);

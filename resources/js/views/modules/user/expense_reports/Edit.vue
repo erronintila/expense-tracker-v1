@@ -63,6 +63,8 @@
                                 :items-per-page="5"
                                 item-key="id"
                                 show-select
+                                show-expand
+                                single-expand
                                 class="elevation-0"
                             >
                                 <template
@@ -163,41 +165,57 @@
                                     <td :colspan="headers.length">
                                         <v-container>
                                             <table>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Date</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{ item.date }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Receipt</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            item.receipt_number
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Vendor</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            item.vendor == null
-                                                                ? ""
-                                                                : item.vendor
-                                                                      .name
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                    <tr>
+                                        <td><strong>Reimbursable</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                formatNumber(
+                                                    item.reimbursable_amount
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Code</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Description</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.description }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Remarks</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.remarks }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Created</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cancelled</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                formatDate(
+                                                    item.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </table>
                                         </v-container>
                                     </td>
                                 </template>
@@ -244,6 +262,7 @@
 
 <script>
 import moment from "moment";
+import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 // import CreateExpense from "./components/CreateExpense";
 // import EditExpense from "./components/EditExpense";
@@ -527,7 +546,13 @@ export default {
                         });
                 }
             });
-        }
+        },
+        formatNumber(data) {
+            return numeral(data).format("0,0.00");
+        },
+        formatDate(date, format) {
+            return date == null ? "" : moment(date).format(format);
+        },
     },
     computed: {
         default_description() {

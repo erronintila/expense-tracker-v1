@@ -426,6 +426,8 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.loadEmployees();
+
+            this.selected = [];
         },
         onShow(item) {
             this.$router.push({
@@ -533,6 +535,8 @@ export default {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
                                 });
+
+                                _this.selected = [];
                             })
                             .catch(function(error) {
                                 console.log(error);
@@ -684,6 +688,8 @@ export default {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
                                 });
+
+                                _this.selected = [];
                             })
                             .catch(function(error) {
                                 console.log(error);

@@ -1,0 +1,9 @@
+/* @media print {
+    @page {
+        size: Legal landscape;
+    }
+} */
+
+html, body * {
+    background: white;
+}

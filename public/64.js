@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[64],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,270 +11,276 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
  // import CreateExpense from "./components/CreateExpense";
 // import EditExpense from "./components/EditExpense";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"] // CreateExpense,
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"] // CreateExpense,
     // EditExpense
 
   },
@@ -329,7 +335,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }],
         remarks: [],
         notes: [],
-        employee: [],
+        employee: [function (v) {
+          return !!v || "Employee is required";
+        }],
         expenses: []
       },
       errors: {
@@ -347,83 +355,59 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     getCurrentUser: function getCurrentUser() {
       var _this = this;
 
-      axios.get("/api/user").then(function (response) {
-        // _this.user = response.data.data;
-        var data = response.data.data;
-        var employee_id = data.employee == null ? 0 : data.employee.id;
-        _this.employee = employee_id;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/user").then(function (response) {
+          // _this.user = response.data.data;
+          var data = response.data.data;
+          var employee_id = data.employee == null ? 0 : data.employee.id;
+          _this.employee = employee_id; // console.log(response);
+
+          resolve(employee_id);
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+          reject();
+        });
       });
     },
     updateDates: function updateDates(e) {
       this.date_range = e;
-      this.loadExpenses(this.employee);
+      this.loadExpenses();
     },
-    getData: function getData() {
-      var _this = this;
-
-      axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
-        var _this$selected;
-
-        var data = response.data.data;
-        _this.code = data.code;
-        _this.description = data.description;
-        _this.remarks = data.remarks;
-        _this.notes = data.notes;
-        _this.employee = data.employee.id;
-        _this.status = data.status;
-        _this.expenses = data.expenses;
-        _this.submitted_at = data.submitted_at;
-        _this.reviewed_at = data.reviewed_at;
-        _this.approved_at = data.approved_at;
-        _this.cancelled_at = data.cancelled_at;
-        _this.created_at = data.created_at;
-        _this.updated_at = data.updated_at;
-        _this.deleted_at = data.deleted_at;
-        _this.total = data.total; // _this.date_range = [_this.from, _this.to];
-
-        (_this$selected = _this.selected).splice.apply(_this$selected, [0, 0].concat(_toConsumableArray(data.expenses)));
-
-        _this.loadExpenses(data.employee.id);
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
-    },
-    loadExpenses: function loadExpenses(emp_id) {
-      // let emp_id = emp_id == null ? this.employee : emp_id;
+    loadExpenses: function loadExpenses() {
       var start_date = this.date_range[0];
       var end_date = this.date_range[1];
 
       var _this = this;
 
-      axios.get("/api/data/expenses", {
-        params: {
-          update_report: true,
-          employee_id: emp_id,
-          start_date: start_date,
-          end_date: end_date,
-          expense_report_id: _this.$route.params.id
-        }
-      }).then(function (response) {
-        _this.items = response.data.data; // _this.total = response.data.total;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      this.getCurrentUser().then(function (item) {
+        axios.get("/api/data/expenses", {
+          params: {
+            create_report: true,
+            employee_id: item,
+            start_date: start_date,
+            end_date: end_date
+          }
+        }).then(function (response) {
+          _this.items = response.data.data;
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+        });
       });
     },
-    loadEmployees: function loadEmployees() {
-      var _this = this;
-
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
-    },
+    // loadEmployees() {
+    //     let _this = this;
+    //     axios
+    //         .get("/api/data/employees")
+    //         .then(response => {
+    //             _this.employees = response.data.data;
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //         });
+    // },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
@@ -451,7 +435,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
 
       if (_this.$refs.form.validate()) {
-        axios.put("/api/expense_reports/" + _this.$route.params.id, {
+        axios.post("/api/expense_reports", {
           code: _this.code,
           description: _this.description,
           remarks: _this.remarks,
@@ -460,7 +444,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           expenses: _this.selected
         }).then(function (response) {
           // _this.onRefresh();
-          _this.$dialog.message.success("Expense Report updated successfully.", {
+          _this.$dialog.message.success("Expense Report created successfully.", {
             position: "top-right",
             timeout: 2000
           });
@@ -506,18 +490,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               timeout: 2000
             });
 
-            _this.loadExpenses(_this.employee);
+            _this.loadExpenses();
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
           });
         }
       });
-    }
-  },
-  computed: {
-    default_description: function default_description() {
-      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
+    },
+    formatNumber: function formatNumber(data) {
+      return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
+    },
+    formatDate: function formatDate(date, format) {
+      return date == null ? "" : moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
     }
   },
   watch: {
@@ -527,20 +512,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }, 0);
     }
   },
+  computed: {
+    default_description: function default_description() {
+      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
+    }
+  },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
-    this.getCurrentUser();
-    this.loadEmployees();
-    this.getData();
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token"); // this.loadEmployees();
+
+    this.loadExpenses();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&":
-/*!*******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce& ***!
-  \*******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=template&id=70dfc3c0&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=template&id=70dfc3c0& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -581,7 +570,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit Expense Report")
+                _vm._v("New Expense Report")
               ])
             ],
             1
@@ -657,7 +646,9 @@ var render = function() {
                                 items: _vm.items,
                                 "items-per-page": 5,
                                 "item-key": "id",
-                                "show-select": ""
+                                "show-select": "",
+                                "show-expand": "",
+                                "single-expand": ""
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -704,24 +695,6 @@ var render = function() {
                                           [
                                             _vm._v(
                                               "\n                                    mdi-pencil\n                                "
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            staticClass: "mr-2",
-                                            attrs: { small: "" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.onDelete(item)
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                    mdi-delete\n                                "
                                             )
                                           ]
                                         )
@@ -796,7 +769,7 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Date")
+                                                      _vm._v("Reimbursable")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -804,9 +777,13 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(item.date) +
-                                                        "\n                                                "
+                                                      "\n                                        " +
+                                                        _vm._s(
+                                                          _vm.formatNumber(
+                                                            item.reimbursable_amount
+                                                          )
+                                                        ) +
+                                                        "\n                                    "
                                                     )
                                                   ])
                                                 ]),
@@ -814,7 +791,21 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Receipt")
+                                                      _vm._v("Code")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(_vm._s(item.code))
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Description")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -822,11 +813,7 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(
-                                                          item.receipt_number
-                                                        ) +
-                                                        "\n                                                "
+                                                      _vm._s(item.description)
                                                     )
                                                   ])
                                                 ]),
@@ -834,7 +821,21 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Vendor")
+                                                      _vm._v("Remarks")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(_vm._s(item.remarks))
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Created")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -842,13 +843,37 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
+                                                      "\n                                        " +
                                                         _vm._s(
-                                                          item.vendor == null
-                                                            ? ""
-                                                            : item.vendor.name
+                                                          _vm.formatDate(
+                                                            item.created_at,
+                                                            "YYYY-MM-DD HH:mm:ss"
+                                                          )
                                                         ) +
-                                                        "\n                                                "
+                                                        "\n                                    "
+                                                    )
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Cancelled")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      "\n                                        " +
+                                                        _vm._s(
+                                                          _vm.formatDate(
+                                                            item.deleted_at,
+                                                            "YYYY-MM-DD HH:mm:ss"
+                                                          )
+                                                        ) +
+                                                        "\n                                    "
                                                     )
                                                   ])
                                                 ])
@@ -913,12 +938,6 @@ var render = function() {
                                             _vm._v(_vm._s(_vm.total))
                                           ])
                                         ]),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td"),
                                         _vm._v(" "),
                                         _c("td")
                                       ]
@@ -1015,17 +1034,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/expense_reports/Edit.vue":
-/*!******************************************************************!*\
-  !*** ./resources/js/views/modules/user/expense_reports/Edit.vue ***!
-  \******************************************************************/
+/***/ "./resources/js/views/modules/user/expense_reports/Create.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Create.vue ***!
+  \********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=6195f4ce& */ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&");
-/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Create_vue_vue_type_template_id_70dfc3c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=70dfc3c0& */ "./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=template&id=70dfc3c0&");
+/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1035,9 +1054,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Create_vue_vue_type_template_id_70dfc3c0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Create_vue_vue_type_template_id_70dfc3c0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1047,38 +1066,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/user/expense_reports/Edit.vue"
+component.options.__file = "resources/js/views/modules/user/expense_reports/Create.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************/
+/***/ "./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&":
-/*!*************************************************************************************************!*\
-  !*** ./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce& ***!
-  \*************************************************************************************************/
+/***/ "./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=template&id=70dfc3c0&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=template&id=70dfc3c0& ***!
+  \***************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=6195f4ce& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_70dfc3c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=70dfc3c0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Create.vue?vue&type=template&id=70dfc3c0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_70dfc3c0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_70dfc3c0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

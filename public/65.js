@@ -433,6 +433,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.selected = [];
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -533,6 +534,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             });
+
+            _this.selected = [];
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -614,6 +617,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             });
+
+            _this.selected = [];
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);

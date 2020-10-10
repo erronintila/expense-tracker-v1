@@ -11,8 +11,10 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
-/* harmony import */ var _components_CreateExpense__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/CreateExpense */ "./resources/js/views/modules/admin/expense_reports/components/CreateExpense.vue");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+/* harmony import */ var _components_CreateExpense__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/CreateExpense */ "./resources/js/views/modules/admin/expense_reports/components/CreateExpense.vue");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -269,14 +271,38 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
  // import EditExpense from "./components/EditExpense";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"],
-    CreateExpense: _components_CreateExpense__WEBPACK_IMPORTED_MODULE_2__["default"] // EditExpense
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"],
+    CreateExpense: _components_CreateExpense__WEBPACK_IMPORTED_MODULE_3__["default"] // EditExpense
 
   },
   data: function data() {
@@ -500,6 +526,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           });
         }
       });
+    },
+    formatNumber: function formatNumber(data) {
+      return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
+    },
+    formatDate: function formatDate(date, format) {
+      return date == null ? "" : moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
     }
   },
   watch: {
@@ -677,7 +709,9 @@ var render = function() {
                                 items: _vm.items,
                                 "items-per-page": 5,
                                 "item-key": "id",
-                                "show-select": ""
+                                "show-select": "",
+                                "show-expand": "",
+                                "single-expand": ""
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -817,7 +851,7 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Date")
+                                                      _vm._v("Reimbursable")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -825,9 +859,13 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(item.date) +
-                                                        "\n                                                "
+                                                      "\n                                        " +
+                                                        _vm._s(
+                                                          _vm.formatNumber(
+                                                            item.reimbursable_amount
+                                                          )
+                                                        ) +
+                                                        "\n                                    "
                                                     )
                                                   ])
                                                 ]),
@@ -835,7 +873,21 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Receipt")
+                                                      _vm._v("Code")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(_vm._s(item.code))
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Description")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -843,11 +895,7 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(
-                                                          item.receipt_number
-                                                        ) +
-                                                        "\n                                                "
+                                                      _vm._s(item.description)
                                                     )
                                                   ])
                                                 ]),
@@ -855,7 +903,21 @@ var render = function() {
                                                 _c("tr", [
                                                   _c("td", [
                                                     _c("strong", [
-                                                      _vm._v("Vendor")
+                                                      _vm._v("Remarks")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(_vm._s(item.remarks))
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Created")
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
@@ -863,13 +925,37 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                                    " +
+                                                      "\n                                        " +
                                                         _vm._s(
-                                                          item.vendor == null
-                                                            ? ""
-                                                            : item.vendor.name
+                                                          _vm.formatDate(
+                                                            item.created_at,
+                                                            "YYYY-MM-DD HH:mm:ss"
+                                                          )
                                                         ) +
-                                                        "\n                                                "
+                                                        "\n                                    "
+                                                    )
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("tr", [
+                                                  _c("td", [
+                                                    _c("strong", [
+                                                      _vm._v("Cancelled")
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [_vm._v(":")]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      "\n                                        " +
+                                                        _vm._s(
+                                                          _vm.formatDate(
+                                                            item.deleted_at,
+                                                            "YYYY-MM-DD HH:mm:ss"
+                                                          )
+                                                        ) +
+                                                        "\n                                    "
                                                     )
                                                   ])
                                                 ])

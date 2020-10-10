@@ -17,7 +17,8 @@ import "vuetify/dist/vuetify.min.css";
 import VuetifyConfirm from "vuetify-confirm";
 import VuetifyDialog from "vuetify-dialog";
 import colors from "vuetify/lib/util/colors";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
+// import VueHtmlToPaper from "vue-html-to-paper";
 
 /**
  * Load Instances
@@ -32,6 +33,18 @@ const vuetify = new Vuetify({
     }
 });
 
+// const options = {
+//     name: "_blank",
+//     specs: ["fullscreen=yes", "titlebar=yes", "scrollbars=yes"],
+//     styles: [
+//         "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
+//         "https://unpkg.com/kidlat-css/css/kidlat.css",
+//         "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css",
+//         "./landscape.css",
+//         // "./assets/styles/print.css"
+//     ]
+// };
+
 /**
  * Load Plugins
  */
@@ -45,6 +58,8 @@ Vue.use(VuetifyDialog, {
     }
 });
 Vue.use(ChartDataLabels);
+// Vue.use(VueHtmlToPaper, options);
+// Vue.use(VueHtmlToPaper);
 
 window.Chart.plugins.unregister(ChartDataLabels);
 

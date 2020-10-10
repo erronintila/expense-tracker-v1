@@ -1,68 +1,84 @@
 <template>
     <div>
-        <div>
-            <v-row>
-                <v-col>
-                    <div class="title green--text">Expense Summary Report</div>
-                    <div>
-                        Employee:
-                        {{
-                            `${
-                                expense_report.employee.last_name
-                            }, ${expense_report.employee.first_name ||
-                                ""} ${expense_report.employee.suffix || ""}`
-                        }}
-                    </div>
-                    <div>
-                        Description: {{ expense_report.description || "" }}
-                    </div>
-                    <div>Period: {{ `${min_date} ~ ${max_date}` }}</div>
-                </v-col>
-                <v-col class="text-right">
-                    <div class="title green--text">
-                        # {{ expense_report.code }}
-                    </div>
-                </v-col>
-            </v-row>
+        <!-- <v-row>
+            <v-spacer></v-spacer>
+            <v-btn @click="print" class="mr-3">Print</v-btn>
+        </v-row>
 
-            <v-row class="mt-5">
-                <v-col>
-                    <v-data-table
-                        dense
-                        :hide-default-footer="true"
-                        disable-pagination
-                        :headers="headers"
-                        :items="items"
-                    >
-                        <template slot="body.append" v-if="items.length > 0">
-                            <tr class="green--text hidden-md-and-up">
-                                <td class="title">
-                                    Total: <strong>{{ 0 }}</strong>
-                                </td>
-                            </tr>
-                            <tr class="green--text hidden-sm-and-down">
-                                <td>Total</td>
-                                <td
-                                    v-for="(value, name) in column_headers"
-                                    :key="name"
-                                >
-                                    {{ value }}
-                                </td>
-                            </tr>
-                        </template>
-                    </v-data-table>
-                </v-col>
-            </v-row>
+        <br /> -->
 
-            <v-row>
-                <v-col>
-                    <div>Grand Total :</div>
-                </v-col>
-                <v-col class="text-right">
-                    <div class="headline green--text">₱ {{ total_amount }}</div>
-                </v-col>
-            </v-row>
-        </div>
+        <v-card flat>
+            <div id="section-to-print">
+                <v-row>
+                    <v-col>
+                        <div class="title green--text">
+                            Expense Summary Report
+                        </div>
+                        <div>
+                            Employee:
+                            {{
+                                `${
+                                    expense_report.employee.last_name
+                                }, ${expense_report.employee.first_name ||
+                                    ""} ${expense_report.employee.suffix || ""}`
+                            }}
+                        </div>
+                        <div>
+                            Description: {{ expense_report.description || "" }}
+                        </div>
+                        <div>Period: {{ `${min_date} ~ ${max_date}` }}</div>
+                    </v-col>
+                    <v-col class="text-right">
+                        <div class="title green--text">
+                            # {{ expense_report.code }}
+                        </div>
+                    </v-col>
+                </v-row>
+
+                <v-row class="mt-5">
+                    <v-col>
+                        <v-data-table
+                            dense
+                            :hide-default-footer="true"
+                            disable-pagination
+                            :headers="headers"
+                            :items="items"
+                        >
+                            <template
+                                slot="body.append"
+                                v-if="items.length > 0"
+                            >
+                                <tr class="green--text hidden-md-and-up">
+                                    <td class="title">
+                                        Total: <strong>{{ 0 }}</strong>
+                                    </td>
+                                </tr>
+                                <tr class="green--text hidden-sm-and-down">
+                                    <td>Total</td>
+                                    <td
+                                        v-for="(value, name) in column_headers"
+                                        :key="name"
+                                    >
+                                        {{ value }}
+                                    </td>
+                                </tr>
+                            </template>
+                        </v-data-table>
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <div>Grand Total :</div>
+                    </v-col>
+                    <v-col class="text-right">
+                        <div class="headline green--text">
+                            ₱ {{ total_amount }}
+                        </div>
+                    </v-col>
+                </v-row>
+            </div>
+        </v-card>
     </div>
 </template>
 
@@ -189,6 +205,9 @@ export default {
         },
         formatNumber(data) {
             return numeral(data).format("0,0.00");
+        },
+        print() {
+            this.$htmlToPaper("section-to-print");
         }
     },
     computed: {
@@ -216,11 +235,52 @@ export default {
 
 <style scoped>
 @media print {
+    body * {
+        background: white;
+    }
+
+    @page {
+        size: Legal landscape;
+    }
+}
+
+/* table {
+    width: 100%;
+    border: 1px solid lightgrey;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    border: 1px solid lightgrey;
+} */
+
+/* @media print {
+    .v-content {
+        padding: 0 !important;
+    }
     body {
         overflow: auto;
         height: auto;
     }
-}
 
-@page { size: Legal landscape; }
+    @page {
+        size: Legal landscape;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    #section-to-print,
+    #section-to-print * {
+        visibility: visible;
+    }
+
+    #section-to-print {
+        position: absolute;
+        left: 0;
+        top: 0;
+    } 
+} */
 </style>
