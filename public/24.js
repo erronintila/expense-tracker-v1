@@ -198,6 +198,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -644,18 +646,6 @@ var render = function() {
                 [
                   _c(
                     "v-list-item",
-                    [
-                      _c("v-list-item-title", [
-                        _vm._v(
-                          "\n                        Export to Excel\n                    "
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
                     { on: { click: _vm.onDelete } },
                     [
                       _c("v-list-item-title", [
@@ -689,27 +679,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "v-card-subtitle",
-        [
-          _c("v-text-field", {
-            attrs: {
-              "append-icon": "mdi-magnify",
-              label: "Search",
-              "single-line": "",
-              "hide-details": ""
-            },
-            model: {
-              value: _vm.search,
-              callback: function($$v) {
-                _vm.search = $$v
-              },
-              expression: "search"
-            }
-          })
-        ],
-        1
-      ),
+      _c("v-card-subtitle", [_c("br")]),
       _vm._v(" "),
       _c(
         "v-card-text",
@@ -795,7 +765,12 @@ var render = function() {
                               }),
                               0
                             )
-                          ])
+                          ]),
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(item.length) +
+                              "\n                "
+                          )
                         ],
                         1
                       )

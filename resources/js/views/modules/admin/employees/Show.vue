@@ -384,7 +384,7 @@ export default {
                 .startOf("month")
                 .format("YYYY-MM-DD");
             let end_date = moment()
-                .startOf("month")
+                .endOf("month")
                 .format("YYYY-MM-DD");
             let employee_id = this.$route.params.id;
 
@@ -393,8 +393,6 @@ export default {
                     `/api/data/expense_stats?start_date=${start_date}&end_date=${end_date}&employee_id=${employee_id}`
                 )
                 .then(response => {
-                    console.log(response);
-
                     _this.total_expenses = response.data.summary.total;
                     _this.total_replenishments =
                         response.data.summary.replenishments;

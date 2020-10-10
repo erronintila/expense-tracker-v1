@@ -106,11 +106,11 @@
                 </template>
 
                 <v-list>
-                    <v-list-item>
+                    <!-- <v-list-item>
                         <v-list-item-title>
                             Export to Excel
                         </v-list-item-title>
-                    </v-list-item>
+                    </v-list-item> -->
 
                     <v-list-item @click="onDelete">
                         <v-list-item-title>
@@ -127,13 +127,14 @@
             </v-menu>
         </v-card-title>
         <v-card-subtitle>
-            <v-text-field
+            <!-- <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
                 label="Search"
                 single-line
                 hide-details
-            ></v-text-field>
+            ></v-text-field> -->
+            <br>
         </v-card-subtitle>
 
         <v-card-text>
@@ -174,6 +175,7 @@
                                 </tr>
                             </table>
                         </v-container>
+                        {{ item.length }}
                     </td>
                 </template>
             </v-data-table>
