@@ -24,38 +24,6 @@ import moment from "moment";
 import numeral from "numeral";
 
 /**
- * Global functions / properties / variables
- *
- *
- */
-Vue.mixin({
-    data() {
-        return {
-            validation: {
-                required: [v => !!v || "This field is required"],
-                minLength: value => [
-                    v => !!v &&
-                        v.length <= value ||
-                        `This field must be less than ${value} characters`
-                ],
-                email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
-            }
-        };
-    },
-    methods: {
-        formatNumber(value) {
-            return numeral(value).format("0,0.00");
-        },
-        formatDate(date, format) {
-            return date == null ? "" : moment(date).format(format);
-        },
-        getHumanDate(date) {
-            return moment(date).fromNow();
-        }
-    }
-});
-
-/**
  * Load Instances
  *
  *
@@ -137,6 +105,55 @@ axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+/**
+ * Global functions / properties / variables
+ *
+ *
+ */
+Vue.mixin({
+    data() {
+        return {
+            validation: {
+                required: [v => !!v || "This field is required"],
+                minLength: value => [
+                    v =>
+                        (!!v && v.length <= value) ||
+                        `This field must be less than ${value} characters`
+                ],
+                email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
+            }
+        };
+    },
+    methods: {
+        formatNumber(value) {
+            return numeral(value).format("0,0.00");
+        },
+        formatDate(date, format) {
+            return date == null ? "" : moment(date).format(format);
+        },
+        getHumanDate(date) {
+            return moment(date).fromNow();
+        },
+        successDialog(title, text) {
+            this.$dialog.message.success(`${title}: ${text}`, {
+                position: "top-right"
+            });
+        },
+        errorDialog(title, text) {
+            this.$dialog.message.error(`${title}: ${text}`, {
+                position: "top-right"
+            });
+        },
+        confirmDialog(title, text, callback) {
+            this.$confirm(`${title} : ${text}`).then(res => {
+                if (res) {
+                    callback();
+                }
+            });
+        },
+    }
+});
 
 /**
  * The following block of code may be used to automatically register your

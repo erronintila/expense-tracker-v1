@@ -16,8 +16,8 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-autocomplete
-                                v-model="job"
-                                :rules="rules.job"
+                                v-model="form.job"
+                                :rules="validation.required"
                                 :items="jobs"
                                 :error-messages="errors.job_id"
                                 @input="errors.job_id = []"
@@ -33,8 +33,11 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="first_name"
-                                :rules="rules.first_name"
+                                v-model="form.first_name"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(100)
+                                ]"
                                 :counter="100"
                                 :error-messages="errors.first_name"
                                 @input="errors.first_name = []"
@@ -45,8 +48,8 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="middle_name"
-                                :rules="rules.middle_name"
+                                v-model="form.middle_name"
+                                :rules="[]"
                                 :counter="100"
                                 :error-messages="errors.middle_name"
                                 @input="errors.middle_name = []"
@@ -56,8 +59,11 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="last_name"
-                                :rules="rules.last_name"
+                                v-model="form.last_name"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(100)
+                                ]"
                                 :counter="100"
                                 :error-messages="errors.last_name"
                                 @input="errors.last_name = []"
@@ -68,8 +74,8 @@
 
                         <v-col cols="12" md="4">
                             <v-combobox
-                                v-model="suffix"
-                                :rules="rules.suffix"
+                                v-model="form.suffix"
+                                :rules="[]"
                                 :counter="30"
                                 :items="['Jr', 'Sr', 'II', 'III']"
                                 :error-messages="errors.suffix"
@@ -80,8 +86,8 @@
 
                         <v-col cols="12" md="4">
                             <v-select
-                                v-model="gender"
-                                :rules="rules.gender"
+                                v-model="form.gender"
+                                :rules="validation.required"
                                 :items="['Male', 'Female']"
                                 :error-messages="errors.gender"
                                 @input="errors.gender = []"
@@ -101,8 +107,8 @@
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
-                                        v-model="birthdate"
-                                        :rules="rules.birthdate"
+                                        v-model="form.birthdate"
+                                        :rules="validation.required"
                                         :error-messages="errors.birthdate"
                                         @input="errors.birthdate = []"
                                         label="Birthdate *"
@@ -112,7 +118,7 @@
                                     ></v-text-field>
                                 </template>
                                 <v-date-picker
-                                    v-model="birthdate"
+                                    v-model="form.birthdate"
                                     no-title
                                     scrollable
                                     color="success"
@@ -123,8 +129,8 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="mobile_number"
-                                :rules="rules.mobile_number"
+                                v-model="form.mobile_number"
+                                :rules="[]"
                                 :counter="30"
                                 :error-messages="errors.mobile_number"
                                 @input="errors.mobile_number = []"
@@ -134,8 +140,8 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="telephone_number"
-                                :rules="rules.telephone_number"
+                                v-model="form.telephone_number"
+                                :rules="[]"
                                 :counter="30"
                                 :error-messages="errors.telephone_number"
                                 @input="errors.telephone_number = []"
@@ -145,8 +151,11 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="email"
-                                :rules="rules.email"
+                                v-model="form.email"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.email
+                                ]"
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
                                 label="Email Address *"
@@ -157,8 +166,8 @@
                     <v-row>
                         <v-col cols="12">
                             <v-textarea
-                                v-model="address"
-                                :rules="rules.address"
+                                v-model="form.address"
+                                :rules="[]"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
                                 label="Address *"
@@ -166,19 +175,6 @@
                             ></v-textarea>
                         </v-col>
                     </v-row>
-
-                    <!-- <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="fund"
-                                :rules="rules.fund"
-                                :counter="30"
-                                :error-messages="errors.fund"
-                                @input="errors.fund = []"
-                                label="Revolving Fund *"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row> -->
 
                     <small class="text--secondary">
                         * indicates required field
@@ -200,47 +196,20 @@ export default {
     data() {
         return {
             valid: false,
-            first_name: "",
-            middle_name: "",
-            last_name: "",
-            suffix: "",
-            gender: "",
-            birthdate: null,
-            job: null,
-            jobs: [],
-            mobile_number: null,
-            telephone_number: "",
-            email: null,
-            address: null,
             menu: false,
-            // fund: 0,
-            // remaining_fund: 0,
-            rules: {
-                first_name: [
-                    v => !!v || "First name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "First name must be less than 100 characters"
-                ],
-                middle_name: [],
-                last_name: [
-                    v => !!v || "Last name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "Last name must be less than 100 characters"
-                ],
-                suffix: [],
-                gender: [v => !!v || "Gender is required"],
-                birthdate: [v => !!v || "Birthdate is required"],
-                job: [v => !!v || "Job designation is required"],
-                mobile_number: [],
-                telephone_number: [],
-                email: [
-                    v => !!v || "E-mail is required",
-                    v => /.+@.+/.test(v) || "E-mail is not valid"
-                ],
-                address: [v => !!v || "Address is required"],
-                // fund: [v => parseFloat(v) >= 0 || "This field is required"]
+            jobs: [],
+            form: {
+                first_name: null,
+                middle_name: "",
+                last_name: null,
+                suffix: "",
+                gender: null,
+                birthdate: null,
+                job: null,
+                mobile_number: null,
+                telephone_number: "",
+                email: null,
+                address: null
             },
             errors: {
                 first_name: [],
@@ -253,8 +222,7 @@ export default {
                 mobile_number: [],
                 telephone_number: [],
                 email: [],
-                address: [],
-                // fund: []
+                address: []
             }
         };
     },
@@ -267,19 +235,17 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.first_name = data.first_name;
-                    _this.middle_name = data.middle_name;
-                    _this.last_name = data.last_name;
-                    _this.suffix = data.suffix;
-                    _this.gender = data.gender;
-                    _this.birthdate = data.birthdate;
-                    _this.job = data.job.id;
-                    _this.mobile_number = data.mobile_number;
-                    _this.telephone_number = data.telephone_number;
-                    _this.email = data.email;
-                    _this.address = data.address;
-                    // _this.fund = data.fund;
-                    // _this.remaining_fund = data.remaining_fund;
+                    _this.form.first_name = data.first_name;
+                    _this.form.middle_name = data.middle_name;
+                    _this.form.last_name = data.last_name;
+                    _this.form.suffix = data.suffix;
+                    _this.form.gender = data.gender;
+                    _this.form.birthdate = data.birthdate;
+                    _this.form.job = data.job.id;
+                    _this.form.mobile_number = data.mobile_number;
+                    _this.form.telephone_number = data.telephone_number;
+                    _this.form.email = data.email;
+                    _this.form.address = data.address;
                 })
                 .catch(error => {
                     console.log(error);
@@ -311,22 +277,19 @@ export default {
                 axios
                     .put("/api/employees/" + _this.$route.params.id, {
                         action: "update",
-                        first_name: _this.first_name,
-                        middle_name: _this.middle_name,
-                        last_name: _this.last_name,
-                        suffix: _this.suffix,
-                        gender: _this.gender,
-                        birthdate: _this.birthdate,
-                        job_id: _this.job,
-                        mobile_number: _this.mobile_number,
-                        telephone_number: _this.telephone_number,
-                        email: _this.email,
-                        address: _this.address,
-                        // fund: _this.fund,
+                        first_name: _this.form.first_name,
+                        middle_name: _this.form.middle_name,
+                        last_name: _this.form.last_name,
+                        suffix: _this.form.suffix,
+                        gender: _this.form.gender,
+                        birthdate: _this.form.birthdate,
+                        job_id: _this.form.job,
+                        mobile_number: _this.form.mobile_number,
+                        telephone_number: _this.form.telephone_number,
+                        email: _this.form.email,
+                        address: _this.form.address
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
                         _this.$dialog.message.success(
                             "Employee updated successfully.",
                             {
@@ -349,9 +312,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadJobs();
         this.getData();
     }

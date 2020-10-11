@@ -122,6 +122,8 @@
             </v-menu>
         </v-card-title>
 
+        <v-btn @click="testClick">Click me</v-btn>
+
         <br />
 
         <v-card-text>
@@ -211,6 +213,19 @@ export default {
         };
     },
     methods: {
+        testClick() {
+            // this.successDialog("Success", "Transaction was successful");
+            // this.errorDialog("Error", "403: Forbidden");
+            // this.successToast("Success", "Transaction was successful");
+            // this.errorToast("Error", "403: Forbidden");
+            this.confirmDialog(
+                "Delete?",
+                "You can't revert this action",
+                () => {
+                    this.successToast("Success", "Transaction was successful");
+                }
+            );
+        },
         getDataFromApi() {
             let _this = this;
 
