@@ -340,7 +340,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   methods: {
     updateDates: function updateDates(e) {
       this.date_range = e;
-      this.loadExpenses(this.employee.id);
+      this.loadExpenses(this.form.employee.id);
     },
     getData: function getData() {
       var _this = this;

@@ -684,6 +684,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -875,9 +876,7 @@ __webpack_require__.r(__webpack_exports__);
             timeout: 2000
           });
 
-          _this.$router.push({
-            name: "admin.expenses.index"
-          });
+          _this.$router.go(-1);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -2185,7 +2184,9 @@ var render = function() {
                                                                       {
                                                                         attrs: {
                                                                           label:
-                                                                            "Amount"
+                                                                            "Amount",
+                                                                          type:
+                                                                            "number"
                                                                         },
                                                                         model: {
                                                                           value:

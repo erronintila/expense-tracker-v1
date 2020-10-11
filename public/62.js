@@ -242,57 +242,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
- // import CreateExpense from "./components/CreateExpense";
-// import EditExpense from "./components/EditExpense";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"] // CreateExpense,
-    // EditExpense
-
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
-      dialogCreate: false,
-      dialogEdit: false,
       valid: false,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
-      selected: [],
       headers: [{
         text: "Date",
         value: "date"
@@ -317,28 +279,16 @@ __webpack_require__.r(__webpack_exports__);
         value: "data-table-expand"
       }],
       items: [],
-      total: 0,
-      code: "",
-      description: "",
-      remarks: "",
-      notes: "",
-      employee: 0,
+      selected: [],
       employees: [],
       expenses: [],
-      rules: {
-        date_range: [],
-        code: [],
-        description: [function (v) {
-          return !!v || "Description is required";
-        }, function (v) {
-          return !!v && v.length <= 100 || "Description must be less than 100 characters";
-        }],
-        remarks: [],
-        notes: [],
-        employee: [function (v) {
-          return !!v || "Employee is required";
-        }],
-        expenses: []
+      total: 0,
+      form: {
+        code: "",
+        description: "",
+        remarks: "",
+        notes: "",
+        employee: 0
       },
       errors: {
         date_range: [],
@@ -357,11 +307,9 @@ __webpack_require__.r(__webpack_exports__);
 
       return new Promise(function (resolve, reject) {
         axios.get("/api/user").then(function (response) {
-          // _this.user = response.data.data;
           var data = response.data.data;
           var employee_id = data.employee == null ? 0 : data.employee.id;
-          _this.employee = employee_id; // console.log(response);
-
+          _this.form.employee = employee_id;
           resolve(employee_id);
         })["catch"](function (error) {
           console.log(error);
@@ -396,25 +344,10 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    // loadEmployees() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/employees")
-    //         .then(response => {
-    //             _this.employees = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //         });
-    // },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
     onSave: function onSave() {
       var _this = this;
 
-      if (_this.employee == null || _this.employee <= 0) {
+      if (_this.form.employee == null || _this.form.employee <= 0) {
         _this.$dialog.message.error("User Account Unauthorized", {
           position: "top-right",
           timeout: 2000
@@ -436,14 +369,13 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/expense_reports", {
-          code: _this.code,
-          description: _this.description,
-          remarks: _this.remarks,
-          notes: _this.notes,
-          employee_id: _this.employee,
+          code: _this.form.code,
+          description: _this.form.description,
+          remarks: _this.form.remarks,
+          notes: _this.form.notes,
+          employee_id: _this.form.employee,
           expenses: _this.selected
         }).then(function (response) {
-          // _this.onRefresh();
           _this.$dialog.message.success("Expense Report created successfully.", {
             position: "top-right",
             timeout: 2000
@@ -458,52 +390,7 @@ __webpack_require__.r(__webpack_exports__);
         });
         return;
       }
-    },
-    onCreate: function onCreate() {
-      if (this.employee == 0) {
-        this.$dialog.message.error("No Employee selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      } // this.$refs.createExpense.openDialog();
-
-    },
-    // onSaveExpense() {
-    //     console.log("Expense saved");
-    //     this.loadExpenses();
-    // },
-    onEdit: function onEdit(item) {// this.$refs.editExpense.openDialog(item);
-    },
-    onDelete: function onDelete(item) {
-      var _this = this;
-
-      this.$confirm("Move item to archive?").then(function (res) {
-        if (res) {
-          axios["delete"]("/api/expenses/".concat(item.id), {
-            params: {
-              ids: [item.id]
-            }
-          }).then(function (response) {
-            _this.$dialog.message.success("Item(s) moved to archive.", {
-              position: "top-right",
-              timeout: 2000
-            });
-
-            _this.loadExpenses();
-          })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-          });
-        }
-      });
-    } // formatNumber(data) {
-    //     return numeral(data).format("0,0.00");
-    // },
-    // formatDate(date, format) {
-    //     return date == null ? "" : moment(date).format(format);
-    // },
-
+    }
   },
   watch: {
     selected: function selected() {
@@ -518,9 +405,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
-    // this.loadEmployees();
     this.loadExpenses();
   }
 });
@@ -604,11 +488,13 @@ var render = function() {
                         [
                           _c("v-combobox", {
                             attrs: {
-                              rules: _vm.rules.description,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(100)
+                              ),
                               counter: 100,
                               items: [_vm.default_description],
                               "error-messages": _vm.errors.description,
-                              label: "Description"
+                              label: "Description *"
                             },
                             on: {
                               input: function($event) {
@@ -616,11 +502,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.description,
+                              value: _vm.form.description,
                               callback: function($$v) {
-                                _vm.description = $$v
+                                _vm.$set(_vm.form, "description", $$v)
                               },
-                              expression: "description"
+                              expression: "form.description"
                             }
                           })
                         ],
@@ -710,9 +596,8 @@ var render = function() {
                                           "v-row",
                                           [
                                             _vm._v(
-                                              "\n                                    Expenses\n                                    "
+                                              "\n                                    Expenses\n\n                                    "
                                             ),
-                                            _vm._v(" "),
                                             _c("v-spacer"),
                                             _vm._v(" "),
                                             _c(
@@ -778,13 +663,13 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.formatNumber(
                                                             item.reimbursable_amount
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -814,7 +699,11 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      _vm._s(item.description)
+                                                      "\n                                                    " +
+                                                        _vm._s(
+                                                          item.description
+                                                        ) +
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -844,14 +733,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.formatDate(
                                                             item.created_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -867,14 +756,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.formatDate(
                                                             item.deleted_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ])
@@ -964,16 +853,16 @@ var render = function() {
                         [
                           _c("v-textarea", {
                             attrs: {
-                              rows: _vm.remarks == "" ? 1 : 2,
                               label: "Remarks",
-                              rules: _vm.rules.remarks
+                              rules: [],
+                              rows: _vm.form.remarks == "" ? 1 : 2
                             },
                             model: {
-                              value: _vm.remarks,
+                              value: _vm.form.remarks,
                               callback: function($$v) {
-                                _vm.remarks = $$v
+                                _vm.$set(_vm.form, "remarks", $$v)
                               },
-                              expression: "remarks"
+                              expression: "form.remarks"
                             }
                           })
                         ],

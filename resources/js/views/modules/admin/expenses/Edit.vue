@@ -574,6 +574,7 @@
                                                                         form.particular_amount
                                                                     "
                                                                     label="Amount"
+                                                                    type="number"
                                                                 ></v-text-field>
                                                             </v-col>
                                                             <v-col cols="12">

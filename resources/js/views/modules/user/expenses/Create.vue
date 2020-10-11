@@ -19,9 +19,9 @@
                             Remaining Funds:
                             {{
                                 formatNumber(
-                                    employee == null
+                                    form.employee == null
                                         ? 0
-                                        : employee.remaining_fund || 0
+                                        : form.employee.remaining_fund || 0
                                 )
                             }}
                         </h3>
@@ -33,8 +33,8 @@
                                 v-model="vendorOptions.valid"
                             >
                                 <v-autocomplete
-                                    v-model="vendor"
-                                    :rules="rules.vendor"
+                                    v-model="form.vendor"
+                                    :rules="[]"
                                     :items="vendors"
                                     :error-messages="errors.vendor_id"
                                     @input="errors.vendor_id = []"
@@ -85,13 +85,16 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            vendorOptions.name
-                                                                        "
-                                                                        :rules="
                                                                             vendorOptions
-                                                                                .rules
+                                                                                .form
                                                                                 .name
                                                                         "
+                                                                        :rules="[
+                                                                            ...validation.required,
+                                                                            ...validation.minLength(
+                                                                                100
+                                                                            )
+                                                                        ]"
                                                                         :counter="
                                                                             150
                                                                         "
@@ -111,13 +114,11 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            vendorOptions.email
-                                                                        "
-                                                                        :rules="
                                                                             vendorOptions
-                                                                                .rules
+                                                                                .form
                                                                                 .email
                                                                         "
+                                                                        :rules="[]"
                                                                         :error-messages="
                                                                             vendorOptions
                                                                                 .errors
@@ -133,12 +134,12 @@
                                                                 >
                                                                     <v-combobox
                                                                         v-model="
-                                                                            vendorOptions.tin
+                                                                            vendorOptions
+                                                                                .form
+                                                                                .tin
                                                                         "
                                                                         :rules="
-                                                                            vendorOptions
-                                                                                .rules
-                                                                                .tin
+                                                                            validation.required
                                                                         "
                                                                         :error-messages="
                                                                             vendorOptions
@@ -162,13 +163,11 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            vendorOptions.contact_person
-                                                                        "
-                                                                        :rules="
                                                                             vendorOptions
-                                                                                .rules
+                                                                                .form
                                                                                 .contact_person
                                                                         "
+                                                                        :rules="[]"
                                                                         :error-messages="
                                                                             vendorOptions
                                                                                 .errors
@@ -187,13 +186,11 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            vendorOptions.mobile_number
-                                                                        "
-                                                                        :rules="
                                                                             vendorOptions
-                                                                                .rules
+                                                                                .form
                                                                                 .mobile_number
                                                                         "
+                                                                        :rules="[]"
                                                                         :counter="
                                                                             30
                                                                         "
@@ -215,13 +212,11 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            vendorOptions.telephone_number
-                                                                        "
-                                                                        :rules="
                                                                             vendorOptions
-                                                                                .rules
+                                                                                .form
                                                                                 .telephone_number
                                                                         "
+                                                                        :rules="[]"
                                                                         :counter="
                                                                             30
                                                                         "
@@ -244,16 +239,14 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            vendorOptions.website
+                                                                            vendorOptions
+                                                                                .form
+                                                                                .website
                                                                         "
                                                                         :counter="
                                                                             100
                                                                         "
-                                                                        :rules="
-                                                                            vendorOptions
-                                                                                .rules
-                                                                                .website
-                                                                        "
+                                                                        :rules="[]"
                                                                         :error-messages="
                                                                             vendorOptions
                                                                                 .errors
@@ -326,13 +319,11 @@
                                                                 >
                                                                     <v-textarea
                                                                         v-model="
-                                                                            vendorOptions.address
-                                                                        "
-                                                                        :rules="
                                                                             vendorOptions
-                                                                                .rules
+                                                                                .form
                                                                                 .address
                                                                         "
+                                                                        :rules="[]"
                                                                         :error-messages="
                                                                             vendorOptions
                                                                                 .errors
@@ -354,7 +345,9 @@
                                                                 >
                                                                     <v-checkbox
                                                                         v-model="
-                                                                            vendorOptions.is_vat_inclusive
+                                                                            vendorOptions
+                                                                                .form
+                                                                                .is_vat_inclusive
                                                                         "
                                                                         label="Vat Inclusive"
                                                                         :error-messages="
@@ -438,8 +431,8 @@
 
                         <v-col cols="12" md="4">
                             <v-autocomplete
-                                v-model="expense_type"
-                                :rules="rules.expense_type"
+                                v-model="form.expense_type"
+                                :rules="validation.required"
                                 :items="expense_types"
                                 :error-messages="errors.expense_type_id"
                                 @input="errors.expense_type_id = []"
@@ -461,8 +454,8 @@
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
-                                        v-model="date"
-                                        :rules="rules.date"
+                                        v-model="form.date"
+                                        :rules="validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         label="Date *"
@@ -472,7 +465,7 @@
                                     ></v-text-field>
                                 </template>
                                 <v-date-picker
-                                    v-model="date"
+                                    v-model="form.date"
                                     no-title
                                     scrollable
                                     color="success"
@@ -483,12 +476,11 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="receipt_number"
-                                :rules="rules.receipt_number"
+                                v-model="form.receipt_number"
+                                :rules="[]"
                                 :error-messages="errors.receipt_number"
                                 @input="errors.receipt_number = []"
                                 label="Receipt No. *"
-                                type="number"
                                 required
                             ></v-text-field>
                         </v-col>
@@ -512,22 +504,22 @@
                                         <td class="title">
                                             Reimbursable:
                                             <strong>{{
-                                                reimbursable_amount
+                                                form.reimbursable_amount
                                             }}</strong>
                                             <br />
                                             Total:
-                                            <strong>{{ amount }}</strong>
+                                            <strong>{{ form.amount }}</strong>
                                         </td>
                                     </tr>
                                     <tr class="green--text hidden-sm-and-down">
                                         <td class="title">Total</td>
                                         <td>
                                             <strong>{{
-                                                reimbursable_amount
+                                                form.reimbursable_amount
                                             }}</strong>
                                         </td>
                                         <td>
-                                            <strong>{{ amount }}</strong>
+                                            <strong>{{ form.amount }}</strong>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -559,7 +551,7 @@
                                                             <v-col cols="12">
                                                                 <v-text-field
                                                                     v-model="
-                                                                        particular
+                                                                        form.particular
                                                                     "
                                                                     label="Particular"
                                                                 ></v-text-field>
@@ -567,7 +559,7 @@
                                                             <v-col cols="12">
                                                                 <v-text-field
                                                                     v-model="
-                                                                        particular_amount
+                                                                        form.particular_amount
                                                                     "
                                                                     label="Amount"
                                                                     type="number"
@@ -577,13 +569,14 @@
                                                             <v-col cols="12">
                                                                 <v-checkbox
                                                                     v-model="
-                                                                        is_reimbursable
+                                                                        form.is_reimbursable
                                                                     "
                                                                     label="Reimbursable"
                                                                     @click="
-                                                                        is_reimbursable
-                                                                            ? (particular_reimbursable_amount = particular_amount)
-                                                                            : (particular_reimbursable_amount = 0)
+                                                                        form.is_reimbursable
+                                                                            ? (form.particular_reimbursable_amount =
+                                                                                  form.particular_amount)
+                                                                            : (form.particular_reimbursable_amount = 0)
                                                                     "
                                                                 ></v-checkbox>
                                                             </v-col>
@@ -591,11 +584,11 @@
                                                             <v-col cols="12">
                                                                 <v-text-field
                                                                     v-model="
-                                                                        particular_reimbursable_amount
+                                                                        form.particular_reimbursable_amount
                                                                     "
                                                                     label="Reimbursable Amount"
                                                                     v-show="
-                                                                        is_reimbursable
+                                                                        form.is_reimbursable
                                                                     "
                                                                     :rules="
                                                                         rules.particular_reimbursable_amount
@@ -647,7 +640,7 @@
                             <v-textarea
                                 rows="1"
                                 label="Remarks"
-                                v-model="remarks"
+                                v-model="form.remarks"
                                 :error-messages="errors.remarks"
                                 @input="errors.remarks = []"
                             ></v-textarea>
@@ -678,43 +671,47 @@ export default {
             dialog: false,
             valid: false,
             menu: false,
-            code: null,
-            description: null,
-            amount: 0,
-            reimbursable_amount: 0,
-            receipt_number: null,
-            date: null,
-            remarks: "",
-            is_active: true,
-            expense_type: null,
+            headers: [
+                { text: "Particulars", value: "particular", sortable: false },
+                {
+                    text: "Reimbursable Amount",
+                    value: "particular_reimbursable_amount",
+                    sortable: false
+                },
+                { text: "Amount", value: "particular_amount", sortable: false },
+                { text: "", value: "actions", sortable: false }
+            ],
+            items: [],
             expense_types: [],
-            employee: { id: null, remaining_fund: 0, fund: 0 },
-            vendor: null,
             vendors: [],
-            particular: "",
-            particular_amount: 0,
-            particular_reimbursable_amount: 0,
-            is_reimbursable: false,
+            form: {
+                code: null,
+                description: null,
+                amount: 0,
+                reimbursable_amount: 0,
+                receipt_number: null,
+                date: null,
+                remarks: "",
+                is_active: true,
+                expense_type: null,
+                employee: { id: null, remaining_fund: 0, fund: 0 },
+                vendor: null,
+                particular: "",
+                particular_amount: 0,
+                particular_reimbursable_amount: 0,
+                is_reimbursable: false
+            },
             rules: {
-                description: [],
-                amount: [v => !!v || "Amount is required"],
                 reimbursable_amount: [
                     v =>
-                        parseFloat(v) <= this.amount ||
+                        parseFloat(v) <= this.form.amount ||
                         "Reimbursable Amount should not be greater than the actual amount"
                 ],
                 particular_reimbursable_amount: [
                     v =>
-                        parseFloat(v) <= this.particular_amount ||
+                        parseFloat(v) <= this.form.particular_amount ||
                         "Reimbursable Amount should not be greater than the actual amount"
-                ],
-                receipt_number: [],
-                date: [v => !!v || "Date is required"],
-                remarks: [],
-                is_active: [],
-                expense_type: [v => !!v || "Expense Type is required"],
-                employee: [v => !!v || "Employee is required"],
-                vendor: []
+                ]
             },
             errors: {
                 description: [],
@@ -728,54 +725,25 @@ export default {
                 employee_id: [],
                 vendor_id: []
             },
-            headers: [
-                { text: "Particulars", value: "particular", sortable: false },
-                {
-                    text: "Reimbursable Amount",
-                    value: "particular_reimbursable_amount",
-                    sortable: false
-                },
-                { text: "Amount", value: "particular_amount", sortable: false },
-                { text: "", value: "actions", sortable: false }
-            ],
-            items: [],
-            //
+
             // Create Vendor
             vendorOptions: {
                 dialog: false,
                 valid: false,
-                code: "",
-                name: "",
-                email: "",
-                tin: "",
-                contact_person: "",
-                mobile_number: "",
-                telephone_number: "",
-                remarks: "",
-                website: "",
-                is_vat_inclusive: false,
-                address: "",
                 selected_expense_types: [],
                 expense_types: [],
-                rules: {
-                    code: [],
-                    name: [
-                        v => !!v || "Name is required",
-                        v =>
-                            v.length <= 150 ||
-                            "Name must be less than 100 characters"
-                    ],
-                    email: [],
-                    tin: [
-                        v => !!v || "TIN is required",
-                    ],
-                    contact_person: [],
-                    mobile_number: [],
-                    telephone_number: [],
-                    remarks: [],
-                    website: [],
-                    is_vat_inclusive: [],
-                    address: []
+                form: {
+                    code: "",
+                    name: "",
+                    email: "",
+                    tin: "",
+                    contact_person: "",
+                    mobile_number: "",
+                    telephone_number: "",
+                    remarks: "",
+                    website: "",
+                    is_vat_inclusive: false,
+                    address: ""
                 },
                 errors: {
                     code: [],
@@ -801,7 +769,7 @@ export default {
                 .then(response => {
                     let emp = response.data.data.employee;
 
-                    _this.employee = emp == null ? null : emp;
+                    _this.form.employee = emp == null ? null : emp;
                 })
                 .catch(error => {
                     console.log(error);
@@ -846,7 +814,7 @@ export default {
         onSave() {
             let _this = this;
 
-            if (_this.employee == null || _this.employee <= 0) {
+            if (_this.form.employee == null || _this.form.employee <= 0) {
                 _this.$dialog.message.error("User Account Unauthorized", {
                     position: "top-right",
                     timeout: 2000
@@ -855,8 +823,9 @@ export default {
             }
 
             if (
-                parseFloat(this.amount) - parseFloat(this.reimbursable_amount) >
-                parseFloat(this.employee.remaining_fund)
+                parseFloat(this.form.amount) -
+                    parseFloat(this.form.reimbursable_amount) >
+                parseFloat(this.form.employee.remaining_fund)
             ) {
                 _this.$dialog.message.error(
                     "Expense actual amount is greater than remaining funds",
@@ -881,17 +850,17 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/expenses", {
-                        code: _this.code,
-                        description: _this.description,
-                        amount: _this.amount,
-                        reimbursable_amount: _this.reimbursable_amount,
-                        receipt_number: _this.receipt_number,
-                        date: _this.date,
-                        remarks: _this.remarks,
-                        is_active: _this.is_active,
-                        expense_type_id: _this.expense_type,
-                        employee_id: _this.employee.id,
-                        vendor_id: _this.vendor,
+                        code: _this.form.code,
+                        description: _this.form.description,
+                        amount: _this.form.amount,
+                        reimbursable_amount: _this.form.reimbursable_amount,
+                        receipt_number: _this.form.receipt_number,
+                        date: _this.form.date,
+                        remarks: _this.form.remarks,
+                        is_active: _this.form.is_active,
+                        expense_type_id: _this.form.expense_type,
+                        employee_id: _this.form.employee.id,
+                        vendor_id: _this.form.vendor,
                         expense_details: _this.items
                     })
                     .then(function(response) {
@@ -904,8 +873,6 @@ export default {
                                 timeout: 2000
                             }
                         );
-
-                        // _this.$router.push({ name: "user.expenses.index" });
 
                         _this.$router.go(-1);
                     })
@@ -921,21 +888,21 @@ export default {
         },
         addItem() {
             if (
-                parseFloat(this.particular_amount) >=
-                parseFloat(this.particular_reimbursable_amount)
+                parseFloat(this.form.particular_amount) >=
+                parseFloat(this.form.particular_reimbursable_amount)
             ) {
                 this.items.push({
-                    particular: this.particular,
-                    particular_amount: this.particular_amount,
-                    particular_reimbursable_amount: this
+                    particular: this.form.particular,
+                    particular_amount: this.form.particular_amount,
+                    particular_reimbursable_amount: this.form
                         .particular_reimbursable_amount
                 });
             }
 
             this.dialog = false;
-            this.particular = "";
-            this.particular_amount = 0;
-            this.particular_reimbursable_amount = 0;
+            this.form.particular = "";
+            this.form.particular_amount = 0;
+            this.form.particular_reimbursable_amount = 0;
         },
         onRemove(item) {
             const index = this.items.indexOf(item);
@@ -956,26 +923,24 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/vendors", {
-                        code: _this.vendorOptions.code,
-                        name: _this.vendorOptions.name,
-                        email: _this.vendorOptions.email,
+                        code: _this.vendorOptions.form.code,
+                        name: _this.vendorOptions.form.name,
+                        email: _this.vendorOptions.form.email,
                         tin:
-                            _this.vendorOptions.tin == "N/A"
+                            _this.vendorOptions.form.tin == "N/A"
                                 ? null
-                                : _this.vendorOptions.tin,
-                        contact_person: _this.vendorOptions.contact_person,
-                        mobile_number: _this.vendorOptions.mobile_number,
-                        telephone_number: _this.vendorOptions.telephone_number,
-                        remarks: _this.vendorOptions.remarks,
-                        website: _this.vendorOptions.website,
-                        is_vat_inclusive: _this.vendorOptions.is_vat_inclusive,
-                        address: _this.vendorOptions.address,
+                                : _this.vendorOptions.form.tin,
+                        contact_person: _this.vendorOptions.form.contact_person,
+                        mobile_number: _this.vendorOptions.form.mobile_number,
+                        telephone_number: _this.vendorOptions.form.telephone_number,
+                        remarks: _this.vendorOptions.form.remarks,
+                        website: _this.vendorOptions.form.website,
+                        is_vat_inclusive: _this.vendorOptions.form.is_vat_inclusive,
+                        address: _this.vendorOptions.form.address,
                         expense_types:
                             _this.vendorOptions.selected_expense_types
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
                         _this.$dialog.message.success(
                             "Vendor created successfully.",
                             {
@@ -1000,20 +965,17 @@ export default {
 
                 return;
             }
-        },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
+        }
     },
     watch: {
         items() {
-            this.amount = this.items.reduce(
+            this.form.amount = this.items.reduce(
                 (total, item) =>
                     parseFloat(total) + parseFloat(item.particular_amount),
                 0
             );
 
-            this.reimbursable_amount = this.items.reduce(
+            this.form.reimbursable_amount = this.items.reduce(
                 (total, item) =>
                     parseFloat(total) +
                     parseFloat(item.particular_reimbursable_amount),
@@ -1022,9 +984,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getCurrentUser();
         this.loadExpenseTypes();
         this.loadVendors();

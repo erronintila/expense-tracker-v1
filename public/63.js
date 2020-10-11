@@ -230,84 +230,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
- // import CreateExpense from "./components/CreateExpense";
-// import EditExpense from "./components/EditExpense";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"] // CreateExpense,
-    // EditExpense
-
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
-      dialogCreate: false,
-      dialogEdit: false,
       valid: false,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
-      selected: [],
       headers: [{
         text: "Date",
         value: "date"
@@ -332,26 +267,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         value: "data-table-expand"
       }],
       items: [],
-      total: 0,
-      code: "",
-      description: "",
-      remarks: "",
-      notes: "",
-      employee: 0,
+      selected: [],
       employees: [],
       expenses: [],
-      rules: {
-        date_range: [],
-        code: [],
-        description: [function (v) {
-          return !!v || "Description is required";
-        }, function (v) {
-          return !!v && v.length <= 100 || "Description must be less than 100 characters";
-        }],
-        remarks: [],
-        notes: [],
-        employee: [],
-        expenses: []
+      total: 0,
+      form: {
+        code: "",
+        description: "",
+        remarks: "",
+        notes: "",
+        employee: 0
       },
       errors: {
         date_range: [],
@@ -372,7 +297,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         // _this.user = response.data.data;
         var data = response.data.data;
         var employee_id = data.employee == null ? 0 : data.employee.id;
-        _this.employee = employee_id;
+        _this.form.employee = employee_id;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -380,7 +305,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     updateDates: function updateDates(e) {
       this.date_range = e;
-      this.loadExpenses(this.employee);
+      this.loadExpenses(this.form.employee);
     },
     getData: function getData() {
       var _this = this;
@@ -389,20 +314,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         var _this$selected;
 
         var data = response.data.data;
-        _this.code = data.code;
-        _this.description = data.description;
-        _this.remarks = data.remarks;
-        _this.notes = data.notes;
-        _this.employee = data.employee.id;
-        _this.status = data.status;
-        _this.expenses = data.expenses;
-        _this.submitted_at = data.submitted_at;
-        _this.reviewed_at = data.reviewed_at;
-        _this.approved_at = data.approved_at;
-        _this.cancelled_at = data.cancelled_at;
-        _this.created_at = data.created_at;
-        _this.updated_at = data.updated_at;
-        _this.deleted_at = data.deleted_at;
+        _this.form.code = data.code;
+        _this.form.description = data.description;
+        _this.form.remarks = data.remarks;
+        _this.form.notes = data.notes;
+        _this.form.employee = data.employee.id;
+        _this.form.status = data.status;
+        _this.expenses = data.expenses; // _this.submitted_at = data.submitted_at;
+        // _this.reviewed_at = data.reviewed_at;
+        // _this.approved_at = data.approved_at;
+        // _this.cancelled_at = data.cancelled_at;
+        // _this.created_at = data.created_at;
+        // _this.updated_at = data.updated_at;
+        // _this.deleted_at = data.deleted_at;
+
         _this.total = data.total; // _this.date_range = [_this.from, _this.to];
 
         (_this$selected = _this.selected).splice.apply(_this$selected, [0, 0].concat(_toConsumableArray(data.expenses)));
@@ -445,13 +370,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         console.log(error.response);
       });
     },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
     onSave: function onSave() {
       var _this = this;
 
-      if (_this.employee == null || _this.employee <= 0) {
+      if (_this.form.employee == null || _this.form.employee <= 0) {
         _this.$dialog.message.error("User Account Unauthorized", {
           position: "top-right",
           timeout: 2000
@@ -473,14 +395,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       if (_this.$refs.form.validate()) {
         axios.put("/api/expense_reports/" + _this.$route.params.id, {
-          code: _this.code,
-          description: _this.description,
-          remarks: _this.remarks,
-          notes: _this.notes,
-          employee_id: _this.employee,
+          code: _this.form.code,
+          description: _this.form.description,
+          remarks: _this.form.remarks,
+          notes: _this.form.notes,
+          employee_id: _this.form.employee,
           expenses: _this.selected
         }).then(function (response) {
-          // _this.onRefresh();
           _this.$dialog.message.success("Expense Report updated successfully.", {
             position: "top-right",
             timeout: 2000
@@ -495,52 +416,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         });
         return;
       }
-    },
-    onCreate: function onCreate() {
-      if (this.employee == 0) {
-        this.$dialog.message.error("No Employee selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      } // this.$refs.createExpense.openDialog();
-
-    },
-    // onSaveExpense() {
-    //     console.log("Expense saved");
-    //     this.loadExpenses();
-    // },
-    onEdit: function onEdit(item) {// this.$refs.editExpense.openDialog(item);
-    },
-    onDelete: function onDelete(item) {
-      var _this = this;
-
-      this.$confirm("Move item to archive?").then(function (res) {
-        if (res) {
-          axios["delete"]("/api/expenses/".concat(item.id), {
-            params: {
-              ids: [item.id]
-            }
-          }).then(function (response) {
-            _this.$dialog.message.success("Item(s) moved to archive.", {
-              position: "top-right",
-              timeout: 2000
-            });
-
-            _this.loadExpenses(_this.employee);
-          })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-          });
-        }
-      });
-    } // formatNumber(data) {
-    //     return numeral(data).format("0,0.00");
-    // },
-    // formatDate(date, format) {
-    //     return date == null ? "" : moment(date).format(format);
-    // },
-
+    }
   },
   computed: {
     default_description: function default_description() {
@@ -555,8 +431,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.getCurrentUser();
     this.loadEmployees();
     this.getData();
@@ -642,11 +516,13 @@ var render = function() {
                         [
                           _c("v-combobox", {
                             attrs: {
-                              rules: _vm.rules.description,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(100)
+                              ),
                               counter: 100,
                               items: [_vm.default_description],
                               "error-messages": _vm.errors.description,
-                              label: "Description"
+                              label: "Description *"
                             },
                             on: {
                               input: function($event) {
@@ -654,11 +530,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.description,
+                              value: _vm.form.description,
                               callback: function($$v) {
-                                _vm.description = $$v
+                                _vm.$set(_vm.form, "description", $$v)
                               },
-                              expression: "description"
+                              expression: "form.description"
                             }
                           })
                         ],
@@ -736,24 +612,6 @@ var render = function() {
                                               "\n                                    mdi-pencil\n                                "
                                             )
                                           ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            staticClass: "mr-2",
-                                            attrs: { small: "" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.onDelete(item)
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                    mdi-delete\n                                "
-                                            )
-                                          ]
                                         )
                                       ]
                                     }
@@ -766,9 +624,8 @@ var render = function() {
                                           "v-row",
                                           [
                                             _vm._v(
-                                              "\n                                    Expenses\n                                    "
+                                              "\n                                    Expenses\n\n                                    "
                                             ),
-                                            _vm._v(" "),
                                             _c("v-spacer"),
                                             _vm._v(" "),
                                             _c(
@@ -1026,16 +883,16 @@ var render = function() {
                         [
                           _c("v-textarea", {
                             attrs: {
-                              rows: _vm.remarks == "" ? 1 : 2,
                               label: "Remarks",
-                              rules: _vm.rules.remarks
+                              rules: [],
+                              rows: _vm.form.remarks == "" ? 1 : 2
                             },
                             model: {
-                              value: _vm.remarks,
+                              value: _vm.form.remarks,
                               callback: function($$v) {
-                                _vm.remarks = $$v
+                                _vm.$set(_vm.form, "remarks", $$v)
                               },
-                              expression: "remarks"
+                              expression: "form.remarks"
                             }
                           })
                         ],

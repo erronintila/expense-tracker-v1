@@ -317,7 +317,7 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenses(this.employee.id);
+            this.loadExpenses(this.form.employee.id);
         },
         getData() {
             let _this = this;

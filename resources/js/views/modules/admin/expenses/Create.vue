@@ -574,6 +574,7 @@
                                                                         form.particular_amount
                                                                     "
                                                                     label="Amount"
+                                                                    type="number"
                                                                 ></v-text-field>
                                                             </v-col>
                                                             <v-col cols="12">
@@ -735,6 +736,7 @@ export default {
                 employee_id: [],
                 vendor_id: []
             },
+
             // Create Vendor
             vendorOptions: {
                 dialog: false,
@@ -873,7 +875,7 @@ export default {
                             }
                         );
 
-                        _this.$router.push({ name: "admin.expenses.index" });
+                        _this.$router.go(-1);
                     })
                     .catch(function(error) {
                         console.log(error);
