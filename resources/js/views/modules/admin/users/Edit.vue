@@ -16,8 +16,11 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="name"
-                                :rules="rules.name"
+                                v-model="form.name"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(150)
+                                ]"
                                 :counter="150"
                                 :error-messages="errors.name"
                                 @input="errors.name = []"
@@ -28,8 +31,11 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="username"
-                                :rules="rules.username"
+                                v-model="form.username"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(50)
+                                ]"
                                 :counter="50"
                                 :error-messages="errors.username"
                                 @input="errors.username = []"
@@ -40,8 +46,11 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="email"
-                                :rules="rules.email"
+                                v-model="form.email"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.email
+                                ]"
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
                                 label="Email Address *"
@@ -51,7 +60,7 @@
 
                         <v-col cols="12" md="4">
                             <v-select
-                                v-model="employee"
+                                v-model="form.employee"
                                 :items="employees"
                                 item-text="fullname"
                                 item-value="id"
@@ -64,7 +73,7 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-checkbox
-                                v-model="is_admin"
+                                v-model="form.is_admin"
                                 label="Is Administrator"
                                 :error-messages="errors.is_admin"
                             ></v-checkbox>
@@ -72,7 +81,7 @@
 
                         <v-col cols="12" md="4">
                             <v-checkbox
-                                v-model="can_login"
+                                v-model="form.can_login"
                                 label="Allow Login"
                                 :error-messages="errors.can_login"
                             ></v-checkbox>
@@ -101,32 +110,16 @@ export default {
             valid: false,
             showPassword: false,
             showPasswordConfirmation: false,
-            is_admin: false,
-            can_login: false,
-            name: "",
-            username: "",
-            email: "",
-            employee: 0,
             employees: [],
-            rules: {
-                is_admin: [],
-                can_login: [],
-                name: [
-                    v => !!v || "Name is required",
-                    v =>
-                        v.length <= 150 ||
-                        "Name must be less than 150 characters"
-                ],
-                username: [
-                    v => !!v || "Username is required",
-                    v =>
-                        v.length <= 50 ||
-                        "Username must be less than 50 characters"
-                ],
-                email: [
-                    v => !!v || "E-mail is required",
-                    v => /.+@.+/.test(v) || "E-mail must be valid"
-                ]
+            form: {
+                name: "",
+                username: "",
+                email: "",
+                password: "",
+                password_confirmation: "",
+                employee: 0,
+                is_admin: false,
+                can_login: false
             },
             errors: {
                 is_admin: [],
@@ -146,12 +139,12 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.name = data.name;
-                    _this.username = data.username;
-                    _this.email = data.email;
-                    _this.is_admin = data.is_admin;
-                    _this.can_login = data.can_login,
-                    _this.employee = data.employee !== null ? data.employee.id : 0;
+                    _this.form.name = data.name;
+                    _this.form.username = data.username;
+                    _this.form.email = data.email;
+                    _this.form.is_admin = data.is_admin;
+                    _this.form.can_login = data.can_login,
+                    _this.form.employee = data.employee !== null ? data.employee.id : 0;
                 })
                 .catch(error => {
                     console.log(error);
@@ -172,37 +165,26 @@ export default {
                     console.log(error.response);
                 });
         },
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-        },
         onSave() {
             let _this = this;
 
-            console.log(_this.employee);
-
-            // return;
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
                 axios
                     .put("/api/users/" + _this.$route.params.id, {
                         action: "update",
-                        name: _this.name,
-                        username: _this.username,
-                        email: _this.email,
-                        is_admin: _this.is_admin,
-                        can_login: _this.can_login,
-                        employee_id: _this.employee !== null ? _this.employee : 0
+                        name: _this.form.name,
+                        username: _this.form.username,
+                        email: _this.form.email,
+                        is_admin: _this.form.is_admin,
+                        can_login: _this.form.can_login,
+                        employee_id: _this.form.employee !== null ? _this.form.employee : 0
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
-                        _this.$dialog.message.success(
-                            "User updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.successDialog(
+                            "Success",
+                            "User created successfully"
                         );
 
                         _this.$router.push({ name: "admin.users.index" });
@@ -212,6 +194,8 @@ export default {
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
+
+                        _this.errorDialog("Error", "Please contact tech support");
                     });
 
                 return;
@@ -219,9 +203,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
         this.loadEmployees();
     }

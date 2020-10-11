@@ -135,6 +135,12 @@ Vue.mixin({
         getHumanDate(date) {
             return moment(date).fromNow();
         },
+        isEmpty(item) {
+            if (item) {
+                return parseFloat(item);
+            }
+            return 0;
+        },
         successDialog(title, text) {
             this.$dialog.message.success(`${title}: ${text}`, {
                 position: "top-right"

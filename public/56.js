@@ -105,37 +105,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
       showPassword: false,
       showPasswordConfirmation: false,
-      is_admin: false,
-      can_login: false,
-      name: "",
-      username: "",
-      email: "",
-      employee: 0,
       employees: [],
-      rules: {
-        is_admin: [],
-        can_login: [],
-        name: [function (v) {
-          return !!v || "Name is required";
-        }, function (v) {
-          return v.length <= 150 || "Name must be less than 150 characters";
-        }],
-        username: [function (v) {
-          return !!v || "Username is required";
-        }, function (v) {
-          return v.length <= 50 || "Username must be less than 50 characters";
-        }],
-        email: [function (v) {
-          return !!v || "E-mail is required";
-        }, function (v) {
-          return /.+@.+/.test(v) || "E-mail must be valid";
-        }]
+      form: {
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        employee: 0,
+        is_admin: false,
+        can_login: false
       },
       errors: {
         is_admin: [],
@@ -152,11 +146,11 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
-        _this.name = data.name;
-        _this.username = data.username;
-        _this.email = data.email;
-        _this.is_admin = data.is_admin;
-        _this.can_login = data.can_login, _this.employee = data.employee !== null ? data.employee.id : 0;
+        _this.form.name = data.name;
+        _this.form.username = data.username;
+        _this.form.email = data.email;
+        _this.form.is_admin = data.is_admin;
+        _this.form.can_login = data.can_login, _this.form.employee = data.employee !== null ? data.employee.id : 0;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -177,31 +171,22 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
     onSave: function onSave() {
       var _this = this;
-
-      console.log(_this.employee); // return;
 
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
         axios.put("/api/users/" + _this.$route.params.id, {
           action: "update",
-          name: _this.name,
-          username: _this.username,
-          email: _this.email,
-          is_admin: _this.is_admin,
-          can_login: _this.can_login,
-          employee_id: _this.employee !== null ? _this.employee : 0
+          name: _this.form.name,
+          username: _this.form.username,
+          email: _this.form.email,
+          is_admin: _this.form.is_admin,
+          can_login: _this.form.can_login,
+          employee_id: _this.form.employee !== null ? _this.form.employee : 0
         }).then(function (response) {
-          // _this.onRefresh();
-          _this.$dialog.message.success("User updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this.successDialog("Success", "User created successfully");
 
           _this.$router.push({
             name: "admin.users.index"
@@ -210,14 +195,14 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
           _this.errors = error.response.data.errors;
+
+          _this.errorDialog("Error", "Please contact tech support");
         });
         return;
       }
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.getData();
     this.loadEmployees();
   }
@@ -300,7 +285,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.name,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(150)
+                              ),
                               counter: 150,
                               "error-messages": _vm.errors.name,
                               label: "Name *",
@@ -312,11 +299,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.name,
+                              value: _vm.form.name,
                               callback: function($$v) {
-                                _vm.name = $$v
+                                _vm.$set(_vm.form, "name", $$v)
                               },
-                              expression: "name"
+                              expression: "form.name"
                             }
                           })
                         ],
@@ -329,7 +316,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.username,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(50)
+                              ),
                               counter: 50,
                               "error-messages": _vm.errors.username,
                               label: "Username *",
@@ -341,11 +330,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.username,
+                              value: _vm.form.username,
                               callback: function($$v) {
-                                _vm.username = $$v
+                                _vm.$set(_vm.form, "username", $$v)
                               },
-                              expression: "username"
+                              expression: "form.username"
                             }
                           })
                         ],
@@ -358,7 +347,9 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.email,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.email
+                              ),
                               "error-messages": _vm.errors.email,
                               label: "Email Address *",
                               required: ""
@@ -369,11 +360,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.email,
+                              value: _vm.form.email,
                               callback: function($$v) {
-                                _vm.email = $$v
+                                _vm.$set(_vm.form, "email", $$v)
                               },
-                              expression: "email"
+                              expression: "form.email"
                             }
                           })
                         ],
@@ -392,11 +383,11 @@ var render = function() {
                               label: "Link Employee Info"
                             },
                             model: {
-                              value: _vm.employee,
+                              value: _vm.form.employee,
                               callback: function($$v) {
-                                _vm.employee = $$v
+                                _vm.$set(_vm.form, "employee", $$v)
                               },
-                              expression: "employee"
+                              expression: "form.employee"
                             }
                           })
                         ],
@@ -419,11 +410,11 @@ var render = function() {
                               "error-messages": _vm.errors.is_admin
                             },
                             model: {
-                              value: _vm.is_admin,
+                              value: _vm.form.is_admin,
                               callback: function($$v) {
-                                _vm.is_admin = $$v
+                                _vm.$set(_vm.form, "is_admin", $$v)
                               },
-                              expression: "is_admin"
+                              expression: "form.is_admin"
                             }
                           })
                         ],
@@ -440,11 +431,11 @@ var render = function() {
                               "error-messages": _vm.errors.can_login
                             },
                             model: {
-                              value: _vm.can_login,
+                              value: _vm.form.can_login,
                               callback: function($$v) {
-                                _vm.can_login = $$v
+                                _vm.$set(_vm.form, "can_login", $$v)
                               },
-                              expression: "can_login"
+                              expression: "form.can_login"
                             }
                           })
                         ],

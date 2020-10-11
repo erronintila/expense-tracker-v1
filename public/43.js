@@ -137,6 +137,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -146,6 +149,7 @@ __webpack_require__.r(__webpack_exports__);
       code: null,
       description: null,
       amount: 0,
+      reimbursable_amount: 0,
       receipt_number: null,
       date: null,
       remarks: null,
@@ -161,6 +165,10 @@ __webpack_require__.r(__webpack_exports__);
       headers: [{
         text: "Particulars",
         value: "description",
+        sortable: false
+      }, {
+        text: "Reimbursable",
+        value: "reimbursable_amount",
         sortable: false
       }, {
         text: "Amount",
@@ -179,6 +187,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.code = data.code;
         _this.description = data.description;
         _this.amount = data.amount;
+        _this.reimbursable_amount = data.reimbursable_amount;
         _this.receipt_number = data.receipt_number;
         _this.date = data.date;
         _this.remarks = data.remarks;
@@ -192,9 +201,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    // formatNumber(data) {
-    //     return numeral(data).format("0,0.00");
-    // },
     isEmpty: function isEmpty(item) {
       if (item) {
         return parseFloat(item);
@@ -216,11 +222,12 @@ __webpack_require__.r(__webpack_exports__);
       this.amount = this.formatNumber(this.items.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.amount);
       }, 0));
+      this.reimbursable_amount = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.reimbursable_amount);
+      }, 0);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.getData();
   }
 });
@@ -469,6 +476,16 @@ var render = function() {
                                       [
                                         _c("td", { staticClass: "title" }, [
                                           _vm._v(
+                                            "\n                                        Reimbursable:\n                                        "
+                                          ),
+                                          _c("strong", [
+                                            _vm._v(
+                                              _vm._s(_vm.reimbursable_amount)
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("br"),
+                                          _vm._v(
                                             "\n                                        Total:\n                                        "
                                           ),
                                           _c("strong", [
@@ -487,6 +504,14 @@ var render = function() {
                                       [
                                         _c("td", { staticClass: "title" }, [
                                           _vm._v("Total")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _c("strong", [
+                                            _vm._v(
+                                              _vm._s(_vm.reimbursable_amount)
+                                            )
+                                          ])
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [

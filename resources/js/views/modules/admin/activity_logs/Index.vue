@@ -222,7 +222,7 @@ export default {
                 "Delete?",
                 "You can't revert this action",
                 () => {
-                    this.successToast("Success", "Transaction was successful");
+                    this.successDialog("Success", "Transaction was successful");
                 }
             );
         },

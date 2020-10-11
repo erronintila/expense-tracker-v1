@@ -76,12 +76,22 @@
                                 >
                                     <tr class="green--text hidden-md-and-up">
                                         <td class="title">
+                                            Reimbursable:
+                                            <strong>{{
+                                                reimbursable_amount
+                                            }}</strong>
+                                            <br />
                                             Total:
                                             <strong>{{ amount }}</strong>
                                         </td>
                                     </tr>
                                     <tr class="green--text hidden-sm-and-down">
                                         <td class="title">Total</td>
+                                        <td>
+                                            <strong>{{
+                                                reimbursable_amount
+                                            }}</strong>
+                                        </td>
                                         <td>
                                             <strong>{{ amount }}</strong>
                                         </td>
@@ -111,13 +121,6 @@
                     <small class="text--secondary">
                         * indicates required field
                     </small>
-
-                    <!-- <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="editDetails"
-                            >Edit Details</v-btn
-                        >
-                    </v-card-actions> -->
                 </v-container>
             </v-form>
         </v-card>
@@ -135,6 +138,7 @@ export default {
             code: null,
             description: null,
             amount: 0,
+            reimbursable_amount: 0,
             receipt_number: null,
             date: null,
             remarks: null,
@@ -149,6 +153,7 @@ export default {
             particular_amount: 0,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
+                { text: "Reimbursable", value: "reimbursable_amount", sortable: false },
                 { text: "Amount", value: "amount", sortable: false }
             ],
             items: []
@@ -166,6 +171,7 @@ export default {
                     _this.code = data.code;
                     _this.description = data.description;
                     _this.amount = data.amount;
+                    _this.reimbursable_amount = data.reimbursable_amount;
                     _this.receipt_number = data.receipt_number;
                     _this.date = data.date;
                     _this.remarks = data.remarks;
@@ -180,9 +186,6 @@ export default {
                     console.log(error.response);
                 });
         },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // },
         isEmpty(item) {
             if (item) {
                 return parseFloat(item);
@@ -205,12 +208,15 @@ export default {
                     0
                 )
             );
+
+            this.reimbursable_amount = this.items.reduce(
+                (total, item) =>
+                    parseFloat(total) + parseFloat(item.reimbursable_amount),
+                0
+            );
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
     }
 };

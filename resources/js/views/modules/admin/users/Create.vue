@@ -16,8 +16,11 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="name"
-                                :rules="rules.name"
+                                v-model="form.name"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(150)
+                                ]"
                                 :counter="150"
                                 :error-messages="errors.name"
                                 @input="errors.name = []"
@@ -28,8 +31,11 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="username"
-                                :rules="rules.username"
+                                v-model="form.username"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(50)
+                                ]"
                                 :counter="50"
                                 :error-messages="errors.username"
                                 @input="errors.username = []"
@@ -40,8 +46,11 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="email"
-                                :rules="rules.email"
+                                v-model="form.email"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.email
+                                ]"
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
                                 label="Email Address *"
@@ -51,7 +60,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="password"
+                                v-model="form.password"
                                 :append-icon="
                                     showPassword ? 'mdi-eye' : 'mdi-eye-off'
                                 "
@@ -67,7 +76,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="password_confirmation"
+                                v-model="form.password_confirmation"
                                 :append-icon="
                                     showPasswordConfirmation
                                         ? 'mdi-eye'
@@ -91,7 +100,7 @@
 
                         <v-col cols="12" md="4">
                             <v-select
-                                v-model="employee"
+                                v-model="form.employee"
                                 :items="employees"
                                 item-text="fullname"
                                 item-value="id"
@@ -104,7 +113,7 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-checkbox
-                                v-model="is_admin"
+                                v-model="form.is_admin"
                                 label="Is Administrator"
                                 :error-messages="errors.is_admin"
                             ></v-checkbox>
@@ -112,7 +121,7 @@
 
                         <v-col cols="12" md="4">
                             <v-checkbox
-                                v-model="can_login"
+                                v-model="form.can_login"
                                 label="Allow Login"
                                 :error-messages="errors.can_login"
                             ></v-checkbox>
@@ -141,34 +150,18 @@ export default {
             valid: false,
             showPassword: false,
             showPasswordConfirmation: false,
-            is_admin: false,
-            can_login: false,
-            name: "",
-            username: "",
-            email: "",
-            password: "",
-            password_confirmation: "",
-            employee: 0,
             employees: [],
+            form: {
+                name: "",
+                username: "",
+                email: "",
+                password: "",
+                password_confirmation: "",
+                employee: 0,
+                is_admin: false,
+                can_login: false
+            },
             rules: {
-                is_admin: [],
-                can_login: [],
-                name: [
-                    v => !!v || "Name is required",
-                    v =>
-                        v.length <= 150 ||
-                        "Name must be less than 150 characters"
-                ],
-                username: [
-                    v => !!v || "Username is required",
-                    v =>
-                        v.length <= 50 ||
-                        "Username must be less than 50 characters"
-                ],
-                email: [
-                    v => !!v || "E-mail is required",
-                    v => /.+@.+/.test(v) || "E-mail must be valid"
-                ],
                 password: [
                     v => !!v || "Password is required",
                     v =>
@@ -178,7 +171,8 @@ export default {
                 password_confirmation: [
                     v => !!v || "Retype password is required",
                     v =>
-                        this.password === this.password_confirmation ||
+                        this.form.password ===
+                            this.form.password_confirmation ||
                         "Passwords do not match"
                 ]
             },
@@ -194,9 +188,6 @@ export default {
         };
     },
     methods: {
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-        },
         loadEmployees() {
             let _this = this;
             axios
@@ -204,7 +195,7 @@ export default {
                 .then(response => {
                     _this.employees = response.data.data;
 
-                    _this.employees.unshift({id: 0, fullname: "None"});
+                    _this.employees.unshift({ id: 0, fullname: "None" });
                 })
                 .catch(error => {
                     console.log(error);
@@ -219,24 +210,19 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/users", {
-                        name: _this.name,
-                        username: _this.username,
-                        email: _this.email,
-                        password: _this.password,
-                        password_confirmation: _this.password_confirmation,
-                        is_admin: _this.is_admin,
-                        can_login: _this.can_login,
-                        employee_id: _this.employee
+                        name: _this.form.name,
+                        username: _this.form.username,
+                        email: _this.form.email,
+                        password: _this.form.password,
+                        password_confirmation: _this.form.password_confirmation,
+                        is_admin: _this.form.is_admin,
+                        can_login: _this.form.can_login,
+                        employee_id: _this.form.employee
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
-                        _this.$dialog.message.success(
-                            "User created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.successDialog(
+                            "Success",
+                            "User created successfully"
                         );
 
                         _this.$router.push({ name: "admin.users.index" });
@@ -246,6 +232,8 @@ export default {
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
+
+                        _this.errorDialog("Error", "Please contact tech support");
                     });
 
                 return;
@@ -253,9 +241,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadEmployees();
     }
 };

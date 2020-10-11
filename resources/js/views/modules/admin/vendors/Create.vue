@@ -16,8 +16,8 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="name"
-                                :rules="rules.name"
+                                v-model="form.name"
+                                :rules="[...validation.required, ...validation.minLength(150)]"
                                 :counter="150"
                                 :error-messages="errors.name"
                                 label="Name *"
@@ -27,8 +27,8 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="email"
-                                :rules="rules.email"
+                                v-model="form.email"
+                                :rules="[]"
                                 :error-messages="errors.email"
                                 label="Email Address"
                             ></v-text-field>
@@ -36,8 +36,8 @@
 
                         <v-col cols="12" md="4">
                             <v-combobox
-                                v-model="tin"
-                                :rules="rules.tin"
+                                v-model="form.tin"
+                                :rules="validation.required"
                                 :error-messages="errors.tin"
                                 :counter="100"
                                 :items="['N/A']"
@@ -48,8 +48,8 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="contact_person"
-                                :rules="rules.contact_person"
+                                v-model="form.contact_person"
+                                :rules="[]"
                                 :error-messages="errors.contact_person"
                                 :counter="100"
                                 label="Contact Person"
@@ -58,8 +58,8 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="mobile_number"
-                                :rules="rules.mobile_number"
+                                v-model="form.mobile_number"
+                                :rules="[]"
                                 :counter="30"
                                 :error-messages="errors.mobile_number"
                                 @input="errors.mobile_number = []"
@@ -69,8 +69,8 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="telephone_number"
-                                :rules="rules.telephone_number"
+                                v-model="form.telephone_number"
+                                :rules="[]"
                                 :counter="30"
                                 :error-messages="errors.telephone_number"
                                 @input="errors.telephone_number = []"
@@ -81,9 +81,9 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="website"
+                                v-model="form.website"
                                 :counter="100"
-                                :rules="rules.website"
+                                :rules="[]"
                                 :error-messages="errors.website"
                                 @input="errors.website = []"
                                 label="Website"
@@ -106,7 +106,10 @@
                                     <span
                                         v-if="index === 1"
                                         class="grey--text caption"
-                                        >(+{{ selected_expense_types.length - 1 }} others)</span
+                                        >(+{{
+                                            selected_expense_types.length - 1
+                                        }}
+                                        others)</span
                                     >
                                 </template>
                             </v-select>
@@ -116,8 +119,8 @@
                     <v-row>
                         <v-col cols="12">
                             <v-textarea
-                                v-model="address"
-                                :rules="rules.address"
+                                v-model="form.address"
+                                :rules="[]"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
                                 label="Address"
@@ -129,7 +132,7 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-checkbox
-                                v-model="is_vat_inclusive"
+                                v-model="form.is_vat_inclusive"
                                 label="Vat Inclusive"
                                 :error-messages="errors.is_vat_inclusive"
                             ></v-checkbox>
@@ -156,38 +159,20 @@ export default {
     data() {
         return {
             valid: false,
-            code: "",
-            name: "",
-            email: "",
-            tin: "",
-            contact_person: "",
-            mobile_number: "",
-            telephone_number: "",
-            remarks: "",
-            website: "",
-            is_vat_inclusive: false,
-            address: "",
             selected_expense_types: [],
             expense_types: [],
-            rules: {
-                code: [],
-                name: [
-                    v => !!v || "Name is required",
-                    v =>
-                        v.length <= 150 ||
-                        "Name must be less than 100 characters"
-                ],
-                email: [],
-                tin: [
-                    v => !!v || "This field is required",
-                ],
-                contact_person: [],
-                mobile_number: [],
-                telephone_number: [],
-                remarks: [],
-                website: [],
-                is_vat_inclusive: [],
-                address: []
+            form: {
+                code: "",
+                name: "",
+                email: "",
+                tin: "",
+                contact_person: "",
+                mobile_number: "",
+                telephone_number: "",
+                remarks: "",
+                website: "",
+                is_vat_inclusive: false,
+                address: ""
             },
             errors: {
                 code: [],
@@ -205,9 +190,6 @@ export default {
         };
     },
     methods: {
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-        },
         loadExpenseTypes() {
             let _this = this;
             axios
@@ -228,28 +210,23 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/vendors", {
-                        code: _this.code,
-                        name: _this.name,
-                        email: _this.email,
-                        tin: _this.tin == "N/A" ? null : _this.tin,
-                        contact_person: _this.contact_person,
-                        mobile_number: _this.mobile_number,
-                        telephone_number: _this.telephone_number,
-                        remarks: _this.remarks,
-                        website: _this.website,
-                        is_vat_inclusive: _this.is_vat_inclusive,
-                        address: _this.address,
-                        expense_types: _this.selected_expense_types,
+                        code: _this.form.code,
+                        name: _this.form.name,
+                        email: _this.form.email,
+                        tin: _this.form.tin == "N/A" ? null : _this.form.tin,
+                        contact_person: _this.form.contact_person,
+                        mobile_number: _this.form.mobile_number,
+                        telephone_number: _this.form.telephone_number,
+                        remarks: _this.form.remarks,
+                        website: _this.form.website,
+                        is_vat_inclusive: _this.form.is_vat_inclusive,
+                        address: _this.form.address,
+                        expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
-                        _this.$dialog.message.success(
-                            "Vendor created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.successDialog(
+                            "Success",
+                            "Vendor created successfully."
                         );
 
                         _this.$router.push({ name: "admin.vendors.index" });
@@ -266,9 +243,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadExpenseTypes();
     }
 };

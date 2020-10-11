@@ -263,12 +263,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -284,19 +278,6 @@ __webpack_require__.r(__webpack_exports__);
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
-      code: "",
-      reference_no: "",
-      voucher_no: "",
-      description: "",
-      date: "",
-      cheque_no: "",
-      cheque_date: "",
-      amount: "",
-      payee: "",
-      payee_address: "",
-      payee_phone: "",
-      remarks: "",
-      notes: "",
       headers: [{
         text: "Employee",
         value: "employee"
@@ -316,14 +297,36 @@ __webpack_require__.r(__webpack_exports__);
       items: [],
       selected: [],
       total: 0,
-      rules: {
-        name: [function (v) {
-          return !!v || "Name is required";
-        }, function (v) {
-          return v.length <= 100 || "Name must be less than 100 characters";
-        }]
+      form: {
+        code: "",
+        reference_no: "",
+        voucher_no: "",
+        description: "",
+        date: "",
+        cheque_no: "",
+        cheque_date: "",
+        amount: "",
+        payee: "",
+        payee_address: "",
+        payee_phone: "",
+        remarks: "",
+        notes: ""
       },
-      errors: {}
+      errors: {
+        code: [],
+        reference_no: [],
+        voucher_no: [],
+        description: [],
+        date: [],
+        cheque_no: [],
+        cheque_date: [],
+        amount: [],
+        payee: [],
+        payee_address: [],
+        payee_phone: [],
+        remarks: [],
+        notes: []
+      }
     };
   },
   methods: {
@@ -358,21 +361,26 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.$refs.form.validate();
 
+      if (this.selected == 0) {
+        this.errorDialog("Error", "No Expense Report selected.");
+        return;
+      }
+
       if (_this.$refs.form.validate()) {
         axios.post("/api/payments", {
-          code: _this.code,
-          reference_no: _this.reference_no,
-          voucher_no: _this.voucher_no,
-          description: _this.description,
-          date: _this.date,
-          cheque_no: _this.cheque_no,
-          cheque_date: _this.cheque_date,
+          code: _this.form.code,
+          reference_no: _this.form.reference_no,
+          voucher_no: _this.form.voucher_no,
+          description: _this.form.description,
+          date: _this.form.date,
+          cheque_no: _this.form.cheque_no,
+          cheque_date: _this.form.cheque_date,
           amount: _this.total,
-          payee: _this.payee,
-          payee_address: _this.payee_address,
-          payee_phone: _this.payee_phone,
-          remarks: _this.remarks,
-          notes: _this.notes,
+          payee: _this.form.payee,
+          payee_address: _this.form.payee_address,
+          payee_phone: _this.form.payee_phone,
+          remarks: _this.form.remarks,
+          notes: _this.form.notes,
           expense_reports: _this.selected
         }).then(function (response) {
           _this.onRefresh();
@@ -388,6 +396,7 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+          _this.errors = error.response.data.errors;
         });
         return;
       }
@@ -401,8 +410,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.loadExpenseReports();
   }
 });
@@ -484,17 +491,20 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.description,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(100)
+                              ),
                               counter: 100,
+                              "error-messages": _vm.errors.description,
                               label: "Description *",
                               required: ""
                             },
                             model: {
-                              value: _vm.description,
+                              value: _vm.form.description,
                               callback: function($$v) {
-                                _vm.description = $$v
+                                _vm.$set(_vm.form, "description", $$v)
                               },
-                              expression: "description"
+                              expression: "form.description"
                             }
                           })
                         ],
@@ -527,7 +537,7 @@ var render = function() {
                                           _vm._b(
                                             {
                                               attrs: {
-                                                rules: _vm.rules.date,
+                                                rules: _vm.validation.required,
                                                 "error-messages":
                                                   _vm.errors.date,
                                                 label: "Date *",
@@ -539,11 +549,15 @@ var render = function() {
                                                 }
                                               },
                                               model: {
-                                                value: _vm.date,
+                                                value: _vm.form.date,
                                                 callback: function($$v) {
-                                                  _vm.date = $$v
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "date",
+                                                    $$v
+                                                  )
                                                 },
-                                                expression: "date"
+                                                expression: "form.date"
                                               }
                                             },
                                             "v-text-field",
@@ -574,11 +588,11 @@ var render = function() {
                                   color: "success"
                                 },
                                 model: {
-                                  value: _vm.date,
+                                  value: _vm.form.date,
                                   callback: function($$v) {
-                                    _vm.date = $$v
+                                    _vm.$set(_vm.form, "date", $$v)
                                   },
-                                  expression: "date"
+                                  expression: "form.date"
                                 }
                               })
                             ],
@@ -613,7 +627,7 @@ var render = function() {
                                           _vm._b(
                                             {
                                               attrs: {
-                                                rules: _vm.rules.payee,
+                                                rules: _vm.validation.required,
                                                 "error-messages":
                                                   _vm.errors.payee,
                                                 label: "Payee *",
@@ -625,11 +639,15 @@ var render = function() {
                                                 }
                                               },
                                               model: {
-                                                value: _vm.payee,
+                                                value: _vm.form.payee,
                                                 callback: function($$v) {
-                                                  _vm.payee = $$v
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "payee",
+                                                    $$v
+                                                  )
                                                 },
-                                                expression: "payee"
+                                                expression: "form.payee"
                                               }
                                             },
                                             "v-text-field",
@@ -668,17 +686,22 @@ var render = function() {
                                             [
                                               _c("v-text-field", {
                                                 attrs: {
-                                                  rules: _vm.rules.payee,
+                                                  rules:
+                                                    _vm.validation.required,
                                                   counter: 100,
                                                   label: "Payee *",
                                                   required: ""
                                                 },
                                                 model: {
-                                                  value: _vm.payee,
+                                                  value: _vm.form.payee,
                                                   callback: function($$v) {
-                                                    _vm.payee = $$v
+                                                    _vm.$set(
+                                                      _vm.form,
+                                                      "payee",
+                                                      $$v
+                                                    )
                                                   },
-                                                  expression: "payee"
+                                                  expression: "form.payee"
                                                 }
                                               })
                                             ],
@@ -691,17 +714,21 @@ var render = function() {
                                             [
                                               _c("v-text-field", {
                                                 attrs: {
-                                                  rules: _vm.rules.payee_phone,
+                                                  rules: [],
                                                   counter: 100,
                                                   label: "Payee Phone No.",
                                                   required: ""
                                                 },
                                                 model: {
-                                                  value: _vm.payee_phone,
+                                                  value: _vm.form.payee_phone,
                                                   callback: function($$v) {
-                                                    _vm.payee_phone = $$v
+                                                    _vm.$set(
+                                                      _vm.form,
+                                                      "payee_phone",
+                                                      $$v
+                                                    )
                                                   },
-                                                  expression: "payee_phone"
+                                                  expression: "form.payee_phone"
                                                 }
                                               })
                                             ],
@@ -714,18 +741,22 @@ var render = function() {
                                             [
                                               _c("v-text-field", {
                                                 attrs: {
-                                                  rules:
-                                                    _vm.rules.payee_address,
+                                                  rules: [],
                                                   counter: 100,
                                                   label: "Payee Address",
                                                   required: ""
                                                 },
                                                 model: {
-                                                  value: _vm.payee_address,
+                                                  value: _vm.form.payee_address,
                                                   callback: function($$v) {
-                                                    _vm.payee_address = $$v
+                                                    _vm.$set(
+                                                      _vm.form,
+                                                      "payee_address",
+                                                      $$v
+                                                    )
                                                   },
-                                                  expression: "payee_address"
+                                                  expression:
+                                                    "form.payee_address"
                                                 }
                                               })
                                             ],
@@ -753,17 +784,17 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.voucher_no,
+                              rules: [],
                               counter: 100,
                               label: "Voucher No.",
                               required: ""
                             },
                             model: {
-                              value: _vm.voucher_no,
+                              value: _vm.form.voucher_no,
                               callback: function($$v) {
-                                _vm.voucher_no = $$v
+                                _vm.$set(_vm.form, "voucher_no", $$v)
                               },
-                              expression: "voucher_no"
+                              expression: "form.voucher_no"
                             }
                           })
                         ],
@@ -1002,11 +1033,11 @@ var render = function() {
                           _c("v-textarea", {
                             attrs: { label: "Remarks", rows: "1" },
                             model: {
-                              value: _vm.remarks,
+                              value: _vm.form.remarks,
                               callback: function($$v) {
-                                _vm.remarks = $$v
+                                _vm.$set(_vm.form, "remarks", $$v)
                               },
-                              expression: "remarks"
+                              expression: "form.remarks"
                             }
                           })
                         ],

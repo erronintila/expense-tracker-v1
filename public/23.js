@@ -253,7 +253,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       // this.successToast("Success", "Transaction was successful");
       // this.errorToast("Error", "403: Forbidden");
       this.confirmDialog("Delete?", "You can't revert this action", function () {
-        _this2.successToast("Success", "Transaction was successful");
+        _this2.successDialog("Success", "Transaction was successful");
       });
     },
     getDataFromApi: function getDataFromApi() {

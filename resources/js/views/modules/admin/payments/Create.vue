@@ -16,9 +16,13 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="description"
-                                :rules="rules.description"
+                                v-model="form.description"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(100)
+                                ]"
                                 :counter="100"
+                                :error-messages="errors.description"
                                 label="Description *"
                                 required
                             ></v-text-field>
@@ -34,8 +38,8 @@
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
-                                        v-model="date"
-                                        :rules="rules.date"
+                                        v-model="form.date"
+                                        :rules="validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         label="Date *"
@@ -45,7 +49,7 @@
                                     ></v-text-field>
                                 </template>
                                 <v-date-picker
-                                    v-model="date"
+                                    v-model="form.date"
                                     no-title
                                     scrollable
                                     color="success"
@@ -63,8 +67,8 @@
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
-                                        v-model="payee"
-                                        :rules="rules.payee"
+                                        v-model="form.payee"
+                                        :rules="validation.required"
                                         :error-messages="errors.payee"
                                         @input="errors.payee = []"
                                         label="Payee *"
@@ -79,8 +83,8 @@
                                         <v-row>
                                             <v-col cols="12" md="8">
                                                 <v-text-field
-                                                    v-model="payee"
-                                                    :rules="rules.payee"
+                                                    v-model="form.payee"
+                                                    :rules="validation.required"
                                                     :counter="100"
                                                     label="Payee *"
                                                     required
@@ -89,8 +93,8 @@
 
                                             <v-col cols="12" md="4">
                                                 <v-text-field
-                                                    v-model="payee_phone"
-                                                    :rules="rules.payee_phone"
+                                                    v-model="form.payee_phone"
+                                                    :rules="[]"
                                                     :counter="100"
                                                     label="Payee Phone No."
                                                     required
@@ -99,8 +103,8 @@
 
                                             <v-col cols="12">
                                                 <v-text-field
-                                                    v-model="payee_address"
-                                                    :rules="rules.payee_address"
+                                                    v-model="form.payee_address"
+                                                    :rules="[]"
                                                     :counter="100"
                                                     label="Payee Address"
                                                     required
@@ -114,23 +118,13 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="voucher_no"
-                                :rules="rules.voucher_no"
+                                v-model="form.voucher_no"
+                                :rules="[]"
                                 :counter="100"
                                 label="Voucher No."
                                 required
                             ></v-text-field>
                         </v-col>
-
-                        <!-- <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="total"
-                                :rules="rules.amount"
-                                :counter="100"
-                                label="Amount"
-                                required
-                            ></v-text-field>
-                        </v-col> -->
                     </v-row>
 
                     <v-row>
@@ -234,7 +228,7 @@
                     <v-row>
                         <v-col cols="12" md="6">
                             <v-textarea
-                                v-model="remarks"
+                                v-model="form.remarks"
                                 label="Remarks"
                                 rows="1"
                             >
@@ -286,19 +280,6 @@ export default {
                 "This Month",
                 "This Year"
             ],
-            code: "",
-            reference_no: "",
-            voucher_no: "",
-            description: "",
-            date: "",
-            cheque_no: "",
-            cheque_date: "",
-            amount: "",
-            payee: "",
-            payee_address: "",
-            payee_phone: "",
-            remarks: "",
-            notes: "",
             headers: [
                 { text: "Employee", value: "employee" },
                 { text: "Description", value: "description" },
@@ -309,15 +290,36 @@ export default {
             items: [],
             selected: [],
             total: 0,
-            rules: {
-                name: [
-                    v => !!v || "Name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "Name must be less than 100 characters"
-                ]
+            form: {
+                code: "",
+                reference_no: "",
+                voucher_no: "",
+                description: "",
+                date: "",
+                cheque_no: "",
+                cheque_date: "",
+                amount: "",
+                payee: "",
+                payee_address: "",
+                payee_phone: "",
+                remarks: "",
+                notes: ""
             },
-            errors: {}
+            errors: {
+                code: [],
+                reference_no: [],
+                voucher_no: [],
+                description: [],
+                date: [],
+                cheque_no: [],
+                cheque_date: [],
+                amount: [],
+                payee: [],
+                payee_address: [],
+                payee_phone: [],
+                remarks: [],
+                notes: []
+            }
         };
     },
     methods: {
@@ -354,22 +356,27 @@ export default {
 
             _this.$refs.form.validate();
 
+            if (this.selected == 0) {
+                this.errorDialog("Error", "No Expense Report selected.");
+                return;
+            }
+
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/payments", {
-                        code: _this.code,
-                        reference_no: _this.reference_no,
-                        voucher_no: _this.voucher_no,
-                        description: _this.description,
-                        date: _this.date,
-                        cheque_no: _this.cheque_no,
-                        cheque_date: _this.cheque_date,
+                        code: _this.form.code,
+                        reference_no: _this.form.reference_no,
+                        voucher_no: _this.form.voucher_no,
+                        description: _this.form.description,
+                        date: _this.form.date,
+                        cheque_no: _this.form.cheque_no,
+                        cheque_date: _this.form.cheque_date,
                         amount: _this.total,
-                        payee: _this.payee,
-                        payee_address: _this.payee_address,
-                        payee_phone: _this.payee_phone,
-                        remarks: _this.remarks,
-                        notes: _this.notes,
+                        payee: _this.form.payee,
+                        payee_address: _this.form.payee_address,
+                        payee_phone: _this.form.payee_phone,
+                        remarks: _this.form.remarks,
+                        notes: _this.form.notes,
                         expense_reports: _this.selected
                     })
                     .then(function(response) {
@@ -383,11 +390,13 @@ export default {
                             }
                         );
 
-                        _this.$router.push({name: "admin.payments.index"});
+                        _this.$router.push({ name: "admin.payments.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
                         console.log(error.response);
+
+                        _this.errors = error.response.data.errors;
                     });
 
                 return;
@@ -403,9 +412,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadExpenseReports();
     }
 };

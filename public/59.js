@@ -162,41 +162,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
-      code: "",
-      name: "",
-      email: "",
-      tin: "",
-      contact_person: "",
-      mobile_number: "",
-      telephone_number: "",
-      remarks: "",
-      website: "",
-      is_vat_inclusive: false,
-      address: "",
       selected_expense_types: [],
       expense_types: [],
-      rules: {
-        code: [],
-        name: [function (v) {
-          return !!v || "Name is required";
-        }, function (v) {
-          return v.length <= 150 || "Name must be less than 100 characters";
-        }],
-        email: [],
-        tin: [function (v) {
-          return !!v || "This field is required";
-        }],
-        contact_person: [],
-        mobile_number: [],
-        telephone_number: [],
-        remarks: [],
-        website: [],
-        is_vat_inclusive: [],
-        address: []
+      form: {
+        code: "",
+        name: "",
+        email: "",
+        tin: "",
+        contact_person: "",
+        mobile_number: "",
+        telephone_number: "",
+        remarks: "",
+        website: "",
+        is_vat_inclusive: false,
+        address: ""
       },
       errors: {
         code: [],
@@ -214,9 +200,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
@@ -234,24 +217,20 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/vendors", {
-          code: _this.code,
-          name: _this.name,
-          email: _this.email,
-          tin: _this.tin == "N/A" ? null : _this.tin,
-          contact_person: _this.contact_person,
-          mobile_number: _this.mobile_number,
-          telephone_number: _this.telephone_number,
-          remarks: _this.remarks,
-          website: _this.website,
-          is_vat_inclusive: _this.is_vat_inclusive,
-          address: _this.address,
+          code: _this.form.code,
+          name: _this.form.name,
+          email: _this.form.email,
+          tin: _this.form.tin == "N/A" ? null : _this.form.tin,
+          contact_person: _this.form.contact_person,
+          mobile_number: _this.form.mobile_number,
+          telephone_number: _this.form.telephone_number,
+          remarks: _this.form.remarks,
+          website: _this.form.website,
+          is_vat_inclusive: _this.form.is_vat_inclusive,
+          address: _this.form.address,
           expense_types: _this.selected_expense_types
         }).then(function (response) {
-          // _this.onRefresh();
-          _this.$dialog.message.success("Vendor created successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this.successDialog("Success", "Vendor created successfully.");
 
           _this.$router.push({
             name: "admin.vendors.index"
@@ -266,8 +245,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.loadExpenseTypes();
   }
 });
@@ -349,18 +326,20 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.name,
+                              rules: _vm.validation.required.concat(
+                                _vm.validation.minLength(150)
+                              ),
                               counter: 150,
                               "error-messages": _vm.errors.name,
                               label: "Name *",
                               required: ""
                             },
                             model: {
-                              value: _vm.name,
+                              value: _vm.form.name,
                               callback: function($$v) {
-                                _vm.name = $$v
+                                _vm.$set(_vm.form, "name", $$v)
                               },
-                              expression: "name"
+                              expression: "form.name"
                             }
                           })
                         ],
@@ -373,16 +352,16 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.email,
+                              rules: [],
                               "error-messages": _vm.errors.email,
                               label: "Email Address"
                             },
                             model: {
-                              value: _vm.email,
+                              value: _vm.form.email,
                               callback: function($$v) {
-                                _vm.email = $$v
+                                _vm.$set(_vm.form, "email", $$v)
                               },
-                              expression: "email"
+                              expression: "form.email"
                             }
                           })
                         ],
@@ -395,7 +374,7 @@ var render = function() {
                         [
                           _c("v-combobox", {
                             attrs: {
-                              rules: _vm.rules.tin,
+                              rules: _vm.validation.required,
                               "error-messages": _vm.errors.tin,
                               counter: 100,
                               items: ["N/A"],
@@ -403,11 +382,11 @@ var render = function() {
                               required: ""
                             },
                             model: {
-                              value: _vm.tin,
+                              value: _vm.form.tin,
                               callback: function($$v) {
-                                _vm.tin = $$v
+                                _vm.$set(_vm.form, "tin", $$v)
                               },
-                              expression: "tin"
+                              expression: "form.tin"
                             }
                           })
                         ],
@@ -420,17 +399,17 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.contact_person,
+                              rules: [],
                               "error-messages": _vm.errors.contact_person,
                               counter: 100,
                               label: "Contact Person"
                             },
                             model: {
-                              value: _vm.contact_person,
+                              value: _vm.form.contact_person,
                               callback: function($$v) {
-                                _vm.contact_person = $$v
+                                _vm.$set(_vm.form, "contact_person", $$v)
                               },
-                              expression: "contact_person"
+                              expression: "form.contact_person"
                             }
                           })
                         ],
@@ -443,7 +422,7 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.mobile_number,
+                              rules: [],
                               counter: 30,
                               "error-messages": _vm.errors.mobile_number,
                               label: "Mobile Number"
@@ -454,11 +433,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.mobile_number,
+                              value: _vm.form.mobile_number,
                               callback: function($$v) {
-                                _vm.mobile_number = $$v
+                                _vm.$set(_vm.form, "mobile_number", $$v)
                               },
-                              expression: "mobile_number"
+                              expression: "form.mobile_number"
                             }
                           })
                         ],
@@ -471,7 +450,7 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.rules.telephone_number,
+                              rules: [],
                               counter: 30,
                               "error-messages": _vm.errors.telephone_number,
                               label: "Telephone Number",
@@ -483,11 +462,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.telephone_number,
+                              value: _vm.form.telephone_number,
                               callback: function($$v) {
-                                _vm.telephone_number = $$v
+                                _vm.$set(_vm.form, "telephone_number", $$v)
                               },
-                              expression: "telephone_number"
+                              expression: "form.telephone_number"
                             }
                           })
                         ],
@@ -501,7 +480,7 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               counter: 100,
-                              rules: _vm.rules.website,
+                              rules: [],
                               "error-messages": _vm.errors.website,
                               label: "Website"
                             },
@@ -511,11 +490,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.website,
+                              value: _vm.form.website,
                               callback: function($$v) {
-                                _vm.website = $$v
+                                _vm.$set(_vm.form, "website", $$v)
                               },
-                              expression: "website"
+                              expression: "form.website"
                             }
                           })
                         ],
@@ -560,7 +539,7 @@ var render = function() {
                                                   _vm.selected_expense_types
                                                     .length - 1
                                                 ) +
-                                                " others)"
+                                                "\n                                    others)"
                                             )
                                           ]
                                         )
@@ -593,7 +572,7 @@ var render = function() {
                         [
                           _c("v-textarea", {
                             attrs: {
-                              rules: _vm.rules.address,
+                              rules: [],
                               "error-messages": _vm.errors.address,
                               label: "Address",
                               rows: "1"
@@ -604,11 +583,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.address,
+                              value: _vm.form.address,
                               callback: function($$v) {
-                                _vm.address = $$v
+                                _vm.$set(_vm.form, "address", $$v)
                               },
-                              expression: "address"
+                              expression: "form.address"
                             }
                           })
                         ],
@@ -631,11 +610,11 @@ var render = function() {
                               "error-messages": _vm.errors.is_vat_inclusive
                             },
                             model: {
-                              value: _vm.is_vat_inclusive,
+                              value: _vm.form.is_vat_inclusive,
                               callback: function($$v) {
-                                _vm.is_vat_inclusive = $$v
+                                _vm.$set(_vm.form, "is_vat_inclusive", $$v)
                               },
-                              expression: "is_vat_inclusive"
+                              expression: "form.is_vat_inclusive"
                             }
                           })
                         ],
