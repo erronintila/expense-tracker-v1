@@ -143,12 +143,14 @@ Vue.mixin({
         },
         successDialog(title, text) {
             this.$dialog.message.success(`${title}: ${text}`, {
-                position: "top-right"
+                position: "top-right",
+                timeout: 2000
             });
         },
         errorDialog(title, text) {
             this.$dialog.message.error(`${title}: ${text}`, {
-                position: "top-right"
+                position: "top-right",
+                timeout: 2000
             });
         },
         confirmDialog(title, text, callback) {

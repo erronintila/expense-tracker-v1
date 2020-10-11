@@ -227,9 +227,6 @@ export default {
                     break;
             }
         },
-        // formatDate(date, format) {
-        //     return date == null ? "" : moment(date).format(format);
-        // }
     },
     watch: {
         params: {

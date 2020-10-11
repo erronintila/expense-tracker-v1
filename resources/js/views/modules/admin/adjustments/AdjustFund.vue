@@ -119,13 +119,9 @@ export default {
                         type: _this.type
                     })
                     .then(function(response) {
-
-                        _this.$dialog.message.success(
-                            "Adjustment created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.successDialog(
+                            "Success",
+                            "Adjustment created successfully."
                         );
 
                         _this.$router.push({ name: "admin.adjustments.index" });

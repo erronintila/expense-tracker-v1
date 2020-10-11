@@ -122,8 +122,6 @@
             </v-menu>
         </v-card-title>
 
-        <v-btn @click="testClick">Click me</v-btn>
-
         <br />
 
         <v-card-text>
@@ -213,19 +211,6 @@ export default {
         };
     },
     methods: {
-        testClick() {
-            // this.successDialog("Success", "Transaction was successful");
-            // this.errorDialog("Error", "403: Forbidden");
-            // this.successToast("Success", "Transaction was successful");
-            // this.errorToast("Error", "403: Forbidden");
-            this.confirmDialog(
-                "Delete?",
-                "You can't revert this action",
-                () => {
-                    this.successDialog("Success", "Transaction was successful");
-                }
-            );
-        },
         getDataFromApi() {
             let _this = this;
 
@@ -305,12 +290,9 @@ export default {
                             }
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Deleted All Logs successfully",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                            _this.successDialog(
+                                "Success",
+                                "Deleted All Logs successfully"
                             );
 
                             _this.getDataFromApi().then(data => {
@@ -323,6 +305,8 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog("Error", error.response.statusText);
                         });
                 }
             });
@@ -369,6 +353,12 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            // let errorMessage =
+                            //     error.statusText == null
+                            //         ? "Please contact tech support"
+                            //         : error.statusText;
+                            _this.errorDialog("Error", error.response.statusText);
                         });
                 }
             });

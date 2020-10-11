@@ -108,12 +108,9 @@ export default {
 
                         _this.errors = error.data;
 
-                        _this.$dialog.message.error(
-                            `Error ${error.status} : ${error.statusText}`,
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.errorDialog(
+                            `Error ${error.status}`,
+                            error.response.statusText
                         );
                     });
             }
