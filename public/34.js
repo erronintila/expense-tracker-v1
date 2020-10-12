@@ -411,6 +411,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
+
           _this.loading = false;
         });
       });
@@ -428,6 +431,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -529,6 +534,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
+
+            _this.errorDialog("Error ".concat(error.status), error.statusText);
           });
         }
       });
@@ -652,19 +659,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
+
+            _this.errorDialog("Error ".concat(error.status), error.statusText);
           });
         }
       });
-    } // getHumanDate(date) {
-    //     return moment(date).fromNow();
-    // },
-    // formatDate(date, format) {
-    //     return date == null ? "" : moment(date).format(format);
-    // },
-    // formatNumber(data) {
-    //     return numeral(data).format("0,0.00");
-    // }
-
+    }
   },
   watch: {
     params: {
@@ -702,8 +702,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.loadEmployees();
   }
 });

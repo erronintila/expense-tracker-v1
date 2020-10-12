@@ -540,6 +540,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         onUpdateData() {
@@ -573,6 +575,8 @@ export default {
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
 
                 return;
@@ -613,6 +617,8 @@ export default {
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
             }
         },
@@ -652,6 +658,8 @@ export default {
                         console.log(error.response);
 
                         _this.password_errors = error.response.data.errors;
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
             }
         },
@@ -664,9 +672,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getCurrentUser();
     }
 };

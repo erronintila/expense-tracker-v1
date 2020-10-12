@@ -245,6 +245,8 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+
                         _this.loading = false;
                     });
             });
@@ -267,6 +269,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         onRefresh() {
@@ -306,7 +310,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog("Error", error.response.statusText);
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });
@@ -354,11 +358,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            // let errorMessage =
-                            //     error.statusText == null
-                            //         ? "Please contact tech support"
-                            //         : error.statusText;
-                            _this.errorDialog("Error", error.response.statusText);
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });

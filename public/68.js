@@ -203,6 +203,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     },
     isEmpty: function isEmpty(item) {
@@ -219,10 +221,7 @@ __webpack_require__.r(__webpack_exports__);
           id: this.$route.params.id
         }
       });
-    } // formatNumber(data) {
-    //     return numeral(data).format("0,0.00");
-    // }
-
+    }
   },
   watch: {
     items: function items() {
@@ -232,8 +231,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.getCurrentUser();
     this.getData();
   }

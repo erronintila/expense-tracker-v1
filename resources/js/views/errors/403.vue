@@ -21,11 +21,14 @@
                                             Forbidden.
                                         </div>
                                         <div class="grey--text lighten-5">
-                                            You are not allowed/authorized to access this page.
+                                            You are not allowed/authorized to
+                                            access this page.
                                         </div>
                                         <div class="paragraph-text mt-2">
+                                            Contact helpdesk for support.
                                             <br />
-                                            <br />Contact helpdesk for support.
+                                            <br />
+                                            <br />
                                         </div>
                                     </v-card>
                                 </v-flex>

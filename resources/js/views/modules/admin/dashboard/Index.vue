@@ -370,24 +370,6 @@ export default {
         };
     },
     methods: {
-        // load_total_expenses(start, end) {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/total_expenses", {
-        //             params: {
-        //                 start_date: start,
-        //                 end_date: end
-        //             }
-        //         })
-        //         .then(response => {
-        //             _this.total_expenses = response.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-        //         });
-        // },
         loadEmployees() {
             let _this = this;
 
@@ -404,6 +386,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         load_department_expenses(start, end, employee) {
@@ -448,6 +432,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         load_expense_types_expenses(start, end, employee) {
@@ -493,6 +479,8 @@ export default {
                     console.log(error);
 
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         load_employees_expenses(start, end, employee) {
@@ -537,6 +525,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         load_expenses_summary(start, end, time_unit, employee) {
@@ -603,6 +593,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         load_bar_chart() {
@@ -917,16 +909,12 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadEmployees();
 
         // this.load_total_expenses(this.date_range[0], this.date_range[1]);

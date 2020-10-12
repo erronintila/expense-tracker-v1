@@ -373,6 +373,8 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+
                         _this.loading = false;
                     });
             });
@@ -478,19 +480,13 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });
         },
-        // getHumanDate(date) {
-        //     return moment(date).fromNow();
-        // },
-        // formatDate(date, format) {
-        //     return date == null ? "" : moment(date).format(format);
-        // },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
+
     },
     watch: {
         params: {
@@ -524,9 +520,5 @@ export default {
             this.totalItems = data.total;
         });
     },
-    created() {
-        // axios.defaults.headers.common["Authorization"] =
-            // "Bearer " + localStorage.getItem("access_token");
-    }
 };
 </script>

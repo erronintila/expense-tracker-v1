@@ -200,6 +200,8 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+
                         _this.loading = false;
                     });
             });
@@ -260,6 +262,8 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });
@@ -299,6 +303,8 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });

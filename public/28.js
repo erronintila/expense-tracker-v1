@@ -217,6 +217,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
+
           _this.loading = false;
         });
       });
@@ -275,6 +278,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
+
+            _this.errorDialog("Error ".concat(error.status), error.statusText);
           });
         }
       });
@@ -310,12 +315,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             _this.selected = [];
           })["catch"](function (error) {
-            // _this.$dialog.message.error(error, {
-            //     position: "top-right",
-            //     timeout: 2000
-            // });
             console.log(error);
             console.log(error.response);
+
+            _this.errorDialog("Error ".concat(error.status), error.statusText);
           });
         }
       });
@@ -349,7 +352,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this4.totalItems = data.total;
     });
   },
-  created: function created() {// axios.defaults.headers.common["Authorization"] =
+  created: function created() {
+    console.log(this.$store.getters.getPermissions); // axios.defaults.headers.common["Authorization"] =
     //     "Bearer " + localStorage.getItem("access_token");
   }
 });

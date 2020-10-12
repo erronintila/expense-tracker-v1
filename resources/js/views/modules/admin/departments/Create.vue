@@ -79,7 +79,7 @@ export default {
 
                         // _this.errors = error.response.data.errors;
 
-                        _this.errorDialog("Error", error.response.statusText);
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
             }
         }

@@ -102,6 +102,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         onSave() {
@@ -131,6 +133,8 @@ export default {
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
             }
         }

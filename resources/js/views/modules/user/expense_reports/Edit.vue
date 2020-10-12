@@ -287,6 +287,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         updateDates(e) {
@@ -325,6 +327,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         loadExpenses(emp_id) {
@@ -350,6 +354,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         loadEmployees() {
@@ -363,6 +369,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         onSave() {
@@ -413,6 +421,8 @@ export default {
                     .catch(function(error) {
                         console.log(error);
                         console.log(error.response);
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
 
                 return;

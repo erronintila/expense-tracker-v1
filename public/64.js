@@ -29,16 +29,6 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     PrintDetailed: _components_PrintDetailed__WEBPACK_IMPORTED_MODULE_2__["default"],
     PrintSummary: _components_PrintSummary__WEBPACK_IMPORTED_MODULE_3__["default"]
-  },
-  data: function data() {
-    return {};
-  },
-  methods: {// formatNumber(data) {
-    //     return numeral(data).format("0,0.00");
-    // }
-  },
-  created: function created() {// axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
   }
 });
 

@@ -78,7 +78,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(function(error) {
                         console.log(error);
-                        console.log(error.response);
+                        // console.log(error.response);
 
                         reject(error.response);
                     });
@@ -103,7 +103,7 @@ export const store = new Vuex.Store({
                         })
                         .catch(function(error) {
                             console.log(error);
-                            console.log(error.response);
+                            // console.log(error.response);
 
                             localStorage.removeItem("user");
                             localStorage.removeItem("access_token");
@@ -135,7 +135,7 @@ export const store = new Vuex.Store({
                         })
                         .catch(function(error) {
                             console.log(error);
-                            console.log(error.response);
+                            // console.log(error.response);
 
                             context.commit("AUTH_LOGOUT");
 

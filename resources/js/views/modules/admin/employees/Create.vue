@@ -323,6 +323,8 @@ export default {
                     console.log(error);
 
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         loadPermissions() {
@@ -331,13 +333,13 @@ export default {
             axios
                 .get("/api/data/permissions")
                 .then(response => {
-                    console.log(response);
-
                     _this.permissions = response.data;
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         onRefresh() {
@@ -391,6 +393,8 @@ export default {
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
 
                 return;

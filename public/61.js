@@ -314,6 +314,9 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
+
           reject();
         });
       });
@@ -341,6 +344,8 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
         });
       });
     },
@@ -387,6 +392,8 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
         });
         return;
       }

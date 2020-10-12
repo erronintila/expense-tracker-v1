@@ -95,6 +95,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     },
     loadDepartments: function loadDepartments() {
@@ -111,6 +113,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     },
     onSave: function onSave() {
@@ -135,6 +139,9 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
+
           _this.errors = error.response.data.errors;
         });
         return;

@@ -36,12 +36,12 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.getData();
   },
   mounted: function mounted() {}

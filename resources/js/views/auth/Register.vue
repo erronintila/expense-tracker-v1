@@ -195,6 +195,8 @@ export default {
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
 
                 return;

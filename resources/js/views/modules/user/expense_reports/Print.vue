@@ -15,17 +15,5 @@ export default {
         PrintDetailed,
         PrintSummary
     },
-    data() {
-        return {};
-    },
-    methods: {
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
-    },
-    created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-    }
 };
 </script>

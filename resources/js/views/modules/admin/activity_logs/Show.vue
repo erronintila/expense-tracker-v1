@@ -29,6 +29,8 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         }
     },

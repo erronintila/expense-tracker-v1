@@ -774,6 +774,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         loadExpenseTypes() {
@@ -787,6 +789,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         loadVendors() {
@@ -806,6 +810,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         onRefresh() {
@@ -881,6 +887,8 @@ export default {
                         console.log(error.response);
 
                         _this.errors = error.response.data.errors;
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
 
                 return;
@@ -961,6 +969,8 @@ export default {
                         console.log(error.response);
 
                         _this.vendorOptions.errors = error.response.data.errors;
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
 
                 return;

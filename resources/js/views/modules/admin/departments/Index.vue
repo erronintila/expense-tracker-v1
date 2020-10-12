@@ -195,6 +195,8 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+
                         _this.loading = false;
                     });
             });
@@ -255,6 +257,8 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });
@@ -293,12 +297,10 @@ export default {
                             _this.selected = [];
                         })
                         .catch(function(error) {
-                            // _this.$dialog.message.error(error, {
-                            //     position: "top-right",
-                            //     timeout: 2000
-                            // });
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });
@@ -331,6 +333,7 @@ export default {
         });
     },
     created() {
+        console.log(this.$store.getters.getPermissions);
         // axios.defaults.headers.common["Authorization"] =
         //     "Bearer " + localStorage.getItem("access_token");
     }

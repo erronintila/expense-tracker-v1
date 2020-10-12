@@ -233,6 +233,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
+
           _this.loading = false;
         });
       });
@@ -250,6 +253,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -307,6 +312,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
+
+            _this.errorDialog("Error ".concat(error.status), error.statusText);
           });
         }
       });
@@ -344,6 +351,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
+
+            _this.errorDialog("Error ".concat(error.status), error.statusText);
           });
         }
       });

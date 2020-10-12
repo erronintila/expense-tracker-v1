@@ -92,20 +92,6 @@ import App from "./views/layouts/App.vue";
 axios.defaults.headers.common["Authorization"] =
     "Bearer " + localStorage.getItem("access_token");
 
-axios.interceptors.response.use(
-    function(response) {
-        return response;
-    },
-    function(error) {
-        if (error.response.status === 401) {
-            store.dispatch("AUTH_LOGOUT");
-            window.location.replace("/login");
-            // router.push("/login");
-        }
-        return Promise.reject(error);
-    }
-);
-
 /**
  * Global functions / properties / variables
  *

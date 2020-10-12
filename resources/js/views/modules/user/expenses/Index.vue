@@ -393,6 +393,8 @@ export default {
                                     console.log(error.response);
 
                                     _this.loading = false;
+
+                                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                                 });
                         } else {
                             let items = [];
@@ -408,6 +410,8 @@ export default {
                         console.log(error.response);
 
                         reject();
+
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
                     });
             });
         },
@@ -426,6 +430,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         onRefresh() {
@@ -527,6 +533,8 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });
@@ -565,19 +573,12 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.errorDialog(`Error ${error.status}`, error.statusText);
                         });
                 }
             });
         },
-        // getHumanDate(date) {
-        //     return moment(date).fromNow();
-        // },
-        // formatDate(date, format) {
-        //     return date == null ? "" : moment(date).format(format);
-        // },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
     },
     watch: {
         params: {
@@ -614,9 +615,6 @@ export default {
         });
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.loadExpenseTypes();
     }
 };

@@ -194,6 +194,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         isEmpty(item) {
@@ -208,9 +210,6 @@ export default {
                 params: { id: this.$route.params.id }
             });
         },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
     },
     watch: {
         items() {
@@ -221,9 +220,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getCurrentUser();
         this.getData();
     }

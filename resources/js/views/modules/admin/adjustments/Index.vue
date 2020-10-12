@@ -196,6 +196,8 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+
                         _this.loading = false;
                     });
             });

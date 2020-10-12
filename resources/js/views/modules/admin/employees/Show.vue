@@ -371,6 +371,8 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
         editEmployee() {
@@ -404,16 +406,12 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.errorDialog(`Error ${error.status}`, error.statusText);
                 });
         },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
         this.getExpenseStats();
     }

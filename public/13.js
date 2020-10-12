@@ -49,6 +49,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -143,7 +146,7 @@ var render = function() {
                                         { staticClass: "grey--text lighten-5" },
                                         [
                                           _vm._v(
-                                            "\n                                        You are not allowed/authorized to access this page.\n                                    "
+                                            "\n                                        You are not allowed/authorized to\n                                        access this page.\n                                    "
                                           )
                                         ]
                                       ),
@@ -152,12 +155,14 @@ var render = function() {
                                         "div",
                                         { staticClass: "paragraph-text mt-2" },
                                         [
+                                          _vm._v(
+                                            "\n                                        Contact helpdesk for support.\n                                        "
+                                          ),
                                           _c("br"),
                                           _vm._v(" "),
                                           _c("br"),
-                                          _vm._v(
-                                            "Contact helpdesk for support.\n                                    "
-                                          )
+                                          _vm._v(" "),
+                                          _c("br")
                                         ]
                                       )
                                     ]

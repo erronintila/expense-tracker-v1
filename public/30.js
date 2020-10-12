@@ -333,17 +333,20 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     },
     loadPermissions: function loadPermissions() {
       var _this = this;
 
       axios.get("/api/data/permissions").then(function (response) {
-        console.log(response);
         _this.permissions = response.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.status), error.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -391,6 +394,8 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
           _this.errors = error.response.data.errors;
+
+          _this.errorDialog("Error ".concat(error.status), error.statusText);
         });
         return;
       }

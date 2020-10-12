@@ -88,6 +88,8 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+
                         _this.errors = error.response.data.errors;
                     });
 
