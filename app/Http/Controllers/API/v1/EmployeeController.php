@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
@@ -48,7 +49,9 @@ class EmployeeController extends Controller
 
             'address' => ['nullable'],
 
-            // 'fund' => ['required'],
+            'username' => ['required'],
+
+            'role' => ['required'],
         ]);
     }
 
@@ -166,25 +169,36 @@ class EmployeeController extends Controller
 
         $employee->address = $request->address;
 
-        // $employee->fund = $request->fund;
-
-        // $employee->remaining_fund = $request->fund;
+        //// Assign a User to the Employee
 
         $user = new User();
 
         $user->name     = $request->last_name . ', ' . $request->first_name . ' ' . $request->middle_name;
 
-        $user->username = $employee->email;
+        $user->username = $request->username;
 
-        $user->email    = $employee->email;
+        $user->email    = $request->email;
 
-        $user->email_verified_at = null;
+        $user->email_verified_at = now();
 
-        $user->is_admin = false;
+        $user->is_admin = $request->role == "Administrator";
+
+        $user->can_login = $request->can_login;
 
         $user->password = Hash::make("password");
 
         $user->save();
+
+        if ($request->role == "Administrator") {
+
+            foreach ($request->permissions as $permission) {
+
+                $user->givePermissionTo($permission["name"]);
+            }
+        } else {
+
+            $user->assignRole("Standard User");
+        }
 
         $employee->user_id = $user->id;
 
@@ -233,16 +247,35 @@ class EmployeeController extends Controller
 
             case 'restore':
 
-                $employee = Employee::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                if (request()->has("ids")) {
+
+                    foreach ($request->ids as $id) {
+
+                        $employee = Employee::withTrashed()->findOrFail($id);
+
+                        $employee->restore();
+
+                        $employee->user->restore();
+                    }
+                } else {
+
+                    $employee = Employee::withTrashed()->findOrFail($id);
+
+                    $employee->restore();
+
+                    $employee->user->restore();
+                }
+
+                // $employee = Employee::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
 
                 break;
             default:
 
                 $this->validator($request->all(), $id)->validate();
 
-                $employee = Employee::findOrFail($id);
+                $employee = Employee::withTrashed()->findOrFail($id);
 
                 $employee->code = $request->code;
 
@@ -276,13 +309,30 @@ class EmployeeController extends Controller
 
                 if ($employee->user_id != null) {
 
-                    $user = User::find($employee->user_id);
+                    $user = User::findOrFail($employee->user_id);
 
                     $user->name = $request->last_name . ', ' . $request->first_name . ' ' . $request->middle_name;
 
-                    $user->email = $employee->email;
+                    $user->email = $request->email;
+
+                    $user->username = $request->username;
+
+                    $user->is_admin = $request->role == "Administrator";
+
+                    $user->can_login = $request->can_login;
 
                     $user->save();
+
+                    if ($request->role == "Administrator") {
+
+                        foreach ($request->permissions as $permission) {
+
+                            $user->givePermissionTo($permission["name"]);
+                        }
+                    } else {
+
+                        $user->assignRole("Standard User");
+                    }
                 }
 
                 break;
@@ -304,7 +354,26 @@ class EmployeeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $employee = Employee::whereIn('id', $request->ids)->delete();
+        if (request()->has("ids")) {
+
+            foreach ($request->ids as $id) {
+
+                $employee = Employee::findOrFail($id);
+
+                $employee->delete();
+
+                $employee->user->delete();
+            }
+        } else {
+
+            $employee = Employee::findOrFail($id);
+
+            $employee->delete();
+
+            $employee->user->delete();
+        }
+
+        // $employee = Employee::whereIn('id', $request->ids)->delete();
 
         return response(
             [

@@ -31,9 +31,11 @@ class UserController extends Controller
             'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
 
             'password'  => ['required', 'min:8', 'max:255', 'confirmed'],
+
+            'role' => ['required'],
         ]);
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -281,7 +283,7 @@ class UserController extends Controller
                     $user->employee->email = $request->employee["email"];
 
                     $user->employee->address = $request->employee["address"];
-                    
+
                     $user->employee->save();
                 }
 
@@ -304,7 +306,21 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::whereIn('id', $request->ids)->delete();
+        if (request()->has("ids")) {
+            foreach ($request->ids as $id) {
+                $user = User::findOrFail($id);
+
+                if (!($user->hasRole('Super Admin'))) {
+                    $user->delete();
+                }
+            }
+        } else {
+            $user = User::findOrFail($id);
+
+            if (!($user->hasRole('Super Admin'))) {
+                $user->delete();
+            }
+        }
 
         return response(
             [

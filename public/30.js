@@ -203,12 +203,93 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
       menu: false,
       jobs: [],
+      permissions: [],
+      selected: [],
+      headers: [{
+        text: "Permission",
+        value: "name",
+        sortable: false
+      }],
       form: {
         first_name: null,
         middle_name: "",
@@ -220,7 +301,10 @@ __webpack_require__.r(__webpack_exports__);
         mobile_number: null,
         telephone_number: "",
         email: null,
-        address: null
+        address: null,
+        role: "Standard User",
+        username: "",
+        can_login: true
       },
       errors: {
         first_name: [],
@@ -233,7 +317,10 @@ __webpack_require__.r(__webpack_exports__);
         mobile_number: [],
         telephone_number: [],
         email: [],
-        address: []
+        address: [],
+        username: [],
+        role: [],
+        can_login: []
       }
     };
   },
@@ -248,8 +335,26 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
+    loadPermissions: function loadPermissions() {
+      var _this = this;
+
+      axios.get("/api/data/permissions").then(function (response) {
+        console.log(response);
+        _this.permissions = response.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+    },
+    changeRole: function changeRole() {
+      if (this.form.role == "Administrator") {
+        this.selected = this.permissions;
+      } else {
+        this.selected = [];
+      }
     },
     onSave: function onSave() {
       var _this = this;
@@ -268,7 +373,11 @@ __webpack_require__.r(__webpack_exports__);
           mobile_number: _this.form.mobile_number,
           telephone_number: _this.form.telephone_number,
           email: _this.form.email,
-          address: _this.form.address
+          address: _this.form.address,
+          username: _this.form.username,
+          can_login: _this.form.can_login,
+          role: _this.form.role,
+          permissions: _this.selected
         }).then(function (response) {
           _this.$dialog.message.success("Employee created successfully.", {
             position: "top-right",
@@ -289,6 +398,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.loadJobs();
+    this.loadPermissions();
   }
 });
 
@@ -358,443 +468,613 @@ var render = function() {
             },
             [
               _c(
-                "v-container",
+                "v-expansion-panels",
                 [
                   _c(
-                    "v-row",
+                    "v-expansion-panel",
                     [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-autocomplete", {
-                            attrs: {
-                              rules: _vm.validation.required,
-                              items: _vm.jobs,
-                              "error-messages": _vm.errors.job_id,
-                              "item-text": "name",
-                              "item-value": "id",
-                              label: "Job Designation *",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.job_id = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.job,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "job", $$v)
-                              },
-                              expression: "form.job"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.validation.required.concat(
-                                _vm.validation.minLength(100)
-                              ),
-                              counter: 100,
-                              "error-messages": _vm.errors.first_name,
-                              label: "First Name *",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.first_name = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.first_name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "first_name", $$v)
-                              },
-                              expression: "form.first_name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
+                      _c("v-expansion-panel-header", [
+                        _c("div", { staticClass: "green--text" }, [
+                          _vm._v(
+                            "\n                            Basic Information\n                        "
+                          )
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: [],
-                              counter: 100,
-                              "error-messages": _vm.errors.middle_name,
-                              label: "Middle Name"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.middle_name = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.middle_name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "middle_name", $$v)
-                              },
-                              expression: "form.middle_name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.validation.required.concat(
-                                _vm.validation.minLength(100)
-                              ),
-                              counter: 100,
-                              "error-messages": _vm.errors.last_name,
-                              label: "Last Name *",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.last_name = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.last_name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "last_name", $$v)
-                              },
-                              expression: "form.last_name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-combobox", {
-                            attrs: {
-                              rules: [],
-                              counter: 30,
-                              items: ["Jr", "Sr", "II", "III"],
-                              "error-messages": _vm.errors.suffix,
-                              label: "Suffix"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.suffix = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.suffix,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "suffix", $$v)
-                              },
-                              expression: "form.suffix"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              rules: _vm.validation.required,
-                              items: ["Male", "Female"],
-                              "error-messages": _vm.errors.gender,
-                              label: "Gender *",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.gender = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.gender,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "gender", $$v)
-                              },
-                              expression: "form.gender"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        "v-expansion-panel-content",
                         [
                           _c(
-                            "v-menu",
-                            {
-                              ref: "menu",
-                              attrs: {
-                                transition: "scale-transition",
-                                "offset-y": "",
-                                "min-width": "290px"
-                              },
-                              scopedSlots: _vm._u([
-                                {
-                                  key: "activator",
-                                  fn: function(ref) {
-                                    var on = ref.on
-                                    var attrs = ref.attrs
-                                    return [
-                                      _c(
-                                        "v-text-field",
-                                        _vm._g(
-                                          _vm._b(
-                                            {
-                                              attrs: {
-                                                rules: _vm.validation.required,
-                                                "error-messages":
-                                                  _vm.errors.birthdate,
-                                                label: "Birthdate *",
-                                                readonly: ""
-                                              },
-                                              on: {
-                                                input: function($event) {
-                                                  _vm.errors.birthdate = []
-                                                }
-                                              },
-                                              model: {
-                                                value: _vm.form.birthdate,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.form,
-                                                    "birthdate",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression: "form.birthdate"
-                                              }
-                                            },
-                                            "v-text-field",
-                                            attrs,
-                                            false
-                                          ),
-                                          on
-                                        )
-                                      )
-                                    ]
-                                  }
-                                }
-                              ]),
-                              model: {
-                                value: _vm.menu,
-                                callback: function($$v) {
-                                  _vm.menu = $$v
-                                },
-                                expression: "menu"
-                              }
-                            },
+                            "v-row",
                             [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-autocomplete", {
+                                    attrs: {
+                                      rules: _vm.validation.required,
+                                      items: _vm.jobs,
+                                      "error-messages": _vm.errors.job_id,
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      label: "Job Designation *",
+                                      required: ""
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.job_id = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.job,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "job", $$v)
+                                      },
+                                      expression: "form.job"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.validation.required.concat(
+                                        _vm.validation.minLength(100)
+                                      ),
+                                      counter: 100,
+                                      "error-messages": _vm.errors.first_name,
+                                      label: "First Name *",
+                                      required: ""
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.first_name = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.first_name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "first_name", $$v)
+                                      },
+                                      expression: "form.first_name"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
                               _vm._v(" "),
-                              _c("v-date-picker", {
-                                attrs: {
-                                  "no-title": "",
-                                  scrollable: "",
-                                  color: "success"
-                                },
-                                model: {
-                                  value: _vm.form.birthdate,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "birthdate", $$v)
-                                  },
-                                  expression: "form.birthdate"
-                                }
-                              })
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: [],
+                                      counter: 100,
+                                      "error-messages": _vm.errors.middle_name,
+                                      label: "Middle Name"
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.middle_name = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.middle_name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "middle_name", $$v)
+                                      },
+                                      expression: "form.middle_name"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.validation.required.concat(
+                                        _vm.validation.minLength(100)
+                                      ),
+                                      counter: 100,
+                                      "error-messages": _vm.errors.last_name,
+                                      label: "Last Name *",
+                                      required: ""
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.last_name = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.last_name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "last_name", $$v)
+                                      },
+                                      expression: "form.last_name"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-combobox", {
+                                    attrs: {
+                                      rules: [],
+                                      counter: 30,
+                                      items: ["Jr", "Sr", "II", "III"],
+                                      "error-messages": _vm.errors.suffix,
+                                      label: "Suffix"
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.suffix = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.suffix,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "suffix", $$v)
+                                      },
+                                      expression: "form.suffix"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      rules: _vm.validation.required,
+                                      items: ["Male", "Female"],
+                                      "error-messages": _vm.errors.gender,
+                                      label: "Gender *",
+                                      required: ""
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.gender = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.gender,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "gender", $$v)
+                                      },
+                                      expression: "form.gender"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c(
+                                    "v-menu",
+                                    {
+                                      ref: "menu",
+                                      attrs: {
+                                        transition: "scale-transition",
+                                        "offset-y": "",
+                                        "min-width": "290px"
+                                      },
+                                      scopedSlots: _vm._u([
+                                        {
+                                          key: "activator",
+                                          fn: function(ref) {
+                                            var on = ref.on
+                                            var attrs = ref.attrs
+                                            return [
+                                              _c(
+                                                "v-text-field",
+                                                _vm._g(
+                                                  _vm._b(
+                                                    {
+                                                      attrs: {
+                                                        rules:
+                                                          _vm.validation
+                                                            .required,
+                                                        "error-messages":
+                                                          _vm.errors.birthdate,
+                                                        label: "Birthdate *",
+                                                        readonly: ""
+                                                      },
+                                                      on: {
+                                                        input: function(
+                                                          $event
+                                                        ) {
+                                                          _vm.errors.birthdate = []
+                                                        }
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.form.birthdate,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.form,
+                                                            "birthdate",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "form.birthdate"
+                                                      }
+                                                    },
+                                                    "v-text-field",
+                                                    attrs,
+                                                    false
+                                                  ),
+                                                  on
+                                                )
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ]),
+                                      model: {
+                                        value: _vm.menu,
+                                        callback: function($$v) {
+                                          _vm.menu = $$v
+                                        },
+                                        expression: "menu"
+                                      }
+                                    },
+                                    [
+                                      _vm._v(" "),
+                                      _c("v-date-picker", {
+                                        attrs: {
+                                          "no-title": "",
+                                          scrollable: "",
+                                          color: "success"
+                                        },
+                                        model: {
+                                          value: _vm.form.birthdate,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "birthdate", $$v)
+                                          },
+                                          expression: "form.birthdate"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: [],
+                                      counter: 30,
+                                      "error-messages":
+                                        _vm.errors.mobile_number,
+                                      label: "Mobile Number *"
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.mobile_number = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.mobile_number,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "mobile_number", $$v)
+                                      },
+                                      expression: "form.mobile_number"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: [],
+                                      counter: 30,
+                                      "error-messages":
+                                        _vm.errors.telephone_number,
+                                      label: "Telephone Number",
+                                      type: "number"
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.telephone_number = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.telephone_number,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.form,
+                                          "telephone_number",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "form.telephone_number"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.validation.required.concat(
+                                        _vm.validation.email
+                                      ),
+                                      "error-messages": _vm.errors.email,
+                                      label: "Email Address *"
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.email = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.email,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "email", $$v)
+                                      },
+                                      expression: "form.email"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-textarea", {
+                                    attrs: {
+                                      rules: [],
+                                      "error-messages": _vm.errors.address,
+                                      label: "Address *",
+                                      rows: "1"
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.address = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.address,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "address", $$v)
+                                      },
+                                      expression: "form.address"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             ],
                             1
                           )
                         ],
                         1
-                      ),
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel",
+                    [
+                      _c("v-expansion-panel-header", [
+                        _c("div", { staticClass: "green--text" }, [
+                          _vm._v(
+                            "\n                            Account Information\n                        "
+                          )
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        "v-expansion-panel-content",
                         [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: [],
-                              counter: 30,
-                              "error-messages": _vm.errors.mobile_number,
-                              label: "Mobile Number *"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.mobile_number = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.mobile_number,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "mobile_number", $$v)
-                              },
-                              expression: "form.mobile_number"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: [],
-                              counter: 30,
-                              "error-messages": _vm.errors.telephone_number,
-                              label: "Telephone Number",
-                              type: "number"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.telephone_number = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.telephone_number,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "telephone_number", $$v)
-                              },
-                              expression: "form.telephone_number"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.validation.required.concat(
-                                _vm.validation.email
+                          _c("small", { staticClass: "text--secondary" }, [
+                            _vm._v(
+                              '\n                            Default Password: "password"\n                        '
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.validation.required.concat(
+                                        _vm.validation.minLength(50)
+                                      ),
+                                      counter: 50,
+                                      "error-messages": _vm.errors.username,
+                                      label: "Username *",
+                                      required: ""
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        _vm.errors.username = []
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.username,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "username", $$v)
+                                      },
+                                      expression: "form.username"
+                                    }
+                                  })
+                                ],
+                                1
                               ),
-                              "error-messages": _vm.errors.email,
-                              label: "Email Address *"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.email = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.email,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "email", $$v)
-                              },
-                              expression: "form.email"
-                            }
-                          })
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      label: "Role *",
+                                      items: ["Standard User", "Administrator"],
+                                      "error-messages": _vm.errors.role
+                                    },
+                                    on: { change: _vm.changeRole },
+                                    model: {
+                                      value: _vm.form.role,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "role", $$v)
+                                      },
+                                      expression: "form.role"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-checkbox", {
+                                    attrs: {
+                                      label: "Allow Login",
+                                      "error-messages": _vm.errors.can_login
+                                    },
+                                    model: {
+                                      value: _vm.form.can_login,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "can_login", $$v)
+                                      },
+                                      expression: "form.can_login"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                [
+                                  _vm.form.role == "Administrator"
+                                    ? _c("v-data-table", {
+                                        attrs: {
+                                          "show-select": "",
+                                          headers: _vm.headers,
+                                          items: _vm.permissions
+                                        },
+                                        model: {
+                                          value: _vm.selected,
+                                          callback: function($$v) {
+                                            _vm.selected = $$v
+                                          },
+                                          expression: "selected"
+                                        }
+                                      })
+                                    : _vm._e()
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
                     ],
                     1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("small", { staticClass: "text--secondary" }, [
+                _vm._v(
+                  "\n                * indicates required field\n            "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "success", dark: "" },
+                      on: { click: _vm.onSave }
+                    },
+                    [_vm._v("Save")]
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12" } },
-                        [
-                          _c("v-textarea", {
-                            attrs: {
-                              rules: [],
-                              "error-messages": _vm.errors.address,
-                              label: "Address *",
-                              rows: "1"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.address = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.address,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "address", $$v)
-                              },
-                              expression: "form.address"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("small", { staticClass: "text--secondary" }, [
-                    _vm._v(
-                      "\n                    * indicates required field\n                "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "success", dark: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [_vm._v("Save")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.$router.go(-1)
-                            }
-                          }
-                        },
-                        [_vm._v("Cancel")]
-                      )
-                    ],
-                    1
+                    "v-btn",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_vm._v("Cancel")]
                   )
                 ],
                 1

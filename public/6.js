@@ -575,6 +575,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //         params: { id: item.id }
     //     });
     // },
+    onPasswordReset: function onPasswordReset() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      this.$confirm("Do you want to reset password?").then(function (res) {
+        if (res) {
+          axios.put("/api/users/".concat(_this.selected[0].user.id), {
+            ids: _this.selected.map(function (item) {
+              return item.user.id;
+            }),
+            action: "password_reset"
+          }).then(function (response) {
+            _this.$dialog.message.success("Password reset successfully. (Default: password)", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
+
+            _this.selected = [];
+          })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+          });
+        }
+      });
+    },
     onDelete: function onDelete() {
       var _this = this;
 
@@ -993,6 +1030,19 @@ var render = function() {
                   _c(
                     "v-list",
                     [
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onPasswordReset } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Reset Password\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-list-item",
                         { on: { click: _vm.onRestore } },

@@ -84,3 +84,5 @@ Route::get('/data/total_expenses', 'API\v1\DataController@total_expenses');
 Route::get('/data/expenses_summary', 'API\v1\DataController@expenses_summary');
 
 Route::get('/data/expense_stats', 'API\v1\DataController@expense_stats');
+
+Route::get('/data/permissions', 'API\v1\DataController@permissions');

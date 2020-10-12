@@ -212,11 +212,11 @@ export default {
                         text: "Adjustments",
                         link: { name: "admin.adjustments.index" }
                     },
-                    {
-                        icon: "mdi-circle-medium",
-                        text: "Users",
-                        link: { name: "admin.users.index" }
-                    },
+                    // {
+                    //     icon: "mdi-circle-medium",
+                    //     text: "Users",
+                    //     link: { name: "admin.users.index" }
+                    // },
                     {
                         icon: "mdi-circle-medium",
                         text: "Activity Logs",

@@ -112,11 +112,11 @@
                     </template>
 
                     <v-list>
-                        <!-- <v-list-item @click="onRestore">
+                        <v-list-item @click="onPasswordReset">
                             <v-list-item-title>
-                                Manage Revolving Fund
+                                Reset Password
                             </v-list-item-title>
-                        </v-list-item> -->
+                        </v-list-item>
 
                         <v-list-item @click="onRestore">
                             <v-list-item-title>
@@ -387,6 +387,48 @@ export default {
         //         params: { id: item.id }
         //     });
         // },
+        onPasswordReset() {
+            let _this = this;
+
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            this.$confirm("Do you want to reset password?").then(res => {
+                if (res) {
+                    axios
+                        .put(`/api/users/${_this.selected[0].user.id}`, {
+                            ids: _this.selected.map(item => {
+                                return item.user.id;
+                            }),
+                            action: "password_reset"
+                        })
+                        .then(function(response) {
+                            _this.$dialog.message.success(
+                                "Password reset successfully. (Default: password)",
+                                {
+                                    position: "top-right",
+                                    timeout: 2000
+                                }
+                            );
+                            _this.getDataFromApi().then(data => {
+                                _this.items = data.items;
+                                _this.totalItems = data.total;
+                            });
+
+                            _this.selected = [];
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                            console.log(error.response);
+                        });
+                }
+            });
+        },
         onDelete() {
             let _this = this;
 

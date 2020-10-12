@@ -79,7 +79,9 @@ class AuthController extends Controller
 
                 'user' => $user,
 
-                'access_token' => $token
+                'access_token' => $token,
+
+                'permissions' => $user->getAllPermissions()->pluck("name"),
             ]);
         }
 

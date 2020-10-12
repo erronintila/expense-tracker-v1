@@ -9,8 +9,17 @@ const routes = [
         }
     },
     {
-        path: "*",
-        name: "500",
+        path: "/error-403",
+        name: "error_403",
+        component: () => import("../../views/errors/403"),
+        meta: {
+            requiresAuth: false,
+            requiresAdmin: false
+        }
+    },
+    {
+        path: "/error-500",
+        name: "error_500",
         component: () => import("../../views/errors/500"),
         meta: {
             requiresAuth: false,
@@ -18,8 +27,8 @@ const routes = [
         }
     },
     {
-        path: "*",
-        name: "401",
+        path: "/error-401",
+        name: "error_401",
         component: () => import("../../views/errors/401"),
         meta: {
             requiresAuth: false,

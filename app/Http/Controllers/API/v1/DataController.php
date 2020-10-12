@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\Permission\Models\Permission;
 
 class DataController extends Controller
 {
@@ -241,7 +242,7 @@ class DataController extends Controller
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
-            
+
             $start_date = Carbon::parse($request->start_date)->startOfDay();
 
             $end_date = Carbon::parse($request->end_date)->endOfDay();
@@ -511,5 +512,10 @@ class DataController extends Controller
         ];
 
         return $stats;
+    }
+
+    public function permissions()
+    {
+        return Permission::all();
     }
 }

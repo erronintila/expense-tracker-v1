@@ -154,6 +154,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -163,6 +181,13 @@ __webpack_require__.r(__webpack_exports__);
       showPassword: false,
       showPasswordConfirmation: false,
       employees: [],
+      permissions: [],
+      selected: [],
+      headers: [{
+        text: "Permission",
+        value: "name",
+        sortable: false
+      }],
       form: {
         name: "",
         username: "",
@@ -171,7 +196,8 @@ __webpack_require__.r(__webpack_exports__);
         password_confirmation: "",
         employee: 0,
         is_admin: false,
-        can_login: false
+        can_login: false,
+        role: "Standard User"
       },
       rules: {
         password: [function (v) {
@@ -197,6 +223,17 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    loadPermissions: function loadPermissions() {
+      var _this = this;
+
+      axios.get("/api/data/permissions").then(function (response) {
+        console.log(response);
+        _this.permissions = response.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
     loadEmployees: function loadEmployees() {
       var _this = this;
 
@@ -211,6 +248,13 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
       });
+    },
+    changeRole: function changeRole() {
+      if (this.form.role == "Administrator") {
+        this.selected = this.permissions;
+      } else {
+        this.selected = [];
+      }
     },
     onSave: function onSave() {
       var _this = this;
@@ -246,6 +290,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.loadEmployees();
+    this.loadPermissions();
   }
 });
 
@@ -518,17 +563,18 @@ var render = function() {
                         "v-col",
                         { attrs: { cols: "12", md: "4" } },
                         [
-                          _c("v-checkbox", {
+                          _c("v-select", {
                             attrs: {
-                              label: "Is Administrator",
-                              "error-messages": _vm.errors.is_admin
+                              label: "Role *",
+                              items: ["Standard User", "Administrator"]
                             },
+                            on: { change: _vm.changeRole },
                             model: {
-                              value: _vm.form.is_admin,
+                              value: _vm.form.role,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "is_admin", $$v)
+                                _vm.$set(_vm.form, "role", $$v)
                               },
-                              expression: "form.is_admin"
+                              expression: "form.role"
                             }
                           })
                         ],
@@ -552,6 +598,35 @@ var render = function() {
                               expression: "form.can_login"
                             }
                           })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        [
+                          _vm.form.role == "Administrator"
+                            ? _c("v-data-table", {
+                                attrs: {
+                                  "show-select": "",
+                                  headers: _vm.headers,
+                                  items: _vm.permissions
+                                },
+                                model: {
+                                  value: _vm.selected,
+                                  callback: function($$v) {
+                                    _vm.selected = $$v
+                                  },
+                                  expression: "selected"
+                                }
+                              })
+                            : _vm._e()
                         ],
                         1
                       )

@@ -185,6 +185,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
+        console.log(response);
         var data = response.data.data;
         _this.name = data.name;
         _this.username = data.username;

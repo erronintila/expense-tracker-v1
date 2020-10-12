@@ -27,6 +27,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // Implicitly grant "Super Admin" role all permission checks using can()
+        Gate::before(function ($user, $ability) {
+            if ($user->hasRole('Super Admin')) {
+                return true;
+            }
+        });
+
         Passport::routes();
         // Passport::tokensExpireIn(Carbon::now()->addDays(1));
         // Passport::refreshTokensExpireIn(Carbon::now()->addDays(10));

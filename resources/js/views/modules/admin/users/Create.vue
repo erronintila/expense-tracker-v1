@@ -112,11 +112,17 @@
 
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-checkbox
+                            <v-select
+                                v-model="form.role"
+                                label="Role *"
+                                :items="['Standard User', 'Administrator']"
+                                @change="changeRole"
+                            ></v-select>
+                            <!-- <v-checkbox
                                 v-model="form.is_admin"
                                 label="Is Administrator"
                                 :error-messages="errors.is_admin"
-                            ></v-checkbox>
+                            ></v-checkbox> -->
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -125,6 +131,18 @@
                                 label="Allow Login"
                                 :error-messages="errors.can_login"
                             ></v-checkbox>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <v-data-table
+                                v-if="form.role == 'Administrator'"
+                                v-model="selected"
+                                show-select
+                                :headers="headers"
+                                :items="permissions"
+                            ></v-data-table>
                         </v-col>
                     </v-row>
 
@@ -151,6 +169,9 @@ export default {
             showPassword: false,
             showPasswordConfirmation: false,
             employees: [],
+            permissions: [],
+            selected: [],
+            headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 name: "",
                 username: "",
@@ -159,7 +180,8 @@ export default {
                 password_confirmation: "",
                 employee: 0,
                 is_admin: false,
-                can_login: false
+                can_login: false,
+                role: "Standard User"
             },
             rules: {
                 password: [
@@ -188,6 +210,21 @@ export default {
         };
     },
     methods: {
+        loadPermissions() {
+            let _this = this;
+
+            axios
+                .get("/api/data/permissions")
+                .then(response => {
+                    console.log(response);
+
+                    _this.permissions = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         loadEmployees() {
             let _this = this;
             axios
@@ -201,6 +238,13 @@ export default {
                     console.log(error);
                     console.log(error.response);
                 });
+        },
+        changeRole() {
+            if(this.form.role == "Administrator") {
+                this.selected = this.permissions;
+            } else {
+                this.selected = [];
+            }
         },
         onSave() {
             let _this = this;
@@ -233,7 +277,10 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog("Error", "Please contact tech support");
+                        _this.errorDialog(
+                            "Error",
+                            "Please contact tech support"
+                        );
                     });
 
                 return;
@@ -242,6 +289,7 @@ export default {
     },
     created() {
         this.loadEmployees();
+        this.loadPermissions();
     }
 };
 </script>

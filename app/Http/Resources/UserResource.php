@@ -27,8 +27,8 @@ class UserResource extends JsonResource
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'employee' => new EmployeeResource($this->employee),
-            'role' => "",
-            'permissions' => []
+            'role' => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
+            'permissions' => $this->getAllPermissions()->pluck("name"),
         ];
     }
 }
