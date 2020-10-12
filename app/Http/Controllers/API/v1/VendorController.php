@@ -12,6 +12,15 @@ use Illuminate\Validation\Rule;
 
 class VendorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all vendors'], ['only' => ['index']]);
+        $this->middleware(['permission:view vendors'], ['only' => ['show']]);
+        $this->middleware(['permission:add vendors'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit vendors'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete vendors'], ['only' => ['destroy']]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *

@@ -12,6 +12,15 @@ use Illuminate\Validation\Rule;
 
 class JobController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all jobs'], ['only' => ['index']]);
+        $this->middleware(['permission:view jobs'], ['only' => ['show']]);
+        $this->middleware(['permission:add jobs'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit jobs'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete jobs'], ['only' => ['destroy']]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *

@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Validator;
 
 class AdjustmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all adjustments'], ['only' => ['index']]);
+        $this->middleware(['permission:view adjustments'], ['only' => ['show']]);
+        $this->middleware(['permission:add adjustments'], ['only' => ['create', 'store']]);
+        // $this->middleware(['permission:edit adjustments'], ['only' => ['edit', 'update']]);
+        // $this->middleware(['permission:delete adjustments'], ['only' => ['destroy']]);
+    }
+
+
     /**
      * Get a validator for an incoming registration request.
      *

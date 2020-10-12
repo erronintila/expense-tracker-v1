@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all payments'], ['only' => ['index']]);
+        $this->middleware(['permission:view payments'], ['only' => ['show']]);
+        $this->middleware(['permission:add payments'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit payments'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete payments'], ['only' => ['destroy']]);
+    }
+
     /**
      * Get a validator for an incoming request.
      *

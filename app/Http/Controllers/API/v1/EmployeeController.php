@@ -15,6 +15,15 @@ use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all employees'], ['only' => ['index']]);
+        $this->middleware(['permission:view employees'], ['only' => ['show']]);
+        $this->middleware(['permission:add employees'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit employees'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete employees'], ['only' => ['destroy']]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -255,7 +264,9 @@ class EmployeeController extends Controller
 
                         $employee->restore();
 
-                        $employee->user->restore();
+                        $user = User::withTrashed()->findOrFail($employee->user_id);
+
+                        $user->restore();
                     }
                 } else {
 
@@ -263,7 +274,9 @@ class EmployeeController extends Controller
 
                     $employee->restore();
 
-                    $employee->user->restore();
+                    $user = User::withTrashed()->findOrFail($employee->user_id);
+
+                    $user->restore();
                 }
 
                 // $employee = Employee::withTrashed()
@@ -301,15 +314,11 @@ class EmployeeController extends Controller
 
                 $employee->address = $request->address;
 
-                // $employee->remaining_fund = $request->fund < $employee->remaining_fund ? $request->fund : $employee->remaining_fund;
-
-                // $employee->fund = $request->fund;
-
                 $employee->save();
 
                 if ($employee->user_id != null) {
 
-                    $user = User::findOrFail($employee->user_id);
+                    $user = User::withTrashed()->findOrFail($employee->user_id);
 
                     $user->name = $request->last_name . ', ' . $request->first_name . ' ' . $request->middle_name;
 
@@ -322,6 +331,10 @@ class EmployeeController extends Controller
                     $user->can_login = $request->can_login;
 
                     $user->save();
+
+                    $user->syncPermissions();
+
+                    $user->syncRoles();
 
                     if ($request->role == "Administrator") {
 
@@ -358,19 +371,23 @@ class EmployeeController extends Controller
 
             foreach ($request->ids as $id) {
 
-                $employee = Employee::findOrFail($id);
+                $employee = Employee::withTrashed()->findOrFail($id);
 
                 $employee->delete();
 
-                $employee->user->delete();
+                $user = User::withTrashed()->findOrFail($employee->user_id);
+
+                $user->delete();
             }
         } else {
 
-            $employee = Employee::findOrFail($id);
+            $employee = Employee::withTrashed()->findOrFail($id);
 
             $employee->delete();
 
-            $employee->user->delete();
+            $user = User::withTrashed()->findOrFail($employee->user_id);
+
+            $user->delete();
         }
 
         // $employee = Employee::whereIn('id', $request->ids)->delete();

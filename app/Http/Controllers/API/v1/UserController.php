@@ -14,6 +14,15 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all users'], ['only' => ['index']]);
+        $this->middleware(['permission:view users'], ['only' => ['show']]);
+        $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete users'], ['only' => ['destroy']]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -35,7 +44,7 @@ class UserController extends Controller
             'role' => ['required'],
         ]);
     }
-    
+
     /**
      * Display a listing of the resource.
      *

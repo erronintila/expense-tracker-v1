@@ -11,6 +11,16 @@ use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
+        // $this->middleware(['permission:view activity logs'], ['only' => ['show']]);
+        // $this->middleware(['permission:add activity logs'], ['only' => ['create', 'store']]);
+        // $this->middleware(['permission:edit activity logs'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete activity logs'], ['only' => ['destroy']]);
+    }
+
+
     /**
      * Display a listing of the resource.
      *

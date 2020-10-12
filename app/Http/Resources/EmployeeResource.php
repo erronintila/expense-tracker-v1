@@ -18,7 +18,7 @@ class EmployeeResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
-        $user = User::findOrFail($this->user_id);
+        $user = User::withTrashed()->findOrFail($this->user_id);
 
         return [
             'id' => $this->id,
@@ -43,7 +43,7 @@ class EmployeeResource extends JsonResource
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'user' => $user,
             'role' => $user->is_admin ? ["Administrator"] : $user->getRoleNames(),
-            'permissions' => $user->getAllPermissions()->pluck("name"),
+            'permissions' => $user->getAllPermissions(),
         ];
     }
 }

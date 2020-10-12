@@ -11,6 +11,15 @@ use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all departments'], ['only' => ['index']]);
+        $this->middleware(['permission:view departments'], ['only' => ['show']]);
+        $this->middleware(['permission:add departments'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit departments'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete departments'], ['only' => ['destroy']]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *

@@ -16,6 +16,15 @@ use Illuminate\Validation\Rule;
 
 class ExpenseReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view all expense reports'], ['only' => ['index']]);
+        $this->middleware(['permission:view expense reports'], ['only' => ['show']]);
+        $this->middleware(['permission:add expense reports'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit expense reports'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete expense reports'], ['only' => ['destroy']]);
+    }
+
     /**
      * Get a validator for an incoming request.
      *
