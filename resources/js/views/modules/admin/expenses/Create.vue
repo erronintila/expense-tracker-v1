@@ -785,7 +785,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         loadEmployees() {
@@ -800,7 +800,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         loadVendors() {
@@ -821,7 +821,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onRefresh() {
@@ -887,7 +887,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.errors = error.response.data.errors;
                     });
@@ -962,7 +962,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.vendorOptions.errors = error.response.data.errors;
                     });

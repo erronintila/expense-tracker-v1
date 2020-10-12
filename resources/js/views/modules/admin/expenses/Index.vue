@@ -322,11 +322,11 @@ export default {
                 "Last 5 Years"
             ],
             headers: [
-                { text: "Expense", value: "expense_type.name" },
-                { text: "Employee", value: "employee_name" },
+                { text: "Expense", value: "expense_type.name", sortable: false  },
+                { text: "Employee", value: "employee_name", sortable: false  },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Report", value: "expense_report" },
+                { text: "Report", value: "expense_report", sortable: false  },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -384,6 +384,7 @@ export default {
                         }
                     })
                     .then(response => {
+                        console.log(response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
@@ -395,7 +396,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.loading = false;
                     });
@@ -417,7 +418,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         loadExpenseTypes() {
@@ -436,7 +437,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onRefresh() {
@@ -541,7 +542,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.status}`, error.statusText);
+                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                         });
                 }
             });
@@ -582,7 +583,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.status}`, error.statusText);
+                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                         });
                 }
             });

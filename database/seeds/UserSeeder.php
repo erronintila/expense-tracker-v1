@@ -45,27 +45,32 @@ class UserSeeder extends Seeder
                 continue;
             }
 
+            if ($model == "users") {
+                // Permission::create(['name' => 'verify users']);
+                // Permission::create(['name' => 'restore users']);
+                Permission::create(['name' => 'reset user passwords']);
+                continue;
+            }
+
             Permission::create(['name' => 'add ' . $model]);
             Permission::create(['name' => 'edit ' . $model]);
             Permission::create(['name' => 'delete ' . $model]);
             Permission::create(['name' => 'view ' . $model]);
             Permission::create(['name' => 'view all ' . $model]);
 
-            if ($model == "users") {
-                // Permission::create(['name' => 'verify users']);
-                Permission::create(['name' => 'restore users']);
-                Permission::create(['name' => 'reset user passwords']);
+            if ($model == "employees") {
+                Permission::create(['name' => 'restore employees']);
             }
 
             if ($model == "expense reports") {
                 Permission::create(['name' => 'approve expense reports']);
                 Permission::create(['name' => 'submit expense reports']);
-                Permission::create(['name' => 'duplicate expense reports']);
+                // Permission::create(['name' => 'duplicate expense reports']);
             }
 
-            if ($model == "payments") {
-                Permission::create(['name' => 'approve payments']);
-            }
+            // if ($model == "payments") {
+            //     Permission::create(['name' => 'approve payments']);
+            // }
         }
 
         // Permission::create(['name' => 'view admin dashboard']);
@@ -85,7 +90,7 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("view expense reports");
         $roleUser->givePermissionTo("view all expense reports");
         $roleUser->givePermissionTo("submit expense reports");
-        $roleUser->givePermissionTo("duplicate expense reports");
+        // $roleUser->givePermissionTo("duplicate expense reports");
         $roleUser->givePermissionTo("add vendors");
 
         // $roleAdmin = Role::create(['name' => 'Administrator']);

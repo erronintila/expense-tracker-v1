@@ -21,7 +21,7 @@ class ExpenseReportController extends Controller
         $this->middleware(['permission:view all expense reports'], ['only' => ['index']]);
         $this->middleware(['permission:view expense reports'], ['only' => ['show']]);
         $this->middleware(['permission:add expense reports'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:edit expense reports'], ['only' => ['edit', 'update']]);
+        // $this->middleware(['permission:edit expense reports'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete expense reports'], ['only' => ['destroy']]);
     }
 
@@ -234,6 +234,11 @@ class ExpenseReportController extends Controller
 
             case 'submit':
 
+                if (!app("auth")->user()->hasPermissionTo('submit expense reports')) {
+
+                    abort(403);
+                }
+
                 foreach ($request->ids as $id) {
 
                     $expense_report = ExpenseReport::withTrashed()->find($id);
@@ -243,6 +248,8 @@ class ExpenseReportController extends Controller
                     $expense_report->approved_at = null;
 
                     $expense_report->cancelled_at = null;
+
+                    $expense_report->submitted_by_user_id = Auth::user()->id;
 
                     $expense_report->save();
                 }
@@ -262,6 +269,11 @@ class ExpenseReportController extends Controller
                 break;
             case 'approve':
 
+                if (!app("auth")->user()->hasPermissionTo('approve expense reports')) {
+
+                    abort(403);
+                }
+
                 foreach ($request->ids as $id) {
 
                     $expense_report = ExpenseReport::withTrashed()->find($id);
@@ -271,6 +283,11 @@ class ExpenseReportController extends Controller
                     $expense_report->approved_at = now();
 
                     $expense_report->cancelled_at = null;
+
+                    $expense_report->submitted_by_user_id = $expense_report->submitted_at == null
+                        ? Auth::user()->id : $expense_report->submitted_by_user_id;
+
+                    $expense_report->approved_by_user_id = Auth::user()->id;
 
                     $expense_report->save();
                 }
@@ -393,6 +410,11 @@ class ExpenseReportController extends Controller
                 break;
             default:
 
+                if (!app("auth")->user()->hasPermissionTo('edit expense reports')) {
+
+                    abort(403);
+                }
+
                 $this->validator($request->all(), $id)->validate();
 
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
@@ -464,6 +486,8 @@ class ExpenseReportController extends Controller
         foreach ($request->ids as $id) {
 
             $expense_report = ExpenseReport::find($id);
+
+            $expense_report->deleted_by_user_id = Auth::user()->id;
 
             $expense_report->delete();
 

@@ -19,7 +19,7 @@ class UserController extends Controller
         $this->middleware(['permission:view all users'], ['only' => ['index']]);
         $this->middleware(['permission:view users'], ['only' => ['show']]);
         $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
+        // $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete users'], ['only' => ['destroy']]);
     }
 
@@ -191,6 +191,11 @@ class UserController extends Controller
                 break;
             case 'password_reset':
 
+                if (!app("auth")->user()->hasPermissionTo('reset user passwords')) {
+
+                    abort(403);
+                }
+
                 $user = User::whereIn('id', $request->ids)
                     ->update(array('password' => Hash::make('password')));
 
@@ -227,6 +232,12 @@ class UserController extends Controller
 
                 break;
             default:
+
+                if (!app("auth")->user()->hasPermissionTo('edit users')) {
+
+                    abort(403);
+                }
+
                 $request->validate([
 
                     'name'      => ['required', 'max:200'],

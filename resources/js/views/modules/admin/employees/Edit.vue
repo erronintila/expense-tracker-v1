@@ -35,6 +35,21 @@
                                     >
                                     </v-autocomplete>
                                 </v-col>
+
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.code"
+                                        :rules="[
+                                            ...validation.required,
+                                            ...validation.minLength(100)
+                                        ]"
+                                        :counter="100"
+                                        :error-messages="errors.code"
+                                        @input="errors.code = []"
+                                        label="Code *"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
                             </v-row>
 
                             <v-row>
@@ -276,6 +291,7 @@ export default {
             selected: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
+                code: null,
                 first_name: null,
                 middle_name: "",
                 last_name: null,
@@ -292,6 +308,7 @@ export default {
                 can_login: true
             },
             errors: {
+                code: [],
                 first_name: [],
                 middle_name: [],
                 last_name: [],
@@ -315,36 +332,37 @@ export default {
 
             this.loadPermissions().then(
                 axios
-                .get("/api/employees/" + _this.$route.params.id)
-                .then(response => {
-                    let data = response.data.data;
+                    .get("/api/employees/" + _this.$route.params.id)
+                    .then(response => {
+                        let data = response.data.data;
 
-                    _this.form.first_name = data.first_name;
-                    _this.form.middle_name = data.middle_name;
-                    _this.form.last_name = data.last_name;
-                    _this.form.suffix = data.suffix;
-                    _this.form.gender = data.gender;
-                    _this.form.birthdate = data.birthdate;
-                    _this.form.job = data.job.id;
-                    _this.form.mobile_number = data.mobile_number;
-                    _this.form.telephone_number = data.telephone_number;
-                    _this.form.email = data.email;
-                    _this.form.address = data.address;
-                    _this.selected = data.permissions;
-                    _this.form.role = data.role[0];
-                    _this.form.username = data.user.username;
-                    _this.form.can_login = data.user.can_login;
+                        _this.form.code = data.code;
+                        _this.form.first_name = data.first_name;
+                        _this.form.middle_name = data.middle_name;
+                        _this.form.last_name = data.last_name;
+                        _this.form.suffix = data.suffix;
+                        _this.form.gender = data.gender;
+                        _this.form.birthdate = data.birthdate;
+                        _this.form.job = data.job.id;
+                        _this.form.mobile_number = data.mobile_number;
+                        _this.form.telephone_number = data.telephone_number;
+                        _this.form.email = data.email;
+                        _this.form.address = data.address;
+                        _this.selected = data.permissions;
+                        _this.form.role = data.role[0];
+                        _this.form.username = data.user.username;
+                        _this.form.can_login = data.user.can_login;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
 
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
-                })
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+                    })
             );
-
-
         },
         loadJobs() {
             let _this = this;
@@ -358,7 +376,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadPermissions() {
@@ -376,7 +397,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         reject();
                     });
@@ -401,6 +425,7 @@ export default {
                 axios
                     .put("/api/employees/" + _this.$route.params.id, {
                         action: "update",
+                        code: _this.form.code,
                         first_name: _this.form.first_name,
                         middle_name: _this.form.middle_name,
                         last_name: _this.form.last_name,
@@ -432,7 +457,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.errors = error.response.data.errors;
                     });

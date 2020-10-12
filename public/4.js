@@ -324,7 +324,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.status), error.statusText);
+        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadExpenses: function loadExpenses(emp_id) {
@@ -347,7 +347,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.status), error.statusText);
+        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onEdit: function onEdit() {

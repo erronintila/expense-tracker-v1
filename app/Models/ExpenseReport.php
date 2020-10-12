@@ -36,8 +36,8 @@ class ExpenseReport extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'code', 'description', 'remarks', 'notes', 'employee_id'
+    protected $guarded = [
+        // 'code', 'description', 'remarks', 'notes', 'employee_id'
     ];
 
     /**

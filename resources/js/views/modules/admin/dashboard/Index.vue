@@ -387,7 +387,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         load_department_expenses(start, end, employee) {
@@ -433,7 +433,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         load_expense_types_expenses(start, end, employee) {
@@ -480,7 +480,7 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         load_employees_expenses(start, end, employee) {
@@ -526,7 +526,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         load_expenses_summary(start, end, time_unit, employee) {
@@ -594,7 +594,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         load_bar_chart() {
@@ -910,7 +910,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
     },

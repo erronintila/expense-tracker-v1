@@ -541,7 +541,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onUpdateData() {
@@ -576,7 +576,7 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
 
                 return;
@@ -618,7 +618,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
             }
         },
@@ -659,7 +659,7 @@ export default {
 
                         _this.password_errors = error.response.data.errors;
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
             }
         },

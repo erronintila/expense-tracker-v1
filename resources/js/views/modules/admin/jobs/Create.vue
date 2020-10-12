@@ -93,7 +93,7 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onSave() {
@@ -123,7 +123,7 @@ export default {
 
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.errors = error.response.data.errors;
                     });

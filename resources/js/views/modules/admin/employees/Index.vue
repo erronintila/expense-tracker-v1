@@ -251,8 +251,8 @@ export default {
             loading: true,
             headers: [
                 { text: "Name", value: "fullname" },
-                { text: "Job Designation", value: "job.name" },
-                { text: "Department", value: "department.name" },
+                { text: "Job Designation", value: "job.name", sortable: false  },
+                { text: "Department", value: "department.name", sortable: false  },
                 { text: "Revolving Fund", value: "revolving_fund" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -323,7 +323,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.loading = false;
                     });
@@ -428,7 +428,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.status}`, error.statusText);
+                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                         });
                 }
             });
@@ -473,7 +473,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.status}`, error.statusText);
+                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                         });
                 }
             });
@@ -514,7 +514,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.status}`, error.statusText);
+                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                         });
                 }
             });

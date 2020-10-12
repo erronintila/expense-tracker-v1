@@ -223,6 +223,26 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
+                                                                <td>
+                                                                    Username
+                                                                </td>
+                                                                <td>
+                                                                    {{
+                                                                        user.username
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Role</td>
+                                                                <td>
+                                                                    {{
+                                                                        user.is_admin
+                                                                            ? "Administrator"
+                                                                            : "Standard User"
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
                                                                 <td>Gender</td>
                                                                 <td>
                                                                     {{ gender }}
@@ -262,22 +282,18 @@
                                                 </v-simple-table>
                                             </v-expansion-panel-content>
                                         </v-expansion-panel>
-                                        <!-- <v-expansion-panel>
+                                        <v-expansion-panel>
                                             <v-expansion-panel-header>
-                                                Itinerary
+                                                Permissions
                                             </v-expansion-panel-header>
                                             <v-expansion-panel-content>
-                                                Lorem ipsum dolor sit amet,
-                                                consectetur adipiscing elit, sed
-                                                do eiusmod tempor incididunt ut
-                                                labore et dolore magna aliqua.
-                                                Ut enim ad minim veniam, quis
-                                                nostrud exercitation ullamco
-                                                laboris nisi ut aliquip ex ea
-                                                commodo consequat.
+                                                <v-data-table
+                                                    :headers="headers"
+                                                    :items="permissions"
+                                                ></v-data-table>
                                             </v-expansion-panel-content>
                                         </v-expansion-panel>
-                                        <v-expansion-panel>
+                                        <!-- <v-expansion-panel>
                                             <v-expansion-panel-header>
                                                 Activities
                                             </v-expansion-panel-header>
@@ -339,7 +355,10 @@ export default {
             fund: 0,
             remaining_fund: 0,
             job: "",
-            department: ""
+            department: "",
+            headers: [{ text: "Permission", value: "name", sortable: false }],
+            permissions: [],
+            user: { username: "", is_admin: false }
         };
     },
     methods: {
@@ -350,7 +369,6 @@ export default {
                 .get(`/api/employees/${_this.$route.params.id}`)
                 .then(function(response) {
                     let data = response.data.data;
-                    console.log(data);
 
                     _this.fullname = data.fullname;
                     _this.first_name = data.first_name;
@@ -367,12 +385,17 @@ export default {
                     _this.remaining_fund = data.remaining_fund;
                     _this.job = data.job.name;
                     _this.department = data.department.name;
+                    _this.permissions = data.permissions;
+                    _this.user = data.user;
                 })
                 .catch(function(error) {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         editEmployee() {
@@ -407,9 +430,12 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
-        },
+        }
     },
     created() {
         this.getData();

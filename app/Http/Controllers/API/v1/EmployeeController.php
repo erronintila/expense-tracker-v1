@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Job;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -20,7 +21,7 @@ class EmployeeController extends Controller
         $this->middleware(['permission:view all employees'], ['only' => ['index']]);
         $this->middleware(['permission:view employees'], ['only' => ['show']]);
         $this->middleware(['permission:add employees'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:edit employees'], ['only' => ['edit', 'update']]);
+        // $this->middleware(['permission:edit employees'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete employees'], ['only' => ['destroy']]);
     }
 
@@ -79,9 +80,35 @@ class EmployeeController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $sortBy = $sortBy == "fullname" ? "last_name" : $sortBy;
+        // $sortBy = $sortBy == "fullname" ? "last_name" : $sortBy;
 
-        $employees = Employee::orderBy($sortBy, $sortType);
+        switch ($sortBy) {
+            case 'fullname':
+
+                $employees = Employee::orderBy("last_name", $sortType);
+
+                break;
+            case 'job.name':
+
+                $employees = Employee::orderBy("last_name", $sortType);
+
+                break;
+            case 'department.name':
+
+                $employees = Employee::orderBy("last_name", $sortType);
+
+                break;
+            case 'revolving_fund':
+
+                $employees = Employee::orderBy("fund", $sortType);
+
+                break;
+            default:
+
+                $employees = Employee::orderBy($sortBy, $sortType);
+
+                break;
+        }
 
         if (request()->has('status')) {
 
@@ -256,6 +283,11 @@ class EmployeeController extends Controller
 
             case 'restore':
 
+                if (!app("auth")->user()->hasPermissionTo('restore employees')) {
+
+                    abort(403);
+                }
+
                 if (request()->has("ids")) {
 
                     foreach ($request->ids as $id) {
@@ -285,6 +317,11 @@ class EmployeeController extends Controller
 
                 break;
             default:
+
+                if (!app("auth")->user()->hasPermissionTo('edit employees')) {
+
+                    abort(403);
+                }
 
                 $this->validator($request->all(), $id)->validate();
 

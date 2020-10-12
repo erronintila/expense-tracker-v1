@@ -432,10 +432,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "fullname"
       }, {
         text: "Job Designation",
-        value: "job.name"
+        value: "job.name",
+        sortable: false
       }, {
         text: "Department",
-        value: "department.name"
+        value: "department.name",
+        sortable: false
       }, {
         text: "Revolving Fund",
         value: "revolving_fund"
@@ -516,7 +518,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.status), error.statusText);
+          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -612,7 +614,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.status), error.statusText);
+            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -652,7 +654,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.status), error.statusText);
+            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -691,7 +693,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.status), error.statusText);
+            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });

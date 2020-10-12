@@ -201,6 +201,15 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Submitted By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                item.submitted_by == null ? "" : item.submitted_by.name,
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Approved</strong></td>
                                         <td>:</td>
                                         <td>
@@ -213,6 +222,15 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Approved By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                item.approved_by == null ? "" : item.approved_by.name,
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
                                         <td>
@@ -221,6 +239,15 @@
                                                     item.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cancelled By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                item.deleted_by == null ? "" : item.deleted_by.name,
                                             }}
                                         </td>
                                     </tr>
@@ -290,9 +317,9 @@ export default {
             loading: true,
             headers: [
                 { text: "Description", value: "description" },
-                { text: "Amount", value: "total" },
+                { text: "Amount", value: "total", sortable: false  },
                 { text: "Last Updated", value: "updated_at" },
-                { text: "Status", value: "status.status" },
+                { text: "Status", value: "status.status", sortable: false  },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -411,7 +438,7 @@ export default {
 
                                     _this.loading = false;
 
-                                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                                 });
                         } else {
                             let items = [];
@@ -426,7 +453,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         reject();
                     });
@@ -557,7 +584,7 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(`Error ${error.status}`, error.statusText);
+                                _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                             });
                     }
                 }
@@ -659,7 +686,7 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(`Error ${error.status}`, error.statusText);
+                                _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                             });
                     }
                 }

@@ -300,6 +300,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -315,13 +342,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "description"
       }, {
         text: "Amount",
-        value: "total"
+        value: "total",
+        sortable: false
       }, {
         text: "Last Updated",
         value: "updated_at"
       }, {
         text: "Status",
-        value: "status.status"
+        value: "status.status",
+        sortable: false
       }, {
         text: "Actions",
         value: "actions",
@@ -415,7 +444,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               console.log(error.response);
               _this.loading = false;
 
-              _this.errorDialog("Error ".concat(error.status), error.statusText);
+              _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
             });
           } else {
             var items = [];
@@ -430,7 +459,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.status), error.statusText);
+          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           reject();
         });
@@ -545,7 +574,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.status), error.statusText);
+            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -630,7 +659,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.status), error.statusText);
+            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -1127,6 +1156,26 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
+                                        _c("strong", [_vm._v("Submitted By")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.submitted_by == null
+                                                ? ""
+                                                : item.submitted_by.name
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
                                         _c("strong", [_vm._v("Approved")])
                                       ]),
                                       _vm._v(" "),
@@ -1148,6 +1197,26 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
+                                        _c("strong", [_vm._v("Approved By")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.approved_by == null
+                                                ? ""
+                                                : item.approved_by.name
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
                                         _c("strong", [_vm._v("Cancelled")])
                                       ]),
                                       _vm._v(" "),
@@ -1161,6 +1230,26 @@ var render = function() {
                                                 item.deleted_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Cancelled By")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.deleted_by == null
+                                                ? ""
+                                                : item.deleted_by.name
                                             ) +
                                             "\n                                    "
                                         )

@@ -35,6 +35,21 @@
                                     >
                                     </v-autocomplete>
                                 </v-col>
+
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.code"
+                                        :rules="[
+                                            ...validation.required,
+                                            ...validation.minLength(100)
+                                        ]"
+                                        :counter="100"
+                                        :error-messages="errors.code"
+                                        @input="errors.code = []"
+                                        label="Code *"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
                             </v-row>
 
                             <v-row>
@@ -277,6 +292,7 @@ export default {
             selected: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
+                code: null,
                 first_name: null,
                 middle_name: "",
                 last_name: null,
@@ -293,6 +309,7 @@ export default {
                 can_login: true
             },
             errors: {
+                code: [],
                 first_name: [],
                 middle_name: [],
                 last_name: [],
@@ -324,7 +341,7 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         loadPermissions() {
@@ -339,7 +356,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onRefresh() {
@@ -360,6 +377,7 @@ export default {
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/employees", {
+                        code: _this.form.code,
                         first_name: _this.form.first_name,
                         middle_name: _this.form.middle_name,
                         last_name: _this.form.last_name,
@@ -394,7 +412,7 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
 
                 return;

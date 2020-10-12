@@ -14,6 +14,10 @@ class ExpenseObserver
      */
     public function created(Expense $expense)
     {
+        $expense->code = "EX" . date("Y") . str_pad($expense->id, 5, '0', STR_PAD_LEFT);
+
+        $expense->save();
+
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
         $expense->employee->remaining_fund -= $expense_amount;

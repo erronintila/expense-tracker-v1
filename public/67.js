@@ -311,7 +311,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       headers: [{
         text: "Expense",
-        value: "expense_type.name"
+        value: "expense_type.name",
+        sortable: false
       }, {
         text: "Date",
         value: "date"
@@ -320,7 +321,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "amount"
       }, {
         text: "Report",
-        value: "expense_report"
+        value: "expense_report",
+        sortable: false
       }, {
         text: "Last Updated",
         value: "updated_at"
@@ -405,7 +407,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               console.log(error.response);
               _this.loading = false;
 
-              _this.errorDialog("Error ".concat(error.status), error.statusText);
+              _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
             });
           } else {
             var items = [];
@@ -421,7 +423,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error.response);
           reject();
 
-          _this.errorDialog("Error ".concat(error.status), error.statusText);
+          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
       });
     },
@@ -439,7 +441,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.status), error.statusText);
+        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -537,7 +539,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.status), error.statusText);
+            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -576,7 +578,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.status), error.statusText);
+            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });

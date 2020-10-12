@@ -14,7 +14,7 @@ class PaymentObserver
      */
     public function created(Payment $payment)
     {
-        $payment->code = "PR" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
+        $payment->code = "PV" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
 
         $payment->save();
     }
