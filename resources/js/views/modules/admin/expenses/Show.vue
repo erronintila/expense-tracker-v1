@@ -153,7 +153,11 @@ export default {
             particular_amount: 0,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
-                { text: "Reimbursable", value: "reimbursable_amount", sortable: false },
+                {
+                    text: "Reimbursable",
+                    value: "reimbursable_amount",
+                    sortable: false
+                },
                 { text: "Amount", value: "amount", sortable: false }
             ],
             items: []
@@ -176,29 +180,25 @@ export default {
                     _this.date = data.date;
                     _this.remarks = data.remarks;
                     _this.is_active = data.is_active;
-                    _this.expense_type = data.expense_type.name;
-                    _this.employee = data.employee.fullname;
-                    _this.vendor = data.vendor.name;
+                    _this.expense_type =
+                        data.expense_type == null
+                            ? null
+                            : data.expense_type.name;
+                    _this.employee =
+                        data.employee == null ? null : data.employee.fullname;
+                    _this.vendor =
+                        data.vendor == null ? null : data.vendor.name;
                     _this.items = data.expense_details;
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
-        },
-        isEmpty(item) {
-            if (item) {
-                return parseFloat(item);
-            }
-            return 0;
-        },
-        editDetails() {
-            this.$router.push({
-                name: "admin.expenses.edit",
-                params: { id: this.$route.params.id }
-            });
         }
     },
     watch: {

@@ -339,12 +339,6 @@ export default {
                 params: { id: this.$route.params.id }
             });
         },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // },
-        // formatDate(date, format) {
-        //     return date == null ? "" : moment(date).format(format);
-        // },
     },
     watch: {
         selected() {
@@ -355,9 +349,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
     }
 };

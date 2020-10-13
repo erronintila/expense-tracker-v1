@@ -281,12 +281,6 @@ export default {
                 }
             });
         },
-        // formatDate(date, format) {
-        //     return date == null ? "" : moment(date).format(format);
-        // },
-        // formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
     },
     watch: {
         items() {
@@ -297,9 +291,6 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
     }
 };

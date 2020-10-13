@@ -18,12 +18,9 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   created: function created() {
-    var _this = this;
-
     this.$store.dispatch("AUTH_LOGOUT").then(function (response) {
-      _this.$router.push({
-        name: "login"
-      });
+      // this.$router.push({ name: "login" });
+      window.location.replace("/login");
     });
   }
 });

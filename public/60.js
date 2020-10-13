@@ -196,9 +196,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.date = data.date;
         _this.remarks = data.remarks;
         _this.is_active = data.is_active;
-        _this.expense_type = data.expense_type.name;
-        _this.employee = data.employee.fullname;
-        _this.vendor = data.vendor.name;
+        _this.expense_type = data.expense_type == null ? null : data.expense_type.name;
+        _this.employee = data.employee == null ? null : data.employee.fullname;
+        _this.vendor = data.vendor == null ? null : data.vendor.name;
         _this.items = data.expense_details;
       })["catch"](function (error) {
         console.log(error);
