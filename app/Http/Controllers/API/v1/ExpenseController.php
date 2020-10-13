@@ -243,9 +243,24 @@ class ExpenseController extends Controller
 
             case 'restore':
 
-                $expense = Expense::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                if (request()->has("ids")) {
+
+                    foreach ($request->ids as $id) {
+
+                        $expense = Expense::withTrashed()->findOrFail($id);
+
+                        $expense->restore();
+                    }
+                } else {
+
+                    $expense = Expense::withTrashed()->findOrFail($id);
+
+                    $expense->restore();
+                }
+
+                // $expense = Expense::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
 
                 break;
             default:
@@ -260,6 +275,11 @@ class ExpenseController extends Controller
                 $this->validator($request->all(), $id, $employee->remaining_fund)->validate();
 
                 $expense = Expense::findOrFail($id);
+
+                // // Prevent update if expense has an approve expense report and user is not admin
+                // if(true) {
+                //     abort(403);
+                // }
 
                 $expense->description = $request->description;
 
@@ -354,6 +374,11 @@ class ExpenseController extends Controller
 
                 $expense = Expense::findOrFail($id);
 
+                // // Prevent delete if expense has an expense report and user is not admin
+                // if(true) {
+                //     abort(403);
+                // }
+
                 $expense->delete();
 
                 activity()
@@ -367,6 +392,15 @@ class ExpenseController extends Controller
                     ])
                     ->log("Cancelled Expense");
             }
+        } else {
+            $expense = Expense::findOrFail($id);
+
+            // // Prevent delete if expense has an expense report and user is not admin
+            // if(true) {
+            //     abort(403);
+            // }
+
+            $expense->delete();
         }
 
         // $expense = Expense::whereIn('id', $request->ids)->delete();

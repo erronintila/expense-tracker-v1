@@ -22,7 +22,8 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 // import VueHtmlToPaper from "vue-html-to-paper";
 import moment from "moment";
 import numeral from "numeral";
-
+import JsonExcel from "vue-json-excel";
+ 
 /**
  * Load Instances
  *
@@ -67,6 +68,7 @@ Vue.use(VuetifyDialog, {
 Vue.use(ChartDataLabels);
 // Vue.use(VueHtmlToPaper, options);
 // Vue.use(VueHtmlToPaper);
+Vue.component("download-excel", JsonExcel);
 
 /**
  * Libraries configuration

@@ -349,7 +349,7 @@ __webpack_require__.r(__webpack_exports__);
       total_reimbursements: 0,
       total_pending_reports: 0,
       selection: 1,
-      panel: [0, 1],
+      panel: 0,
       fullname: "",
       first_name: "",
       middle_name: "",

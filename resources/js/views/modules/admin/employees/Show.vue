@@ -340,7 +340,7 @@ export default {
             total_pending_reports: 0,
 
             selection: 1,
-            panel: [0, 1],
+            panel: 0,
             fullname: "",
             first_name: "",
             middle_name: "",

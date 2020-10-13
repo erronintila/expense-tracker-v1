@@ -196,6 +196,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -239,7 +245,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortDesc: [true],
         page: 1,
         itemsPerPage: 10
-      }
+      },
+      export_data: []
     };
   },
   methods: {
@@ -272,6 +279,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
+          var export_data = items.map(function (item) {
+            return {
+              user: item.user.name,
+              description: item.description,
+              details: item.properties.details,
+              "created at": item.created_at
+            };
+          });
+          _this.export_data = export_data;
           resolve({
             items: items,
             total: total
@@ -441,6 +457,23 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              staticClass: "elevation-3 mr-2",
+              attrs: { color: "green", dark: "", fab: "", "x-small": "" }
+            },
+            [
+              _c(
+                "download-excel",
+                { attrs: { data: _vm.export_data } },
+                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-export")])],
+                1
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
           _c(
             "v-btn",

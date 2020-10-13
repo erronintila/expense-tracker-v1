@@ -296,6 +296,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      panel: 0,
       valid: false,
       menu: false,
       jobs: [],
@@ -493,6 +494,15 @@ var render = function() {
             [
               _c(
                 "v-expansion-panels",
+                {
+                  model: {
+                    value: _vm.panel,
+                    callback: function($$v) {
+                      _vm.panel = $$v
+                    },
+                    expression: "panel"
+                  }
+                },
                 [
                   _c(
                     "v-expansion-panel",

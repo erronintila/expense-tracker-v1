@@ -5,6 +5,12 @@
 
             <v-spacer></v-spacer>
 
+            <v-btn class="elevation-3 mr-2" color="green" dark fab x-small>
+                <download-excel :data="export_data">
+                    <v-icon dark>mdi-export</v-icon>
+                </download-excel>
+            </v-btn>
+
             <v-btn
                 class="elevation-3 mr-2"
                 color="green"
@@ -207,7 +213,8 @@ export default {
                 sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
-            }
+            },
+            export_data: []
         };
     },
     methods: {
@@ -239,13 +246,25 @@ export default {
 
                         _this.loading = false;
 
+                        let export_data = items.map(item => ({
+                            user: item.user.name,
+                            description: item.description,
+                            details: item.properties.details,
+                            "created at": item.created_at
+                        }));
+
+                        _this.export_data = export_data;
+
                         resolve({ items, total });
                     })
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.loading = false;
                     });
@@ -270,7 +289,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onRefresh() {
@@ -310,7 +332,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -358,7 +383,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });

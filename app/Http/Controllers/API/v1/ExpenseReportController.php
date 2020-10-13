@@ -239,6 +239,11 @@ class ExpenseReportController extends Controller
                     abort(403);
                 }
 
+                // // Prevent submit if expense report has been submitted or approved or cancelled
+                // if(true) {
+                //     abort(403);
+                // }
+
                 foreach ($request->ids as $id) {
 
                     $expense_report = ExpenseReport::withTrashed()->find($id);
@@ -273,6 +278,11 @@ class ExpenseReportController extends Controller
 
                     abort(403);
                 }
+
+                // // Prevent approve if expense report has been approved or cancelled
+                // if(true) {
+                //     abort(403);
+                // }
 
                 foreach ($request->ids as $id) {
 
@@ -415,6 +425,12 @@ class ExpenseReportController extends Controller
                     abort(403);
                 }
 
+                // // Prevent update if expense report has been cancelled
+                // // Approved expense report can only be edited by Admin if expense report has no payment yet
+                // if(true) {
+                //     abort(403);
+                // }
+
                 $this->validator($request->all(), $id)->validate();
 
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
@@ -486,6 +502,12 @@ class ExpenseReportController extends Controller
         foreach ($request->ids as $id) {
 
             $expense_report = ExpenseReport::find($id);
+
+            // // Prevent delete if expense report has been cancelled/deleted
+            // // Approved expense report can only be cancelled/deleted by Admin if expense report has no payment yet
+            // if(true) {
+            //     abort(403);
+            // }
 
             $expense_report->deleted_by_user_id = Auth::user()->id;
 
