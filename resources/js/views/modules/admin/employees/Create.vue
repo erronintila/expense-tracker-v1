@@ -123,6 +123,7 @@
                                     <v-menu
                                         ref="menu"
                                         v-model="menu"
+                                        :close-on-content-click="false"
                                         transition="scale-transition"
                                         offset-y
                                         min-width="290px"

@@ -16,11 +16,11 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:view all users'], ['only' => ['index']]);
-        $this->middleware(['permission:view users'], ['only' => ['show']]);
-        $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
+        // $this->middleware(['permission:view all users'], ['only' => ['index']]);
+        // $this->middleware(['permission:view users'], ['only' => ['show']]);
+        $this->middleware(['permission:add employees'], ['only' => ['create', 'store']]);
         // $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
-        $this->middleware(['permission:delete users'], ['only' => ['destroy']]);
+        $this->middleware(['permission:delete employees'], ['only' => ['destroy']]);
     }
 
     /**
@@ -233,7 +233,7 @@ class UserController extends Controller
                 break;
             default:
 
-                if (!app("auth")->user()->hasPermissionTo('edit users')) {
+                if (!app("auth")->user()->hasPermissionTo('edit employees')) {
 
                     abort(403);
                 }

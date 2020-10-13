@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Employee;
+use App\Models\Job;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -92,6 +94,7 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("submit expense reports");
         // $roleUser->givePermissionTo("duplicate expense reports");
         $roleUser->givePermissionTo("add vendors");
+        $roleUser->givePermissionTo("edit employees");
 
         // $roleAdmin = Role::create(['name' => 'Administrator']);
 
@@ -113,6 +116,34 @@ class UserSeeder extends Seeder
             'can_login' => true,
         ]);
         $user->assignRole($roleSuperAdmin);
+
+        // $user1 = User::create([
+        //     'name' => 'Intila, Erron Cerdania',
+        //     'username' => 'erronintila',
+        //     'email' => 'erronintila@gmail.com',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('password'),
+        //     'remember_token' => Str::random(10),
+        //     'is_admin' => false,
+        //     'can_login' => true,
+        // ]);
+        // $user1->assignRole('Standard User');
+
+        // Employee::create([
+        //     'code' => "19018",
+        //     'first_name' => "Erron",
+        //     'middle_name' => "Cerdania",
+        //     'last_name' => "Intila",
+        //     'suffix' => null,
+        //     'gender' => "Male",
+        //     'birthdate' => "1996-08-19",
+        //     'mobile_number' => "09567653221",
+        //     'telephone_number' => null,
+        //     'email' => 'erronintila@gmail.com',
+        //     'address' => "Polomolok, South Cotabato",
+        //     "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
+        //     "user_id" => $user1->id,
+        // ]);
 
         // $user = User::create([
         //     'name' => 'Administrator',

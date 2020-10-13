@@ -292,6 +292,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -735,6 +736,7 @@ var render = function() {
                                     {
                                       ref: "menu",
                                       attrs: {
+                                        "close-on-content-click": false,
                                         transition: "scale-transition",
                                         "offset-y": "",
                                         "min-width": "290px"

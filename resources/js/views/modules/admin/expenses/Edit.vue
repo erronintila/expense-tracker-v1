@@ -471,6 +471,7 @@
                             <v-menu
                                 ref="menu"
                                 v-model="menu"
+                                :close-on-content-click="false"
                                 transition="scale-transition"
                                 offset-y
                                 min-width="290px"
@@ -779,7 +780,6 @@ export default {
                 axios
                     .get("/api/expenses/" + _this.$route.params.id)
                     .then(response => {
-                        console.log(response);
                         let data = response.data.data;
 
                         _this.form.code = data.code;
