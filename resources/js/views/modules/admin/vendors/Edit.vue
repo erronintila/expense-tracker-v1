@@ -17,12 +17,53 @@
                         <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.name"
-                                :rules="[...validation.required, ...validation.minLength(150)]"
+                                :rules="[
+                                    ...validation.required,
+                                    ...validation.minLength(150)
+                                ]"
                                 :counter="150"
                                 :error-messages="errors.name"
                                 label="Name *"
                                 required
                             ></v-text-field>
+                        </v-col>
+
+                        <v-col>
+                            <v-radio-group v-model="form.is_vat_inclusive" row>
+                                <v-radio label="VAT" :value="true"></v-radio>
+                                <v-radio
+                                    label="Non-VAT"
+                                    :value="false"
+                                ></v-radio>
+                            </v-radio-group>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="9" md="3">
+                            <v-text-field
+                                v-model="form.tin"
+                                :rules="validation.required"
+                                :error-messages="errors.tin"
+                                :counter="100"
+                                label="Tax Identification Number (TIN) *"
+                                required
+                                :readonly="no_tin"
+                            >
+                                <template v-slot:append> </template>
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col cols="3" md="1">
+                            <v-checkbox
+                                v-model="no_tin"
+                                label="N/A"
+                                @click="
+                                    () => {
+                                        form.tin = no_tin ? 'N/A' : '';
+                                    }
+                                "
+                            ></v-checkbox>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -32,18 +73,6 @@
                                 :error-messages="errors.email"
                                 label="Email Address"
                             ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-combobox
-                                v-model="form.tin"
-                                :rules="validation.required"
-                                :error-messages="errors.tin"
-                                :counter="100"
-                                :items="['N/A']"
-                                label="Tax Identification Number (TIN) *"
-                                required
-                            ></v-combobox>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -89,7 +118,7 @@
                             ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-select
                                 v-model="selected_expense_types"
                                 :items="expense_types"
@@ -112,7 +141,7 @@
                                     >
                                 </template>
                             </v-select>
-                        </v-col>
+                        </v-col> -->
                     </v-row>
 
                     <v-row>
@@ -128,7 +157,7 @@
                         </v-col>
                     </v-row>
 
-                    <v-row>
+                    <!-- <v-row>
                         <v-col cols="12" md="4">
                             <v-checkbox
                                 v-model="form.is_vat_inclusive"
@@ -136,7 +165,7 @@
                                 :error-messages="errors.is_vat_inclusive"
                             ></v-checkbox>
                         </v-col>
-                    </v-row>
+                    </v-row> -->
 
                     <small class="text--secondary">
                         * indicates required field
@@ -157,6 +186,7 @@
 export default {
     data() {
         return {
+            no_tin: false,
             valid: false,
             selected_expense_types: [],
             expense_types: [],
@@ -200,13 +230,14 @@ export default {
                     _this.form.code = data.code;
                     _this.form.name = data.name;
                     _this.form.email = data.email;
+                    _this.no_tin = data.tin == null ? true : false;
                     _this.form.tin = data.tin == null ? "N/A" : data.tin;
                     _this.form.contact_person = data.contact_person;
                     _this.form.mobile_number = data.mobile_number;
                     _this.form.telephone_number = data.telephone_number;
                     _this.form.remarks = data.remarks;
                     _this.form.website = data.website;
-                    _this.form.is_vat_inclusive = data.is_vat_inclusive;
+                    _this.form.is_vat_inclusive = data.is_vat_inclusive == 1;
                     _this.form.address = data.address;
                     _this.selected_expense_types = data.expense_types.map(
                         item => item.id

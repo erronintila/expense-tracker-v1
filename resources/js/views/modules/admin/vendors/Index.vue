@@ -127,6 +127,12 @@
                     item-key="id"
                     class="elevation-0"
                 >
+                    <template v-slot:[`item.is_vat_inclusive`]="{ item }">
+                        {{ item.is_vat_inclusive == 1 ? "VAT" : "Non-VAT"}}
+                    </template>
+                    <template v-slot:[`item.tin`]="{ item }">
+                        {{ item.tin == null ? "N/A" : item.tin }}
+                    </template>
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
                             <v-container>
@@ -185,7 +191,7 @@ export default {
                 { text: "Contact", value: "telephone_number" },
                 // { text: "Address", value: "address" },
                 { text: "TIN", value: "tin" },
-
+                { text: "Type", value: "is_vat_inclusive" },
                 // { text: "Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -239,7 +245,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.loading = false;
                     });
@@ -301,7 +310,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -342,7 +354,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });

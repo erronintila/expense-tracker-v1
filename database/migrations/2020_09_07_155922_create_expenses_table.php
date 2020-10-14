@@ -19,6 +19,7 @@ class CreateExpensesTable extends Migration
             $table->string('description', 100)->nullable();
             $table->double('amount', 10, 2)->default(0);
             $table->double('reimbursable_amount', 10, 2)->default(0);
+            // $table->double('paid_amount', 10, 2)->default(0);
             $table->string('receipt_number')->nullable();
             $table->date('date');
             $table->text('remarks')->nullable();

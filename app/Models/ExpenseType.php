@@ -50,4 +50,9 @@ class ExpenseType extends Model
     {
         return $this->belongsToMany(Vendor::class)->withTimestamps();
     }
+
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class)->withTimestamps();
+    }
 }

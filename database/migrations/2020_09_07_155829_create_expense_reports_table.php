@@ -23,13 +23,15 @@ class CreateExpenseReportsTable extends Migration
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamp('approved_at')->nullable();
+            $table->timestamp('disapproved_at')->nullable();
             $table->timestamp('cancelled_at')->nullable();
 
-            $table->unsignedBigInteger('submitted_by_user_id')->nullable();
-            $table->unsignedBigInteger('reviewed_by_user_id')->nullable();
-            $table->unsignedBigInteger('approved_by_user_id')->nullable();
-            $table->unsignedBigInteger('cancelled_by_user_id')->nullable();
-            $table->unsignedBigInteger('deleted_by_user_id')->nullable();
+            $table->unsignedBigInteger('submitted_by')->nullable();
+            $table->unsignedBigInteger('reviewed_by')->nullable();
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->unsignedBigInteger('disapproved_by')->nullable();
+            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->unsignedBigInteger('employee_id')->unsigned();
             $table->unsignedBigInteger('payment_id')->nullable();
@@ -40,11 +42,12 @@ class CreateExpenseReportsTable extends Migration
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('payment_id')->references('id')->on('payments');
 
-            $table->foreign('submitted_by_user_id')->references('id')->on('users');
-            $table->foreign('reviewed_by_user_id')->references('id')->on('users');
-            $table->foreign('approved_by_user_id')->references('id')->on('users');
-            $table->foreign('cancelled_by_user_id')->references('id')->on('users');
-            $table->foreign('deleted_by_user_id')->references('id')->on('users');
+            $table->foreign('submitted_by')->references('id')->on('users');
+            $table->foreign('reviewed_by')->references('id')->on('users');
+            $table->foreign('approved_by')->references('id')->on('users');
+            $table->foreign('disapproved_by')->references('id')->on('users');
+            $table->foreign('cancelled_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
     }
 

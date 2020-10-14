@@ -139,4 +139,9 @@ class Employee extends Model
 
     //     return $this->fund - $expenses;
     // }
+
+    public function expense_types()
+    {
+        return $this->belongsToMany(ExpenseType::class)->withTimestamps();
+    }
 }

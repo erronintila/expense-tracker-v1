@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[39],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,353 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/dialogs/AddVendor */ "./resources/js/components/dialogs/AddVendor.vue");
 //
 //
 //
@@ -687,25 +341,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    AddVendor: _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   data: function data() {
     var _this2 = this;
 
     return {
+      openAddVendor: false,
       dialog: false,
       valid: false,
       menu: false,
       headers: [{
         text: "Particulars",
-        value: "description",
+        value: "particular",
         sortable: false
       }, {
         text: "Reimbursable Amount",
-        value: "reimbursable_amount",
+        value: "particular_reimbursable_amount",
         sortable: false
       }, {
         text: "Amount",
-        value: "amount",
+        value: "particular_amount",
         sortable: false
       }, {
         text: "",
@@ -756,67 +415,10 @@ __webpack_require__.r(__webpack_exports__);
         expense_type_id: [],
         employee_id: [],
         vendor_id: []
-      },
-      // Create Vendor
-      vendorOptions: {
-        dialog: false,
-        valid: false,
-        selected_expense_types: [],
-        expense_types: [],
-        form: {
-          code: "",
-          name: "",
-          email: "",
-          tin: "",
-          contact_person: "",
-          mobile_number: "",
-          telephone_number: "",
-          remarks: "",
-          website: "",
-          is_vat_inclusive: false,
-          address: ""
-        },
-        errors: {
-          code: [],
-          name: [],
-          email: [],
-          tin: [],
-          contact_person: [],
-          mobile_number: [],
-          telephone_number: [],
-          remarks: [],
-          website: [],
-          is_vat_inclusive: [],
-          address: []
-        }
       }
     };
   },
   methods: {
-    getData: function getData() {
-      var _this = this;
-
-      this.loadEmployees().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.description = data.description;
-        _this.form.amount = data.amount;
-        _this.form.reimbursable_amount = data.reimbursable_amount;
-        _this.form.receipt_number = data.receipt_number;
-        _this.form.date = data.date;
-        _this.form.remarks = data.remarks;
-        _this.form.is_active = data.is_active;
-        _this.form.expense_type = data.expense_type.id;
-        _this.form.employee = data.employee;
-        _this.form.vendor = data.vendor == null ? null : data.vendor.id;
-        _this.items = data.expense_details;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      }));
-    },
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
@@ -832,18 +434,13 @@ __webpack_require__.r(__webpack_exports__);
     loadEmployees: function loadEmployees() {
       var _this = this;
 
-      return new Promise(function (resolve, reject) {
-        axios.get("/api/data/employees").then(function (response) {
-          _this.employees = response.data.data;
-          resolve();
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
+      axios.get("/api/data/employees").then(function (response) {
+        _this.employees = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          reject();
-        });
+        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadVendors: function loadVendors() {
@@ -865,8 +462,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this)); // this.$refs.form.reset();
-      // this.$refs.form.resetValidation();
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
@@ -892,7 +488,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (_this.$refs.form.validate()) {
-        axios.put("/api/expenses/" + _this.$route.params.id, {
+        axios.post("/api/expenses", {
           code: _this.form.code,
           description: _this.form.description,
           amount: _this.form.amount,
@@ -908,14 +504,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           _this.onRefresh();
 
-          _this.$dialog.message.success("Expense updated successfully.", {
+          _this.$dialog.message.success("Expense created successfully.", {
             position: "top-right",
             timeout: 2000
           });
 
-          _this.$router.push({
-            name: "admin.expenses.index"
-          });
+          _this.$router.go(-1);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -930,10 +524,9 @@ __webpack_require__.r(__webpack_exports__);
     addItem: function addItem() {
       if (parseFloat(this.form.particular_amount) >= parseFloat(this.form.particular_reimbursable_amount)) {
         this.items.push({
-          id: null,
-          description: this.form.particular,
-          amount: this.form.particular_amount,
-          reimbursable_amount: this.form.particular_reimbursable_amount
+          particular: this.form.particular,
+          particular_amount: this.form.particular_amount,
+          particular_reimbursable_amount: this.form.particular_reimbursable_amount
         });
       }
 
@@ -945,74 +538,31 @@ __webpack_require__.r(__webpack_exports__);
     onRemove: function onRemove(item) {
       var index = this.items.indexOf(item);
       confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
-    },
-    onCreateVendor: function onCreateVendor() {
-      var _this = this;
-
-      _this.$refs.vendorForm.validate();
-
-      if (_this.$refs.vendorForm.validate()) {
-        axios.post("/api/vendors", {
-          code: _this.vendorOptions.form.code,
-          name: _this.vendorOptions.form.name,
-          email: _this.vendorOptions.form.email,
-          tin: _this.vendorOptions.form.tin == "N/A" ? null : _this.vendorOptions.form.tin,
-          contact_person: _this.vendorOptions.form.contact_person,
-          mobile_number: _this.vendorOptions.form.mobile_number,
-          telephone_number: _this.vendorOptions.form.telephone_number,
-          remarks: _this.vendorOptions.form.remarks,
-          website: _this.vendorOptions.form.website,
-          is_vat_inclusive: _this.vendorOptions.form.is_vat_inclusive,
-          address: _this.vendorOptions.form.address,
-          expense_types: _this.vendorOptions.selected_expense_types
-        }).then(function (response) {
-          _this.$dialog.message.success("Vendor created successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
-
-          _this.$refs.vendorForm.reset();
-
-          _this.$refs.vendorForm.resetValidation();
-
-          _this.vendorOptions.dialog = false;
-
-          _this.loadVendors();
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.vendorOptions.errors = error.response.data.errors;
-        });
-        return;
-      }
     }
   },
   watch: {
     items: function items() {
       this.form.amount = this.items.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.amount);
+        return parseFloat(total) + parseFloat(item.particular_amount);
       }, 0);
       this.form.reimbursable_amount = this.items.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.reimbursable_amount);
+        return parseFloat(total) + parseFloat(item.particular_reimbursable_amount);
       }, 0);
     }
   },
   created: function created() {
     this.loadExpenseTypes();
+    this.loadEmployees();
     this.loadVendors();
-    this.getData();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2& ***!
-  \*************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e& ***!
+  \***************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1053,7 +603,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit Expense")
+                _vm._v("New Expense")
               ])
             ],
             1
@@ -1132,797 +682,100 @@ var render = function() {
                         "v-col",
                         { attrs: { cols: "12", md: "4" } },
                         [
-                          _c(
-                            "v-form",
-                            {
-                              ref: "vendorForm",
-                              model: {
-                                value: _vm.vendorOptions.valid,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.vendorOptions, "valid", $$v)
-                                },
-                                expression: "vendorOptions.valid"
+                          _c("v-autocomplete", {
+                            attrs: {
+                              rules: [],
+                              items: _vm.vendors,
+                              "error-messages": _vm.errors.vendor_id,
+                              "item-value": "id",
+                              "item-text": "name",
+                              label: "Vendor *"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.vendor_id = []
                               }
                             },
-                            [
-                              _c("v-autocomplete", {
-                                attrs: {
-                                  rules: [],
-                                  items: _vm.vendors,
-                                  "error-messages": _vm.errors.vendor_id,
-                                  "item-value": "id",
-                                  "item-text": "name",
-                                  label: "Vendor *"
+                            scopedSlots: _vm._u([
+                              {
+                                key: "append",
+                                fn: function() {
+                                  return [
+                                    _c("AddVendor", {
+                                      attrs: { openDialog: false },
+                                      on: { createdVendor: _vm.loadVendors }
+                                    })
+                                  ]
                                 },
-                                on: {
-                                  input: function($event) {
-                                    _vm.errors.vendor_id = []
-                                  }
-                                },
-                                scopedSlots: _vm._u([
-                                  {
-                                    key: "append",
-                                    fn: function() {
-                                      return [
-                                        _c(
-                                          "v-dialog",
-                                          {
-                                            attrs: {
-                                              persistent: "",
-                                              "max-width": "600px"
-                                            },
-                                            scopedSlots: _vm._u([
-                                              {
-                                                key: "activator",
-                                                fn: function(ref) {
-                                                  var on = ref.on
-                                                  var attrs = ref.attrs
-                                                  return [
-                                                    _c(
-                                                      "v-btn",
-                                                      _vm._g(
-                                                        _vm._b(
-                                                          {
-                                                            attrs: {
-                                                              fab: "",
-                                                              color: "primary",
-                                                              text: "",
-                                                              "x-small": ""
-                                                            }
-                                                          },
-                                                          "v-btn",
-                                                          attrs,
-                                                          false
-                                                        ),
-                                                        on
-                                                      ),
-                                                      [
-                                                        _c(
-                                                          "v-icon",
-                                                          {
-                                                            attrs: { dark: "" }
-                                                          },
-                                                          [_vm._v("mdi-plus")]
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ]
-                                                }
-                                              }
-                                            ]),
-                                            model: {
-                                              value: _vm.vendorOptions.dialog,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.vendorOptions,
-                                                  "dialog",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "vendorOptions.dialog"
-                                            }
-                                          },
-                                          [
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-card",
-                                              [
-                                                _c("v-card-title", [
-                                                  _c(
-                                                    "span",
-                                                    { staticClass: "headline" },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                                                    New Vendor\n                                                "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-card-text",
-                                                  [
-                                                    _c(
-                                                      "v-form",
-                                                      {
-                                                        ref: "form",
-                                                        model: {
-                                                          value:
-                                                            _vm.vendorOptions
-                                                              .valid,
-                                                          callback: function(
-                                                            $$v
-                                                          ) {
-                                                            _vm.$set(
-                                                              _vm.vendorOptions,
-                                                              "valid",
-                                                              $$v
-                                                            )
-                                                          },
-                                                          expression:
-                                                            "\n                                                        vendorOptions.valid\n                                                    "
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "v-container",
-                                                          [
-                                                            _c(
-                                                              "v-row",
-                                                              [
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        attrs: {
-                                                                          rules: _vm.validation.required.concat(
-                                                                            _vm.validation.minLength(
-                                                                              100
-                                                                            )
-                                                                          ),
-                                                                          counter: 150,
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .name,
-                                                                          label:
-                                                                            "Name *",
-                                                                          required:
-                                                                            ""
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .name,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "name",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .name\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        attrs: {
-                                                                          rules: [],
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .email,
-                                                                          label:
-                                                                            "Email Address"
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .email,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "email",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .email\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-combobox",
-                                                                      {
-                                                                        attrs: {
-                                                                          rules:
-                                                                            _vm
-                                                                              .validation
-                                                                              .required,
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .tin,
-                                                                          counter: 100,
-                                                                          items: [
-                                                                            "N/A"
-                                                                          ],
-                                                                          label:
-                                                                            "Tax Identification Number (TIN) *",
-                                                                          required:
-                                                                            ""
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .tin,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "tin",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .tin\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        attrs: {
-                                                                          rules: [],
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .contact_person,
-                                                                          counter: 100,
-                                                                          label:
-                                                                            "Contact Person"
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .contact_person,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "contact_person",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .contact_person\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        attrs: {
-                                                                          rules: [],
-                                                                          counter: 30,
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .mobile_number,
-                                                                          label:
-                                                                            "Mobile Number"
-                                                                        },
-                                                                        on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            _vm.vendorOptions.errors.mobile_number = []
-                                                                          }
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .mobile_number,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "mobile_number",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .mobile_number\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        attrs: {
-                                                                          rules: [],
-                                                                          counter: 30,
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .telephone_number,
-                                                                          label:
-                                                                            "Telephone Number",
-                                                                          type:
-                                                                            "number"
-                                                                        },
-                                                                        on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            _vm.vendorOptions.errors.telephone_number = []
-                                                                          }
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .telephone_number,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "telephone_number",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .telephone_number\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        attrs: {
-                                                                          counter: 100,
-                                                                          rules: [],
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .website,
-                                                                          label:
-                                                                            "Website"
-                                                                        },
-                                                                        on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            _vm.vendorOptions.errors.website = []
-                                                                          }
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .website,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "website",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .website\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                )
-                                                              ],
-                                                              1
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "v-row",
-                                                              [
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols: "12"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-textarea",
-                                                                      {
-                                                                        attrs: {
-                                                                          rules: [],
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .address,
-                                                                          label:
-                                                                            "Address",
-                                                                          rows:
-                                                                            "1"
-                                                                        },
-                                                                        on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            _vm.vendorOptions.errors.address = []
-                                                                          }
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .address,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "address",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .address\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                )
-                                                              ],
-                                                              1
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "v-row",
-                                                              [
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols:
-                                                                        "12",
-                                                                      md: "6"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-checkbox",
-                                                                      {
-                                                                        attrs: {
-                                                                          label:
-                                                                            "Vat Inclusive",
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .errors
-                                                                              .is_vat_inclusive
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .vendorOptions
-                                                                              .form
-                                                                              .is_vat_inclusive,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm
-                                                                                .vendorOptions
-                                                                                .form,
-                                                                              "is_vat_inclusive",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                        vendorOptions\n                                                                            .form\n                                                                            .is_vat_inclusive\n                                                                    "
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                )
-                                                              ],
-                                                              1
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "small",
-                                                              {
-                                                                staticClass:
-                                                                  "text--secondary"
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "\n                                                            * indicates\n                                                            required field\n                                                        "
-                                                                )
-                                                              ]
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-card-actions",
-                                                  [
-                                                    _c("v-spacer"),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          color: "primary",
-                                                          text: ""
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.vendorOptions.dialog = false
-                                                          }
-                                                        }
-                                                      },
-                                                      [_vm._v("Close")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        attrs: {
-                                                          color: "primary",
-                                                          text: ""
-                                                        },
-                                                        on: {
-                                                          click:
-                                                            _vm.onCreateVendor
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                                                    Save\n                                                "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    },
-                                    proxy: true
-                                  },
-                                  {
-                                    key: "item",
-                                    fn: function(data) {
-                                      return [
+                                proxy: true
+                              },
+                              {
+                                key: "item",
+                                fn: function(data) {
+                                  return [
+                                    [
+                                      _c(
+                                        "v-list",
+                                        { attrs: { "max-width": "300" } },
                                         [
                                           _c(
-                                            "v-list",
-                                            { attrs: { "max-width": "300" } },
+                                            "v-list-item-content",
                                             [
-                                              _c(
-                                                "v-list-item-content",
-                                                [
-                                                  _c("v-list-item-title", {
-                                                    domProps: {
-                                                      innerHTML: _vm._s(
-                                                        data.item.name
-                                                      )
-                                                    }
-                                                  }),
-                                                  _vm._v(" "),
-                                                  _c("v-list-item-subtitle", {
-                                                    domProps: {
-                                                      innerHTML: _vm._s(
-                                                        "TIN: " +
-                                                          (data.item.tin == null
-                                                            ? "N/A"
-                                                            : data.item.tin)
-                                                      )
-                                                    }
-                                                  }),
-                                                  _vm._v(" "),
-                                                  _c("v-list-item-subtitle", {
-                                                    domProps: {
-                                                      innerHTML: _vm._s(
-                                                        data.item.address
-                                                      )
-                                                    }
-                                                  }),
-                                                  _vm._v(" "),
-                                                  _c("v-list-item-subtitle", {
-                                                    domProps: {
-                                                      innerHTML: _vm._s(
-                                                        data.item
-                                                          .is_vat_inclusive
-                                                          ? "VAT"
-                                                          : "Non-VAT"
-                                                      )
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              )
+                                              _c("v-list-item-title", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    data.item.name
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-list-item-subtitle", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    "TIN: " +
+                                                      (data.item.tin == null
+                                                        ? "N/A"
+                                                        : data.item.tin)
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-list-item-subtitle", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    data.item.address
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-list-item-subtitle", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    data.item.is_vat_inclusive
+                                                      ? "VAT"
+                                                      : "Non-VAT"
+                                                  )
+                                                }
+                                              })
                                             ],
                                             1
                                           )
-                                        ]
-                                      ]
-                                    }
-                                  }
-                                ]),
-                                model: {
-                                  value: _vm.form.vendor,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "vendor", $$v)
-                                  },
-                                  expression: "form.vendor"
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  ]
                                 }
-                              })
-                            ],
-                            1
-                          )
+                              }
+                            ]),
+                            model: {
+                              value: _vm.form.vendor,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "vendor", $$v)
+                              },
+                              expression: "form.vendor"
+                            }
+                          })
                         ],
                         1
                       ),
@@ -2617,17 +1470,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Edit.vue":
-/*!************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Edit.vue ***!
-  \************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Create.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Create.vue ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=d09223b2& */ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&");
-/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=bab06a4e& */ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&");
+/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -2637,9 +1490,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -2649,38 +1502,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/expenses/Edit.vue"
+component.options.__file = "resources/js/views/modules/admin/expenses/Create.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2& ***!
-  \*******************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e& ***!
+  \*********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=d09223b2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=bab06a4e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

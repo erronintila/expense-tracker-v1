@@ -28,405 +28,57 @@
                     </v-row>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-form
-                                ref="vendorForm"
-                                v-model="vendorOptions.valid"
+                            <v-autocomplete
+                                v-model="form.vendor"
+                                :rules="[]"
+                                :items="vendors"
+                                :error-messages="errors.vendor_id"
+                                @input="errors.vendor_id = []"
+                                item-value="id"
+                                item-text="name"
+                                label="Vendor *"
                             >
-                                <v-autocomplete
-                                    v-model="form.vendor"
-                                    :rules="[]"
-                                    :items="vendors"
-                                    :error-messages="errors.vendor_id"
-                                    @input="errors.vendor_id = []"
-                                    item-value="id"
-                                    item-text="name"
-                                    label="Vendor *"
-                                >
-                                    <template v-slot:append>
-                                        <v-dialog
-                                            v-model="vendorOptions.dialog"
-                                            persistent
-                                            max-width="600px"
-                                        >
-                                            <template
-                                                v-slot:activator="{ on, attrs }"
-                                            >
-                                                <v-btn
-                                                    fab
-                                                    color="primary"
-                                                    text
-                                                    x-small
-                                                    v-bind="attrs"
-                                                    v-on="on"
+                                <template v-slot:append>
+                                    <AddVendor
+                                        :openDialog="false"
+                                        @createdVendor="loadVendors"
+                                    >
+                                    </AddVendor>
+                                </template>
+                                <template v-slot:item="data">
+                                    <template>
+                                        <v-list max-width="300">
+                                            <v-list-item-content>
+                                                <v-list-item-title
+                                                    v-html="data.item.name"
+                                                ></v-list-item-title>
+                                                <v-list-item-subtitle
+                                                    v-html="
+                                                        `TIN: ${
+                                                            data.item.tin ==
+                                                            null
+                                                                ? 'N/A'
+                                                                : data.item.tin
+                                                        }`
+                                                    "
+                                                ></v-list-item-subtitle>
+                                                <v-list-item-subtitle
+                                                    v-html="data.item.address"
+                                                ></v-list-item-subtitle>
+                                                <v-list-item-subtitle
+                                                    v-html="
+                                                        data.item
+                                                            .is_vat_inclusive
+                                                            ? 'VAT'
+                                                            : 'Non-VAT'
+                                                    "
                                                 >
-                                                    <v-icon dark
-                                                        >mdi-plus</v-icon
-                                                    >
-                                                </v-btn>
-                                            </template>
-                                            <v-card>
-                                                <v-card-title>
-                                                    <span class="headline">
-                                                        New Vendor
-                                                    </span>
-                                                </v-card-title>
-                                                <v-card-text>
-                                                    <v-form
-                                                        ref="form"
-                                                        v-model="
-                                                            vendorOptions.valid
-                                                        "
-                                                    >
-                                                        <v-container>
-                                                            <v-row>
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-text-field
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .name
-                                                                        "
-                                                                        :rules="[
-                                                                            ...validation.required,
-                                                                            ...validation.minLength(
-                                                                                100
-                                                                            )
-                                                                        ]"
-                                                                        :counter="
-                                                                            150
-                                                                        "
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .name
-                                                                        "
-                                                                        label="Name *"
-                                                                        required
-                                                                    ></v-text-field>
-                                                                </v-col>
-
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-text-field
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .email
-                                                                        "
-                                                                        :rules="[]"
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .email
-                                                                        "
-                                                                        label="Email Address"
-                                                                    ></v-text-field>
-                                                                </v-col>
-
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-combobox
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .tin
-                                                                        "
-                                                                        :rules="
-                                                                            validation.required
-                                                                        "
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .tin
-                                                                        "
-                                                                        :counter="
-                                                                            100
-                                                                        "
-                                                                        :items="[
-                                                                            'N/A'
-                                                                        ]"
-                                                                        label="Tax Identification Number (TIN) *"
-                                                                        required
-                                                                    ></v-combobox>
-                                                                </v-col>
-
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-text-field
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .contact_person
-                                                                        "
-                                                                        :rules="[]"
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .contact_person
-                                                                        "
-                                                                        :counter="
-                                                                            100
-                                                                        "
-                                                                        label="Contact Person"
-                                                                    ></v-text-field>
-                                                                </v-col>
-
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-text-field
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .mobile_number
-                                                                        "
-                                                                        :rules="[]"
-                                                                        :counter="
-                                                                            30
-                                                                        "
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .mobile_number
-                                                                        "
-                                                                        @input="
-                                                                            vendorOptions.errors.mobile_number = []
-                                                                        "
-                                                                        label="Mobile Number"
-                                                                    ></v-text-field>
-                                                                </v-col>
-
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-text-field
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .telephone_number
-                                                                        "
-                                                                        :rules="[]"
-                                                                        :counter="
-                                                                            30
-                                                                        "
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .telephone_number
-                                                                        "
-                                                                        @input="
-                                                                            vendorOptions.errors.telephone_number = []
-                                                                        "
-                                                                        label="Telephone Number"
-                                                                        type="number"
-                                                                    ></v-text-field>
-                                                                </v-col>
-
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-text-field
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .website
-                                                                        "
-                                                                        :counter="
-                                                                            100
-                                                                        "
-                                                                        :rules="[]"
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .website
-                                                                        "
-                                                                        @input="
-                                                                            vendorOptions.errors.website = []
-                                                                        "
-                                                                        label="Website"
-                                                                    ></v-text-field>
-                                                                </v-col>
-
-                                                                <!-- <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-select
-                                                                        v-model="
-                                                                            vendorOptions.selected_expense_types
-                                                                        "
-                                                                        :items="
-                                                                            expense_types
-                                                                        "
-                                                                        item-text="name"
-                                                                        item-value="id"
-                                                                        label="Link with Expense Types"
-                                                                        multiple
-                                                                    >
-                                                                        <template
-                                                                            v-slot:selection="{
-                                                                                item,
-                                                                                index
-                                                                            }"
-                                                                        >
-                                                                            <v-chip
-                                                                                v-if="
-                                                                                    index ===
-                                                                                        0
-                                                                                "
-                                                                                small
-                                                                            >
-                                                                                <span
-                                                                                    >{{
-                                                                                        item.name
-                                                                                    }}</span
-                                                                                >
-                                                                            </v-chip>
-                                                                            <span
-                                                                                v-if="
-                                                                                    index ===
-                                                                                        1
-                                                                                "
-                                                                                class="grey--text caption"
-                                                                                >(+{{
-                                                                                    vendorOptions
-                                                                                        .selected_expense_types
-                                                                                        .length -
-                                                                                        1
-                                                                                }}
-                                                                                others)</span
-                                                                            >
-                                                                        </template>
-                                                                    </v-select>
-                                                                </v-col> -->
-                                                            </v-row>
-
-                                                            <v-row>
-                                                                <v-col
-                                                                    cols="12"
-                                                                >
-                                                                    <v-textarea
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .address
-                                                                        "
-                                                                        :rules="[]"
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .address
-                                                                        "
-                                                                        @input="
-                                                                            vendorOptions.errors.address = []
-                                                                        "
-                                                                        label="Address"
-                                                                        rows="1"
-                                                                    ></v-textarea>
-                                                                </v-col>
-                                                            </v-row>
-
-                                                            <v-row>
-                                                                <v-col
-                                                                    cols="12"
-                                                                    md="6"
-                                                                >
-                                                                    <v-checkbox
-                                                                        v-model="
-                                                                            vendorOptions
-                                                                                .form
-                                                                                .is_vat_inclusive
-                                                                        "
-                                                                        label="Vat Inclusive"
-                                                                        :error-messages="
-                                                                            vendorOptions
-                                                                                .errors
-                                                                                .is_vat_inclusive
-                                                                        "
-                                                                    ></v-checkbox>
-                                                                </v-col>
-                                                            </v-row>
-
-                                                            <small
-                                                                class="text--secondary"
-                                                            >
-                                                                * indicates
-                                                                required field
-                                                            </small>
-                                                        </v-container>
-                                                    </v-form>
-                                                </v-card-text>
-                                                <v-card-actions>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn
-                                                        color="primary"
-                                                        text
-                                                        @click="
-                                                            vendorOptions.dialog = false
-                                                        "
-                                                        >Close</v-btn
-                                                    >
-                                                    <v-btn
-                                                        color="primary"
-                                                        text
-                                                        @click="onCreateVendor"
-                                                    >
-                                                        Save
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-card>
-                                        </v-dialog>
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list>
                                     </template>
-                                    <template v-slot:item="data">
-                                        <template>
-                                            <v-list max-width="300">
-                                                <v-list-item-content>
-                                                    <v-list-item-title
-                                                        v-html="data.item.name"
-                                                    ></v-list-item-title>
-                                                    <v-list-item-subtitle
-                                                        v-html="
-                                                            `TIN: ${
-                                                                data.item.tin ==
-                                                                null
-                                                                    ? 'N/A'
-                                                                    : data.item
-                                                                          .tin
-                                                            }`
-                                                        "
-                                                    ></v-list-item-subtitle>
-                                                    <v-list-item-subtitle
-                                                        v-html="
-                                                            data.item.address
-                                                        "
-                                                    ></v-list-item-subtitle>
-                                                    <v-list-item-subtitle
-                                                        v-html="
-                                                            data.item
-                                                                .is_vat_inclusive
-                                                                ? 'VAT'
-                                                                : 'Non-VAT'
-                                                        "
-                                                    >
-                                                    </v-list-item-subtitle>
-                                                </v-list-item-content>
-                                            </v-list>
-                                        </template>
-                                    </template>
-                                </v-autocomplete>
-                            </v-form>
+                                </template>
+                            </v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -665,8 +317,12 @@
 
 <script>
 import numeral from "numeral";
+import AddVendor from "../../../../components/dialogs/AddVendor";
 
 export default {
+    components: {
+        AddVendor
+    },
     data() {
         return {
             dialog: false,
@@ -713,7 +369,7 @@ export default {
                     v =>
                         parseFloat(v) <= this.form.particular_amount ||
                         "Reimbursable Amount should not be greater than the actual amount"
-                ],
+                ]
             },
             errors: {
                 description: [],
@@ -726,39 +382,6 @@ export default {
                 expense_type_id: [],
                 employee_id: [],
                 vendor_id: []
-            },
-            // Create Vendor
-            vendorOptions: {
-                dialog: false,
-                valid: false,
-                selected_expense_types: [],
-                expense_types: [],
-                form: {
-                    code: "",
-                    name: "",
-                    email: "",
-                    tin: "",
-                    contact_person: "",
-                    mobile_number: "",
-                    telephone_number: "",
-                    remarks: "",
-                    website: "",
-                    is_vat_inclusive: false,
-                    address: ""
-                },
-                errors: {
-                    code: [],
-                    name: [],
-                    email: [],
-                    tin: [],
-                    contact_person: [],
-                    mobile_number: [],
-                    telephone_number: [],
-                    remarks: [],
-                    website: [],
-                    is_vat_inclusive: [],
-                    address: []
-                }
             }
         };
     },
@@ -776,7 +399,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         getData() {
@@ -796,14 +422,18 @@ export default {
                     _this.form.is_active = data.is_active;
                     _this.form.expense_type = data.expense_type.id;
                     _this.form.employee = data.employee;
-                    _this.form.vendor = data.vendor == null ? null : data.vendor.id;
+                    _this.form.vendor =
+                        data.vendor == null ? null : data.vendor.id;
                     _this.items = data.expense_details;
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadExpenseTypes() {
@@ -818,7 +448,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadVendors() {
@@ -839,7 +472,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onRefresh() {
@@ -858,7 +494,8 @@ export default {
             }
 
             if (
-                parseFloat(this.form.amount) - parseFloat(this.form.reimbursable_amount) >
+                parseFloat(this.form.amount) -
+                    parseFloat(this.form.reimbursable_amount) >
                 parseFloat(this.form.employee.remaining_fund)
             ) {
                 _this.$dialog.message.error(
@@ -914,7 +551,10 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
 
                 return;
@@ -929,7 +569,8 @@ export default {
                     id: null,
                     description: this.form.particular,
                     amount: this.form.particular_amount,
-                    reimbursable_amount: this.form.particular_reimbursable_amount
+                    reimbursable_amount: this.form
+                        .particular_reimbursable_amount
                 });
             }
 
@@ -942,59 +583,6 @@ export default {
             const index = this.items.indexOf(item);
             confirm("Are you sure you want to remove this item?") &&
                 this.items.splice(index, 1);
-        },
-        onCreateVendor() {
-            let _this = this;
-
-            _this.$refs.vendorForm.validate();
-
-            if (_this.$refs.vendorForm.validate()) {
-                axios
-                    .post("/api/vendors", {
-                        code: _this.vendorOptions.form.code,
-                        name: _this.vendorOptions.form.name,
-                        email: _this.vendorOptions.form.email,
-                        tin:
-                            _this.vendorOptions.form.tin == "N/A"
-                                ? null
-                                : _this.vendorOptions.form.tin,
-                        contact_person: _this.vendorOptions.form.contact_person,
-                        mobile_number: _this.vendorOptions.form.mobile_number,
-                        telephone_number: _this.vendorOptions.form.telephone_number,
-                        remarks: _this.vendorOptions.form.remarks,
-                        website: _this.vendorOptions.form.website,
-                        is_vat_inclusive: _this.vendorOptions.form.is_vat_inclusive,
-                        address: _this.vendorOptions.form.address,
-                        expense_types:
-                            _this.vendorOptions.selected_expense_types
-                    })
-                    .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Vendor created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
-                        _this.$refs.vendorForm.reset();
-                        _this.$refs.vendorForm.resetValidation();
-
-                        _this.vendorOptions.dialog = false;
-
-                        _this.loadVendors();
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.vendorOptions.errors = error.response.data.errors;
-
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
-                    });
-
-                return;
-            }
         }
     },
     watch: {

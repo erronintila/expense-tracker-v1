@@ -42,42 +42,45 @@ class UserSeeder extends Seeder
         foreach ($models as $model) {
             // create permissions
             if ($model == "activity logs") {
-                Permission::create(['name' => 'delete ' . $model]);
-                Permission::create(['name' => 'view all ' . $model]);
+                Permission::create(['name' => 'export ' . $model, 'category' => $model]);
+                Permission::create(['name' => 'delete ' . $model, 'category' => $model]);
+                Permission::create(['name' => 'view all ' . $model, 'category' => $model]);
                 continue;
             }
 
             if ($model == "users") {
                 // Permission::create(['name' => 'verify users']);
                 // Permission::create(['name' => 'restore users']);
-                Permission::create(['name' => 'reset user passwords']);
+                Permission::create(['name' => 'reset user passwords', 'category' => $model]);
                 continue;
             }
 
-            Permission::create(['name' => 'add ' . $model]);
-            Permission::create(['name' => 'edit ' . $model]);
-            Permission::create(['name' => 'delete ' . $model]);
-            Permission::create(['name' => 'view ' . $model]);
-            Permission::create(['name' => 'view all ' . $model]);
+            Permission::create(['name' => 'add ' . $model, 'category' => $model]);
+            Permission::create(['name' => 'edit ' . $model, 'category' => $model]);
+            Permission::create(['name' => 'delete ' . $model, 'category' => $model]);
+            Permission::create(['name' => 'view ' . $model, 'category' => $model]);
+            Permission::create(['name' => 'view all ' . $model, 'category' => $model]);
+            Permission::create(['name' => 'export ' . $model, 'category' => $model]);
 
             if ($model == "employees") {
-                Permission::create(['name' => 'restore employees']);
+                Permission::create(['name' => 'restore employees', 'category' => $model]);
             }
 
             if ($model == "expense reports") {
-                Permission::create(['name' => 'approve expense reports']);
-                Permission::create(['name' => 'submit expense reports']);
-                // Permission::create(['name' => 'duplicate expense reports']);
+                Permission::create(['name' => 'approve expense reports', 'category' => $model]);
+                Permission::create(['name' => 'disapprove expense reports', 'category' => $model]);
+                Permission::create(['name' => 'submit expense reports', 'category' => $model]);
+                Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
             }
 
             // if ($model == "payments") {
-            //     Permission::create(['name' => 'approve payments']);
+            //     Permission::create(['name' => 'approve payments', 'category' => $model]);
             // }
         }
 
-        // Permission::create(['name' => 'view admin dashboard']);
-        // Permission::create(['name' => 'view dashboard']);
-        // Permission::create(['name' => 'login']);
+        // Permission::create(['name' => 'view admin dashboard', 'category' => $model]);
+        // Permission::create(['name' => 'view dashboard', 'category' => $model]);
+        // Permission::create(['name' => 'login', 'category' => $model]);
 
         // create roles and assign existing permissions
         $roleUser = Role::create(['name' => 'Standard User']);
