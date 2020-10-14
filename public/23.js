@@ -202,6 +202,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -459,44 +481,9 @@ var render = function() {
           _c("v-spacer"),
           _vm._v(" "),
           _c(
-            "v-btn",
+            "v-tooltip",
             {
-              staticClass: "elevation-3 mr-2",
-              attrs: { color: "green", dark: "", fab: "", "x-small": "" }
-            },
-            [
-              _c(
-                "download-excel",
-                { attrs: { data: _vm.export_data } },
-                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-export")])],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              staticClass: "elevation-3 mr-2",
-              attrs: { color: "green", dark: "", fab: "", "x-small": "" },
-              on: { click: _vm.onRefresh }
-            },
-            [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-reload")])],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-menu",
-            {
-              attrs: {
-                transition: "scale-transition",
-                "close-on-content-click": false,
-                "nudge-width": 200,
-                "offset-y": "",
-                left: "",
-                bottom: ""
-              },
+              attrs: { bottom: "" },
               scopedSlots: _vm._u([
                 {
                   key: "activator",
@@ -524,11 +511,137 @@ var render = function() {
                           on
                         ),
                         [
+                          _c(
+                            "download-excel",
+                            { attrs: { data: _vm.export_data } },
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-download")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ]
+                  }
+                }
+              ])
+            },
+            [_vm._v(" "), _c("span", [_vm._v("Export to Excel")])]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-tooltip",
+            {
+              attrs: { bottom: "" },
+              scopedSlots: _vm._u([
+                {
+                  key: "activator",
+                  fn: function(ref) {
+                    var on = ref.on
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._g(
+                          _vm._b(
+                            {
+                              staticClass: "elevation-3 mr-2",
+                              attrs: {
+                                color: "green",
+                                dark: "",
+                                fab: "",
+                                "x-small": ""
+                              },
+                              on: { click: _vm.onRefresh }
+                            },
+                            "v-btn",
+                            attrs,
+                            false
+                          ),
+                          on
+                        ),
+                        [
                           _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v("mdi-filter")
+                            _vm._v("mdi-reload")
                           ])
                         ],
                         1
+                      )
+                    ]
+                  }
+                }
+              ])
+            },
+            [_vm._v(" "), _c("span", [_vm._v("Refresh")])]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-menu",
+            {
+              attrs: {
+                transition: "scale-transition",
+                "close-on-content-click": false,
+                "nudge-width": 200,
+                "offset-y": "",
+                left: "",
+                bottom: ""
+              },
+              scopedSlots: _vm._u([
+                {
+                  key: "activator",
+                  fn: function(ref) {
+                    var menu = ref.on
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-tooltip",
+                        {
+                          attrs: { bottom: "" },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var tooltip = ref.on
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          {
+                                            staticClass: "elevation-3 mr-2",
+                                            attrs: {
+                                              color: "green",
+                                              dark: "",
+                                              fab: "",
+                                              "x-small": ""
+                                            }
+                                          },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        Object.assign({}, tooltip, menu)
+                                      ),
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-filter")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                }
+                              }
+                            ],
+                            null,
+                            true
+                          )
+                        },
+                        [_vm._v(" "), _c("span", [_vm._v("Filter Data")])]
                       )
                     ]
                   }
@@ -639,36 +752,55 @@ var render = function() {
                 {
                   key: "activator",
                   fn: function(ref) {
-                    var on = ref.on
+                    var menu = ref.on
                     var attrs = ref.attrs
                     return [
                       _c(
-                        "v-btn",
-                        _vm._g(
-                          _vm._b(
-                            {
-                              staticClass: "elevation-3",
-                              attrs: {
-                                color: "green",
-                                dark: "",
-                                fab: "",
-                                "x-small": ""
+                        "v-tooltip",
+                        {
+                          attrs: { bottom: "" },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var tooltip = ref.on
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          {
+                                            staticClass: "elevation-3",
+                                            attrs: {
+                                              color: "green",
+                                              dark: "",
+                                              fab: "",
+                                              "x-small": ""
+                                            }
+                                          },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        Object.assign({}, tooltip, menu)
+                                      ),
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-view-grid-plus-outline")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                }
                               }
-                            },
-                            "v-btn",
-                            attrs,
-                            false
-                          ),
-                          on
-                        ),
-                        [
-                          _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v(
-                              "\n                        mdi-format-list-bulleted-square\n                    "
-                            )
-                          ])
-                        ],
-                        1
+                            ],
+                            null,
+                            true
+                          )
+                        },
+                        [_vm._v(" "), _c("span", [_vm._v("More Options")])]
                       )
                     ]
                   }

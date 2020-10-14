@@ -185,7 +185,7 @@ class ExpenseReportController extends Controller
                     ["text" => "Description", "value" => $expense_report->description],
                 ],
                 'link' => "/admin/expense_reports/{$expense_report->id}",
-                'details' => "{$expense_report->description}"
+                'details' => "Ref:{$expense_report->code} {$expense_report->description}"
             ])
             ->log("Created Expense Report");
 
@@ -254,7 +254,7 @@ class ExpenseReportController extends Controller
 
                     $expense_report->cancelled_at = null;
 
-                    $expense_report->submitted_by_user_id = Auth::user()->id;
+                    $expense_report->submitted_by = Auth::user()->id;
 
                     $expense_report->save();
                 }
@@ -267,7 +267,7 @@ class ExpenseReportController extends Controller
                             ["text" => "Description", "value" => $expense_report->description],
                         ],
                         'link' => "/admin/expense_reports/{$expense_report->id}",
-                        'details' => "{$expense_report->description}"
+                        'details' => "Ref:{$expense_report->code} {$expense_report->description}"
                     ])
                     ->log("Submitted Expense Report");
 
@@ -294,10 +294,10 @@ class ExpenseReportController extends Controller
 
                     $expense_report->cancelled_at = null;
 
-                    $expense_report->submitted_by_user_id = $expense_report->submitted_at == null
-                        ? Auth::user()->id : $expense_report->submitted_by_user_id;
+                    $expense_report->submitted_by = $expense_report->submitted_at == null
+                        ? Auth::user()->id : $expense_report->submitted_by;
 
-                    $expense_report->approved_by_user_id = Auth::user()->id;
+                    $expense_report->approved_by = Auth::user()->id;
 
                     $expense_report->save();
                 }
@@ -310,7 +310,7 @@ class ExpenseReportController extends Controller
                             ["text" => "Description", "value" => $expense_report->description],
                         ],
                         'link' => "/admin/expense_reports/{$expense_report->id}",
-                        'details' => "{$expense_report->description}"
+                        'details' => "Ref:{$expense_report->code} {$expense_report->description}"
                     ])
                     ->log("Approved Expense Report");
 
@@ -333,13 +333,13 @@ class ExpenseReportController extends Controller
 
                     $new_report->deleted_at = null;
 
-                    $new_report->submitted_by_user_id = null;
+                    $new_report->submitted_by = null;
 
-                    $new_report->approved_by_user_id = null;
+                    $new_report->approved_by = null;
 
-                    $new_report->cancelled_by_user_id = null;
+                    $new_report->cancelled_by = null;
 
-                    $new_report->deleted_by_user_id = null;
+                    $new_report->deleted_by = null;
 
                     $new_report->save();
 
@@ -379,7 +379,7 @@ class ExpenseReportController extends Controller
                                 ["text" => "Description", "value" => $expense_report->description],
                             ],
                             'link' => "/admin/expense_reports/{$expense_report->id}",
-                            'details' => "{$expense_report->description}"
+                            'details' => "Ref:{$expense_report->code} {$expense_report->description}"
                         ])
                         ->log("Duplicated Expense Report");
                 }
@@ -476,7 +476,7 @@ class ExpenseReportController extends Controller
                             ["text" => "Description", "value" => $expense_report->description],
                         ],
                         'link' => "/admin/expense_reports/{$expense_report->id}",
-                        'details' => "{$expense_report->description}"
+                        'details' => "Ref:{$expense_report->code} {$expense_report->description}"
                     ])
                     ->log("Updated Expense Report");
 
@@ -509,7 +509,7 @@ class ExpenseReportController extends Controller
             //     abort(403);
             // }
 
-            $expense_report->deleted_by_user_id = Auth::user()->id;
+            $expense_report->deleted_by = Auth::user()->id;
 
             $expense_report->delete();
 
@@ -524,7 +524,7 @@ class ExpenseReportController extends Controller
                         ["text" => "Description", "value" => $expense_report->description],
                     ],
                     'link' => "/admin/expense_reports/{$expense_report->id}",
-                    'details' => "{$expense_report->description}"
+                    'details' => "Ref:{$expense_report->code} {$expense_report->description}"
                 ])
                 ->log("Cancelled Expense Report");
         }

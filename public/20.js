@@ -161,6 +161,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -565,10 +570,44 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c(
-                "v-btn",
-                { attrs: { icon: "" }, on: { click: _vm.onLogout } },
-                [_c("v-icon", [_vm._v("mdi-logout")])],
-                1
+                "v-tooltip",
+                {
+                  attrs: { left: "" },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    attrs: { icon: "" },
+                                    on: { click: _vm.onLogout }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [_c("v-icon", [_vm._v("mdi-logout")])],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ],
+                    null,
+                    false,
+                    2733129345
+                  )
+                },
+                [_vm._v(" "), _c("span", [_vm._v("Log out")])]
               )
             ],
             1

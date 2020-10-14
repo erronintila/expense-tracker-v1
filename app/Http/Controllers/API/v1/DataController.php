@@ -518,4 +518,74 @@ class DataController extends Controller
     {
         return Permission::all();
     }
+
+    ////////////
+    ////////////
+    ////////////
+
+    public function expenses_summary1(Request $request)
+    {
+        $start_date = "";
+        $end_date = "";
+
+        return response()->json([
+            "all_expenses" => "",
+            "pending_expenses" => "",
+            "approved_expenses" => "",
+            "cancelled_expenses" => "",
+            "paid_expenses" => "",
+        ]);
+    }
+
+    public function expenses_per_category1(Request $request)
+    {
+        $start_date = "";
+        $end_date = "";
+
+        return response()->json([
+            "all_expenses" => "",
+            "pending_expenses" => "",
+            "approved_expenses" => "",
+            "cancelled_expenses" => "",
+            "paid_expenses" => "",
+        ]);
+    }
+
+    public function expenses_per_employee1(Request $request)
+    {
+        $start_date = "";
+        $end_date = "";
+
+        return response()->json([
+            "all_expenses" => "",
+            "pending_expenses" => "",
+            "approved_expenses" => "",
+            "cancelled_expenses" => "",
+            "paid_expenses" => "",
+        ]);
+    }
+
+    public function expenses_per_department1(Request $request)
+    {
+        $start_date = "";
+        $end_date = "";
+
+        return response()->json([
+            "all_expenses" => "",
+            "pending_expenses" => "",
+            "approved_expenses" => "",
+            "cancelled_expenses" => "",
+            "paid_expenses" => "",
+        ]);
+    }
+
+    public function expenses_per_time_unit1(Request $request)
+    {
+        $start_date = "";
+        $end_date = "";
+
+        return response()->json([
+            "expenses" => ""
+        ]);
+    }
 }

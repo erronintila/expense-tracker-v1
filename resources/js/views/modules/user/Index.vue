@@ -125,9 +125,14 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn icon @click="onLogout">
-                <v-icon>mdi-logout</v-icon>
-            </v-btn>
+            <v-tooltip left>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon v-bind="attrs" v-on="on" @click="onLogout">
+                        <v-icon>mdi-logout</v-icon>
+                    </v-btn>
+                </template>
+                <span>Log out</span>
+            </v-tooltip>
         </v-app-bar>
         <!-- End of App Bar -->
 

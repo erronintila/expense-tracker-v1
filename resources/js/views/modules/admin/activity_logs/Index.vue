@@ -5,31 +5,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn class="elevation-3 mr-2" color="green" dark fab x-small>
-                <download-excel :data="export_data">
-                    <v-icon dark>mdi-export</v-icon>
-                </download-excel>
-            </v-btn>
-
-            <v-btn
-                class="elevation-3 mr-2"
-                color="green"
-                dark
-                fab
-                x-small
-                @click="onRefresh"
-            >
-                <v-icon dark>mdi-reload</v-icon>
-            </v-btn>
-
-            <v-menu
-                transition="scale-transition"
-                :close-on-content-click="false"
-                :nudge-width="200"
-                offset-y
-                left
-                bottom
-            >
+            <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         class="elevation-3 mr-2"
@@ -40,8 +16,57 @@
                         v-bind="attrs"
                         v-on="on"
                     >
-                        <v-icon dark>mdi-filter</v-icon>
+                        <download-excel :data="export_data">
+                            <v-icon dark>mdi-download</v-icon>
+                        </download-excel>
                     </v-btn>
+                </template>
+                <span>Export to Excel</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        class="elevation-3 mr-2"
+                        color="green"
+                        dark
+                        fab
+                        x-small
+                        @click="onRefresh"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon dark>mdi-reload</v-icon>
+                    </v-btn>
+                </template>
+                <span>Refresh</span>
+            </v-tooltip>
+
+            <v-menu
+                transition="scale-transition"
+                :close-on-content-click="false"
+                :nudge-width="200"
+                offset-y
+                left
+                bottom
+            >
+                <template v-slot:activator="{ on: menu, attrs }">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on: tooltip }">
+                            <v-btn
+                                class="elevation-3 mr-2"
+                                color="green"
+                                dark
+                                fab
+                                x-small
+                                v-bind="attrs"
+                                v-on="{ ...tooltip, ...menu }"
+                            >
+                                <v-icon dark>mdi-filter</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Filter Data</span>
+                    </v-tooltip>
                 </template>
 
                 <v-card>
@@ -90,29 +115,26 @@
             </v-menu>
 
             <v-menu offset-y transition="scale-transition" left>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        class="elevation-3"
-                        color="green"
-                        dark
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon dark>
-                            mdi-format-list-bulleted-square
-                        </v-icon>
-                    </v-btn>
+                <template v-slot:activator="{ on: menu, attrs }">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on: tooltip }">
+                            <v-btn
+                                class="elevation-3"
+                                color="green"
+                                dark
+                                fab
+                                x-small
+                                v-bind="attrs"
+                                v-on="{ ...tooltip, ...menu }"
+                            >
+                                <v-icon dark>mdi-view-grid-plus-outline</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>More Options</span>
+                    </v-tooltip>
                 </template>
 
                 <v-list>
-                    <!-- <v-list-item>
-                        <v-list-item-title>
-                            Export to Excel
-                        </v-list-item-title>
-                    </v-list-item> -->
-
                     <v-list-item @click="onDelete">
                         <v-list-item-title>
                             Delete

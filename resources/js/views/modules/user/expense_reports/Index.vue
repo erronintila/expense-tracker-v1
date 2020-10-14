@@ -6,27 +6,41 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    :to="{ name: 'user.expense_reports.create' }"
-                    dark
-                    fab
-                    x-small
-                >
-                    <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3 mr-2"
+                            color="green"
+                            :to="{ name: 'user.expense_reports.create' }"
+                            dark
+                            fab
+                            x-small
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Add New</span>
+                </v-tooltip>
 
-                <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    dark
-                    fab
-                    x-small
-                    @click="onRefresh"
-                >
-                    <v-icon dark>mdi-reload</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3 mr-2"
+                            color="green"
+                            dark
+                            fab
+                            x-small
+                            @click="onRefresh"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>mdi-reload</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Refresh</span>
+                </v-tooltip>
 
                 <v-menu
                     transition="scale-transition"
@@ -36,18 +50,23 @@
                     left
                     bottom
                 >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-filter</v-icon>
-                        </v-btn>
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on: tooltip }">
+                                <v-btn
+                                    class="elevation-3 mr-2"
+                                    color="green"
+                                    dark
+                                    fab
+                                    x-small
+                                    v-bind="attrs"
+                                    v-on="{ ...tooltip, ...menu }"
+                                >
+                                    <v-icon dark>mdi-filter</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Filter Data</span>
+                        </v-tooltip>
                     </template>
 
                     <v-card>
@@ -72,39 +91,54 @@
                 </v-menu>
 
                 <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>
-                                mdi-format-list-bulleted-square
-                            </v-icon>
-                        </v-btn>
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on: tooltip }">
+                                <v-btn
+                                    class="elevation-3"
+                                    color="green"
+                                    dark
+                                    fab
+                                    x-small
+                                    v-bind="attrs"
+                                    v-on="{ ...tooltip, ...menu }"
+                                >
+                                    <v-icon dark
+                                        >mdi-view-grid-plus-outline</v-icon
+                                    >
+                                </v-btn>
+                            </template>
+                            <span>More Options</span>
+                        </v-tooltip>
                     </template>
 
                     <v-list>
                         <v-list-item @click="onUpdate('submit', 'put')">
-                            <v-list-item-title>
+                            <v-list-item-icon>
+                                <v-icon>mdi-file-send-outline</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
                                 Submit Report(s)
-                            </v-list-item-title>
+                            </v-list-item-subtitle>
                         </v-list-item>
 
                         <v-list-item @click="onDelete">
-                            <v-list-item-title>
+                            <v-list-item-icon>
+                                <v-icon>mdi-close</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
                                 Cancel Report(s)
-                            </v-list-item-title>
+                            </v-list-item-subtitle>
                         </v-list-item>
 
                         <v-list-item @click="onUpdate('duplicate', 'put')">
-                            <v-list-item-title>
+                            <v-list-item-icon>
+                                <v-icon>mdi-content-copy</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
                                 Duplicate Report(s)
-                            </v-list-item-title>
+                            </v-list-item-subtitle>
+                            
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -269,7 +303,7 @@
                         {{ getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onShow(item)">
+                        <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
                         <v-icon
@@ -279,7 +313,37 @@
                             @click="onEdit(item)"
                         >
                             mdi-pencil
-                        </v-icon>
+                        </v-icon> -->
+
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    small
+                                    class="mr-2"
+                                    @click="onShow(item)"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    mdi-eye
+                                </v-icon>
+                            </template>
+                            <span>View Data</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    v-show="status !== 'Cancelled'"
+                                    small
+                                    class="mr-2"
+                                    @click="onEdit(item)"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    mdi-pencil
+                                </v-icon>
+                            </template>
+                            <span>Edit Data</span>
+                        </v-tooltip>
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -317,9 +381,9 @@ export default {
             loading: true,
             headers: [
                 { text: "Description", value: "description" },
-                { text: "Amount", value: "total", sortable: false  },
+                { text: "Amount", value: "total", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
-                { text: "Status", value: "status.status", sortable: false  },
+                { text: "Status", value: "status.status", sortable: false },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -438,7 +502,10 @@ export default {
 
                                     _this.loading = false;
 
-                                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                                    _this.errorDialog(
+                                        `Error ${error.response.status}`,
+                                        error.response.statusText
+                                    );
                                 });
                         } else {
                             let items = [];
@@ -453,7 +520,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         reject();
                     });
@@ -584,7 +654,10 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                                _this.errorDialog(
+                                    `Error ${error.response.status}`,
+                                    error.response.statusText
+                                );
                             });
                     }
                 }
@@ -686,12 +759,15 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                                _this.errorDialog(
+                                    `Error ${error.response.status}`,
+                                    error.response.statusText
+                                );
                             });
                     }
                 }
             );
-        },
+        }
     },
     watch: {
         params: {
@@ -725,6 +801,6 @@ export default {
             this.items = data.items;
             this.totalItems = data.total;
         });
-    },
+    }
 };
 </script>

@@ -196,7 +196,7 @@ class ExpenseController extends Controller
                     ["text" => "Amount", "value" => $expense->amount],
                 ],
                 'link' => "/admin/expenses/{$expense->id}",
-                'details' => "Amount: {$expense->amount}"
+                'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
             ])
             ->log("Created Expense");
 
@@ -333,7 +333,7 @@ class ExpenseController extends Controller
                             ["text" => "Amount", "value" => $expense->amount],
                         ],
                         'link' => "/admin/expenses/{$expense->id}",
-                        'details' => "Amount: {$expense->amount}"
+                        'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
                     ])
                     ->log("Updated Expense");
 
@@ -388,7 +388,7 @@ class ExpenseController extends Controller
                             ["text" => "Amount", "value" => $expense->amount],
                         ],
                         'link' => "/admin/expenses/{$expense->id}",
-                        'details' => "Amount: {$expense->amount}"
+                        'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
                     ])
                     ->log("Cancelled Expense");
             }
