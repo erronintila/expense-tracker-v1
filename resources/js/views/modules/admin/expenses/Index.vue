@@ -6,27 +6,41 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    :to="{ name: 'admin.expenses.create' }"
-                    dark
-                    fab
-                    x-small
-                >
-                    <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3 mr-2"
+                            color="green"
+                            :to="{ name: 'admin.expenses.create' }"
+                            dark
+                            fab
+                            x-small
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Add New</span>
+                </v-tooltip>
 
-                <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    dark
-                    fab
-                    x-small
-                    @click="onRefresh"
-                >
-                    <v-icon dark>mdi-reload</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3 mr-2"
+                            color="green"
+                            dark
+                            fab
+                            x-small
+                            @click="onRefresh"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>mdi-reload</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Refresh</span>
+                </v-tooltip>
 
                 <v-menu
                     transition="scale-transition"
@@ -36,18 +50,23 @@
                     left
                     bottom
                 >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-filter</v-icon>
-                        </v-btn>
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on: tooltip }">
+                                <v-btn
+                                    class="elevation-3 mr-2"
+                                    color="green"
+                                    dark
+                                    fab
+                                    x-small
+                                    v-bind="attrs"
+                                    v-on="{ ...tooltip, ...menu }"
+                                >
+                                    <v-icon dark>mdi-filter</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Filter Data</span>
+                        </v-tooltip>
                     </template>
 
                     <v-card>
@@ -90,20 +109,25 @@
                 </v-menu>
 
                 <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>
-                                mdi-format-list-bulleted-square
-                            </v-icon>
-                        </v-btn>
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on: tooltip }">
+                                <v-btn
+                                    class="elevation-3"
+                                    color="green"
+                                    dark
+                                    fab
+                                    x-small
+                                    v-bind="attrs"
+                                    v-on="{ ...tooltip, ...menu }"
+                                >
+                                    <v-icon dark
+                                        >mdi-view-grid-plus-outline</v-icon
+                                    >
+                                </v-btn>
+                            </template>
+                            <span>More Options</span>
+                        </v-tooltip>
                     </template>
 
                     <v-list>
@@ -114,13 +138,17 @@
                         </v-list-item> -->
 
                         <v-list-item @click="onDelete">
-                            <v-list-item-title>
+                            <v-list-item-icon>
+                                <v-icon>mdi-close</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
                                 Cancel Expense(s)
-                            </v-list-item-title>
+                            </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
                 </v-menu>
             </v-card-title>
+
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
@@ -282,6 +310,28 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
+
+        <!-- <v-row>
+            <v-col cols="12" md="4">
+                <v-card elevation="0">
+                    <v-card-subtitle>
+                        <div class="green--text">Total Expenses: 0</div>
+                        <div class="green--text">Unreported Expenses: 0</div>
+                        <div class="green--text">Approved Expenses: 0</div>
+                    </v-card-subtitle>
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="4">
+                <v-card elevation="0">
+                    <v-card-title> </v-card-title>
+                    <v-card-subtitle>
+                        <div class="green--text">Total Expenses: 0</div>
+                        <div class="green--text">Unreported Expenses: 0</div>
+                        <div class="green--text">Approved Expenses: 0</div>
+                    </v-card-subtitle>
+                </v-card>
+            </v-col>
+        </v-row> -->
     </div>
 </template>
 
@@ -322,11 +372,15 @@ export default {
                 "Last 5 Years"
             ],
             headers: [
-                { text: "Expense", value: "expense_type.name", sortable: false  },
-                { text: "Employee", value: "employee_name", sortable: false  },
+                {
+                    text: "Expense",
+                    value: "expense_type.name",
+                    sortable: false
+                },
+                { text: "Employee", value: "employee_name", sortable: false },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Report", value: "expense_report", sortable: false  },
+                { text: "Report", value: "expense_report", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -336,8 +390,16 @@ export default {
             employees: [],
             expense_type: 0,
             expense_types: [],
-            status: "Active",
-            statuses: ["Active", "Cancelled", "Unreported Expenses"],
+            status: "All Expenses",
+            statuses: [
+                "All Expenses",
+                "Unreported Expenses",
+                "Unsubmitted Expenses",
+                "Approved Expenses",
+                "Rejected Expenses",
+                "Reimbursed Expenses",
+                "Archived Expenses"
+            ],
             selected: [],
             search: "",
             totalItems: 0,
@@ -395,7 +457,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.loading = false;
                     });
@@ -417,7 +482,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadExpenseTypes() {
@@ -436,7 +504,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onRefresh() {
@@ -541,7 +612,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -582,11 +656,14 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
-        },
+        }
     },
     watch: {
         params: {

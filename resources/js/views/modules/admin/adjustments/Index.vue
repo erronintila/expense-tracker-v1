@@ -6,16 +6,23 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn
-                    class="elevation-3 mr-2"
-                    color="green"
-                    dark
-                    fab
-                    x-small
-                    @click="onRefresh"
-                >
-                    <v-icon dark>mdi-reload</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="elevation-3 mr-2"
+                            color="green"
+                            dark
+                            fab
+                            x-small
+                            @click="onRefresh"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>mdi-reload</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Refresh</span>
+                </v-tooltip>
 
                 <!-- <v-menu
                     transition="scale-transition"
@@ -53,28 +60,35 @@
                 </v-menu> -->
 
                 <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>
-                                mdi-format-list-bulleted-square
-                                <!-- mdi-plus -->
-                            </v-icon>
-                        </v-btn>
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on: tooltip }">
+                                <v-btn
+                                    class="elevation-3"
+                                    color="green"
+                                    dark
+                                    fab
+                                    x-small
+                                    v-bind="attrs"
+                                    v-on="{ ...tooltip, ...menu }"
+                                >
+                                    <v-icon dark
+                                        >mdi-view-grid-plus-outline</v-icon
+                                    >
+                                </v-btn>
+                            </template>
+                            <span>More Options</span>
+                        </v-tooltip>
                     </template>
 
                     <v-list>
                         <v-list-item @click="onCreate('revolving_fund')">
-                            <v-list-item-title>
+                            <v-list-item-icon>
+                                <v-icon>mdi-text-box-plus-outline</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
                                 Manage Revolving Fund
-                            </v-list-item-title>
+                            </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
                 </v-menu>

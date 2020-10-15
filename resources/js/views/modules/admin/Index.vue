@@ -226,6 +226,11 @@ export default {
                         icon: "mdi-circle-medium",
                         text: "Activity Logs",
                         link: { name: "admin.activity_logs.index" }
+                    },
+                    {
+                        icon: "mdi-circle-medium",
+                        text: "Settings",
+                        // link: { name: "admin.activity_logs.index" }
                     }
                     // {
                     //     icon: "mdi-circle-medium",

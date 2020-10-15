@@ -77,7 +77,7 @@ class ExpenseController extends Controller
 
             switch ($request->status) {
 
-                case 'Cancelled':
+                case 'Cancelled Expenses':
 
                     $expenses = $expenses->onlyTrashed();
 

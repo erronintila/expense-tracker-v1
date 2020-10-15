@@ -251,6 +251,10 @@ __webpack_require__.r(__webpack_exports__);
           link: {
             name: "admin.activity_logs.index"
           }
+        }, {
+          icon: "mdi-circle-medium",
+          text: "Settings" // link: { name: "admin.activity_logs.index" }
+
         } // {
         //     icon: "mdi-circle-medium",
         //     text: "Roles",

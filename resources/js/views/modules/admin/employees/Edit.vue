@@ -12,7 +12,7 @@
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
-                <v-expansion-panels v-model="panel">
+                <v-expansion-panels v-model="panel" multiple>
                     <v-expansion-panel>
                         <v-expansion-panel-header>
                             <div class="green--text">
@@ -285,7 +285,7 @@
 export default {
     data() {
         return {
-            panel: 0,
+            panel: [0, 1],
             valid: false,
             menu: false,
             jobs: [],

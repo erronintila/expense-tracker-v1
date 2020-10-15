@@ -34,20 +34,22 @@ class CreatePaymentsTable extends Migration
             $table->timestamp('released_at')->nullable();
             $table->timestamp('received_at')->nullable();
 
-            $table->unsignedBigInteger('approved_by_user_id')->nullable();
-            $table->unsignedBigInteger('cancelled_by_user_id')->nullable();
-            $table->unsignedBigInteger('deleted_by_user_id')->nullable();
-            $table->unsignedBigInteger('released_by_user_id')->nullable();
-            $table->unsignedBigInteger('received_by_user_id')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->unsignedBigInteger('released_by')->nullable();
+            $table->unsignedBigInteger('received_by')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('approved_by_user_id')->references('id')->on('users');
-            $table->foreign('cancelled_by_user_id')->references('id')->on('users');
-            $table->foreign('deleted_by_user_id')->references('id')->on('users');
-            $table->foreign('released_by_user_id')->references('id')->on('users');
-            $table->foreign('received_by_user_id')->references('id')->on('users');
+            // $table->foreign('approved_by_user_id')->references('id')->on('users');
+            // $table->foreign('cancelled_by_user_id')->references('id')->on('users');
+            // $table->foreign('deleted_by_user_id')->references('id')->on('users');
+            // $table->foreign('released_by_user_id')->references('id')->on('users');
+            // $table->foreign('received_by_user_id')->references('id')->on('users');
         });
     }
 
