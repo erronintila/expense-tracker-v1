@@ -136,6 +136,14 @@
                                 Restore
                             </v-list-item-title>
                         </v-list-item> -->
+                        <v-list-item>
+                            <v-list-item-icon>
+                                <v-icon>mdi-plus</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Add Expense Report
+                            </v-list-item-subtitle>
+                        </v-list-item>
 
                         <v-list-item @click="onDelete">
                             <v-list-item-icon>

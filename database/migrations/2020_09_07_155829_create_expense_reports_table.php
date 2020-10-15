@@ -16,6 +16,7 @@ class CreateExpenseReportsTable extends Migration
         Schema::create('expense_reports', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
+            $table->string('reference_no')->nullable();
             $table->string('description');
             $table->text('remarks')->nullable();
             $table->text('notes')->nullable();

@@ -327,6 +327,9 @@ export default {
         );
 
         this.getCurrentUser();
+
+        // console.log("user", this.$currentUser);
+        // console.log("permisiions", this.$permissions);
     }
 };
 </script>

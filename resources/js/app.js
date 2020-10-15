@@ -23,7 +23,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 import numeral from "numeral";
 import JsonExcel from "vue-json-excel";
- 
+
 /**
  * Load Instances
  *
@@ -85,6 +85,7 @@ window.Chart.plugins.unregister(ChartDataLabels);
 import { store } from "./store/index";
 import { router } from "./router/index";
 import App from "./views/layouts/App.vue";
+import Mixin from "./mixins/index";
 
 /**
  * Axios configuration
@@ -99,57 +100,59 @@ axios.defaults.headers.common["Authorization"] =
  *
  *
  */
-Vue.mixin({
-    data() {
-        return {
-            validation: {
-                required: [v => !!v || "This field is required"],
-                minLength: value => [
-                    v =>
-                        (!!v && v.length <= value) ||
-                        `This field must be less than ${value} characters`
-                ],
-                email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
-            }
-        };
-    },
-    methods: {
-        formatNumber(value) {
-            return numeral(value).format("0,0.00");
-        },
-        formatDate(date, format) {
-            return date == null ? "" : moment(date).format(format);
-        },
-        getHumanDate(date) {
-            return moment(date).fromNow();
-        },
-        isEmpty(item) {
-            if (item) {
-                return parseFloat(item);
-            }
-            return 0;
-        },
-        successDialog(title, text) {
-            this.$dialog.message.success(`${title}: ${text}`, {
-                position: "top-right",
-                timeout: 2000
-            });
-        },
-        errorDialog(title, text) {
-            this.$dialog.message.error(`${title}: ${text}`, {
-                position: "top-right",
-                timeout: 2000
-            });
-        },
-        confirmDialog(title, text, callback) {
-            this.$confirm(`${title} : ${text}`).then(res => {
-                if (res) {
-                    callback();
-                }
-            });
-        },
-    }
-});
+Vue.mixin(Mixin);
+
+// Vue.mixin({
+//     data() {
+//         return {
+//             validation: {
+//                 required: [v => !!v || "This field is required"],
+//                 minLength: value => [
+//                     v =>
+//                         (!!v && v.length <= value) ||
+//                         `This field must be less than ${value} characters`
+//                 ],
+//                 email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
+//             }
+//         };
+//     },
+//     methods: {
+//         formatNumber(value) {
+//             return numeral(value).format("0,0.00");
+//         },
+//         formatDate(date, format) {
+//             return date == null ? "" : moment(date).format(format);
+//         },
+//         getHumanDate(date) {
+//             return moment(date).fromNow();
+//         },
+//         isEmpty(item) {
+//             if (item) {
+//                 return parseFloat(item);
+//             }
+//             return 0;
+//         },
+//         successDialog(title, text) {
+//             this.$dialog.message.success(`${title}: ${text}`, {
+//                 position: "top-right",
+//                 timeout: 2000
+//             });
+//         },
+//         errorDialog(title, text) {
+//             this.$dialog.message.error(`${title}: ${text}`, {
+//                 position: "top-right",
+//                 timeout: 2000
+//             });
+//         },
+//         confirmDialog(title, text, callback) {
+//             this.$confirm(`${title} : ${text}`).then(res => {
+//                 if (res) {
+//                     callback();
+//                 }
+//             });
+//         }
+//     }
+// });
 
 /**
  * The following block of code may be used to automatically register your

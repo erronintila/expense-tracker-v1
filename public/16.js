@@ -350,7 +350,8 @@ __webpack_require__.r(__webpack_exports__);
 
       return Promise.reject(error);
     });
-    this.getCurrentUser();
+    this.getCurrentUser(); // console.log("user", this.$currentUser);
+    // console.log("permisiions", this.$permissions);
   }
 });
 
