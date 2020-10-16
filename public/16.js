@@ -253,8 +253,10 @@ __webpack_require__.r(__webpack_exports__);
           }
         }, {
           icon: "mdi-circle-medium",
-          text: "Settings" // link: { name: "admin.activity_logs.index" }
-
+          text: "Settings",
+          link: {
+            name: "admin.settings.index"
+          }
         } // {
         //     icon: "mdi-circle-medium",
         //     text: "Roles",

@@ -230,7 +230,7 @@ export default {
                     {
                         icon: "mdi-circle-medium",
                         text: "Settings",
-                        // link: { name: "admin.activity_logs.index" }
+                        link: { name: "admin.settings.index" }
                     }
                     // {
                     //     icon: "mdi-circle-medium",

@@ -45,6 +45,283 @@
             <v-card-subtitle> </v-card-subtitle>
 
             <v-row>
+                <v-col cols="12" md="4">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            class="mx-auto mb-3"
+                            :elevation="hover ? 5 : 2"
+                            :to="{ name: 'admin.expenses.index' }"
+                        >
+                            <v-card-text>
+                                <div class="green--text">Total Expenses</div>
+                                <div class="display-1 text--primary">
+                                    {{ formatNumber(total.expenses_by_date) }}
+                                </div>
+                                <div>{{ count.expenses_by_date }} Expenses</div>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            class="mx-auto"
+                            :elevation="hover ? 5 : 2"
+                            :to="{ name: 'admin.employees.index' }"
+                        >
+                            <v-card-text>
+                                <div>
+                                    Remaining Fund
+                                </div>
+                                <div class="display-1 text--primary">
+                                    {{ formatNumber(total.remaining_fund) }}
+                                </div>
+                                <div>
+                                    {{
+                                        `Total Revolving Funds: ${total.total_fund}`
+                                    }}
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+                </v-col>
+
+                <v-col cols="12" md="8">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            class="mx-auto"
+                            :elevation="hover ? 5 : 2"
+                            height="100%"
+                            style="position: relative"
+                        >
+                            <v-card-text>
+                                <div>
+                                    Expense Reports Summary
+                                    <v-menu offset-y open-on-hover>
+                                        <template
+                                            v-slot:activator="{ on, attrs }"
+                                        >
+                                            <v-btn
+                                                x-small
+                                                icon
+                                                color="green"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                            >
+                                                <v-icon
+                                                    >mdi-information-outline</v-icon
+                                                >
+                                            </v-btn>
+                                        </template>
+                                        <v-card>
+                                            <v-card-text>
+                                                <div>
+                                                    Unreported Expenses:
+                                                    Expenses that are not
+                                                    associated with any report
+                                                </div>
+                                                <div>
+                                                    Unsubmitted: Created reports
+                                                    that are not yet submitted
+                                                </div>
+                                                <div>
+                                                    Pending for Approval:
+                                                    Submitted reports waiting
+                                                    for approval
+                                                </div>
+                                                <div>
+                                                    Awaiting Reimbursement:
+                                                    Approved reports waiting for
+                                                    payment
+                                                </div>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-menu>
+                                </div>
+                                <v-row>
+                                    <v-col
+                                        cols="12"
+                                        md="6"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name:
+                                                    'admin.expense_reports.index'
+                                            }"
+                                        >
+                                            <span>
+                                                <div
+                                                    class="orange--text text-capitalize"
+                                                >
+                                                    Unreported Expenses
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        formatNumber(
+                                                            total.unreported_expenses
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.unreported_expenses
+                                                    }}
+                                                    Expenses
+                                                </div>
+                                            </span>
+                                        </v-btn>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        md="6"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name:
+                                                    'admin.expense_reports.index'
+                                            }"
+                                        >
+                                            <span>
+                                                <div
+                                                    class="orange--text text-capitalize"
+                                                >
+                                                    Unsubmitted
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        formatNumber(
+                                                            total.unsubmitted_reports
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.unsubmitted_reports
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </span>
+                                        </v-btn>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        md="6"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name:
+                                                    'admin.expense_reports.index'
+                                            }"
+                                        >
+                                            <div>
+                                                <div
+                                                    class="red--text text-capitalize"
+                                                >
+                                                    Pending for Approval
+                                                </div>
+                                                <div
+                                                    :class="
+                                                        parseFloat(
+                                                            total.pending_for_approval_reports
+                                                        ) > 0
+                                                            ? 'display-1 red--text'
+                                                            : 'display-1 text--primary'
+                                                    "
+                                                >
+                                                    {{
+                                                        formatNumber(
+                                                            total.pending_for_approval_reports
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.pending_for_approval_reports
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </div>
+                                        </v-btn>
+                                    </v-col>
+
+                                    <v-col
+                                        cols="12"
+                                        md="6"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name:
+                                                    'admin.expense_reports.index'
+                                            }"
+                                        >
+                                            <div>
+                                                <div
+                                                    class="green--text text-capitalize"
+                                                >
+                                                    Awaiting Reimbursement
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        formatNumber(
+                                                            total.awaiting_for_reimbursement_reports
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.awaiting_for_reimbursement_reports
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </div>
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+                </v-col>
+            </v-row>
+
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+
+            <!-- <v-row>
                 <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
@@ -84,7 +361,6 @@
                                     {{ total_count.replenishments }} Expenses
                                 </small>
                             </v-card-subtitle>
-                            <!-- <v-card-text>---</v-card-text> -->
                         </v-card>
                     </v-hover>
                 </v-col>
@@ -106,7 +382,6 @@
                                     {{ total_count.reimbursements }} Expenses
                                 </small>
                             </v-card-subtitle>
-                            <!-- <v-card-text>---</v-card-text> -->
                         </v-card>
                     </v-hover>
                 </v-col>
@@ -128,22 +403,13 @@
                                     {{ total_count.unreported }}
                                 </small>
                             </v-card-subtitle>
-                            <!-- <v-card-text>---</v-card-text> -->
                         </v-card>
                     </v-hover>
                 </v-col>
-                <!-- <v-col cols="12" md="3">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card :elevation="hover ? 5 : 2" class="mx-auto">
-                                <v-card-title>0.00</v-card-title>
-                                <v-card-subtitle>------</v-card-subtitle>
-                                <v-card-text>---</v-card-text>
-                            </v-card>
-                        </v-hover>
-                    </v-col> -->
-            </v-row>
+            </v-row> -->
+
             <v-hover v-slot:default="{ hover }">
-                <v-card :elevation="hover ? 5 : 0" class="mx-auto">
+                <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                     <v-toolbar flat dense>
                         <v-toolbar-title>
                             Expenses by category
@@ -208,7 +474,7 @@
             </v-hover>
 
             <v-hover v-slot:default="{ hover }">
-                <v-card :elevation="hover ? 5 : 0" class="mx-auto">
+                <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                     <v-toolbar flat dense>
                         <v-toolbar-title>
                             Expenses by date
@@ -280,6 +546,22 @@ export default {
     },
     data() {
         return {
+            total: {
+                awaiting_for_reimbursement_reports: 0,
+                expenses_by_date: 0,
+                pending_for_approval_reports: 0,
+                remaining_fund: 0,
+                total_fund: 0,
+                unreported_expenses: 0,
+                unsubmitted_reports: 0
+            },
+            count: {
+                awaiting_for_reimbursement_reports: 0,
+                expenses_by_date: 0,
+                pending_for_approval_reports: 0,
+                unreported_expenses: 0,
+                unsubmitted_reports: 0
+            },
             total_expenses: 0,
             total_replenishments: 0,
             total_reimbursements: 0,
@@ -387,7 +669,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         load_department_expenses(start, end, employee) {
@@ -433,7 +718,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         load_expense_types_expenses(start, end, employee) {
@@ -480,7 +768,10 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         load_employees_expenses(start, end, employee) {
@@ -526,7 +817,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         load_expenses_summary(start, end, time_unit, employee) {
@@ -594,7 +888,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         load_bar_chart() {
@@ -897,6 +1194,8 @@ export default {
                     `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${emp}`
                 )
                 .then(response => {
+                    console.log(response);
+
                     _this.total_expenses = response.data.summary.total;
                     _this.total_replenishments =
                         response.data.summary.replenishments;
@@ -905,14 +1204,24 @@ export default {
                     _this.total_pending_reports = response.data.summary.pending;
 
                     _this.total_count = response.data.summary.total_count;
+
+                    //
+                    //
+                    //
+
+                    _this.total = response.data.total;
+                    _this.count = response.data.count;
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
-        },
+        }
     },
     created() {
         this.loadEmployees();

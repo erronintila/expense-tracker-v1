@@ -446,8 +446,55 @@ class DataController extends Controller
 
     public function expense_stats(Request $request)
     {
-        $total_expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
+        // $expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
+        $expenses_by_date = Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', "<>", null);
+            $q->where('approved_at', '<>', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null)
+            ->whereBetween('date', [$request->start_date, $request->end_date]);
+        $all_expenses = Expense::all();
+        $employees = Employee::all();
 
+        $unsubmitted_reports =  Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', null);
+            $q->where('approved_at', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null);
+
+        $submitted_reports =  Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', "<>", null);
+            $q->where('approved_at', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null);
+
+        $approved_reports =  Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', "<>", null);
+            $q->where('approved_at', "<>", null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+            $q->where('payment_id', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null);
+
+        //
+        //
+        //
+        $total_expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
         $pending_expenses = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
             $q->where('approved_at', null);
@@ -457,7 +504,6 @@ class DataController extends Controller
             ->whereHas('expense_report')
             ->get()
             ->where('expense_report', '<>', null);
-        // ->whereBetween('date', [$request->start_date, $request->end_date]);
 
         $total_expenses = Expense::with("expense_report.payment")
             ->whereBetween('date', ["2020-01-01", "2020-12-31"])
@@ -469,12 +515,24 @@ class DataController extends Controller
             })
             ->get();
 
+        //
+        //
+        //
+
         // if (request()->has('employee_id') && request()->has("admin_page")) {
         if (request()->has('employee_id')) {
             if ($request->employee_id > 0) {
                 $total_expenses_by_date = $total_expenses_by_date->where('employee_id', $request->employee_id);
                 $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
                 $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
+                //
+                //
+                //
+                $employees = $employees->where("id", $request->employee_id);
+                $expenses_by_date =  $expenses_by_date->where('employee_id', $request->employee_id);
+                $unsubmitted_reports = $unsubmitted_reports->where('employee_id', $request->employee_id);
+                $submitted_reports = $submitted_reports->where('employee_id', $request->employee_id);
+                $approved_reports = $approved_reports->where('employee_id', $request->employee_id);
             }
         }
         // elseif (request()->has('employee_id')) {
@@ -503,6 +561,22 @@ class DataController extends Controller
                 "reimbursements" => $reimbursements,
                 "replenishments" => $total_expenses - $reimbursements,
                 "total_count" => $total_count
+            ],
+            "total" => [
+                "expenses_by_date" => $expenses_by_date->sum("amount"),
+                "remaining_fund" => $employees->sum("remaining_fund"),
+                "total_fund" => $employees->sum("fund"),
+                "unreported_expenses" => $all_expenses->where("expense_report_id", null)->sum("amount"),
+                "unsubmitted_reports" => $unsubmitted_reports->sum("amount"),
+                "pending_for_approval_reports" => $submitted_reports->sum("amount"),
+                "awaiting_for_reimbursement_reports" => $approved_reports->sum("amount"),
+            ],
+            "count" => [
+                "expenses_by_date" => count($expenses_by_date),
+                "unreported_expenses" => $all_expenses->where("expense_report_id", null)->count(),
+                "unsubmitted_reports" => $unsubmitted_reports->count(),
+                "pending_for_approval_reports" => $submitted_reports->count(),
+                "awaiting_for_reimbursement_reports" => $approved_reports->count(),
             ],
             // "data" => [
             //     "expenses" => $total_expenses,

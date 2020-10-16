@@ -28,6 +28,19 @@ const adminRoutes = [
             /**
              *
              *
+             * Settings
+             *
+             *
+             */
+            {
+                path: "/admin/settings",
+                name: "admin.settings.index",
+                component: () =>
+                    import("../../views/modules/admin/settings/Index.vue")
+            },
+            /**
+             *
+             *
              * Profile
              *
              *

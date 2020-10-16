@@ -26,12 +26,14 @@ class CreateExpenseReportsTable extends Migration
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
             $table->timestamp('cancelled_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
 
             $table->unsignedBigInteger('submitted_by')->nullable();
             $table->unsignedBigInteger('reviewed_by')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->unsignedBigInteger('rejected_by')->nullable();
             $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->unsignedBigInteger('paid_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->unsignedBigInteger('employee_id')->unsigned();

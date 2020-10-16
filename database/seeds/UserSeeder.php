@@ -37,10 +37,14 @@ class UserSeeder extends Seeder
             "expenses",
             "adjustments",
             "activity logs",
+            "settings",
+            "authentication"
         ];
 
+        // create permissions
+
         foreach ($models as $model) {
-            // create permissions
+
             if ($model == "activity logs") {
                 Permission::create(['name' => 'export ' . $model, 'category' => $model]);
                 Permission::create(['name' => 'delete ' . $model, 'category' => $model]);
@@ -48,9 +52,19 @@ class UserSeeder extends Seeder
                 continue;
             }
 
+            if ($model == "settings") {
+                Permission::create(['name' => 'manage ' . $model, 'category' => $model]);
+                continue;
+            }
+
+            if ($model == "authentication") {
+                // Permission::create(['name' => 'login application', 'category' => $model]);
+                continue;
+            }
+
             if ($model == "users") {
-                // Permission::create(['name' => 'verify users']);
-                // Permission::create(['name' => 'restore users']);
+                // Permission::create(['name' => 'verify users', 'category' => $model]);
+                // Permission::create(['name' => 'restore users', 'category' => $model]);
                 Permission::create(['name' => 'reset user passwords', 'category' => $model]);
                 continue;
             }
@@ -73,16 +87,14 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
             }
 
-            // if ($model == "payments") {
-            //     Permission::create(['name' => 'approve payments', 'category' => $model]);
-            // }
+            if ($model == "payments") {
+                Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
+                // Permission::create(['name' => 'approve payments', 'category' => $model]);
+            }
         }
 
-        // Permission::create(['name' => 'view admin dashboard', 'category' => $model]);
-        // Permission::create(['name' => 'view dashboard', 'category' => $model]);
-        // Permission::create(['name' => 'login', 'category' => $model]);
-
         // create roles and assign existing permissions
+
         $roleUser = Role::create(['name' => 'Standard User']);
         $roleUser->givePermissionTo("add expenses");
         $roleUser->givePermissionTo("edit expenses");
@@ -99,14 +111,13 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("add vendors");
         $roleUser->givePermissionTo("edit employees");
 
-        // $roleAdmin = Role::create(['name' => 'Administrator']);
-
         $roleSuperAdmin = Role::create(['name' => 'Super Admin']);
 
         foreach (Permission::all() as $permission) {
-            // $roleAdmin->givePermissionTo($permission->pluck("name"));
             $roleSuperAdmin->givePermissionTo($permission->pluck("name"));
         }
+
+        // create users and assign roles
 
         $user = User::create([
             'name' => 'Super Admin',
@@ -118,72 +129,36 @@ class UserSeeder extends Seeder
             'is_admin' => true,
             'can_login' => true,
         ]);
+
         $user->assignRole($roleSuperAdmin);
 
-        // $user1 = User::create([
-        //     'name' => 'Intila, Erron Cerdania',
-        //     'username' => 'erronintila',
-        //     'email' => 'erronintila@gmail.com',
-        //     'email_verified_at' => now(),
-        //     'password' => Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-        //     'is_admin' => false,
-        //     'can_login' => true,
-        // ]);
-        // $user1->assignRole('Standard User');
+        $user = User::create([
+            'name' => 'Intila, Erron Cerdania',
+            'username' => 'erronintila',
+            'email' => 'erronintila@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'is_admin' => false,
+            'can_login' => true,
+        ]);
 
-        // Employee::create([
-        //     'code' => "19018",
-        //     'first_name' => "Erron",
-        //     'middle_name' => "Cerdania",
-        //     'last_name' => "Intila",
-        //     'suffix' => null,
-        //     'gender' => "Male",
-        //     'birthdate' => "1996-08-19",
-        //     'mobile_number' => "09567653221",
-        //     'telephone_number' => null,
-        //     'email' => 'erronintila@gmail.com',
-        //     'address' => "Polomolok, South Cotabato",
-        //     "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
-        //     "user_id" => $user1->id,
-        // ]);
+        $user->assignRole('Standard User');
 
-        // $user = User::create([
-        //     'name' => 'Administrator',
-        //     'username' => 'administrator',
-        //     'email' => 'administrator@administrator.com',
-        //     'email_verified_at' => now(),
-        //     'password' => Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-        //     'is_admin' => true,
-        //     'can_login' => true,
-        // ]);
-        // $user->assignRole($roleAdmin);
-
-        // $users = [
-        //     [
-        //         'name' => 'admin',
-        //         'username' => 'admin',
-        //         'email' =>  'admin@admin.com',
-        //         'email_verified_at' => now(),
-        //         'password' => Hash::make('password'),
-        //         'remember_token' => Str::random(10),
-        //         'is_admin' => true,
-        //         'can_login' => true,
-        //     ],
-        //     [
-        //         'name' => 'user',
-        //         'username' => 'user',
-        //         'email' => 'user@user.com',
-        //         'email_verified_at' => now(),
-        //         'password' => Hash::make('password'),
-        //         'remember_token' => Str::random(10),
-        //         'can_login' => true,
-        //     ],
-        // ];
-
-        // foreach ($users as $user) {
-        //     User::create($user);
-        // }
+        $employee = Employee::create([
+            'code' => "19018",
+            'first_name' => "Erron",
+            'middle_name' => "Cerdania",
+            'last_name' => "Intila",
+            'suffix' => null,
+            'gender' => "Male",
+            'birthdate' => "1996-08-19",
+            'mobile_number' => "09567653221",
+            'telephone_number' => null,
+            'email' => 'erronintila@gmail.com',
+            'address' => "Polomolok, South Cotabato",
+            "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
+            "user_id" => $user->id,
+        ]);
     }
 }

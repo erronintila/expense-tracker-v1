@@ -236,6 +236,287 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -256,6 +537,22 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      total: {
+        awaiting_for_reimbursement_reports: 0,
+        expenses_by_date: 0,
+        pending_for_approval_reports: 0,
+        remaining_fund: 0,
+        total_fund: 0,
+        unreported_expenses: 0,
+        unsubmitted_reports: 0
+      },
+      count: {
+        awaiting_for_reimbursement_reports: 0,
+        expenses_by_date: 0,
+        pending_for_approval_reports: 0,
+        unreported_expenses: 0,
+        unsubmitted_reports: 0
+      },
       total_expenses: 0,
       total_reimbursements: 0,
       total_pending_reports: 0,
@@ -651,7 +948,12 @@ __webpack_require__.r(__webpack_exports__);
           _this.total_expenses = response.data.summary.total;
           _this.total_reimbursements = response.data.summary.reimbursements;
           _this.total_pending_reports = response.data.summary.pending;
-          _this.total_count = response.data.summary.total_count;
+          _this.total_count = response.data.summary.total_count; //
+          //
+          //
+
+          _this.total = response.data.total;
+          _this.count = response.data.count;
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -703,7 +1005,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../node_module
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* .theme--light .v-card {\r\n    border-left: 3px solid green !important;\r\n} */\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* .theme--light .v-card {\r\n    border-left: 3px solid green !important;\r\n} */\r\n", ""]);
 
 // exports
 
@@ -848,7 +1150,7 @@ var render = function() {
             [
               _c(
                 "v-col",
-                { attrs: { cols: "12", md: "3" } },
+                { attrs: { cols: "12", md: "4" } },
                 [
                   _c("v-hover", {
                     scopedSlots: _vm._u([
@@ -860,39 +1162,100 @@ var render = function() {
                             _c(
                               "v-card",
                               {
-                                staticClass: "mx-auto",
-                                staticStyle: {
-                                  "border-left": "2px solid #7dff81 !important"
-                                },
+                                staticClass: "mx-auto mb-3",
                                 attrs: {
-                                  to: { name: "user.expenses.index" },
-                                  elevation: hover ? 5 : 2
+                                  elevation: hover ? 5 : 2,
+                                  to: { name: "admin.expenses.index" }
                                 }
                               },
                               [
-                                _c("v-card-title", [
-                                  _vm._v(
-                                    _vm._s(_vm.formatNumber(_vm.total_expenses))
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("v-card-subtitle", [
-                                  _vm._v(
-                                    "\n                            Total Expenses "
-                                  ),
-                                  _c("br"),
+                                _c("v-card-text", [
+                                  _c("div", { staticClass: "green--text" }, [
+                                    _vm._v("Total Expenses")
+                                  ]),
                                   _vm._v(" "),
                                   _c(
-                                    "small",
-                                    { staticClass: "text--secondary" },
+                                    "div",
+                                    { staticClass: "display-1 text--primary" },
                                     [
                                       _vm._v(
-                                        "\n                                Total No.:\n                                " +
-                                          _vm._s(_vm.total_count.expenses) +
-                                          " Expenses\n                            "
+                                        "\n                                " +
+                                          _vm._s(
+                                            _vm.formatNumber(
+                                              _vm.total.expenses_by_date
+                                            )
+                                          ) +
+                                          "\n                            "
                                       )
                                     ]
-                                  )
+                                  ),
+                                  _vm._v(" "),
+                                  _c("div", [
+                                    _vm._v(
+                                      _vm._s(_vm.count.expenses_by_date) +
+                                        " Expenses"
+                                    )
+                                  ])
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
+                            _c(
+                              "v-card",
+                              {
+                                staticClass: "mx-auto",
+                                attrs: {
+                                  elevation: hover ? 5 : 2,
+                                  to: { name: "admin.employees.index" }
+                                }
+                              },
+                              [
+                                _c("v-card-text", [
+                                  _c("div", [
+                                    _vm._v(
+                                      "\n                                Remaining Fund\n                            "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "display-1 text--primary" },
+                                    [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(
+                                            _vm.formatNumber(
+                                              _vm.total.remaining_fund
+                                            )
+                                          ) +
+                                          "\n                            "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("div", [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(
+                                          "Total Revolving Funds: " +
+                                            _vm.total.total_fund
+                                        ) +
+                                        "\n                            "
+                                    )
+                                  ])
                                 ])
                               ],
                               1
@@ -908,7 +1271,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-col",
-                { attrs: { cols: "12", md: "3" } },
+                { attrs: { cols: "12", md: "8" } },
                 [
                   _c("v-hover", {
                     scopedSlots: _vm._u([
@@ -921,185 +1284,447 @@ var render = function() {
                               "v-card",
                               {
                                 staticClass: "mx-auto",
-                                staticStyle: {
-                                  "border-left": "2px solid #7dff81 !important"
-                                },
+                                staticStyle: { position: "relative" },
                                 attrs: {
-                                  to: { name: "user.expenses.index" },
-                                  elevation: hover ? 5 : 2
+                                  elevation: hover ? 5 : 2,
+                                  height: "100%"
                                 }
                               },
                               [
                                 _c(
-                                  "v-card-title",
-                                  { staticClass: "d-inline-block" },
+                                  "v-card-text",
                                   [
-                                    _vm._v(
-                                      "\n                            " +
-                                        _vm._s(
-                                          _vm.formatNumber(_vm.remaining_fund)
-                                        ) +
-                                        "\n                        "
+                                    _c(
+                                      "div",
+                                      [
+                                        _vm._v(
+                                          "\n                                Expense Reports Summary\n                                "
+                                        ),
+                                        _c(
+                                          "v-menu",
+                                          {
+                                            attrs: {
+                                              "offset-y": "",
+                                              "open-on-hover": ""
+                                            },
+                                            scopedSlots: _vm._u(
+                                              [
+                                                {
+                                                  key: "activator",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    return [
+                                                      _c(
+                                                        "v-btn",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                "x-small": "",
+                                                                icon: "",
+                                                                color: "green"
+                                                              }
+                                                            },
+                                                            "v-btn",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        ),
+                                                        [
+                                                          _c("v-icon", [
+                                                            _vm._v(
+                                                              "mdi-information-outline"
+                                                            )
+                                                          ])
+                                                        ],
+                                                        1
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ],
+                                              null,
+                                              true
+                                            )
+                                          },
+                                          [
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-card",
+                                              [
+                                                _c("v-card-text", [
+                                                  _c("div", [
+                                                    _vm._v(
+                                                      "\n                                                Unreported Expenses:\n                                                Expenses that are not\n                                                associated with any report\n                                            "
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("div", [
+                                                    _vm._v(
+                                                      "\n                                                Unsubmitted: Created reports\n                                                that are not yet submitted\n                                            "
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("div", [
+                                                    _vm._v(
+                                                      "\n                                                Pending for Approval:\n                                                Submitted reports waiting\n                                                for approval\n                                            "
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("div", [
+                                                    _vm._v(
+                                                      "\n                                                Awaiting Reimbursement:\n                                                Approved reports waiting for\n                                                payment\n                                            "
+                                                    )
+                                                  ])
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-row",
+                                      [
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              md: "6",
+                                              align: "center",
+                                              justify: "center"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mt-4 mb-4",
+                                                attrs: {
+                                                  text: "",
+                                                  to: {
+                                                    name:
+                                                      "admin.expense_reports.index"
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("span", [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "orange--text text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                Unreported Expenses\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "display-1 text--primary"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.formatNumber(
+                                                              _vm.total
+                                                                .unreported_expenses
+                                                            )
+                                                          ) +
+                                                          "\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        " text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.count
+                                                              .unreported_expenses
+                                                          ) +
+                                                          "\n                                                Expenses\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              md: "6",
+                                              align: "center",
+                                              justify: "center"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mt-4 mb-4",
+                                                attrs: {
+                                                  text: "",
+                                                  to: {
+                                                    name:
+                                                      "admin.expense_reports.index"
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("span", [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "orange--text text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                Unsubmitted\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "display-1 text--primary"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.formatNumber(
+                                                              _vm.total
+                                                                .unsubmitted_reports
+                                                            )
+                                                          ) +
+                                                          "\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        " text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.count
+                                                              .unsubmitted_reports
+                                                          ) +
+                                                          "\n                                                Reports\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              md: "6",
+                                              align: "center",
+                                              justify: "center"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mt-4 mb-4",
+                                                attrs: {
+                                                  text: "",
+                                                  to: {
+                                                    name:
+                                                      "admin.expense_reports.index"
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("div", [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "red--text text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                Pending for Approval\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "display-1 text--primary"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.formatNumber(
+                                                              _vm.total
+                                                                .pending_for_approval_reports
+                                                            )
+                                                          ) +
+                                                          "\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        " text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.count
+                                                              .pending_for_approval_reports
+                                                          ) +
+                                                          "\n                                                Reports\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              md: "6",
+                                              align: "center",
+                                              justify: "center"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mt-4 mb-4",
+                                                attrs: {
+                                                  text: "",
+                                                  to: {
+                                                    name:
+                                                      "admin.expense_reports.index"
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("div", [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "green--text text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                Awaiting Reimbursement\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "display-1 text--primary"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.formatNumber(
+                                                              _vm.total
+                                                                .awaiting_for_reimbursement_reports
+                                                            )
+                                                          ) +
+                                                          "\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        " text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.count
+                                                              .awaiting_for_reimbursement_reports
+                                                          ) +
+                                                          "\n                                                Reports\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
                                     )
-                                  ]
-                                ),
-                                _vm._v(
-                                  "\n                        " +
-                                    _vm._s(
-                                      _vm.remaining_fund == _vm.fund
-                                        ? ""
-                                        : "/ " + _vm.formatNumber(_vm.fund)
-                                    ) +
-                                    "\n                        "
-                                ),
-                                _c("v-card-subtitle", [
-                                  _vm._v(
-                                    "\n                            Revolving Fund "
-                                  ),
-                                  _c("br"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "small",
-                                    { staticClass: "text--secondary" },
-                                    [
-                                      _vm._v(
-                                        "\n                                Total No.:\n                                " +
-                                          _vm._s(
-                                            _vm.total_count.replenishments
-                                          ) +
-                                          " Expenses\n                            "
-                                      )
-                                    ]
-                                  )
-                                ])
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-col",
-                { attrs: { cols: "12", md: "3" } },
-                [
-                  _c("v-hover", {
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function(ref) {
-                          var hover = ref.hover
-                          return [
-                            _c(
-                              "v-card",
-                              {
-                                staticClass: "mx-auto",
-                                staticStyle: {
-                                  "border-left": "2px solid #7dff81 !important"
-                                },
-                                attrs: {
-                                  to: { name: "user.expenses.index" },
-                                  elevation: hover ? 5 : 2
-                                }
-                              },
-                              [
-                                _c("v-card-title", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.formatNumber(_vm.total_reimbursements)
-                                    )
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("v-card-subtitle", [
-                                  _vm._v(
-                                    "\n                            Reimbursements "
-                                  ),
-                                  _c("br"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "small",
-                                    { staticClass: "text--secondary" },
-                                    [
-                                      _vm._v(
-                                        "\n                                Total No.:\n                                " +
-                                          _vm._s(
-                                            _vm.total_count.reimbursements
-                                          ) +
-                                          " Expenses\n                            "
-                                      )
-                                    ]
-                                  )
-                                ])
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-col",
-                { attrs: { cols: "12", md: "3" } },
-                [
-                  _c("v-hover", {
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function(ref) {
-                          var hover = ref.hover
-                          return [
-                            _c(
-                              "v-card",
-                              {
-                                staticClass: "mx-auto",
-                                staticStyle: {
-                                  "border-left": "2px solid #7dff81 !important"
-                                },
-                                attrs: {
-                                  to: { name: "user.expense_reports.index" },
-                                  elevation: hover ? 5 : 2
-                                }
-                              },
-                              [
-                                _c("v-card-title", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.formatNumber(
-                                        _vm.total_pending_reports
-                                      )
-                                    )
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("v-card-subtitle", [
-                                  _vm._v(
-                                    "\n                            Pending Expense Reports "
-                                  ),
-                                  _c("br"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "small",
-                                    { staticClass: "text--secondary" },
-                                    [
-                                      _vm._v(
-                                        "\n                                Unreported Expenses:\n                                " +
-                                          _vm._s(_vm.total_count.unreported) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  )
-                                ])
+                                  ],
+                                  1
+                                )
                               ],
                               1
                             )
@@ -1126,7 +1751,7 @@ var render = function() {
                       "v-card",
                       {
                         staticClass: "mx-auto",
-                        attrs: { elevation: hover ? 5 : 0 }
+                        attrs: { elevation: hover ? 5 : 2 }
                       },
                       [
                         _c(
@@ -1217,7 +1842,7 @@ var render = function() {
                       "v-card",
                       {
                         staticClass: "mx-auto",
-                        attrs: { elevation: hover ? 5 : 0 }
+                        attrs: { elevation: hover ? 5 : 2 }
                       },
                       [
                         _c(
