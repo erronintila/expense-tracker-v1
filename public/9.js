@@ -449,6 +449,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -970,7 +976,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&employee_id=").concat(emp)).then(function (response) {
-        console.log(response);
         _this.total = response.data.total;
         _this.count = response.data.count;
       })["catch"](function (error) {
@@ -1210,7 +1215,13 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "div",
-                                    { staticClass: "display-1 text--primary" },
+                                    {
+                                      class:
+                                        parseFloat(_vm.total.remaining_fund) <=
+                                        parseFloat(_vm.total.total_fund) * 0.1
+                                          ? "display-1 red--text"
+                                          : "display-1 text--primary"
+                                    },
                                     [
                                       _vm._v(
                                         "\n                                " +

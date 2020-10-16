@@ -72,7 +72,14 @@
                                 <div>
                                     Remaining Fund
                                 </div>
-                                <div class="display-1 text--primary">
+                                <div
+                                    :class="
+                                        parseFloat(total.remaining_fund) <=
+                                        parseFloat(total.total_fund) * 0.1
+                                            ? 'display-1 red--text'
+                                            : 'display-1 text--primary'
+                                    "
+                                >
                                     {{ formatNumber(total.remaining_fund) }}
                                 </div>
                                 <div>
@@ -148,8 +155,7 @@
                                             text
                                             class="mt-4 mb-4"
                                             :to="{
-                                                name:
-                                                    'admin.expenses.index'
+                                                name: 'admin.expenses.index'
                                             }"
                                         >
                                             <span>
@@ -1059,7 +1065,6 @@ export default {
                     `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${emp}`
                 )
                 .then(response => {
-                    console.log(response);
                     _this.total = response.data.total;
                     _this.count = response.data.count;
                 })
