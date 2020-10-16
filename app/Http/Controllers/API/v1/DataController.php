@@ -30,7 +30,18 @@ class DataController extends Controller
 {
     public function test()
     {
-        return "test";
+        $unsubmitted_reports = Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', null);
+            $q->where('approved_at', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null);
+
+        return $unsubmitted_reports;
+       return "test";
     }
 
     public function print(Request $request)
@@ -270,6 +281,9 @@ class DataController extends Controller
     public function expense_types_expenses_summary(Request $request)
     {
         $expense_types = ExpenseType::with(['expenses' => function ($q) use ($request) {
+            $q->whereHas("expense_report", function($q) {
+                $q->where("approved_at", "<>", null);
+            });
             if (request()->has("employee_id")) {
                 if (request()->has("admin_page")) {
                     if ($request->employee_id > 0) {
@@ -311,6 +325,9 @@ class DataController extends Controller
     public function employees_expenses_summary(Request $request)
     {
         $employees = Employee::with(['expenses' => function ($q) use ($request) {
+            $q->whereHas("expense_report", function($q) {
+                $q->where("approved_at", "<>", null);
+            });
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
@@ -341,6 +358,9 @@ class DataController extends Controller
     public function departments_expenses_summary(Request $request)
     {
         $departments = Department::with(['jobs.employees.expenses' => function ($q) use ($request) {
+            $q->whereHas("expense_report", function($q) {
+                $q->where("approved_at", "<>", null);
+            });
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
@@ -392,6 +412,9 @@ class DataController extends Controller
     public function expenses_summary(Request $request)
     {
         $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])
+            ->whereHas("expense_report", function($q) {
+                $q->where("approved_at", "<>", null);
+            })
             ->orderBy('date')
             ->select(DB::raw('date as text, sum(amount) as value'));
 
@@ -460,7 +483,7 @@ class DataController extends Controller
         $all_expenses = Expense::all();
         $employees = Employee::all();
 
-        $unsubmitted_reports =  Expense::with(['expense_report' => function ($q) {
+        $unsubmitted_reports = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', null);
             $q->where('approved_at', null);
             $q->where('cancelled_at', null);
@@ -528,6 +551,7 @@ class DataController extends Controller
                 //
                 //
                 //
+                $all_expenses = $all_expenses->where("employee_id", $request->employee_id);
                 $employees = $employees->where("id", $request->employee_id);
                 $expenses_by_date =  $expenses_by_date->where('employee_id', $request->employee_id);
                 $unsubmitted_reports = $unsubmitted_reports->where('employee_id', $request->employee_id);
@@ -541,6 +565,7 @@ class DataController extends Controller
         //     $reimbursements = $reimbursements->where('employee_id', $request->employee_id);
         //     $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
         // }
+        // $unsubmitted_reports = $unsubmitted_reports->where('employee_id', 2);
 
         $total_count = [
             "expenses" => count($total_expenses_by_date),
@@ -556,6 +581,7 @@ class DataController extends Controller
 
         $stats = [
             "summary" => [
+                "unsub" => $unsubmitted_reports,
                 "total" => $total_expenses_by_date,
                 "pending" => $pending_expenses,
                 "reimbursements" => $reimbursements,

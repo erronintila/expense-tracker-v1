@@ -138,7 +138,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'admin.expenses.index'
                                             }"
                                         >
                                             <span>
@@ -219,12 +219,24 @@
                                         >
                                             <div>
                                                 <div
-                                                    class="red--text text-capitalize"
+                                                    :class="
+                                                        parseFloat(
+                                                            total.pending_for_approval_reports
+                                                        ) > 0
+                                                            ? 'red--text text-capitalize'
+                                                            : 'text-capitalize'
+                                                    "
                                                 >
                                                     Pending for Approval
                                                 </div>
                                                 <div
-                                                    class="display-1 text--primary"
+                                                    :class="
+                                                        parseFloat(
+                                                            total.pending_for_approval_reports
+                                                        ) > 0
+                                                            ? 'display-1 red--text'
+                                                            : 'display-1 text--primary'
+                                                    "
                                                 >
                                                     {{
                                                         formatNumber(
@@ -287,127 +299,6 @@
                 </v-col>
             </v-row>
 
-            <!-- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-             -->
-
-            <!-- <v-row>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'user.expenses.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title>{{
-                                formatNumber(total_expenses)
-                            }}</v-card-title>
-                            <v-card-subtitle>
-                                Total Expenses <br />
-                                <small class="text--secondary">
-                                    Total No.:
-                                    {{ total_count.expenses }} Expenses
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'user.expenses.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title class="d-inline-block">
-                                {{ formatNumber(remaining_fund) }}
-                            </v-card-title>
-                            {{
-                                remaining_fund == fund
-                                    ? ""
-                                    : `/ ${formatNumber(fund)}`
-                            }}
-                            <v-card-subtitle>
-                                Revolving Fund <br />
-                                <small class="text--secondary">
-                                    Total No.:
-                                    {{ total_count.replenishments }} Expenses
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'user.expenses.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title>{{
-                                formatNumber(total_reimbursements)
-                            }}</v-card-title>
-                            <v-card-subtitle>
-                                Reimbursements <br />
-                                <small class="text--secondary">
-                                    Total No.:
-                                    {{ total_count.reimbursements }} Expenses
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'user.expense_reports.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title>{{
-                                formatNumber(total_pending_reports)
-                            }}</v-card-title>
-                            <v-card-subtitle>
-                                Pending Expense Reports <br />
-                                <small class="text--secondary">
-                                    Unreported Expenses:
-                                    {{ total_count.unreported }}
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-            </v-row> -->
             <v-hover v-slot:default="{ hover }">
                 <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                     <v-toolbar flat dense>
@@ -534,18 +425,18 @@ export default {
                 unreported_expenses: 0,
                 unsubmitted_reports: 0
             },
-            total_expenses: 0,
-            total_reimbursements: 0,
-            total_pending_reports: 0,
-            total_count: {
-                expenses: 0,
-                replenishments: 0,
-                reimbursements: 0,
-                unreported: 0
-            },
+            // total_expenses: 0,
+            // total_reimbursements: 0,
+            // total_pending_reports: 0,
+            // total_count: {
+            //     expenses: 0,
+            //     replenishments: 0,
+            //     reimbursements: 0,
+            //     unreported: 0
+            // },
 
-            fund: 0,
-            remaining_fund: 0,
+            // fund: 0,
+            // remaining_fund: 0,
 
             backgroundColors: [
                 "#36a2eb",
@@ -629,9 +520,9 @@ export default {
                         let emp = response.data.data.employee;
 
                         _this.employee = emp == null ? 0 : emp.id;
-                        _this.fund = emp == null ? 0 : emp.fund;
-                        _this.remaining_fund =
-                            emp == null ? 0 : emp.remaining_fund;
+                        // _this.fund = emp == null ? 0 : emp.fund;
+                        // _this.remaining_fund =
+                        //     emp == null ? 0 : emp.remaining_fund;
 
                         let employee_id = _this.employee;
 
@@ -1013,13 +904,13 @@ export default {
                         `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${data}`
                     )
                     .then(response => {
-                        _this.total_expenses = response.data.summary.total;
-                        _this.total_reimbursements =
-                            response.data.summary.reimbursements;
-                        _this.total_pending_reports =
-                            response.data.summary.pending;
+                        // _this.total_expenses = response.data.summary.total;
+                        // _this.total_reimbursements =
+                        //     response.data.summary.reimbursements;
+                        // _this.total_pending_reports =
+                        //     response.data.summary.pending;
 
-                        _this.total_count = response.data.summary.total_count;
+                        // _this.total_count = response.data.summary.total_count;
 
                         //
                         //

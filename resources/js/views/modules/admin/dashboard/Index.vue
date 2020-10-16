@@ -149,7 +149,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'admin.expenses.index'
                                             }"
                                         >
                                             <span>
@@ -230,7 +230,13 @@
                                         >
                                             <div>
                                                 <div
-                                                    class="red--text text-capitalize"
+                                                    :class="
+                                                        parseFloat(
+                                                            total.pending_for_approval_reports
+                                                        ) > 0
+                                                            ? 'red--text text-capitalize'
+                                                            : 'text-capitalize'
+                                                    "
                                                 >
                                                     Pending for Approval
                                                 </div>
@@ -303,110 +309,6 @@
                     </v-hover>
                 </v-col>
             </v-row>
-
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-            <!--  -->
-
-            <!-- <v-row>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'admin.expenses.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title>{{
-                                formatNumber(total_expenses)
-                            }}</v-card-title>
-                            <v-card-subtitle>
-                                Total Expenses <br />
-                                <small class="text--secondary">
-                                    Total No.:
-                                    {{ total_count.expenses }} Expenses
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'admin.expenses.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title>
-                                {{ formatNumber(total_replenishments) }}
-                            </v-card-title>
-                            <v-card-subtitle>
-                                Replenishments <br />
-                                <small class="text--secondary">
-                                    Total No.:
-                                    {{ total_count.replenishments }} Expenses
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'admin.expenses.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title>
-                                {{ formatNumber(total_reimbursements) }}
-                            </v-card-title>
-                            <v-card-subtitle>
-                                Reimbursements <br />
-                                <small class="text--secondary">
-                                    Total No.:
-                                    {{ total_count.reimbursements }} Expenses
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            :to="{ name: 'admin.expense_reports.index' }"
-                            :elevation="hover ? 5 : 2"
-                            class="mx-auto"
-                            style="border-left: 2px solid #7dff81 !important"
-                        >
-                            <v-card-title>
-                                {{ formatNumber(total_pending_reports) }}
-                            </v-card-title>
-                            <v-card-subtitle>
-                                Pending Expense Reports <br />
-                                <small class="text--secondary">
-                                    Unreported Expenses:
-                                    {{ total_count.unreported }}
-                                </small>
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-hover>
-                </v-col>
-            </v-row> -->
 
             <v-hover v-slot:default="{ hover }">
                 <v-card :elevation="hover ? 5 : 2" class="mx-auto">
@@ -561,16 +463,6 @@ export default {
                 pending_for_approval_reports: 0,
                 unreported_expenses: 0,
                 unsubmitted_reports: 0
-            },
-            total_expenses: 0,
-            total_replenishments: 0,
-            total_reimbursements: 0,
-            total_pending_reports: 0,
-            total_count: {
-                expenses: 0,
-                replenishments: 0,
-                reimbursements: 0,
-                unreported: 0
             },
 
             backgroundColors: [
@@ -915,7 +807,6 @@ export default {
                         borderWidth: 2,
                         borderColor: "white",
                         borderRadius: 20,
-                        // color: 0,
                         font: {
                             weight: "bold"
                         },
@@ -955,29 +846,6 @@ export default {
                         backgroundColor: "lightgray",
                         formatter: (value, ctx) => {
                             return this.formatNumber(value) + " %";
-                            // let total_expense =
-                            //     this.total_expenses == null
-                            //         ? 0
-                            //         : this.total_expenses;
-
-                            // if (total_expense == 0) {
-                            //     return value;
-                            // }
-
-                            // return (
-                            //     this.formatNumber(
-                            //         (value / total_expense) * 100
-                            //     ) + " %"
-                            // );
-
-                            // let sum = 0;
-                            // let dataArr = ctx.chart.data.datasets[0].data;
-                            // dataArr.map(data => {
-                            //     sum += data;
-                            // });
-                            // let percentage =
-                            //     ((value * 100) / sum).toFixed(2) + "%";
-                            // return percentage;
                         }
                     }
                 }
@@ -1148,8 +1016,6 @@ export default {
                     );
                     break;
             }
-
-            // this.load_total_expenses(start, end);
         },
         onTimeUnitChange() {
             this.load_expenses_summary(
@@ -1158,7 +1024,6 @@ export default {
                 this.groupBy,
                 this.employee.id
             );
-            // this.load_total_expenses(this.date_range[0], this.date_range[1]);
         },
         updateDates(e) {
             this.date_range = e;
@@ -1195,20 +1060,6 @@ export default {
                 )
                 .then(response => {
                     console.log(response);
-
-                    _this.total_expenses = response.data.summary.total;
-                    _this.total_replenishments =
-                        response.data.summary.replenishments;
-                    _this.total_reimbursements =
-                        response.data.summary.reimbursements;
-                    _this.total_pending_reports = response.data.summary.pending;
-
-                    _this.total_count = response.data.summary.total_count;
-
-                    //
-                    //
-                    //
-
                     _this.total = response.data.total;
                     _this.count = response.data.count;
                 })
@@ -1226,7 +1077,6 @@ export default {
     created() {
         this.loadEmployees();
 
-        // this.load_total_expenses(this.date_range[0], this.date_range[1]);
         this.load_expense_types_expenses(
             this.date_range[0],
             this.date_range[1],
@@ -1236,8 +1086,6 @@ export default {
         this.load_pie_chart();
         this.load_bar_chart();
         this.load_line_chart();
-
-        // this.onTimeUnitChange();
 
         this.load_expenses_summary(
             this.date_range[0],
@@ -1254,9 +1102,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-/* .theme--light .v-card {
-    border-left: 3px solid green !important;
-} */
-</style>
