@@ -20,11 +20,118 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      general_settings: {
+        company_name: "Twin-Circa Marketing",
+        currency: "Philippine Peso"
+      },
+      expense_settings: {
+        expiry_period: 1
+      },
+      expense_report_settings: {
+        submission_date: "Weekly",
+        approval_period: 1
+      },
+      panel: [0, 1, 2, 3]
+    };
   },
-  methods: {}
+  methods: {
+    onSave: function onSave() {}
+  }
 });
 
 /***/ }),
@@ -59,7 +166,194 @@ var render = function() {
                 _vm._v("Settings")
               ]),
               _vm._v(" "),
-              _c("v-spacer")
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("v-btn", { attrs: { color: "green", dark: "" } }, [
+                _vm._v("Save Changes")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-expansion-panels",
+            {
+              attrs: { multiple: "" },
+              model: {
+                value: _vm.panel,
+                callback: function($$v) {
+                  _vm.panel = $$v
+                },
+                expression: "panel"
+              }
+            },
+            [
+              _c(
+                "v-expansion-panel",
+                [
+                  _c("v-expansion-panel-header", [
+                    _vm._v(
+                      "\n                    General Settings\n                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel-content",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Company Name" }
+                          }),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              label: "Currency",
+                              items: ["Philippine Peso"]
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-expansion-panel",
+                [
+                  _c("v-expansion-panel-header", [
+                    _vm._v("\n                    Expenses\n                ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel-content",
+                    [
+                      _c(
+                        "v-container",
+                        [
+                          _c(
+                            "v-form",
+                            { ref: "formExpenses" },
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Expense Expiry Period",
+                                      value: "1",
+                                      suffix: "days"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-expansion-panel",
+                [
+                  _c("v-expansion-panel-header", [
+                    _vm._v(
+                      "\n                    Expense Reports\n                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel-content",
+                    [
+                      _c(
+                        "v-container",
+                        [
+                          _c(
+                            "v-form",
+                            { ref: "formExpenseReports" },
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      label: "Submission Date",
+                                      items: ["Daily", "Weekly", "Monthly"]
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.expense_report_settings
+                                          .submission_date,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.expense_report_settings,
+                                          "submission_date",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "\n                                        expense_report_settings.submission_date\n                                    "
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Approval Period",
+                                      suffix: "days"
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.expense_report_settings
+                                          .approval_period,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.expense_report_settings,
+                                          "approval_period",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "\n                                        expense_report_settings.approval_period\n                                    "
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             ],
             1
           )

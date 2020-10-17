@@ -20,6 +20,7 @@ class CreateExpenseReportsTable extends Migration
             $table->string('description');
             $table->text('remarks')->nullable();
             $table->text('notes')->nullable();
+            $table->text('comments')->nullable();
 
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('reviewed_at')->nullable();

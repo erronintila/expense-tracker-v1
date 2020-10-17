@@ -22,6 +22,7 @@
                             <v-text-field
                                 v-model="employee"
                                 label="Employee"
+                                readonly
                                 required
                             >
                             </v-text-field>
@@ -30,6 +31,7 @@
                             <v-text-field
                                 v-model="description"
                                 label="Description"
+                                readonly
                                 required
                             ></v-text-field>
                         </v-col>

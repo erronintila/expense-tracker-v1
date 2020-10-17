@@ -210,6 +210,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 
 
 
@@ -2633,7 +2635,11 @@ var render = function() {
                         { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "Employee", required: "" },
+                            attrs: {
+                              label: "Employee",
+                              readonly: "",
+                              required: ""
+                            },
                             model: {
                               value: _vm.employee,
                               callback: function($$v) {
@@ -2651,7 +2657,11 @@ var render = function() {
                         { attrs: { cols: "12", md: "8" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "Description", required: "" },
+                            attrs: {
+                              label: "Description",
+                              readonly: "",
+                              required: ""
+                            },
                             model: {
                               value: _vm.description,
                               callback: function($$v) {
