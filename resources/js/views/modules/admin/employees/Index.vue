@@ -261,6 +261,31 @@
                             mdi-pencil
                         </v-icon>
                     </template>
+                    <template slot="body.append" v-if="items.length > 0">
+                        <tr class="green--text hidden-md-and-up">
+                            <td class="title">
+                                Total:
+                                <strong
+                                    >{{ total_remaining_fund }} /
+                                    {{ total_fund }}</strong
+                                >
+                            </td>
+                        </tr>
+                        <tr class="green--text hidden-sm-and-down">
+                            <td class="title">Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <strong
+                                    >{{ total_remaining_fund }} /
+                                    {{ total_fund }}</strong
+                                >
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
@@ -283,8 +308,12 @@ export default {
             loading: true,
             headers: [
                 { text: "Name", value: "fullname" },
-                { text: "Job Designation", value: "job.name", sortable: false  },
-                { text: "Department", value: "department.name", sortable: false  },
+                { text: "Job Designation", value: "job.name", sortable: false },
+                {
+                    text: "Department",
+                    value: "department.name",
+                    sortable: false
+                },
                 { text: "Revolving Fund", value: "revolving_fund" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -294,6 +323,8 @@ export default {
             // departments: [],
             job: 0,
             jobs: [],
+            total_fund: 0,
+            total_remaining_fund: 0,
             status: "Active",
             statuses: ["Active", "Archived"],
             selected: [],
@@ -355,7 +386,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.loading = false;
                     });
@@ -460,7 +494,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -505,7 +542,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -546,7 +586,10 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -558,6 +601,17 @@ export default {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
+
+                    this.total_fund = this.formatNumber(
+                        data.items.reduce((total, item) => total + item.fund, 0)
+                    );
+
+                    this.total_remaining_fund = this.formatNumber(
+                        data.items.reduce(
+                            (total, item) => total + item.remaining_fund,
+                            0
+                        )
+                    );
                 });
             },
             deep: true
@@ -583,7 +637,6 @@ export default {
     created() {
         // axios.defaults.headers.common["Authorization"] =
         //     "Bearer " + localStorage.getItem("access_token");
-
         // this.loadDepartments();
         // this.loadJobs();
     }

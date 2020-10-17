@@ -99,6 +99,14 @@
                     </v-list-item>
                 </template>
             </v-list>
+
+            <template v-slot:append>
+                <div class="pa-2">
+                    <v-btn block color="green" dark outlined @click="onLogout">
+                        Logout
+                    </v-btn>
+                </div>
+            </template>
         </v-navigation-drawer>
         <!-- End of Navigation Drawer -->
 
@@ -125,7 +133,23 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip left>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        icon
+                        v-bind="attrs"
+                        v-on="on"
+                        @click.stop="notificationDrawer = !notificationDrawer"
+                    >
+                        <v-badge content="2" value="2" color="red" overlap>
+                            <v-icon>mdi-bell</v-icon>
+                        </v-badge>
+                    </v-btn>
+                </template>
+                <span>Notifications</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on" @click="onLogout">
                         <v-icon>mdi-logout</v-icon>
@@ -139,14 +163,62 @@
         <!-- Main View -->
         <v-main>
             <!-- <v-container> -->
-            <v-row class="ml-2 mr-2 mt-4">
+            <v-row class="ml-2 mr-2 mt-4 pb-12 mb-5">
                 <v-col>
                     <router-view></router-view>
                 </v-col>
             </v-row>
             <!-- </v-container> -->
+
+            <v-footer fixed padless>
+                <v-col class="text-right" cols="12">
+                    <small
+                        >© 2020 Copyright —
+                        <strong>Twin-Circa Marketing</strong></small
+                    >
+                </v-col>
+            </v-footer>
         </v-main>
         <!-- End of Main View -->
+
+        <!-- Notifications Drawer -->
+        <v-navigation-drawer
+            v-model="notificationDrawer"
+            right
+            fixed
+            app
+            temporary
+            :clipped="$vuetify.breakpoint.lgAndUp"
+            floating
+        >
+            <template v-slot:prepend>
+                <v-list-item two-line>
+                    <v-list-item-avatar>
+                        <v-icon>mdi-bell</v-icon>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                        <v-list-item-title>Notifications</v-list-item-title>
+                        <v-list-item-subtitle>5 Unread</v-list-item-subtitle>
+                    </v-list-item-content>
+                </v-list-item>
+            </template>
+
+            <v-divider></v-divider>
+
+            <v-list dense>
+                <v-list-item>
+                    <v-list-item-icon>
+                        <v-icon>mdi-bell</v-icon>
+                    </v-list-item-icon>
+
+                    <v-list-item-content>
+                        <v-list-item-title>Title</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+        <!-- End of Notifications Drawer -->
     </div>
 </template>
 
@@ -160,6 +232,7 @@ export default {
         user: { name: "", username: "", email: "" },
         dialog: false,
         drawer: null,
+        notificationDrawer: null,
         items: [
             {
                 icon: "mdi-chart-areaspline",
@@ -193,27 +266,27 @@ export default {
                 model: false,
                 children: [
                     {
-                        icon: "mdi-circle-medium",
+                        icon: "mdi-account-group",
                         text: "Vendors",
                         link: { name: "admin.vendors.index" }
                     },
                     {
-                        icon: "mdi-circle-medium",
+                        icon: "mdi-clipboard-file",
                         text: "Departments",
                         link: { name: "admin.departments.index" }
                     },
                     {
-                        icon: "mdi-circle-medium",
+                        icon: "mdi-briefcase",
                         text: "Job Designations",
                         link: { name: "admin.jobs.index" }
                     },
                     {
-                        icon: "mdi-circle-medium",
+                        icon: "mdi-file-cog-outline",
                         text: "Expense Types",
                         link: { name: "admin.expense_types.index" }
                     },
                     {
-                        icon: "mdi-circle-medium",
+                        icon: "mdi-text-box-plus-outline",
                         text: "Adjustments",
                         link: { name: "admin.adjustments.index" }
                     },
@@ -223,12 +296,12 @@ export default {
                     //     link: { name: "admin.users.index" }
                     // },
                     {
-                        icon: "mdi-circle-medium",
+                        icon: "mdi-format-list-numbered",
                         text: "Activity Logs",
                         link: { name: "admin.activity_logs.index" }
                     },
                     {
-                        icon: "mdi-circle-medium",
+                        icon: "mdi-cog",
                         text: "Settings",
                         link: { name: "admin.settings.index" }
                     }

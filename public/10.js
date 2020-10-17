@@ -67,6 +67,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
@@ -220,6 +224,26 @@ var render = function() {
                                           type: "text",
                                           color: "success"
                                         },
+                                        on: {
+                                          keyup: function($event) {
+                                            if (
+                                              !$event.type.indexOf("key") &&
+                                              _vm._k(
+                                                $event.keyCode,
+                                                "enter",
+                                                13,
+                                                $event.key,
+                                                "Enter"
+                                              )
+                                            ) {
+                                              return null
+                                            }
+                                            return _vm.onLogin($event)
+                                          },
+                                          input: function($event) {
+                                            _vm.errors = []
+                                          }
+                                        },
                                         model: {
                                           value: _vm.form.username,
                                           callback: function($$v) {
@@ -238,6 +262,26 @@ var render = function() {
                                           "prepend-icon": "mdi-lock",
                                           type: "password",
                                           color: "success"
+                                        },
+                                        on: {
+                                          keyup: function($event) {
+                                            if (
+                                              !$event.type.indexOf("key") &&
+                                              _vm._k(
+                                                $event.keyCode,
+                                                "enter",
+                                                13,
+                                                $event.key,
+                                                "Enter"
+                                              )
+                                            ) {
+                                              return null
+                                            }
+                                            return _vm.onLogin($event)
+                                          },
+                                          input: function($event) {
+                                            _vm.errors = []
+                                          }
                                         },
                                         model: {
                                           value: _vm.form.password,

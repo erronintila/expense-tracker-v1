@@ -161,6 +161,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -175,6 +247,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       dialog: false,
       drawer: null,
+      notificationDrawer: null,
       items: [{
         icon: "mdi-chart-areaspline",
         text: "Dashboard",
@@ -211,31 +284,31 @@ __webpack_require__.r(__webpack_exports__);
         text: "More",
         model: false,
         children: [{
-          icon: "mdi-circle-medium",
+          icon: "mdi-account-group",
           text: "Vendors",
           link: {
             name: "admin.vendors.index"
           }
         }, {
-          icon: "mdi-circle-medium",
+          icon: "mdi-clipboard-file",
           text: "Departments",
           link: {
             name: "admin.departments.index"
           }
         }, {
-          icon: "mdi-circle-medium",
+          icon: "mdi-briefcase",
           text: "Job Designations",
           link: {
             name: "admin.jobs.index"
           }
         }, {
-          icon: "mdi-circle-medium",
+          icon: "mdi-file-cog-outline",
           text: "Expense Types",
           link: {
             name: "admin.expense_types.index"
           }
         }, {
-          icon: "mdi-circle-medium",
+          icon: "mdi-text-box-plus-outline",
           text: "Adjustments",
           link: {
             name: "admin.adjustments.index"
@@ -246,13 +319,13 @@ __webpack_require__.r(__webpack_exports__);
         //     link: { name: "admin.users.index" }
         // },
         {
-          icon: "mdi-circle-medium",
+          icon: "mdi-format-list-numbered",
           text: "Activity Logs",
           link: {
             name: "admin.activity_logs.index"
           }
         }, {
-          icon: "mdi-circle-medium",
+          icon: "mdi-cog",
           text: "Settings",
           link: {
             name: "admin.settings.index"
@@ -386,6 +459,45 @@ var render = function() {
                 floating: "",
                 app: ""
               },
+              scopedSlots: _vm._u(
+                [
+                  {
+                    key: "append",
+                    fn: function() {
+                      return [
+                        _c(
+                          "div",
+                          { staticClass: "pa-2" },
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  block: "",
+                                  color: "green",
+                                  dark: "",
+                                  outlined: ""
+                                },
+                                on: { click: _vm.onLogout }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                    Logout\n                "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ]
+                    },
+                    proxy: true
+                  }
+                ],
+                null,
+                false,
+                1979733975
+              ),
               model: {
                 value: _vm.drawer,
                 callback: function($$v) {
@@ -672,7 +784,67 @@ var render = function() {
               _c(
                 "v-tooltip",
                 {
-                  attrs: { left: "" },
+                  attrs: { bottom: "" },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    attrs: { icon: "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation()
+                                        _vm.notificationDrawer = !_vm.notificationDrawer
+                                      }
+                                    }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _c(
+                                  "v-badge",
+                                  {
+                                    attrs: {
+                                      content: "2",
+                                      value: "2",
+                                      color: "red",
+                                      overlap: ""
+                                    }
+                                  },
+                                  [_c("v-icon", [_vm._v("mdi-bell")])],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ],
+                    null,
+                    false,
+                    685925669
+                  )
+                },
+                [_vm._v(" "), _c("span", [_vm._v("Notifications")])]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tooltip",
+                {
+                  attrs: { bottom: "" },
                   scopedSlots: _vm._u(
                     [
                       {
@@ -719,8 +891,109 @@ var render = function() {
         [
           _c(
             "v-row",
-            { staticClass: "ml-2 mr-2 mt-4" },
+            { staticClass: "ml-2 mr-2 mt-4 pb-12 mb-5" },
             [_c("v-col", [_c("router-view")], 1)],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-footer",
+            { attrs: { fixed: "", padless: "" } },
+            [
+              _c(
+                "v-col",
+                { staticClass: "text-right", attrs: { cols: "12" } },
+                [
+                  _c("small", [
+                    _vm._v("© 2020 Copyright —\n                    "),
+                    _c("strong", [_vm._v("Twin-Circa Marketing")])
+                  ])
+                ]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-navigation-drawer",
+        {
+          attrs: {
+            right: "",
+            fixed: "",
+            app: "",
+            temporary: "",
+            clipped: _vm.$vuetify.breakpoint.lgAndUp,
+            floating: ""
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "prepend",
+              fn: function() {
+                return [
+                  _c(
+                    "v-list-item",
+                    { attrs: { "two-line": "" } },
+                    [
+                      _c(
+                        "v-list-item-avatar",
+                        [_c("v-icon", [_vm._v("mdi-bell")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item-content",
+                        [
+                          _c("v-list-item-title", [_vm._v("Notifications")]),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [_vm._v("5 Unread")])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ]
+              },
+              proxy: true
+            }
+          ]),
+          model: {
+            value: _vm.notificationDrawer,
+            callback: function($$v) {
+              _vm.notificationDrawer = $$v
+            },
+            expression: "notificationDrawer"
+          }
+        },
+        [
+          _vm._v(" "),
+          _c("v-divider"),
+          _vm._v(" "),
+          _c(
+            "v-list",
+            { attrs: { dense: "" } },
+            [
+              _c(
+                "v-list-item",
+                [
+                  _c(
+                    "v-list-item-icon",
+                    [_c("v-icon", [_vm._v("mdi-bell")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [_c("v-list-item-title", [_vm._v("Title")])],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
             1
           )
         ],
