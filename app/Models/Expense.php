@@ -84,6 +84,11 @@ class Expense extends Model
         return $this->belongsTo(Vendor::class);
     }
 
+    public function sub_type()
+    {
+        return $this->belongsTo(SubType::class);
+    }
+
     /**
      * Displays the expense report associated with expense.
      *
@@ -147,5 +152,10 @@ class Expense extends Model
     public function date_formatted()
     {
         return date('F d, Y', strtotime($this->date));
+    }
+
+    public function payments()
+    {
+        return $this->belongsToMany(Payment::class);
     }
 }

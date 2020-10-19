@@ -11,6 +11,16 @@ export default {
                         (!!v && v.length <= value) ||
                         `This field must be less than ${value} characters`
                 ],
+                isNumber: [
+                    v => !Number.isNaN(parseFloat(v)) || "Value is not a number"
+                ],
+                minNumberValue: value => [
+                    v =>
+                        parseFloat(v) >= parseFloat(value) ||
+                        `Value must be greater than or equal to ${parseFloat(
+                            value
+                        )}`
+                ],
                 email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
             }
         };

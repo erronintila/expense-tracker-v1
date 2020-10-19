@@ -240,6 +240,11 @@ class EmployeeController extends Controller
 
         $employee->save();
 
+        if (request()->has("expense_types")) {
+
+            $employee->expense_types()->sync($request->expense_types);
+        }
+
         return response(
             [
                 'data' => new EmployeeResource($employee),
@@ -352,6 +357,11 @@ class EmployeeController extends Controller
                 $employee->address = $request->address;
 
                 $employee->save();
+
+                if (request()->has("expense_types")) {
+
+                    $employee->expense_types()->sync($request->expense_types);
+                }
 
                 if ($employee->user_id != null) {
 

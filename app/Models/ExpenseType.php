@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ExpenseType extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -35,7 +35,7 @@ class ExpenseType extends Model
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
-    
+
     /**
      * Displays the expenses associated with expense type.
      *
@@ -54,5 +54,10 @@ class ExpenseType extends Model
     public function employees()
     {
         return $this->belongsToMany(Employee::class)->withTimestamps();
+    }
+
+    public function sub_types()
+    {
+        return $this->hasMany(SubType::class);
     }
 }

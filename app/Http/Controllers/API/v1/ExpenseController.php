@@ -172,6 +172,8 @@ class ExpenseController extends Controller
 
         $expense->vendor_id  = $request->vendor_id;
 
+        $expense->details  = $request->details;
+
         $expense->save();
 
         foreach ($request->expense_details as $key => $value) {

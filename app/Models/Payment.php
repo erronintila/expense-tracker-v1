@@ -108,4 +108,9 @@ class Payment extends Model
 
         return $arr;
     }
+
+    public function expenses()
+    {
+        return $this->belongsToMany(Expense::class);
+    }
 }

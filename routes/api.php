@@ -36,6 +36,8 @@ Route::middleware('auth:api')->group(function () {
 
             'expense_types' => 'API\v1\ExpenseTypeController',
 
+            'sub_types' => 'API\v1\SubTypeController',
+
             'expenses' => 'API\v1\ExpenseController',
 
             'jobs' => 'API\v1\JobController',

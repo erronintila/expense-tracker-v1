@@ -23,9 +23,11 @@ class CreateExpensesTable extends Migration
             // $table->double('paid_amount', 10, 2)->default(0);
             $table->string('receipt_number')->nullable();
             $table->date('date');
+            $table->text('details')->nullable();
             $table->text('remarks')->nullable();
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
+            $table->unsignedBigInteger('sub_type_id')->nullable();
             $table->unsignedBigInteger('employee_id')->unsigned();
             $table->unsignedBigInteger('vendor_id')->nullable();
             $table->unsignedBigInteger('expense_report_id')->nullable();
@@ -41,6 +43,9 @@ class CreateExpensesTable extends Migration
                 ->references('id')
                 ->on('expense_types')
                 ->onDelete('cascade');
+            $table->foreign('sub_type_id')
+                ->references('id')
+                ->on('sub_types');
             $table->foreign('employee_id')
                 ->references('id')
                 ->on('employees');

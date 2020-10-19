@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Models\ExpenseType;
+use App\Models\SubType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -90,7 +91,25 @@ class ExpenseTypeController extends Controller
 
         $expense_type->name = $request->name;
 
+        $expense_type->limit = $request->limit;
+
         $expense_type->save();
+
+        if (request()->has("sub_types")) {
+
+            foreach ($request->sub_types as $item) {
+
+                $sub_type = new SubType();
+
+                $sub_type->name = $item["name"];
+
+                $sub_type->limit = $item["limit"];
+
+                $sub_type->expense_type_id = $expense_type->id;
+
+                $sub_type->save();
+            }
+        }
 
         return response(
             [
@@ -148,7 +167,66 @@ class ExpenseTypeController extends Controller
 
                 $expense_type->name = $request->name;
 
+                $expense_type->limit = $request->limit;
+
                 $expense_type->save();
+
+                foreach ($expense_type->sub_types as $sub_type) {
+
+                    $sub_type->delete();
+                }
+
+                foreach ($request->sub_types as $key => $value) {
+
+                    $sub_type = SubType::withTrashed()->updateOrCreate(
+
+                        ['id' => $value["id"]],
+
+                        [
+                            'name' => $value["name"],
+
+                            "limit" => $value["limit"],
+
+                            'expense_type_id' => $expense_type->id,
+
+                            'deleted_at' => null,
+                        ]
+                    );
+                }
+
+                // if (request()->has("sub_types")) {
+
+                //     foreach ($request->sub_types as $item) {
+
+                //         $sub_type = SubType::updateOrCreate(
+
+                //             ['name' =>   $item['name'], 'expense_type_id' => $expense_type->id],
+
+                //             ['deleted_at' => null]
+                //         );
+
+                //         // $sub_type = SubType::firstOrNew(
+
+                //         //     ['name' => $item['name']],
+
+                //         //     ['expense_type_id' => $expense_type->id],
+                //         // );
+
+                //         // $sub_type->save();
+
+                //         // $sub_type = SubType::updateOrCreate(
+
+                //         //     // ['id' => $item['id']],
+
+                //         //     ['name' => $item['name']],
+
+                //         //     ['expense_type_id' => $expense_type->id],
+                //         // );
+
+                //         // // $sub_type->restore();
+                //     }
+                // }
+
                 break;
         }
 

@@ -57,15 +57,128 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
+      subtype: "",
+      subtype_limit: null,
+      hasSubtype: false,
+      headers: [{
+        text: "Name",
+        value: "name"
+      }, {
+        text: "Limit",
+        value: "limit"
+      }, {
+        text: "",
+        value: "actions",
+        sortable: false
+      }],
+      items: [],
       form: {
-        name: ""
+        name: "",
+        limit: null
       },
       errors: {
-        name: []
+        name: [],
+        limit: []
       }
     };
   },
@@ -77,7 +190,9 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         axios.post("/api/expense_types", {
-          name: _this.form.name
+          name: _this.form.name,
+          limit: _this.form.limit,
+          sub_types: _this.items
         }).then(function (response) {
           _this.$dialog.message.success("Expense type created successfully.", {
             position: "top-right",
@@ -97,6 +212,22 @@ __webpack_require__.r(__webpack_exports__);
         });
         return;
       }
+    },
+    addItem: function addItem() {
+      if (this.subtype.length == 0 || this.subtype == "") {
+        return;
+      }
+
+      this.items.push({
+        name: this.subtype,
+        limit: this.subtype_limit
+      });
+      this.subtype = "";
+      this.subtype_limit = null;
+    },
+    removeItem: function removeItem(item) {
+      var index = this.items.indexOf(item);
+      this.items.splice(index, 1);
     }
   }
 });
@@ -174,7 +305,7 @@ var render = function() {
                     [
                       _c(
                         "v-col",
-                        { attrs: { cols: "12", md: "12" } },
+                        { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-text-field", {
                             attrs: {
@@ -198,6 +329,224 @@ var render = function() {
                               },
                               expression: "form.name"
                             }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: [],
+                              "error-messages": _vm.errors.limit,
+                              label: "Expense Amount Limit *",
+                              required: ""
+                            },
+                            on: {
+                              input: function() {
+                                _vm.errors.limit = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.limit,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "limit", $$v)
+                              },
+                              expression: "form.limit"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c("v-col", { attrs: { cols: "12", md: "4" } }),
+                      _vm._v(" "),
+                      _c("v-col", { attrs: { cols: "12", md: "4" } }),
+                      _vm._v(" "),
+                      _c("v-col", { attrs: { cols: "12", md: "4" } })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        [
+                          _vm._v(
+                            "\n                        Sub Types\n                        "
+                          ),
+                          _vm._v(" "),
+                          _c("v-data-table", {
+                            attrs: { headers: _vm.headers, items: _vm.items },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "top",
+                                  fn: function() {
+                                    return [
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c("v-text-field", {
+                                            staticClass: "mx-4",
+                                            attrs: { label: "Sub type name" },
+                                            model: {
+                                              value: _vm.subtype,
+                                              callback: function($$v) {
+                                                _vm.subtype = $$v
+                                              },
+                                              expression: "subtype"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-text-field", {
+                                            staticClass: "mx-4",
+                                            attrs: {
+                                              label:
+                                                "Sub type expense amount limit"
+                                            },
+                                            model: {
+                                              value: _vm.subtype_limit,
+                                              callback: function($$v) {
+                                                _vm.subtype_limit = $$v
+                                              },
+                                              expression: "subtype_limit"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              staticClass: "mx-4",
+                                              on: { click: _vm.addItem }
+                                            },
+                                            [_vm._v("Add")]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  },
+                                  proxy: true
+                                },
+                                {
+                                  key: "item.name",
+                                  fn: function(props) {
+                                    return [
+                                      _c(
+                                        "v-edit-dialog",
+                                        {
+                                          attrs: {
+                                            "return-value": props.item.name
+                                          },
+                                          on: {
+                                            "update:returnValue": function(
+                                              $event
+                                            ) {
+                                              return _vm.$set(
+                                                props.item,
+                                                "name",
+                                                $event
+                                              )
+                                            },
+                                            "update:return-value": function(
+                                              $event
+                                            ) {
+                                              return _vm.$set(
+                                                props.item,
+                                                "name",
+                                                $event
+                                              )
+                                            }
+                                          },
+                                          scopedSlots: _vm._u(
+                                            [
+                                              {
+                                                key: "input",
+                                                fn: function() {
+                                                  return [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: [],
+                                                        label: "Edit",
+                                                        "single-line": "",
+                                                        counter: ""
+                                                      },
+                                                      model: {
+                                                        value: props.item.name,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            props.item,
+                                                            "name",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "props.item.name"
+                                                      }
+                                                    })
+                                                  ]
+                                                },
+                                                proxy: true
+                                              }
+                                            ],
+                                            null,
+                                            true
+                                          )
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    " +
+                                              _vm._s(props.item.name) +
+                                              "\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  }
+                                },
+                                {
+                                  key: "item.actions",
+                                  fn: function(ref) {
+                                    var item = ref.item
+                                    return [
+                                      _c(
+                                        "v-icon",
+                                        {
+                                          staticClass: "mr-2",
+                                          attrs: { small: "" },
+                                          on: {
+                                            click: function() {
+                                              _vm.removeItem(item)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    mdi-delete\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  }
+                                }
+                              ],
+                              null,
+                              true
+                            )
                           })
                         ],
                         1

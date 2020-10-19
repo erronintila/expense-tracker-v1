@@ -293,6 +293,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -301,7 +329,9 @@ __webpack_require__.r(__webpack_exports__);
       menu: false,
       jobs: [],
       permissions: [],
+      expense_types: [],
       selected: [],
+      selected_expense_types: [],
       headers: [{
         text: "Permission",
         value: "name",
@@ -356,6 +386,18 @@ __webpack_require__.r(__webpack_exports__);
         _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
+    loadExpenseTypes: function loadExpenseTypes() {
+      var _this = this;
+
+      axios.get("/api/data/expense_types").then(function (response) {
+        _this.expense_types = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      });
+    },
     loadPermissions: function loadPermissions() {
       var _this = this;
 
@@ -400,7 +442,8 @@ __webpack_require__.r(__webpack_exports__);
           username: _this.form.username,
           can_login: _this.form.can_login,
           role: _this.form.role,
-          permissions: _this.selected
+          permissions: _this.selected,
+          expense_types: _this.selected_expense_types
         }).then(function (response) {
           _this.$dialog.message.success("Employee created successfully.", {
             position: "top-right",
@@ -423,6 +466,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.loadJobs();
+    this.loadExpenseTypes();
     this.loadPermissions();
   }
 });
@@ -578,6 +622,73 @@ var render = function() {
                                         _vm.$set(_vm.form, "code", $$v)
                                       },
                                       expression: "form.code"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.expense_types,
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      label: "Allowed Expense Types",
+                                      multiple: ""
+                                    },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "selection",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          var index = ref.index
+                                          return [
+                                            index === 0
+                                              ? _c(
+                                                  "v-chip",
+                                                  { attrs: { small: "" } },
+                                                  [
+                                                    _c("span", [
+                                                      _vm._v(_vm._s(item.name))
+                                                    ])
+                                                  ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            index === 1
+                                              ? _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "grey--text caption"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "(+" +
+                                                        _vm._s(
+                                                          _vm
+                                                            .selected_expense_types
+                                                            .length - 1
+                                                        ) +
+                                                        "\n                                            others)"
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]
+                                        }
+                                      }
+                                    ]),
+                                    model: {
+                                      value: _vm.selected_expense_types,
+                                      callback: function($$v) {
+                                        _vm.selected_expense_types = $$v
+                                      },
+                                      expression: "selected_expense_types"
                                     }
                                   })
                                 ],

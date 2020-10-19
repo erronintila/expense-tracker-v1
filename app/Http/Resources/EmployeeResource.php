@@ -44,6 +44,7 @@ class EmployeeResource extends JsonResource
             'user' => $user,
             'role' => $user->is_admin ? ["Administrator"] : $user->getRoleNames(),
             'permissions' => $user->getAllPermissions(),
+            'expense_types' => $this->expense_types
         ];
     }
 }

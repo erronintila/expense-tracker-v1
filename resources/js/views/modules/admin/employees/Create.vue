@@ -50,6 +50,34 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
+
+                                <v-col cols="12" md="4">
+                                    <v-select
+                                        v-model="selected_expense_types"
+                                        :items="expense_types"
+                                        item-text="name"
+                                        item-value="id"
+                                        label="Allowed Expense Types"
+                                        multiple
+                                    >
+                                        <template
+                                            v-slot:selection="{ item, index }"
+                                        >
+                                            <v-chip v-if="index === 0" small>
+                                                <span>{{ item.name }}</span>
+                                            </v-chip>
+                                            <span
+                                                v-if="index === 1"
+                                                class="grey--text caption"
+                                                >(+{{
+                                                    selected_expense_types.length -
+                                                        1
+                                                }}
+                                                others)</span
+                                            >
+                                        </template>
+                                    </v-select>
+                                </v-col>
                             </v-row>
 
                             <v-row>
@@ -291,7 +319,9 @@ export default {
             menu: false,
             jobs: [],
             permissions: [],
+            expense_types: [],
             selected: [],
+            selected_expense_types: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 code: null,
@@ -343,7 +373,27 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
+        },
+        loadExpenseTypes() {
+            let _this = this;
+            axios
+                .get("/api/data/expense_types")
+                .then(response => {
+                    _this.expense_types = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadPermissions() {
@@ -358,7 +408,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onRefresh() {
@@ -394,7 +447,8 @@ export default {
                         username: _this.form.username,
                         can_login: _this.form.can_login,
                         role: _this.form.role,
-                        permissions: _this.selected
+                        permissions: _this.selected,
+                        expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(
@@ -414,7 +468,10 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
 
                 return;
@@ -423,6 +480,7 @@ export default {
     },
     created() {
         this.loadJobs();
+        this.loadExpenseTypes();
         this.loadPermissions();
     }
 };

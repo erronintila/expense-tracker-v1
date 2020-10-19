@@ -38,8 +38,9 @@ class ExpenseResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             'expense_details' => $this->expense_details,
             'expense_report_id' => $this->expense_report_id,
-            'expense_report' => $this->expense_report
+            'expense_report' => $this->expense_report,
             // 'expense_report' => $this->expense_report()->withTrashed()->get(),
+            'details' => $this->details
         ];
     }
 }

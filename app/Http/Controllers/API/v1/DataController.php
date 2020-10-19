@@ -18,6 +18,7 @@ use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
 use App\Models\Job;
 use App\Models\Payment;
+use App\Models\SubType;
 use App\Models\Vendor;
 use App\User;
 use Carbon\Carbon;
@@ -30,18 +31,11 @@ class DataController extends Controller
 {
     public function test()
     {
-        $unsubmitted_reports = Expense::with(['expense_report' => function ($q) {
-            $q->where('submitted_at', null);
-            $q->where('approved_at', null);
-            $q->where('cancelled_at', null);
-            $q->where('deleted_at', null);
-        }])
-            ->whereHas('expense_report')
-            ->get()
-            ->where('expense_report', '<>', null);
+        $sub_type = SubType::find(1);
 
-        return $unsubmitted_reports;
-       return "test";
+        return count($sub_type->expenses);
+
+        return "test";
     }
 
     public function print(Request $request)
@@ -131,9 +125,10 @@ class DataController extends Controller
         return DepartmentResource::collection($departments->get());
     }
 
-    public function expense_types()
+    public function expense_types(Request $request)
     {
-        return ExpenseTypeResource::collection(ExpenseType::orderBy("name")->get());
+        $expense_types = ExpenseType::withTrashed()->orderBy("name")->get();
+        return ExpenseTypeResource::collection($expense_types);
     }
 
     public function jobs(Request $request)
@@ -281,7 +276,7 @@ class DataController extends Controller
     public function expense_types_expenses_summary(Request $request)
     {
         $expense_types = ExpenseType::with(['expenses' => function ($q) use ($request) {
-            $q->whereHas("expense_report", function($q) {
+            $q->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
             });
             if (request()->has("employee_id")) {
@@ -325,7 +320,7 @@ class DataController extends Controller
     public function employees_expenses_summary(Request $request)
     {
         $employees = Employee::with(['expenses' => function ($q) use ($request) {
-            $q->whereHas("expense_report", function($q) {
+            $q->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
             });
             if (request()->has("employee_id")) {
@@ -358,7 +353,7 @@ class DataController extends Controller
     public function departments_expenses_summary(Request $request)
     {
         $departments = Department::with(['jobs.employees.expenses' => function ($q) use ($request) {
-            $q->whereHas("expense_report", function($q) {
+            $q->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
             });
             if (request()->has("employee_id")) {
@@ -412,7 +407,7 @@ class DataController extends Controller
     public function expenses_summary(Request $request)
     {
         $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])
-            ->whereHas("expense_report", function($q) {
+            ->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
             })
             ->orderBy('date')
