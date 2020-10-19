@@ -318,8 +318,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1134,12 +1132,6 @@ var render = function() {
                       _c(
                         "v-expansion-panel-content",
                         [
-                          _c("small", { staticClass: "text--secondary" }, [
-                            _vm._v(
-                              '\n                            Default Password: "password"\n                        '
-                            )
-                          ]),
-                          _vm._v(" "),
                           _c(
                             "v-row",
                             [

@@ -16,7 +16,11 @@
                         v-bind="attrs"
                         v-on="on"
                     >
-                        <download-excel :data="export_data">
+                        <download-excel
+                            :data="export_data"
+                            type="csv"
+                            name="Activity Logs.xls"
+                        >
                             <v-icon dark>mdi-download</v-icon>
                         </download-excel>
                     </v-btn>

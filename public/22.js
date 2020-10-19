@@ -224,6 +224,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -513,7 +517,13 @@ var render = function() {
                         [
                           _c(
                             "download-excel",
-                            { attrs: { data: _vm.export_data } },
+                            {
+                              attrs: {
+                                data: _vm.export_data,
+                                type: "csv",
+                                name: "Activity Logs.xls"
+                              }
+                            },
                             [
                               _c("v-icon", { attrs: { dark: "" } }, [
                                 _vm._v("mdi-download")

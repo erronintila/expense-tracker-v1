@@ -241,9 +241,7 @@
                             </div>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
-                            <small class="text--secondary">
-                                Default Password: "password"
-                            </small>
+                            
                             <v-row>
                                 <v-col cols="12" md="4">
                                     <v-text-field

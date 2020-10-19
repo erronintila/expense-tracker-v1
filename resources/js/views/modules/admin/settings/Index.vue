@@ -10,7 +10,9 @@
             <v-expansion-panels v-model="panel" multiple>
                 <v-expansion-panel>
                     <v-expansion-panel-header>
-                        General Settings
+                        <div class="green--text">
+                            General Settings
+                        </div>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-col cols="12" md="4">
@@ -38,7 +40,9 @@
 
                 <v-expansion-panel>
                     <v-expansion-panel-header>
-                        Expenses
+                        <div class="green--text">
+                            Expenses
+                        </div>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-container>
@@ -69,7 +73,9 @@
 
                 <v-expansion-panel>
                     <v-expansion-panel-header>
-                        Expense Reports
+                        <div class="green--text">
+                            Expense Reports
+                        </div>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-container>

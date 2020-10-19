@@ -112,6 +112,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -192,9 +198,11 @@ var render = function() {
                 "v-expansion-panel",
                 [
                   _c("v-expansion-panel-header", [
-                    _vm._v(
-                      "\n                    General Settings\n                "
-                    )
+                    _c("div", { staticClass: "green--text" }, [
+                      _vm._v(
+                        "\n                        General Settings\n                    "
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
                   _c(
@@ -228,7 +236,11 @@ var render = function() {
                 "v-expansion-panel",
                 [
                   _c("v-expansion-panel-header", [
-                    _vm._v("\n                    Expenses\n                ")
+                    _c("div", { staticClass: "green--text" }, [
+                      _vm._v(
+                        "\n                        Expenses\n                    "
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
                   _c(
@@ -272,9 +284,11 @@ var render = function() {
                 "v-expansion-panel",
                 [
                   _c("v-expansion-panel-header", [
-                    _vm._v(
-                      "\n                    Expense Reports\n                "
-                    )
+                    _c("div", { staticClass: "green--text" }, [
+                      _vm._v(
+                        "\n                        Expense Reports\n                    "
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
                   _c(
