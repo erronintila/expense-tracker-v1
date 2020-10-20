@@ -24,6 +24,7 @@ class ExpenseResource extends JsonResource
             'receipt_number' => $this->receipt_number,
             'date' => $this->date,
             'amount' => $this->amount,
+            'revolving_fund' => $this->revolving_fund,
             'reimbursable_amount' => $this->reimbursable_amount,
             'remarks' => $this->remarks,
             'expense_type' => $this->expense_type,
@@ -40,7 +41,8 @@ class ExpenseResource extends JsonResource
             'expense_report_id' => $this->expense_report_id,
             'expense_report' => $this->expense_report,
             // 'expense_report' => $this->expense_report()->withTrashed()->get(),
-            'details' => $this->details
+            'details' => $this->details,
+            'status' => $this->status(),
         ];
     }
 }

@@ -133,7 +133,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         icon
@@ -147,7 +147,7 @@
                     </v-btn>
                 </template>
                 <span>Notifications</span>
-            </v-tooltip>
+            </v-tooltip> -->
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">

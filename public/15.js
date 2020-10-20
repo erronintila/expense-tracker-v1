@@ -799,66 +799,6 @@ var render = function() {
                                 _vm._b(
                                   {
                                     attrs: { icon: "" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.stopPropagation()
-                                        _vm.notificationDrawer = !_vm.notificationDrawer
-                                      }
-                                    }
-                                  },
-                                  "v-btn",
-                                  attrs,
-                                  false
-                                ),
-                                on
-                              ),
-                              [
-                                _c(
-                                  "v-badge",
-                                  {
-                                    attrs: {
-                                      content: "2",
-                                      value: "2",
-                                      color: "red",
-                                      overlap: ""
-                                    }
-                                  },
-                                  [_c("v-icon", [_vm._v("mdi-bell")])],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ],
-                    null,
-                    false,
-                    685925669
-                  )
-                },
-                [_vm._v(" "), _c("span", [_vm._v("Notifications")])]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-tooltip",
-                {
-                  attrs: { bottom: "" },
-                  scopedSlots: _vm._u(
-                    [
-                      {
-                        key: "activator",
-                        fn: function(ref) {
-                          var on = ref.on
-                          var attrs = ref.attrs
-                          return [
-                            _c(
-                              "v-btn",
-                              _vm._g(
-                                _vm._b(
-                                  {
-                                    attrs: { icon: "" },
                                     on: { click: _vm.onLogout }
                                   },
                                   "v-btn",

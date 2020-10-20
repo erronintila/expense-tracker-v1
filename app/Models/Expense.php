@@ -111,7 +111,123 @@ class Expense extends Model
      */
     public function status()
     {
-        return $this->deleted_at == null ? "Active" : "Archived";
+        $arr = [
+            'color' => 'red',
+            'remarks' => 'Status is unindentified',
+            'status' => 'Error',
+        ];
+
+        // return $this->deleted_at == null ? "Active" : "Archived";
+        $reported = is_null($this->expense_report_id);
+        $submitted = is_null($this->submitted_at);
+        $reviewed = is_null($this->reviewed_at);
+        $approved = is_null($this->approved_at);
+        $cancelled = is_null($this->cancelled_at);
+        $rejected = is_null($this->rejected_at);
+        $deleted = is_null($this->deleted_at);
+
+        $paid = is_null($this->payment_id);
+
+        if (!$deleted) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Expense was deleted',
+                'status' => 'Deleted',
+            ];
+
+            return $arr;
+        }
+
+        if (!$cancelled) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Expense was cancelled',
+                'status' => 'Cancelled',
+            ];
+
+            return $arr;
+        }
+
+        if (!$rejected) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Expense was rejected',
+                'status' => 'Rejected',
+            ];
+
+            return $arr;
+        }
+
+        // if (!$paid) {
+
+        //     switch ($this->payment->status()["status"]) {
+        //         case 'Completed':
+        //             $arr = [
+        //                 'color' => 'green',
+        //                 'remarks' => 'Payment transaction was completed',
+        //                 'status' => 'Paid/Reimbursed',
+        //             ];
+        //             break;
+
+        //         default:
+        //             $arr = [
+        //                 'color' => 'blue',
+        //                 'remarks' => 'Processing Payment',
+        //                 'status' => 'Approved',
+        //             ];
+        //             break;
+        //     }
+
+        //     return $arr;
+        // }
+
+        if (!$approved) {
+            $arr = [
+                'color' => 'blue',
+                'remarks' => 'Processing Payment',
+                'status' => 'Approved',
+            ];
+
+            return $arr;
+        }
+
+        if (!$reviewed) {
+            $arr = [
+                'color' => 'orange',
+                'remarks' => 'For Approval',
+                'status' => 'Reviewed',
+            ];
+
+            return $arr;
+        }
+
+        if (!$submitted) {
+            $arr = [
+                'color' => 'orange',
+                'remarks' => 'Submitted expense for approval',
+                'status' => 'Submitted',
+            ];
+
+            return $arr;
+        }
+
+        if ($reported) {
+            $arr = [
+                'color' => 'orange',
+                'remarks' => 'Expense is not associated with report',
+                'status' => 'Unreported',
+            ];
+
+            return $arr;
+        }
+
+        // $arr = [
+        //     'color' => 'orange',
+        //     'remarks' => 'Expense for submission',
+        //     'status' => 'Unreported',
+        // ];
+
+        return $arr;
     }
 
     /**

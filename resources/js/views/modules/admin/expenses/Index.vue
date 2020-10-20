@@ -136,14 +136,14 @@
                                 Restore
                             </v-list-item-title>
                         </v-list-item> -->
-                        <v-list-item>
+                        <!-- <v-list-item>
                             <v-list-item-icon>
                                 <v-icon>mdi-plus</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
                                 Add Expense Report
                             </v-list-item-subtitle>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <v-list-item @click="onDelete">
                             <v-list-item-icon>
@@ -205,12 +205,23 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Reimbursable</strong></td>
+                                        <td><strong>To Replenish</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 formatNumber(
-                                                    item.reimbursable_amount
+                                                    item.revolving_fund
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>To Reimburse</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                formatNumber(
+                                                    item.amount - item.revolving_fund
                                                 )
                                             }}
                                         </td>
@@ -287,6 +298,11 @@
                                 : item.expense_report.code
                         }}
                     </template>
+                    <template v-slot:[`item.status.status`]="{ item }">
+                        <v-chip :color="item.status.color" dark small>{{
+                            item.status.status
+                        }}</v-chip>
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
@@ -309,6 +325,7 @@
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -390,6 +407,7 @@ export default {
                 { text: "Amount", value: "amount" },
                 { text: "Report", value: "expense_report", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
+                { text: "Status", value: "status.status", sortable: false  },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],

@@ -1228,24 +1228,6 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-item",
-                        [
-                          _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("mdi-plus")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("v-list-item-subtitle", [
-                            _vm._v(
-                              "\n                            Add Payment\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
                         {
                           on: {
                             click: function($event) {

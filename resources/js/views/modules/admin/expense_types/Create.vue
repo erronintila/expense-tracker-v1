@@ -33,7 +33,7 @@
                             ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.limit"
                                 :rules="[]"
@@ -46,7 +46,7 @@
                                 label="Expense Amount Limit *"
                                 required
                             ></v-text-field>
-                        </v-col>
+                        </v-col> -->
                         <!-- <v-col cols="12" md="4">
                             <v-checkbox
                                 v-model="hasSubtype"
@@ -84,12 +84,12 @@
                                             class="mx-4"
                                         >
                                         </v-text-field>
-                                        <v-text-field
+                                        <!-- <v-text-field
                                             v-model="subtype_limit"
                                             label="Sub type expense amount limit"
                                             class="mx-4"
                                         >
-                                        </v-text-field>
+                                        </v-text-field> -->
                                         <v-btn @click="addItem" class="mx-4">Add</v-btn>
                                     </v-row>
                                 </template>
@@ -155,10 +155,10 @@ export default {
                     text: "Name",
                     value: "name"
                 },
-                {
-                    text: "Limit",
-                    value: "limit"
-                },
+                // {
+                //     text: "Limit",
+                //     value: "limit"
+                // },
                 { text: "", value: "actions", sortable: false }
             ],
             items: [],

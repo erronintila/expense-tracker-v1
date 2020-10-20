@@ -52,7 +52,7 @@ class ExpenseController extends Controller
 
             'employee_id' => ['required'],
 
-            'expense_details' => ['required']
+            // 'expense_details' => ['required']
         ]);
     }
 
@@ -162,6 +162,8 @@ class ExpenseController extends Controller
 
         $expense->amount = $request->amount;
 
+        $expense->revolving_fund = $request->revolving_fund;
+
         $expense->reimbursable_amount = $request->reimbursable_amount;
 
         $expense->remarks = $request->remarks;
@@ -172,24 +174,24 @@ class ExpenseController extends Controller
 
         $expense->vendor_id  = $request->vendor_id;
 
-        $expense->details  = $request->details;
+        $expense->details  = json_encode($request->details);
 
         $expense->save();
 
-        foreach ($request->expense_details as $key => $value) {
+        // foreach ($request->expense_details as $key => $value) {
 
-            $expense_detail = new ExpenseDetail();
+        //     $expense_detail = new ExpenseDetail();
 
-            $expense_detail->description = $value["particular"];
+        //     $expense_detail->description = $value["particular"];
 
-            $expense_detail->amount = $value["particular_amount"];
+        //     $expense_detail->amount = $value["particular_amount"];
 
-            $expense_detail->reimbursable_amount = $value["particular_reimbursable_amount"];
+        //     $expense_detail->reimbursable_amount = $value["particular_reimbursable_amount"];
 
-            $expense_detail->expense_id = $expense->id;
+        //     $expense_detail->expense_id = $expense->id;
 
-            $expense_detail->save();
-        }
+        //     $expense_detail->save();
+        // }
 
         activity()
             ->withProperties([

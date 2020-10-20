@@ -20,10 +20,12 @@ class CreateExpensesTable extends Migration
             $table->string('description', 100)->nullable();
             $table->double('amount', 10, 2)->default(0);
             $table->double('reimbursable_amount', 10, 2)->default(0);
+            $table->double('revolving_fund', 10, 2)->default(0);
             // $table->double('paid_amount', 10, 2)->default(0);
             $table->string('receipt_number')->nullable();
             $table->date('date');
-            $table->text('details')->nullable();
+            $table->json('details')->nullable();
+            // $table->text('details')->nullable();
             $table->text('remarks')->nullable();
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
@@ -32,10 +34,23 @@ class CreateExpensesTable extends Migration
             $table->unsignedBigInteger('vendor_id')->nullable();
             $table->unsignedBigInteger('expense_report_id')->nullable();
 
+            $table->timestamp('submitted_at')->nullable();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamp('rejected_at')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
+
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('submitted_by')->nullable();
+            $table->unsignedBigInteger('reviewed_by')->nullable();
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->unsignedBigInteger('rejected_by')->nullable();
+            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->unsignedBigInteger('paid_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
-
+            
             $table->timestamps();
             $table->softDeletes();
 

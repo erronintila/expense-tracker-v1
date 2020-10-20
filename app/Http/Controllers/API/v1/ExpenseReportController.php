@@ -248,15 +248,12 @@ class ExpenseReportController extends Controller
 
                     $expense_report = ExpenseReport::withTrashed()->find($id);
 
-                    $expense_report->submitted_at = now();
+                    $this->updateReport($expense_report, true, false, false, false, false);
 
-                    $expense_report->approved_at = null;
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
 
-                    $expense_report->cancelled_at = null;
-
-                    $expense_report->submitted_by = Auth::user()->id;
-
-                    $expense_report->save();
+                        $this->updateExpense($expense, true, false, false, false, false);
+                    }
                 }
 
                 $message = "Expense Report(s) submitted successfully";
@@ -272,6 +269,7 @@ class ExpenseReportController extends Controller
                     ->log("Submitted Expense Report");
 
                 break;
+
             case 'approve':
 
                 if (!app("auth")->user()->hasPermissionTo('approve expense reports')) {
@@ -288,18 +286,12 @@ class ExpenseReportController extends Controller
 
                     $expense_report = ExpenseReport::withTrashed()->find($id);
 
-                    $expense_report->submitted_at = $expense_report->submitted_at == null ? now() : $expense_report->submitted_at;
+                    $this->updateReport($expense_report, false, false, true, false, false);
 
-                    $expense_report->approved_at = now();
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
 
-                    $expense_report->cancelled_at = null;
-
-                    $expense_report->submitted_by = $expense_report->submitted_at == null
-                        ? Auth::user()->id : $expense_report->submitted_by;
-
-                    $expense_report->approved_by = Auth::user()->id;
-
-                    $expense_report->save();
+                        $this->updateExpense($expense, false, false, true, false, false);
+                    }
                 }
 
                 $message = "Expense Report(s) approved successfully";
@@ -315,6 +307,83 @@ class ExpenseReportController extends Controller
                     ->log("Approved Expense Report");
 
                 break;
+
+            case 'cancel':
+
+                if (!app("auth")->user()->hasPermissionTo('approve expense reports')) {
+
+                    abort(403);
+                }
+
+                // // Prevent approve if expense report has been approved or cancelled
+                // if(true) {
+                //     abort(403);
+                // }
+
+                foreach ($request->ids as $id) {
+
+                    $expense_report = ExpenseReport::withTrashed()->find($id);
+
+                    $this->updateReport($expense_report, false, false, false, false, true);
+
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+
+                        $this->updateExpense($expense, false, false, false, false, true);
+                    }
+                }
+
+                $message = "Expense Report(s) cancelled successfully";
+
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense_report->description],
+                        ],
+                        'link' => "/admin/expense_reports/{$expense_report->id}",
+                        'details' => "Ref:{$expense_report->code} {$expense_report->description}"
+                    ])
+                    ->log("Cancelled Expense Report");
+
+                break;
+
+            case 'reject':
+
+                if (!app("auth")->user()->hasPermissionTo('approve expense reports')) {
+
+                    abort(403);
+                }
+
+                // // Prevent approve if expense report has been approved or cancelled
+                // if(true) {
+                //     abort(403);
+                // }
+
+                foreach ($request->ids as $id) {
+
+                    $expense_report = ExpenseReport::withTrashed()->find($id);
+
+                    $this->updateReport($expense_report, false, false, false, true, false);
+
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+
+                        $this->updateExpense($expense, false, false, false, true, false);
+                    }
+                }
+
+                $message = "Expense Report(s) rejected successfully";
+
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense_report->description],
+                        ],
+                        'link' => "/admin/expense_reports/{$expense_report->id}",
+                        'details' => "Ref:{$expense_report->code} {$expense_report->description}"
+                    ])
+                    ->log("Rejected Expense Report");
+
+                break;
+
             case 'duplicate':
 
                 foreach ($request->ids as $value) {
@@ -327,7 +396,11 @@ class ExpenseReportController extends Controller
 
                     $new_report->submitted_at = null;
 
+                    $new_report->reviewed_at = null;
+
                     $new_report->approved_at = null;
+
+                    $new_report->rejected_at = null;
 
                     $new_report->cancelled_at = null;
 
@@ -335,7 +408,11 @@ class ExpenseReportController extends Controller
 
                     $new_report->submitted_by = null;
 
+                    $new_report->reviewed_by = null;
+
                     $new_report->approved_by = null;
+
+                    $new_report->rejected_by = null;
 
                     $new_report->cancelled_by = null;
 
@@ -353,24 +430,33 @@ class ExpenseReportController extends Controller
 
                         $new_expense = $expense->replicate();
 
+                        $new_expense->submitted_at = null;
+
+                        $new_expense->reviewed_at = null;
+
+                        $new_expense->approved_at = null;
+
+                        $new_expense->rejected_at = null;
+
+                        $new_expense->cancelled_at = null;
+
                         $new_expense->deleted_at = null;
+
+                        $new_expense->submitted_by = null;
+
+                        $new_expense->reviewed_by = null;
+
+                        $new_expense->approved_by = null;
+
+                        $new_expense->rejected_by = null;
+
+                        $new_expense->cancelled_by = null;
+
+                        $new_expense->deleted_by = null;
 
                         $new_expense->expense_report_id = $new_report->id;
 
                         $new_expense->save();
-
-                        foreach ($expense->expense_details as $key => $value) {
-
-                            $expense_detail = ExpenseDetail::find($value["id"]);
-
-                            $new_expense_detail = $expense_detail->replicate();
-
-                            $new_expense_detail->deleted_at = null;
-
-                            $new_expense_detail->expense_id = $new_expense->id;
-
-                            $new_expense_detail->save();
-                        }
                     }
 
                     activity()
@@ -387,20 +473,7 @@ class ExpenseReportController extends Controller
                 $message = "Expense Report(s) duplicated successfully";
 
                 break;
-                // case 'cancel':
-                //     foreach ($request->ids as $id) {
-                //         $expense_report = ExpenseReport::withTrashed()->find($id);
-                //         $expense_report->cancelled_at = now();
-                //         $expense_report->save();
 
-                //         foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                //             $expense->delete();
-                //         }
-                //     }
-
-                //     $message = "Expense Report(s) cancelled successfully";
-
-                //     break;
             case 'restore':
 
                 foreach ($request->ids as $id) {
@@ -418,6 +491,7 @@ class ExpenseReportController extends Controller
                 $message = "Expense Report(s) restored successfully";
 
                 break;
+
             default:
 
                 if (!app("auth")->user()->hasPermissionTo('edit expense reports')) {
@@ -535,5 +609,53 @@ class ExpenseReportController extends Controller
             ],
             200
         );
+    }
+
+    public function updateReport(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
+    {
+        $expense_report->submitted_at = $submitted ? now() : $expense_report->submitted_at;
+        $expense_report->reviewed_at = $reviewed ? now() : $expense_report->submitted_at;
+        $expense_report->approved_at = $approved ? now() : $expense_report->submitted_at;
+        $expense_report->rejected_at = $rejected ? now() : $expense_report->submitted_at;
+        $expense_report->cancelled_at = $cancelled ? now() : $expense_report->submitted_at;
+
+        $expense_report->submitted_by = $submitted ? Auth::user()->id : $expense_report->submitted_by;
+        $expense_report->reviewed_by = $reviewed ? Auth::user()->id : $expense_report->submitted_by;
+        $expense_report->approved_by = $approved ? Auth::user()->id : $expense_report->submitted_by;
+        $expense_report->rejected_by = $rejected ? Auth::user()->id : $expense_report->submitted_by;
+        $expense_report->cancelled_by = $cancelled ? Auth::user()->id : $expense_report->submitted_by;
+
+        if ($approved) {
+
+            $expense_report->submitted_at = $expense_report->submitted_at == null ? now() : $expense_report->submitted_at;
+
+            $expense_report->submitted_by = $expense_report->submitted_by == null ? Auth::user()->id : $expense_report->submitted_by;
+        }
+
+        $expense_report->save();
+    }
+
+    public function updateExpense(Expense $expense, $reviewed, $submitted, $approved, $rejected, $cancelled)
+    {
+        $expense->submitted_at = $submitted ? now() : $expense->submitted_at;
+        $expense->reviewed_at = $reviewed ? now() : $expense->submitted_at;
+        $expense->approved_at = $approved ? now() : $expense->submitted_at;
+        $expense->rejected_at = $rejected ? now() : $expense->submitted_at;
+        $expense->cancelled_at = $cancelled ? now() : $expense->submitted_at;
+
+        $expense->submitted_by = $submitted ? Auth::user()->id : $expense->submitted_by;
+        $expense->reviewed_by = $reviewed ? Auth::user()->id : $expense->submitted_by;
+        $expense->approved_by = $approved ? Auth::user()->id : $expense->submitted_by;
+        $expense->rejected_by = $rejected ? Auth::user()->id : $expense->submitted_by;
+        $expense->cancelled_by = $cancelled ? Auth::user()->id : $expense->submitted_by;
+
+        if ($approved) {
+
+            $expense->submitted_at = $expense->submitted_at == null ? now() : $expense->submitted_at;
+
+            $expense->submitted_by = $expense->submitted_by == null ? Auth::user()->id : $expense->submitted_by;
+        }
+
+        $expense->save();
     }
 }

@@ -42,9 +42,9 @@ class PaymentObserver
 
             foreach ($expense_report->expenses as $expense) {
 
-                $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                // $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                $expense->employee->remaining_fund -= $expense_amount;
+                $expense->employee->remaining_fund -= $expense->revolving_fund;
 
                 $expense->employee->save();
             }

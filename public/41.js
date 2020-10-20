@@ -365,6 +365,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -399,6 +416,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: "Last Updated",
         value: "updated_at"
+      }, {
+        text: "Status",
+        value: "status.status",
+        sortable: false
       }, {
         text: "Actions",
         value: "actions",
@@ -1067,24 +1088,6 @@ var render = function() {
                     [
                       _c(
                         "v-list-item",
-                        [
-                          _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("mdi-plus")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("v-list-item-subtitle", [
-                            _vm._v(
-                              "\n                            Add Expense Report\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
                         { on: { click: _vm.onDelete } },
                         [
                           _c(
@@ -1204,7 +1207,7 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Reimbursable")])
+                                        _c("strong", [_vm._v("To Replenish")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
@@ -1214,7 +1217,28 @@ var render = function() {
                                           "\n                                        " +
                                             _vm._s(
                                               _vm.formatNumber(
-                                                item.reimbursable_amount
+                                                item.revolving_fund
+                                              )
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("To Reimburse")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.formatNumber(
+                                                item.amount -
+                                                  item.revolving_fund
                                               )
                                             ) +
                                             "\n                                    "
@@ -1379,6 +1403,25 @@ var render = function() {
                         }
                       },
                       {
+                        key: "item.status.status",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _c(
+                              "v-chip",
+                              {
+                                attrs: {
+                                  color: item.status.color,
+                                  dark: "",
+                                  small: ""
+                                }
+                              },
+                              [_vm._v(_vm._s(item.status.status))]
+                            )
+                          ]
+                        }
+                      },
+                      {
                         key: "item.actions",
                         fn: function(ref) {
                           var item = ref.item
@@ -1439,6 +1482,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
+                  _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
                         _c(
@@ -1469,6 +1513,8 @@ var render = function() {
                             _c("td", [
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
+                            _vm._v(" "),
+                            _c("td"),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),

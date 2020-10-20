@@ -1,0 +1,417 @@
+<?php
+
+namespace App\Http\Controllers\API\v1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpenseResource;
+use App\Models\Employee;
+use App\Models\Expense;
+use App\Models\ExpenseDetail;
+use App\Models\ExpenseType;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
+class ExpenseController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware(['permission:view all expenses'], ['only' => ['index']]);
+        $this->middleware(['permission:view expenses'], ['only' => ['show']]);
+        $this->middleware(['permission:add expenses'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:edit expenses'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete expenses'], ['only' => ['destroy']]);
+    }
+
+    /**
+     * Get a validator for an incoming request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data, $id, $fund)
+    {
+        return Validator::make($data, [
+
+            'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
+
+            'description' => ['nullable', 'max:255'],
+
+            'receipt_number' => ['nullable', 'max:255'],
+
+            'date' => ['required'],
+
+            'amount' => ['required', 'numeric', 'gt:0',],
+
+            'reimbursable_amount' => ['required', 'numeric'],
+
+            'remarks' => ['nullable'],
+
+            'expense_type_id' => ['required'],
+
+            'employee_id' => ['required'],
+
+            'expense_details' => ['required']
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $search = $request->search ?? "";
+
+        $sortBy = $request->sortBy ?? "updated_at";
+
+        $sortType = $request->sortType ?? "desc";
+
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+
+        $expenses = Expense::orderBy($sortBy, $sortType);
+
+        if (request()->has('status')) {
+
+            switch ($request->status) {
+
+                case 'Cancelled Expenses':
+
+                    $expenses = $expenses->onlyTrashed();
+
+                    break;
+                case 'Unreported Expenses':
+                    $expenses = $expenses->where("expense_report_id", null);
+
+                    break;
+                default:
+
+                    $expenses = $expenses;
+
+                    break;
+            }
+        }
+
+        if (request()->has('start_date') && request()->has('end_date')) {
+
+            $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
+        }
+
+        if (request()->has('employee_id')) {
+
+            if ($request->employee_id > 0) {
+
+                $expenses = $expenses->where("employee_id", $request->employee_id);
+            }
+        }
+
+        if (request()->has('expense_type_id')) {
+
+            if ($request->expense_type_id > 0) {
+
+                $expenses = $expenses->where("expense_type_id", $request->expense_type_id);
+            }
+        }
+
+        $expenses = $expenses->where(function ($query) use ($search) {
+
+            $query->where('code', "like", "%" . $search . "%");
+
+            $query->orWhere("description", "like", "%" . $search . "%");
+
+            $query->orWhere("receipt_number", "like", "%" . $search . "%");
+
+            $query->orWhere("date", "like", "%" . $search . "%");
+        });
+
+        $expenses = $expenses->paginate($itemsPerPage);
+
+        // $expenses->appends(['sort' => 'votes'])->links();
+
+        return ExpenseResource::collection($expenses);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        Validator::make($request->all(), [
+
+            'employee_id' => ['required'],
+        ]);
+
+        $employee = Employee::findOrFail($request->employee_id);
+
+        $this->validator($request->all(), null, $employee->remaining_fund)->validate();
+
+        $expense_type = ExpenseType::withTrashed()->findOrFail($request->expense_type_id);
+
+        $expense = new Expense();
+
+        $expense->description = $request->description ?? $expense_type->name;
+
+        $expense->receipt_number = $request->receipt_number;
+
+        $expense->date = $request->date;
+
+        $expense->amount = $request->amount;
+
+        $expense->reimbursable_amount = $request->reimbursable_amount;
+
+        $expense->remarks = $request->remarks;
+
+        $expense->expense_type_id = $request->expense_type_id;
+
+        $expense->employee_id  = $request->employee_id;
+
+        $expense->vendor_id  = $request->vendor_id;
+
+        $expense->details  = $request->details;
+
+        $expense->save();
+
+        foreach ($request->expense_details as $key => $value) {
+
+            $expense_detail = new ExpenseDetail();
+
+            $expense_detail->description = $value["particular"];
+
+            $expense_detail->amount = $value["particular_amount"];
+
+            $expense_detail->reimbursable_amount = $value["particular_reimbursable_amount"];
+
+            $expense_detail->expense_id = $expense->id;
+
+            $expense_detail->save();
+        }
+
+        activity()
+            ->withProperties([
+                'attributes' => [
+                    ["text" => "Description", "value" => $expense->description],
+                    ["text" => "Amount", "value" => $expense->amount],
+                ],
+                'link' => "/admin/expenses/{$expense->id}",
+                'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
+            ])
+            ->log("Created Expense");
+
+        return response(
+            [
+                'data' => new ExpenseResource($expense),
+
+                'message' => 'Created successfully'
+            ],
+            201
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        $expense = Expense::withTrashed()->findOrFail($id);
+
+        return response(
+            [
+                'data' => new ExpenseResource($expense),
+
+                'message' => 'Retrieved successfully'
+            ],
+            200
+        );
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        switch ($request->action) {
+
+            case 'restore':
+
+                if (request()->has("ids")) {
+
+                    foreach ($request->ids as $id) {
+
+                        $expense = Expense::withTrashed()->findOrFail($id);
+
+                        $expense->restore();
+                    }
+                } else {
+
+                    $expense = Expense::withTrashed()->findOrFail($id);
+
+                    $expense->restore();
+                }
+
+                // $expense = Expense::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
+
+                break;
+            default:
+
+                Validator::make($request->all(), [
+
+                    'employee_id' => ['required'],
+                ]);
+
+                $employee = Employee::findOrFail($request->employee_id);
+
+                $this->validator($request->all(), $id, $employee->remaining_fund)->validate();
+
+                $expense = Expense::findOrFail($id);
+
+                // // Prevent update if expense has an approve expense report and user is not admin
+                // if(true) {
+                //     abort(403);
+                // }
+
+                $expense->description = $request->description;
+
+                $expense->receipt_number = $request->receipt_number;
+
+                $expense->date = $request->date;
+
+                $expense->amount = $request->amount;
+
+                $expense->reimbursable_amount = $request->reimbursable_amount;
+
+                $expense->remarks = $request->remarks;
+
+                $expense->expense_type_id = $request->expense_type_id;
+
+                $expense->employee_id  = $request->employee_id;
+
+                $expense->vendor_id  = $request->vendor_id;
+
+                $expense->save();
+
+                foreach ($expense->expense_details as $expense_detail) {
+
+                    $expense_detail->delete();
+                }
+
+                foreach ($request->expense_details as $key => $value) {
+
+                    $expense_detail = ExpenseDetail::withTrashed()->updateOrCreate(
+
+                        ['id' => $value["id"]],
+
+                        [
+                            'description' => $value["description"],
+
+                            'amount' => $value["amount"],
+
+                            'reimbursable_amount' => $value["reimbursable_amount"],
+
+                            'expense_id' => $expense->id,
+
+                            'deleted_at' => null,
+                        ]
+                    );
+                }
+
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense->description],
+                            ["text" => "Amount", "value" => $expense->amount],
+                        ],
+                        'link' => "/admin/expenses/{$expense->id}",
+                        'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
+                    ])
+                    ->log("Updated Expense");
+
+                // foreach ($request->expense_details as $key => $value) {
+                //     $expense_detail = ExpenseDetail::updateOrCreate(
+                //         ['description' => 'Oakland', 'destination' => 'San Diego'],
+                //         ['price' => 99, 'discounted' => 1]
+                //     );
+
+                //     // $expense_detail = new ExpenseDetail();
+                //     // $expense_detail->description = $value["particular"];
+                //     // $expense_detail->amount = $value["particular_amount"];
+                //     // $expense_detail->save();
+                // }
+
+                break;
+        }
+
+        return response(
+            [
+                'message' => 'Updated successfully'
+            ],
+            201
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        if (request()->has("ids")) {
+
+            foreach ($request->ids as $id) {
+
+                $expense = Expense::findOrFail($id);
+
+                // // Prevent delete if expense has an expense report and user is not admin
+                // if(true) {
+                //     abort(403);
+                // }
+
+                $expense->delete();
+
+                activity()
+                    ->withProperties([
+                        'attributes' => [
+                            ["text" => "Description", "value" => $expense->description],
+                            ["text" => "Amount", "value" => $expense->amount],
+                        ],
+                        'link' => "/admin/expenses/{$expense->id}",
+                        'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
+                    ])
+                    ->log("Cancelled Expense");
+            }
+        } else {
+            $expense = Expense::findOrFail($id);
+
+            // // Prevent delete if expense has an expense report and user is not admin
+            // if(true) {
+            //     abort(403);
+            // }
+
+            $expense->delete();
+        }
+
+        // $expense = Expense::whereIn('id', $request->ids)->delete();
+
+        return response(
+            [
+                'message' => 'Deleted successfully'
+            ],
+            200
+        );
+    }
+}
