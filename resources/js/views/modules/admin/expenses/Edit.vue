@@ -8,313 +8,521 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">Edit Expense</h4>
+                <h4 class="title green--text">New Expense</h4>
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <v-row>
+                    <!-- <v-row>
                         <v-spacer></v-spacer>
                         <h3 class="title green--text mr-2">
                             Remaining Funds:
                             {{ formatNumber(form.employee.remaining_fund) }}
                         </h3>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-autocomplete
-                                v-model="form.employee"
-                                :rules="validation.required"
-                                :items="employees"
-                                :error-messages="errors.employee_id"
-                                @input="errors.employee_id = []"
-                                item-value="id"
-                                item-text="fullname"
-                                label="Employee *"
-                                return-object
-                                required
-                            >
-                            </v-autocomplete>
-                        </v-col>
+                    </v-row> -->
 
-                        <v-col cols="12" md="4">
-                            <v-autocomplete
-                                v-model="form.vendor"
-                                :rules="[]"
-                                :items="vendors"
-                                :error-messages="errors.vendor_id"
-                                @input="errors.vendor_id = []"
-                                item-value="id"
-                                item-text="name"
-                                label="Vendor *"
-                            >
-                                <template v-slot:append>
-                                    <AddVendor
-                                        :openDialog="false"
-                                        @createdVendor="loadVendors"
-                                    >
-                                    </AddVendor>
-                                </template>
-                                <template v-slot:item="data">
-                                    <template>
-                                        <v-list max-width="300">
-                                            <v-list-item-content>
-                                                <v-list-item-title
-                                                    v-html="data.item.name"
-                                                ></v-list-item-title>
-                                                <v-list-item-subtitle
-                                                    v-html="
-                                                        `TIN: ${
-                                                            data.item.tin ==
-                                                            null
-                                                                ? 'N/A'
-                                                                : data.item.tin
-                                                        }`
-                                                    "
-                                                ></v-list-item-subtitle>
-                                                <v-list-item-subtitle
-                                                    v-html="data.item.address"
-                                                ></v-list-item-subtitle>
-                                                <v-list-item-subtitle
-                                                    v-html="
-                                                        data.item
-                                                            .is_vat_inclusive
-                                                            ? 'VAT'
-                                                            : 'Non-VAT'
-                                                    "
-                                                >
-                                                </v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </v-list>
-                                    </template>
-                                </template>
-                            </v-autocomplete>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-autocomplete
-                                v-model="form.expense_type"
-                                :rules="validation.required"
-                                :items="expense_types"
-                                :error-messages="errors.expense_type_id"
-                                @input="errors.expense_type_id = []"
-                                item-value="id"
-                                item-text="name"
-                                label="Expense Type *"
-                                required
-                            >
-                            </v-autocomplete>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="form.receipt_number"
-                                :rules="[]"
-                                :error-messages="errors.receipt_number"
-                                @input="errors.receipt_number = []"
-                                label="Receipt No. *"
-                                required
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-menu
-                                ref="menu"
-                                v-model="menu"
-                                :close-on-content-click="false"
-                                transition="scale-transition"
-                                offset-y
-                                min-width="290px"
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field
-                                        v-model="form.date"
-                                        :rules="validation.required"
-                                        :error-messages="errors.date"
-                                        @input="errors.date = []"
-                                        label="Date *"
-                                        readonly
-                                        v-bind="attrs"
-                                        v-on="on"
-                                    ></v-text-field>
-                                </template>
-                                <v-date-picker
-                                    v-model="form.date"
-                                    no-title
-                                    scrollable
-                                    color="success"
-                                >
-                                </v-date-picker>
-                            </v-menu>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12">
-                            <v-data-table
-                                :headers="headers"
-                                :items="items"
-                                :items-per-page="5"
-                                :footer-props="{
-                                    itemsPerPageOptions: [5, 10, 20]
-                                }"
-                            >
-                                <template
-                                    slot="body.append"
-                                    v-if="items.length > 0"
-                                >
-                                    <tr class="green--text hidden-md-and-up">
-                                        <td class="title">
-                                            Reimbursable:
-                                            <strong>{{
-                                                form.reimbursable_amount
-                                            }}</strong>
-                                            <br />
-                                            Total:
-                                            <strong>{{ form.amount }}</strong>
-                                        </td>
-                                    </tr>
-                                    <tr class="green--text hidden-sm-and-down">
-                                        <td class="title">Total</td>
-                                        <td>
-                                            <strong>{{
-                                                form.reimbursable_amount
-                                            }}</strong>
-                                        </td>
-                                        <td>
-                                            <strong>{{ form.amount }}</strong>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </template>
-                                <template v-slot:top>
-                                    <v-toolbar flat color="white">
-                                        Expense Details
-                                        <v-spacer></v-spacer>
-                                        <v-dialog
-                                            v-model="dialog"
-                                            max-width="500px"
+                    <v-expansion-panels v-model="panel" multiple class="mt-4">
+                        <v-expansion-panel>
+                            <v-expansion-panel-header>
+                                <div class="green--text">Basic Information</div>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-menu
+                                            ref="menu"
+                                            v-model="menu"
+                                            :close-on-content-click="false"
+                                            transition="scale-transition"
+                                            offset-y
+                                            min-width="290px"
                                         >
                                             <template
                                                 v-slot:activator="{ on, attrs }"
                                             >
-                                                <v-btn
-                                                    color="primary"
-                                                    dark
-                                                    class="mb-2"
+                                                <v-text-field
+                                                    v-model="form.date"
+                                                    :rules="validation.required"
+                                                    :error-messages="
+                                                        errors.date
+                                                    "
+                                                    @input="errors.date = []"
+                                                    label="Date *"
+                                                    readonly
                                                     v-bind="attrs"
                                                     v-on="on"
-                                                    >New Item</v-btn
-                                                >
+                                                ></v-text-field>
                                             </template>
-                                            <v-card>
-                                                <v-card-text>
-                                                    <v-container>
-                                                        <v-row>
-                                                            <v-col cols="12">
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        form.particular
-                                                                    "
-                                                                    label="Particular"
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                            <v-col cols="12">
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        form.particular_amount
-                                                                    "
-                                                                    label="Amount"
-                                                                    type="number"
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                            <v-col cols="12">
-                                                                <v-checkbox
-                                                                    v-model="
-                                                                        form.is_reimbursable
-                                                                    "
-                                                                    label="Reimbursable"
-                                                                    @click="
-                                                                        form.is_reimbursable
-                                                                            ? (form.particular_reimbursable_amount =
-                                                                                  form.particular_amount)
-                                                                            : (form.particular_reimbursable_amount = 0)
-                                                                    "
-                                                                ></v-checkbox>
-                                                            </v-col>
-                                                            <v-col cols="12">
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        form.particular_reimbursable_amount
-                                                                    "
-                                                                    label="Reimbursable Amount"
-                                                                    v-show="
-                                                                        form.is_reimbursable
-                                                                    "
-                                                                    :rules="
-                                                                        rules.particular_reimbursable_amount
-                                                                    "
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
-                                                    </v-container>
-                                                </v-card-text>
+                                            <v-date-picker
+                                                v-model="form.date"
+                                                no-title
+                                                scrollable
+                                                color="success"
+                                            >
+                                            </v-date-picker>
+                                        </v-menu>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-autocomplete
+                                            v-model="form.employee"
+                                            :rules="validation.required"
+                                            :items="employees"
+                                            :error-messages="errors.employee_id"
+                                            @input="errors.employee_id = []"
+                                            @change="loadExpenseTypes"
+                                            item-value="id"
+                                            item-text="fullname"
+                                            label="Employee *"
+                                            return-object
+                                            required
+                                        >
+                                        </v-autocomplete>
+                                    </v-col>
 
-                                                <v-card-actions>
+                                    <v-col cols="12" md="4">
+                                        <v-autocomplete
+                                            v-model="form.vendor"
+                                            :rules="[]"
+                                            :items="vendors"
+                                            :error-messages="errors.vendor_id"
+                                            @input="errors.vendor_id = []"
+                                            item-value="id"
+                                            item-text="name"
+                                            label="Vendor *"
+                                        >
+                                            <template v-slot:append>
+                                                <AddVendor
+                                                    :openDialog="false"
+                                                    @createdVendor="loadVendors"
+                                                >
+                                                </AddVendor>
+                                            </template>
+                                            <template v-slot:item="data">
+                                                <template>
+                                                    <v-list max-width="300">
+                                                        <v-list-item-content>
+                                                            <v-list-item-title
+                                                                v-html="
+                                                                    data.item
+                                                                        .name
+                                                                "
+                                                            ></v-list-item-title>
+                                                            <v-list-item-subtitle
+                                                                v-html="
+                                                                    `TIN: ${
+                                                                        data
+                                                                            .item
+                                                                            .tin ==
+                                                                        null
+                                                                            ? 'N/A'
+                                                                            : data
+                                                                                  .item
+                                                                                  .tin
+                                                                    }`
+                                                                "
+                                                            ></v-list-item-subtitle>
+                                                            <v-list-item-subtitle
+                                                                v-html="
+                                                                    data.item
+                                                                        .address
+                                                                "
+                                                            ></v-list-item-subtitle>
+                                                            <v-list-item-subtitle
+                                                                v-html="
+                                                                    data.item
+                                                                        .is_vat_inclusive
+                                                                        ? 'VAT'
+                                                                        : 'Non-VAT'
+                                                                "
+                                                            >
+                                                            </v-list-item-subtitle>
+                                                        </v-list-item-content>
+                                                    </v-list>
+                                                </template>
+                                            </template>
+                                        </v-autocomplete>
+                                        <!-- </v-form> -->
+                                    </v-col>
+
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.receipt_number"
+                                            :rules="[]"
+                                            :error-messages="
+                                                errors.receipt_number
+                                            "
+                                            @input="errors.receipt_number = []"
+                                            label="Receipt No. *"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+
+                        <v-expansion-panel>
+                            <v-expansion-panel-header>
+                                <div class="green--text">
+                                    Expense Details ({{
+                                        `Remaining Fund: ${formatNumber(
+                                            form.employee.remaining_fund
+                                        )}`
+                                    }})
+                                </div>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-autocomplete
+                                            return-object
+                                            v-model="form.expense_type"
+                                            :rules="validation.required"
+                                            :items="expense_types"
+                                            :error-messages="
+                                                errors.expense_type_id
+                                            "
+                                            @input="errors.expense_type_id = []"
+                                            @change="loadSubTypes"
+                                            item-value="id"
+                                            item-text="name"
+                                            label="Expense Type *"
+                                            required
+                                        >
+                                        </v-autocomplete>
+                                    </v-col>
+
+                                    <v-col cols="12" md="4">
+                                        <v-autocomplete
+                                            v-model="form.sub_type"
+                                            :rules="validation.required"
+                                            :items="sub_types"
+                                            :error-messages="errors.sub_type"
+                                            @input="errors.sub_type = []"
+                                            item-value="id"
+                                            item-text="name"
+                                            label="Sub Type *"
+                                            required
+                                            return-object
+                                        >
+                                        </v-autocomplete>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.description"
+                                            label="Description"
+                                        ></v-text-field>
+                                    </v-col>
+
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.amount"
+                                            label="Amount"
+                                            :readonly="itemize"
+                                            type="number"
+                                        ></v-text-field>
+                                    </v-col>
+
+                                    <v-col cols="12" md="4">
+                                        <v-checkbox
+                                            v-model="itemize"
+                                            label="Itemize"
+                                            @change="
+                                                form.amount = 0;
+                                                form.revolving_fund = 0;
+                                            "
+                                        ></v-checkbox>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row v-if="itemize">
+                                    <v-col cols="12">
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="items"
+                                            :items-per-page="5"
+                                            :footer-props="{
+                                                itemsPerPageOptions: [5, 10, 20]
+                                            }"
+                                        >
+                                            <template
+                                                slot="body.append"
+                                                v-if="items.length > 0"
+                                            >
+                                                <tr
+                                                    class="green--text hidden-md-and-up"
+                                                >
+                                                    <td class="title">
+                                                        <!-- Reimbursable:
+                                                        <strong>{{
+                                                            form.reimbursable_amount
+                                                        }}</strong>
+                                                        <br /> -->
+                                                        Total:
+                                                        <strong>{{
+                                                            form.amount
+                                                        }}</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr
+                                                    class="green--text hidden-sm-and-down"
+                                                >
+                                                    <td class="title">Total</td>
+                                                    <td>
+                                                        <strong>{{
+                                                            form.amount
+                                                        }}</strong>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </template>
+                                            <template v-slot:top>
+                                                <v-toolbar flat color="white">
+                                                    <!-- Expense Details -->
                                                     <v-spacer></v-spacer>
-                                                    <v-btn
-                                                        color="primary"
-                                                        text
-                                                        @click="dialog = false"
-                                                        >Cancel</v-btn
+                                                    <v-dialog
+                                                        v-model="dialog"
+                                                        max-width="500px"
                                                     >
-                                                    <v-btn
-                                                        color="primary"
-                                                        text
-                                                        @click="addItem"
-                                                        >Add</v-btn
-                                                    >
-                                                </v-card-actions>
-                                            </v-card>
-                                        </v-dialog>
-                                    </v-toolbar>
-                                </template>
-                                <template v-slot:[`item.actions`]="{ item }">
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            () => {
-                                                onRemove(item);
-                                            }
-                                        "
+                                                        <template
+                                                            v-slot:activator="{
+                                                                on,
+                                                                attrs
+                                                            }"
+                                                        >
+                                                            <v-btn
+                                                                color="primary"
+                                                                dark
+                                                                class="mb-2"
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                                >New Item</v-btn
+                                                            >
+                                                        </template>
+                                                        <v-card>
+                                                            <v-card-text>
+                                                                <v-container>
+                                                                    <v-row>
+                                                                        <v-col
+                                                                            cols="12"
+                                                                        >
+                                                                            <v-text-field
+                                                                                v-model="
+                                                                                    form
+                                                                                        .details
+                                                                                        .description
+                                                                                "
+                                                                                label="Particular"
+                                                                            ></v-text-field>
+                                                                        </v-col>
+                                                                        <v-col
+                                                                            cols="12"
+                                                                        >
+                                                                            <v-text-field
+                                                                                v-model="
+                                                                                    form
+                                                                                        .details
+                                                                                        .amount
+                                                                                "
+                                                                                label="Amount"
+                                                                                type="number"
+                                                                            ></v-text-field>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </v-container>
+                                                            </v-card-text>
+
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn
+                                                                    color="primary"
+                                                                    text
+                                                                    @click="
+                                                                        dialog = false
+                                                                    "
+                                                                >
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn
+                                                                    color="primary"
+                                                                    text
+                                                                    @click="
+                                                                        addItem
+                                                                    "
+                                                                    >Add</v-btn
+                                                                >
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-toolbar>
+                                            </template>
+                                            <template
+                                                v-slot:[`item.actions`]="{
+                                                    item
+                                                }"
+                                            >
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="
+                                                        () => {
+                                                            onRemove(item);
+                                                        }
+                                                    "
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row> </v-row>
+
+                                <!-- <v-row> 
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            label="Amount paid through revolving fund"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row> -->
+
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-checkbox
+                                            v-model="paid_through_fund"
+                                            label="Paid through revolving fund"
+                                            @change="
+                                                paid_through_fund
+                                                    ? (form.revolving_fund =
+                                                          form.amount)
+                                                    : (form.revolving_fund = 0)
+                                            "
+                                        ></v-checkbox>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        md="4"
+                                        v-if="paid_through_fund"
                                     >
-                                        mdi-delete
-                                    </v-icon>
-                                </template>
-                            </v-data-table>
-                        </v-col>
-                    </v-row>
+                                        <v-text-field
+                                            v-model="form.revolving_fund"
+                                            :rules="rules.revolving_fund"
+                                            label="Amount"
+                                            type="number"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
 
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-textarea
-                                rows="1"
-                                label="Remarks"
-                                v-model="form.remarks"
-                                :error-messages="errors.remarks"
-                                @input="errors.remarks = []"
-                            ></v-textarea>
-                        </v-col>
-                    </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="green--text">
+                                                        Amount to reimburse
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            amount_to_reimburse
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="green--text">
+                                                        Amount to replenish
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            form.revolving_fund
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="green--text">
+                                                        Total Amount
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ form.amount }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </v-col>
+                                </v-row>
 
-                    <small class="text--secondary">
-                        * indicates required field
-                    </small>
+                                <!-- <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-checkbox
+                                            v-model="reimbursable"
+                                            label="Reimbursable"
+                                        ></v-checkbox>
+                                    </v-col>
+                                    <v-col cols="12" md="4" v-if="!reimbursable">
+                                        <v-select
+                                            label="Paid through"
+                                            :items="[
+                                                'Petty Cash',
+                                                'Undeposited Funds'
+                                            ]"
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
 
-                    <v-card-actions>
+                                <v-row v-if="reimbursable">
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            label="Amount paid through Revolving Fund"
+                                        ></v-text-field>
+                                    </v-col>
+
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            label="Revolving Fund Amount"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row> -->
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </v-expansion-panels>
+
+                    <v-card class="mt-4">
+                        <!-- <v-card-subtitle>
+                            <div class="green--text">Remarks</div>
+                        </v-card-subtitle> -->
+
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" md="6">
+                                        <v-textarea
+                                            rows="1"
+                                            v-model="form.remarks"
+                                            :error-messages="errors.remarks"
+                                            @input="errors.remarks = []"
+                                            label="Remarks"
+                                        ></v-textarea>
+                                    </v-col>
+                                    <v-col cols="12" md="6">
+                                        <v-textarea
+                                            rows="1"
+                                            label="Notes"
+                                            readonly
+                                        ></v-textarea>
+                                    </v-col>
+                                </v-row>
+
+                                <small class="text--secondary">
+                                    * indicates required field
+                                </small>
+                            </v-container>
+                        </v-card-text>
+                    </v-card>
+
+                    <v-card-actions class="mt-3">
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
                         <v-btn @click="$router.go(-1)">Cancel</v-btn>
@@ -335,21 +543,22 @@ export default {
     },
     data() {
         return {
+            panel: [0, 1],
+            itemize: false,
+            paid_through_fund: false,
+            reimbursable: false,
+            openAddVendor: false,
             dialog: false,
             valid: false,
             menu: false,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
-                {
-                    text: "Reimbursable Amount",
-                    value: "reimbursable_amount",
-                    sortable: false
-                },
                 { text: "Amount", value: "amount", sortable: false },
                 { text: "", value: "actions", sortable: false }
             ],
             items: [],
             expense_types: [],
+            sub_types: [],
             employees: [],
             vendors: [],
             form: {
@@ -361,13 +570,30 @@ export default {
                 date: null,
                 remarks: "",
                 is_active: true,
-                expense_type: null,
-                employee: { id: null, remaining_fund: 0, fund: 0 },
+                expense_type: {
+                    id: null,
+                    name: "",
+                    limit: null,
+                    sub_types: null
+                },
+                sub_type: { id: null, name: "", limit: null },
+                employee: {
+                    id: null,
+                    remaining_fund: 0,
+                    fund: 0,
+                    expense_types: null
+                },
                 vendor: null,
-                particular: "",
-                particular_amount: 0,
-                particular_reimbursable_amount: 0,
-                is_reimbursable: false
+                // particular: "",
+                // particular_amount: 0,
+                // particular_reimbursable_amount: 0,
+                is_reimbursable: false,
+
+                revolving_fund: 0,
+                details: {
+                    description: "",
+                    amount: 0
+                }
             },
             rules: {
                 reimbursable_amount: [
@@ -375,13 +601,23 @@ export default {
                         parseFloat(v) <= this.form.amount ||
                         "Reimbursable Amount should not be greater than the actual amount"
                 ],
-                particular_reimbursable_amount: [
-                    v =>
-                        parseFloat(v) <= this.form.particular_amount ||
-                        "Reimbursable Amount should not be greater than the actual amount"
+                revolving_fund: [
+                    // v =>
+                    //     (parseFloat(v) <=
+                    //         (this.form.sub_type.limit == null
+                    //             ? this.form.expense_type.limit || v
+                    //             : this.form.sub_type.limit) &&
+                    //         parseFloat(v) == 0) ||
+                    //     "Revolving Fund is greater than expense amount limit"
                 ]
+                // particular_reimbursable_amount: [
+                //     v =>
+                //         parseFloat(v) <= this.form.particular_amount ||
+                //         "Reimbursable Amount should not be greater than the actual amount"
+                // ]
             },
             errors: {
+                sub_type: [],
                 description: [],
                 amount: [],
                 reimbursable_amount: [],
@@ -407,18 +643,41 @@ export default {
 
                         _this.form.code = data.code;
                         _this.form.description = data.description;
-                        _this.form.amount = data.amount;
-                        _this.form.reimbursable_amount =
-                            data.reimbursable_amount;
+                        
                         _this.form.receipt_number = data.receipt_number;
                         _this.form.date = data.date;
                         _this.form.remarks = data.remarks;
                         _this.form.is_active = data.is_active;
-                        _this.form.expense_type = data.expense_type.id;
                         _this.form.employee = data.employee;
                         _this.form.vendor =
                             data.vendor == null ? null : data.vendor.id;
-                        _this.items = data.expense_details;
+
+                        _this.form.expense_type = data.expense_type;
+                        // _this.form.sub_type = data.sub_type_id;
+
+                        _this.expense_types = data.employee.expense_types;
+                        _this.sub_types = data.expense_type.sub_types;
+
+                        if (data.details !== null) {
+                            _this.itemize = true;
+                            _this.items = data.details;
+                        } else {
+                            // _this.itemize = false;
+                            // _this.items = [];
+                            _this.form.amount = data.amount;
+                            // console.log(_this.form.amount, data.amount);
+                        }
+
+                        _this.sub_types.unshift({ id: null, name: "None", limit: null });
+                        _this.form.sub_type = data.sub_type == null ? { id: null, name: "None", limit: null } : data.sub_type;
+
+                        if (data.revolving_fund > 0) {
+                            _this.paid_through_fund = true;
+                            _this.form.revolving_fund = data.revolving_fund;
+                        } else {
+                            _this.paid_through_fund = false;
+                            _this.form.revolving_fund = 0;
+                        }
                     })
                     .catch(error => {
                         console.log(error);
@@ -505,15 +764,17 @@ export default {
         onSave() {
             let _this = this;
 
+            // console.log(this.form.sub_type.id);
+
+            // return;
+
             _this.$refs.form.validate();
 
             if (
-                parseFloat(this.form.amount) -
-                    parseFloat(this.form.reimbursable_amount) >
-                parseFloat(this.form.employee.remaining_fund)
+                _this.form.revolving_fund > _this.form.employee.remaining_fund
             ) {
                 _this.$dialog.message.error(
-                    "Expense actual amount is greater than remaining funds",
+                    "Revolving fund amount is greater than remaining fund",
                     {
                         position: "top-right",
                         timeout: 2000
@@ -522,13 +783,13 @@ export default {
                 return;
             }
 
-            if (this.items.length == 0) {
-                _this.$dialog.message.error("No Expense detail added", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
+            // if (this.items.length == 0) {
+            //     _this.$dialog.message.error("No Expense detail added", {
+            //         position: "top-right",
+            //         timeout: 2000
+            //     });
+            //     return;
+            // }
 
             if (_this.$refs.form.validate()) {
                 axios
@@ -536,15 +797,17 @@ export default {
                         code: _this.form.code,
                         description: _this.form.description,
                         amount: _this.form.amount,
+                        revolving_fund: _this.form.revolving_fund,
                         reimbursable_amount: _this.form.reimbursable_amount,
                         receipt_number: _this.form.receipt_number,
                         date: _this.form.date,
                         remarks: _this.form.remarks,
                         is_active: _this.form.is_active,
-                        expense_type_id: _this.form.expense_type,
+                        expense_type_id: _this.form.expense_type.id,
+                        sub_type_id: _this.form.sub_type.id,
                         employee_id: _this.form.employee.id,
                         vendor_id: _this.form.vendor,
-                        expense_details: _this.items
+                        details: _this.itemize ? _this.items : null
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -575,28 +838,32 @@ export default {
             }
         },
         addItem() {
-            if (
-                parseFloat(this.form.particular_amount) >=
-                parseFloat(this.form.particular_reimbursable_amount)
-            ) {
-                this.items.push({
-                    id: null,
-                    description: this.form.particular,
-                    amount: this.form.particular_amount,
-                    reimbursable_amount: this.form
-                        .particular_reimbursable_amount
-                });
-            }
+            this.items.push({
+                description: this.form.details.description,
+                amount: this.form.details.amount
+            });
 
             this.dialog = false;
-            this.form.particular = "";
-            this.form.particular_amount = 0;
-            this.form.particular_reimbursable_amount = 0;
+            this.form.details.description = "";
+            this.form.details.amount = 0;
         },
         onRemove(item) {
             const index = this.items.indexOf(item);
             confirm("Are you sure you want to remove this item?") &&
                 this.items.splice(index, 1);
+        },
+        loadSubTypes(e) {
+            this.form.sub_type = { id: null, name: "", limit: null };
+            this.sub_types = e.sub_types;
+            this.sub_types.push({ id: null, name: "None", limit: null });
+        }
+    },
+    computed: {
+        amount_to_reimburse() {
+            return (
+                parseFloat(this.form.amount) -
+                parseFloat(this.form.revolving_fund)
+            );
         }
     },
     watch: {
@@ -606,15 +873,21 @@ export default {
                 0
             );
 
-            this.form.reimbursable_amount = this.items.reduce(
-                (total, item) =>
-                    parseFloat(total) + parseFloat(item.reimbursable_amount),
+            // this.form.reimbursable_amount = this.items.reduce(
+            //     (total, item) =>
+            //         parseFloat(total) + parseFloat(item.reimbursable_amount),
+            //     0
+            // );
+        },
+        itemize() {
+            this.form.amount = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.amount),
                 0
             );
         }
     },
     created() {
-        this.loadExpenseTypes();
+        // this.loadExpenseTypes();
         this.loadVendors();
         this.getData();
     }

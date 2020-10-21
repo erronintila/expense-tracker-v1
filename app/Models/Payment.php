@@ -8,18 +8,41 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Payment extends Model
 {
-    use SoftDeletes;
-    // use LogsActivity;
+    use SoftDeletes, LogsActivity;
 
-    // protected static $logUnguarded = true;
+    /**
+     * Activity Logs Configuration
+     *
+     * 
+     */
 
-    // // Logging only the changed attributes
-    // protected static $logOnlyDirty = true;
+    // // log changes to all the $fillable/$guarded attributes of the model
+    protected static $logUnguarded = true;
+    // protected static $logFillable = true;
 
-    // public function getDescriptionForEvent(string $eventName): string
-    // {
-    //     return "Record has been {$eventName}";
-    // }
+    // // log the changed attributes for all events
+    protected static $logAttributes = ['*'];
+
+    // // Ignoring attributes from logging
+    protected static $logAttributesToIgnore = [ 'updated_at'];
+
+    // // only created and updated event will be logged
+    // protected static $recordEvents = ['created', 'updated']
+
+    // // logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    // // prevents the package from storing empty logs
+    // protected static $submitEmptyLogs = false;
+
+    // // customizong the log name
+    protected static $logName = "payment";
+
+    // // logging description
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "{$eventName} payment";
+    }
 
     /**
      * The attributes that are not mass assignable.
@@ -55,6 +78,12 @@ class Payment extends Model
 
     public function status()
     {
+        $arr = [
+            'color' => 'red',
+            'remarks' => 'Status is unidentified',
+            'status' => 'Error',
+        ];
+
         $approved = is_null($this->approved_at);
         $cancelled = is_null($this->deleted_at);
         $released = is_null($this->released_at);
@@ -82,7 +111,7 @@ class Payment extends Model
 
         if (!$released) {
             $arr = [
-                'color' => 'orange',
+                'color' => 'blue',
                 'remarks' => 'Payment was released',
                 'status' => 'Released',
             ];
@@ -92,7 +121,7 @@ class Payment extends Model
 
         if (!$approved) {
             $arr = [
-                'color' => 'orange',
+                'color' => 'cyan',
                 'remarks' => 'Payment was approved and waiting for release',
                 'status' => 'Approved',
             ];
@@ -101,7 +130,7 @@ class Payment extends Model
         }
 
         $arr = [
-            'color' => 'blue',
+            'color' => 'orange',
             'remarks' => 'Payment waiting for approval',
             'status' => 'Pending',
         ];

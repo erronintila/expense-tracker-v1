@@ -6,19 +6,18 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JsonException;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Department extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -44,19 +43,53 @@ class Department extends Model
 
         static::deleting(function ($department) {
             if ($department->jobs()->count() > 0) {
-                
+
                 throw new JsonException("Model has child records");
-            
+
                 // abort("Model has child records", 401);
-            
+
                 // abort(response()->json(['Model has child records'], 401));
-            
+
                 // return abort(500, 'Model has child records');
-            
+
                 // return response("Model has child records", 500);
                 // throw new Exception("Model have child records");
             }
         });
+    }
+
+    /**
+     * Activity Logs Configuration
+     *
+     * 
+     */
+
+    // // log changes to all the $fillable/$guarded attributes of the model
+    protected static $logUnguarded = true;
+    // protected static $logFillable = true;
+
+    // // log the changed attributes for all events
+    protected static $logAttributes = ['name'];
+
+    // // Ignoring attributes from logging
+    protected static $logAttributesToIgnore = [ 'updated_at'];
+
+    // // only created and updated event will be logged
+    // protected static $recordEvents = ['created', 'updated']
+
+    // // logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    // // prevents the package from storing empty logs
+    // protected static $submitEmptyLogs = false;
+
+    // // customizong the log name
+    protected static $logName = "department";
+
+    // // logging description
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "{$eventName} department";
     }
 
     /**

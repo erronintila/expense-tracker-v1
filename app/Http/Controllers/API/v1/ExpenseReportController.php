@@ -68,48 +68,87 @@ class ExpenseReportController extends Controller
 
             switch ($request->status) {
 
-                case 'Archived':
-
+                case 'Archived Expense Reports':
                     $expense_reports = $expense_reports->onlyTrashed();
 
                     break;
-                case 'Cancelled':
-
-                    $expense_reports = $expense_reports->onlyTrashed();
-
-                    // $expense_reports = $expense_reports->where("cancelled_at", '<>', null);
+                case 'Overdue Expense Reports':
+                    $expense_reports = $expense_reports;
 
                     break;
-                case 'Completed':
+                case 'Cancelled Expense Reports':
 
-                    $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null)->where("payment_id", "<>", null);
-
-                    break;
-                case 'Approved':
-
-                    $expense_reports = $expense_reports->where("approved_at", '<>', null)->where("cancelled_at", null)->where("payment_id", null);
-
-                    break;
-                case 'Pending':
-
-                    $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("approved_at", null)->where("cancelled_at", null);
+                    $expense_reports = $expense_reports->where([
+                        ["expense_report_id", "<>", null],
+                        // ["submitted_at", "<>", null],
+                        // ["approved_at", "<>", null],
+                        // ["rejected_at", "=", null],
+                        ["cancelled_at", "<>", null],
+                    ]);
 
                     break;
-                case 'For Submission':
+                case 'Reimbursed Expense Reports':
 
-                    $expense_reports = $expense_reports->where("submitted_at", null)->where("approved_at", null)->where("cancelled_at", null);
+                    $expense_reports = $expense_reports->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "<>", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                        ["payment_id", "<>", null],
+                    ]);
 
                     break;
+                case 'Rejected Expense Reports':
+
+                    $expense_reports = $expense_reports->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "<>", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
+                case 'Approved Expense Reports':
+
+                    $expense_reports = $expense_reports->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "<>", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
+                case 'Submitted Expense Reports':
+
+                    $expense_reports = $expense_reports->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
+                case 'Unsubmitted Expense Reports':
+
+                    $expense_reports = $expense_reports->where([
+                        ["submitted_at", "=", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
+
                 default:
 
-                    if (request()->has("admin_page")) {
+                    // if (request()->has("admin_page")) {
 
-                        $expense_reports = $expense_reports->where("submitted_at", '<>', null)->where("cancelled_at", null);
+                    //     $expense_reports = $expense_reports->where("submitted_at", '<>', null);
 
-                        break;
-                    }
+                    //     break;
+                    // }
 
-                    $expense_reports = $expense_reports->where("cancelled_at", null);
+                    $expense_reports = $expense_reports;
 
                     break;
             }
@@ -614,16 +653,16 @@ class ExpenseReportController extends Controller
     public function updateReport(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
     {
         $expense_report->submitted_at = $submitted ? now() : $expense_report->submitted_at;
-        $expense_report->reviewed_at = $reviewed ? now() : $expense_report->submitted_at;
-        $expense_report->approved_at = $approved ? now() : $expense_report->submitted_at;
-        $expense_report->rejected_at = $rejected ? now() : $expense_report->submitted_at;
-        $expense_report->cancelled_at = $cancelled ? now() : $expense_report->submitted_at;
+        $expense_report->reviewed_at = $reviewed ? now() : $expense_report->reviewed_at;
+        $expense_report->approved_at = $approved ? now() : $expense_report->approved_at;
+        $expense_report->rejected_at = $rejected ? now() : $expense_report->rejected_at;
+        $expense_report->cancelled_at = $cancelled ? now() : $expense_report->cancelled_at;
 
         $expense_report->submitted_by = $submitted ? Auth::user()->id : $expense_report->submitted_by;
-        $expense_report->reviewed_by = $reviewed ? Auth::user()->id : $expense_report->submitted_by;
-        $expense_report->approved_by = $approved ? Auth::user()->id : $expense_report->submitted_by;
-        $expense_report->rejected_by = $rejected ? Auth::user()->id : $expense_report->submitted_by;
-        $expense_report->cancelled_by = $cancelled ? Auth::user()->id : $expense_report->submitted_by;
+        $expense_report->reviewed_by = $reviewed ? Auth::user()->id : $expense_report->reviewed_by;
+        $expense_report->approved_by = $approved ? Auth::user()->id : $expense_report->approved_by;
+        $expense_report->rejected_by = $rejected ? Auth::user()->id : $expense_report->rejected_by;
+        $expense_report->cancelled_by = $cancelled ? Auth::user()->id : $expense_report->cancelled_by;
 
         if ($approved) {
 
@@ -638,16 +677,16 @@ class ExpenseReportController extends Controller
     public function updateExpense(Expense $expense, $reviewed, $submitted, $approved, $rejected, $cancelled)
     {
         $expense->submitted_at = $submitted ? now() : $expense->submitted_at;
-        $expense->reviewed_at = $reviewed ? now() : $expense->submitted_at;
-        $expense->approved_at = $approved ? now() : $expense->submitted_at;
-        $expense->rejected_at = $rejected ? now() : $expense->submitted_at;
-        $expense->cancelled_at = $cancelled ? now() : $expense->submitted_at;
+        $expense->reviewed_at = $reviewed ? now() : $expense->reviewed_at;
+        $expense->approved_at = $approved ? now() : $expense->approved_at;
+        $expense->rejected_at = $rejected ? now() : $expense->rejected_at;
+        $expense->cancelled_at = $cancelled ? now() : $expense->cancelled_at;
 
         $expense->submitted_by = $submitted ? Auth::user()->id : $expense->submitted_by;
-        $expense->reviewed_by = $reviewed ? Auth::user()->id : $expense->submitted_by;
-        $expense->approved_by = $approved ? Auth::user()->id : $expense->submitted_by;
-        $expense->rejected_by = $rejected ? Auth::user()->id : $expense->submitted_by;
-        $expense->cancelled_by = $cancelled ? Auth::user()->id : $expense->submitted_by;
+        $expense->reviewed_by = $reviewed ? Auth::user()->id : $expense->reviewed_by;
+        $expense->approved_by = $approved ? Auth::user()->id : $expense->approved_by;
+        $expense->rejected_by = $rejected ? Auth::user()->id : $expense->rejected_by;
+        $expense->cancelled_by = $cancelled ? Auth::user()->id : $expense->cancelled_by;
 
         if ($approved) {
 

@@ -251,11 +251,11 @@
                             </v-container>
                         </td>
                     </template>
-                    <!-- <template v-slot:[`item.status.status`]="{ item }">
+                    <template v-slot:[`item.status.status`]="{ item }">
                         <v-chip :color="item.status.color" dark small>{{
                             item.status.status
                         }}</v-chip>
-                    </template> -->
+                    </template>
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{ getHumanDate(item.created_at) }}
                     </template>
@@ -293,7 +293,7 @@
                             </td>
                             <td></td>
                             <td></td>
-                            <!-- <td></td> -->
+                            <td></td>
                             <td></td>
                         </tr>
                     </template>
@@ -318,7 +318,7 @@ export default {
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },
-                // { text: "Status", value: "status.status" },
+                { text: "Status", value: "status.status" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],

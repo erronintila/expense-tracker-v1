@@ -9,18 +9,41 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class ExpenseReport extends Model
 {
-    use SoftDeletes;
-    // use LogsActivity;
+    use SoftDeletes, LogsActivity;
 
+    /**
+     * Activity Logs Configuration
+     *
+     * 
+     */
+
+    // // log changes to all the $fillable/$guarded attributes of the model
+    protected static $logUnguarded = true;
     // protected static $logFillable = true;
 
-    // // Logging only the changed attributes
-    // protected static $logOnlyDirty = true;
+    // // log the changed attributes for all events
+    protected static $logAttributes = ['*'];
 
-    // public function getDescriptionForEvent(string $eventName): string
-    // {
-    //     return "Record has been {$eventName}";
-    // }
+    // // Ignoring attributes from logging
+    protected static $logAttributesToIgnore = [ 'updated_at'];
+
+    // // only created and updated event will be logged
+    // protected static $recordEvents = ['created', 'updated']
+
+    // // logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    // // prevents the package from storing empty logs
+    // protected static $submitEmptyLogs = false;
+
+    // // customizong the log name
+    protected static $logName = "expense_report";
+
+    // // logging description
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "{$eventName} expense report";
+    }
 
     /**
      * The attributes that should be mutated to dates.
@@ -103,11 +126,18 @@ class ExpenseReport extends Model
      */
     public function status()
     {
+        $arr = [
+            'color' => 'red',
+            'remarks' => 'Status is unindentified',
+            'status' => 'Error',
+        ];
+
         $submitted = is_null($this->submitted_at);
+        $reviewed = is_null($this->reviewed_at);
         $approved = is_null($this->approved_at);
+        $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $reviewed = is_null($this->reviewed_at);
         $paid = is_null($this->payment_id);
 
         if (!$deleted) {
@@ -130,6 +160,16 @@ class ExpenseReport extends Model
             return $arr;
         }
 
+        if (!$rejected) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Expense Report was rejected',
+                'status' => 'Rejected',
+            ];
+
+            return $arr;
+        }
+
         if (!$paid) {
 
             switch ($this->payment->status()["status"]) {
@@ -137,13 +177,13 @@ class ExpenseReport extends Model
                     $arr = [
                         'color' => 'green',
                         'remarks' => 'Payment transaction was completed',
-                        'status' => 'Paid/Reimbursed',
+                        'status' => 'Reimbursed',
                     ];
                     break;
 
                 default:
                     $arr = [
-                        'color' => 'blue',
+                        'color' => 'cyan',
                         'remarks' => 'Processing Payment',
                         'status' => 'Approved',
                     ];
@@ -155,7 +195,7 @@ class ExpenseReport extends Model
 
         if (!$approved) {
             $arr = [
-                'color' => 'blue',
+                'color' => 'cyan',
                 'remarks' => 'Processing Payment',
                 'status' => 'Approved',
             ];
@@ -175,9 +215,9 @@ class ExpenseReport extends Model
 
         if (!$submitted) {
             $arr = [
-                'color' => 'orange',
+                'color' => 'blue',
                 'remarks' => 'Submitted expense report for approval',
-                'status' => 'Pending',
+                'status' => 'Submitted',
             ];
 
             return $arr;
@@ -185,8 +225,8 @@ class ExpenseReport extends Model
 
         $arr = [
             'color' => 'orange',
-            'remarks' => 'Expense Report for submission',
-            'status' => 'For Submission',
+            'remarks' => 'Expense Report is not yet submitted',
+            'status' => 'Unsubmitted',
         ];
 
         return $arr;

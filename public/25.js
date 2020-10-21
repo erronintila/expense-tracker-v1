@@ -1409,7 +1409,7 @@ var render = function() {
                                                     "div",
                                                     {
                                                       staticClass:
-                                                        "orange--text text-capitalize"
+                                                        "blue-grey--text text-capitalize"
                                                     },
                                                     [
                                                       _vm._v(

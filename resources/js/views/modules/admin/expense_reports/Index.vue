@@ -427,11 +427,11 @@ export default {
                 "Reimbursed Expense Reports",
                 "Overdue Expense Reports",
                 "Archived Expense Reports",
-                "For Submission",
-                "Pending",
-                "Approved",
-                "Cancelled",
-                "Completed"
+                // "For Submission",
+                // "Pending",
+                // "Approved",
+                // "Cancelled",
+                // "Completed"
                 // "Archived"
             ],
             selected: [],

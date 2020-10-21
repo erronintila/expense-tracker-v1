@@ -705,7 +705,7 @@ __webpack_require__.r(__webpack_exports__);
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
-      var _this = this; // console.log(_this.form.expense_type, _this.form.sub_type);
+      var _this = this; // console.log(_this.form.expense_type, _this.form.sub_type.id);
       // return;
 
 
@@ -797,7 +797,7 @@ __webpack_require__.r(__webpack_exports__);
         limit: null
       };
       this.sub_types = e.sub_types;
-      this.sub_types.push({
+      this.sub_types.unshift({
         id: null,
         name: "None",
         limit: null
@@ -2001,21 +2001,6 @@ var render = function() {
                                             _vm.$set(_vm.form, "remarks", $$v)
                                           },
                                           expression: "form.remarks"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: {
-                                          rows: "1",
-                                          label: "Notes",
-                                          readonly: ""
                                         }
                                       })
                                     ],

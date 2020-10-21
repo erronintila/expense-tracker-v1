@@ -23,6 +23,7 @@ use App\Models\Vendor;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
@@ -31,9 +32,11 @@ class DataController extends Controller
 {
     public function test()
     {
-        $sub_type = SubType::find(1);
+        $activity = Activity::all()->last();
 
-        return count($sub_type->expenses);
+        return $activity;
+        // return $activity->description; //returns 'deleted'
+        // return $activity->changes; //
 
         return "test";
     }
@@ -468,6 +471,7 @@ class DataController extends Controller
         $expenses_by_date = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
             $q->where('approved_at', '<>', null);
+            $q->where('rejected_at', null);
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
         }])
@@ -481,6 +485,7 @@ class DataController extends Controller
         $unsubmitted_reports = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', null);
             $q->where('approved_at', null);
+            $q->where('rejected_at', null);
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
         }])
@@ -491,6 +496,7 @@ class DataController extends Controller
         $submitted_reports =  Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
             $q->where('approved_at', null);
+            $q->where('rejected_at', null);
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
         }])
@@ -501,6 +507,7 @@ class DataController extends Controller
         $approved_reports =  Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
             $q->where('approved_at', "<>", null);
+            $q->where('rejected_at', null);
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
             $q->where('payment_id', null);
@@ -516,6 +523,7 @@ class DataController extends Controller
         $pending_expenses = Expense::with(['expense_report' => function ($q) {
             $q->where('submitted_at', "<>", null);
             $q->where('approved_at', null);
+            $q->where('rejected_at', null);
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
         }])

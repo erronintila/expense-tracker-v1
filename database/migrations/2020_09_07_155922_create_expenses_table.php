@@ -34,6 +34,8 @@ class CreateExpensesTable extends Migration
             $table->unsignedBigInteger('vendor_id')->nullable();
             $table->unsignedBigInteger('expense_report_id')->nullable();
 
+            $table->date('expiry_date')->nullable();
+
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamp('approved_at')->nullable();

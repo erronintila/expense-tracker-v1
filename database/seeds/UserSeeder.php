@@ -80,11 +80,16 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'restore employees', 'category' => $model]);
             }
 
+            if ($model == "expenses") {
+                Permission::create(['name' => 'add expense notes', 'category' => $model]);
+            }
+
             if ($model == "expense reports") {
                 Permission::create(['name' => 'approve expense reports', 'category' => $model]);
                 Permission::create(['name' => 'disapprove expense reports', 'category' => $model]);
                 Permission::create(['name' => 'submit expense reports', 'category' => $model]);
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
+                Permission::create(['name' => 'add expense report notes', 'category' => $model]);
             }
 
             if ($model == "payments") {

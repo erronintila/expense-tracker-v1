@@ -347,8 +347,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: "Last Updated",
         value: "updated_at"
-      }, // { text: "Status", value: "status.status" },
-      {
+      }, {
+        text: "Status",
+        value: "status.status"
+      }, {
         text: "Actions",
         value: "actions",
         sortable: false
@@ -1125,6 +1127,25 @@ var render = function() {
                         }
                       },
                       {
+                        key: "item.status.status",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _c(
+                              "v-chip",
+                              {
+                                attrs: {
+                                  color: item.status.color,
+                                  dark: "",
+                                  small: ""
+                                }
+                              },
+                              [_vm._v(_vm._s(item.status.status))]
+                            )
+                          ]
+                        }
+                      },
+                      {
                         key: "item.created_at",
                         fn: function(ref) {
                           var item = ref.item
@@ -1214,6 +1235,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
+                  _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
                         _c(
@@ -1242,6 +1264,8 @@ var render = function() {
                             _c("td", [
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
+                            _vm._v(" "),
+                            _c("td"),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),

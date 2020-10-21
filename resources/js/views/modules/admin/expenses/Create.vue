@@ -506,13 +506,13 @@
                                             label="Remarks"
                                         ></v-textarea>
                                     </v-col>
-                                    <v-col cols="12" md="6">
+                                    <!-- <v-col cols="12" md="6">
                                         <v-textarea
                                             rows="1"
                                             label="Notes"
                                             readonly
                                         ></v-textarea>
-                                    </v-col>
+                                    </v-col> -->
                                 </v-row>
 
                                 <small class="text--secondary">
@@ -702,7 +702,7 @@ export default {
         onSave() {
             let _this = this;
 
-            // console.log(_this.form.expense_type, _this.form.sub_type);
+            // console.log(_this.form.expense_type, _this.form.sub_type.id);
 
             // return;
 
@@ -808,7 +808,7 @@ export default {
         loadSubTypes(e) {
             this.form.sub_type = { id: null, name: "", limit: null };
             this.sub_types = e.sub_types;
-            this.sub_types.push({ id: null, name: "None", limit: null });
+            this.sub_types.unshift({ id: null, name: "None", limit: null });
         }
     },
     computed: {

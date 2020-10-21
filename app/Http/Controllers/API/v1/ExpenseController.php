@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Employee;
 use App\Models\Expense;
-use App\Models\ExpenseDetail;
 use App\Models\ExpenseType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,9 +17,13 @@ class ExpenseController extends Controller
     public function __construct()
     {
         $this->middleware(['permission:view all expenses'], ['only' => ['index']]);
+
         $this->middleware(['permission:view expenses'], ['only' => ['show']]);
+
         $this->middleware(['permission:add expenses'], ['only' => ['create', 'store']]);
+
         $this->middleware(['permission:edit expenses'], ['only' => ['edit', 'update']]);
+
         $this->middleware(['permission:delete expenses'], ['only' => ['destroy']]);
     }
 
@@ -51,8 +54,6 @@ class ExpenseController extends Controller
             'expense_type_id' => ['required'],
 
             'employee_id' => ['required'],
-
-            // 'expense_details' => ['required']
         ]);
     }
 
@@ -77,13 +78,86 @@ class ExpenseController extends Controller
 
             switch ($request->status) {
 
-                case 'Cancelled Expenses':
-
+                case 'Archived Expenses':
                     $expenses = $expenses->onlyTrashed();
 
                     break;
+                case 'Cancelled Expenses':
+
+                    $expenses = $expenses->where([
+                        ["expense_report_id", "<>", null],
+                        // ["submitted_at", "<>", null],
+                        // ["approved_at", "<>", null],
+                        // ["rejected_at", "=", null],
+                        ["cancelled_at", "<>", null],
+                    ]);
+
+                    break;
+                case 'Reimbursed Expenses':
+
+                    $expenses = $expenses->where([
+                        ["expense_report_id", "<>", null],
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "<>", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                        ["paid_at", "<>", null],
+                    ]);
+
+                    break;
+                case 'Rejected Expenses':
+
+                    $expenses = $expenses->where([
+                        ["expense_report_id", "<>", null],
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "<>", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
+                case 'Approved Expenses':
+
+                    $expenses = $expenses->where([
+                        ["expense_report_id", "<>", null],
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "<>", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
+                case 'Submitted Expenses':
+
+                    $expenses = $expenses->where([
+                        ["expense_report_id", "<>", null],
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
+                case 'Unsubmitted Expenses':
+
+                    $expenses = $expenses->where([
+                        ["expense_report_id", "<>", null],
+                        ["submitted_at", "=", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+
+                    break;
                 case 'Unreported Expenses':
-                    $expenses = $expenses->where("expense_report_id", null);
+
+                    $expenses = $expenses->where([
+                        ["expense_report_id", "=", null],
+                        ["submitted_at", "=", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
 
                     break;
                 default:
@@ -170,6 +244,8 @@ class ExpenseController extends Controller
 
         $expense->expense_type_id = $request->expense_type_id;
 
+        $expense->sub_type_id = $request->sub_type_id;
+
         $expense->employee_id  = $request->employee_id;
 
         $expense->vendor_id  = $request->vendor_id;
@@ -177,21 +253,6 @@ class ExpenseController extends Controller
         $expense->details  = json_encode($request->details);
 
         $expense->save();
-
-        // foreach ($request->expense_details as $key => $value) {
-
-        //     $expense_detail = new ExpenseDetail();
-
-        //     $expense_detail->description = $value["particular"];
-
-        //     $expense_detail->amount = $value["particular_amount"];
-
-        //     $expense_detail->reimbursable_amount = $value["particular_reimbursable_amount"];
-
-        //     $expense_detail->expense_id = $expense->id;
-
-        //     $expense_detail->save();
-        // }
 
         activity()
             ->withProperties([
@@ -274,18 +335,20 @@ class ExpenseController extends Controller
                     'employee_id' => ['required'],
                 ]);
 
-                $employee = Employee::findOrFail($request->employee_id);
+                $employee = Employee::withTrashed()->findOrFail($request->employee_id);
 
                 $this->validator($request->all(), $id, $employee->remaining_fund)->validate();
 
                 $expense = Expense::findOrFail($id);
+
+                $expense_type = ExpenseType::withTrashed()->findOrFail($request->expense_type_id);
 
                 // // Prevent update if expense has an approve expense report and user is not admin
                 // if(true) {
                 //     abort(403);
                 // }
 
-                $expense->description = $request->description;
+                $expense->description = $request->description ?? $expense_type->name;
 
                 $expense->receipt_number = $request->receipt_number;
 
@@ -293,42 +356,23 @@ class ExpenseController extends Controller
 
                 $expense->amount = $request->amount;
 
+                $expense->revolving_fund = $request->revolving_fund;
+
                 $expense->reimbursable_amount = $request->reimbursable_amount;
 
                 $expense->remarks = $request->remarks;
 
                 $expense->expense_type_id = $request->expense_type_id;
 
+                $expense->sub_type_id = $request->sub_type_id;
+
                 $expense->employee_id  = $request->employee_id;
 
                 $expense->vendor_id  = $request->vendor_id;
 
+                $expense->details  = json_encode($request->details);
+
                 $expense->save();
-
-                foreach ($expense->expense_details as $expense_detail) {
-
-                    $expense_detail->delete();
-                }
-
-                foreach ($request->expense_details as $key => $value) {
-
-                    $expense_detail = ExpenseDetail::withTrashed()->updateOrCreate(
-
-                        ['id' => $value["id"]],
-
-                        [
-                            'description' => $value["description"],
-
-                            'amount' => $value["amount"],
-
-                            'reimbursable_amount' => $value["reimbursable_amount"],
-
-                            'expense_id' => $expense->id,
-
-                            'deleted_at' => null,
-                        ]
-                    );
-                }
 
                 activity()
                     ->withProperties([
@@ -341,24 +385,13 @@ class ExpenseController extends Controller
                     ])
                     ->log("Updated Expense");
 
-                // foreach ($request->expense_details as $key => $value) {
-                //     $expense_detail = ExpenseDetail::updateOrCreate(
-                //         ['description' => 'Oakland', 'destination' => 'San Diego'],
-                //         ['price' => 99, 'discounted' => 1]
-                //     );
-
-                //     // $expense_detail = new ExpenseDetail();
-                //     // $expense_detail->description = $value["particular"];
-                //     // $expense_detail->amount = $value["particular_amount"];
-                //     // $expense_detail->save();
-                // }
-
                 break;
         }
 
         return response(
             [
-                'message' => 'Updated successfully'
+                'message' => 'Updated successfully',
+                'sub_type' => $request->sub_type_id
             ],
             201
         );

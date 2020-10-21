@@ -160,7 +160,7 @@
                                         >
                                             <span>
                                                 <div
-                                                    class="orange--text text-capitalize"
+                                                    class="blue-grey--text text-capitalize"
                                                 >
                                                     Unreported Expenses
                                                 </div>

@@ -8,24 +8,43 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Expense extends Model
 {
-    use SoftDeletes;
-    // use LogsActivity;
+    use SoftDeletes, LogsActivity;
 
     protected $dates = ['deleted_at'];
 
-    // protected static $logUnguarded = true;
+    /**
+     * Activity Logs Configuration
+     *
+     * 
+     */
 
-    // // protected static $logAttributes = ['description', 'amount'];
+    // // log changes to all the $fillable/$guarded attributes of the model
+    protected static $logUnguarded = true;
+    // protected static $logFillable = true;
 
-    // // protected static $ignoreChangedAttributes = ['text'];
+    // // log the changed attributes for all events
+    protected static $logAttributes = ['*'];
 
-    // // Logging only the changed attributes
-    // protected static $logOnlyDirty = true;
+    // // Ignoring attributes from logging
+    protected static $logAttributesToIgnore = [ 'updated_at'];
 
-    // public function getDescriptionForEvent(string $eventName): string
-    // {
-    //     return "Record has been {$eventName}";
-    // }
+    // // only created and updated event will be logged
+    // protected static $recordEvents = ['created', 'updated']
+
+    // // logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    // // prevents the package from storing empty logs
+    // protected static $submitEmptyLogs = false;
+
+    // // customizong the log name
+    protected static $logName = "expense";
+
+    // // logging description
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "{$eventName} expense";
+    }
 
     /**
      * The attributes that are not mass assignable.
@@ -125,14 +144,23 @@ class Expense extends Model
         $cancelled = is_null($this->cancelled_at);
         $rejected = is_null($this->rejected_at);
         $deleted = is_null($this->deleted_at);
-
-        $paid = is_null($this->payment_id);
+        $paid = is_null($this->paid_at);
 
         if (!$deleted) {
             $arr = [
-                'color' => 'red',
+                'color' => 'grey',
                 'remarks' => 'Expense was deleted',
                 'status' => 'Deleted',
+            ];
+
+            return $arr;
+        }
+
+        if (!$paid) {
+            $arr = [
+                'color' => 'green',
+                'remarks' => 'Expense was paid/reimbursed',
+                'status' => 'Reimbursed',
             ];
 
             return $arr;
@@ -183,7 +211,7 @@ class Expense extends Model
 
         if (!$approved) {
             $arr = [
-                'color' => 'blue',
+                'color' => 'cyan',
                 'remarks' => 'Processing Payment',
                 'status' => 'Approved',
             ];
@@ -203,7 +231,7 @@ class Expense extends Model
 
         if (!$submitted) {
             $arr = [
-                'color' => 'orange',
+                'color' => 'blue',
                 'remarks' => 'Submitted expense for approval',
                 'status' => 'Submitted',
             ];
@@ -213,9 +241,20 @@ class Expense extends Model
 
         if ($reported) {
             $arr = [
-                'color' => 'orange',
+                'color' => 'grey',
                 'remarks' => 'Expense is not associated with report',
                 'status' => 'Unreported',
+            ];
+
+            return $arr;
+        }
+
+        if (!$reported && $submitted) {
+
+            $arr = [
+                'color' => 'orange',
+                'remarks' => 'Expense is not yet submitted',
+                'status' => 'Unsubmitted',
             ];
 
             return $arr;

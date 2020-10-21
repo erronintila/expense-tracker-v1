@@ -22,6 +22,9 @@ class CreateExpenseReportsTable extends Migration
             $table->text('notes')->nullable();
             $table->text('comments')->nullable();
 
+            $table->date('submission_due_date')->nullable();
+            $table->date('approval_due_date')->nullable();
+
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamp('approved_at')->nullable();

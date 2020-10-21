@@ -291,13 +291,16 @@
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ formatNumber(item.amount) }}
                     </template>
-                    <template v-slot:[`item.expense_report`]="{ item }">
+                    <template v-slot:[`item.revolving_fund`]="{ item }">
+                        {{ formatNumber(item.revolving_fund) }}
+                    </template>
+                    <!-- <template v-slot:[`item.expense_report`]="{ item }">
                         {{
                             item.expense_report == null
                                 ? "None"
                                 : item.expense_report.code
                         }}
-                    </template>
+                    </template> -->
                     <template v-slot:[`item.status.status`]="{ item }">
                         <v-chip :color="item.status.color" dark small>{{
                             item.status.status
@@ -325,7 +328,9 @@
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
-                            <td></td>
+                            <td>
+                                <strong>{{ totalReplenishment }}</strong>
+                            </td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -405,7 +410,7 @@ export default {
                 { text: "Employee", value: "employee_name", sortable: false },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Report", value: "expense_report", sortable: false },
+                { text: "To replenish", value: "revolving_fund", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status", sortable: false  },
                 { text: "Actions", value: "actions", sortable: false },
@@ -421,8 +426,10 @@ export default {
                 "All Expenses",
                 "Unreported Expenses",
                 "Unsubmitted Expenses",
+                "Submitted Expenses",
                 "Approved Expenses",
                 "Rejected Expenses",
+                "Cancelled Expenses",
                 "Reimbursed Expenses",
                 "Archived Expenses"
             ],
@@ -430,6 +437,7 @@ export default {
             search: "",
             totalItems: 0,
             totalAmount: 0,
+            totalReplenishment: 0,
             options: {
                 sortBy: ["created_at"],
                 sortDesc: [true],
@@ -704,6 +712,10 @@ export default {
         items() {
             this.totalAmount = this.formatNumber(
                 this.items.reduce((total, item) => total + item.amount, 0)
+            );
+
+            this.totalReplenishment = this.formatNumber(
+                this.items.reduce((total, item) => total + item.revolving_fund, 0)
             );
         }
     },

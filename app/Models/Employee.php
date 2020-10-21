@@ -5,10 +5,11 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Employee extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
 
     /**
      * The attributes that are not mass assignable.
@@ -36,6 +37,40 @@ class Employee extends Model
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Activity Logs Configuration
+     *
+     * 
+     */
+
+    // // log changes to all the $fillable/$guarded attributes of the model
+    protected static $logUnguarded = true;
+    // protected static $logFillable = true;
+
+    // // log the changed attributes for all events
+    protected static $logAttributes = ['*'];
+
+    // // Ignoring attributes from logging
+    protected static $logAttributesToIgnore = [ 'updated_at'];
+
+    // // only created and updated event will be logged
+    // protected static $recordEvents = ['created', 'updated']
+
+    // // logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    // // prevents the package from storing empty logs
+    // protected static $submitEmptyLogs = false;
+
+    // // customizong the log name
+    protected static $logName = "employee";
+
+    // // logging description
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "{$eventName} employee";
+    }
 
     /**
      * Displays the user account associated with employee.

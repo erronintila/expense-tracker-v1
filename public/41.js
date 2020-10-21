@@ -382,6 +382,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -410,8 +415,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Amount",
         value: "amount"
       }, {
-        text: "Report",
-        value: "expense_report",
+        text: "To replenish",
+        value: "revolving_fund",
         sortable: false
       }, {
         text: "Last Updated",
@@ -434,11 +439,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       expense_type: 0,
       expense_types: [],
       status: "All Expenses",
-      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Approved Expenses", "Rejected Expenses", "Reimbursed Expenses", "Archived Expenses"],
+      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Reimbursed Expenses", "Archived Expenses"],
       selected: [],
       search: "",
       totalItems: 0,
       totalAmount: 0,
+      totalReplenishment: 0,
       options: {
         sortBy: ["created_at"],
         sortDesc: [true],
@@ -691,6 +697,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     items: function items() {
       this.totalAmount = this.formatNumber(this.items.reduce(function (total, item) {
         return total + item.amount;
+      }, 0));
+      this.totalReplenishment = this.formatNumber(this.items.reduce(function (total, item) {
+        return total + item.revolving_fund;
       }, 0));
     }
   },
@@ -1386,17 +1395,13 @@ var render = function() {
                         }
                       },
                       {
-                        key: "item.expense_report",
+                        key: "item.revolving_fund",
                         fn: function(ref) {
                           var item = ref.item
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(
-                                  item.expense_report == null
-                                    ? "None"
-                                    : item.expense_report.code
-                                ) +
+                                _vm._s(_vm.formatNumber(item.revolving_fund)) +
                                 "\n                "
                             )
                           ]
@@ -1514,7 +1519,11 @@ var render = function() {
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
                             _vm._v(" "),
-                            _c("td"),
+                            _c("td", [
+                              _c("strong", [
+                                _vm._v(_vm._s(_vm.totalReplenishment))
+                              ])
+                            ]),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),

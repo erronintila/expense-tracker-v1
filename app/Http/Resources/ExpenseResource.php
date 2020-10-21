@@ -6,6 +6,8 @@ use App\Models\ExpenseReport;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use function GuzzleHttp\json_decode;
+
 class ExpenseResource extends JsonResource
 {
     /**
@@ -27,7 +29,10 @@ class ExpenseResource extends JsonResource
             'revolving_fund' => $this->revolving_fund,
             'reimbursable_amount' => $this->reimbursable_amount,
             'remarks' => $this->remarks,
-            'expense_type' => $this->expense_type,
+            'expense_type' => new ExpenseTypeResource($this->expense_type),
+            'expense_type_id' => $this->expense_type_id,
+            'sub_type' => $this->sub_type,
+            'sub_type_id' => $this->sub_type_id,
             'employee' => new EmployeeResource($this->employee),
             'vendor' => $this->vendor,
             'employee_name' => $this->employee->first_name . " " . $this->employee->last_name,
@@ -41,7 +46,7 @@ class ExpenseResource extends JsonResource
             'expense_report_id' => $this->expense_report_id,
             'expense_report' => $this->expense_report,
             // 'expense_report' => $this->expense_report()->withTrashed()->get(),
-            'details' => $this->details,
+            'details' => json_decode($this->details),
             'status' => $this->status(),
         ];
     }
