@@ -7,12 +7,15 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, SoftDeletes, HasRoles;
+    use HasApiTokens, Notifiable, SoftDeletes, HasRoles, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +43,53 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Activity Logs Configuration
+     *
+     * 
+     */
+
+    // // log changes to all the $fillable/$guarded attributes of the model
+    // protected static $logUnguarded = true;
+    protected static $logFillable = true;
+
+    // // log the changed attributes for all events
+    protected static $logAttributes = ['*'];
+
+    // // Ignoring attributes from logging
+    protected static $logAttributesToIgnore = ['updated_at'];
+
+    // // only created and updated event will be logged
+    // protected static $recordEvents = ['created', 'updated']
+
+    // // logging only the changed attributes
+    protected static $logOnlyDirty = true;
+
+    // // prevents the package from storing empty logs
+    // protected static $submitEmptyLogs = false;
+
+    // // customizong the log name
+    protected static $logName = "vendor";
+
+    // // logging description
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "{$eventName} user";
+    }
+
+    // // used to fill properties and add custom fields before the activity is saved.
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+
+        $activity->properties = $activity->properties->merge([
+            'custom' => [
+                'table' => 'users',
+                'causer_role' => $role,
+            ],
+        ]);
+    }
 
     public function employee()
     {

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Employee extends Model
@@ -70,6 +72,19 @@ class Employee extends Model
     public function getDescriptionForEvent(string $eventName): string
     {
         return "{$eventName} employee";
+    }
+
+    // // used to fill properties and add custom fields before the activity is saved.
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+
+        $activity->properties = $activity->properties->merge([
+            'custom' => [
+                'table' => 'employees',
+                'causer_role' => $role,
+            ],
+        ]);
     }
 
     /**

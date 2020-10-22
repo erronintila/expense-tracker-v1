@@ -254,16 +254,16 @@ class ExpenseController extends Controller
 
         $expense->save();
 
-        activity()
-            ->withProperties([
-                'attributes' => [
-                    ["text" => "Description", "value" => $expense->description],
-                    ["text" => "Amount", "value" => $expense->amount],
-                ],
-                'link' => "/admin/expenses/{$expense->id}",
-                'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
-            ])
-            ->log("Created Expense");
+        // activity()
+        //     ->withProperties([
+        //         'attributes' => [
+        //             ["text" => "Description", "value" => $expense->description],
+        //             ["text" => "Amount", "value" => $expense->amount],
+        //         ],
+        //         'link' => "/admin/expenses/{$expense->id}",
+        //         'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
+        //     ])
+        //     ->log("Created Expense");
 
         return response(
             [
@@ -374,16 +374,16 @@ class ExpenseController extends Controller
 
                 $expense->save();
 
-                activity()
-                    ->withProperties([
-                        'attributes' => [
-                            ["text" => "Description", "value" => $expense->description],
-                            ["text" => "Amount", "value" => $expense->amount],
-                        ],
-                        'link' => "/admin/expenses/{$expense->id}",
-                        'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
-                    ])
-                    ->log("Updated Expense");
+                // activity()
+                //     ->withProperties([
+                //         'attributes' => [
+                //             ["text" => "Description", "value" => $expense->description],
+                //             ["text" => "Amount", "value" => $expense->amount],
+                //         ],
+                //         'link' => "/admin/expenses/{$expense->id}",
+                //         'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
+                //     ])
+                //     ->log("Updated Expense");
 
                 break;
         }
@@ -418,16 +418,16 @@ class ExpenseController extends Controller
 
                 $expense->delete();
 
-                activity()
-                    ->withProperties([
-                        'attributes' => [
-                            ["text" => "Description", "value" => $expense->description],
-                            ["text" => "Amount", "value" => $expense->amount],
-                        ],
-                        'link' => "/admin/expenses/{$expense->id}",
-                        'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
-                    ])
-                    ->log("Cancelled Expense");
+                // activity()
+                //     ->withProperties([
+                //         'attributes' => [
+                //             ["text" => "Description", "value" => $expense->description],
+                //             ["text" => "Amount", "value" => $expense->amount],
+                //         ],
+                //         'link' => "/admin/expenses/{$expense->id}",
+                //         'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
+                //     ])
+                //     ->log("Cancelled Expense");
             }
         } else {
             $expense = Expense::findOrFail($id);

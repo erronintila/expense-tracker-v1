@@ -202,17 +202,17 @@ class PaymentController extends Controller
             }
         }
 
-        activity()
-            ->withProperties([
-                'attributes' => [
-                    ["text" => "Description", "value" => $payment->description],
-                    ["text" => "Date", "value" => $payment->date],
-                    ["text" => "Amount", "value" => $payment->amount],
-                ],
-                'link' => "/admin/payments/{$payment->id}",
-                'details' => "{$payment->description} with amount of {$payment->amount}"
-            ])
-            ->log("Created Payment");
+        // activity()
+        //     ->withProperties([
+        //         'attributes' => [
+        //             ["text" => "Description", "value" => $payment->description],
+        //             ["text" => "Date", "value" => $payment->date],
+        //             ["text" => "Amount", "value" => $payment->amount],
+        //         ],
+        //         'link' => "/admin/payments/{$payment->id}",
+        //         'details' => "{$payment->description} with amount of {$payment->amount}"
+        //     ])
+        //     ->log("Created Payment");
 
         return response(
             [
@@ -404,17 +404,17 @@ class PaymentController extends Controller
                     $expense_report->save();
                 }
 
-                activity()
-                    ->withProperties([
-                        'attributes' => [
-                            ["text" => "Description", "value" => $payment->description],
-                            ["text" => "Date", "value" => $payment->date],
-                            ["text" => "Amount", "value" => $payment->amount],
-                        ],
-                        'link' => "/admin/payments/{$payment->id}",
-                        'details' => "{$payment->description} with amount of {$payment->amount}"
-                    ])
-                    ->log("Cancelled Payment");
+                // activity()
+                //     ->withProperties([
+                //         'attributes' => [
+                //             ["text" => "Description", "value" => $payment->description],
+                //             ["text" => "Date", "value" => $payment->date],
+                //             ["text" => "Amount", "value" => $payment->amount],
+                //         ],
+                //         'link' => "/admin/payments/{$payment->id}",
+                //         'details' => "{$payment->description} with amount of {$payment->amount}"
+                //     ])
+                //     ->log("Cancelled Payment");
             }
         } else {
 
@@ -429,17 +429,17 @@ class PaymentController extends Controller
                 $expense_report->save();
             }
 
-            activity()
-                ->withProperties([
-                    'attributes' => [
-                        ["text" => "Description", "value" => $payment->description],
-                        ["text" => "Date", "value" => $payment->date],
-                        ["text" => "Amount", "value" => $payment->amount],
-                    ],
-                    'link' => "/admin/adjustments/{$payment->id}",
-                    'details' => "{$payment->description} with amount of {$payment->amount}"
-                ])
-                ->log("Cancelled Payment");
+            // activity()
+            //     ->withProperties([
+            //         'attributes' => [
+            //             ["text" => "Description", "value" => $payment->description],
+            //             ["text" => "Date", "value" => $payment->date],
+            //             ["text" => "Amount", "value" => $payment->amount],
+            //         ],
+            //         'link' => "/admin/adjustments/{$payment->id}",
+            //         'details' => "{$payment->description} with amount of {$payment->amount}"
+            //     ])
+            //     ->log("Cancelled Payment");
         }
 
         return response(

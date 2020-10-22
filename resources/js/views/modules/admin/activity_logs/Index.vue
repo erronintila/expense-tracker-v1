@@ -180,30 +180,36 @@
             >
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon
+                        :key="item.id"
                         small
                         class="mr-2"
-                        @click="$router.push(item.properties.link)"
+                        @click="$router.push(`/admin/departments`)"
                     >
                         mdi-open-in-new
                     </v-icon>
                 </template>
+                <template v-slot:[`item.user`]="{ item }">
+                    {{ item.user == null ? "Default" : item.user.name }}
+                </template>
                 <template v-slot:expanded-item="{ headers, item }">
                     <td :colspan="headers.length">
-                        <v-container>
-                            <table>
-                                <tr
-                                    v-for="item in item.properties.attributes"
-                                    :key="item.length"
-                                >
+                        <v-container :key="item.id">
+                            <table
+                                v-for="(items, key) in item.properties"
+                                :key="items.id"
+                            >
+                                <div class="green--text text-capitalize">
+                                    {{ key }}
+                                </div>
+                                <tr v-for="(item, key) in items" :key="key">
                                     <td>
-                                        <strong>{{ item.text }}</strong>
+                                        <strong>{{ key }}</strong>
                                     </td>
                                     <td>:</td>
-                                    <td>{{ item.value }}</td>
+                                    <td>{{ item }}</td>
                                 </tr>
                             </table>
                         </v-container>
-                        {{ item.length }}
                     </td>
                 </template>
             </v-data-table>
@@ -217,13 +223,8 @@ export default {
         return {
             loading: true,
             headers: [
-                { text: "User", value: "user.name", sortable: false },
+                { text: "User", value: "user", sortable: false },
                 { text: "Description", value: "description", sortable: false },
-                {
-                    text: "Details",
-                    value: "properties.details",
-                    sortable: false
-                },
                 { text: "Created", value: "created_at" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
@@ -273,7 +274,8 @@ export default {
                         _this.loading = false;
 
                         let export_data = items.map(item => ({
-                            user: item.user.name,
+                            user:
+                                item.user == null ? "Default" : item.user.name,
                             description: item.description,
                             details: item.properties.details,
                             "created at": item.created_at

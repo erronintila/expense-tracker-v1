@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Job extends Model
 {
     use SoftDeletes, LogsActivity;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -49,7 +51,7 @@ class Job extends Model
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = [ 'updated_at'];
+    protected static $logAttributesToIgnore = ['updated_at'];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
@@ -68,7 +70,20 @@ class Job extends Model
     {
         return "{$eventName} job";
     }
-    
+
+    // // used to fill properties and add custom fields before the activity is saved.
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+
+        $activity->properties = $activity->properties->merge([
+            'custom' => [
+                'table' => 'jobs',
+                'causer_role' => $role,
+            ],
+        ]);
+    }
+
     /**
      * Displays the department associated with job designation.
      *
@@ -78,7 +93,7 @@ class Job extends Model
     {
         return $this->belongsTo(Department::class);
     }
-    
+
     /**
      * Displays the employees associated with job designation.
      *
@@ -88,7 +103,7 @@ class Job extends Model
     {
         return $this->hasMany(Employee::class);
     }
-    
+
     /**
      * Displays the job histories associated with job designation.
      *

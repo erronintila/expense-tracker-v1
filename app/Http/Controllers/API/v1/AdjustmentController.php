@@ -148,17 +148,17 @@ class AdjustmentController extends Controller
             }
         }
 
-        activity()
-            ->withProperties([
-                'attributes' => [
-                    ["text" => "Description", "value" => $adjustment->description],
-                    ["text" => "Added Amount", "value" => $adjustment->add_amount],
-                    ["text" => "Subtracted Amount", "value" => $adjustment->subtract_amount],
-                ],
-                'link' => "/admin/adjustments",
-                'details' => "{$adjustment->description}"
-            ])
-            ->log("Managed Revolving Fund");
+        // activity()
+        //     ->withProperties([
+        //         'attributes' => [
+        //             ["text" => "Description", "value" => $adjustment->description],
+        //             ["text" => "Added Amount", "value" => $adjustment->add_amount],
+        //             ["text" => "Subtracted Amount", "value" => $adjustment->subtract_amount],
+        //         ],
+        //         'link' => "/admin/adjustments",
+        //         'details' => "{$adjustment->description}"
+        //     ])
+        //     ->log("Managed Revolving Fund");
 
         return response(
             [

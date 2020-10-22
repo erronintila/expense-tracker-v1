@@ -27,7 +27,7 @@ class ActivityLogResource extends JsonResource
             'causer_type' => $this->causer_type,
             'causer_id' => $this->causer_id,
             'properties' => $this->properties,
-            'user' => new UserResource(User::findOrFail($this->causer_id)),
+            'user' => new UserResource(User::find($this->causer_id ?? 0)),
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
         ];

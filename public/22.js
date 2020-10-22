@@ -228,21 +228,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       loading: true,
       headers: [{
         text: "User",
-        value: "user.name",
+        value: "user",
         sortable: false
       }, {
         text: "Description",
         value: "description",
-        sortable: false
-      }, {
-        text: "Details",
-        value: "properties.details",
         sortable: false
       }, {
         text: "Created",
@@ -307,7 +309,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.loading = false;
           var export_data = items.map(function (item) {
             return {
-              user: item.user.name,
+              user: item.user == null ? "Default" : item.user.name,
               description: item.description,
               details: item.properties.details,
               "created at": item.created_at
@@ -898,11 +900,12 @@ var render = function() {
                       _c(
                         "v-icon",
                         {
+                          key: item.id,
                           staticClass: "mr-2",
                           attrs: { small: "" },
                           on: {
                             click: function($event) {
-                              return _vm.$router.push(item.properties.link)
+                              return _vm.$router.push("/admin/departments")
                             }
                           }
                         },
@@ -911,6 +914,21 @@ var render = function() {
                             "\n                    mdi-open-in-new\n                "
                           )
                         ]
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "item.user",
+                  fn: function(ref) {
+                    var item = ref.item
+                    return [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(
+                            item.user == null ? "Default" : item.user.name
+                          ) +
+                          "\n            "
                       )
                     ]
                   }
@@ -925,29 +943,44 @@ var render = function() {
                         "td",
                         { attrs: { colspan: headers.length } },
                         [
-                          _c("v-container", [
-                            _c(
-                              "table",
-                              _vm._l(item.properties.attributes, function(
-                                item
-                              ) {
-                                return _c("tr", { key: item.length }, [
-                                  _c("td", [
-                                    _c("strong", [_vm._v(_vm._s(item.text))])
-                                  ]),
+                          _c(
+                            "v-container",
+                            { key: item.id },
+                            _vm._l(item.properties, function(items, key) {
+                              return _c(
+                                "table",
+                                { key: items.id },
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "green--text text-capitalize"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(key) +
+                                          "\n                            "
+                                      )
+                                    ]
+                                  ),
                                   _vm._v(" "),
-                                  _c("td", [_vm._v(":")]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v(_vm._s(item.value))])
-                                ])
-                              }),
-                              0
-                            )
-                          ]),
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(item.length) +
-                              "\n                "
+                                  _vm._l(items, function(item, key) {
+                                    return _c("tr", { key: key }, [
+                                      _c("td", [
+                                        _c("strong", [_vm._v(_vm._s(key))])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(_vm._s(item))])
+                                    ])
+                                  })
+                                ],
+                                2
+                              )
+                            }),
+                            0
                           )
                         ],
                         1

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Payment extends Model
@@ -24,7 +26,7 @@ class Payment extends Model
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = [ 'updated_at'];
+    protected static $logAttributesToIgnore = ['updated_at'];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
@@ -42,6 +44,19 @@ class Payment extends Model
     public function getDescriptionForEvent(string $eventName): string
     {
         return "{$eventName} payment";
+    }
+
+    // // used to fill properties and add custom fields before the activity is saved.
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+
+        $activity->properties = $activity->properties->merge([
+            'custom' => [
+                'table' => 'payments',
+                'causer_role' => $role,
+            ],
+        ]);
     }
 
     /**

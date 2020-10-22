@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Vendor extends Model
@@ -51,7 +53,7 @@ class Vendor extends Model
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = [ 'updated_at'];
+    protected static $logAttributesToIgnore = ['updated_at'];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
@@ -69,6 +71,19 @@ class Vendor extends Model
     public function getDescriptionForEvent(string $eventName): string
     {
         return "{$eventName} vendor";
+    }
+
+    // // used to fill properties and add custom fields before the activity is saved.
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+
+        $activity->properties = $activity->properties->merge([
+            'custom' => [
+                'table' => 'vendors',
+                'causer_role' => $role,
+            ],
+        ]);
     }
 
     public function expenses()
