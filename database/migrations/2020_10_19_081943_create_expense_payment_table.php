@@ -19,15 +19,15 @@ class CreateExpensePaymentTable extends Migration
             $table->unsignedBigInteger('payment_id');
             $table->timestamps();
 
-            $table->foreign('expense_id')
-                ->references('id')
-                ->on('expenses')
-                ->onDelete('cascade');
+            // $table->foreign('expense_id')
+            //     ->references('id')
+            //     ->on('expenses')
+            //     ->onDelete('cascade');
 
-            $table->foreign('payment_id')
-                ->references('id')
-                ->on('payments')
-                ->onDelete('cascade');
+            // $table->foreign('payment_id')
+            //     ->references('id')
+            //     ->on('payments')
+            //     ->onDelete('cascade');
         });
     }
 

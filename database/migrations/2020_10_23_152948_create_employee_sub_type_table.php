@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExpenseTypeVendorTable extends Migration
+class CreateEmployeeSubTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,21 @@ class CreateExpenseTypeVendorTable extends Migration
      */
     public function up()
     {
-        Schema::create('expense_type_vendor', function (Blueprint $table) {
+        Schema::create('employee_sub_type', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('expense_type_id');
-            $table->unsignedBigInteger('vendor_id');
+            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('sub_type_id');
+            $table->double('limit', 10, 2)->nullable();
             $table->timestamps();
 
-            // $table->foreign('expense_type_id')
+            // $table->foreign('sub_type_id')
             //     ->references('id')
-            //     ->on('expense_types')
+            //     ->on('sub_types')
             //     ->onDelete('cascade');
 
-            // $table->foreign('vendor_id')
+            // $table->foreign('employee_id')
             //     ->references('id')
-            //     ->on('vendors')
+            //     ->on('employees')
             //     ->onDelete('cascade');
         });
     }
@@ -38,6 +39,6 @@ class CreateExpenseTypeVendorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expense_type_vendor');
+        Schema::dropIfExists('employee_sub_type');
     }
 }

@@ -17,17 +17,18 @@ class CreateEmployeeExpenseTypeTable extends Migration
             $table->id();
             $table->unsignedBigInteger('employee_id');
             $table->unsignedBigInteger('expense_type_id');
+            $table->double('limit', 10, 2)->nullable();
             $table->timestamps();
 
-            $table->foreign('expense_type_id')
-                ->references('id')
-                ->on('expense_types')
-                ->onDelete('cascade');
+            // $table->foreign('expense_type_id')
+            //     ->references('id')
+            //     ->on('expense_types')
+            //     ->onDelete('cascade');
 
-            $table->foreign('employee_id')
-                ->references('id')
-                ->on('employees')
-                ->onDelete('cascade');
+            // $table->foreign('employee_id')
+            //     ->references('id')
+            //     ->on('employees')
+            //     ->onDelete('cascade');
         });
     }
 
