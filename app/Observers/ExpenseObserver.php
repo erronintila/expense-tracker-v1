@@ -18,11 +18,11 @@ class ExpenseObserver
 
         // $expense->save();
 
-        // $expense_amount = $expense->amount - $expense->reimbursable_amount;
+        $expense_amount = $expense->amount - $expense->personal_amount;
 
-        // $expense->employee->remaining_fund -= $expense_amount;
+        $expense->employee->remaining_fund -= $expense_amount;
 
-        $expense->employee->remaining_fund -= $expense->revolving_fund;
+        // $expense->employee->remaining_fund -= $expense->revolving_fund;
 
         $expense->employee->save();
     }
@@ -35,13 +35,23 @@ class ExpenseObserver
      */
     public function updated(Expense $expense)
     {
-        $original_revolving_fund = $expense->getOriginal("revolving_fund");
+        // $original_revolving_fund = $expense->getOriginal("revolving_fund");
 
-        // $new_amount = $expense->revolving_fund;
+        // // $new_amount = $expense->revolving_fund;
+
+        // $remaining_fund = $expense->employee->remaining_fund;
+
+        // $expense->employee->remaining_fund = ($remaining_fund + $original_revolving_fund) - $expense->revolving_fund;
+
+        // $expense->employee->save();
+
+        $original_personal_amount = $expense->getOriginal("personal_amount");
+
+        $new_amount = $expense->amount - $expense->personal_amount;
 
         $remaining_fund = $expense->employee->remaining_fund;
 
-        $expense->employee->remaining_fund = ($remaining_fund + $original_revolving_fund) - $expense->revolving_fund;
+        $expense->employee->remaining_fund = ($remaining_fund + $original_personal_amount) - $new_amount;
 
         $expense->employee->save();
     }
@@ -55,8 +65,9 @@ class ExpenseObserver
     public function deleted(Expense $expense)
     {
         // $expense_amount = $expense->revolving_fund;
+        $expense_amount = $expense->amount - $expense->personal_amount;
 
-        $expense->employee->remaining_fund += $expense->revolving_fund;
+        $expense->employee->remaining_fund += $expense_amount;
 
         $expense->employee->save();
     }
@@ -69,7 +80,9 @@ class ExpenseObserver
      */
     public function restored(Expense $expense)
     {
-        $expense->employee->remaining_fund -= $expense->revolving_fund;
+        $expense_amount = $expense->amount - $expense->personal_amount;
+
+        $expense->employee->remaining_fund -= $expense_amount;
 
         $expense->employee->save();
     }
@@ -82,7 +95,9 @@ class ExpenseObserver
      */
     public function forceDeleted(Expense $expense)
     {
-        $expense->employee->remaining_fund += $expense->revolving_fund;
+        $expense_amount = $expense->amount - $expense->personal_amount;
+
+        $expense->employee->remaining_fund += $expense_amount;
 
         $expense->employee->save();
     }

@@ -209,8 +209,8 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatNumber(
-                                                    item.revolving_fund
+                                                mixin_formatNumber(
+                                                    item.amount - item.personal_amount
                                                 )
                                             }}
                                         </td>
@@ -220,8 +220,8 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatNumber(
-                                                    item.amount - item.revolving_fund
+                                                mixin_formatNumber(
+                                                    item.personal_amount
                                                 )
                                             }}
                                         </td>
@@ -262,7 +262,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -274,7 +274,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -286,13 +286,13 @@
                         </td>
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
-                        {{ formatNumber(item.amount) }}
+                        {{ mixin_formatNumber(item.amount) }}
                     </template>
-                    <template v-slot:[`item.revolving_fund`]="{ item }">
-                        {{ formatNumber(item.revolving_fund) }}
+                    <template v-slot:[`item.replenishment`]="{ item }">
+                        {{ mixin_formatNumber(item.amount - item.personal_amount) }}
                     </template>
                     <!-- <template v-slot:[`item.expense_report`]="{ item }">
                         {{
@@ -410,7 +410,7 @@ export default {
                 { text: "Employee", value: "employee_name", sortable: false },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "To replenish", value: "revolving_fund", sortable: false },
+                { text: "To replenish", value: "replenishment", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status", sortable: false  },
                 { text: "Actions", value: "actions", sortable: false },
@@ -431,7 +431,7 @@ export default {
                 "Rejected Expenses",
                 "Cancelled Expenses",
                 "Reimbursed Expenses",
-                "Archived Expenses"
+                // "Archived Expenses"
             ],
             selected: [],
             search: "",
@@ -491,7 +491,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
@@ -516,7 +516,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -538,7 +538,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -646,7 +646,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(
+                            _this.mixin_errorDialog(
                                 `Error ${error.response.status}`,
                                 error.response.statusText
                             );
@@ -690,7 +690,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(
+                            _this.mixin_errorDialog(
                                 `Error ${error.response.status}`,
                                 error.response.statusText
                             );
@@ -710,12 +710,12 @@ export default {
             deep: true
         },
         items() {
-            this.totalAmount = this.formatNumber(
+            this.totalAmount = this.mixin_formatNumber(
                 this.items.reduce((total, item) => total + item.amount, 0)
             );
 
-            this.totalReplenishment = this.formatNumber(
-                this.items.reduce((total, item) => total + item.revolving_fund, 0)
+            this.totalReplenishment = this.mixin_formatNumber(
+                this.items.reduce((total, item) => total + (item.amount - item.personal_amount), 0)
             );
         }
     },

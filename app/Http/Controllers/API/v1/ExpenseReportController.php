@@ -68,23 +68,25 @@ class ExpenseReportController extends Controller
 
             switch ($request->status) {
 
-                case 'Archived Expense Reports':
-                    $expense_reports = $expense_reports->onlyTrashed();
+                // case 'Archived Expense Reports':
+                //     $expense_reports = $expense_reports->onlyTrashed();
 
-                    break;
+                //     break;
                 case 'Overdue Expense Reports':
                     $expense_reports = $expense_reports;
 
                     break;
                 case 'Cancelled Expense Reports':
 
-                    $expense_reports = $expense_reports->where([
-                        ["expense_report_id", "<>", null],
-                        // ["submitted_at", "<>", null],
-                        // ["approved_at", "<>", null],
-                        // ["rejected_at", "=", null],
-                        ["cancelled_at", "<>", null],
-                    ]);
+                    $expense_reports = $expense_reports->onlyTrashed();
+
+                    // $expense_reports = $expense_reports->where([
+                    //     ["expense_report_id", "<>", null],
+                    //     // ["submitted_at", "<>", null],
+                    //     // ["approved_at", "<>", null],
+                    //     // ["rejected_at", "=", null],
+                    //     ["cancelled_at", "<>", null],
+                    // ]);
 
                     break;
                 case 'Reimbursed Expense Reports':

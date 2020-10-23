@@ -18,8 +18,8 @@
                             <v-text-field
                                 v-model="form.name"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.minLength(150)
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(150)
                                 ]"
                                 :counter="150"
                                 :error-messages="errors.name"
@@ -33,8 +33,8 @@
                             <v-text-field
                                 v-model="form.username"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.minLength(50)
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(50)
                                 ]"
                                 :counter="50"
                                 :error-messages="errors.username"
@@ -48,8 +48,8 @@
                             <v-text-field
                                 v-model="form.email"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.email
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.email
                                 ]"
                                 :error-messages="errors.email"
                                 @input="errors.email = []"
@@ -182,7 +182,7 @@ export default {
                         employee_id: _this.form.employee !== null ? _this.form.employee : 0
                     })
                     .then(function(response) {
-                        _this.successDialog(
+                        _this.mixin_successDialog(
                             "Success",
                             "User created successfully"
                         );
@@ -195,7 +195,7 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog("Error", "Please contact tech support");
+                        _this.mixin_errorDialog("Error", "Please contact tech support");
                     });
 
                 return;

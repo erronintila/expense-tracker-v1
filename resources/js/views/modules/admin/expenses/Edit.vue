@@ -17,7 +17,7 @@
                         <v-spacer></v-spacer>
                         <h3 class="title green--text mr-2">
                             Remaining Funds:
-                            {{ formatNumber(form.employee.remaining_fund) }}
+                            {{ mixin_formatNumber(form.employee.remaining_fund) }}
                         </h3>
                     </v-row> -->
 
@@ -42,7 +42,7 @@
                                             >
                                                 <v-text-field
                                                     v-model="form.date"
-                                                    :rules="validation.required"
+                                                    :rules="mixin_validation.required"
                                                     :error-messages="
                                                         errors.date
                                                     "
@@ -65,7 +65,7 @@
                                     <v-col cols="12" md="4">
                                         <v-autocomplete
                                             v-model="form.employee"
-                                            :rules="validation.required"
+                                            :rules="mixin_validation.required"
                                             :items="employees"
                                             :error-messages="errors.employee_id"
                                             @input="errors.employee_id = []"
@@ -164,7 +164,7 @@
                             <v-expansion-panel-header>
                                 <div class="green--text">
                                     Expense Details ({{
-                                        `Remaining Fund: ${formatNumber(
+                                        `Remaining Fund: ${mixin_formatNumber(
                                             form.employee.remaining_fund
                                         )}`
                                     }})
@@ -176,7 +176,7 @@
                                         <v-autocomplete
                                             return-object
                                             v-model="form.expense_type"
-                                            :rules="validation.required"
+                                            :rules="mixin_validation.required"
                                             :items="expense_types"
                                             :error-messages="
                                                 errors.expense_type_id
@@ -194,7 +194,7 @@
                                     <v-col cols="12" md="4">
                                         <v-autocomplete
                                             v-model="form.sub_type"
-                                            :rules="validation.required"
+                                            :rules="mixin_validation.required"
                                             :items="sub_types"
                                             :error-messages="errors.sub_type"
                                             @input="errors.sub_type = []"
@@ -683,7 +683,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
@@ -702,7 +702,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -723,7 +723,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
@@ -750,7 +750,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -826,7 +826,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );

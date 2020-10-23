@@ -233,16 +233,13 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    formatNumber: function formatNumber(data) {
-      return numeral__WEBPACK_IMPORTED_MODULE_1___default()(data).format("0,0.00");
-    },
     print: function print() {
       this.$htmlToPaper("section-to-print");
     }
   },
   computed: {
     total_amount: function total_amount() {
-      return this.formatNumber(this.expense_report.total);
+      return this.mixin_formatNumber(this.expense_report.total);
     }
   },
   watch: {

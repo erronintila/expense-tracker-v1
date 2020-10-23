@@ -19,8 +19,8 @@
                                 <v-text-field
                                     v-model="form.name"
                                     :rules="[
-                                        ...validation.required,
-                                        ...validation.minLength(150)
+                                        ...mixin_validation.required,
+                                        ...mixin_validation.minLength(150)
                                     ]"
                                     :counter="150"
                                     :error-messages="errors.name"
@@ -50,7 +50,7 @@
                             <v-col cols="12" md="9">
                                 <v-text-field
                                     v-model="form.tin"
-                                    :rules="validation.required"
+                                    :rules="mixin_validation.required"
                                     :error-messages="errors.tin"
                                     :counter="100"
                                     label="Tax Identification Number (TIN) *"

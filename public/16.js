@@ -404,7 +404,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     editEmployee: function editEmployee() {
@@ -430,7 +430,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     }
   },
@@ -630,14 +630,14 @@ var render = function() {
                                                           _vm.remaining_fund ==
                                                             _vm.fund
                                                             ? "" +
-                                                                _vm.formatNumber(
+                                                                _vm.mixin_formatNumber(
                                                                   _vm.remaining_fund
                                                                 )
-                                                            : _vm.formatNumber(
+                                                            : _vm.mixin_formatNumber(
                                                                 _vm.remaining_fund
                                                               ) +
                                                                 " / " +
-                                                                _vm.formatNumber(
+                                                                _vm.mixin_formatNumber(
                                                                   _vm.fund
                                                                 )
                                                         ) +
@@ -718,7 +718,7 @@ var render = function() {
                                               [
                                                 _vm._v(
                                                   _vm._s(
-                                                    _vm.formatNumber(
+                                                    _vm.mixin_formatNumber(
                                                       _vm.total_expenses
                                                     )
                                                   )
@@ -781,7 +781,7 @@ var render = function() {
                                                 _vm._v(
                                                   "\n                                        " +
                                                     _vm._s(
-                                                      _vm.formatNumber(
+                                                      _vm.mixin_formatNumber(
                                                         _vm.total_pending_reports
                                                       )
                                                     ) +
@@ -841,7 +841,7 @@ var render = function() {
                                                 _vm._v(
                                                   "\n                                        " +
                                                     _vm._s(
-                                                      _vm.formatNumber(
+                                                      _vm.mixin_formatNumber(
                                                         _vm.total_replenishments
                                                       )
                                                     ) +
@@ -900,7 +900,7 @@ var render = function() {
                                               [
                                                 _vm._v(
                                                   _vm._s(
-                                                    _vm.formatNumber(
+                                                    _vm.mixin_formatNumber(
                                                       _vm.total_reimbursements
                                                     )
                                                   )

@@ -83,7 +83,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error); // console.log(error.response);
           // _this.errors = error.response.data.errors;
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
       }
     }
@@ -165,8 +165,8 @@ var render = function() {
                       _c("v-text-field", {
                         attrs: {
                           counter: 100,
-                          rules: _vm.validation.required.concat(
-                            _vm.validation.minLength(100)
+                          rules: _vm.mixin_validation.required.concat(
+                            _vm.mixin_validation.minLength(100)
                           ),
                           "error-messages": _vm.errors.name[0],
                           label: "Name *",

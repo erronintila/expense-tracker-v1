@@ -577,7 +577,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -673,7 +673,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -713,7 +713,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -752,7 +752,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -766,10 +766,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.getDataFromApi().then(function (data) {
           _this3.items = data.items;
           _this3.totalItems = data.total;
-          _this3.total_fund = _this3.formatNumber(data.items.reduce(function (total, item) {
+          _this3.total_fund = _this3.mixin_formatNumber(data.items.reduce(function (total, item) {
             return total + item.fund;
           }, 0));
-          _this3.total_remaining_fund = _this3.formatNumber(data.items.reduce(function (total, item) {
+          _this3.total_remaining_fund = _this3.mixin_formatNumber(data.items.reduce(function (total, item) {
             return total + item.remaining_fund;
           }, 0));
         });

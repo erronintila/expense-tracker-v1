@@ -349,7 +349,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadEmployees: function loadEmployees() {
@@ -361,7 +361,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -402,7 +402,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
         return;
       }
@@ -505,7 +505,7 @@ var render = function() {
                         [
                           _c("v-autocomplete", {
                             attrs: {
-                              rules: _vm.validation.required,
+                              rules: _vm.mixin_validation.required,
                               items: _vm.employees,
                               "error-messages": _vm.errors.employee,
                               "item-value": "id",
@@ -538,8 +538,8 @@ var render = function() {
                         [
                           _c("v-combobox", {
                             attrs: {
-                              rules: _vm.validation.required.concat(
-                                _vm.validation.minLength(100)
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(100)
                               ),
                               counter: 100,
                               items: [_vm.default_description],
@@ -716,7 +716,7 @@ var render = function() {
                                                     _vm._v(
                                                       "\n                                                    " +
                                                         _vm._s(
-                                                          _vm.formatNumber(
+                                                          _vm.mixin_formatNumber(
                                                             item.reimbursable_amount
                                                           )
                                                         ) +
@@ -786,7 +786,7 @@ var render = function() {
                                                     _vm._v(
                                                       "\n                                                    " +
                                                         _vm._s(
-                                                          _vm.formatDate(
+                                                          _vm.mixin_formatDate(
                                                             item.created_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )
@@ -809,7 +809,7 @@ var render = function() {
                                                     _vm._v(
                                                       "\n                                                    " +
                                                         _vm._s(
-                                                          _vm.formatDate(
+                                                          _vm.mixin_formatDate(
                                                             item.deleted_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )

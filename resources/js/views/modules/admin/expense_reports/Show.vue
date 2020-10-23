@@ -51,7 +51,7 @@
                                 class="elevation-0"
                             >
                                 <template v-slot:[`item.amount`]="{ item }">
-                                    {{ formatNumber(item.amount) }}
+                                    {{ mixin_formatNumber(item.amount) }}
                                 </template>
                                 <template
                                     slot="body.append"
@@ -69,7 +69,7 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            <strong>{{ formatNumber(total) }}</strong>
+                                            <strong>{{ mixin_formatNumber(total) }}</strong>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -91,7 +91,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatNumber(
+                                                mixin_formatNumber(
                                                     item.reimbursable_amount
                                                 )
                                             }}
@@ -117,7 +117,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -129,7 +129,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -186,14 +186,10 @@
 import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import CreateExpense from "./components/CreateExpense";
-import EditExpense from "./components/EditExpense";
 
 export default {
     components: {
         DateRangePicker,
-        CreateExpense,
-        EditExpense
     },
     data() {
         return {
@@ -307,7 +303,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         loadExpenses(emp_id) {
@@ -332,7 +328,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onEdit() {

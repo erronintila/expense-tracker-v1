@@ -574,7 +574,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     load_department_expenses: function load_department_expenses(start, end, employee) {
@@ -614,7 +614,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     load_expense_types_expenses: function load_expense_types_expenses(start, end, employee) {
@@ -654,7 +654,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     load_employees_expenses: function load_employees_expenses(start, end, employee) {
@@ -694,7 +694,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     load_expenses_summary: function load_expenses_summary(start, end, time_unit, employee) {
@@ -755,7 +755,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     load_bar_chart: function load_bar_chart() {
@@ -813,7 +813,7 @@ __webpack_require__.r(__webpack_exports__);
             },
             backgroundColor: "lightgray",
             formatter: function formatter(value, ctx) {
-              return _this6.formatNumber(value) + " %";
+              return _this6.mixin_formatNumber(value) + " %";
             }
           }
         }
@@ -982,7 +982,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     }
   },
@@ -1164,7 +1164,7 @@ var render = function() {
                                       _vm._v(
                                         "\n                                " +
                                           _vm._s(
-                                            _vm.formatNumber(
+                                            _vm.mixin_formatNumber(
                                               _vm.total.expenses_by_date
                                             )
                                           ) +
@@ -1226,7 +1226,7 @@ var render = function() {
                                       _vm._v(
                                         "\n                                " +
                                           _vm._s(
-                                            _vm.formatNumber(
+                                            _vm.mixin_formatNumber(
                                               _vm.total.remaining_fund
                                             )
                                           ) +
@@ -1428,7 +1428,7 @@ var render = function() {
                                                       _vm._v(
                                                         "\n                                                " +
                                                           _vm._s(
-                                                            _vm.formatNumber(
+                                                            _vm.mixin_formatNumber(
                                                               _vm.total
                                                                 .unreported_expenses
                                                             )
@@ -1510,7 +1510,7 @@ var render = function() {
                                                       _vm._v(
                                                         "\n                                                " +
                                                           _vm._s(
-                                                            _vm.formatNumber(
+                                                            _vm.mixin_formatNumber(
                                                               _vm.total
                                                                 .unsubmitted_reports
                                                             )
@@ -1602,7 +1602,7 @@ var render = function() {
                                                       _vm._v(
                                                         "\n                                                " +
                                                           _vm._s(
-                                                            _vm.formatNumber(
+                                                            _vm.mixin_formatNumber(
                                                               _vm.total
                                                                 .pending_for_approval_reports
                                                             )
@@ -1684,7 +1684,7 @@ var render = function() {
                                                       _vm._v(
                                                         "\n                                                " +
                                                           _vm._s(
-                                                            _vm.formatNumber(
+                                                            _vm.mixin_formatNumber(
                                                               _vm.total
                                                                 .awaiting_for_reimbursement_reports
                                                             )

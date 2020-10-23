@@ -22,8 +22,8 @@
                             <v-combobox
                                 v-model="form.description"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.minLength(100)
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(100)
                                 ]"
                                 :counter="100"
                                 :items="[default_description]"
@@ -132,7 +132,7 @@
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            formatNumber(
+                                                            mixin_formatNumber(
                                                                 item.reimbursable_amount
                                                             )
                                                         }}
@@ -170,7 +170,7 @@
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            formatDate(
+                                                            mixin_formatDate(
                                                                 item.created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
@@ -186,7 +186,7 @@
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            formatDate(
+                                                            mixin_formatDate(
                                                                 item.deleted_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
@@ -315,7 +315,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         reject();
                     });
@@ -347,7 +347,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
             });
         },
@@ -400,7 +400,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
 
                 return;

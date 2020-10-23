@@ -221,7 +221,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "login"
         });
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     toProfile: function toProfile() {

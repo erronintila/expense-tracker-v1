@@ -324,7 +324,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -346,7 +346,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -364,7 +364,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               delete_all: true
             }
           }).then(function (response) {
-            _this.successDialog("Success", "Deleted All Logs successfully");
+            _this.mixin_successDialog("Success", "Deleted All Logs successfully");
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -376,7 +376,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -416,7 +416,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });

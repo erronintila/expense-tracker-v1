@@ -96,7 +96,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadDepartments: function loadDepartments() {
@@ -114,7 +114,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onSave: function onSave() {
@@ -140,7 +140,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
         });
@@ -235,7 +235,7 @@ var render = function() {
                           _c("v-autocomplete", {
                             attrs: {
                               items: _vm.departments,
-                              rules: _vm.validation.required,
+                              rules: _vm.mixin_validation.required,
                               "error-messages": _vm.errors.department_id,
                               "item-value": "id",
                               "item-text": "name",
@@ -264,8 +264,8 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.validation.required.concat(
-                                _vm.validation.minLength(100)
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(100)
                               ),
                               counter: 100,
                               "error-messages": _vm.errors.name,

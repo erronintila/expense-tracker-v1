@@ -236,7 +236,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -559,7 +559,7 @@ var render = function() {
                           _vm._v(
                             "\n                    " +
                               _vm._s(
-                                _vm.formatDate(
+                                _vm.mixin_formatDate(
                                   item.updated_at,
                                   "YYYY-MM-DD HH:mm:ss"
                                 )

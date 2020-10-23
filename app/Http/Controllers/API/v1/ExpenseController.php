@@ -47,7 +47,7 @@ class ExpenseController extends Controller
 
             'amount' => ['required', 'numeric', 'gt:0',],
 
-            'reimbursable_amount' => ['required', 'numeric'],
+            // 'reimbursable_amount' => ['required', 'numeric'],
 
             'remarks' => ['nullable'],
 
@@ -78,19 +78,21 @@ class ExpenseController extends Controller
 
             switch ($request->status) {
 
-                case 'Archived Expenses':
-                    $expenses = $expenses->onlyTrashed();
+                // case 'Archived Expenses':
+                //     $expenses = $expenses->onlyTrashed();
 
-                    break;
+                //     break;
                 case 'Cancelled Expenses':
 
-                    $expenses = $expenses->where([
-                        ["expense_report_id", "<>", null],
-                        // ["submitted_at", "<>", null],
-                        // ["approved_at", "<>", null],
-                        // ["rejected_at", "=", null],
-                        ["cancelled_at", "<>", null],
-                    ]);
+                    $expenses = $expenses->onlyTrashed();
+
+                    // $expenses = $expenses->where([
+                    //     ["expense_report_id", "<>", null],
+                    //     // ["submitted_at", "<>", null],
+                    //     // ["approved_at", "<>", null],
+                    //     // ["rejected_at", "=", null],
+                    //     ["cancelled_at", "<>", null],
+                    // ]);
 
                     break;
                 case 'Reimbursed Expenses':
@@ -236,9 +238,9 @@ class ExpenseController extends Controller
 
         $expense->amount = $request->amount;
 
-        $expense->revolving_fund = $request->revolving_fund;
+        $expense->personal_amount = $request->personal_amount;
 
-        $expense->reimbursable_amount = $request->reimbursable_amount;
+        // $expense->reimbursable_amount = $request->reimbursable_amount;
 
         $expense->remarks = $request->remarks;
 
@@ -356,9 +358,9 @@ class ExpenseController extends Controller
 
                 $expense->amount = $request->amount;
 
-                $expense->revolving_fund = $request->revolving_fund;
+                $expense->personal_amount = $request->personal_amount;
 
-                $expense->reimbursable_amount = $request->reimbursable_amount;
+                // $expense->reimbursable_amount = $request->reimbursable_amount;
 
                 $expense->remarks = $request->remarks;
 

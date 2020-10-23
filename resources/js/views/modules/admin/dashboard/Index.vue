@@ -55,7 +55,7 @@
                             <v-card-text>
                                 <div class="green--text">Total Expenses</div>
                                 <div class="display-1 text--primary">
-                                    {{ formatNumber(total.expenses_by_date) }}
+                                    {{ mixin_formatNumber(total.expenses_by_date) }}
                                 </div>
                                 <div>{{ count.expenses_by_date }} Expenses</div>
                             </v-card-text>
@@ -80,7 +80,7 @@
                                             : 'display-1 text--primary'
                                     "
                                 >
-                                    {{ formatNumber(total.remaining_fund) }}
+                                    {{ mixin_formatNumber(total.remaining_fund) }}
                                 </div>
                                 <div>
                                     {{
@@ -168,7 +168,7 @@
                                                     class="display-1 text--primary"
                                                 >
                                                     {{
-                                                        formatNumber(
+                                                        mixin_formatNumber(
                                                             total.unreported_expenses
                                                         )
                                                     }}
@@ -206,7 +206,7 @@
                                                     class="display-1 text--primary"
                                                 >
                                                     {{
-                                                        formatNumber(
+                                                        mixin_formatNumber(
                                                             total.unsubmitted_reports
                                                         )
                                                     }}
@@ -256,7 +256,7 @@
                                                     "
                                                 >
                                                     {{
-                                                        formatNumber(
+                                                        mixin_formatNumber(
                                                             total.pending_for_approval_reports
                                                         )
                                                     }}
@@ -295,7 +295,7 @@
                                                     class="display-1 text--primary"
                                                 >
                                                     {{
-                                                        formatNumber(
+                                                        mixin_formatNumber(
                                                             total.awaiting_for_reimbursement_reports
                                                         )
                                                     }}
@@ -567,7 +567,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -616,7 +616,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -666,7 +666,7 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -715,7 +715,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -786,7 +786,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -851,7 +851,7 @@ export default {
                         },
                         backgroundColor: "lightgray",
                         formatter: (value, ctx) => {
-                            return this.formatNumber(value) + " %";
+                            return this.mixin_formatNumber(value) + " %";
                         }
                     }
                 }
@@ -1072,7 +1072,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );

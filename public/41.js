@@ -416,7 +416,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "amount"
       }, {
         text: "To replenish",
-        value: "revolving_fund",
+        value: "replenishment",
         sortable: false
       }, {
         text: "Last Updated",
@@ -439,7 +439,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       expense_type: 0,
       expense_types: [],
       status: "All Expenses",
-      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Reimbursed Expenses", "Archived Expenses"],
+      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Reimbursed Expenses" // "Archived Expenses"
+      ],
       selected: [],
       search: "",
       totalItems: 0,
@@ -501,7 +502,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -521,7 +522,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {
@@ -538,7 +539,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -637,7 +638,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -676,7 +677,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -695,11 +696,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       deep: true
     },
     items: function items() {
-      this.totalAmount = this.formatNumber(this.items.reduce(function (total, item) {
+      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
         return total + item.amount;
       }, 0));
-      this.totalReplenishment = this.formatNumber(this.items.reduce(function (total, item) {
-        return total + item.revolving_fund;
+      this.totalReplenishment = this.mixin_formatNumber(this.items.reduce(function (total, item) {
+        return total + (item.amount - item.personal_amount);
       }, 0));
     }
   },
@@ -1225,8 +1226,9 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatNumber(
-                                                item.revolving_fund
+                                              _vm.mixin_formatNumber(
+                                                item.amount -
+                                                  item.personal_amount
                                               )
                                             ) +
                                             "\n                                    "
@@ -1245,9 +1247,8 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatNumber(
-                                                item.amount -
-                                                  item.revolving_fund
+                                              _vm.mixin_formatNumber(
+                                                item.personal_amount
                                               )
                                             ) +
                                             "\n                                    "
@@ -1330,7 +1331,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.created_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1351,7 +1352,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.deleted_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1375,7 +1376,9 @@ var render = function() {
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(_vm.getHumanDate(item.updated_at)) +
+                                _vm._s(
+                                  _vm.mixin_getHumanDate(item.updated_at)
+                                ) +
                                 "\n                "
                             )
                           ]
@@ -1388,20 +1391,24 @@ var render = function() {
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(_vm.formatNumber(item.amount)) +
+                                _vm._s(_vm.mixin_formatNumber(item.amount)) +
                                 "\n                "
                             )
                           ]
                         }
                       },
                       {
-                        key: "item.revolving_fund",
+                        key: "item.replenishment",
                         fn: function(ref) {
                           var item = ref.item
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(_vm.formatNumber(item.revolving_fund)) +
+                                _vm._s(
+                                  _vm.mixin_formatNumber(
+                                    item.amount - item.personal_amount
+                                  )
+                                ) +
                                 "\n                "
                             )
                           ]

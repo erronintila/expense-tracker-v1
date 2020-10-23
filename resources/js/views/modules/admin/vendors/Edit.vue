@@ -18,8 +18,8 @@
                             <v-text-field
                                 v-model="form.name"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.minLength(150)
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(150)
                                 ]"
                                 :counter="150"
                                 :error-messages="errors.name"
@@ -43,7 +43,7 @@
                         <v-col cols="9" md="3">
                             <v-text-field
                                 v-model="form.tin"
-                                :rules="validation.required"
+                                :rules="mixin_validation.required"
                                 :error-messages="errors.tin"
                                 :counter="100"
                                 label="Tax Identification Number (TIN) *"
@@ -256,7 +256,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onSave() {
@@ -281,7 +281,7 @@ export default {
                         expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
-                        _this.successDialog(
+                        _this.mixin_successDialog(
                             "Success",
                             "Vendor created successfully."
                         );
@@ -292,7 +292,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.errors = error.response.data.errors;
                     });

@@ -372,8 +372,8 @@ var render = function() {
                             [
                               _c("v-text-field", {
                                 attrs: {
-                                  rules: _vm.validation.required.concat(
-                                    _vm.validation.minLength(150)
+                                  rules: _vm.mixin_validation.required.concat(
+                                    _vm.mixin_validation.minLength(150)
                                   ),
                                   counter: 150,
                                   "error-messages": _vm.errors.name,
@@ -439,7 +439,7 @@ var render = function() {
                             [
                               _c("v-text-field", {
                                 attrs: {
-                                  rules: _vm.validation.required,
+                                  rules: _vm.mixin_validation.required,
                                   "error-messages": _vm.errors.tin,
                                   counter: 100,
                                   label: "Tax Identification Number (TIN) *",

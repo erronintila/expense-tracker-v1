@@ -223,7 +223,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -235,7 +235,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -257,10 +257,10 @@
                         }}</v-chip>
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">
-                        {{ getHumanDate(item.created_at) }}
+                        {{ mixin_getHumanDate(item.created_at) }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon
@@ -276,7 +276,7 @@
                         </v-icon> -->
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
-                        {{ formatNumber(item.amount) }}
+                        {{ mixin_formatNumber(item.amount) }}
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -413,7 +413,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.loading = false;
                     });
@@ -521,7 +521,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                         });
                 }
             });
@@ -539,7 +539,7 @@ export default {
             deep: true
         },
         items() {
-            this.totalAmount = this.formatNumber(
+            this.totalAmount = this.mixin_formatNumber(
                 this.items.reduce((total, item) => total + item.amount, 0)
             );
         }

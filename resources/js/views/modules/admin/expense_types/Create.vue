@@ -18,8 +18,8 @@
                             <v-text-field
                                 v-model="form.name"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.minLength(100)
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(100)
                                 ]"
                                 :counter="100"
                                 :error-messages="errors.name"
@@ -202,7 +202,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );

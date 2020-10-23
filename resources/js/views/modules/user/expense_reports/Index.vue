@@ -194,7 +194,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatNumber(
+                                                mixin_formatNumber(
                                                     item.total_reimbursable
                                                 )
                                             }}
@@ -215,7 +215,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -227,7 +227,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.submitted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -248,7 +248,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.approved_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -269,7 +269,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -290,7 +290,7 @@
                         </td>
                     </template>
                     <template v-slot:[`item.total`]="{ item }">
-                        {{ formatNumber(item.total) }}
+                        {{ mixin_formatNumber(item.total) }}
                     </template>
                     <template v-slot:[`item.employee`]="{ item }">
                         {{
@@ -300,7 +300,7 @@
                         }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <!-- <v-icon small class="mr-2" @click="onShow(item)">
@@ -502,7 +502,7 @@ export default {
 
                                     _this.loading = false;
 
-                                    _this.errorDialog(
+                                    _this.mixin_errorDialog(
                                         `Error ${error.response.status}`,
                                         error.response.statusText
                                     );
@@ -520,7 +520,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
@@ -654,7 +654,7 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(
+                                _this.mixin_errorDialog(
                                     `Error ${error.response.status}`,
                                     error.response.statusText
                                 );
@@ -759,7 +759,7 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(
+                                _this.mixin_errorDialog(
                                     `Error ${error.response.status}`,
                                     error.response.statusText
                                 );
@@ -780,7 +780,7 @@ export default {
             deep: true
         },
         items() {
-            this.totalAmount = this.formatNumber(
+            this.totalAmount = this.mixin_formatNumber(
                 this.items.reduce((total, item) => total + item.total, 0)
             );
         }

@@ -386,7 +386,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
@@ -494,7 +494,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(
+                            _this.mixin_errorDialog(
                                 `Error ${error.response.status}`,
                                 error.response.statusText
                             );
@@ -542,7 +542,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(
+                            _this.mixin_errorDialog(
                                 `Error ${error.response.status}`,
                                 error.response.statusText
                             );
@@ -586,7 +586,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(
+                            _this.mixin_errorDialog(
                                 `Error ${error.response.status}`,
                                 error.response.statusText
                             );
@@ -602,11 +602,11 @@ export default {
                     this.items = data.items;
                     this.totalItems = data.total;
 
-                    this.total_fund = this.formatNumber(
+                    this.total_fund = this.mixin_formatNumber(
                         data.items.reduce((total, item) => total + item.fund, 0)
                     );
 
-                    this.total_remaining_fund = this.formatNumber(
+                    this.total_remaining_fund = this.mixin_formatNumber(
                         data.items.reduce(
                             (total, item) => total + item.remaining_fund,
                             0

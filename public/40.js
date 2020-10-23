@@ -704,7 +704,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       }));
     },
     loadExpenseTypes: function loadExpenseTypes() {
@@ -716,7 +716,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadEmployees: function loadEmployees() {
@@ -730,7 +730,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           reject();
         });
@@ -751,7 +751,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -812,7 +812,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
         });
@@ -999,7 +999,8 @@ var render = function() {
                                                         {
                                                           attrs: {
                                                             rules:
-                                                              _vm.validation
+                                                              _vm
+                                                                .mixin_validation
                                                                 .required,
                                                             "error-messages":
                                                               _vm.errors.date,
@@ -1077,7 +1078,7 @@ var render = function() {
                                     [
                                       _c("v-autocomplete", {
                                         attrs: {
-                                          rules: _vm.validation.required,
+                                          rules: _vm.mixin_validation.required,
                                           items: _vm.employees,
                                           "error-messages":
                                             _vm.errors.employee_id,
@@ -1284,7 +1285,7 @@ var render = function() {
                                 "\n                                Expense Details (" +
                                   _vm._s(
                                     "Remaining Fund: " +
-                                      _vm.formatNumber(
+                                      _vm.mixin_formatNumber(
                                         _vm.form.employee.remaining_fund
                                       )
                                   ) +
@@ -1306,7 +1307,7 @@ var render = function() {
                                       _c("v-autocomplete", {
                                         attrs: {
                                           "return-object": "",
-                                          rules: _vm.validation.required,
+                                          rules: _vm.mixin_validation.required,
                                           items: _vm.expense_types,
                                           "error-messages":
                                             _vm.errors.expense_type_id,
@@ -1343,7 +1344,7 @@ var render = function() {
                                     [
                                       _c("v-autocomplete", {
                                         attrs: {
-                                          rules: _vm.validation.required,
+                                          rules: _vm.mixin_validation.required,
                                           items: _vm.sub_types,
                                           "error-messages": _vm.errors.sub_type,
                                           "item-value": "id",

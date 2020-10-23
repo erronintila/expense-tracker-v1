@@ -260,7 +260,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     cancelPayment: function cancelPayment() {
@@ -287,7 +287,7 @@ __webpack_require__.r(__webpack_exports__);
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -518,7 +518,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.created_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -536,7 +536,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                " +
                                             _vm._s(
-                                              _vm.formatNumber(item.total)
+                                              _vm.mixin_formatNumber(item.total)
                                             ) +
                                             "\n                            "
                                         )
@@ -666,7 +666,9 @@ var render = function() {
                                       _c("td", [
                                         _c("strong", [
                                           _vm._v(
-                                            _vm._s(_vm.formatNumber(_vm.total))
+                                            _vm._s(
+                                              _vm.mixin_formatNumber(_vm.total)
+                                            )
                                           )
                                         ])
                                       ]),

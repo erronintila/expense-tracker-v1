@@ -68,7 +68,7 @@
                                 }"
                             >
                                 <template v-slot:[`item.amount`]="{ item }">
-                                    {{ formatNumber(item.amount) }}
+                                    {{ mixin_formatNumber(item.amount) }}
                                 </template>
                                 <template
                                     slot="body.append"
@@ -78,7 +78,7 @@
                                         <td class="title">
                                             Total:
                                             <strong>{{
-                                                formatNumber(amount)
+                                                mixin_formatNumber(amount)
                                             }}</strong>
                                         </td>
                                     </tr>
@@ -86,7 +86,7 @@
                                         <td class="title">Total</td>
                                         <td>
                                             <strong>{{
-                                                formatNumber(amount)
+                                                mixin_formatNumber(amount)
                                             }}</strong>
                                         </td>
                                     </tr>
@@ -200,17 +200,11 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
                 });
-        },
-        isEmpty(item) {
-            if (item) {
-                return parseFloat(item);
-            }
-            return 0;
         },
         editDetails() {
             this.$router.push({

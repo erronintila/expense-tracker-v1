@@ -306,7 +306,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -367,7 +367,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -406,7 +406,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });

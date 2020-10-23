@@ -4,7 +4,7 @@ import numeral from "numeral";
 export default {
     data() {
         return {
-            validation: {
+            mixin_validation: {
                 required: [v => !!v || "This field is required"],
                 minLength: value => [
                     v =>
@@ -26,34 +26,40 @@ export default {
         };
     },
     methods: {
-        formatNumber(value) {
+        mixin_formatNumber(value) {
             return numeral(value).format("0,0.00");
         },
-        formatDate(date, format) {
+        mixin_formatDate(date, format) {
             return date == null ? "" : moment(date).format(format);
         },
-        getHumanDate(date) {
+        mixin_getHumanDate(date) {
             return moment(date).fromNow();
         },
-        isEmpty(item) {
+        mixin_isEmpty(item) {
             if (item) {
                 return parseFloat(item);
             }
             return 0;
         },
-        successDialog(title, text) {
+        mixin_isEmptyNumber(item) {
+            if (item) {
+                return parseFloat(item);
+            }
+            return 0;
+        },
+        mixin_successDialog(title, text) {
             this.$dialog.message.success(`${title}: ${text}`, {
                 position: "top-right",
                 timeout: 2000
             });
         },
-        errorDialog(title, text) {
+        mixin_errorDialog(title, text) {
             this.$dialog.message.error(`${title}: ${text}`, {
                 position: "top-right",
                 timeout: 2000
             });
         },
-        confirmDialog(title, text, callback) {
+        mixin_confirmDialog(title, text, callback) {
             this.$confirm(`${title} : ${text}`).then(res => {
                 if (res) {
                     callback();
@@ -62,10 +68,10 @@ export default {
         }
     },
     computed: {
-        $currentUser() {
+        mixin_currentUser() {
             return this.$store.getters.currentUser;
         },
-        $permissions() {
+        mixin_permissions() {
             return this.$store.getters.getPermissions;
         }
     }

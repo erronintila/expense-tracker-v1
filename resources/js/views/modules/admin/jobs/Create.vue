@@ -18,7 +18,7 @@
                             <v-autocomplete
                                 v-model="form.department"
                                 :items="departments"
-                                :rules="validation.required"
+                                :rules="mixin_validation.required"
                                 :error-messages="errors.department_id"
                                 @input="errors.department_id = []"
                                 item-value="id"
@@ -31,8 +31,8 @@
                             <v-text-field
                                 v-model="form.name"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.minLength(100)
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(100)
                                 ]"
                                 :counter="100"
                                 :error-messages="errors.name"
@@ -93,7 +93,7 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onSave() {
@@ -123,7 +123,7 @@ export default {
 
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.errors = error.response.data.errors;
                     });

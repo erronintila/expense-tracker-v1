@@ -85,7 +85,7 @@
                                         <td></td>
                                         <td>
                                             <strong>{{
-                                                formatNumber(total)
+                                                mixin_formatNumber(total)
                                             }}</strong>
                                         </td>
                                         <td></td>
@@ -93,10 +93,10 @@
                                     </tr>
                                 </template>
                                 <template v-slot:[`item.created_at`]="{ item }">
-                                    {{ formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}
+                                    {{ mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}
                                 </template>
                                 <template v-slot:[`item.total`]="{ item }">
-                                    {{ formatNumber(item.total) }}
+                                    {{ mixin_formatNumber(item.total) }}
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
@@ -244,7 +244,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         cancelPayment() {
@@ -276,7 +276,7 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                         });
                 }
             });

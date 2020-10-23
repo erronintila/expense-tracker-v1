@@ -202,7 +202,7 @@ export default {
 
                     _this.$router.push({ name: "login" });
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         toProfile() {

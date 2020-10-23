@@ -1,6 +1,10 @@
 <template>
     <div>
         <v-card class="elevation-0 pt-0">
+
+            <!-- **************************************************************
+                Card Title 
+            *************************************************************** -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -11,16 +15,11 @@
                 <h4 class="title green--text">New Expense</h4>
             </v-card-title>
 
+            <!-- **************************************************************
+                Form
+            *************************************************************** -->
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <!-- <v-row>
-                        <v-spacer></v-spacer>
-                        <h3 class="title green--text mr-2">
-                            Remaining Funds:
-                            {{ formatNumber(form.employee.remaining_fund) }}
-                        </h3>
-                    </v-row> -->
-
                     <v-expansion-panels v-model="panel" multiple class="mt-4">
                         <v-expansion-panel>
                             <v-expansion-panel-header>
@@ -42,7 +41,7 @@
                                             >
                                                 <v-text-field
                                                     v-model="form.date"
-                                                    :rules="validation.required"
+                                                    :rules="mixin_validation.required"
                                                     :error-messages="
                                                         errors.date
                                                     "
@@ -65,7 +64,7 @@
                                     <v-col cols="12" md="4">
                                         <v-autocomplete
                                             v-model="form.employee"
-                                            :rules="validation.required"
+                                            :rules="mixin_validation.required"
                                             :items="employees"
                                             :error-messages="errors.employee_id"
                                             @input="errors.employee_id = []"
@@ -141,7 +140,6 @@
                                                 </template>
                                             </template>
                                         </v-autocomplete>
-                                        <!-- </v-form> -->
                                     </v-col>
 
                                     <v-col cols="12" md="4">
@@ -164,7 +162,7 @@
                             <v-expansion-panel-header>
                                 <div class="green--text">
                                     Expense Details ({{
-                                        `Remaining Fund: ${formatNumber(
+                                        `Remaining Fund: ${mixin_formatNumber(
                                             form.employee.remaining_fund
                                         )}`
                                     }})
@@ -176,7 +174,7 @@
                                         <v-autocomplete
                                             return-object
                                             v-model="form.expense_type"
-                                            :rules="validation.required"
+                                            :rules="mixin_validation.required"
                                             :items="expense_types"
                                             :error-messages="
                                                 errors.expense_type_id
@@ -194,7 +192,7 @@
                                     <v-col cols="12" md="4">
                                         <v-autocomplete
                                             v-model="form.sub_type"
-                                            :rules="validation.required"
+                                            :rules="mixin_validation.required"
                                             :items="sub_types"
                                             :error-messages="errors.sub_type"
                                             @input="errors.sub_type = []"
@@ -255,11 +253,6 @@
                                                     class="green--text hidden-md-and-up"
                                                 >
                                                     <td class="title">
-                                                        <!-- Reimbursable:
-                                                        <strong>{{
-                                                            form.reimbursable_amount
-                                                        }}</strong>
-                                                        <br /> -->
                                                         Total:
                                                         <strong>{{
                                                             form.amount
@@ -379,47 +372,40 @@
                                     </v-col>
                                 </v-row>
 
-                                <v-row> </v-row>
-
-                                <!-- <v-row> 
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            label="Amount paid through revolving fund"
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row> -->
-
                                 <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-checkbox
-                                            v-model="paid_through_fund"
-                                            label="Paid through revolving fund"
-                                            @change="
-                                                paid_through_fund
-                                                    ? (form.revolving_fund =
-                                                          form.amount)
-                                                    : (form.revolving_fund = 0)
-                                            "
-                                        ></v-checkbox>
-                                    </v-col>
                                     <v-col
                                         cols="12"
                                         md="4"
-                                        v-if="paid_through_fund"
+                                        v-if="display_personal_amount"
                                     >
                                         <v-text-field
-                                            v-model="form.revolving_fund"
-                                            :rules="rules.revolving_fund"
-                                            label="Amount"
+                                            v-model="amount_to_reimburse"
+                                            :rules="rules.personal_amount"
+                                            label="Personal Amount"
                                             type="number"
+                                            readonly
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
 
                                 <v-row>
                                     <v-col>
-                                        <table>
+                                        <div class="green--text">
+                                            Expense Summary
+                                        </div>
+                                        <table class="ml-4">
                                             <tbody>
+                                                <tr>
+                                                    <td class="green--text">
+                                                        Remaining Fund
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatNumber(form.employee.remaining_fund)
+                                                        }}
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <td class="green--text">
                                                         Amount to reimburse
@@ -427,7 +413,7 @@
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            amount_to_reimburse
+                                                            mixin_formatNumber(amount_to_reimburse)
                                                         }}
                                                     </td>
                                                 </tr>
@@ -438,7 +424,7 @@
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            form.revolving_fund
+                                                            mixin_formatNumber(amount_to_replenish)
                                                         }}
                                                     </td>
                                                 </tr>
@@ -447,7 +433,7 @@
                                                         Total Amount
                                                     </td>
                                                     <td>:</td>
-                                                    <td>{{ form.amount }}</td>
+                                                    <td>{{ mixin_formatNumber(expense_amount) }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -545,8 +531,9 @@ export default {
         return {
             panel: [0, 1],
             itemize: false,
-            paid_through_fund: false,
-            reimbursable: false,
+            // paid_through_fund: false,
+            personal_amount: false,
+            // reimbursable: false,
             openAddVendor: false,
             dialog: false,
             valid: false,
@@ -565,7 +552,7 @@ export default {
                 code: null,
                 description: null,
                 amount: 0,
-                reimbursable_amount: 0,
+                // reimbursable_amount: 0,
                 receipt_number: null,
                 date: null,
                 remarks: "",
@@ -590,6 +577,7 @@ export default {
                 is_reimbursable: false,
 
                 revolving_fund: 0,
+                personal_amount: 0,
                 details: {
                     description: "",
                     amount: ""
@@ -597,9 +585,9 @@ export default {
             },
             rules: {
                 reimbursable_amount: [
-                    v =>
-                        parseFloat(v) <= this.form.amount ||
-                        "Reimbursable Amount should not be greater than the actual amount"
+                    // v =>
+                    //     parseFloat(v) <= this.form.amount ||
+                    //     "Reimbursable Amount should not be greater than the actual amount"
                 ],
                 revolving_fund: [
                     // v =>
@@ -648,7 +636,7 @@ export default {
             //         console.log(error);
             //         console.log(error.response);
 
-            //         _this.errorDialog(
+            //         _this.mixin_errorDialog(
             //             `Error ${error.response.status}`,
             //             error.response.statusText
             //         );
@@ -666,7 +654,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -690,7 +678,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -709,7 +697,8 @@ export default {
             _this.$refs.form.validate();
 
             if (
-                _this.form.revolving_fund > _this.form.employee.remaining_fund
+                _this.form.amount - _this.form.personal_amount >
+                _this.form.employee.remaining_fund
             ) {
                 _this.$dialog.message.error(
                     "Revolving fund amount is greater than remaining fund",
@@ -750,8 +739,8 @@ export default {
                         code: _this.form.code,
                         description: _this.form.description,
                         amount: _this.form.amount,
-                        revolving_fund: _this.form.revolving_fund,
-                        reimbursable_amount: _this.form.reimbursable_amount,
+                        // revolving_fund: _this.form.revolving_fund,
+                        // reimbursable_amount: _this.form.reimbursable_amount,
                         receipt_number: _this.form.receipt_number,
                         date: _this.form.date,
                         remarks: _this.form.remarks,
@@ -779,7 +768,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
@@ -812,10 +801,40 @@ export default {
         }
     },
     computed: {
-        amount_to_reimburse() {
+        amount_to_replenish() {
+
+            // return this.mixin_isEmptyNumber(this.form.personal_amount);
             return (
-                parseFloat(this.form.amount) -
-                parseFloat(this.form.revolving_fund)
+                this.mixin_isEmptyNumber(this.form.amount) -
+                this.mixin_isEmptyNumber(this.form.personal_amount)
+            );
+        },
+        amount_to_reimburse() {
+            let remaining_fund = this.mixin_isEmptyNumber(
+                this.form.employee.remaining_fund
+            );
+            let amount = this.mixin_isEmptyNumber(this.form.amount);
+
+            if (remaining_fund < amount) {
+                let to_replenish = Math.abs(remaining_fund - amount);
+
+                return to_replenish;
+            }
+
+            return 0;
+
+            // return (
+            //     this.$isEmptyNumber(this.form.employee.remaining_fund) -
+            //     this.$isEmptyNumber(this.form.amount)
+            // );
+        },
+        expense_amount() {
+            return this.mixin_isEmptyNumber(this.form.amount);
+        },
+        display_personal_amount() {
+            return (
+                parseFloat(this.form.amount) >
+                parseFloat(this.form.employee.remaining_fund)
             );
         }
     },

@@ -229,7 +229,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatNumber(
+                                                mixin_formatNumber(
                                                     item.total_reimbursable
                                                 )
                                             }}
@@ -250,7 +250,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -262,7 +262,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.submitted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -283,7 +283,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.approved_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -304,7 +304,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                formatDate(
+                                                mixin_formatDate(
                                                     item.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
@@ -325,7 +325,7 @@
                         </td>
                     </template>
                     <template v-slot:[`item.total`]="{ item }">
-                        {{ formatNumber(item.total) }}
+                        {{ mixin_formatNumber(item.total) }}
                     </template>
                     <template v-slot:[`item.employee`]="{ item }">
                         {{
@@ -335,7 +335,7 @@
                         }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
@@ -382,10 +382,10 @@ export default {
             loading: true,
             headers: [
                 { text: "Description", value: "description" },
-                { text: "Employee", value: "employee", sortable: false  },
-                { text: "Amount", value: "total", sortable: false  },
+                { text: "Employee", value: "employee", sortable: false },
+                { text: "Amount", value: "total", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
-                { text: "Status", value: "status.status", sortable: false  },
+                { text: "Status", value: "status.status", sortable: false },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -426,7 +426,8 @@ export default {
                 "Rejected Expense Reports",
                 "Reimbursed Expense Reports",
                 "Overdue Expense Reports",
-                "Archived Expense Reports",
+                "Cancelled Expense Reports"
+                // "Archived Expense Reports"
                 // "For Submission",
                 // "Pending",
                 // "Approved",
@@ -489,7 +490,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
@@ -514,7 +515,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -640,7 +641,7 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(
+                                _this.mixin_errorDialog(
                                     `Error ${error.response.status}`,
                                     error.response.statusText
                                 );
@@ -664,7 +665,7 @@ export default {
                 action == "submit" &&
                 !this.selected
                     .map(item => item.status.status)
-                    .includes("For Submission")
+                    .includes("Unsubmitted")
             ) {
                 this.$dialog.message.error("Action can't be completed", {
                     position: "top-right",
@@ -690,7 +691,7 @@ export default {
                 action == "submit" &&
                 this.selected
                     .map(item => item.status.status)
-                    .includes("Paid/Reimbursed")
+                    .includes("Reimbursed")
             ) {
                 this.$dialog.message.error("Report has been paid/reimbursed", {
                     position: "top-right",
@@ -742,7 +743,7 @@ export default {
                 action == "approve" &&
                 this.selected
                     .map(item => item.status.status)
-                    .includes("Paid/Reimbursed")
+                    .includes("Reimbursed")
             ) {
                 this.$dialog.message.error("Report has been paid/reimbursed", {
                     position: "top-right",
@@ -798,7 +799,7 @@ export default {
                                 console.log(error);
                                 console.log(error.response);
 
-                                _this.errorDialog(
+                                _this.mixin_errorDialog(
                                     `Error ${error.response.status}`,
                                     error.response.statusText
                                 );
@@ -819,7 +820,7 @@ export default {
             deep: true
         },
         items() {
-            this.totalAmount = this.formatNumber(
+            this.totalAmount = this.mixin_formatNumber(
                 this.items.reduce((total, item) => total + item.total, 0)
             );
         }

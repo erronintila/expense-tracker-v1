@@ -18,7 +18,7 @@
                         <h3 class="title green--text mr-2">
                             Remaining Funds:
                             {{
-                                formatNumber(
+                                mixin_formatNumber(
                                     form.employee == null
                                         ? 0
                                         : form.employee.remaining_fund || 0
@@ -84,7 +84,7 @@
                         <v-col cols="12" md="4">
                             <v-autocomplete
                                 v-model="form.expense_type"
-                                :rules="validation.required"
+                                :rules="mixin_validation.required"
                                 :items="expense_types"
                                 :error-messages="errors.expense_type_id"
                                 @input="errors.expense_type_id = []"
@@ -108,7 +108,7 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="form.date"
-                                        :rules="validation.required"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         label="Date *"
@@ -399,7 +399,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -430,7 +430,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -448,7 +448,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -472,7 +472,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -551,7 +551,7 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );

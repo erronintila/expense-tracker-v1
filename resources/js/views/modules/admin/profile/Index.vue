@@ -538,7 +538,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onUpdateData() {
@@ -572,7 +572,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.errors = error.response.data.errors;
                     });
@@ -616,7 +616,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
             }
         },
@@ -655,7 +655,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.password_errors = error.response.data.errors;
                     });

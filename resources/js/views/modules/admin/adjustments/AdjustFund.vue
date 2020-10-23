@@ -103,7 +103,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onSave() {
@@ -121,7 +121,7 @@ export default {
                         type: _this.type
                     })
                     .then(function(response) {
-                        _this.successDialog(
+                        _this.mixin_successDialog(
                             "Success",
                             "Adjustment created successfully."
                         );
@@ -134,7 +134,7 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                     });
             }
         }

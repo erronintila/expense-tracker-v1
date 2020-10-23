@@ -163,10 +163,16 @@ class Expense extends Model
 
         if (!$deleted) {
             $arr = [
-                'color' => 'grey',
-                'remarks' => 'Expense was deleted',
-                'status' => 'Deleted',
+                'color' => 'red',
+                'remarks' => 'Expense was cancelled',
+                'status' => 'Cancelled',
             ];
+
+            // $arr = [
+            //     'color' => 'grey',
+            //     'remarks' => 'Expense was deleted',
+            //     'status' => 'Deleted',
+            // ];
 
             return $arr;
         }

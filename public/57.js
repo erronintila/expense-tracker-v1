@@ -508,7 +508,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               console.log(error.response);
               _this.loading = false;
 
-              _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+              _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
             });
           } else {
             var items = [];
@@ -523,7 +523,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           reject();
         });
@@ -638,7 +638,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -723,7 +723,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -742,7 +742,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       deep: true
     },
     items: function items() {
-      this.totalAmount = this.formatNumber(this.items.reduce(function (total, item) {
+      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
         return total + item.total;
       }, 0));
     }
@@ -1276,7 +1276,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatNumber(
+                                              _vm.mixin_formatNumber(
                                                 item.total_reimbursable
                                               )
                                             ) +
@@ -1318,7 +1318,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.created_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1339,7 +1339,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.submitted_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1380,7 +1380,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.approved_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1421,7 +1421,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.deleted_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1465,7 +1465,7 @@ var render = function() {
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(_vm.formatNumber(item.total)) +
+                                _vm._s(_vm.mixin_formatNumber(item.total)) +
                                 "\n                "
                             )
                           ]
@@ -1495,7 +1495,9 @@ var render = function() {
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(_vm.getHumanDate(item.updated_at)) +
+                                _vm._s(
+                                  _vm.mixin_getHumanDate(item.updated_at)
+                                ) +
                                 "\n                "
                             )
                           ]

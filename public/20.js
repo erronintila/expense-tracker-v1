@@ -552,7 +552,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onUpdateData: function onUpdateData() {
@@ -579,7 +579,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error.response);
           _this.errors = error.response.data.errors;
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
         return;
       }
@@ -613,7 +613,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
       }
     },
@@ -643,7 +643,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error.response);
           _this.password_errors = error.response.data.errors;
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
       }
     },

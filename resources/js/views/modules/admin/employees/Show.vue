@@ -57,12 +57,12 @@
                                             >
                                                 {{
                                                     remaining_fund == fund
-                                                        ? `${formatNumber(
+                                                        ? `${mixin_formatNumber(
                                                               remaining_fund
                                                           )}`
-                                                        : `${formatNumber(
+                                                        : `${mixin_formatNumber(
                                                               remaining_fund
-                                                          )} / ${formatNumber(
+                                                          )} / ${mixin_formatNumber(
                                                               fund
                                                           )}`
                                                 }}
@@ -93,7 +93,7 @@
                                         :elevation="hover ? 5 : 2"
                                     >
                                         <v-card-title class="green--text">{{
-                                            formatNumber(total_expenses)
+                                            mixin_formatNumber(total_expenses)
                                         }}</v-card-title>
                                         <v-card-subtitle>
                                             Expenses (This Month)
@@ -114,7 +114,7 @@
                                     >
                                         <v-card-title class="green--text">
                                             {{
-                                                formatNumber(
+                                                mixin_formatNumber(
                                                     total_pending_reports
                                                 )
                                             }}
@@ -138,7 +138,7 @@
                                     >
                                         <v-card-title class="green--text">
                                             {{
-                                                formatNumber(
+                                                mixin_formatNumber(
                                                     total_replenishments
                                                 )
                                             }}
@@ -162,7 +162,7 @@
                                         :elevation="hover ? 5 : 2"
                                     >
                                         <v-card-title class="green--text">{{
-                                            formatNumber(total_reimbursements)
+                                            mixin_formatNumber(total_reimbursements)
                                         }}</v-card-title>
                                         <v-card-subtitle>
                                             Reimbursements
@@ -392,7 +392,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -430,7 +430,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );

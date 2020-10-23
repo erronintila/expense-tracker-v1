@@ -533,20 +533,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -554,13 +540,12 @@ __webpack_require__.r(__webpack_exports__);
     AddVendor: _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
-    var _this2 = this;
-
     return {
       panel: [0, 1],
       itemize: false,
-      paid_through_fund: false,
-      reimbursable: false,
+      // paid_through_fund: false,
+      personal_amount: false,
+      // reimbursable: false,
       openAddVendor: false,
       dialog: false,
       valid: false,
@@ -587,7 +572,7 @@ __webpack_require__.r(__webpack_exports__);
         code: null,
         description: null,
         amount: 0,
-        reimbursable_amount: 0,
+        // reimbursable_amount: 0,
         receipt_number: null,
         date: null,
         remarks: "",
@@ -615,15 +600,17 @@ __webpack_require__.r(__webpack_exports__);
         // particular_reimbursable_amount: 0,
         is_reimbursable: false,
         revolving_fund: 0,
+        personal_amount: 0,
         details: {
           description: "",
           amount: ""
         }
       },
       rules: {
-        reimbursable_amount: [function (v) {
-          return parseFloat(v) <= _this2.form.amount || "Reimbursable Amount should not be greater than the actual amount";
-        }],
+        reimbursable_amount: [// v =>
+          //     parseFloat(v) <= this.form.amount ||
+          //     "Reimbursable Amount should not be greater than the actual amount"
+        ],
         revolving_fund: [// v =>
           //     (parseFloat(v) <=
           //         (this.form.sub_type.limit == null
@@ -665,7 +652,7 @@ __webpack_require__.r(__webpack_exports__);
       //     .catch(error => {
       //         console.log(error);
       //         console.log(error.response);
-      //         _this.errorDialog(
+      //         _this.mixin_errorDialog(
       //             `Error ${error.response.status}`,
       //             error.response.statusText
       //         );
@@ -680,7 +667,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadVendors: function loadVendors() {
@@ -698,7 +685,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -711,7 +698,7 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.$refs.form.validate();
 
-      if (_this.form.revolving_fund > _this.form.employee.remaining_fund) {
+      if (_this.form.amount - _this.form.personal_amount > _this.form.employee.remaining_fund) {
         _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
           position: "top-right",
           timeout: 2000
@@ -746,8 +733,8 @@ __webpack_require__.r(__webpack_exports__);
           code: _this.form.code,
           description: _this.form.description,
           amount: _this.form.amount,
-          revolving_fund: _this.form.revolving_fund,
-          reimbursable_amount: _this.form.reimbursable_amount,
+          // revolving_fund: _this.form.revolving_fund,
+          // reimbursable_amount: _this.form.reimbursable_amount,
           receipt_number: _this.form.receipt_number,
           date: _this.form.date,
           remarks: _this.form.remarks,
@@ -770,7 +757,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
         });
@@ -805,8 +792,29 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    amount_to_replenish: function amount_to_replenish() {
+      // return this.mixin_isEmptyNumber(this.form.personal_amount);
+      return this.mixin_isEmptyNumber(this.form.amount) - this.mixin_isEmptyNumber(this.form.personal_amount);
+    },
     amount_to_reimburse: function amount_to_reimburse() {
-      return parseFloat(this.form.amount) - parseFloat(this.form.revolving_fund);
+      var remaining_fund = this.mixin_isEmptyNumber(this.form.employee.remaining_fund);
+      var amount = this.mixin_isEmptyNumber(this.form.amount);
+
+      if (remaining_fund < amount) {
+        var to_replenish = Math.abs(remaining_fund - amount);
+        return to_replenish;
+      }
+
+      return 0; // return (
+      //     this.$isEmptyNumber(this.form.employee.remaining_fund) -
+      //     this.$isEmptyNumber(this.form.amount)
+      // );
+    },
+    expense_amount: function expense_amount() {
+      return this.mixin_isEmptyNumber(this.form.amount);
+    },
+    display_personal_amount: function display_personal_amount() {
+      return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
     }
   },
   watch: {
@@ -967,7 +975,8 @@ var render = function() {
                                                         {
                                                           attrs: {
                                                             rules:
-                                                              _vm.validation
+                                                              _vm
+                                                                .mixin_validation
                                                                 .required,
                                                             "error-messages":
                                                               _vm.errors.date,
@@ -1045,7 +1054,7 @@ var render = function() {
                                     [
                                       _c("v-autocomplete", {
                                         attrs: {
-                                          rules: _vm.validation.required,
+                                          rules: _vm.mixin_validation.required,
                                           items: _vm.employees,
                                           "error-messages":
                                             _vm.errors.employee_id,
@@ -1252,7 +1261,7 @@ var render = function() {
                                 "\n                                Expense Details (" +
                                   _vm._s(
                                     "Remaining Fund: " +
-                                      _vm.formatNumber(
+                                      _vm.mixin_formatNumber(
                                         _vm.form.employee.remaining_fund
                                       )
                                   ) +
@@ -1274,7 +1283,7 @@ var render = function() {
                                       _c("v-autocomplete", {
                                         attrs: {
                                           "return-object": "",
-                                          rules: _vm.validation.required,
+                                          rules: _vm.mixin_validation.required,
                                           items: _vm.expense_types,
                                           "error-messages":
                                             _vm.errors.expense_type_id,
@@ -1311,7 +1320,7 @@ var render = function() {
                                     [
                                       _c("v-autocomplete", {
                                         attrs: {
-                                          rules: _vm.validation.required,
+                                          rules: _vm.mixin_validation.required,
                                           items: _vm.sub_types,
                                           "error-messages": _vm.errors.sub_type,
                                           "item-value": "id",
@@ -1816,60 +1825,27 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              _c("v-row"),
-                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-checkbox", {
-                                        attrs: {
-                                          label: "Paid through revolving fund"
-                                        },
-                                        on: {
-                                          change: function($event) {
-                                            _vm.paid_through_fund
-                                              ? (_vm.form.revolving_fund =
-                                                  _vm.form.amount)
-                                              : (_vm.form.revolving_fund = 0)
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.paid_through_fund,
-                                          callback: function($$v) {
-                                            _vm.paid_through_fund = $$v
-                                          },
-                                          expression: "paid_through_fund"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _vm.paid_through_fund
+                                  _vm.display_personal_amount
                                     ? _c(
                                         "v-col",
                                         { attrs: { cols: "12", md: "4" } },
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.revolving_fund,
-                                              label: "Amount",
-                                              type: "number"
+                                              rules: _vm.rules.personal_amount,
+                                              label: "Personal Amount",
+                                              type: "number",
+                                              readonly: ""
                                             },
                                             model: {
-                                              value: _vm.form.revolving_fund,
+                                              value: _vm.amount_to_reimburse,
                                               callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.form,
-                                                  "revolving_fund",
-                                                  $$v
-                                                )
+                                                _vm.amount_to_reimburse = $$v
                                               },
-                                              expression: "form.revolving_fund"
+                                              expression: "amount_to_reimburse"
                                             }
                                           })
                                         ],
@@ -1884,8 +1860,41 @@ var render = function() {
                                 "v-row",
                                 [
                                   _c("v-col", [
-                                    _c("table", [
+                                    _c("div", { staticClass: "green--text" }, [
+                                      _vm._v(
+                                        "\n                                        Expense Summary\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("table", { staticClass: "ml-4" }, [
                                       _c("tbody", [
+                                        _c("tr", [
+                                          _c(
+                                            "td",
+                                            { staticClass: "green--text" },
+                                            [
+                                              _vm._v(
+                                                "\n                                                    Remaining Fund\n                                                "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                                    " +
+                                                _vm._s(
+                                                  _vm.mixin_formatNumber(
+                                                    _vm.form.employee
+                                                      .remaining_fund
+                                                  )
+                                                ) +
+                                                "\n                                                "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
                                         _c("tr", [
                                           _c(
                                             "td",
@@ -1903,7 +1912,9 @@ var render = function() {
                                             _vm._v(
                                               "\n                                                    " +
                                                 _vm._s(
-                                                  _vm.amount_to_reimburse
+                                                  _vm.mixin_formatNumber(
+                                                    _vm.amount_to_reimburse
+                                                  )
                                                 ) +
                                                 "\n                                                "
                                             )
@@ -1927,7 +1938,9 @@ var render = function() {
                                             _vm._v(
                                               "\n                                                    " +
                                                 _vm._s(
-                                                  _vm.form.revolving_fund
+                                                  _vm.mixin_formatNumber(
+                                                    _vm.amount_to_replenish
+                                                  )
                                                 ) +
                                                 "\n                                                "
                                             )
@@ -1948,7 +1961,13 @@ var render = function() {
                                           _c("td", [_vm._v(":")]),
                                           _vm._v(" "),
                                           _c("td", [
-                                            _vm._v(_vm._s(_vm.form.amount))
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  _vm.expense_amount
+                                                )
+                                              )
+                                            )
                                           ])
                                         ])
                                       ])

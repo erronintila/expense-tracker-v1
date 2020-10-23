@@ -436,7 +436,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       totalAmount: 0,
       status: "All Expense Reports",
-      statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", "Overdue Expense Reports", "Archived Expense Reports" // "For Submission",
+      statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", "Overdue Expense Reports", "Cancelled Expense Reports" // "Archived Expense Reports"
+      // "For Submission",
       // "Pending",
       // "Approved",
       // "Cancelled",
@@ -501,7 +502,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -521,7 +522,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onRefresh: function onRefresh() {
@@ -624,7 +625,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -642,7 +643,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (action == "submit" && !this.selected.map(function (item) {
         return item.status.status;
-      }).includes("For Submission")) {
+      }).includes("Unsubmitted")) {
         this.$dialog.message.error("Action can't be completed", {
           position: "top-right",
           timeout: 2000
@@ -662,7 +663,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (action == "submit" && this.selected.map(function (item) {
         return item.status.status;
-      }).includes("Paid/Reimbursed")) {
+      }).includes("Reimbursed")) {
         this.$dialog.message.error("Report has been paid/reimbursed", {
           position: "top-right",
           timeout: 2000
@@ -702,7 +703,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (action == "approve" && this.selected.map(function (item) {
         return item.status.status;
-      }).includes("Paid/Reimbursed")) {
+      }).includes("Reimbursed")) {
         this.$dialog.message.error("Report has been paid/reimbursed", {
           position: "top-right",
           timeout: 2000
@@ -749,7 +750,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });
@@ -768,7 +769,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       deep: true
     },
     items: function items() {
-      this.totalAmount = this.formatNumber(this.items.reduce(function (total, item) {
+      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
         return total + item.total;
       }, 0));
     }
@@ -1372,7 +1373,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatNumber(
+                                              _vm.mixin_formatNumber(
                                                 item.total_reimbursable
                                               )
                                             ) +
@@ -1414,7 +1415,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.created_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1435,7 +1436,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.submitted_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1476,7 +1477,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.approved_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1517,7 +1518,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              _vm.formatDate(
+                                              _vm.mixin_formatDate(
                                                 item.deleted_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
@@ -1561,7 +1562,7 @@ var render = function() {
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(_vm.formatNumber(item.total)) +
+                                _vm._s(_vm.mixin_formatNumber(item.total)) +
                                 "\n                "
                             )
                           ]
@@ -1591,7 +1592,9 @@ var render = function() {
                           return [
                             _vm._v(
                               "\n                    " +
-                                _vm._s(_vm.getHumanDate(item.updated_at)) +
+                                _vm._s(
+                                  _vm.mixin_getHumanDate(item.updated_at)
+                                ) +
                                 "\n                "
                             )
                           ]

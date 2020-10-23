@@ -124,7 +124,7 @@
                     }"
                 >
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ formatDate(item.updated_at, "YYYY-MM-DD HH:mm:ss") }}
+                        {{ mixin_formatDate(item.updated_at, "YYYY-MM-DD HH:mm:ss") }}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{
@@ -210,7 +210,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.loading = false;
                     });

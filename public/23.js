@@ -115,7 +115,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onSave: function onSave() {
@@ -131,7 +131,7 @@ __webpack_require__.r(__webpack_exports__);
           amount: _this.amount,
           type: _this.type
         }).then(function (response) {
-          _this.successDialog("Success", "Adjustment created successfully.");
+          _this.mixin_successDialog("Success", "Adjustment created successfully.");
 
           _this.$router.push({
             name: "admin.adjustments.index"
@@ -141,7 +141,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error.response);
           _this.errors = error.response.data.errors;
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
       }
     }

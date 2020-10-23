@@ -24,7 +24,7 @@
                                 <v-col cols="12" md="4">
                                     <v-autocomplete
                                         v-model="form.job"
-                                        :rules="validation.required"
+                                        :rules="mixin_validation.required"
                                         :items="jobs"
                                         :error-messages="errors.job_id"
                                         @input="errors.job_id = []"
@@ -40,8 +40,8 @@
                                     <v-text-field
                                         v-model="form.code"
                                         :rules="[
-                                            ...validation.required,
-                                            ...validation.minLength(100)
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
                                         ]"
                                         :counter="100"
                                         :error-messages="errors.code"
@@ -85,8 +85,8 @@
                                     <v-text-field
                                         v-model="form.first_name"
                                         :rules="[
-                                            ...validation.required,
-                                            ...validation.minLength(100)
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
                                         ]"
                                         :counter="100"
                                         :error-messages="errors.first_name"
@@ -111,8 +111,8 @@
                                     <v-text-field
                                         v-model="form.last_name"
                                         :rules="[
-                                            ...validation.required,
-                                            ...validation.minLength(100)
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
                                         ]"
                                         :counter="100"
                                         :error-messages="errors.last_name"
@@ -137,7 +137,7 @@
                                 <v-col cols="12" md="4">
                                     <v-select
                                         v-model="form.gender"
-                                        :rules="validation.required"
+                                        :rules="mixin_validation.required"
                                         :items="['Male', 'Female']"
                                         :error-messages="errors.gender"
                                         @input="errors.gender = []"
@@ -161,7 +161,7 @@
                                         >
                                             <v-text-field
                                                 v-model="form.birthdate"
-                                                :rules="validation.required"
+                                                :rules="mixin_validation.required"
                                                 :error-messages="
                                                     errors.birthdate
                                                 "
@@ -211,8 +211,8 @@
                                     <v-text-field
                                         v-model="form.email"
                                         :rules="[
-                                            ...validation.required,
-                                            ...validation.email
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.email
                                         ]"
                                         :error-messages="errors.email"
                                         @input="errors.email = []"
@@ -250,8 +250,8 @@
                                     <v-text-field
                                         v-model="form.username"
                                         :rules="[
-                                            ...validation.required,
-                                            ...validation.minLength(50)
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(50)
                                         ]"
                                         :counter="50"
                                         :error-messages="errors.username"
@@ -373,7 +373,7 @@ export default {
 
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -390,7 +390,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -408,7 +408,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(
+                    _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -468,7 +468,7 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );

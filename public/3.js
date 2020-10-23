@@ -182,14 +182,14 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error.response);
         });
       });
-    } // formatNumber(data) {
+    } // mixin_formatNumber(data) {
     //     return numeral(data).format("0,0.00");
     // }
 
   },
   computed: {
     total_amount: function total_amount() {
-      return this.formatNumber(this.expense_report.total);
+      return this.mixin_formatNumber(this.expense_report.total);
     }
   },
   watch: {

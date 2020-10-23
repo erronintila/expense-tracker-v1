@@ -260,7 +260,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onSave: function onSave() {
@@ -283,7 +283,7 @@ __webpack_require__.r(__webpack_exports__);
           address: _this.form.address,
           expense_types: _this.selected_expense_types
         }).then(function (response) {
-          _this.successDialog("Success", "Vendor created successfully.");
+          _this.mixin_successDialog("Success", "Vendor created successfully.");
 
           _this.$router.push({
             name: "admin.vendors.index"
@@ -292,7 +292,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
         });
@@ -383,8 +383,8 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.validation.required.concat(
-                                _vm.validation.minLength(150)
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(150)
                               ),
                               counter: 150,
                               "error-messages": _vm.errors.name,
@@ -445,7 +445,7 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.validation.required,
+                              rules: _vm.mixin_validation.required,
                               "error-messages": _vm.errors.tin,
                               counter: 100,
                               label: "Tax Identification Number (TIN) *",

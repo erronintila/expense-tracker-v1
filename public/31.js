@@ -399,7 +399,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       }));
     },
     loadJobs: function loadJobs() {
@@ -411,7 +411,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {
@@ -423,7 +423,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadPermissions: function loadPermissions() {
@@ -437,7 +437,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           reject();
         });
@@ -491,7 +491,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
         });
@@ -607,7 +607,7 @@ var render = function() {
                                 [
                                   _c("v-autocomplete", {
                                     attrs: {
-                                      rules: _vm.validation.required,
+                                      rules: _vm.mixin_validation.required,
                                       items: _vm.jobs,
                                       "error-messages": _vm.errors.job_id,
                                       "item-text": "name",
@@ -638,8 +638,8 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.validation.required.concat(
-                                        _vm.validation.minLength(100)
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(100)
                                       ),
                                       counter: 100,
                                       "error-messages": _vm.errors.code,
@@ -742,8 +742,8 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.validation.required.concat(
-                                        _vm.validation.minLength(100)
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(100)
                                       ),
                                       counter: 100,
                                       "error-messages": _vm.errors.first_name,
@@ -801,8 +801,8 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.validation.required.concat(
-                                        _vm.validation.minLength(100)
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(100)
                                       ),
                                       counter: 100,
                                       "error-messages": _vm.errors.last_name,
@@ -861,7 +861,7 @@ var render = function() {
                                 [
                                   _c("v-select", {
                                     attrs: {
-                                      rules: _vm.validation.required,
+                                      rules: _vm.mixin_validation.required,
                                       items: ["Male", "Female"],
                                       "error-messages": _vm.errors.gender,
                                       label: "Gender *",
@@ -912,7 +912,7 @@ var render = function() {
                                                     {
                                                       attrs: {
                                                         rules:
-                                                          _vm.validation
+                                                          _vm.mixin_validation
                                                             .required,
                                                         "error-messages":
                                                           _vm.errors.birthdate,
@@ -1052,8 +1052,8 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.validation.required.concat(
-                                        _vm.validation.email
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.email
                                       ),
                                       "error-messages": _vm.errors.email,
                                       label: "Email Address *"
@@ -1141,8 +1141,8 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.validation.required.concat(
-                                        _vm.validation.minLength(50)
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(50)
                                       ),
                                       counter: 50,
                                       "error-messages": _vm.errors.username,

@@ -18,8 +18,8 @@
                             <v-text-field
                                 v-model="form.description"
                                 :rules="[
-                                    ...validation.required,
-                                    ...validation.minLength(100)
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(100)
                                 ]"
                                 :counter="100"
                                 :error-messages="errors.description"
@@ -39,7 +39,7 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="form.date"
-                                        :rules="validation.required"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         label="Date *"
@@ -68,7 +68,7 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="form.payee"
-                                        :rules="validation.required"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.payee"
                                         @input="errors.payee = []"
                                         label="Payee *"
@@ -84,7 +84,7 @@
                                             <v-col cols="12" md="8">
                                                 <v-text-field
                                                     v-model="form.payee"
-                                                    :rules="validation.required"
+                                                    :rules="mixin_validation.required"
                                                     :counter="100"
                                                     label="Payee *"
                                                     required
@@ -350,7 +350,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
                 });
         },
         onSave() {
@@ -359,7 +359,7 @@ export default {
             _this.$refs.form.validate();
 
             if (this.selected == 0) {
-                this.errorDialog("Error", "No Expense Report selected.");
+                this.mixin_errorDialog("Error", "No Expense Report selected.");
                 return;
             }
 
@@ -398,7 +398,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
 
                         _this.errors = error.response.data.errors;
                     });
