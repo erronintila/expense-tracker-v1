@@ -210,7 +210,7 @@
                                         <td>
                                             {{
                                                 mixin_formatNumber(
-                                                    item.amount - item.personal_amount
+                                                    item.amount - item.reimbursable_amount
                                                 )
                                             }}
                                         </td>
@@ -221,7 +221,7 @@
                                         <td>
                                             {{
                                                 mixin_formatNumber(
-                                                    item.personal_amount
+                                                    item.reimbursable_amount
                                                 )
                                             }}
                                         </td>
@@ -292,7 +292,7 @@
                         {{ mixin_formatNumber(item.amount) }}
                     </template>
                     <template v-slot:[`item.replenishment`]="{ item }">
-                        {{ mixin_formatNumber(item.amount - item.personal_amount) }}
+                        {{ mixin_formatNumber(item.amount - item.reimbursable_amount) }}
                     </template>
                     <!-- <template v-slot:[`item.expense_report`]="{ item }">
                         {{
@@ -715,7 +715,7 @@ export default {
             );
 
             this.totalReplenishment = this.mixin_formatNumber(
-                this.items.reduce((total, item) => total + (item.amount - item.personal_amount), 0)
+                this.items.reduce((total, item) => total + (item.amount - item.reimbursable_amount), 0)
             );
         }
     },

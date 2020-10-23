@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[39],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12,6 +12,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/dialogs/AddVendor */ "./resources/js/components/dialogs/AddVendor.vue");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -544,7 +551,7 @@ __webpack_require__.r(__webpack_exports__);
       panel: [0, 1],
       itemize: false,
       // paid_through_fund: false,
-      personal_amount: false,
+      reimbursable_amount: false,
       // reimbursable: false,
       openAddVendor: false,
       dialog: false,
@@ -600,30 +607,15 @@ __webpack_require__.r(__webpack_exports__);
         // particular_reimbursable_amount: 0,
         is_reimbursable: false,
         revolving_fund: 0,
-        personal_amount: 0,
+        reimbursable_amount: 0,
         details: {
           description: "",
-          amount: ""
+          amount: 0
         }
       },
       rules: {
-        reimbursable_amount: [// v =>
-          //     parseFloat(v) <= this.form.amount ||
-          //     "Reimbursable Amount should not be greater than the actual amount"
-        ],
-        revolving_fund: [// v =>
-          //     (parseFloat(v) <=
-          //         (this.form.sub_type.limit == null
-          //             ? this.form.expense_type.limit || v
-          //             : this.form.sub_type.limit) &&
-          //         parseFloat(v) == 0) ||
-          //     "Revolving Fund is greater than expense amount limit"
-        ] // particular_reimbursable_amount: [
-        //     v =>
-        //         parseFloat(v) <= this.form.particular_amount ||
-        //         "Reimbursable Amount should not be greater than the actual amount"
-        // ]
-
+        reimbursable_amount: [],
+        revolving_fund: []
       },
       errors: {
         sub_type: [],
@@ -641,33 +633,89 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    loadExpenseTypes: function loadExpenseTypes() {
-      // console.log(this.form.employee);
-      this.expense_types = this.form.employee.expense_types; // let _this = this;
-      // axios
-      //     .get("/api/data/expense_types")
-      //     .then(response => {
-      //         _this.expense_types = response.data.data;
-      //     })
-      //     .catch(error => {
-      //         console.log(error);
-      //         console.log(error.response);
-      //         _this.mixin_errorDialog(
-      //             `Error ${error.response.status}`,
-      //             error.response.statusText
-      //         );
-      //     });
-    },
-    loadEmployees: function loadEmployees() {
+    getData: function getData() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
+      this.loadEmployees().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
+        var data = response.data.data;
+        _this.form.code = data.code;
+        _this.form.description = data.description;
+        _this.form.receipt_number = data.receipt_number;
+        _this.form.date = data.date;
+        _this.form.remarks = data.remarks;
+        _this.form.is_active = data.is_active;
+        _this.form.employee = data.employee;
+        _this.form.vendor = data.vendor == null ? null : data.vendor.id;
+        _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
+
+        _this.expense_types = data.employee.expense_types;
+        _this.sub_types = data.expense_type.sub_types;
+
+        if (data.details !== null) {
+          _this.itemize = true;
+          _this.items = data.details;
+        } else {
+          // _this.itemize = false;
+          // _this.items = [];
+          _this.form.amount = data.amount;
+        }
+
+        _this.sub_types.unshift({
+          id: null,
+          name: "None",
+          limit: null
+        });
+
+        _this.form.sub_type = data.sub_type == null ? {
+          id: null,
+          name: "None",
+          limit: null
+        } : data.sub_type;
+
+        if (data.revolving_fund > 0) {
+          _this.paid_through_fund = true;
+          _this.form.revolving_fund = data.revolving_fund;
+        } else {
+          _this.paid_through_fund = false;
+          _this.form.revolving_fund = 0;
+        }
+
+        _this.form.reimbursable_amount = data.reimbursable_amount;
+        _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
 
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      }));
+    },
+    loadExpenseTypes: function loadExpenseTypes() {
+      var _this = this;
+
+      axios.get("/api/data/expense_types").then(function (response) {
+        _this.expense_types = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      });
+    },
+    loadEmployees: function loadEmployees() {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/data/employees").then(function (response) {
+          _this.employees = response.data.data;
+          resolve();
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          reject();
+        });
       });
     },
     loadVendors: function loadVendors() {
@@ -692,49 +740,25 @@ __webpack_require__.r(__webpack_exports__);
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
-      var _this = this; // console.log(_this.form.expense_type, _this.form.sub_type.id);
-      // return;
-
+      var _this = this;
 
       _this.$refs.form.validate();
 
-      if (_this.form.amount - _this.form.personal_amount > _this.form.employee.remaining_fund) {
+      if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
         _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
           position: "top-right",
           timeout: 2000
         });
 
         return;
-      } // if (
-      //     parseFloat(this.form.amount) -
-      //         parseFloat(this.form.reimbursable_amount) >
-      //     parseFloat(this.form.employee.remaining_fund)
-      // ) {
-      //     _this.$dialog.message.error(
-      //         "Expense actual amount is greater than remaining funds",
-      //         {
-      //             position: "top-right",
-      //             timeout: 2000
-      //         }
-      //     );
-      //     return;
-      // }
-      // if (this.items.length == 0) {
-      //     _this.$dialog.message.error("No Expense detail added", {
-      //         position: "top-right",
-      //         timeout: 2000
-      //     });
-      //     return;
-      // }
-
+      }
 
       if (_this.$refs.form.validate()) {
-        axios.post("/api/expenses", {
+        axios.put("/api/expenses/" + _this.$route.params.id, {
           code: _this.form.code,
           description: _this.form.description,
           amount: _this.form.amount,
-          // revolving_fund: _this.form.revolving_fund,
-          // reimbursable_amount: _this.form.reimbursable_amount,
+          reimbursable_amount: _this.form.reimbursable_amount,
           receipt_number: _this.form.receipt_number,
           date: _this.form.date,
           remarks: _this.form.remarks,
@@ -747,12 +771,14 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           _this.onRefresh();
 
-          _this.$dialog.message.success("Expense created successfully.", {
+          _this.$dialog.message.success("Expense updated successfully.", {
             position: "top-right",
             timeout: 2000
           });
 
-          _this.$router.go(-1);
+          _this.$router.push({
+            name: "admin.expenses.index"
+          });
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -765,9 +791,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addItem: function addItem() {
+      var description = this.form.details.description;
+      var amount = this.mixin_convertToNumber(this.form.details.amount);
+
+      if (description == "" || amount <= 0) {
+        return;
+      }
+
       this.items.push({
-        description: this.form.details.description,
-        amount: this.form.details.amount
+        description: description,
+        amount: amount
       });
       this.dialog = false;
       this.form.details.description = "";
@@ -784,7 +817,7 @@ __webpack_require__.r(__webpack_exports__);
         limit: null
       };
       this.sub_types = e.sub_types;
-      this.sub_types.unshift({
+      this.sub_types.push({
         id: null,
         name: "None",
         limit: null
@@ -793,27 +826,31 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     amount_to_replenish: function amount_to_replenish() {
-      // return this.mixin_isEmptyNumber(this.form.personal_amount);
-      return this.mixin_isEmptyNumber(this.form.amount) - this.mixin_isEmptyNumber(this.form.personal_amount);
+      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var amount = this.mixin_convertToNumber(this.form.amount);
+
+      if (remaining_fund >= amount) {
+        return amount;
+      }
+
+      return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_isEmptyNumber(this.form.employee.remaining_fund);
-      var amount = this.mixin_isEmptyNumber(this.form.amount);
+      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var amount = this.mixin_convertToNumber(this.form.amount);
 
       if (remaining_fund < amount) {
         var to_replenish = Math.abs(remaining_fund - amount);
+        this.form.reimbursable_amount = to_replenish;
         return to_replenish;
       }
 
-      return 0; // return (
-      //     this.$isEmptyNumber(this.form.employee.remaining_fund) -
-      //     this.$isEmptyNumber(this.form.amount)
-      // );
+      return 0;
     },
     expense_amount: function expense_amount() {
-      return this.mixin_isEmptyNumber(this.form.amount);
+      return this.mixin_convertToNumber(this.form.amount);
     },
-    display_personal_amount: function display_personal_amount() {
+    display_reimbursable_amount: function display_reimbursable_amount() {
       return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
     }
   },
@@ -821,41 +858,26 @@ __webpack_require__.r(__webpack_exports__);
     items: function items() {
       this.form.amount = this.items.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.amount);
-      }, 0); // this.form.reimbursable_amount = this.items.reduce(
-      //     (total, item) =>
-      //         parseFloat(total) +
-      //         parseFloat(item.particular_reimbursable_amount),
-      //     0
-      // );
+      }, 0);
     },
     itemize: function itemize() {
       this.form.amount = this.items.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.amount);
       }, 0);
-    } // "form.amount": function() {
-    //     if (this.form.amount.length == 0) {
-    //         this.form.amount = 0;
-    //     }
-    // }
-    // expense_type() {
-    //     console.log(this.expense_type);
-    //     this.sub_types = this.expense_type.sub_types;
-    // }
-
+    }
   },
   created: function created() {
-    // this.loadExpenseTypes();
-    this.loadEmployees();
     this.loadVendors();
+    this.getData();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e& ***!
-  \***************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2& ***!
+  \*************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -896,7 +918,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("New Expense")
+                _vm._v("Edit Expense")
               ])
             ],
             1
@@ -1345,6 +1367,36 @@ var render = function() {
                                     ],
                                     1
                                   )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c("v-col", [
+                                    _c("div", { staticClass: "ml-4" }, [
+                                      _c(
+                                        "small",
+                                        { staticClass: "green--text" },
+                                        [
+                                          _vm._v(
+                                            "\n                                            ** Note:\n                                        "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "small",
+                                        { staticClass: "grey--text" },
+                                        [
+                                          _vm._v(
+                                            "\n                                            Expense amount exceeding the\n                                            remaining fund will be\n                                            considered as reimbursable.\n                                        "
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ])
                                 ],
                                 1
                               ),
@@ -1828,17 +1880,21 @@ var render = function() {
                               _c(
                                 "v-row",
                                 [
-                                  _vm.display_personal_amount
+                                  _vm.display_reimbursable_amount
                                     ? _c(
                                         "v-col",
                                         { attrs: { cols: "12", md: "4" } },
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.personal_amount,
-                                              label: "Personal Amount",
+                                              rules:
+                                                _vm.rules.reimbursable_amount,
+                                              label: "Reimbursable Amount",
                                               type: "number",
-                                              readonly: ""
+                                              readonly: "",
+                                              hint:
+                                                "The amount involves spending from your own pocket",
+                                              "persistent-hint": ""
                                             },
                                             model: {
                                               value: _vm.amount_to_reimburse,
@@ -1869,106 +1925,128 @@ var render = function() {
                                     _c("table", { staticClass: "ml-4" }, [
                                       _c("tbody", [
                                         _c("tr", [
-                                          _c(
-                                            "td",
-                                            { staticClass: "green--text" },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    Remaining Fund\n                                                "
-                                              )
-                                            ]
-                                          ),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                                    Remaining Fund\n                                                "
+                                            )
+                                          ]),
                                           _vm._v(" "),
                                           _c("td", [_vm._v(":")]),
                                           _vm._v(" "),
+                                          _c(
+                                            "td",
+                                            {
+                                              staticClass:
+                                                "green--text text--darken-4 text-right"
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                                    " +
+                                                  _vm._s(
+                                                    _vm.mixin_formatNumber(
+                                                      _vm.form.employee
+                                                        .remaining_fund
+                                                    )
+                                                  ) +
+                                                  "\n                                                "
+                                              )
+                                            ]
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
                                           _c("td", [
                                             _vm._v(
-                                              "\n                                                    " +
-                                                _vm._s(
-                                                  _vm.mixin_formatNumber(
-                                                    _vm.form.employee
-                                                      .remaining_fund
-                                                  )
-                                                ) +
-                                                "\n                                                "
+                                              "\n                                                    Amount to reimburse\n                                                "
                                             )
-                                          ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "td",
+                                            {
+                                              staticClass:
+                                                "green--text text--darken-4 text-right"
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                                    " +
+                                                  _vm._s(
+                                                    _vm.mixin_formatNumber(
+                                                      _vm.amount_to_reimburse
+                                                    )
+                                                  ) +
+                                                  "\n                                                "
+                                              )
+                                            ]
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                                    Amount to replenish\n                                                "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "td",
+                                            {
+                                              staticClass:
+                                                "green--text text--darken-4 text-right"
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                                    " +
+                                                  _vm._s(
+                                                    _vm.mixin_formatNumber(
+                                                      _vm.amount_to_replenish
+                                                    )
+                                                  ) +
+                                                  "\n                                                "
+                                              )
+                                            ]
+                                          )
                                         ]),
                                         _vm._v(" "),
                                         _c("tr", [
                                           _c(
                                             "td",
-                                            { staticClass: "green--text" },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    Amount to reimburse\n                                                "
-                                              )
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    " +
-                                                _vm._s(
-                                                  _vm.mixin_formatNumber(
-                                                    _vm.amount_to_reimburse
-                                                  )
-                                                ) +
-                                                "\n                                                "
-                                            )
-                                          ])
+                                            { attrs: { colspan: "3" } },
+                                            [_c("hr")]
+                                          )
                                         ]),
                                         _vm._v(" "),
                                         _c("tr", [
-                                          _c(
-                                            "td",
-                                            { staticClass: "green--text" },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    Amount to replenish\n                                                "
-                                              )
-                                            ]
-                                          ),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                                    Total\n                                                "
+                                            )
+                                          ]),
                                           _vm._v(" "),
                                           _c("td", [_vm._v(":")]),
                                           _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    " +
-                                                _vm._s(
-                                                  _vm.mixin_formatNumber(
-                                                    _vm.amount_to_replenish
-                                                  )
-                                                ) +
-                                                "\n                                                "
-                                            )
-                                          ])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
                                           _c(
                                             "td",
-                                            { staticClass: "green--text" },
+                                            {
+                                              staticClass:
+                                                "green--text text--darken-4 text-right"
+                                            },
                                             [
                                               _vm._v(
-                                                "\n                                                    Total Amount\n                                                "
+                                                "\n                                                    " +
+                                                  _vm._s(
+                                                    _vm.mixin_formatNumber(
+                                                      _vm.expense_amount
+                                                    )
+                                                  ) +
+                                                  "\n                                                "
                                               )
                                             ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(
-                                              _vm._s(
-                                                _vm.mixin_formatNumber(
-                                                  _vm.expense_amount
-                                                )
-                                              )
-                                            )
-                                          ])
+                                          )
                                         ])
                                       ])
                                     ])
@@ -2020,6 +2098,21 @@ var render = function() {
                                             _vm.$set(_vm.form, "remarks", $$v)
                                           },
                                           expression: "form.remarks"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "6" } },
+                                    [
+                                      _c("v-textarea", {
+                                        attrs: {
+                                          rows: "1",
+                                          label: "Notes",
+                                          readonly: ""
                                         }
                                       })
                                     ],
@@ -2093,17 +2186,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Create.vue":
-/*!**************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Create.vue ***!
-  \**************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Edit.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Edit.vue ***!
+  \************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=bab06a4e& */ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&");
-/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=d09223b2& */ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&");
+/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -2113,9 +2206,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -2125,38 +2218,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/expenses/Create.vue"
+component.options.__file = "resources/js/views/modules/admin/expenses/Edit.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&":
-/*!*********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e& ***!
-  \*********************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2& ***!
+  \*******************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=bab06a4e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=d09223b2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Edit.vue?vue&type=template&id=d09223b2&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_d09223b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

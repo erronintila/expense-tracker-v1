@@ -41,7 +41,13 @@ export default {
             }
             return 0;
         },
-        mixin_isEmptyNumber(item) {
+        // mixin_isEmptyNumber(item) {
+        //     if (item) {
+        //         return parseFloat(item);
+        //     }
+        //     return 0;
+        // },
+        mixin_convertToNumber(item) {
             if (item) {
                 return parseFloat(item);
             }

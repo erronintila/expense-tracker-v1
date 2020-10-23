@@ -238,9 +238,7 @@ class ExpenseController extends Controller
 
         $expense->amount = $request->amount;
 
-        $expense->personal_amount = $request->personal_amount;
-
-        // $expense->reimbursable_amount = $request->reimbursable_amount;
+        $expense->reimbursable_amount = $request->reimbursable_amount;
 
         $expense->remarks = $request->remarks;
 
@@ -358,9 +356,7 @@ class ExpenseController extends Controller
 
                 $expense->amount = $request->amount;
 
-                $expense->personal_amount = $request->personal_amount;
-
-                // $expense->reimbursable_amount = $request->reimbursable_amount;
+                $expense->reimbursable_amount = $request->reimbursable_amount;
 
                 $expense->remarks = $request->remarks;
 

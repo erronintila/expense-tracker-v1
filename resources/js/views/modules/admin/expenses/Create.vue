@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-card class="elevation-0 pt-0">
-
             <!-- **************************************************************
                 Card Title 
             *************************************************************** -->
@@ -21,6 +20,9 @@
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-expansion-panels v-model="panel" multiple class="mt-4">
+                        <!-- **************************************************************
+                            Basic Information
+                        *************************************************************** -->
                         <v-expansion-panel>
                             <v-expansion-panel-header>
                                 <div class="green--text">Basic Information</div>
@@ -41,7 +43,9 @@
                                             >
                                                 <v-text-field
                                                     v-model="form.date"
-                                                    :rules="mixin_validation.required"
+                                                    :rules="
+                                                        mixin_validation.required
+                                                    "
                                                     :error-messages="
                                                         errors.date
                                                     "
@@ -158,6 +162,9 @@
                             </v-expansion-panel-content>
                         </v-expansion-panel>
 
+                        <!-- **************************************************************
+                            Expense Details
+                        *************************************************************** -->
                         <v-expansion-panel>
                             <v-expansion-panel-header>
                                 <div class="green--text">
@@ -169,6 +176,7 @@
                                 </div>
                             </v-expansion-panel-header>
                             <v-expansion-panel-content>
+                                
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-autocomplete
@@ -203,6 +211,27 @@
                                             return-object
                                         >
                                         </v-autocomplete>
+                                    </v-col>
+
+                                    <v-col cols="12" md="4">
+                                        <div>
+                                            Expense Limit: 0
+                                        </div>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <div class="ml-4">
+                                            <small class="green--text">
+                                                ** Note:
+                                            </small>
+                                            <small class="grey--text">
+                                                Expense amount exceeding the
+                                                remaining fund/expense limit will be
+                                                considered as reimbursable.
+                                            </small>
+                                        </div>
                                     </v-col>
                                 </v-row>
 
@@ -376,14 +405,18 @@
                                     <v-col
                                         cols="12"
                                         md="4"
-                                        v-if="display_personal_amount"
+                                        v-if="display_reimbursable_amount"
                                     >
                                         <v-text-field
                                             v-model="amount_to_reimburse"
-                                            :rules="rules.personal_amount"
-                                            label="Personal Amount"
+                                            :rules="rules.reimbursable_amount"
+                                            label="Reimbursable Amount"
                                             type="number"
                                             readonly
+                                            :hint="
+                                                `The amount involves spending from your own pocket`
+                                            "
+                                            persistent-hint
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -396,90 +429,78 @@
                                         <table class="ml-4">
                                             <tbody>
                                                 <tr>
-                                                    <td class="green--text">
+                                                    <td>
                                                         Remaining Fund
                                                     </td>
                                                     <td>:</td>
-                                                    <td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
                                                         {{
-                                                            mixin_formatNumber(form.employee.remaining_fund)
+                                                            mixin_formatNumber(
+                                                                form.employee
+                                                                    .remaining_fund
+                                                            )
                                                         }}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="green--text">
+                                                    <td>
                                                         Amount to reimburse
                                                     </td>
                                                     <td>:</td>
-                                                    <td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
                                                         {{
-                                                            mixin_formatNumber(amount_to_reimburse)
+                                                            mixin_formatNumber(
+                                                                amount_to_reimburse
+                                                            )
                                                         }}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="green--text">
+                                                    <td>
                                                         Amount to replenish
                                                     </td>
                                                     <td>:</td>
-                                                    <td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
                                                         {{
-                                                            mixin_formatNumber(amount_to_replenish)
+                                                            mixin_formatNumber(
+                                                                amount_to_replenish
+                                                            )
                                                         }}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="green--text">
-                                                        Total Amount
+                                                    <td colspan="3"><hr /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Total
                                                     </td>
                                                     <td>:</td>
-                                                    <td>{{ mixin_formatNumber(expense_amount) }}</td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                expense_amount
+                                                            )
+                                                        }}
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </v-col>
                                 </v-row>
-
-                                <!-- <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-checkbox
-                                            v-model="reimbursable"
-                                            label="Reimbursable"
-                                        ></v-checkbox>
-                                    </v-col>
-                                    <v-col cols="12" md="4" v-if="!reimbursable">
-                                        <v-select
-                                            label="Paid through"
-                                            :items="[
-                                                'Petty Cash',
-                                                'Undeposited Funds'
-                                            ]"
-                                        ></v-select>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row v-if="reimbursable">
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            label="Amount paid through Revolving Fund"
-                                        ></v-text-field>
-                                    </v-col>
-
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            label="Revolving Fund Amount"
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row> -->
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                     </v-expansion-panels>
 
                     <v-card class="mt-4">
-                        <!-- <v-card-subtitle>
-                            <div class="green--text">Remarks</div>
-                        </v-card-subtitle> -->
-
                         <v-card-text>
                             <v-container>
                                 <v-row>
@@ -532,7 +553,7 @@ export default {
             panel: [0, 1],
             itemize: false,
             // paid_through_fund: false,
-            personal_amount: false,
+            reimbursable_amount: false,
             // reimbursable: false,
             openAddVendor: false,
             dialog: false,
@@ -577,32 +598,15 @@ export default {
                 is_reimbursable: false,
 
                 revolving_fund: 0,
-                personal_amount: 0,
+                reimbursable_amount: 0,
                 details: {
                     description: "",
                     amount: ""
                 }
             },
             rules: {
-                reimbursable_amount: [
-                    // v =>
-                    //     parseFloat(v) <= this.form.amount ||
-                    //     "Reimbursable Amount should not be greater than the actual amount"
-                ],
-                revolving_fund: [
-                    // v =>
-                    //     (parseFloat(v) <=
-                    //         (this.form.sub_type.limit == null
-                    //             ? this.form.expense_type.limit || v
-                    //             : this.form.sub_type.limit) &&
-                    //         parseFloat(v) == 0) ||
-                    //     "Revolving Fund is greater than expense amount limit"
-                ]
-                // particular_reimbursable_amount: [
-                //     v =>
-                //         parseFloat(v) <= this.form.particular_amount ||
-                //         "Reimbursable Amount should not be greater than the actual amount"
-                // ]
+                reimbursable_amount: [],
+                revolving_fund: []
             },
             errors: {
                 sub_type: [],
@@ -621,26 +625,7 @@ export default {
     },
     methods: {
         loadExpenseTypes() {
-            // console.log(this.form.employee);
-
             this.expense_types = this.form.employee.expense_types;
-
-            // let _this = this;
-
-            // axios
-            //     .get("/api/data/expense_types")
-            //     .then(response => {
-            //         _this.expense_types = response.data.data;
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //         console.log(error.response);
-
-            //         _this.mixin_errorDialog(
-            //             `Error ${error.response.status}`,
-            //             error.response.statusText
-            //         );
-            //     });
         },
         loadEmployees() {
             let _this = this;
@@ -690,14 +675,10 @@ export default {
         onSave() {
             let _this = this;
 
-            // console.log(_this.form.expense_type, _this.form.sub_type.id);
-
-            // return;
-
             _this.$refs.form.validate();
 
             if (
-                _this.form.amount - _this.form.personal_amount >
+                _this.amount_to_replenish >
                 _this.form.employee.remaining_fund
             ) {
                 _this.$dialog.message.error(
@@ -710,37 +691,13 @@ export default {
                 return;
             }
 
-            // if (
-            //     parseFloat(this.form.amount) -
-            //         parseFloat(this.form.reimbursable_amount) >
-            //     parseFloat(this.form.employee.remaining_fund)
-            // ) {
-            //     _this.$dialog.message.error(
-            //         "Expense actual amount is greater than remaining funds",
-            //         {
-            //             position: "top-right",
-            //             timeout: 2000
-            //         }
-            //     );
-            //     return;
-            // }
-
-            // if (this.items.length == 0) {
-            //     _this.$dialog.message.error("No Expense detail added", {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     });
-            //     return;
-            // }
-
             if (_this.$refs.form.validate()) {
                 axios
                     .post("/api/expenses", {
                         code: _this.form.code,
                         description: _this.form.description,
                         amount: _this.form.amount,
-                        // revolving_fund: _this.form.revolving_fund,
-                        // reimbursable_amount: _this.form.reimbursable_amount,
+                        reimbursable_amount: _this.form.reimbursable_amount,
                         receipt_number: _this.form.receipt_number,
                         date: _this.form.date,
                         remarks: _this.form.remarks,
@@ -780,9 +737,16 @@ export default {
             }
         },
         addItem() {
+            let description = this.form.details.description;
+            let amount = this.mixin_convertToNumber(this.form.details.amount);
+
+            if (description == "" || amount <= 0) {
+                return;
+            }
+
             this.items.push({
-                description: this.form.details.description,
-                amount: this.form.details.amount
+                description: description,
+                amount: amount
             });
 
             this.dialog = false;
@@ -802,36 +766,39 @@ export default {
     },
     computed: {
         amount_to_replenish() {
-
-            // return this.mixin_isEmptyNumber(this.form.personal_amount);
-            return (
-                this.mixin_isEmptyNumber(this.form.amount) -
-                this.mixin_isEmptyNumber(this.form.personal_amount)
-            );
-        },
-        amount_to_reimburse() {
-            let remaining_fund = this.mixin_isEmptyNumber(
+            let remaining_fund = this.mixin_convertToNumber(
                 this.form.employee.remaining_fund
             );
-            let amount = this.mixin_isEmptyNumber(this.form.amount);
+            let amount = this.mixin_convertToNumber(this.form.amount);
+
+            if (remaining_fund >= amount) {
+                return amount;
+            }
+
+            return amount - Math.abs(remaining_fund - amount);
+        },
+        amount_to_reimburse() {
+            let remaining_fund = this.mixin_convertToNumber(
+                this.form.employee.remaining_fund
+            );
+            let amount = this.mixin_convertToNumber(this.form.amount);
 
             if (remaining_fund < amount) {
                 let to_replenish = Math.abs(remaining_fund - amount);
 
+                this.form.reimbursable_amount = to_replenish;
+
                 return to_replenish;
             }
 
-            return 0;
+            this.form.reimbursable_amount = 0;
 
-            // return (
-            //     this.$isEmptyNumber(this.form.employee.remaining_fund) -
-            //     this.$isEmptyNumber(this.form.amount)
-            // );
+            return 0;
         },
         expense_amount() {
-            return this.mixin_isEmptyNumber(this.form.amount);
+            return this.mixin_convertToNumber(this.form.amount);
         },
-        display_personal_amount() {
+        display_reimbursable_amount() {
             return (
                 parseFloat(this.form.amount) >
                 parseFloat(this.form.employee.remaining_fund)
@@ -844,13 +811,6 @@ export default {
                 (total, item) => parseFloat(total) + parseFloat(item.amount),
                 0
             );
-
-            // this.form.reimbursable_amount = this.items.reduce(
-            //     (total, item) =>
-            //         parseFloat(total) +
-            //         parseFloat(item.particular_reimbursable_amount),
-            //     0
-            // );
         },
         itemize() {
             this.form.amount = this.items.reduce(
@@ -858,18 +818,8 @@ export default {
                 0
             );
         }
-        // "form.amount": function() {
-        //     if (this.form.amount.length == 0) {
-        //         this.form.amount = 0;
-        //     }
-        // }
-        // expense_type() {
-        //     console.log(this.expense_type);
-        //     this.sub_types = this.expense_type.sub_types;
-        // }
     },
     created() {
-        // this.loadExpenseTypes();
         this.loadEmployees();
         this.loadVendors();
     }

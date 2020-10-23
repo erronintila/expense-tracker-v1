@@ -292,7 +292,7 @@ class ExpenseReportController extends Controller
                     $this->updateReport($expense_report, true, false, false, false, false);
 
                     foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-
+                        
                         $this->updateExpense($expense, true, false, false, false, false);
                     }
                 }
