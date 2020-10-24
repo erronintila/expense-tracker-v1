@@ -17,7 +17,7 @@ class Expense extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model
@@ -133,11 +133,6 @@ class Expense extends Model
         return $this->belongsTo(ExpenseReport::class);
     }
 
-    // public function expense_details()
-    // {
-    //     return $this->hasMany(ExpenseDetail::class);
-    // }
-
     /**
      * Displays the current status of expense.
      *
@@ -151,7 +146,6 @@ class Expense extends Model
             'status' => 'Error',
         ];
 
-        // return $this->deleted_at == null ? "Active" : "Archived";
         $reported = is_null($this->expense_report_id);
         $submitted = is_null($this->submitted_at);
         $reviewed = is_null($this->reviewed_at);
@@ -299,26 +293,6 @@ class Expense extends Model
     {
         return "₱ " . number_format($this->amount, 2);
     }
-
-    // /**
-    //  * Displays the formatted start date of the expense.
-    //  *
-    //  * @return void
-    //  */
-    // public function start_date_formatted()
-    // {
-    //     return date('F d, Y', strtotime($this->start_date));
-    // }
-
-    // /**
-    //  * Displays the formatted end date of the expense.
-    //  *
-    //  * @return void
-    //  */
-    // public function end_date_formatted()
-    // {
-    //     return date('F d, Y', strtotime($this->end_date));
-    // }
 
     /**
      * Displays the formatted receipt date of the expense.
