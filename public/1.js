@@ -1,17 +1,14 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[1],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Show.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Show.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/dialogs/AddVendor.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/dialogs/AddVendor.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/dialogs/AddVendor */ "./resources/js/components/dialogs/AddVendor.vue");
 //
 //
 //
@@ -173,459 +170,114 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    AddVendor: _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__["default"]
-  },
+  // props: {
+  //     openDialog: {
+  //         type: Boolean,
+  //         default: false
+  //     }
+  // },
   data: function data() {
     return {
-      panel: [0, 1],
-      itemize: false,
-      // paid_through_fund: false,
-      reimbursable_amount: false,
-      // reimbursable: false,
-      openAddVendor: false,
-      dialog: false,
+      no_tin: false,
+      openDialog: false,
       valid: false,
-      menu: false,
-      headers: [{
-        text: "Particulars",
-        value: "description",
-        sortable: false
-      }, {
-        text: "Amount",
-        value: "amount",
-        sortable: false
-      }, {
-        text: "",
-        value: "actions",
-        sortable: false
-      }],
-      items: [],
+      selected_expense_types: [],
       expense_types: [],
-      sub_types: [],
-      employees: [],
-      vendors: [],
       form: {
-        code: null,
-        description: null,
-        amount: 0,
-        // reimbursable_amount: 0,
-        receipt_number: null,
-        date: null,
+        code: "",
+        name: "",
+        email: "",
+        tin: "",
+        contact_person: "",
+        mobile_number: "",
+        telephone_number: "",
         remarks: "",
-        is_active: true,
-        expense_type: {
-          id: null,
-          name: "",
-          limit: null,
-          sub_types: null
-        },
-        sub_type: {
-          id: null,
-          name: "",
-          limit: null
-        },
-        employee: {
-          id: null,
-          remaining_fund: 0,
-          fund: 0,
-          expense_types: null
-        },
-        vendor: null,
-        // particular: "",
-        // particular_amount: 0,
-        // particular_reimbursable_amount: 0,
-        is_reimbursable: false,
-        revolving_fund: 0,
-        reimbursable_amount: 0,
-        details: {
-          description: "",
-          amount: 0
-        }
-      },
-      rules: {
-        reimbursable_amount: [],
-        revolving_fund: []
+        website: "",
+        is_vat_inclusive: true,
+        address: ""
       },
       errors: {
-        sub_type: [],
-        description: [],
-        amount: [],
-        reimbursable_amount: [],
-        receipt_number: [],
-        date: [],
+        code: [],
+        name: [],
+        email: [],
+        tin: [],
+        contact_person: [],
+        mobile_number: [],
+        telephone_number: [],
         remarks: [],
-        is_active: [],
-        expense_type_id: [],
-        employee_id: [],
-        vendor_id: []
+        website: [],
+        is_vat_inclusive: [],
+        address: []
       }
     };
   },
   methods: {
-    getData: function getData() {
-      var _this2 = this;
-
-      var _this = this;
-
-      this.loadEmployees().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
-        console.log(response);
-        console.log(_this2.form.employee.reimbursable_amount);
-        var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.description = data.description;
-        _this.form.receipt_number = data.receipt_number;
-        _this.form.date = data.date;
-        _this.form.remarks = data.remarks;
-        _this.form.is_active = data.is_active;
-        _this.form.employee = data.employee;
-        _this.form.vendor = data.vendor == null ? null : data.vendor.id;
-        _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
-
-        _this.expense_types = data.employee.expense_types;
-        _this.sub_types = data.expense_type.sub_types;
-        console.log(_this.form.employee);
-
-        if (data.details !== null) {
-          _this.itemize = true;
-          _this.items = data.details;
-        } else {
-          // _this.itemize = false;
-          // _this.items = [];
-          _this.form.amount = data.amount;
-        }
-
-        _this.sub_types.unshift({
-          id: null,
-          name: "None",
-          limit: null
-        });
-
-        _this.form.sub_type = data.sub_type == null ? {
-          id: null,
-          name: "None",
-          limit: null
-        } : data.sub_type;
-
-        if (data.revolving_fund > 0) {
-          _this.paid_through_fund = true;
-          _this.form.revolving_fund = data.revolving_fund;
-        } else {
-          _this.paid_through_fund = false;
-          _this.form.revolving_fund = 0;
-        }
-
-        _this.form.reimbursable_amount = data.reimbursable_amount;
-        _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      }));
-    },
-    loadExpenseTypes: function loadExpenseTypes() {
-      var _this = this;
-
-      axios.get("/api/data/expense_types").then(function (response) {
-        _this.expense_types = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
-    loadEmployees: function loadEmployees() {
-      var _this = this;
-
-      return new Promise(function (resolve, reject) {
-        axios.get("/api/data/employees").then(function (response) {
-          _this.employees = response.data.data;
-          resolve();
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          reject();
-        });
-      });
-    },
-    loadVendors: function loadVendors() {
-      var _this = this;
-
-      axios.get("/api/data/vendors").then(function (response) {
-        _this.vendors = response.data.data;
-
-        _this.vendors.unshift({
-          id: null,
-          name: "No Vendor",
-          tin: ""
-        });
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
-    onSave: function onSave() {
+    onCreateVendor: function onCreateVendor() {
       var _this = this;
 
       _this.$refs.form.validate();
 
-      if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
-        _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
-          position: "top-right",
-          timeout: 2000
-        });
-
-        return;
-      }
-
       if (_this.$refs.form.validate()) {
-        axios.put("/api/expenses/" + _this.$route.params.id, {
+        axios.post("/api/vendors", {
           code: _this.form.code,
-          description: _this.form.description,
-          amount: _this.form.amount,
-          reimbursable_amount: _this.form.reimbursable_amount,
-          receipt_number: _this.form.receipt_number,
-          date: _this.form.date,
+          name: _this.form.name,
+          email: _this.form.email,
+          tin: _this.form.tin == "N/A" ? null : _this.form.tin,
+          contact_person: _this.form.contact_person,
+          mobile_number: _this.form.mobile_number,
+          telephone_number: _this.form.telephone_number,
           remarks: _this.form.remarks,
-          is_active: _this.form.is_active,
-          expense_type_id: _this.form.expense_type.id,
-          sub_type_id: _this.form.sub_type.id,
-          employee_id: _this.form.employee.id,
-          vendor_id: _this.form.vendor,
-          details: _this.itemize ? _this.items : null
+          website: _this.form.website,
+          is_vat_inclusive: _this.form.is_vat_inclusive,
+          address: _this.form.address,
+          expense_types: _this.selected_expense_types
         }).then(function (response) {
-          _this.onRefresh();
-
-          _this.$dialog.message.success("Expense updated successfully.", {
+          _this.$dialog.message.success("Vendor created successfully.", {
             position: "top-right",
             timeout: 2000
           });
 
-          _this.$router.push({
-            name: "admin.expenses.index"
-          });
+          _this.$emit("createdVendor");
+
+          _this.openDialog = false;
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
         });
         return;
       }
-    },
-    addItem: function addItem() {
-      var description = this.form.details.description;
-      var amount = this.mixin_convertToNumber(this.form.details.amount);
-
-      if (description == "" || amount <= 0) {
-        return;
-      }
-
-      this.items.push({
-        description: description,
-        amount: amount
-      });
-      this.dialog = false;
-      this.form.details.description = "";
-      this.form.details.amount = 0;
-    },
-    onRemove: function onRemove(item) {
-      var index = this.items.indexOf(item);
-      confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
-    },
-    loadSubTypes: function loadSubTypes(e) {
-      this.form.sub_type = {
-        id: null,
-        name: "",
-        limit: null
-      };
-      this.sub_types = e.sub_types;
-      this.sub_types.push({
-        id: null,
-        name: "None",
-        limit: null
-      });
-    }
-  },
-  computed: {
-    amount_to_replenish: function amount_to_replenish() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
-      var amount = this.mixin_convertToNumber(this.form.amount);
-
-      if (remaining_fund >= amount) {
-        return amount;
-      }
-
-      return amount - Math.abs(remaining_fund - amount);
-    },
-    amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
-      var amount = this.mixin_convertToNumber(this.form.amount);
-
-      if (remaining_fund < amount) {
-        var to_replenish = Math.abs(remaining_fund - amount);
-        this.form.reimbursable_amount = to_replenish;
-        return to_replenish;
-      }
-
-      return 0;
-    },
-    expense_amount: function expense_amount() {
-      return this.mixin_convertToNumber(this.form.amount);
-    },
-    display_reimbursable_amount: function display_reimbursable_amount() {
-      return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
     }
   },
   watch: {
-    items: function items() {
-      this.form.amount = this.items.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.amount);
-      }, 0);
-    },
-    itemize: function itemize() {
-      this.form.amount = this.items.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.amount);
-      }, 0);
+    openDialog: function openDialog() {
+      this.form = {
+        code: "",
+        name: "",
+        email: "",
+        tin: "",
+        contact_person: "",
+        mobile_number: "",
+        telephone_number: "",
+        remarks: "",
+        website: "",
+        is_vat_inclusive: true,
+        address: ""
+      };
     }
-  },
-  created: function created() {
-    this.loadVendors();
-    this.getData();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Show.vue?vue&type=template&id=2407a99a&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Show.vue?vue&type=template&id=2407a99a& ***!
-  \*************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/dialogs/AddVendor.vue?vue&type=template&id=29b2b70a&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/dialogs/AddVendor.vue?vue&type=template&id=29b2b70a& ***!
+  \********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -638,173 +290,136 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
-    [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
-            [
+    "v-dialog",
+    {
+      attrs: { persistent: "", "max-width": "600px" },
+      scopedSlots: _vm._u([
+        {
+          key: "activator",
+          fn: function(ref) {
+            var on = ref.on
+            var attrs = ref.attrs
+            return [
               _c(
                 "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                1
-              ),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Expense Details")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-form",
-            {
-              ref: "form",
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
-              }
-            },
-            [
-              _c(
-                "v-container",
-                [
-                  _c(
-                    "v-expansion-panels",
+                _vm._g(
+                  _vm._b(
                     {
-                      staticClass: "mt-4",
-                      attrs: { multiple: "" },
-                      model: {
-                        value: _vm.panel,
-                        callback: function($$v) {
-                          _vm.panel = $$v
-                        },
-                        expression: "panel"
+                      attrs: {
+                        fab: "",
+                        color: "primary",
+                        text: "",
+                        "x-small": ""
                       }
                     },
+                    "v-btn",
+                    attrs,
+                    false
+                  ),
+                  on
+                ),
+                [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-plus")])],
+                1
+              )
+            ]
+          }
+        }
+      ]),
+      model: {
+        value: _vm.openDialog,
+        callback: function($$v) {
+          _vm.openDialog = $$v
+        },
+        expression: "openDialog"
+      }
+    },
+    [
+      _vm._v(" "),
+      _c(
+        "v-card",
+        [
+          _c("v-card-title", [
+            _c("span", { staticClass: "headline" }, [
+              _vm._v("\n                New Vendor\n            ")
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-form",
+                {
+                  ref: "form",
+                  model: {
+                    value: _vm.valid,
+                    callback: function($$v) {
+                      _vm.valid = $$v
+                    },
+                    expression: "valid"
+                  }
+                },
+                [
+                  _c(
+                    "v-container",
                     [
                       _c(
-                        "v-expansion-panel",
+                        "v-row",
                         [
-                          _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "green--text" }, [
-                              _vm._v("Basic Information")
-                            ])
-                          ]),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: _vm.mixin_validation.required.concat(
+                                    _vm.mixin_validation.minLength(150)
+                                  ),
+                                  counter: 150,
+                                  "error-messages": _vm.errors.name,
+                                  label: "Name *",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.form.name,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "name", $$v)
+                                  },
+                                  expression: "form.name"
+                                }
+                              })
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
                           _c(
-                            "v-expansion-panel-content",
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
                             [
                               _c(
-                                "v-row",
+                                "v-radio-group",
+                                {
+                                  attrs: { row: "" },
+                                  model: {
+                                    value: _vm.form.is_vat_inclusive,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.form,
+                                        "is_vat_inclusive",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "form.is_vat_inclusive"
+                                  }
+                                },
                                 [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: { label: "Date", readonly: "" },
-                                        model: {
-                                          value: _vm.form.date,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "date", $$v)
-                                          },
-                                          expression: "form.date"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
+                                  _c("v-radio", {
+                                    attrs: { label: "VAT", value: true }
+                                  }),
                                   _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Employee",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.employee.fullname,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.employee,
-                                              "fullname",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.employee.fullname"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Vendor",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.vendor,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "vendor", $$v)
-                                          },
-                                          expression: "form.vendor"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Receipt No.",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.receipt_number,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "receipt_number",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.receipt_number"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
+                                  _c("v-radio", {
+                                    attrs: { label: "Non-VAT", value: false }
+                                  })
                                 ],
                                 1
                               )
@@ -816,465 +431,272 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-expansion-panel",
+                        "v-row",
                         [
-                          _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "green--text" }, [
-                              _vm._v(
-                                "\n                                Expense Details\n                            "
-                              )
-                            ])
-                          ]),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "9" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: _vm.mixin_validation.required,
+                                  "error-messages": _vm.errors.tin,
+                                  counter: 100,
+                                  label: "Tax Identification Number (TIN) *",
+                                  required: "",
+                                  readonly: _vm.no_tin
+                                },
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "append",
+                                    fn: function() {
+                                      return undefined
+                                    },
+                                    proxy: true
+                                  }
+                                ]),
+                                model: {
+                                  value: _vm.form.tin,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "tin", $$v)
+                                  },
+                                  expression: "form.tin"
+                                }
+                              })
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
                           _c(
-                            "v-expansion-panel-content",
+                            "v-col",
+                            { attrs: { cols: "12", md: "3" } },
                             [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Expense Type",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.expense_type.name,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.expense_type,
-                                              "name",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.expense_type.name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Sub Type",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.sub_type.name,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.sub_type,
-                                              "name",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.sub_type.name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Description",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.description,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "description",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.description"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Amount",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.amount,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "amount", $$v)
-                                          },
-                                          expression: "form.amount"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12" } },
-                                    [
-                                      _c(
-                                        "v-data-table",
-                                        {
-                                          attrs: {
-                                            headers: _vm.headers,
-                                            items: _vm.items,
-                                            "items-per-page": 5,
-                                            "footer-props": {
-                                              itemsPerPageOptions: [5, 10, 20]
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm.items.length > 0
-                                            ? _c(
-                                                "template",
-                                                { slot: "body.append" },
-                                                [
-                                                  _c(
-                                                    "tr",
-                                                    {
-                                                      staticClass:
-                                                        "green--text hidden-md-and-up"
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "td",
-                                                        {
-                                                          staticClass: "title"
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            "\n                                                    Total:\n                                                    "
-                                                          ),
-                                                          _c("strong", [
-                                                            _vm._v(
-                                                              _vm._s(
-                                                                _vm.form.amount
-                                                              )
-                                                            )
-                                                          ])
-                                                        ]
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "tr",
-                                                    {
-                                                      staticClass:
-                                                        "green--text hidden-sm-and-down"
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "td",
-                                                        {
-                                                          staticClass: "title"
-                                                        },
-                                                        [_vm._v("Total")]
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v(
-                                                            _vm._s(
-                                                              _vm.form.amount
-                                                            )
-                                                          )
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td")
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            : _vm._e()
-                                        ],
-                                        2
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Reimbursable Amount",
-                                          readonly: "",
-                                          hint:
-                                            "The amount involves spending from your own pocket",
-                                          "persistent-hint": ""
-                                        },
-                                        model: {
-                                          value: _vm.amount_to_reimburse,
-                                          callback: function($$v) {
-                                            _vm.amount_to_reimburse = $$v
-                                          },
-                                          expression: "amount_to_reimburse"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c("v-col", [
-                                    _c("div", { staticClass: "green--text" }, [
-                                      _vm._v(
-                                        "\n                                        Expense Summary\n                                    "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("table", { staticClass: "ml-4" }, [
-                                      _c("tbody", [
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Remaining Fund\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.form.employee
-                                                        .remaining_fund
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Amount to reimburse\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.amount_to_reimburse
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Amount to replenish\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.amount_to_replenish
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c(
-                                            "td",
-                                            { attrs: { colspan: "3" } },
-                                            [_c("hr")]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Total\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.expense_amount
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ])
-                                      ])
-                                    ])
-                                  ])
-                                ],
-                                1
-                              )
+                              _c("v-checkbox", {
+                                attrs: { label: "N/A" },
+                                on: {
+                                  click: function() {
+                                    _vm.form.tin = _vm.no_tin ? "N/A" : ""
+                                  }
+                                },
+                                model: {
+                                  value: _vm.no_tin,
+                                  callback: function($$v) {
+                                    _vm.no_tin = $$v
+                                  },
+                                  expression: "no_tin"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: [],
+                                  "error-messages": _vm.errors.email,
+                                  label: "Email Address"
+                                },
+                                model: {
+                                  value: _vm.form.email,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "email", $$v)
+                                  },
+                                  expression: "form.email"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: [],
+                                  "error-messages": _vm.errors.contact_person,
+                                  counter: 100,
+                                  label: "Contact Person"
+                                },
+                                model: {
+                                  value: _vm.form.contact_person,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "contact_person", $$v)
+                                  },
+                                  expression: "form.contact_person"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: [],
+                                  counter: 30,
+                                  "error-messages": _vm.errors.mobile_number,
+                                  label: "Mobile Number"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.mobile_number = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.mobile_number,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "mobile_number", $$v)
+                                  },
+                                  expression: "form.mobile_number"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: [],
+                                  counter: 30,
+                                  "error-messages": _vm.errors.telephone_number,
+                                  label: "Telephone Number",
+                                  type: "number"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.telephone_number = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.telephone_number,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "telephone_number", $$v)
+                                  },
+                                  expression: "form.telephone_number"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  counter: 100,
+                                  rules: [],
+                                  "error-messages": _vm.errors.website,
+                                  label: "Website"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.website = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.website,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "website", $$v)
+                                  },
+                                  expression: "form.website"
+                                }
+                              })
                             ],
                             1
                           )
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card",
-                    { staticClass: "mt-4" },
-                    [
+                      ),
+                      _vm._v(" "),
                       _c(
-                        "v-card-text",
+                        "v-row",
                         [
                           _c(
-                            "v-container",
+                            "v-col",
+                            { attrs: { cols: "12" } },
                             [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: {
-                                          label: "Remarks",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.remarks,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "remarks", $$v)
-                                          },
-                                          expression: "form.remarks"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: {
-                                          rows: "1",
-                                          label: "Notes",
-                                          readonly: ""
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
+                              _c("v-textarea", {
+                                attrs: {
+                                  rules: [],
+                                  "error-messages": _vm.errors.address,
+                                  label: "Address",
+                                  rows: "1"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.address = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.address,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "address", $$v)
+                                  },
+                                  expression: "form.address"
+                                }
+                              })
                             ],
                             1
                           )
                         ],
                         1
-                      )
+                      ),
+                      _vm._v(" "),
+                      _c("small", { staticClass: "text--secondary" }, [
+                        _vm._v(
+                          "\n                        * indicates required field\n                    "
+                        )
+                      ])
                     ],
                     1
                   )
                 ],
                 1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "primary", text: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.openDialog = false
+                    }
+                  }
+                },
+                [_vm._v("Close")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "primary", text: "" },
+                  on: { click: _vm.onCreateVendor }
+                },
+                [_vm._v("\n                Save\n            ")]
               )
             ],
             1
@@ -1293,18 +715,18 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Show.vue":
-/*!************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Show.vue ***!
-  \************************************************************/
+/***/ "./resources/js/components/dialogs/AddVendor.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/dialogs/AddVendor.vue ***!
+  \*******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Show_vue_vue_type_template_id_2407a99a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Show.vue?vue&type=template&id=2407a99a& */ "./resources/js/views/modules/admin/expenses/Show.vue?vue&type=template&id=2407a99a&");
-/* harmony import */ var _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Show.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expenses/Show.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _AddVendor_vue_vue_type_template_id_29b2b70a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddVendor.vue?vue&type=template&id=29b2b70a& */ "./resources/js/components/dialogs/AddVendor.vue?vue&type=template&id=29b2b70a&");
+/* harmony import */ var _AddVendor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddVendor.vue?vue&type=script&lang=js& */ "./resources/js/components/dialogs/AddVendor.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -1313,9 +735,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Show_vue_vue_type_template_id_2407a99a___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Show_vue_vue_type_template_id_2407a99a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _AddVendor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AddVendor_vue_vue_type_template_id_29b2b70a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AddVendor_vue_vue_type_template_id_29b2b70a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1325,38 +747,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/expenses/Show.vue"
+component.options.__file = "resources/js/components/dialogs/AddVendor.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Show.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Show.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/components/dialogs/AddVendor.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/dialogs/AddVendor.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Show.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddVendor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AddVendor.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/dialogs/AddVendor.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddVendor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/expenses/Show.vue?vue&type=template&id=2407a99a&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expenses/Show.vue?vue&type=template&id=2407a99a& ***!
-  \*******************************************************************************************/
+/***/ "./resources/js/components/dialogs/AddVendor.vue?vue&type=template&id=29b2b70a&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/dialogs/AddVendor.vue?vue&type=template&id=29b2b70a& ***!
+  \**************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_2407a99a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=template&id=2407a99a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Show.vue?vue&type=template&id=2407a99a&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_2407a99a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddVendor_vue_vue_type_template_id_29b2b70a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AddVendor.vue?vue&type=template&id=29b2b70a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/dialogs/AddVendor.vue?vue&type=template&id=29b2b70a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddVendor_vue_vue_type_template_id_29b2b70a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_2407a99a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddVendor_vue_vue_type_template_id_29b2b70a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

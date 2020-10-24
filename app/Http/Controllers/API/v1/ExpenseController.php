@@ -230,6 +230,8 @@ class ExpenseController extends Controller
 
         $expense = new Expense();
 
+        $expense->code = generate_code(Expense::class, "EXP" . date("Y"), 10);
+
         $expense->description = $request->description ?? $expense_type->name;
 
         $expense->receipt_number = $request->receipt_number;

@@ -27,8 +27,13 @@ class CreateExpensesTable extends Migration
             $table->string('receipt_number')->nullable();
             $table->date('date');
             $table->json('details')->nullable();
-            // $table->text('details')->nullable();
             $table->text('remarks')->nullable();
+            // $table->json('notes')->nullable()->default(json_encode([
+            //     "comment" => [],
+            //     "cancellation" => [],
+            //     "rejection" => []
+            // ]));
+            $table->text('notes')->nullable();
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('sub_type_id')->nullable();

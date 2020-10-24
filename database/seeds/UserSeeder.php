@@ -125,6 +125,7 @@ class UserSeeder extends Seeder
         // create users and assign roles
 
         $user = User::create([
+            'code' => generate_code(User::class, "USR" . date("Y"), 10),
             'name' => 'Super Admin',
             'username' => 'superadmin',
             'email' => 'superadmin@superadmin.com',
@@ -138,6 +139,7 @@ class UserSeeder extends Seeder
         $user->assignRole($roleSuperAdmin);
 
         $user = User::create([
+            'code' => generate_code(User::class, "USR" . date("Y"), 10),
             'name' => 'Intila, Erron Cerdania',
             'username' => 'erronintila',
             'email' => 'erronintila@gmail.com',
@@ -151,7 +153,7 @@ class UserSeeder extends Seeder
         $user->assignRole('Standard User');
 
         $employee = Employee::create([
-            'code' => "19018",
+            'code' => generate_code(Employee::class, "EMP" . date("Y"), 10),
             'first_name' => "Erron",
             'middle_name' => "Cerdania",
             'last_name' => "Intila",

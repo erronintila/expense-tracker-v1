@@ -13,7 +13,7 @@ class DepartmentSeeder extends Seeder
     public function run()
     {
         // factory(Department::class, 5000)->create();
-        
+
         $departments = [
             ['name' => 'Administrative Department'],
             ['name' => 'Sales & Marketing Department'],
@@ -27,7 +27,10 @@ class DepartmentSeeder extends Seeder
         ];
 
         foreach ($departments as $department) {
-            Department::create($department);
+            Department::create([
+                "code" => generate_code(Department::class, "DEP" . date("Y"), 10),
+                "name" => $department["name"]
+            ]);
         }
     }
 }

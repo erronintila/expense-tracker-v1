@@ -108,7 +108,7 @@ class AdjustmentController extends Controller
 
         $adjustment->reference = $request->reference;
 
-        $adjustment->code = $request->code;
+        $adjustment->code = generate_code(Adjustment::class, "ADJ" . date("Y"), 10);
 
         $adjustment->remarks = $request->remarks;
 

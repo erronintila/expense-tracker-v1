@@ -89,6 +89,8 @@ class ExpenseTypeController extends Controller
 
         $expense_type = new ExpenseType();
 
+        $expense_type->code = generate_code(ExpenseType::class, "EXT" . date("Y"), 10);
+
         $expense_type->name = $request->name;
 
         $expense_type->limit = $request->limit;

@@ -26,8 +26,13 @@ class CreatePaymentsTable extends Migration
             $table->string('payee', 150)->nullable();
             $table->string('payee_address')->nullable();
             $table->string('payee_phone', 50)->nullable();
-            $table->text('notes')->nullable();
             $table->text('remarks')->nullable();
+            // $table->json('notes')->nullable()->default(json_encode([
+            //     "comments" => [],
+            //     "cancellation" => [],
+            //     "rejection" => []
+            // ]));
+            $table->text('notes')->nullable();
 
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('cancelled_at')->nullable();

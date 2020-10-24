@@ -87,7 +87,11 @@ class DepartmentController extends Controller
 
         $department = new Department();
 
+        $department->code = generate_code(Department::class, "DEP" . date("Y"), 10);
+
         $department->name = $request->name;
+
+        $department->notes = json_encode([]);
 
         $department->save();
 
@@ -154,7 +158,8 @@ class DepartmentController extends Controller
 
         return response(
             [
-                'message' => 'Updated successfully'
+                'message' => 'Updated successfully',
+                'data' => json_decode($department->notes)
             ],
             201
         );

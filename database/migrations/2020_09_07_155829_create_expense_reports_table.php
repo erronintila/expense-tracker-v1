@@ -19,8 +19,12 @@ class CreateExpenseReportsTable extends Migration
             $table->string('reference_no')->nullable();
             $table->string('description');
             $table->text('remarks')->nullable();
+            // $table->json('notes')->nullable()->default(json_encode([
+            //     "comments" => [],
+            //     "cancellation" => [],
+            //     "rejection" => []
+            // ]));
             $table->text('notes')->nullable();
-            $table->text('comments')->nullable();
 
             $table->date('submission_due_date')->nullable();
             $table->date('approval_due_date')->nullable();

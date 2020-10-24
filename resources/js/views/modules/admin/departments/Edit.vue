@@ -79,6 +79,7 @@ export default {
                         name: _this.form.name
                     })
                     .then(function(response) {
+                        console.log(response);
                         _this.$dialog.message.success(
                             "Department updated successfully.",
                             {

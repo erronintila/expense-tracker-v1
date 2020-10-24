@@ -39,6 +39,7 @@ class JobSeeder extends Seeder
 
             if (!is_null($department)) {
                 Job::create([
+                    'code' => generate_code(Job::class, "JOB" . date("Y"), 10),
                     'name' => $value["job"],
                     'department_id' => $department->id,
                 ]);
