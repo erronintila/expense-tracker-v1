@@ -28,10 +28,10 @@ class CreateExpenseDetailsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('expense_id')
-                ->references('id')
-                ->on('expenses')
-                ->onDelete('cascade');
+            // $table->foreign('expense_id')
+            //     ->references('id')
+            //     ->on('expenses')
+            //     ->onDelete('cascade');
         });
     }
 

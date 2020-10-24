@@ -15,8 +15,8 @@ class CreateAdjustmentsTable extends Migration
     {
         Schema::create('adjustments', function (Blueprint $table) {
             $table->id();
+            $table->string("code")->unique()->nullable();
             $table->string("reference")->nullable();
-            $table->string("code")->nullable();
             $table->string("description", 150);
             $table->double("add_amount", 10, 2)->default(0);
             $table->double("subtract_amount", 10, 2)->default(0);
