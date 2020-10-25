@@ -308,4 +308,9 @@ class Expense extends Model
     {
         return $this->belongsToMany(Payment::class);
     }
+
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class);
+    }
 }
