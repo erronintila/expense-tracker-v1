@@ -61,12 +61,12 @@ class AuthController extends Controller
 
             if ($authenticated_user->email_verified_at == null) {
 
-                return response()->json($validator->errors(), 401);
+                return response()->json($validator->errors(), 422);
             }
 
             if (!$authenticated_user->can_login) {
 
-                return response()->json($validator->errors(), 401);
+                return response()->json($validator->errors(), 422);
             }
 
             $user = User::find($authenticated_user->id);
@@ -85,7 +85,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json($validator->errors(), 401);
+        return response()->json($validator->errors(), 422);
     }
 
     public function logout(Request $request)

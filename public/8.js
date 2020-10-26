@@ -116,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           _this.errors = error.data;
 
-          _this.errorDialog("Error ".concat(error.status), error.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.status), error.statusText);
         });
       }
     }

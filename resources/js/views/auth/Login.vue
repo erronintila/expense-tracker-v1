@@ -112,7 +112,7 @@ export default {
 
                         _this.errors = error.data;
 
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.mixin_errorDialog(`Error ${error.status}`, error.statusText);
                     });
             }
         }
