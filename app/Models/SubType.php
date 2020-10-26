@@ -20,4 +20,9 @@ class SubType extends Model
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class)->withPivot('limit')->withTimestamps();
+    }
 }

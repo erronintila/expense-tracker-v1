@@ -49,6 +49,10 @@ Route::middleware('auth:api')->group(function () {
             'users' => 'API\v1\UserController',
 
             'vendors' => 'API\v1\VendorController',
+
+            'taxes' => 'API\v1\TaxController',
+
+            'settings' => 'API\v1\SettingController',
         ]
     );
 });

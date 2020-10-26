@@ -324,6 +324,9 @@ class EmployeeController extends Controller
                 //     ->restore();
 
                 break;
+            case 'settings':
+
+                break;
             default:
 
                 if (!app("auth")->user()->hasPermissionTo('edit employees')) {

@@ -554,6 +554,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -625,7 +656,8 @@ __webpack_require__.r(__webpack_exports__);
         details: {
           description: "",
           amount: ""
-        }
+        },
+        is_tax_inclusive: false
       },
       rules: {
         reimbursable_amount: [],
@@ -1346,7 +1378,7 @@ var render = function() {
                                         { staticClass: "grey--text" },
                                         [
                                           _vm._v(
-                                            "\n                                            Expense amount exceeding the\n                                            remaining fund/expense limit will be\n                                            considered as reimbursable.\n                                        "
+                                            "\n                                            Expense amount exceeding the\n                                            remaining fund/expense limit\n                                            will be considered as\n                                            reimbursable.\n                                        "
                                           )
                                         ]
                                       )
@@ -1863,6 +1895,80 @@ var render = function() {
                                         1
                                       )
                                     : _vm._e()
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Tax Rate" }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Tax Amount" }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    [
+                                      _c(
+                                        "v-radio-group",
+                                        {
+                                          attrs: { row: "" },
+                                          model: {
+                                            value: _vm.form.is_tax_inclusive,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.form,
+                                                "is_tax_inclusive",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "form.is_tax_inclusive"
+                                          }
+                                        },
+                                        [
+                                          _c("v-radio", {
+                                            attrs: {
+                                              label: "Tax Inclusive",
+                                              value: true
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-radio", {
+                                            attrs: {
+                                              label: "Tax Exclusive",
+                                              value: false
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
                                 ],
                                 1
                               ),

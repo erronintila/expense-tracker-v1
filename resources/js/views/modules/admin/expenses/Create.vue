@@ -176,7 +176,6 @@
                                 </div>
                             </v-expansion-panel-header>
                             <v-expansion-panel-content>
-                                
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-autocomplete
@@ -228,8 +227,9 @@
                                             </small>
                                             <small class="grey--text">
                                                 Expense amount exceeding the
-                                                remaining fund/expense limit will be
-                                                considered as reimbursable.
+                                                remaining fund/expense limit
+                                                will be considered as
+                                                reimbursable.
                                             </small>
                                         </div>
                                     </v-col>
@@ -422,6 +422,37 @@
                                 </v-row>
 
                                 <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            label="Tax Rate"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            label="Tax Amount"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <v-radio-group
+                                            v-model="form.is_tax_inclusive"
+                                            row
+                                        >
+                                            <v-radio
+                                                label="Tax Inclusive"
+                                                :value="true"
+                                            ></v-radio>
+                                            <v-radio
+                                                label="Tax Exclusive"
+                                                :value="false"
+                                            ></v-radio>
+                                        </v-radio-group>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
                                     <v-col>
                                         <div class="green--text">
                                             Expense Summary
@@ -602,7 +633,8 @@ export default {
                 details: {
                     description: "",
                     amount: ""
-                }
+                },
+                is_tax_inclusive: false
             },
             rules: {
                 reimbursable_amount: [],
@@ -678,8 +710,7 @@ export default {
             _this.$refs.form.validate();
 
             if (
-                _this.amount_to_replenish >
-                _this.form.employee.remaining_fund
+                _this.amount_to_replenish > _this.form.employee.remaining_fund
             ) {
                 _this.$dialog.message.error(
                     "Revolving fund amount is greater than remaining fund",

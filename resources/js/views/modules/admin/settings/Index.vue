@@ -13,11 +13,11 @@
                 >
                     Employee Settings
                 </v-btn>
-                <v-btn color="green" dark>Save Changes</v-btn>
+                <v-btn color="green" @click="onSave" dark>Save Changes</v-btn>
             </v-card-title>
 
             <v-expansion-panels v-model="panel" multiple>
-                <v-expansion-panel>
+                <!-- <v-expansion-panel>
                     <v-expansion-panel-header>
                         <div class="green--text">
                             General Settings
@@ -38,7 +38,7 @@
                             </v-col>
                         </v-row>
                     </v-expansion-panel-content>
-                </v-expansion-panel>
+                </v-expansion-panel> -->
 
                 <v-expansion-panel>
                     <v-expansion-panel-header>
@@ -124,7 +124,11 @@ export default {
         };
     },
     methods: {
-        onSave: function() {}
+        onSave: function() {
+            let settings = Object.assign(this.general_settings, this.expense_settings, this.expense_report_settings);
+
+            console.log(settings);
+        }
     }
 };
 </script>
