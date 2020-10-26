@@ -321,10 +321,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      panel: [0, 1],
+      panel: [0, 1, 2],
       valid: false,
       menu: false,
       jobs: [],

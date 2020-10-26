@@ -192,6 +192,11 @@ class Employee extends Model
 
     public function expense_types()
     {
-        return $this->belongsToMany(ExpenseType::class)->withTimestamps();
+        return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
+    }
+
+    public function sub_types()
+    {
+        return $this->belongsToMany(SubType::class)->withPivot('limit')->withTimestamps();
     }
 }

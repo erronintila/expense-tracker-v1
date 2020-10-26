@@ -247,6 +247,16 @@ class ExpenseReport extends Model
         return $arr;
     }
 
+    public function late_submitted()
+    {
+        return false;
+    }
+
+    public function late_approved()
+    {
+        return false;
+    }
+
     /**
      * Displays the earliest start date covered by the expense report.
      *

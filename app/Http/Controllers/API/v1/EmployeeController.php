@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Models\ExpenseType;
 use App\Models\Job;
 use App\User;
 use Illuminate\Http\Request;
@@ -284,6 +285,8 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $subtypes = [];
+
         switch ($request->action) {
 
             case 'restore':
@@ -361,6 +364,18 @@ class EmployeeController extends Controller
                 if (request()->has("expense_types")) {
 
                     $employee->expense_types()->sync($request->expense_types);
+
+                    // foreach ($employee->expense_types as $item) {
+
+                    //     $expense_type = ExpenseType::withTrashed()->find($item["expense_type_id"]);
+
+                    //     foreach ($expense_type->sub_types as $item2) {
+
+                    //         $subtypes = $item2->pluck("id");
+                    //     }
+                    // }
+
+                    $employee->sub_types()->sync($employee->expense_types);
                 }
 
                 if ($employee->user_id != null) {
@@ -400,7 +415,8 @@ class EmployeeController extends Controller
 
         return response(
             [
-                'message' => 'Updated successfully'
+                'message' => 'Updated successfully',
+                'data' => $subtypes
             ],
             201
         );

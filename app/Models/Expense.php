@@ -284,6 +284,11 @@ class Expense extends Model
         return $arr;
     }
 
+    public function expired() {
+        //compare date of submission to expiry date
+        return false;
+    }
+
     /**
      * Displays the formatted amount of the expense.
      *

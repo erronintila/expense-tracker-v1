@@ -494,6 +494,7 @@ export default {
                         expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
+                        console.log(response);
                         _this.$dialog.message.success(
                             "Employee updated successfully.",
                             {

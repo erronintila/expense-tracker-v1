@@ -479,6 +479,8 @@ __webpack_require__.r(__webpack_exports__);
           permissions: _this.selected,
           expense_types: _this.selected_expense_types
         }).then(function (response) {
+          console.log(response);
+
           _this.$dialog.message.success("Employee updated successfully.", {
             position: "top-right",
             timeout: 2000

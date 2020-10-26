@@ -34,7 +34,6 @@ class EmployeeResource extends JsonResource
             'email' => $this->email,
             'address' => $this->address,
             'fund' => $this->fund,
-            // 'remaining_fund' => $this->remaining_fund(),
             'remaining_fund' => $this->remaining_fund,
             'job' => $this->job,
             'department' => $this->job->department,
@@ -45,6 +44,7 @@ class EmployeeResource extends JsonResource
             'role' => $user->is_admin ? ["Administrator"] : $user->getRoleNames(),
             'permissions' => $user->getAllPermissions(),
             'expense_types' => ExpenseTypeResource::collection($this->expense_types),
+            'sub_types' => $this->expense_types
         ];
     }
 }

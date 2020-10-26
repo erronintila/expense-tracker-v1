@@ -38,6 +38,12 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/settings/Index.vue")
             },
+            {
+                path: "/admin/settings/employee",
+                name: "admin.settings.employee",
+                component: () =>
+                    import("../../views/modules/admin/settings/Employee.vue")
+            },
             /**
              *
              *

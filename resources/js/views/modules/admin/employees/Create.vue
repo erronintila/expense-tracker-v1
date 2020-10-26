@@ -161,7 +161,9 @@
                                         >
                                             <v-text-field
                                                 v-model="form.birthdate"
-                                                :rules="mixin_validation.required"
+                                                :rules="
+                                                    mixin_validation.required
+                                                "
                                                 :error-messages="
                                                     errors.birthdate
                                                 "
@@ -314,7 +316,7 @@
 export default {
     data() {
         return {
-            panel: [0, 1],
+            panel: [0, 1, 2],
             valid: false,
             menu: false,
             jobs: [],
