@@ -92,8 +92,28 @@ import Mixin from "./mixins/index";
  *
  *
  */
-axios.defaults.headers.common["Authorization"] =
-    "Bearer " + localStorage.getItem("access_token");
+// axios.defaults.headers.common["Authorization"] =
+//     "Bearer " + localStorage.getItem("access_token");
+
+axios.interceptors.response.use(
+    function(response) {
+        return response;
+    },
+    function(error) {
+        switch (error.response.status) {
+            case 401:
+                store.dispatch("AUTH_LOGOUT");
+                window.location.replace("/login");
+                break;
+            case 404:
+                router.push("/404");
+                break;
+            default:
+                break;
+        }
+        return Promise.reject(error);
+    }
+);
 
 /**
  * Global functions / properties / variables

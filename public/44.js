@@ -420,8 +420,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
     this.loadDepartments();
   }
 });

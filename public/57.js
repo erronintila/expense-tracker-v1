@@ -444,18 +444,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
-    // getCurrentUser() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/user")
-    //         .then(response => {
-    //             // _this.user = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //         });
-    // },
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
@@ -763,6 +751,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this4.items = data.items;
       _this4.totalItems = data.total;
     });
+  },
+  created: function created() {
+    this.$store.dispatch("AUTH_USER");
   }
 });
 

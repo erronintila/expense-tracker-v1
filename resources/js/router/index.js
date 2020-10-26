@@ -24,11 +24,11 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!store.getters.isAuthenticated) {
+        if (!store.getters.authenticated) {
             next({ name: "login" });
         } else {
             if (to.matched.some(record => record.meta.requiresAdmin)) {
-                if (store.getters.isAdmin) {
+                if (store.getters.admin == 1) {
                     next();
                 } else {
                     next({ name: "user.dashboard.index" });
@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
         if (!store.getters.isAuthenticated) {
             next();
         } else {
-            if (store.getters.isAdmin) {
+            if (store.getters.admin) {
                 next({ name: "admin.dashboard.index" });
             } else {
                 next({ name: "user.dashboard.index" });

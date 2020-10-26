@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,15 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register', 'API\v1\AuthController@register');
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::post('/login', 'API\v1\AuthController@login');
+    Route::get('/user', function (Request $request) {
 
-Route::middleware('auth:api')->group(function () {
+        return new UserResource($request->user());
+    });
 
-    Route::post('/logout', 'API\v1\AuthController@logout');
+    Route::get('/permissions', function (Request $request) {
 
-    Route::get('/user', 'API\v1\AuthController@user');
+        return $request->user->getAllPermissions();
+    });
 
     Route::apiResources(
         [

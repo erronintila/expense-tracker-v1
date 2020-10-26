@@ -300,15 +300,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      axios.get("/api/user").then(function (response) {// _this.user = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
-    },
     updateDates: function updateDates(e) {
       this.date_range = e; // this.loadExpenses(this.employee);
     },
@@ -390,9 +381,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   created: function created() {
-    // axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
-    this.getCurrentUser();
+    this.$store.dispatch("AUTH_USER");
     this.getData();
   }
 });

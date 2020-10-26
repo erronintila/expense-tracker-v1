@@ -44,7 +44,11 @@
                             <v-card-text>
                                 <div class="green--text">Total Expenses</div>
                                 <div class="display-1 text--primary">
-                                    {{ mixin_formatNumber(total.expenses_by_date) }}
+                                    {{
+                                        mixin_formatNumber(
+                                            total.expenses_by_date
+                                        )
+                                    }}
                                 </div>
                                 <div>{{ count.expenses_by_date }} Expenses</div>
                             </v-card-text>
@@ -69,7 +73,9 @@
                                             : 'display-1 text--primary'
                                     "
                                 >
-                                    {{ mixin_formatNumber(total.remaining_fund) }}
+                                    {{
+                                        mixin_formatNumber(total.remaining_fund)
+                                    }}
                                 </div>
                                 <div>
                                     {{
@@ -516,41 +522,12 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-
-            return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/user")
-                    .then(response => {
-                        let emp = response.data.data.employee;
-
-                        _this.employee = emp == null ? 0 : emp.id;
-                        // _this.fund = emp == null ? 0 : emp.fund;
-                        // _this.remaining_fund =
-                        //     emp == null ? 0 : emp.remaining_fund;
-
-                        let employee_id = _this.employee;
-
-                        resolve(employee_id);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        reject();
-                    });
-            });
-        },
         load_expense_types_expenses(start, end) {
             let _this = this;
 
-            _this.getCurrentUser().then(data => {
+            this.$store.dispatch("AUTH_USER").then(response => {
+                let data = response.employee == null ? 0 : response.employee.id;
+
                 axios
                     .get("/api/data/expense_types_expenses_summary", {
                         params: {
@@ -604,7 +581,9 @@ export default {
         load_expenses_summary(start, end, time_unit) {
             let _this = this;
 
-            _this.getCurrentUser().then(data => {
+            this.$store.dispatch("AUTH_USER").then(response => {
+                let data = response.employee == null ? 0 : response.employee.id;
+
                 axios
                     .get("/api/data/expenses_summary", {
                         params: {
@@ -904,24 +883,14 @@ export default {
         getExpenseStats(start, end) {
             let _this = this;
 
-            _this.getCurrentUser().then(data => {
+            this.$store.dispatch("AUTH_USER").then(response => {
+                let data = response.employee == null ? 0 : response.employee.id;
+
                 axios
                     .get(
                         `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${data}`
                     )
                     .then(response => {
-                        // _this.total_expenses = response.data.summary.total;
-                        // _this.total_reimbursements =
-                        //     response.data.summary.reimbursements;
-                        // _this.total_pending_reports =
-                        //     response.data.summary.pending;
-
-                        // _this.total_count = response.data.summary.total_count;
-
-                        //
-                        //
-                        //
-
                         _this.total = response.data.total;
                         _this.count = response.data.count;
                     })
@@ -935,31 +904,10 @@ export default {
                         );
                     });
             });
-
-            // axios
-            //     .get("/api/user")
-            //     .then(response => {
-            //         let emp = response.data.data.employee;
-
-            //         _this.employee = null ? 0 : emp.id;
-
-            //         let employee_id = _this.employee;
-
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //         console.log(error.response);
-            //     });
         }
-        // mixin_formatNumber(data) {
-        //     return numeral(data).format("0,0.00");
-        // }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        // "Bearer " + localStorage.getItem("access_token");
-
-        this.getCurrentUser();
+        this.$store.dispatch("AUTH_USER");
 
         this.load_expense_types_expenses(
             this.date_range[0],

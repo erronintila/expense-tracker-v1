@@ -271,26 +271,6 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    // _this.user = response.data.data;
-                    let data = response.data.data;
-
-                    let employee_id =
-                        data.employee == null ? 0 : data.employee.id;
-
-                    _this.form.employee = employee_id;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
-                });
-        },
         updateDates(e) {
             this.date_range = e;
             this.loadExpenses(this.form.employee);
@@ -445,7 +425,7 @@ export default {
         }
     },
     created() {
-        this.getCurrentUser();
+        this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
         this.getData();
     }

@@ -290,21 +290,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      axios.get("/api/user").then(function (response) {
-        // _this.user = response.data.data;
-        var data = response.data.data;
-        var employee_id = data.employee == null ? 0 : data.employee.id;
-        _this.form.employee = employee_id;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
     updateDates: function updateDates(e) {
       this.date_range = e;
       this.loadExpenses(this.form.employee);
@@ -441,7 +426,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   created: function created() {
-    this.getCurrentUser();
+    this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.getData();
   }

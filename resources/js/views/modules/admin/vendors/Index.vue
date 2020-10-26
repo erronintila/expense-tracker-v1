@@ -419,9 +419,5 @@ export default {
             this.totalItems = data.total;
         });
     },
-    created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-    }
 };
 </script>

@@ -159,18 +159,6 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    // _this.user = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
         getData() {
             let _this = this;
 
@@ -222,7 +210,7 @@ export default {
         }
     },
     created() {
-        this.getCurrentUser();
+        this.$store.dispatch("AUTH_USER");
         this.getData();
     }
 };

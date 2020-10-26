@@ -73,7 +73,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     this.getData();
   }
 });
@@ -154,7 +153,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access_token");
     this.resetData();
   }
 });
@@ -793,11 +791,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this4.items = data.items;
       _this4.totalItems = data.total;
     });
-  },
-  created: function created() {// axios.defaults.headers.common["Authorization"] =
-    //     "Bearer " + localStorage.getItem("access_token");
-    // this.loadDepartments();
-    // this.loadJobs();
   }
 });
 

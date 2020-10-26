@@ -407,19 +407,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      axios.get("/api/user").then(function (response) {
-        var emp = response.data.data.employee;
-        _this.form.employee = emp == null ? null : emp;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
+    // getCurrentUser() {
+    //     let _this = this;
+    //     axios
+    //         .get("/api/user")
+    //         .then(response => {
+    //             let emp = response.data.data.employee;
+    //             _this.form.employee = emp == null ? null : emp;
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //             _this.mixin_errorDialog(
+    //                 `Error ${error.response.status}`,
+    //                 error.response.statusText
+    //             );
+    //         });
+    // },
     getData: function getData() {
       var _this = this;
 
@@ -571,7 +575,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getCurrentUser();
+    var _this = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this.form.employee = response.employee == null ? null : response.employee;
+    });
     this.loadExpenseTypes();
     this.loadVendors();
     this.getData();

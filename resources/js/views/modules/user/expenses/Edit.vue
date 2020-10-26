@@ -386,25 +386,25 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    let emp = response.data.data.employee;
+        // getCurrentUser() {
+        //     let _this = this;
+        //     axios
+        //         .get("/api/user")
+        //         .then(response => {
+        //             let emp = response.data.data.employee;
 
-                    _this.form.employee = emp == null ? null : emp;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+        //             _this.form.employee = emp == null ? null : emp;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
+        //             _this.mixin_errorDialog(
+        //                 `Error ${error.response.status}`,
+        //                 error.response.statusText
+        //             );
+        //         });
+        // },
         getData() {
             let _this = this;
 
@@ -600,7 +600,11 @@ export default {
         }
     },
     created() {
-        this.getCurrentUser();
+        let _this = this;
+        this.$store.dispatch("AUTH_USER").then(response => {
+            _this.form.employee = response.employee == null ? null : response.employee;
+        });
+        
         this.loadExpenseTypes();
         this.loadVendors();
         this.getData();

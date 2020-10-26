@@ -543,18 +543,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      axios.get("/api/user").then(function (response) {
-        _this.user = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
     onUpdateData: function onUpdateData() {
       var _this = this;
 
@@ -656,7 +644,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getCurrentUser();
+    var _this = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this.user = response;
+    });
   }
 });
 

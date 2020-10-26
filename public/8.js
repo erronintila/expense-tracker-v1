@@ -107,16 +107,25 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.$refs.form.validate()) {
         this.$store.dispatch("AUTH_LOGIN", {
           username: _this.form.username,
-          email: _this.form.email,
           password: _this.form.password
         }).then(function (response) {
-          var data = response.data;
-          window.location.replace(data.user.is_admin ? "/admin" : "/");
-        })["catch"](function (error) {
-          console.log(error);
-          _this.errors = error.data;
+          _this.form = {
+            username: "",
+            password: ""
+          };
 
-          _this.mixin_errorDialog("Error ".concat(error.status), error.statusText);
+          _this.$store.dispatch("AUTH_USER").then(function (response) {
+            if (_this.$store.getters.admin) {
+              window.location.replace("/admin");
+            } else {
+              window.location.replace("/");
+            }
+          });
+        })["catch"](function (error) {
+          console.log(error.response);
+          _this.errors = error.response.data.errors;
+
+          _this.mixin_errorDialog(error.response.status, error.response.statusText);
         });
       }
     }

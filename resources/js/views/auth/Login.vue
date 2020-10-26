@@ -97,22 +97,30 @@ export default {
                 this.$store
                     .dispatch("AUTH_LOGIN", {
                         username: _this.form.username,
-                        email: _this.form.email,
                         password: _this.form.password
                     })
                     .then(response => {
-                        let data = response.data;
+                        _this.form = {
+                            username: "",
+                            password: ""
+                        };
 
-                        window.location.replace(
-                            data.user.is_admin ? "/admin" : "/"
-                        );
+                        _this.$store.dispatch("AUTH_USER").then(response => {
+                            if (_this.$store.getters.admin) {
+                                window.location.replace("/admin");
+                            } else {
+                                window.location.replace("/");
+                            }
+                        });
                     })
-                    .catch(function(error) {
-                        console.log(error);
+                    .catch(error => {
+                        console.log(error.response);
 
-                        _this.errors = error.data;
-
-                        _this.mixin_errorDialog(`Error ${error.status}`, error.statusText);
+                        _this.errors = error.response.data.errors;
+                        _this.mixin_errorDialog(
+                            error.response.status,
+                            error.response.statusText
+                        );
                     });
             }
         }

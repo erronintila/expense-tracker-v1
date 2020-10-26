@@ -204,26 +204,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     loggedIn: function loggedIn() {
-      return this.$store.getters.isAuthenticated;
+      return this.$store.getters.authenticated;
     }
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      axios.get("/api/user").then(function (response) {
-        _this.user = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.$router.push({
-          name: "login"
-        });
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
     toProfile: function toProfile() {
       // Added () => {} on router, used to prevent NavigationDuplicated error
       this.$router.push({
@@ -243,17 +227,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    axios.interceptors.response.use(function (response) {
-      return response;
-    }, function (error) {
-      if (error.response.status === 401) {
-        store.dispatch("AUTH_LOGOUT");
-        window.location.replace("/login"); // router.push("/login");
-      }
+    var _this = this;
 
-      return Promise.reject(error);
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this.user = response;
     });
-    this.getCurrentUser();
   }
 });
 

@@ -257,11 +257,7 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
         this.getData();
     },
-    mounted() {}
 };
 </script>

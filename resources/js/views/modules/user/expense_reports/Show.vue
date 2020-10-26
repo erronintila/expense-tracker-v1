@@ -277,18 +277,6 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    // _this.user = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
         updateDates(e) {
             this.date_range = e;
             // this.loadExpenses(this.employee);
@@ -373,10 +361,7 @@ export default {
         }
     },
     created() {
-        // axios.defaults.headers.common["Authorization"] =
-        //     "Bearer " + localStorage.getItem("access_token");
-
-        this.getCurrentUser();
+        this.$store.dispatch("AUTH_USER");
         this.getData();
     }
 };

@@ -185,26 +185,10 @@ export default {
     }),
     computed: {
         loggedIn() {
-            return this.$store.getters.isAuthenticated;
+            return this.$store.getters.authenticated;
         }
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    _this.user = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.$router.push({ name: "login" });
-
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
-                });
-        },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error
             this.$router.push({ name: "user.profile.index" }, () => {});
@@ -218,21 +202,10 @@ export default {
         }
     },
     created() {
-        axios.interceptors.response.use(
-            function(response) {
-                return response;
-            },
-            function(error) {
-                if (error.response.status === 401) {
-                    store.dispatch("AUTH_LOGOUT");
-                    window.location.replace("/login");
-                    // router.push("/login");
-                }
-                return Promise.reject(error);
-            }
-        );
-
-        this.getCurrentUser();
+        let _this = this;
+        this.$store.dispatch("AUTH_USER").then(response => {
+            _this.user = response;
+        });
     }
 };
 </script>

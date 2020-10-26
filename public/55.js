@@ -302,25 +302,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      return new Promise(function (resolve, reject) {
-        axios.get("/api/user").then(function (response) {
-          var data = response.data.data;
-          var employee_id = data.employee == null ? 0 : data.employee.id;
-          _this.form.employee = employee_id;
-          resolve(employee_id);
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          reject();
-        });
-      });
-    },
     updateDates: function updateDates(e) {
       this.date_range = e;
       this.loadExpenses();
@@ -331,7 +312,8 @@ __webpack_require__.r(__webpack_exports__);
 
       var _this = this;
 
-      this.getCurrentUser().then(function (item) {
+      this.$store.dispatch("AUTH_USER").then(function (response) {
+        var item = response.employee == null ? 0 : response.employee.id;
         axios.get("/api/data/expenses", {
           params: {
             create_report: true,
@@ -412,6 +394,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadExpenses();
   }
 });

@@ -175,15 +175,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      axios.get("/api/user").then(function (response) {// _this.user = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
-    },
     getData: function getData() {
       var _this = this;
 
@@ -224,7 +215,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getCurrentUser();
+    this.$store.dispatch("AUTH_USER");
     this.getData();
   }
 });

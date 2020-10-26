@@ -295,32 +295,6 @@ export default {
         };
     },
     methods: {
-        getCurrentUser() {
-            let _this = this;
-
-            return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/user")
-                    .then(response => {
-                        let data = response.data.data;
-
-                        let employee_id =
-                            data.employee == null ? 0 : data.employee.id;
-
-                        _this.form.employee = employee_id;
-
-                        resolve(employee_id);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
-
-                        reject();
-                    });
-            });
-        },
         updateDates(e) {
             this.date_range = e;
             this.loadExpenses();
@@ -330,7 +304,9 @@ export default {
             let end_date = this.date_range[1];
             let _this = this;
 
-            this.getCurrentUser().then(item => {
+            this.$store.dispatch("AUTH_USER").then(response => {
+                let item = response.employee == null ? 0 : response.employee.id;
+
                 axios
                     .get("/api/data/expenses", {
                         params: {
@@ -423,6 +399,7 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadExpenses();
     }
 };

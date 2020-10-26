@@ -138,7 +138,7 @@
                             <v-list-item-subtitle>
                                 Duplicate Report(s)
                             </v-list-item-subtitle>
-                            
+
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -436,18 +436,6 @@ export default {
         };
     },
     methods: {
-        // getCurrentUser() {
-        //     let _this = this;
-        //     axios
-        //         .get("/api/user")
-        //         .then(response => {
-        //             // _this.user = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-        //         });
-        // },
         updateDates(e) {
             this.date_range = e;
         },
@@ -801,6 +789,9 @@ export default {
             this.items = data.items;
             this.totalItems = data.total;
         });
-    }
+    },
+    created() {
+        this.$store.dispatch("AUTH_USER");
+    },
 };
 </script>
