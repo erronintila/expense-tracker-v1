@@ -422,9 +422,10 @@
                                 </v-row>
 
                                 <v-row>
-                                    <v-col cols="12" md="4">
+                                    <v-col cols="12" md="2">
                                         <v-text-field
                                             label="Tax Rate"
+                                            suffix="%"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="4">
@@ -432,20 +433,17 @@
                                             label="Tax Amount"
                                         ></v-text-field>
                                     </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col>
+                                    <v-col  cols="12" md="4">
                                         <v-radio-group
                                             v-model="form.is_tax_inclusive"
                                             row
                                         >
                                             <v-radio
-                                                label="Tax Inclusive"
+                                                label="Inclusive"
                                                 :value="true"
                                             ></v-radio>
                                             <v-radio
-                                                label="Tax Exclusive"
+                                                label="Exclusive"
                                                 :value="false"
                                             ></v-radio>
                                         </v-radio-group>
@@ -634,7 +632,7 @@ export default {
                     description: "",
                     amount: ""
                 },
-                is_tax_inclusive: false
+                is_tax_inclusive: true
             },
             rules: {
                 reimbursable_amount: [],

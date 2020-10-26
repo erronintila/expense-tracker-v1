@@ -583,8 +583,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -657,7 +655,7 @@ __webpack_require__.r(__webpack_exports__);
           description: "",
           amount: ""
         },
-        is_tax_inclusive: false
+        is_tax_inclusive: true
       },
       rules: {
         reimbursable_amount: [],
@@ -1904,10 +1902,13 @@ var render = function() {
                                 [
                                   _c(
                                     "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
+                                    { attrs: { cols: "12", md: "2" } },
                                     [
                                       _c("v-text-field", {
-                                        attrs: { label: "Tax Rate" }
+                                        attrs: {
+                                          label: "Tax Rate",
+                                          suffix: "%"
+                                        }
                                       })
                                     ],
                                     1
@@ -1922,16 +1923,11 @@ var render = function() {
                                       })
                                     ],
                                     1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
+                                  ),
+                                  _vm._v(" "),
                                   _c(
                                     "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
                                     [
                                       _c(
                                         "v-radio-group",
@@ -1952,14 +1948,14 @@ var render = function() {
                                         [
                                           _c("v-radio", {
                                             attrs: {
-                                              label: "Tax Inclusive",
+                                              label: "Inclusive",
                                               value: true
                                             }
                                           }),
                                           _vm._v(" "),
                                           _c("v-radio", {
                                             attrs: {
-                                              label: "Tax Exclusive",
+                                              label: "Exclusive",
                                               value: false
                                             }
                                           })
