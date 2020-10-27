@@ -51,9 +51,17 @@
                                                             .name
                                                     }}
                                                 </div>
-                                                <h3 class="display-1 green--text">
+                                                <h3
+                                                    class="display-1 green--text"
+                                                >
                                                     {{
-                                                        `${user.employee.last_name}, ${user.employee.first_name || ""} ${user.employee.suffix || ""}`
+                                                        `${
+                                                            user.employee
+                                                                .last_name
+                                                        }, ${user.employee
+                                                            .first_name ||
+                                                            ""} ${user.employee
+                                                            .suffix || ""}`
                                                     }}
                                                 </h3>
                                                 <p>
@@ -120,9 +128,7 @@
                                                                     v-model="
                                                                         old_password
                                                                     "
-                                                                    :rules="
-                                                                        password_rules.old_password
-                                                                    "
+                                                                    :rules="mixin_validation.required"
                                                                     :error-messages="
                                                                         password_errors.old_password
                                                                     "
@@ -142,9 +148,7 @@
                                                                     v-model="
                                                                         password
                                                                     "
-                                                                    :rules="
-                                                                        password_rules.password
-                                                                    "
+                                                                    :rules="[...mixin_validation.required, ...mixin_validation.minimumLength(8)]"
                                                                     :error-messages="
                                                                         password_errors.password
                                                                     "
@@ -469,13 +473,6 @@ export default {
             password: "",
             password_confirmation: "",
             password_rules: {
-                old_password: [v => !!v || "Old Password is required"],
-                password: [
-                    v => !!v || "New Password is required",
-                    v =>
-                        v.length >= 8 ||
-                        "New Password must be at least 8 characters"
-                ],
                 password_confirmation: [
                     v => !!v || "Retype password is required",
                     v =>
@@ -528,18 +525,21 @@ export default {
     },
     methods: {
         getCurrentUser() {
-            let _this = this;
-            axios
-                .get("/api/user")
-                .then(response => {
-                    _this.user = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+            // let _this = this;
+            // axios
+            //     .get("/api/user")
+            //     .then(response => {
+            //         _this.user = response.data.data;
+            //     })
+            //     .catch(error => {
+            //         console.log(error);
+            //         console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
-                });
+            //         _this.mixin_errorDialog(
+            //             `Error ${error.response.status}`,
+            //             error.response.statusText
+            //         );
+            //     });
         },
         onUpdateData() {
             let _this = this;
@@ -557,9 +557,6 @@ export default {
                         employee_id: 0
                     })
                     .then(function(response) {
-                        console.log(response);
-                        // _this.onRefresh();
-
                         _this.$dialog.message.success(
                             "User account updated successfully.",
                             {
@@ -572,7 +569,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.errors = error.response.data.errors;
                     });
@@ -616,18 +616,15 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
             }
         },
         onUpdatePassword() {
             let _this = this;
-
-            console.log([
-                this.old_password,
-                this.password,
-                this.password_confirmation
-            ]);
 
             if (_this.$refs.form_password.validate()) {
                 axios
@@ -655,7 +652,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.password_errors = error.response.data.errors;
                     });
@@ -671,6 +671,10 @@ export default {
     },
     created() {
         this.getCurrentUser();
+        let _this = this;
+        this.$store.dispatch("AUTH_USER").then(response => {
+            _this.user = response;
+        });
     }
 };
 </script>

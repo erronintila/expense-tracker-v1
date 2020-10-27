@@ -55,6 +55,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -149,7 +150,7 @@ var render = function() {
                                         { staticClass: "grey--text lighten-5" },
                                         [
                                           _vm._v(
-                                            "\n                                        We could not find the page you were\n                                        looking for.\n                                    "
+                                            "\n                                        The server encountered an internal\n                                        error or misconfiguration and was\n                                        unable to complete your request.\n                                    "
                                           )
                                         ]
                                       ),
@@ -162,7 +163,7 @@ var render = function() {
                                           _vm._v(" "),
                                           _c("br"),
                                           _vm._v(
-                                            "Try going back to home page\n                                        and repeating your action. Or,\n                                        contact helpdesk for support.\n                                    "
+                                            "Try going back to previous page\n                                        and repeating your action. Or,\n                                        contact helpdesk for support.\n                                    "
                                           )
                                         ]
                                       )

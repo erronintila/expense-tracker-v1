@@ -722,6 +722,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (action == "reject" && this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Rejected")) {
+        this.$dialog.message.error("Report has been rejected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
       this.$confirm("Do you want to ".concat(action, " expense report(s)?")).then(function (res) {
         if (res) {
           var ids = _this.selected.map(function (item) {
@@ -1198,6 +1208,13 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-item",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onUpdate("reject", "put")
+                            }
+                          }
+                        },
                         [
                           _c(
                             "v-list-item-icon",

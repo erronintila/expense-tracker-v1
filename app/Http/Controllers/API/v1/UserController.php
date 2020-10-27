@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
 use App\Models\Employee;
+use App\Rules\MatchOldPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -210,27 +211,12 @@ class UserController extends Controller
                 break;
             case 'change_password':
 
-                $validator = Validator::make($request->all(), [
-                    'old_password' => [
-                        'required', function ($attribute, $value, $fail) {
-                            if (!Hash::check($value, Auth::user()->password)) {
-                                $fail('Old Password didn\'t match');
-                            }
-                        },
-                    ],
+                $request->validate([
+                    'old_password' => ['required', new MatchOldPassword],
                     'password' => ['required', 'confirmed', 'string', 'max:255'],
                 ]);
 
-                if ($validator->fails()) {
-
-                    return redirect()->back()->withInput()->withErrors($validator);
-                }
-
-                $user = User::find($id);
-
-                $user->password = Hash::make($request->password);
-
-                $user->save();
+                User::find(auth()->user()->id)->update(['password' => Hash::make($request->password)]);
 
                 break;
             default:

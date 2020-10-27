@@ -30,6 +30,9 @@
                                             and repeating your action. Or,
                                             contact helpdesk for support.
                                         </div>
+                                        <!-- <div>
+                                            <v-btn :to="$router.go(-1)">Go to previous</v-btn>
+                                        </div> -->
                                     </v-card>
                                 </v-flex>
                             </v-layout>

@@ -1311,7 +1311,7 @@ var render = function() {
                                                 item.tax_rate
                                               )
                                             ) +
-                                            "\n                                    "
+                                            " %\n                                    "
                                         )
                                       ])
                                     ]),

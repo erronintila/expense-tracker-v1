@@ -112,9 +112,9 @@ class ExpenseController extends Controller
                     $expenses = $expenses->where([
                         ["expense_report_id", "<>", null],
                         ["submitted_at", "<>", null],
-                        ["approved_at", "=", null],
+                        // ["approved_at", "<>", null],
                         ["rejected_at", "<>", null],
-                        ["cancelled_at", "=", null],
+                        // ["cancelled_at", "=", null],
                     ]);
 
                     break;

@@ -40,7 +40,6 @@ class appreset extends Command
     {
         Artisan::call("migrate:fresh");
         Artisan::call("db:seed");
-        Artisan::call("passport:install --force");
         Artisan::call("optimize:clear");
 
         echo "Reset Application Successfully!";

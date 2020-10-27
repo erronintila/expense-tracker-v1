@@ -120,9 +120,7 @@
                                                                     v-model="
                                                                         old_password
                                                                     "
-                                                                    :rules="
-                                                                        password_rules.old_password
-                                                                    "
+                                                                    :rules="mixin_validation.required"
                                                                     :error-messages="
                                                                         password_errors.old_password
                                                                     "
@@ -142,9 +140,7 @@
                                                                     v-model="
                                                                         password
                                                                     "
-                                                                    :rules="
-                                                                        password_rules.password
-                                                                    "
+                                                                    :rules="[...mixin_validation.required, ...mixin_validation.minimumLength(8)]"
                                                                     :error-messages="
                                                                         password_errors.password
                                                                     "
@@ -469,13 +465,6 @@ export default {
             password: "",
             password_confirmation: "",
             password_rules: {
-                old_password: [v => !!v || "Old Password is required"],
-                password: [
-                    v => !!v || "New Password is required",
-                    v =>
-                        v.length >= 8 ||
-                        "New Password must be at least 8 characters"
-                ],
                 password_confirmation: [
                     v => !!v || "Retype password is required",
                     v =>
@@ -607,12 +596,6 @@ export default {
         },
         onUpdatePassword() {
             let _this = this;
-
-            console.log([
-                this.old_password,
-                this.password,
-                this.password_confirmation
-            ]);
 
             if (_this.$refs.form_password.validate()) {
                 axios

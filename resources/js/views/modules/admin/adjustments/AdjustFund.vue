@@ -22,12 +22,14 @@
                                 item-text="fullname"
                                 item-value="id"
                                 return-object
-                                @change="amount = employee.fund"
+                                :rules="mixin_validation.required"
+                                :error-messages="errors.employee"
+                                @input="errors.employee = []"
                             >
                             </v-autocomplete>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="amount"
                                 label="Amount"
@@ -37,6 +39,110 @@
                                 persistent-hint
                             >
                             </v-text-field>
+                        </v-col> -->
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-select
+                                v-model="adjustment_type"
+                                label="Adjustment Type"
+                                :items="['Add Amount', 'Subtract Amount']"
+                            ></v-select>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="amount"
+                                :rules="mixin_validation.minNumberValue(1)"
+                                label="Amount"
+                                type="number"
+                            >
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" md="6">
+                            Current Balance
+                            <table class="ml-4">
+                                <tbody>
+                                    <tr>
+                                        <td class="headline">
+                                            Revolving Fund
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            class="headline green--text text--darken-4 text-right"
+                                        >
+                                            {{
+                                                mixin_formatNumber(
+                                                    employee.fund
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="headline">
+                                            Remaining Fund
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            class="headline green--text text--darken-4 text-right"
+                                        >
+                                            {{
+                                                mixin_formatNumber(
+                                                    employee.remaining_fund
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </v-col>
+                        <v-col cols="12" md="6">
+                            New Balance
+                            <table class="ml-4">
+                                <tbody>
+                                    <tr>
+                                        <td class="headline">
+                                            Revolving Fund
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            :class="
+                                                `headline ${
+                                                    new_fund < 0
+                                                        ? 'red--text'
+                                                        : 'green--text'
+                                                } text--darken-4 text-right`
+                                            "
+                                        >
+                                            {{ mixin_formatNumber(new_fund) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="headline">
+                                            Remaining Fund
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            :class="
+                                                `headline ${
+                                                    new_remaining_fund < 0
+                                                        ? 'red--text'
+                                                        : 'green--text'
+                                                } text--darken-4 text-right`
+                                            "
+                                        >
+                                            {{
+                                                mixin_formatNumber(
+                                                    new_remaining_fund
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </v-col>
                     </v-row>
 
@@ -72,6 +178,7 @@ export default {
     data() {
         return {
             valid: false,
+            adjustment_type: "Add Amount",
             employee: { id: null, fullname: "", fund: 0, remaining_fund: 0 },
             employees: [],
             reference: "",
@@ -103,21 +210,36 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onSave() {
             let _this = this;
 
+            if(this.new_fund < 0 || this.new_remaining_fund < 0) {
+                this.mixin_errorDialog("Error", "Revolving fund/Remaining fund should not be lesser than current amount");
+                return;
+            }
+
             if (_this.$refs.form.validate()) {
+                let add_amount =
+                    this.adjustment_type == "Add Amount" ? this.amount : 0;
+                let subtract_amount =
+                    this.adjustment_type == "Subtract Amount" ? this.amount : 0;
+
                 axios
                     .post("/api/adjustments", {
-                        employee_id: _this.employee.id,
+                        employee: _this.employee.id,
                         reference: _this.reference,
                         code: _this.code,
                         description: _this.description,
                         remarks: _this.remarks,
-                        amount: _this.amount,
+                        // amount: _this.amount,
+                        add_amount: add_amount,
+                        subtract_amount: subtract_amount,
                         type: _this.type
                     })
                     .then(function(response) {
@@ -134,9 +256,40 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
             }
+        }
+    },
+    computed: {
+        new_fund() {
+            if (this.adjustment_type == "Add Amount") {
+                return (
+                    this.mixin_convertToNumber(this.employee.fund) +
+                    this.mixin_convertToNumber(this.amount)
+                );
+            }
+
+            return (
+                this.mixin_convertToNumber(this.employee.fund) -
+                this.mixin_convertToNumber(this.amount)
+            );
+        },
+        new_remaining_fund() {
+            if (this.adjustment_type == "Add Amount") {
+                return (
+                    this.mixin_convertToNumber(this.employee.remaining_fund) +
+                    this.mixin_convertToNumber(this.amount)
+                );
+            }
+
+            return (
+                this.mixin_convertToNumber(this.employee.remaining_fund) -
+                this.mixin_convertToNumber(this.amount)
+            );
         }
     },
     created() {

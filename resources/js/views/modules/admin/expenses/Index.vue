@@ -245,7 +245,7 @@
                                                 mixin_formatNumber(
                                                     item.tax_rate
                                                 )
-                                            }}
+                                            }} %
                                         </td>
                                     </tr>
                                     <tr>

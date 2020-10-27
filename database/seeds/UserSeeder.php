@@ -86,7 +86,7 @@ class UserSeeder extends Seeder
 
             if ($model == "expense reports") {
                 Permission::create(['name' => 'approve expense reports', 'category' => $model]);
-                Permission::create(['name' => 'disapprove expense reports', 'category' => $model]);
+                Permission::create(['name' => 'reject expense reports', 'category' => $model]);
                 Permission::create(['name' => 'submit expense reports', 'category' => $model]);
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
                 Permission::create(['name' => 'add expense report notes', 'category' => $model]);

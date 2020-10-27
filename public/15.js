@@ -445,6 +445,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -481,14 +485,6 @@ __webpack_require__.r(__webpack_exports__);
       password: "",
       password_confirmation: "",
       password_rules: {
-        old_password: [function (v) {
-          return !!v || "Old Password is required";
-        }],
-        password: [function (v) {
-          return !!v || "New Password is required";
-        }, function (v) {
-          return v.length >= 8 || "New Password must be at least 8 characters";
-        }],
         password_confirmation: [function (v) {
           return !!v || "Retype password is required";
         }, function (v) {
@@ -543,17 +539,20 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {
-      var _this = this;
-
-      axios.get("/api/user").then(function (response) {
-        _this.user = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
+    getCurrentUser: function getCurrentUser() {// let _this = this;
+      // axios
+      //     .get("/api/user")
+      //     .then(response => {
+      //         _this.user = response.data.data;
+      //     })
+      //     .catch(error => {
+      //         console.log(error);
+      //         console.log(error.response);
+      //         _this.mixin_errorDialog(
+      //             `Error ${error.response.status}`,
+      //             error.response.statusText
+      //         );
+      //     });
     },
     onUpdateData: function onUpdateData() {
       var _this = this; // _this.$refs.form.validate();
@@ -568,8 +567,6 @@ __webpack_require__.r(__webpack_exports__);
           is_admin: _this.user.is_admin,
           employee_id: 0
         }).then(function (response) {
-          console.log(response); // _this.onRefresh();
-
           _this.$dialog.message.success("User account updated successfully.", {
             position: "top-right",
             timeout: 2000
@@ -621,8 +618,6 @@ __webpack_require__.r(__webpack_exports__);
     onUpdatePassword: function onUpdatePassword() {
       var _this = this;
 
-      console.log([this.old_password, this.password, this.password_confirmation]);
-
       if (_this.$refs.form_password.validate()) {
         axios.put("/api/users/" + _this.user.id, {
           action: "change_password",
@@ -659,6 +654,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getCurrentUser();
+
+    var _this = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this.user = response;
+    });
   }
 });
 
@@ -1044,8 +1045,8 @@ var render = function() {
                                                                         attrs: {
                                                                           rules:
                                                                             _vm
-                                                                              .password_rules
-                                                                              .old_password,
+                                                                              .mixin_validation
+                                                                              .required,
                                                                           "error-messages":
                                                                             _vm
                                                                               .password_errors
@@ -1093,10 +1094,11 @@ var render = function() {
                                                                       "v-text-field",
                                                                       {
                                                                         attrs: {
-                                                                          rules:
-                                                                            _vm
-                                                                              .password_rules
-                                                                              .password,
+                                                                          rules: _vm.mixin_validation.required.concat(
+                                                                            _vm.mixin_validation.minimumLength(
+                                                                              8
+                                                                            )
+                                                                          ),
                                                                           "error-messages":
                                                                             _vm
                                                                               .password_errors

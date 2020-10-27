@@ -37,11 +37,15 @@ class AdjustmentController extends Controller
 
             'description' => [],
 
-            'amount' => ['required'],
+            'add_amount' => ['required'],
+
+            'subtract_amount' => ['required'],
 
             'type' => ['required', 'max:150'],
 
             'remarks' => ['nullable'],
+
+            'employee' => ['required']
         ]);
     }
 
@@ -112,7 +116,7 @@ class AdjustmentController extends Controller
 
         $adjustment->remarks = $request->remarks;
 
-        $adjustment->employee_id = $request->employee_id;
+        $adjustment->employee_id = $request->employee;
 
         if (request()->has("type")) {
 
@@ -120,19 +124,31 @@ class AdjustmentController extends Controller
 
                 case 'Manage Revolving Fund':
 
-                    $employee = Employee::findOrFail($request->employee_id);
+                    $employee = Employee::findOrFail($request->employee);
 
-                    $amount = $request->amount;
+                    $new_fund = ($employee->fund + $request->add_amount) - $request->subtract_amount;
 
-                    $fund = $employee->fund;
+                    $new_remaining_fund = ($employee->remaining_fund + $request->add_amount) - $request->subtract_amount;
 
-                    $adjustment->description = ($employee->fund > $request->amount) ?
+                    if ($new_fund < 0 || $new_remaining_fund < 0) {
+                        return response("Error", 500);
+                    }
+
+                    // $amount = $request->amount;
+
+                    // $fund = $employee->fund;
+
+                    $adjustment->description = ($request->add_amount < $request->subtract_amount) ?
                         "Decreased Revolving Fund for {$employee->last_name}, {$employee->first_name}" :
                         "Added Revolving Fund for {$employee->last_name}, {$employee->first_name}";
 
-                    $adjustment->add_amount = ($employee->fund >= $request->amount) ? 0 : ($amount - $fund);
+                    $adjustment->add_amount = $request->add_amount;
 
-                    $adjustment->subtract_amount = ($employee->fund >= $request->amount) ? ($fund - $amount) : 0;
+                    $adjustment->subtract_amount = $request->subtract_amount;
+
+                    // $adjustment->add_amount = ($employee->fund >= $request->amount) ? 0 : ($amount - $fund);
+
+                    // $adjustment->subtract_amount = ($employee->fund >= $request->amount) ? ($fund - $amount) : 0;
 
                     $adjustment->type = $request->type;
 

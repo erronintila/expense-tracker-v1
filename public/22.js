@@ -174,8 +174,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Description",
         value: "description"
       }, {
-        text: "Amount",
-        value: "amount",
+        text: "Added",
+        value: "add_amount",
+        sortable: false
+      }, {
+        text: "Subtracted",
+        value: "subtract_amount",
         sortable: false
       }, {
         text: "Type",

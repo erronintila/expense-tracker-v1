@@ -140,7 +140,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
 
-                        <v-list-item>
+                        <v-list-item @click="onUpdate('reject', 'put')">
                             <v-list-item-icon>
                                 <v-icon>mdi-close</v-icon>
                             </v-list-item-icon>
@@ -759,6 +759,19 @@ export default {
                     .includes("Cancelled")
             ) {
                 this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "reject" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Rejected")
+            ) {
+                this.$dialog.message.error("Report has been rejected", {
                     position: "top-right",
                     timeout: 2000
                 });

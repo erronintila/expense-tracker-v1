@@ -11,6 +11,11 @@ export default {
                         (!!v && v.length <= value) ||
                         `This field must be less than ${value} characters`
                 ],
+                minimumLength: value => [
+                    v =>
+                        (!!v && v.length >= value) ||
+                        `This field must be greater than ${value} characters`
+                ],
                 isNumber: [
                     v => !Number.isNaN(parseFloat(v)) || "Value is not a number"
                 ],

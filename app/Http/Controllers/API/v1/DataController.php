@@ -281,6 +281,9 @@ class DataController extends Controller
         $expense_types = ExpenseType::with(['expenses' => function ($q) use ($request) {
             $q->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
+                $q->where("rejected_at", null);
+                $q->where("deleted_at", null);
+                $q->where("cancelled_at", null);
             });
             if (request()->has("employee_id")) {
                 if (request()->has("admin_page")) {
@@ -325,6 +328,9 @@ class DataController extends Controller
         $employees = Employee::with(['expenses' => function ($q) use ($request) {
             $q->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
+                $q->where("rejected_at", null);
+                $q->where("deleted_at", null);
+                $q->where("cancelled_at", null);
             });
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
@@ -358,6 +364,9 @@ class DataController extends Controller
         $departments = Department::with(['jobs.employees.expenses' => function ($q) use ($request) {
             $q->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
+                $q->where("rejected_at", null);
+                $q->where("deleted_at", null);
+                $q->where("cancelled_at", null);
             });
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
@@ -412,6 +421,9 @@ class DataController extends Controller
         $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])
             ->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
+                $q->where("rejected_at", null);
+                $q->where("deleted_at", null);
+                $q->where("cancelled_at", null);
             })
             ->orderBy('date')
             ->select(DB::raw('date as text, sum(amount) as value'));

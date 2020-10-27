@@ -175,7 +175,7 @@
   UNIQUE KEY `sub_types_code_unique` (`code`),
   KEY `sub_types_expense_type_id_foreign` (`expense_type_id`),
   CONSTRAINT `sub_types_expense_type_id_foreign` FOREIGN KEY (`expense_type_id`) REFERENCES `expense_types` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="users" view="colnames">
 <left>37</left>
@@ -227,7 +227,7 @@
   UNIQUE KEY `adjustments_code_unique` (`code`),
   KEY `adjustments_employee_id_foreign` (`employee_id`),
   CONSTRAINT `adjustments_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_reports" view="colnames">
 <left>675</left>
@@ -359,11 +359,11 @@
   KEY `subject` (`subject_type`,`subject_id`),
   KEY `causer` (`causer_type`,`causer_id`),
   KEY `activity_log_log_name_index` (`log_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="employee_expense_type" view="colnames">
 <left>924</left>
-<top>1310</top>
+<top>1339</top>
 <width>181</width>
 <height>209</height>
 <sql_create_table>CREATE TABLE `employee_expense_type` (
@@ -374,13 +374,13 @@
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="employee_sub_type" view="colnames">
-<left>1166</left>
-<top>1086</top>
+<left>1143</left>
+<top>1087</top>
 <width>174</width>
-<height>212</height>
+<height>207</height>
 <sql_create_table>CREATE TABLE `employee_sub_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `employee_id` bigint(20) unsigned NOT NULL,
@@ -389,13 +389,13 @@
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_report_payment" view="colnames">
 <left>924</left>
-<top>1086</top>
+<top>1087</top>
 <width>178</width>
-<height>209</height>
+<height>208</height>
 <sql_create_table>CREATE TABLE `expense_report_payment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `expense_report_id` bigint(20) unsigned NOT NULL,

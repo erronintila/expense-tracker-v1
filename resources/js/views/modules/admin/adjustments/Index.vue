@@ -157,7 +157,8 @@ export default {
             headers: [
                 // { text: "Reference", value: "reference" },
                 { text: "Description", value: "description" },
-                { text: "Amount", value: "amount", sortable: false },
+                { text: "Added", value: "add_amount", sortable: false },
+                { text: "Subtracted", value: "subtract_amount", sortable: false },
                 { text: "Type", value: "type" },
                 { text: "Last Updated", value: "updated_at" }
             ],

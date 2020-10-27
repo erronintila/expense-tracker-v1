@@ -7,12 +7,14 @@ use App\Http\Resources\ExpenseReportResource;
 use App\Models\Expense;
 use App\Models\ExpenseDetail;
 use App\Models\ExpenseReport;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Spatie\Activitylog\Models\Activity;
 
 class ExpenseReportController extends Controller
 {
@@ -68,10 +70,10 @@ class ExpenseReportController extends Controller
 
             switch ($request->status) {
 
-                // case 'Archived Expense Reports':
-                //     $expense_reports = $expense_reports->onlyTrashed();
+                    // case 'Archived Expense Reports':
+                    //     $expense_reports = $expense_reports->onlyTrashed();
 
-                //     break;
+                    //     break;
                 case 'Overdue Expense Reports':
                     $expense_reports = $expense_reports;
 
@@ -104,9 +106,9 @@ class ExpenseReportController extends Controller
 
                     $expense_reports = $expense_reports->where([
                         ["submitted_at", "<>", null],
-                        ["approved_at", "=", null],
+                        // ["approved_at", "=", null],
                         ["rejected_at", "<>", null],
-                        ["cancelled_at", "=", null],
+                        // ["cancelled_at", "=", null],
                     ]);
 
                     break;
@@ -292,7 +294,7 @@ class ExpenseReportController extends Controller
                     $this->updateReport($expense_report, true, false, false, false, false);
 
                     foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                        
+
                         $this->updateExpense($expense, true, false, false, false, false);
                     }
                 }
@@ -389,10 +391,10 @@ class ExpenseReportController extends Controller
 
             case 'reject':
 
-                if (!app("auth")->user()->hasPermissionTo('approve expense reports')) {
+                // if (!app("auth")->user()->hasPermissionTo('reject expense reports')) {
 
-                    abort(403);
-                }
+                //     abort(403);
+                // }
 
                 // // Prevent approve if expense report has been approved or cancelled
                 // if(true) {
@@ -673,7 +675,11 @@ class ExpenseReportController extends Controller
             $expense_report->submitted_by = $expense_report->submitted_by == null ? Auth::user()->id : $expense_report->submitted_by;
         }
 
+        $expense_report->disableLogging();
+
         $expense_report->save();
+
+        $this->logUpdateActivity($expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled);
     }
 
     public function updateExpense(Expense $expense, $reviewed, $submitted, $approved, $rejected, $cancelled)
@@ -697,6 +703,57 @@ class ExpenseReportController extends Controller
             $expense->submitted_by = $expense->submitted_by == null ? Auth::user()->id : $expense->submitted_by;
         }
 
+        $expense->disableLogging();
+
         $expense->save();
+    }
+
+    public function logUpdateActivity(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
+    {
+        $action = "";
+        $key = "";
+        $value = "";
+
+        if ($submitted) {
+
+            $action = "submitted";
+
+            $key = "submitted_at";
+
+            $value = $expense_report->submitted_at;
+        } elseif ($reviewed) {
+
+            $action = "reviewed";
+
+            $key = "reviewed_at";
+
+            $value = $expense_report->reviewed_at;
+        } elseif ($approved) {
+
+            $action = "approved";
+
+            $key = "approved_at";
+
+            $value = $expense_report->approved_at;
+        } elseif ($rejected) {
+
+            $action = "rejected";
+
+            $key = "rejected_at";
+
+            $value = $expense_report->rejected_at;
+        } elseif ($cancelled) {
+
+            $action = "cancelled";
+
+            $key = "cancelled_at";
+
+            $value = $expense_report->cancelled_at;
+        }
+
+        activity()
+            ->performedOn($expense_report)
+            ->withProperties(['attributes' => [$key => $value]])
+            ->log($action . ' expense report');
     }
 }

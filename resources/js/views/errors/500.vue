@@ -21,15 +21,16 @@
                                             Internal Server Error.
                                         </div>
                                         <div class="grey--text lighten-5">
-                                            We could not find the page you were
-                                            looking for.
+                                            The server encountered an internal
+                                            error or misconfiguration and was
+                                            unable to complete your request.
                                         </div>
                                         <!-- <div class="mt-3">
                                             <v-btn :to="{ name: 'admin.dashboard.index' }">Go back to Dashboard</v-btn>
                                         </div> -->
                                         <div class="paragraph-text mt-2">
                                             <br />
-                                            <br />Try going back to home page
+                                            <br />Try going back to previous page
                                             and repeating your action. Or,
                                             contact helpdesk for support.
                                         </div>
