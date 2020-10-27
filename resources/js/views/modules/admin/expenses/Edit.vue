@@ -82,6 +82,7 @@
                                             @input="errors.vendor_id = []"
                                             item-value="id"
                                             item-text="name"
+                                            return-object
                                             label="Vendor *"
                                         >
                                             <template v-slot:append>
@@ -168,7 +169,6 @@
                                 </div>
                             </v-expansion-panel-header>
                             <v-expansion-panel-content>
-
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-autocomplete
@@ -280,6 +280,16 @@
                                                     <td class="title">Total</td>
                                                     <td>
                                                         <strong>{{
+                                                            form.details_quantity
+                                                        }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <strong>{{
+                                                            form.details_amount
+                                                        }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <strong>{{
                                                             form.amount
                                                         }}</strong>
                                                     </td>
@@ -327,6 +337,21 @@
                                                                         </v-col>
                                                                         <v-col
                                                                             cols="12"
+                                                                            md="3"
+                                                                        >
+                                                                            <v-text-field
+                                                                                v-model="
+                                                                                    form
+                                                                                        .details
+                                                                                        .quantity
+                                                                                "
+                                                                                label="Quantity"
+                                                                                type="number"
+                                                                            ></v-text-field>
+                                                                        </v-col>
+                                                                        <v-col
+                                                                            cols="12"
+                                                                            md="9"
                                                                         >
                                                                             <v-text-field
                                                                                 v-model="
@@ -337,6 +362,20 @@
                                                                                 label="Amount"
                                                                                 type="number"
                                                                             ></v-text-field>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                    <v-row>
+                                                                        <v-col
+                                                                            cols="12"
+                                                                        >
+                                                                            <v-text-field
+                                                                                v-model="
+                                                                                    total_details_amount
+                                                                                "
+                                                                                label="Total Amount"
+                                                                                readonly
+                                                                            >
+                                                                            </v-text-field>
                                                                         </v-col>
                                                                     </v-row>
                                                                 </v-container>
@@ -405,6 +444,37 @@
                                             persistent-hint
                                         ></v-text-field>
                                     </v-col>
+                                </v-row>
+
+                                <v-row v-if="form.vendor.is_vat_inclusive">
+                                    <v-col cols="12" md="2">
+                                        <v-text-field
+                                            v-model="form.tax_rate"
+                                            label="Tax Rate"
+                                            suffix="%"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="taxable_amount"
+                                            label="Tax Amount"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <!-- <v-col cols="12" md="4">
+                                        <v-radio-group
+                                            v-model="form.is_tax_inclusive"
+                                            row
+                                        >
+                                            <v-radio
+                                                label="Inclusive"
+                                                :value="true"
+                                            ></v-radio>
+                                            <v-radio
+                                                label="Exclusive"
+                                                :value="false"
+                                            ></v-radio>
+                                        </v-radio-group>
+                                    </v-col> -->
                                 </v-row>
 
                                 <v-row>
@@ -547,7 +617,9 @@ export default {
             menu: false,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
+                { text: "Quantity", value: "quantity", sortable: false },
                 { text: "Amount", value: "amount", sortable: false },
+                { text: "Total", value: "total", sortable: false },
                 { text: "", value: "actions", sortable: false }
             ],
             items: [],
@@ -559,6 +631,8 @@ export default {
                 code: null,
                 description: null,
                 amount: 0,
+                detials_quantity: 0,
+                details_amount: 0,
                 // reimbursable_amount: 0,
                 receipt_number: null,
                 date: null,
@@ -577,7 +651,7 @@ export default {
                     fund: 0,
                     expense_types: null
                 },
-                vendor: null,
+                vendor: { id: null, name: "", tin: "", is_vat_inclusive: true },
                 // particular: "",
                 // particular_amount: 0,
                 // particular_reimbursable_amount: 0,
@@ -588,7 +662,12 @@ export default {
                 details: {
                     description: "",
                     amount: 0
-                }
+                },
+
+                is_tax_inclusive: true,
+                tax_name: "",
+                tax_rate: 0,
+                tax_amount: 0
             },
             rules: {
                 reimbursable_amount: [],
@@ -628,14 +707,18 @@ export default {
                         _this.form.is_active = data.is_active;
                         _this.form.employee = data.employee;
                         _this.form.vendor =
-                            data.vendor == null ? null : data.vendor.id;
+                            data.vendor == null ? null : data.vendor;
 
                         _this.form.expense_type = data.expense_type;
                         // _this.form.sub_type = data.sub_type_id;
 
                         _this.expense_types = data.employee.expense_types;
                         _this.sub_types = data.expense_type.sub_types;
-
+                        _this.form.is_tax_inclusive = data.is_tax_inclusive;
+                        _this.form.tax_name = data.tax_name;
+                        _this.form.tax_rate = data.tax_rate;
+                        _this.form.tax_amount = data.tax_amount;
+                        console.log(_this.form.tax_rate, data.tax_rate);
                         if (data.details !== null) {
                             _this.itemize = true;
                             _this.items = data.details;
@@ -663,10 +746,11 @@ export default {
                             _this.form.revolving_fund = 0;
                         }
 
-                        _this.form.reimbursable_amount = data.reimbursable_amount;
+                        _this.form.reimbursable_amount =
+                            data.reimbursable_amount;
 
                         _this.form.employee.remaining_fund +=
-                            (data.amount - data.reimbursable_amount);
+                            data.amount - data.reimbursable_amount;
                     })
                     .catch(error => {
                         console.log(error);
@@ -732,7 +816,8 @@ export default {
                     _this.vendors.unshift({
                         id: null,
                         name: "No Vendor",
-                        tin: ""
+                        tin: "",
+                        is_vat_inclusive: false
                     });
                 })
                 .catch(error => {
@@ -754,8 +839,7 @@ export default {
             _this.$refs.form.validate();
 
             if (
-                _this.amount_to_replenish >
-                _this.form.employee.remaining_fund
+                _this.amount_to_replenish > _this.form.employee.remaining_fund
             ) {
                 _this.$dialog.message.error(
                     "Revolving fund amount is greater than remaining fund",
@@ -768,6 +852,11 @@ export default {
             }
 
             if (_this.$refs.form.validate()) {
+                if (!_this.form.vendor.is_vat_inclusive) {
+                    _this.form.tax_rate = 0;
+                    _this.form.tax_amount = 0;
+                }
+
                 axios
                     .put("/api/expenses/" + _this.$route.params.id, {
                         code: _this.form.code,
@@ -781,8 +870,12 @@ export default {
                         expense_type_id: _this.form.expense_type.id,
                         sub_type_id: _this.form.sub_type.id,
                         employee_id: _this.form.employee.id,
-                        vendor_id: _this.form.vendor,
-                        details: _this.itemize ? _this.items : null
+                        vendor_id: _this.form.vendor.id,
+                        details: _this.itemize ? _this.items : null,
+                        tax_name: "",
+                        tax_rate: _this.form.tax_rate,
+                        tax_amount: _this.form.tax_amount,
+                        is_tax_inclusive: _this.form.is_tax_inclusive
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -814,20 +907,28 @@ export default {
         },
         addItem() {
             let description = this.form.details.description;
+            let quantity = this.mixin_convertToNumber(
+                this.form.details.quantity
+            );
             let amount = this.mixin_convertToNumber(this.form.details.amount);
+            let total = this.mixin_convertToNumber(this.form.details.total);
 
-            if (description == "" || amount <= 0) {
+            if (description == "" || total <= 0) {
                 return;
             }
 
             this.items.push({
                 description: description,
-                amount: amount
+                quantity: quantity,
+                amount: amount,
+                total: total
             });
 
             this.dialog = false;
             this.form.details.description = "";
+            this.form.details.quantity = 1;
             this.form.details.amount = 0;
+            this.form.details.total = 0;
         },
         onRemove(item) {
             const index = this.items.indexOf(item);
@@ -877,21 +978,75 @@ export default {
                 parseFloat(this.form.amount) >
                 parseFloat(this.form.employee.remaining_fund)
             );
+        },
+        taxable_amount: {
+            get: function() {
+                if (!this.form.is_tax_inclusive) {
+                    this.form.tax_amount = this.tax_exclusive.toFixed(2);
+                    return this.tax_exclusive.toFixed(2);
+                }
+
+                this.form.tax_amount = this.tax_inclusive.toFixed(2);
+                return this.tax_inclusive.toFixed(2);
+            },
+            set: function(amount) {
+                this.form.tax_amount = amount;
+                return amount;
+            }
+        },
+        tax_inclusive() {
+            return (
+                (this.mixin_convertToNumber(this.form.amount) /
+                    (1 +
+                        this.mixin_convertToNumber(this.form.tax_rate) / 100)) *
+                (this.mixin_convertToNumber(this.form.tax_rate) / 100)
+            );
+        },
+        tax_exclusive() {
+            return (
+                this.mixin_convertToNumber(this.form.amount) *
+                (this.mixin_convertToNumber(this.form.tax_rate) / 100)
+            );
+        },
+        total_details_amount() {
+            let total = (
+                this.mixin_convertToNumber(this.form.details.quantity) *
+                this.mixin_convertToNumber(this.form.details.amount)
+            ).toFixed(2);
+
+            this.form.details.total = total;
+
+            return total;
         }
     },
     watch: {
         items() {
             this.form.amount = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.total),
+                0
+            );
+
+            this.form.details_amount = this.items.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.amount),
+                0
+            );
+
+            this.form.details_quantity = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.quantity),
                 0
             );
         },
         itemize() {
             this.form.amount = this.items.reduce(
-                (total, item) => parseFloat(total) + parseFloat(item.amount),
+                (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
         }
+        // "form.vendor": function() {
+        //     this.form.tax_rate = 0;
+        //     this.form.tax_amount = 0;
+        //     this.form.is_tax_inclusive = true;
+        // }
     },
     created() {
         this.loadVendors();

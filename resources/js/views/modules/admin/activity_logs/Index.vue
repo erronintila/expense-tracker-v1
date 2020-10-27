@@ -429,7 +429,7 @@ export default {
                 });
             },
             deep: true
-        }
+        },
     },
     computed: {
         params(nv) {

@@ -78,10 +78,10 @@ class ExpenseController extends Controller
 
             switch ($request->status) {
 
-                // case 'Archived Expenses':
-                //     $expenses = $expenses->onlyTrashed();
+                    // case 'Archived Expenses':
+                    //     $expenses = $expenses->onlyTrashed();
 
-                //     break;
+                    //     break;
                 case 'Cancelled Expenses':
 
                     $expenses = $expenses->onlyTrashed();
@@ -254,6 +254,14 @@ class ExpenseController extends Controller
 
         $expense->details  = json_encode($request->details);
 
+        $expense->tax_name = $request->tax_name;
+
+        $expense->tax_rate = $request->tax_rate;
+
+        $expense->tax_amount = $request->tax_amount;
+
+        $expense->is_tax_inclusive = $request->is_tax_inclusive;
+
         $expense->save();
 
         // activity()
@@ -371,6 +379,15 @@ class ExpenseController extends Controller
                 $expense->vendor_id  = $request->vendor_id;
 
                 $expense->details  = json_encode($request->details);
+
+                $expense->tax_name = $request->tax_name;
+
+                $expense->tax_rate = $request->tax_rate;
+
+                $expense->tax_amount = $request->tax_amount;
+
+                $expense->is_tax_inclusive = $request->is_tax_inclusive;
+
 
                 $expense->save();
 

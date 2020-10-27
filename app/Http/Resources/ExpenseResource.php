@@ -49,6 +49,11 @@ class ExpenseResource extends JsonResource
             // 'expense_report' => $this->expense_report()->withTrashed()->get(),
             'details' => json_decode($this->details),
             'status' => $this->status(),
+
+            'is_tax_inclusive' => $this->is_tax_inclusive,
+            'tax_name' => $this->tax_name,
+            'tax_rate' => $this->tax_rate,
+            'tax_amount' => $this->tax_amount,
         ];
     }
 }

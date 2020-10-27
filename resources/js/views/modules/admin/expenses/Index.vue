@@ -227,6 +227,28 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Tax</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatNumber(
+                                                    item.tax_amount
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tax rate</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatNumber(
+                                                    item.tax_rate
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Code</strong></td>
                                         <td>:</td>
                                         <td>{{ item.code }}</td>

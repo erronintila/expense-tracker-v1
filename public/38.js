@@ -583,6 +583,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -605,8 +647,16 @@ __webpack_require__.r(__webpack_exports__);
         value: "description",
         sortable: false
       }, {
+        text: "Quantity",
+        value: "quantity",
+        sortable: false
+      }, {
         text: "Amount",
         value: "amount",
+        sortable: false
+      }, {
+        text: "Total",
+        value: "total",
         sortable: false
       }, {
         text: "",
@@ -622,6 +672,8 @@ __webpack_require__.r(__webpack_exports__);
         code: null,
         description: null,
         amount: 0,
+        detials_quantity: 0,
+        details_amount: 0,
         // reimbursable_amount: 0,
         receipt_number: null,
         date: null,
@@ -644,7 +696,12 @@ __webpack_require__.r(__webpack_exports__);
           fund: 0,
           expense_types: null
         },
-        vendor: null,
+        vendor: {
+          id: null,
+          name: "",
+          tin: "",
+          is_vat_inclusive: false
+        },
         // particular: "",
         // particular_amount: 0,
         // particular_reimbursable_amount: 0,
@@ -653,9 +710,14 @@ __webpack_require__.r(__webpack_exports__);
         reimbursable_amount: 0,
         details: {
           description: "",
-          amount: ""
+          quantity: 1,
+          amount: 0,
+          total: 0
         },
-        is_tax_inclusive: true
+        is_tax_inclusive: true,
+        tax_name: "",
+        tax_rate: 0,
+        tax_amount: 0
       },
       rules: {
         reimbursable_amount: [],
@@ -701,7 +763,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.vendors.unshift({
           id: null,
           name: "No Vendor",
-          tin: ""
+          tin: "",
+          is_vat_inclusive: false
         });
       })["catch"](function (error) {
         console.log(error);
@@ -740,8 +803,12 @@ __webpack_require__.r(__webpack_exports__);
           expense_type_id: _this.form.expense_type.id,
           sub_type_id: _this.form.sub_type.id,
           employee_id: _this.form.employee.id,
-          vendor_id: _this.form.vendor,
-          details: _this.itemize ? _this.items : null
+          vendor_id: _this.form.vendor.id,
+          details: _this.itemize ? _this.items : null,
+          tax_name: "",
+          tax_rate: _this.form.tax_rate,
+          tax_amount: _this.form.tax_amount,
+          is_tax_inclusive: _this.form.is_tax_inclusive
         }).then(function (response) {
           _this.onRefresh();
 
@@ -764,19 +831,25 @@ __webpack_require__.r(__webpack_exports__);
     },
     addItem: function addItem() {
       var description = this.form.details.description;
+      var quantity = this.mixin_convertToNumber(this.form.details.quantity);
       var amount = this.mixin_convertToNumber(this.form.details.amount);
+      var total = this.mixin_convertToNumber(this.form.details.total);
 
-      if (description == "" || amount <= 0) {
+      if (description == "" || total <= 0) {
         return;
       }
 
       this.items.push({
         description: description,
-        amount: amount
+        quantity: quantity,
+        amount: amount,
+        total: total
       });
       this.dialog = false;
       this.form.details.description = "";
+      this.form.details.quantity = 1;
       this.form.details.amount = 0;
+      this.form.details.total = 0;
     },
     onRemove: function onRemove(item) {
       var index = this.items.indexOf(item);
@@ -825,18 +898,55 @@ __webpack_require__.r(__webpack_exports__);
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
       return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
+    },
+    taxable_amount: {
+      get: function get() {
+        if (!this.form.is_tax_inclusive) {
+          this.form.tax_amount = this.tax_exclusive.toFixed(2);
+          return this.tax_exclusive.toFixed(2);
+        }
+
+        this.form.tax_amount = this.tax_inclusive.toFixed(2);
+        return this.tax_inclusive.toFixed(2);
+      },
+      set: function set(amount) {
+        this.form.tax_amount = amount;
+        return amount;
+      }
+    },
+    tax_inclusive: function tax_inclusive() {
+      return this.mixin_convertToNumber(this.form.amount) / (1 + this.mixin_convertToNumber(this.form.tax_rate) / 100) * (this.mixin_convertToNumber(this.form.tax_rate) / 100);
+    },
+    tax_exclusive: function tax_exclusive() {
+      return this.mixin_convertToNumber(this.form.amount) * (this.mixin_convertToNumber(this.form.tax_rate) / 100);
+    },
+    total_details_amount: function total_details_amount() {
+      var total = (this.mixin_convertToNumber(this.form.details.quantity) * this.mixin_convertToNumber(this.form.details.amount)).toFixed(2);
+      this.form.details.total = total;
+      return total;
     }
   },
   watch: {
     items: function items() {
       this.form.amount = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.total);
+      }, 0);
+      this.form.details_amount = this.items.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.amount);
+      }, 0);
+      this.form.details_quantity = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.quantity);
       }, 0);
     },
     itemize: function itemize() {
       this.form.amount = this.items.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.amount);
+        return parseFloat(total) + parseFloat(item.total);
       }, 0);
+    },
+    "form.vendor": function formVendor() {
+      this.form.tax_rate = 0;
+      this.form.tax_amount = 0;
+      this.form.is_tax_inclusive = true;
     }
   },
   created: function created() {
@@ -1089,6 +1199,7 @@ var render = function() {
                                             _vm.errors.vendor_id,
                                           "item-value": "id",
                                           "item-text": "name",
+                                          "return-object": "",
                                           label: "Vendor *"
                                         },
                                         on: {
@@ -1629,7 +1740,57 @@ var render = function() {
                                                                                   {
                                                                                     attrs: {
                                                                                       cols:
-                                                                                        "12"
+                                                                                        "12",
+                                                                                      md:
+                                                                                        "3"
+                                                                                    }
+                                                                                  },
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-text-field",
+                                                                                      {
+                                                                                        attrs: {
+                                                                                          label:
+                                                                                            "Quantity",
+                                                                                          type:
+                                                                                            "number"
+                                                                                        },
+                                                                                        model: {
+                                                                                          value:
+                                                                                            _vm
+                                                                                              .form
+                                                                                              .details
+                                                                                              .quantity,
+                                                                                          callback: function(
+                                                                                            $$v
+                                                                                          ) {
+                                                                                            _vm.$set(
+                                                                                              _vm
+                                                                                                .form
+                                                                                                .details,
+                                                                                              "quantity",
+                                                                                              $$v
+                                                                                            )
+                                                                                          },
+                                                                                          expression:
+                                                                                            "\n                                                                                form\n                                                                                    .details\n                                                                                    .quantity\n                                                                            "
+                                                                                        }
+                                                                                      }
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "v-col",
+                                                                                  {
+                                                                                    attrs: {
+                                                                                      cols:
+                                                                                        "12",
+                                                                                      md:
+                                                                                        "9"
                                                                                     }
                                                                                   },
                                                                                   [
@@ -1661,6 +1822,49 @@ var render = function() {
                                                                                           },
                                                                                           expression:
                                                                                             "\n                                                                                form\n                                                                                    .details\n                                                                                    .amount\n                                                                            "
+                                                                                        }
+                                                                                      }
+                                                                                    )
+                                                                                  ],
+                                                                                  1
+                                                                                )
+                                                                              ],
+                                                                              1
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "v-row",
+                                                                              [
+                                                                                _c(
+                                                                                  "v-col",
+                                                                                  {
+                                                                                    attrs: {
+                                                                                      cols:
+                                                                                        "12"
+                                                                                    }
+                                                                                  },
+                                                                                  [
+                                                                                    _c(
+                                                                                      "v-text-field",
+                                                                                      {
+                                                                                        attrs: {
+                                                                                          label:
+                                                                                            "Total Amount",
+                                                                                          readonly:
+                                                                                            ""
+                                                                                        },
+                                                                                        model: {
+                                                                                          value:
+                                                                                            _vm.total_details_amount,
+                                                                                          callback: function(
+                                                                                            $$v
+                                                                                          ) {
+                                                                                            _vm.total_details_amount = $$v
+                                                                                          },
+                                                                                          expression:
+                                                                                            "\n                                                                                total_details_amount\n                                                                            "
                                                                                         }
                                                                                       }
                                                                                     )
@@ -1839,6 +2043,28 @@ var render = function() {
                                                               _vm._v(
                                                                 _vm._s(
                                                                   _vm.form
+                                                                    .details_quantity
+                                                                )
+                                                              )
+                                                            ])
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _c("strong", [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  _vm.form
+                                                                    .details_amount
+                                                                )
+                                                              )
+                                                            ])
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _c("strong", [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  _vm.form
                                                                     .amount
                                                                 )
                                                               )
@@ -1897,66 +2123,47 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "2" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Tax Rate",
-                                          suffix: "%"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: { label: "Tax Amount" }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
+                              _vm.form.vendor.is_vat_inclusive
+                                ? _c(
+                                    "v-row",
                                     [
                                       _c(
-                                        "v-radio-group",
-                                        {
-                                          attrs: { row: "" },
-                                          model: {
-                                            value: _vm.form.is_tax_inclusive,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                _vm.form,
-                                                "is_tax_inclusive",
-                                                $$v
-                                              )
-                                            },
-                                            expression: "form.is_tax_inclusive"
-                                          }
-                                        },
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "2" } },
                                         [
-                                          _c("v-radio", {
+                                          _c("v-text-field", {
                                             attrs: {
-                                              label: "Inclusive",
-                                              value: true
+                                              label: "Tax Rate",
+                                              suffix: "%"
+                                            },
+                                            model: {
+                                              value: _vm.form.tax_rate,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "tax_rate",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.tax_rate"
                                             }
-                                          }),
-                                          _vm._v(" "),
-                                          _c("v-radio", {
-                                            attrs: {
-                                              label: "Exclusive",
-                                              value: false
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: { label: "Tax Amount" },
+                                            model: {
+                                              value: _vm.taxable_amount,
+                                              callback: function($$v) {
+                                                _vm.taxable_amount = $$v
+                                              },
+                                              expression: "taxable_amount"
                                             }
                                           })
                                         ],
@@ -1965,9 +2172,7 @@ var render = function() {
                                     ],
                                     1
                                   )
-                                ],
-                                1
-                              ),
+                                : _vm._e(),
                               _vm._v(" "),
                               _c(
                                 "v-row",

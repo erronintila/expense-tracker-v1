@@ -436,7 +436,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       totalAmount: 0,
       status: "All Expense Reports",
-      statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", "Overdue Expense Reports", "Cancelled Expense Reports" // "Archived Expense Reports"
+      statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", // "Overdue Expense Reports",
+      "Cancelled Expense Reports" // "Archived Expense Reports"
       // "For Submission",
       // "Pending",
       // "Approved",

@@ -105,8 +105,14 @@ axios.interceptors.response.use(
                 store.dispatch("AUTH_LOGOUT");
                 window.location.replace("/login");
                 break;
-            case 404:
-                router.push("/404");
+            // case 404:
+            //     router.push({ name: "404" });
+            //     break;
+            case 403:
+                router.push({ name: "error_403" });
+                break;
+            case 500:
+                router.push({ name: "error_500" });
                 break;
             default:
                 break;

@@ -39,7 +39,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="form.vendor"
+                                            v-model="form.vendor.name"
                                             label="Vendor"
                                             readonly
                                         >
@@ -136,6 +136,16 @@
                                                     <td class="title">Total</td>
                                                     <td>
                                                         <strong>{{
+                                                            form.details_quantity
+                                                        }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <strong>{{
+                                                            form.details_amount
+                                                        }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <strong>{{
                                                             form.amount
                                                         }}</strong>
                                                     </td>
@@ -156,6 +166,24 @@
                                                 `The amount involves spending from your own pocket`
                                             "
                                             persistent-hint
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field
+                                            v-model="form.tax_rate"
+                                            label="Tax Rate"
+                                            suffix="%"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.tax_amount"
+                                            label="Tax Amount"
+                                            readonly
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -285,7 +313,9 @@ export default {
             menu: false,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
+                { text: "Quantity", value: "quantity", sortable: false },
                 { text: "Amount", value: "amount", sortable: false },
+                { text: "Total", value: "total", sortable: false },
                 { text: "", value: "actions", sortable: false }
             ],
             items: [],
@@ -297,7 +327,8 @@ export default {
                 code: null,
                 description: null,
                 amount: 0,
-                // reimbursable_amount: 0,
+                detials_quantity: 0,
+                details_amount: 0,
                 receipt_number: null,
                 date: null,
                 remarks: "",
@@ -315,10 +346,7 @@ export default {
                     fund: 0,
                     expense_types: null
                 },
-                vendor: null,
-                // particular: "",
-                // particular_amount: 0,
-                // particular_reimbursable_amount: 0,
+                vendor: { id: null, name: "", is_vat_inclusive: true },
                 is_reimbursable: false,
 
                 revolving_fund: 0,
@@ -326,24 +354,12 @@ export default {
                 details: {
                     description: "",
                     amount: 0
-                }
-            },
-            rules: {
-                reimbursable_amount: [],
-                revolving_fund: []
-            },
-            errors: {
-                sub_type: [],
-                description: [],
-                amount: [],
-                reimbursable_amount: [],
-                receipt_number: [],
-                date: [],
-                remarks: [],
-                is_active: [],
-                expense_type_id: [],
-                employee_id: [],
-                vendor_id: []
+                },
+
+                is_tax_inclusive: true,
+                tax_name: "",
+                tax_rate: 0,
+                tax_amount: 0
             }
         };
     },
@@ -366,13 +382,18 @@ export default {
                         _this.form.is_active = data.is_active;
                         _this.form.employee = data.employee;
                         _this.form.vendor =
-                            data.vendor == null ? null : data.vendor.id;
+                            data.vendor == null ? null : data.vendor;
 
                         _this.form.expense_type = data.expense_type;
                         // _this.form.sub_type = data.sub_type_id;
 
                         _this.expense_types = data.employee.expense_types;
                         _this.sub_types = data.expense_type.sub_types;
+
+                        _this.form.is_tax_inclusive = data.is_tax_inclusive;
+                        _this.form.tax_name = data.tax_name;
+                        _this.form.tax_rate = data.tax_rate;
+                        _this.form.tax_amount = data.tax_amount;
 
                         if (data.details !== null) {
                             _this.itemize = true;
@@ -543,8 +564,6 @@ export default {
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
-
-                        _this.errors = error.response.data.errors;
                     });
 
                 return;
@@ -620,13 +639,23 @@ export default {
     watch: {
         items() {
             this.form.amount = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.total),
+                0
+            );
+
+            this.form.details_amount = this.items.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.amount),
+                0
+            );
+
+            this.form.details_quantity = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.quantity),
                 0
             );
         },
         itemize() {
             this.form.amount = this.items.reduce(
-                (total, item) => parseFloat(total) + parseFloat(item.amount),
+                (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
         }
