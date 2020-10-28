@@ -378,6 +378,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this4.items = data.items;
       _this4.totalItems = data.total;
     });
+  },
+  created: function created() {
+    console.log(this.$store.getters.user);
   }
 });
 

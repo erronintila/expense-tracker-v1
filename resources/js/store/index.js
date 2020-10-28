@@ -1,5 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
+import SecureLS from "secure-ls";
+
+const ls = new SecureLS({ isCompression: false });
 
 Vue.use(Vuex);
 
@@ -7,8 +11,17 @@ export const store = new Vuex.Store({
     state: {
         admin: localStorage.getItem("admin") || false,
         authenticated: localStorage.getItem("authenticated") || false,
-        user: null || null
+        user: {empty: ""} || {empty: ""}
     },
+    plugins: [
+        createPersistedState({
+            storage: {
+                getItem: key => ls.get(key),
+                setItem: (key, value) => ls.set(key, value),
+                removeItem: key => ls.remove(key)
+            }
+        })
+    ],
     getters: {
         admin(state) {
             return state.admin;
@@ -93,7 +106,10 @@ export const store = new Vuex.Store({
                     .get("/api/user")
                     .then(function(response) {
                         localStorage.setItem("authenticated", "true");
-                        localStorage.setItem("admin", response.data.data.is_admin);
+                        localStorage.setItem(
+                            "admin",
+                            response.data.data.is_admin
+                        );
 
                         context.commit("SET_AUTHENTICATED", true);
                         context.commit("SET_USER", response.data.data);

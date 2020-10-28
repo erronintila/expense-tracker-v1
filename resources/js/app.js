@@ -155,5 +155,8 @@ const app = new Vue({
     router,
     store,
     vuetify,
-    components: { App }
+    components: { App },
+    // created() {
+    //     this.$store.dispatch("AUTH_USER");
+    // },
 });

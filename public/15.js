@@ -539,21 +539,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getCurrentUser: function getCurrentUser() {// let _this = this;
-      // axios
-      //     .get("/api/user")
-      //     .then(response => {
-      //         _this.user = response.data.data;
-      //     })
-      //     .catch(error => {
-      //         console.log(error);
-      //         console.log(error.response);
-      //         _this.mixin_errorDialog(
-      //             `Error ${error.response.status}`,
-      //             error.response.statusText
-      //         );
-      //     });
-    },
     onUpdateData: function onUpdateData() {
       var _this = this; // _this.$refs.form.validate();
 
@@ -653,8 +638,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getCurrentUser();
-
     var _this = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
