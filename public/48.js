@@ -325,6 +325,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -361,10 +366,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       totalAmount: 0,
       items: [],
       status: "All Payments",
-      statuses: ["All Payments", "All Advance Payments", "Reported Advance Payments", "Unreported Advance Payments", "Cancelled Payments", // "Approved",
+      statuses: ["All Payments", // "All Advance Payments",
+      // "Reported Advance Payments",
+      // "Unreported Advance Payments",
+      "Released Payments", "Completed Payments", "Cancelled Payments" // "Approved",
       // "Released",
       // "Received",
-      "Cancelled" // "Completed"
+      // "Cancelled"
+      // "Completed"
       ],
       selected: [],
       search: "",
@@ -902,20 +911,24 @@ var render = function() {
                         {
                           on: {
                             click: function($event) {
-                              return _vm.onUpdate("cancel", "delete")
+                              return _vm.onUpdate("receive", "put")
                             }
                           }
                         },
                         [
                           _c(
                             "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("mdi-plus")])],
+                            [
+                              _c("v-icon", [
+                                _vm._v("mdi-credit-card-check-outline")
+                              ])
+                            ],
                             1
                           ),
                           _vm._v(" "),
                           _c("v-list-item-subtitle", [
                             _vm._v(
-                              "\n                            Add Advance Payment\n                        "
+                              "\n                            Receive Payment(s)\n                        "
                             )
                           ])
                         ],

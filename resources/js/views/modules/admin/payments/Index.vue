@@ -125,20 +125,25 @@
                             </v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item @click="onUpdate('receive', 'put')">
-                            <v-list-item-title>
-                                Receive Payment(s)
-                            </v-list-item-title>
-                        </v-list-item> -->
+                         -->
 
-                        <v-list-item @click="onUpdate('cancel', 'delete')">
+                        <v-list-item @click="onUpdate('receive', 'put')">
+                            <v-list-item-icon>
+                                <v-icon>mdi-credit-card-check-outline</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Receive Payment(s)
+                            </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <!-- <v-list-item @click="onUpdate('cancel', 'delete')">
                             <v-list-item-icon>
                                 <v-icon>mdi-plus</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
                                 Add Advance Payment
                             </v-list-item-subtitle>
-                        </v-list-item>
+                        </v-list-item> -->
 
                         <v-list-item @click="onUpdate('cancel', 'delete')">
                             <v-list-item-icon>
@@ -327,14 +332,16 @@ export default {
             status: "All Payments",
             statuses: [
                 "All Payments",
-                "All Advance Payments",
-                "Reported Advance Payments",
-                "Unreported Advance Payments",
+                // "All Advance Payments",
+                // "Reported Advance Payments",
+                // "Unreported Advance Payments",
+                "Released Payments",
+                "Completed Payments",
                 "Cancelled Payments",
                 // "Approved",
                 // "Released",
                 // "Received",
-                "Cancelled"
+                // "Cancelled"
                 // "Completed"
             ],
             selected: [],
@@ -413,7 +420,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.loading = false;
                     });
@@ -521,12 +531,14 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.mixin_errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
-        },
-
+        }
     },
     watch: {
         params: {
@@ -559,6 +571,6 @@ export default {
             this.items = data.items;
             this.totalItems = data.total;
         });
-    },
+    }
 };
 </script>

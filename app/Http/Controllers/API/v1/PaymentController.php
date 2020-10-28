@@ -78,29 +78,57 @@ class PaymentController extends Controller
 
             switch ($request->status) {
 
-                case 'Cancelled':
+                case 'Cancelled Payments':
 
                     $payments = $payments->onlyTrashed();
 
                     break;
-                case 'Completed':
+                case 'Completed Payments':
 
-                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
+                    $payments = $payments->where([
+                        ["approved_at", "<>", null],
+                        ["cancelled_at", "=", null],
+                        ["released_at", "<>", null],
+                        ["received_at", "<>", null],
+                    ]);
 
-                    break;
-                case 'Received':
-
-                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
-
-                    break;
-                case 'Released':
-
-                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", null);
+                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
 
                     break;
-                case 'Approved':
+                case 'Received Payments':
 
-                    $payments = $payments->where("approved_at", "<>", null)->where("released_at", null)->where("received_at", null);
+                    $payments = $payments->where([
+                        ["approved_at", "<>", null],
+                        ["cancelled_at", "=", null],
+                        ["released_at", "<>", null],
+                        ["received_at", "<>", null],
+                    ]);
+
+                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
+
+                    break;
+                case 'Released Payments':
+
+                    $payments = $payments->where([
+                        ["approved_at", "<>", null],
+                        ["cancelled_at", "=", null],
+                        ["released_at", "<>", null],
+                        ["received_at", "=", null],
+                    ]);
+
+                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", null);
+
+                    break;
+                case 'Approved Payments':
+
+                    $payments = $payments->where([
+                        ["approved_at", "<>", null],
+                        ["cancelled_at", "=", null],
+                        ["released_at", "=", null],
+                        ["received_at", "=", null],
+                    ]);
+
+                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", null)->where("received_at", null);
 
                     break;
                 default:
@@ -181,7 +209,7 @@ class PaymentController extends Controller
 
         $payment->released_at = now();
 
-        $payment->received_at = now();
+        $payment->received_at = null;
         //////////
 
         $payment->save();
@@ -194,14 +222,14 @@ class PaymentController extends Controller
 
             $expense_report->save();
 
-            foreach ($expense_report->expenses as $expense) {
+            // foreach ($expense_report->expenses as $expense) {
 
-                $expense_amount = $expense->amount - $expense->reimbursable_amount;
+            //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                $expense->employee->remaining_fund += $expense_amount;
+            //     $expense->employee->remaining_fund += $expense_amount;
 
-                $expense->employee->save();
-            }
+            //     $expense->employee->save();
+            // }
         }
 
         // activity()

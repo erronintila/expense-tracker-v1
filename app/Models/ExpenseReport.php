@@ -153,7 +153,7 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->payment_id);
+        $paid = is_null($this->paid_at);
 
         if (!$deleted) {
             $arr = [

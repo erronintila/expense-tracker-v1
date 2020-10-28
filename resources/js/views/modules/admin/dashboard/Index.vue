@@ -322,7 +322,7 @@
                 </v-col>
             </v-row>
 
-            <div v-show="total.expenses_by_date > 0">
+            <div>
                 <v-hover v-slot:default="{ hover }">
                     <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                         <v-toolbar flat dense>
@@ -389,7 +389,7 @@
                 </v-hover>
             </div>
 
-            <div v-show="total.expenses_by_date > 0">
+            <div>
                 <v-hover v-slot:default="{ hover }">
                     <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                         <v-toolbar flat dense>

@@ -1750,16 +1750,6 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.total.expenses_by_date > 0,
-                  expression: "total.expenses_by_date > 0"
-                }
-              ]
-            },
             [
               _c("v-hover", {
                 scopedSlots: _vm._u([
@@ -1944,16 +1934,6 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.total.expenses_by_date > 0,
-                  expression: "total.expenses_by_date > 0"
-                }
-              ]
-            },
             [
               _c("v-hover", {
                 scopedSlots: _vm._u([
