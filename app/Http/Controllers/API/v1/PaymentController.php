@@ -289,6 +289,8 @@ class PaymentController extends Controller
 
             case 'approve':
 
+                //unfininshed
+
                 foreach ($request->ids as $id) {
 
                     $payment = Payment::withTrashed()->findOrFail($id);
@@ -302,6 +304,8 @@ class PaymentController extends Controller
 
                 break;
             case 'release':
+
+                //unfininshed
 
                 foreach ($request->ids as $id) {
 
@@ -323,13 +327,22 @@ class PaymentController extends Controller
 
                     $payment->received_at = now();
 
+                    $payment->disableLogging();
+
                     $payment->save();
+
+                    activity()
+                        ->performedOn($payment)
+                        ->withProperties(['attributes' => ["code" => $payment->code, "received_at" => $payment->receoved_at]])
+                        ->log('received payment');
                 }
 
                 $message = "Payment(s) received successfully";
 
                 break;
             case 'complete':
+
+                //unfininshed
 
                 foreach ($request->ids as $id) {
 
@@ -433,18 +446,6 @@ class PaymentController extends Controller
 
                     $expense_report->save();
                 }
-
-                // activity()
-                //     ->withProperties([
-                //         'attributes' => [
-                //             ["text" => "Description", "value" => $payment->description],
-                //             ["text" => "Date", "value" => $payment->date],
-                //             ["text" => "Amount", "value" => $payment->amount],
-                //         ],
-                //         'link' => "/admin/payments/{$payment->id}",
-                //         'details' => "{$payment->description} with amount of {$payment->amount}"
-                //     ])
-                //     ->log("Cancelled Payment");
             }
         } else {
 
@@ -458,18 +459,6 @@ class PaymentController extends Controller
 
                 $expense_report->save();
             }
-
-            // activity()
-            //     ->withProperties([
-            //         'attributes' => [
-            //             ["text" => "Description", "value" => $payment->description],
-            //             ["text" => "Date", "value" => $payment->date],
-            //             ["text" => "Amount", "value" => $payment->amount],
-            //         ],
-            //         'link' => "/admin/adjustments/{$payment->id}",
-            //         'details' => "{$payment->description} with amount of {$payment->amount}"
-            //     ])
-            //     ->log("Cancelled Payment");
         }
 
         return response(
