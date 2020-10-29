@@ -194,6 +194,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -536,7 +537,8 @@ var render = function() {
                               rules: [],
                               counter: 30,
                               "error-messages": _vm.errors.mobile_number,
-                              label: "Mobile Number"
+                              label: "Mobile Number",
+                              type: "number"
                             },
                             on: {
                               input: function($event) {
@@ -624,9 +626,9 @@ var render = function() {
                         [
                           _c("v-textarea", {
                             attrs: {
-                              rules: [],
+                              rules: _vm.mixin_validation.required,
                               "error-messages": _vm.errors.address,
-                              label: "Address",
+                              label: "Address *",
                               rows: "1"
                             },
                             on: {

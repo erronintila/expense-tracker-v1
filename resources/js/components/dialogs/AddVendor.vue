@@ -100,6 +100,7 @@
                                     :error-messages="errors.mobile_number"
                                     @input="errors.mobile_number = []"
                                     label="Mobile Number"
+                                    type="number"
                                 ></v-text-field>
                             </v-col>
 
@@ -131,10 +132,10 @@
                             <v-col cols="12">
                                 <v-textarea
                                     v-model="form.address"
-                                    :rules="[]"
+                                    :rules="mixin_validation.required"
                                     :error-messages="errors.address"
                                     @input="errors.address = []"
-                                    label="Address"
+                                    label="Address *"
                                     rows="1"
                                 ></v-textarea>
                             </v-col>

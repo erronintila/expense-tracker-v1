@@ -128,6 +128,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -319,7 +320,8 @@ var render = function() {
                                           suffix: "days",
                                           hint:
                                             "Allowed period for expense reports to be approved based on submission date",
-                                          "persistent-hint": ""
+                                          "persistent-hint": "",
+                                          type: "number"
                                         },
                                         model: {
                                           value: _vm.settings.approval_period,

@@ -185,11 +185,12 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.mobile_number"
-                                        :rules="[]"
+                                        :rules="mixin_validation.required"
                                         :counter="30"
                                         :error-messages="errors.mobile_number"
                                         @input="errors.mobile_number = []"
                                         label="Mobile Number *"
+                                        type="number"
                                     ></v-text-field>
                                 </v-col>
 
@@ -203,6 +204,7 @@
                                         "
                                         @input="errors.telephone_number = []"
                                         label="Telephone Number"
+                                        type="number"
                                     ></v-text-field>
                                 </v-col>
 
@@ -224,7 +226,7 @@
                                 <v-col cols="12">
                                     <v-textarea
                                         v-model="form.address"
-                                        :rules="[]"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.address"
                                         @input="errors.address = []"
                                         label="Address *"
@@ -241,7 +243,7 @@
                             </div>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
-                            
+
                             <v-row>
                                 <v-col cols="12" md="4">
                                     <v-text-field

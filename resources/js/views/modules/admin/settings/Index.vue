@@ -103,6 +103,7 @@
                                                 'Allowed period for expense reports to be approved based on submission date'
                                             "
                                             persistent-hint
+                                            type="number"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
