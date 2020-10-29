@@ -1326,7 +1326,7 @@ var render = function() {
                                       _vm._v(
                                         "\n                                " +
                                           _vm._s(
-                                            "Total Revolving Funds: " +
+                                            "Total Revolving Fund: " +
                                               _vm.total.total_fund
                                           ) +
                                           "\n                            "

@@ -90,7 +90,9 @@
                                             class="mx-4"
                                         >
                                         </v-text-field> -->
-                                        <v-btn @click="addItem" class="mx-4">Add</v-btn>
+                                        <v-btn @click="addItem" class="mx-4"
+                                            >Add</v-btn
+                                        >
                                     </v-row>
                                 </template>
                                 <template v-slot:[`item.name`]="props">
@@ -207,7 +209,11 @@ export default {
                             error.response.statusText
                         );
 
-                        _this.errors = error.response.data.errors;
+                        if (error.response) {
+                            if (error.response.data) {
+                                _this.errors = error.response.data.errors;
+                            }
+                        }
                     });
 
                 return;

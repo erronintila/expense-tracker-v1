@@ -76,7 +76,7 @@ export default {
                     callback();
                 }
             });
-        }
+        },
     },
     computed: {
         mixin_currentUser() {

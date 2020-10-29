@@ -159,16 +159,6 @@
                         </v-col>
                     </v-row>
 
-                    <!-- <v-row>
-                        <v-col cols="12" md="4">
-                            <v-checkbox
-                                v-model="form.is_vat_inclusive"
-                                label="Vat Inclusive"
-                                :error-messages="errors.is_vat_inclusive"
-                            ></v-checkbox>
-                        </v-col>
-                    </v-row> -->
-
                     <small class="text--secondary">
                         * indicates required field
                     </small>
@@ -284,7 +274,11 @@ export default {
                             error.response.statusText
                         );
 
-                        _this.errors = error.response.data.errors;
+                        if (error.response) {
+                            if (error.response.data) {
+                                _this.errors = error.response.data.errors;
+                            }
+                        }
                     });
 
                 return;

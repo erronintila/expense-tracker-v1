@@ -31,7 +31,7 @@ class JobController extends Controller
     {
         return Validator::make($data, [
 
-            'name' => ['required', 'max:255', Rule::unique('jobs')->ignore($id, 'id')],
+            'name' => ['required', 'max:100', Rule::unique('jobs')->ignore($id, 'id')],
 
             'department_id' => ['required'],
         ]);

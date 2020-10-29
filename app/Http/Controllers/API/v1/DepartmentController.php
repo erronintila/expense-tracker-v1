@@ -30,7 +30,7 @@ class DepartmentController extends Controller
     {
         return Validator::make($data, [
 
-            'name' => ['required', 'max:150', Rule::unique('departments')->ignore($id, 'id')],
+            'name' => ['required', 'max:100', Rule::unique('departments')->ignore($id, 'id')],
         ]);
     }
 

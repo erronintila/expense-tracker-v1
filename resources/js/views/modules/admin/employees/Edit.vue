@@ -516,7 +516,11 @@ export default {
                             error.response.statusText
                         );
 
-                        _this.errors = error.response.data.errors;
+                        if (error.response) {
+                            if (error.response.data) {
+                                _this.errors = error.response.data.errors;
+                            }
+                        }
                     });
 
                 return;

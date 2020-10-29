@@ -102,7 +102,7 @@
 
                                 <div>
                                     {{
-                                        `Total Revolving Funds: ${total.total_fund}`
+                                        `Total Revolving Fund: ${total.total_fund}`
                                     }}
                                 </div>
                             </v-card-text>

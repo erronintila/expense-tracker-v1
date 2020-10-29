@@ -142,7 +142,11 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
-          _this.errors = error.response.data.errors;
+          if (error.response) {
+            if (error.response.data) {
+              _this.errors = error.response.data.errors;
+            }
+          }
         });
         return;
       }

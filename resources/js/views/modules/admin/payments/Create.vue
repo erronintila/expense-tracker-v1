@@ -58,7 +58,7 @@
                             </v-menu>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-menu
                                 v-model="menu_payee"
                                 :close-on-content-click="false"
@@ -116,7 +116,7 @@
                                     </v-container>
                                 </v-card>
                             </v-menu>
-                        </v-col>
+                        </v-col> -->
 
                         <v-col cols="12" md="4">
                             <v-text-field

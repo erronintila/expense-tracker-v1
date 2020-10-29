@@ -467,7 +467,11 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errors = error.response.data.errors;
+                        if (error.response) {
+                            if (error.response.data) {
+                                _this.errors = error.response.data.errors;
+                            }
+                        }
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
