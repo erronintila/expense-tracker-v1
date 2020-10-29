@@ -28,7 +28,7 @@ class DepartmentSeeder extends Seeder
 
         foreach ($departments as $department) {
             Department::create([
-                "code" => generate_code(Department::class, "DEP" . date("Y"), 10),
+                "code" => generate_code(Department::class, "DEP", 10),
                 "name" => $department["name"]
             ]);
         }

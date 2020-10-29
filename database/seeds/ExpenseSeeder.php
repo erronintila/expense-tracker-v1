@@ -26,9 +26,5 @@ class ExpenseSeeder extends Seeder
                 'expense_id' => $i,
             ]);
         }
-
-        foreach ($expense_details as $expense_detail) {
-            ExpenseDetail::create($expense_detail);
-        }
     }
 }

@@ -26,7 +26,7 @@ class ExpenseTypeSeeder extends Seeder
 
         foreach ($expense_types as $expense_type) {
             ExpenseType::create([
-                "code" => generate_code(ExpenseType::class, "EXT" . date("Y"), 10),
+                "code" => generate_code(ExpenseType::class, "EXT", 10),
                 "name" => $expense_type["name"]
             ]);
         }

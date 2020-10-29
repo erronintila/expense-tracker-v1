@@ -56,7 +56,7 @@ return [
 	'forgetCacheByWrite' => true,
 	// TTL in seconds.
 	'cacheTtl' => 15,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Default Settings

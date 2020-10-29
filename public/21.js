@@ -353,74 +353,87 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
       this.loadUsers();
       this.selected = [];
-    },
-    onDeleteAll: function onDeleteAll() {
-      var _this = this;
+    } // onDeleteAll() {
+    //     let _this = this;
+    //     this.$confirm(
+    //         "WARNING: Delete All Activity Logs? This action can't be revoked."
+    //     ).then(res => {
+    //         if (res) {
+    //             axios
+    //                 .delete(`/api/activity_logs/0`, {
+    //                     params: {
+    //                         delete_all: true
+    //                     }
+    //                 })
+    //                 .then(function(response) {
+    //                     _this.mixin_successDialog(
+    //                         "Success",
+    //                         "Deleted All Logs successfully"
+    //                     );
+    //                     _this.getDataFromApi().then(data => {
+    //                         _this.items = data.items;
+    //                         _this.totalItems = data.total;
+    //                     });
+    //                     _this.selected = [];
+    //                 })
+    //                 .catch(function(error) {
+    //                     console.log(error);
+    //                     console.log(error.response);
+    //                     _this.mixin_errorDialog(
+    //                         `Error ${error.response.status}`,
+    //                         error.response.statusText
+    //                     );
+    //                 });
+    //         }
+    //     });
+    // },
+    // onDelete() {
+    //     let _this = this;
+    //     if (_this.selected.length == 0) {
+    //         this.$dialog.message.error("No item(s) selected", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     this.$confirm(
+    //         "WARNING: Delete selected Activity Log(s)? This action can't be revoked."
+    //     ).then(res => {
+    //         if (res) {
+    //             axios
+    //                 .delete(`/api/activity_logs/${_this.selected[0].id}`, {
+    //                     params: {
+    //                         ids: _this.selected.map(item => {
+    //                             return item.id;
+    //                         })
+    //                     }
+    //                 })
+    //                 .then(function(response) {
+    //                     _this.$dialog.message.success(
+    //                         "Deleted Logs successfully",
+    //                         {
+    //                             position: "top-right",
+    //                             timeout: 2000
+    //                         }
+    //                     );
+    //                     _this.getDataFromApi().then(data => {
+    //                         _this.items = data.items;
+    //                         _this.totalItems = data.total;
+    //                     });
+    //                     _this.selected = [];
+    //                 })
+    //                 .catch(function(error) {
+    //                     console.log(error);
+    //                     console.log(error.response);
+    //                     _this.mixin_errorDialog(
+    //                         `Error ${error.response.status}`,
+    //                         error.response.statusText
+    //                     );
+    //                 });
+    //         }
+    //     });
+    // }
 
-      this.$confirm("WARNING: Delete All Activity Logs? This action can't be revoked.").then(function (res) {
-        if (res) {
-          axios["delete"]("/api/activity_logs/0", {
-            params: {
-              delete_all: true
-            }
-          }).then(function (response) {
-            _this.mixin_successDialog("Success", "Deleted All Logs successfully");
-
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
-            });
-
-            _this.selected = [];
-          })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-          });
-        }
-      });
-    },
-    onDelete: function onDelete() {
-      var _this = this;
-
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      this.$confirm("WARNING: Delete selected Activity Log(s)? This action can't be revoked.").then(function (res) {
-        if (res) {
-          axios["delete"]("/api/activity_logs/".concat(_this.selected[0].id), {
-            params: {
-              ids: _this.selected.map(function (item) {
-                return item.id;
-              })
-            }
-          }).then(function (response) {
-            _this.$dialog.message.success("Deleted Logs successfully", {
-              position: "top-right",
-              timeout: 2000
-            });
-
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
-            });
-
-            _this.selected = [];
-          })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-          });
-        }
-      });
-    }
   },
   watch: {
     params: {
@@ -485,64 +498,6 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("v-spacer"),
-          _vm._v(" "),
-          _c(
-            "v-tooltip",
-            {
-              attrs: { bottom: "" },
-              scopedSlots: _vm._u([
-                {
-                  key: "activator",
-                  fn: function(ref) {
-                    var on = ref.on
-                    var attrs = ref.attrs
-                    return [
-                      _c(
-                        "v-btn",
-                        _vm._g(
-                          _vm._b(
-                            {
-                              staticClass: "elevation-3 mr-2",
-                              attrs: {
-                                color: "green",
-                                dark: "",
-                                fab: "",
-                                "x-small": ""
-                              }
-                            },
-                            "v-btn",
-                            attrs,
-                            false
-                          ),
-                          on
-                        ),
-                        [
-                          _c(
-                            "download-excel",
-                            {
-                              attrs: {
-                                data: _vm.export_data,
-                                type: "csv",
-                                name: "Activity Logs.xls"
-                              }
-                            },
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-download")
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ]
-                  }
-                }
-              ])
-            },
-            [_vm._v(" "), _c("span", [_vm._v("Export to Excel")])]
-          ),
           _vm._v(" "),
           _c(
             "v-tooltip",
@@ -742,110 +697,6 @@ var render = function() {
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-menu",
-            {
-              attrs: {
-                "offset-y": "",
-                transition: "scale-transition",
-                left: ""
-              },
-              scopedSlots: _vm._u([
-                {
-                  key: "activator",
-                  fn: function(ref) {
-                    var menu = ref.on
-                    var attrs = ref.attrs
-                    return [
-                      _c(
-                        "v-tooltip",
-                        {
-                          attrs: { bottom: "" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "activator",
-                                fn: function(ref) {
-                                  var tooltip = ref.on
-                                  return [
-                                    _c(
-                                      "v-btn",
-                                      _vm._g(
-                                        _vm._b(
-                                          {
-                                            staticClass: "elevation-3",
-                                            attrs: {
-                                              color: "green",
-                                              dark: "",
-                                              fab: "",
-                                              "x-small": ""
-                                            }
-                                          },
-                                          "v-btn",
-                                          attrs,
-                                          false
-                                        ),
-                                        Object.assign({}, tooltip, menu)
-                                      ),
-                                      [
-                                        _c("v-icon", { attrs: { dark: "" } }, [
-                                          _vm._v("mdi-view-grid-plus-outline")
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        },
-                        [_vm._v(" "), _c("span", [_vm._v("More Options")])]
-                      )
-                    ]
-                  }
-                }
-              ])
-            },
-            [
-              _vm._v(" "),
-              _c(
-                "v-list",
-                [
-                  _c(
-                    "v-list-item",
-                    { on: { click: _vm.onDelete } },
-                    [
-                      _c("v-list-item-title", [
-                        _vm._v(
-                          "\n                        Delete\n                    "
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { on: { click: _vm.onDeleteAll } },
-                    [
-                      _c("v-list-item-title", [
-                        _vm._v(
-                          "\n                        Delete All\n                    "
-                        )
-                      ])
                     ],
                     1
                   )

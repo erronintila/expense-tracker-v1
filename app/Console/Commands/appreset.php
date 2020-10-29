@@ -19,7 +19,7 @@ class appreset extends Command
      *
      * @var string
      */
-    protected $description = 'Drop tables, run migrations, seed data and install laravel passport';
+    protected $description = 'Drop tables, run migrations, and seed data';
 
     /**
      * Create a new command instance.

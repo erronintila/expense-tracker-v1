@@ -133,10 +133,12 @@ export default {
     },
     methods: {
         onLoad: function() {
+            let _this = this;
             axios
                 .get("/api/settings")
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
+                    _this.settings = response.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -157,10 +159,6 @@ export default {
             //     this.expense_report_settings
             // );
 
-            console.log(_this.settings);
-
-            return;
-
             axios
                 .post("/api/settings", {
                     settings: _this.settings
@@ -169,7 +167,7 @@ export default {
                     console.log(response);
 
                     _this.mixin_successDialog(
-                        "",
+                        "Success",
                         "Saved settings successfully"
                     );
                 })

@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
+use anlutro\LaravelSettings\Facade as Setting;
 
 class UserSeeder extends Seeder
 {
@@ -125,7 +126,7 @@ class UserSeeder extends Seeder
         // create users and assign roles
 
         $user = User::create([
-            'code' => generate_code(User::class, "USR" . date("Y"), 10),
+            'code' => generate_code(User::class, "USR", 10),
             'name' => 'Super Admin',
             'username' => 'superadmin',
             'email' => 'superadmin@superadmin.com',
@@ -139,7 +140,7 @@ class UserSeeder extends Seeder
         $user->assignRole($roleSuperAdmin);
 
         $user = User::create([
-            'code' => generate_code(User::class, "USR" . date("Y"), 10),
+            'code' => generate_code(User::class, "USR", 10),
             'name' => 'Intila, Erron Cerdania',
             'username' => 'erronintila',
             'email' => 'erronintila@gmail.com',
@@ -153,7 +154,7 @@ class UserSeeder extends Seeder
         $user->assignRole('Standard User');
 
         $employee = Employee::create([
-            'code' => generate_code(Employee::class, "EMP" . date("Y"), 10),
+            'code' => generate_code(Employee::class, "EMP", 10),
             'first_name' => "Erron",
             'middle_name' => "Cerdania",
             'last_name' => "Intila",
@@ -167,5 +168,9 @@ class UserSeeder extends Seeder
             "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
             "user_id" => $user->id,
         ]);
+
+        Setting::set("submission_date", "Weekly");
+        Setting::set("approval_period", 1);
+        Setting::save();
     }
 }

@@ -144,8 +144,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onLoad: function onLoad() {
+      var _this = this;
+
       axios.get("/api/settings").then(function (response) {
-        console.log(response);
+        // console.log(response);
+        _this.settings = response.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -161,14 +164,12 @@ __webpack_require__.r(__webpack_exports__);
       // );
 
 
-      console.log(_this.settings);
-      return;
       axios.post("/api/settings", {
         settings: _this.settings
       }).then(function (response) {
         console.log(response);
 
-        _this.mixin_successDialog("", "Saved settings successfully");
+        _this.mixin_successDialog("Success", "Saved settings successfully");
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

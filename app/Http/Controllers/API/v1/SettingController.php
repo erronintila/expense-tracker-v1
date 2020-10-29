@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use anlutro\LaravelSettings\Facade as Setting;
 
 class SettingController extends Controller
 {
@@ -14,7 +15,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        // return Setting::all()
+        return response(Setting::all(), 200);
     }
 
     /**
@@ -25,7 +26,14 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $settings = request()->has("settings") ? $request->settings : [];
+
+        foreach ($settings as $key => $value) {
+
+            Setting::set($key, $value);
+        }
+
+        Setting::save();
     }
 
     /**

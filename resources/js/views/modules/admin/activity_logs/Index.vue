@@ -5,7 +5,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         class="elevation-3 mr-2"
@@ -26,7 +26,7 @@
                     </v-btn>
                 </template>
                 <span>Export to Excel</span>
-            </v-tooltip>
+            </v-tooltip> -->
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -118,7 +118,7 @@
                 </v-card>
             </v-menu>
 
-            <v-menu offset-y transition="scale-transition" left>
+            <!-- <v-menu offset-y transition="scale-transition" left>
                 <template v-slot:activator="{ on: menu, attrs }">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on: tooltip }">
@@ -151,7 +151,7 @@
                         </v-list-item-title>
                     </v-list-item>
                 </v-list>
-            </v-menu>
+            </v-menu> -->
         </v-card-title>
 
         <br />
@@ -330,95 +330,95 @@ export default {
 
             this.selected = [];
         },
-        onDeleteAll() {
-            let _this = this;
+        // onDeleteAll() {
+        //     let _this = this;
 
-            this.$confirm(
-                "WARNING: Delete All Activity Logs? This action can't be revoked."
-            ).then(res => {
-                if (res) {
-                    axios
-                        .delete(`/api/activity_logs/0`, {
-                            params: {
-                                delete_all: true
-                            }
-                        })
-                        .then(function(response) {
-                            _this.mixin_successDialog(
-                                "Success",
-                                "Deleted All Logs successfully"
-                            );
+        //     this.$confirm(
+        //         "WARNING: Delete All Activity Logs? This action can't be revoked."
+        //     ).then(res => {
+        //         if (res) {
+        //             axios
+        //                 .delete(`/api/activity_logs/0`, {
+        //                     params: {
+        //                         delete_all: true
+        //                     }
+        //                 })
+        //                 .then(function(response) {
+        //                     _this.mixin_successDialog(
+        //                         "Success",
+        //                         "Deleted All Logs successfully"
+        //                     );
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
+        //                     _this.getDataFromApi().then(data => {
+        //                         _this.items = data.items;
+        //                         _this.totalItems = data.total;
+        //                     });
 
-                            _this.selected = [];
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
+        //                     _this.selected = [];
+        //                 })
+        //                 .catch(function(error) {
+        //                     console.log(error);
+        //                     console.log(error.response);
 
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
-                        });
-                }
-            });
-        },
-        onDelete() {
-            let _this = this;
+        //                     _this.mixin_errorDialog(
+        //                         `Error ${error.response.status}`,
+        //                         error.response.statusText
+        //                     );
+        //                 });
+        //         }
+        //     });
+        // },
+        // onDelete() {
+        //     let _this = this;
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
+        //     if (_this.selected.length == 0) {
+        //         this.$dialog.message.error("No item(s) selected", {
+        //             position: "top-right",
+        //             timeout: 2000
+        //         });
+        //         return;
+        //     }
 
-            this.$confirm(
-                "WARNING: Delete selected Activity Log(s)? This action can't be revoked."
-            ).then(res => {
-                if (res) {
-                    axios
-                        .delete(`/api/activity_logs/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Deleted Logs successfully",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
+        //     this.$confirm(
+        //         "WARNING: Delete selected Activity Log(s)? This action can't be revoked."
+        //     ).then(res => {
+        //         if (res) {
+        //             axios
+        //                 .delete(`/api/activity_logs/${_this.selected[0].id}`, {
+        //                     params: {
+        //                         ids: _this.selected.map(item => {
+        //                             return item.id;
+        //                         })
+        //                     }
+        //                 })
+        //                 .then(function(response) {
+        //                     _this.$dialog.message.success(
+        //                         "Deleted Logs successfully",
+        //                         {
+        //                             position: "top-right",
+        //                             timeout: 2000
+        //                         }
+        //                     );
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
+        //                     _this.getDataFromApi().then(data => {
+        //                         _this.items = data.items;
+        //                         _this.totalItems = data.total;
+        //                     });
 
-                            _this.selected = [];
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
+        //                     _this.selected = [];
+        //                 })
+        //                 .catch(function(error) {
+        //                     console.log(error);
+        //                     console.log(error.response);
 
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
-                        });
-                }
-            });
-        }
+        //                     _this.mixin_errorDialog(
+        //                         `Error ${error.response.status}`,
+        //                         error.response.statusText
+        //                     );
+        //                 });
+        //         }
+        //     });
+        // }
     },
     watch: {
         params: {
