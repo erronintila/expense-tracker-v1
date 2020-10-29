@@ -143,18 +143,26 @@ export default {
                     _this.form.username = data.username;
                     _this.form.email = data.email;
                     _this.form.is_admin = data.is_admin;
-                    _this.form.can_login = data.can_login,
-                    _this.form.employee = data.employee !== null ? data.employee.id : 0;
+                    (_this.form.can_login = data.can_login),
+                        (_this.form.employee =
+                            data.employee !== null ? data.employee.id : 0);
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadEmployees() {
             let _this = this;
             axios
-                .get(`/api/data/employees?no_user=true&user_id=${_this.$route.params.id}`)
+                .get(
+                    `/api/data/employees?no_user=true&user_id=${_this.$route.params.id}`
+                )
                 .then(response => {
                     _this.employees = response.data.data;
 
@@ -163,6 +171,11 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onSave() {
@@ -179,7 +192,10 @@ export default {
                         email: _this.form.email,
                         is_admin: _this.form.is_admin,
                         can_login: _this.form.can_login,
-                        employee_id: _this.form.employee !== null ? _this.form.employee : 0
+                        employee_id:
+                            _this.form.employee !== null
+                                ? _this.form.employee
+                                : 0
                     })
                     .then(function(response) {
                         _this.mixin_successDialog(
@@ -195,7 +211,10 @@ export default {
 
                         _this.errors = error.response.data.errors;
 
-                        _this.mixin_errorDialog("Error", "Please contact tech support");
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
 
                 return;

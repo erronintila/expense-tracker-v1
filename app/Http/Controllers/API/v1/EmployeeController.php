@@ -56,13 +56,15 @@ class EmployeeController extends Controller
 
             'email' => ['nullable', 'email', Rule::unique('employees')->ignore($id, 'id')],
 
-            'job_id' => ['required'],
+            'address' => ['required'],
 
-            'address' => ['nullable'],
+            'job_id' => ['required'],
 
             'username' => ['required'],
 
             'role' => ['required'],
+
+            'can_login' => ['required'],
         ]);
     }
 

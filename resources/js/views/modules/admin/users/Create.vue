@@ -223,6 +223,11 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadEmployees() {
@@ -237,10 +242,15 @@ export default {
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         changeRole() {
-            if(this.form.role == "Administrator") {
+            if (this.form.role == "Administrator") {
                 this.selected = this.permissions;
             } else {
                 this.selected = [];
@@ -278,8 +288,8 @@ export default {
                         _this.errors = error.response.data.errors;
 
                         _this.mixin_errorDialog(
-                            "Error",
-                            "Please contact tech support"
+                            `Error ${error.response.status}`,
+                            error.response.statusText
                         );
                     });
 

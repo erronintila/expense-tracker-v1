@@ -17,7 +17,10 @@
                         <v-text-field
                             v-model="form.name"
                             :counter="100"
-                            :rules="[...mixin_validation.required, ...mixin_validation.minLength(100)]"
+                            :rules="[
+                                ...mixin_validation.required,
+                                ...mixin_validation.minLength(100)
+                            ]"
                             :error-messages="errors.name[0]"
                             @input="errors.name = []"
                             label="Name *"
@@ -46,7 +49,7 @@ export default {
         return {
             valid: false,
             form: {
-                name: "",
+                name: ""
             },
             errors: {
                 name: []
@@ -79,10 +82,13 @@ export default {
 
                         // _this.errors = error.response.data.errors;
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
             }
         }
-    },
+    }
 };
 </script>

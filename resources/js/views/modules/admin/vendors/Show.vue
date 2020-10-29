@@ -246,7 +246,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         editData() {
@@ -258,6 +261,6 @@ export default {
     },
     created() {
         this.getData();
-    },
+    }
 };
 </script>

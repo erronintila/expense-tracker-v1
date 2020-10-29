@@ -210,7 +210,8 @@
                                         <td>
                                             {{
                                                 mixin_formatNumber(
-                                                    item.amount - item.reimbursable_amount
+                                                    item.amount -
+                                                        item.reimbursable_amount
                                                 )
                                             }}
                                         </td>
@@ -245,7 +246,8 @@
                                                 mixin_formatNumber(
                                                     item.tax_rate
                                                 )
-                                            }} %
+                                            }}
+                                            %
                                         </td>
                                     </tr>
                                     <tr>
@@ -314,7 +316,11 @@
                         {{ mixin_formatNumber(item.amount) }}
                     </template>
                     <template v-slot:[`item.replenishment`]="{ item }">
-                        {{ mixin_formatNumber(item.amount - item.reimbursable_amount) }}
+                        {{
+                            mixin_formatNumber(
+                                item.amount - item.reimbursable_amount
+                            )
+                        }}
                     </template>
                     <!-- <template v-slot:[`item.expense_report`]="{ item }">
                         {{
@@ -432,9 +438,13 @@ export default {
                 { text: "Employee", value: "employee_name", sortable: false },
                 { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "To replenish", value: "replenishment", sortable: false },
+                {
+                    text: "To replenish",
+                    value: "replenishment",
+                    sortable: false
+                },
                 { text: "Last Updated", value: "updated_at" },
-                { text: "Status", value: "status.status", sortable: false  },
+                { text: "Status", value: "status.status", sortable: false },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
@@ -452,7 +462,7 @@ export default {
                 "Approved Expenses",
                 "Rejected Expenses",
                 "Cancelled Expenses",
-                "Reimbursed Expenses",
+                "Reimbursed Expenses"
                 // "Archived Expenses"
             ],
             selected: [],
@@ -737,7 +747,11 @@ export default {
             );
 
             this.totalReplenishment = this.mixin_formatNumber(
-                this.items.reduce((total, item) => total + (item.amount - item.reimbursable_amount), 0)
+                this.items.reduce(
+                    (total, item) =>
+                        total + (item.amount - item.reimbursable_amount),
+                    0
+                )
             );
         }
     },

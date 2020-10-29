@@ -21,15 +21,11 @@ class CreateExpensesTable extends Migration
             $table->double('amount', 10, 2)->default(0);
             $table->double('reimbursable_amount', 10, 2)->default(0);
 
-            $table->string('tax_name', 10, 2)->nullable();
+            $table->string('tax_name', 100)->nullable();
             $table->double('tax_rate', 10, 2)->default(0);
             $table->boolean('is_compound_tax')->default(false);
             $table->boolean('is_tax_inclusive')->default(false);
             $table->double('tax_amount', 10, 2)->default(0);
-
-            // $table->double('personal_amount', 10, 2)->default(0);
-            // $table->double('revolving_fund', 10, 2)->default(0);
-            // $table->double('paid_amount', 10, 2)->default(0);
 
             $table->string('receipt_number')->nullable();
             $table->date('date');
@@ -42,14 +38,14 @@ class CreateExpensesTable extends Migration
             // ]));
             $table->text('notes')->nullable();
 
+            $table->date('expiry_date')->nullable();
+
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('sub_type_id')->nullable();
             $table->unsignedBigInteger('employee_id')->unsigned();
             $table->unsignedBigInteger('vendor_id')->nullable();
             $table->unsignedBigInteger('expense_report_id')->nullable();
             $table->unsignedBigInteger('tax_id')->nullable();
-
-            $table->date('expiry_date')->nullable();
 
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('reviewed_at')->nullable();

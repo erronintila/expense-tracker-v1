@@ -183,6 +183,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {

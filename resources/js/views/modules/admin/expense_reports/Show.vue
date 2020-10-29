@@ -69,7 +69,9 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            <strong>{{ mixin_formatNumber(total) }}</strong>
+                                            <strong>{{
+                                                mixin_formatNumber(total)
+                                            }}</strong>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -86,57 +88,77 @@
                                     <td :colspan="headers.length">
                                         <v-container>
                                             <table>
-                                    <tr>
-                                        <td><strong>Reimbursable</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatNumber(
-                                                    item.reimbursable_amount
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Code</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.code }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Description</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.description }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Remarks</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.remarks }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Created</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.created_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Cancelled</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.deleted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                </table>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Reimbursable</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                item.reimbursable_amount
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Code</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.code }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Description</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ item.description }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Remarks</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.remarks }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Created</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatDate(
+                                                                item.created_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Cancelled</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatDate(
+                                                                item.deleted_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </v-container>
                                     </td>
                                 </template>
@@ -189,7 +211,7 @@ import DateRangePicker from "../../../../components/daterangepicker/DateRangePic
 
 export default {
     components: {
-        DateRangePicker,
+        DateRangePicker
     },
     data() {
         return {
@@ -283,7 +305,9 @@ export default {
                     _this.description = data.description;
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
-                    _this.employee = `${data.employee.last_name || ""}, ${data.employee.first_name || ""} ${data.employee.suffix || ""}`;
+                    _this.employee = `${data.employee.last_name || ""}, ${data
+                        .employee.first_name || ""} ${data.employee.suffix ||
+                        ""}`;
                     _this.status = data.status;
                     _this.expenses = data.expenses;
                     _this.submitted_at = data.submitted_at;
@@ -303,7 +327,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadExpenses(emp_id) {
@@ -328,7 +355,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onEdit() {
@@ -336,7 +366,7 @@ export default {
                 name: "admin.expense_reports.edit",
                 params: { id: this.$route.params.id }
             });
-        },
+        }
     },
     watch: {
         selected() {

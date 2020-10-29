@@ -210,6 +210,28 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -570,13 +592,13 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.mixin_formatNumber(
                                                             item.reimbursable_amount
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -606,7 +628,11 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      _vm._s(item.description)
+                                                      "\n                                                    " +
+                                                        _vm._s(
+                                                          item.description
+                                                        ) +
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -636,14 +662,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.mixin_formatDate(
                                                             item.created_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -659,14 +685,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.mixin_formatDate(
                                                             item.deleted_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ])

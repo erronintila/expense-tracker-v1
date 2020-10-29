@@ -409,6 +409,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1311,7 +1317,7 @@ var render = function() {
                                                 item.tax_rate
                                               )
                                             ) +
-                                            " %\n                                    "
+                                            "\n                                        %\n                                    "
                                         )
                                       ])
                                     ]),

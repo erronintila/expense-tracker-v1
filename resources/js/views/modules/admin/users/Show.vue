@@ -188,10 +188,18 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                     console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         editData() {
-            this.$router.push({name: "admin.users.edit", params: {id: this.$route.params.id}});
+            this.$router.push({
+                name: "admin.users.edit",
+                params: { id: this.$route.params.id }
+            });
         }
     },
     created() {

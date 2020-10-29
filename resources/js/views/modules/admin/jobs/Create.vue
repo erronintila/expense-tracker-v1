@@ -90,10 +90,12 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
-
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onSave() {
@@ -120,10 +122,12 @@ export default {
                     })
                     .catch(function(error) {
                         console.log(error);
-
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.errors = error.response.data.errors;
                     });

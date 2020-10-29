@@ -110,7 +110,6 @@
                                 Roles & Permissions
                             </v-list-item-title>
                         </v-list-item> -->
-
                     </v-list>
                 </v-menu>
             </v-card-title>
@@ -237,6 +236,11 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+
                         _this.loading = false;
                     });
             });
@@ -296,6 +300,11 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.mixin_errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -343,6 +352,11 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.mixin_errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -382,6 +396,11 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.mixin_errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -420,6 +439,11 @@ export default {
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
+
+                            _this.mixin_errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
@@ -450,6 +474,6 @@ export default {
             this.items = data.items;
             this.totalItems = data.total;
         });
-    },
+    }
 };
 </script>

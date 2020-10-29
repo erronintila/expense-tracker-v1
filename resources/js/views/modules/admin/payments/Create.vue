@@ -84,7 +84,9 @@
                                             <v-col cols="12" md="8">
                                                 <v-text-field
                                                     v-model="form.payee"
-                                                    :rules="mixin_validation.required"
+                                                    :rules="
+                                                        mixin_validation.required
+                                                    "
                                                     :counter="100"
                                                     label="Payee *"
                                                     required
@@ -350,7 +352,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         onSave() {
@@ -398,7 +403,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.errors = error.response.data.errors;
                     });

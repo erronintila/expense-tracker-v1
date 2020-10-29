@@ -327,6 +327,11 @@ export default {
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                         reject();
                     });
             });
@@ -352,6 +357,11 @@ export default {
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
             });
         },
@@ -430,6 +440,6 @@ table td {
         position: absolute;
         left: 0;
         top: 0;
-    } 
+    }
 } */
 </style>

@@ -93,7 +93,12 @@
                                     </tr>
                                 </template>
                                 <template v-slot:[`item.created_at`]="{ item }">
-                                    {{ mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}
+                                    {{
+                                        mixin_formatDate(
+                                            item.created_at,
+                                            "YYYY-MM-DD HH:mm:ss"
+                                        )
+                                    }}
                                 </template>
                                 <template v-slot:[`item.total`]="{ item }">
                                     {{ mixin_formatNumber(item.total) }}
@@ -244,7 +249,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         cancelPayment() {
@@ -276,11 +284,14 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                            _this.mixin_errorDialog(
+                                `Error ${error.response.status}`,
+                                error.response.statusText
+                            );
                         });
                 }
             });
-        },
+        }
     },
     watch: {
         items() {

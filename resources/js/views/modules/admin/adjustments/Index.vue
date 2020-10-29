@@ -124,7 +124,12 @@
                     }"
                 >
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_formatDate(item.updated_at, "YYYY-MM-DD HH:mm:ss") }}
+                        {{
+                            mixin_formatDate(
+                                item.updated_at,
+                                "YYYY-MM-DD HH:mm:ss"
+                            )
+                        }}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{
@@ -158,7 +163,11 @@ export default {
                 // { text: "Reference", value: "reference" },
                 { text: "Description", value: "description" },
                 { text: "Added", value: "add_amount", sortable: false },
-                { text: "Subtracted", value: "subtract_amount", sortable: false },
+                {
+                    text: "Subtracted",
+                    value: "subtract_amount",
+                    sortable: false
+                },
                 { text: "Type", value: "type" },
                 { text: "Last Updated", value: "updated_at" }
             ],
@@ -211,7 +220,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         _this.loading = false;
                     });
@@ -243,7 +255,7 @@ export default {
                 default:
                     break;
             }
-        },
+        }
     },
     watch: {
         params: {
@@ -270,6 +282,6 @@ export default {
             this.items = data.items;
             this.totalItems = data.total;
         });
-    },
+    }
 };
 </script>

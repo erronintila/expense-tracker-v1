@@ -39,17 +39,33 @@ class ExpenseController extends Controller
 
             'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
 
+            'reference_no' => ['nullable'],
+
             'description' => ['nullable', 'max:255'],
+
+            'amount' => ['required', 'numeric', 'gt:0',],
+
+            'reimbursable_amount' => ['required', 'numeric'],
+
+            'tax_name' => ['nullable', 'max:100'],
+
+            'tax_rate' => ['required'],
+
+            'is_compound_tax' => ['required'],
+
+            'is_tax_inclusive' => ['required'],
+
+            'tax_amount' => ['required'],
 
             'receipt_number' => ['nullable', 'max:255'],
 
             'date' => ['required'],
 
-            'amount' => ['required', 'numeric', 'gt:0',],
-
-            // 'reimbursable_amount' => ['required', 'numeric'],
+            'details' => ['nullable'],
 
             'remarks' => ['nullable'],
+
+            'notes' => ['nullable'],
 
             'expense_type_id' => ['required'],
 
@@ -78,21 +94,9 @@ class ExpenseController extends Controller
 
             switch ($request->status) {
 
-                    // case 'Archived Expenses':
-                    //     $expenses = $expenses->onlyTrashed();
-
-                    //     break;
                 case 'Cancelled Expenses':
 
                     $expenses = $expenses->onlyTrashed();
-
-                    // $expenses = $expenses->where([
-                    //     ["expense_report_id", "<>", null],
-                    //     // ["submitted_at", "<>", null],
-                    //     // ["approved_at", "<>", null],
-                    //     // ["rejected_at", "=", null],
-                    //     ["cancelled_at", "<>", null],
-                    // ]);
 
                     break;
                 case 'Reimbursed Expenses':
@@ -264,17 +268,6 @@ class ExpenseController extends Controller
 
         $expense->save();
 
-        // activity()
-        //     ->withProperties([
-        //         'attributes' => [
-        //             ["text" => "Description", "value" => $expense->description],
-        //             ["text" => "Amount", "value" => $expense->amount],
-        //         ],
-        //         'link' => "/admin/expenses/{$expense->id}",
-        //         'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
-        //     ])
-        //     ->log("Created Expense");
-
         return response(
             [
                 'data' => new ExpenseResource($expense),
@@ -391,17 +384,6 @@ class ExpenseController extends Controller
 
                 $expense->save();
 
-                // activity()
-                //     ->withProperties([
-                //         'attributes' => [
-                //             ["text" => "Description", "value" => $expense->description],
-                //             ["text" => "Amount", "value" => $expense->amount],
-                //         ],
-                //         'link' => "/admin/expenses/{$expense->id}",
-                //         'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
-                //     ])
-                //     ->log("Updated Expense");
-
                 break;
         }
 
@@ -434,17 +416,6 @@ class ExpenseController extends Controller
                 // }
 
                 $expense->delete();
-
-                // activity()
-                //     ->withProperties([
-                //         'attributes' => [
-                //             ["text" => "Description", "value" => $expense->description],
-                //             ["text" => "Amount", "value" => $expense->amount],
-                //         ],
-                //         'link' => "/admin/expenses/{$expense->id}",
-                //         'details' => "{$expense->description} (Amount: {$expense->amount}; Receipt: {$expense->receipt_number})"
-                //     ])
-                //     ->log("Cancelled Expense");
             }
         } else {
             $expense = Expense::findOrFail($id);
