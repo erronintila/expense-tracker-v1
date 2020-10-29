@@ -67,15 +67,18 @@ class PaymentObserver
      */
     public function deleting(Payment $payment)
     {
-        foreach ($payment->expense_reports as $expense_report) {
+        if ($payment->received_at !== null) {
 
-            foreach ($expense_report->expenses as $expense) {
+            foreach ($payment->expense_reports as $expense_report) {
 
-                // $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                foreach ($expense_report->expenses as $expense) {
 
-                $expense->employee->remaining_fund -= $expense->revolving_fund;
+                    $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                $expense->employee->save();
+                    $expense->employee->remaining_fund -= $expense_amount;
+
+                    $expense->employee->save();
+                }
             }
         }
     }

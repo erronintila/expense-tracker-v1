@@ -121,7 +121,7 @@ class VendorController extends Controller
 
         $vendor = new Vendor();
 
-        $vendor->code = generate_code(Vendor::class, "VEN" . date("Y"), 10);
+        $vendor->code = generate_code(Vendor::class, "VEN", 10);
 
         $vendor->name = $request->name;
 

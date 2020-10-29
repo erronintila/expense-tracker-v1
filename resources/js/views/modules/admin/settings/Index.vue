@@ -40,7 +40,7 @@
                     </v-expansion-panel-content>
                 </v-expansion-panel> -->
 
-                <v-expansion-panel>
+                <!-- <v-expansion-panel>
                     <v-expansion-panel-header>
                         <div class="green--text">
                             Expenses
@@ -52,16 +52,18 @@
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            label="Expense Expiry Period"
+                                            label="Expense Encoding Period"
                                             value="1"
                                             suffix="days"
+                                            :hint="'Allowed period for expenses to be encoded based on date'"
+                                            persistent-hint
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
                             </v-form>
                         </v-container>
                     </v-expansion-panel-content>
-                </v-expansion-panel>
+                </v-expansion-panel> -->
 
                 <v-expansion-panel>
                     <v-expansion-panel-header>
@@ -76,7 +78,7 @@
                                     <v-col cols="12" md="4">
                                         <v-select
                                             v-model="
-                                                expense_report_settings.submission_date
+                                                settings.submission_date
                                             "
                                             label="Submission Date"
                                             :items="[
@@ -84,15 +86,23 @@
                                                 'Weekly',
                                                 'Monthly'
                                             ]"
+                                            :hint="
+                                                'Due date for submission of expense reports'
+                                            "
+                                            persistent-hint
                                         ></v-select>
                                     </v-col>
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="
-                                                expense_report_settings.approval_period
+                                                settings.approval_period
                                             "
                                             label="Approval Period"
                                             suffix="days"
+                                            :hint="
+                                                'Allowed period for expense reports to be approved based on submission date'
+                                            "
+                                            persistent-hint
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -106,17 +116,15 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
     data() {
         return {
-            general_settings: {
+            settings: {
                 company_name: "Twin-Circa Marketing",
-                currency: "Philippine Peso"
-            },
-            expense_settings: {
-                expiry_period: 1
-            },
-            expense_report_settings: {
+                currency: "Philippine Peso",
+                expiry_period: 1,
                 submission_date: "Weekly",
                 approval_period: 1
             },
@@ -124,11 +132,60 @@ export default {
         };
     },
     methods: {
-        onSave: function() {
-            let settings = Object.assign(this.general_settings, this.expense_settings, this.expense_report_settings);
+        onLoad: function() {
+            axios
+                .get("/api/settings")
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
 
-            console.log(settings);
+                    _this.mixin_errorDialog(
+                        error.response.status,
+                        error.response.statusText
+                    );
+                });
+        },
+        onSave: function() {
+            let _this = this;
+
+            // let settings = Object.assign(
+            //     this.general_settings,
+            //     this.expense_settings,
+            //     this.expense_report_settings
+            // );
+
+            console.log(_this.settings);
+
+            return;
+
+            axios
+                .post("/api/settings", {
+                    settings: _this.settings
+                })
+                .then(response => {
+                    console.log(response);
+
+                    _this.mixin_successDialog(
+                        "",
+                        "Saved settings successfully"
+                    );
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        error.response.status,
+                        error.response.statusText
+                    );
+                });
         }
+    },
+    created() {
+        this.onLoad();
     }
 };
 </script>

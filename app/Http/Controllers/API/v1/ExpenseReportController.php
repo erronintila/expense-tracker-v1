@@ -209,7 +209,7 @@ class ExpenseReportController extends Controller
 
         $expense_report->save();
 
-        $expense_report->code = generate_code(ExpenseReport::class, "EXR" . date("Y"), 10);
+        $expense_report->code = generate_code(ExpenseReport::class, "EXR", 10);
 
         $expense_report->save();
 

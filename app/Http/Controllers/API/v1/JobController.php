@@ -102,7 +102,7 @@ class JobController extends Controller
 
         $job = new Job();
 
-        $job->code = generate_code(Job::class, "JOB" . date("Y"), 10);
+        $job->code = generate_code(Job::class, "JOB", 10);
 
         $job->name = $request->name;
 

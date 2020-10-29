@@ -2,7 +2,7 @@
     <div>
         <v-card class="elevation-0 pt-0">
             <!-- **************************************************************
-                Card Title 
+                Card Title
             *************************************************************** -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>

@@ -116,7 +116,7 @@ class UserController extends Controller
 
         $user = new User();
 
-        $user->code = generate_code(User::class, "USR" . date("Y"), 10);
+        $user->code = generate_code(User::class, "USR", 10);
 
         $user->name     = $request['name'];
 

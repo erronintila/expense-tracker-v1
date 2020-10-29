@@ -11,16 +11,18 @@ export const store = new Vuex.Store({
     state: {
         admin: localStorage.getItem("admin") || false,
         authenticated: localStorage.getItem("authenticated") || false,
-        user: {empty: ""} || {empty: ""}
+        user: null || null,
+        settings: null || null
     },
     plugins: [
-        createPersistedState({
-            storage: {
-                getItem: key => ls.get(key),
-                setItem: (key, value) => ls.set(key, value),
-                removeItem: key => ls.remove(key)
-            }
-        })
+        createPersistedState()
+        // createPersistedState({
+        //     storage: {
+        //         getItem: key => ls.get(key),
+        //         setItem: (key, value) => ls.set(key, value),
+        //         removeItem: key => ls.remove(key)
+        //     }
+        // })
     ],
     getters: {
         admin(state) {
@@ -31,6 +33,9 @@ export const store = new Vuex.Store({
         },
         user(state) {
             return state.user;
+        },
+        settings(state) {
+            return state.settings;
         }
     },
     mutations: {
@@ -40,6 +45,9 @@ export const store = new Vuex.Store({
         SET_USER(state, value) {
             state.user = value;
             state.admin = value == null ? false : value.is_admin;
+        },
+        SET_SETTINGS(state, value) {
+            state.settings = value;
         }
     },
     actions: {
@@ -125,6 +133,26 @@ export const store = new Vuex.Store({
 
                         context.commit("SET_AUTHENTICATED", false);
                         context.commit("SET_USER", null);
+
+                        reject(error);
+                    });
+            });
+        },
+
+        AUTH_SETTINGS(context) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/settings")
+                    .then(function(response) {
+                        context.commit("SET_SETTINGS", response.data);
+
+                        resolve(response.data.data);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        console.log(error.response);
+
+                        context.commit("SET_SETTINGS", null);
 
                         reject(error);
                     });

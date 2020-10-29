@@ -87,7 +87,7 @@ class DepartmentController extends Controller
 
         $department = new Department();
 
-        $department->code = generate_code(Department::class, "DEP" . date("Y"), 10);
+        $department->code = generate_code(Department::class, "DEP", 10);
 
         $department->name = $request->name;
 

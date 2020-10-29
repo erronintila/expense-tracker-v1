@@ -178,7 +178,7 @@ class PaymentController extends Controller
 
         $payment = new Payment();
 
-        $payment->code = generate_code(Payment::class, "PAY" . date("Y"), 10);
+        $payment->code = generate_code(Payment::class, "PAY", 10);
 
         $payment->reference_no = $request->reference_no;
 

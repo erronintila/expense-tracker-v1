@@ -182,7 +182,7 @@ class EmployeeController extends Controller
 
         $employee = new Employee();
 
-        $employee->code = generate_code(Employee::class, "EMP" . date("Y"), 10);
+        $employee->code = generate_code(Employee::class, "EMP", 10);
 
         $employee->first_name = $request->first_name;
 
