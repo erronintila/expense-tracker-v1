@@ -52,6 +52,8 @@
                                                 no-title
                                                 scrollable
                                                 color="success"
+                                                :min="minDate"
+                                                :max="maxDate"
                                             >
                                             </v-date-picker>
                                         </v-menu>
@@ -597,6 +599,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import numeral from "numeral";
 import AddVendor from "../../../../components/dialogs/AddVendor";
 
@@ -651,7 +654,7 @@ export default {
                     fund: 0,
                     expense_types: null
                 },
-                vendor: { id: null, name: "", tin: "", is_vat_inclusive: true },
+                vendor: { id: null, name: "", tin: "", is_vat_inclusive: false },
                 // particular: "",
                 // particular_amount: 0,
                 // particular_reimbursable_amount: 0,
@@ -706,19 +709,21 @@ export default {
                         _this.form.remarks = data.remarks;
                         _this.form.is_active = data.is_active;
                         _this.form.employee = data.employee;
+
                         _this.form.vendor =
-                            data.vendor == null ? null : data.vendor;
+                            data.vendor == null ? { id: null, name: "", tin: "", is_vat_inclusive: false } : data.vendor;
 
                         _this.form.expense_type = data.expense_type;
                         // _this.form.sub_type = data.sub_type_id;
 
                         _this.expense_types = data.employee.expense_types;
                         _this.sub_types = data.expense_type.sub_types;
+
                         _this.form.is_tax_inclusive = data.is_tax_inclusive;
                         _this.form.tax_name = data.tax_name;
                         _this.form.tax_rate = data.tax_rate;
                         _this.form.tax_amount = data.tax_amount;
-                        console.log(_this.form.tax_rate, data.tax_rate);
+
                         if (data.details !== null) {
                             _this.itemize = true;
                             _this.items = data.details;
@@ -942,6 +947,52 @@ export default {
         }
     },
     computed: {
+        minDate() {
+            let settings = this.$store.getters.settings;
+
+            switch (settings.submission_date) {
+                case "Weekly":
+                    return moment()
+                        .startOf("week")
+                        .format("YYYY-MM-DD");
+                    break;
+                case "Monthly":
+                    return moment()
+                        .startOf("month")
+                        .format("YYYY-MM-DD");
+                    break;
+                default:
+                    return moment()
+                        .startOf("day")
+                        .format("YYYY-MM-DD");
+                    break;
+            }
+        },
+        maxDate() {
+            let settings = this.$store.getters.settings;
+            let today = moment().format("YYYY-MM-DD");
+            let maxDate = moment().endOf("day");
+
+            switch (settings.submission_date) {
+                case "Weekly":
+                    maxDate = moment()
+                        .endOf("week")
+                        .format("YYYY-MM-DD");
+                    break;
+                case "Monthly":
+                    maxDate = moment()
+                        .endOf("month")
+                        .format("YYYY-MM-DD");
+                    break;
+                default:
+                    maxDate = moment()
+                        .endOf("day")
+                        .format("YYYY-MM-DD");
+                    break;
+            }
+
+            return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+        },
         amount_to_replenish() {
             let remaining_fund = this.mixin_convertToNumber(
                 this.form.employee.remaining_fund

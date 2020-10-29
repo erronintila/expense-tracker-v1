@@ -470,6 +470,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -754,7 +763,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
-    }
+    } // onExport() {
+    //     axios.get("/api/employees/export").then(response => {
+    //         console.log(response);
+    //     }).catch(error => {
+    //         console.log(error);
+    //         console.log(error.response);
+    //     });
+    // }
+
   },
   watch: {
     params: {

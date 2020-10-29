@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Exports\EmployeesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
@@ -467,4 +469,11 @@ class EmployeeController extends Controller
             200
         );
     }
+
+    // public function export()
+    // {
+    //     Excel::download(new EmployeesExport, 'Employees.csv');
+
+    //     return response("Exported successfully", 200);
+    // }
 }

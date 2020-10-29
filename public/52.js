@@ -171,6 +171,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         _this.mixin_successDialog("Success", "Saved settings successfully");
+
+        _this.$store.dispatch("AUTH_USER");
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

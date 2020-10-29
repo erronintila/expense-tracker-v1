@@ -9,9 +9,11 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/dialogs/AddVendor */ "./resources/js/components/dialogs/AddVendor.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/dialogs/AddVendor */ "./resources/js/components/dialogs/AddVendor.vue");
 //
 //
 //
@@ -625,11 +627,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    AddVendor: _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_1__["default"]
+    AddVendor: _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -676,7 +681,7 @@ __webpack_require__.r(__webpack_exports__);
         details_amount: 0,
         // reimbursable_amount: 0,
         receipt_number: null,
-        date: null,
+        date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
         remarks: "",
         is_active: true,
         expense_type: {
@@ -870,6 +875,44 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    minDate: function minDate() {
+      var settings = this.$store.getters.settings;
+
+      switch (settings.submission_date) {
+        case "Weekly":
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
+          break;
+
+        case "Monthly":
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
+          break;
+
+        default:
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+          break;
+      }
+    },
+    maxDate: function maxDate() {
+      var settings = this.$store.getters.settings;
+      var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+      var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
+
+      switch (settings.submission_date) {
+        case "Weekly":
+          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+          break;
+
+        case "Monthly":
+          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+          break;
+
+        default:
+          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+          break;
+      }
+
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
+    },
     amount_to_replenish: function amount_to_replenish() {
       var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
@@ -1136,7 +1179,9 @@ var render = function() {
                                             attrs: {
                                               "no-title": "",
                                               scrollable: "",
-                                              color: "success"
+                                              color: "success",
+                                              min: _vm.minDate,
+                                              max: _vm.maxDate
                                             },
                                             model: {
                                               value: _vm.form.date,

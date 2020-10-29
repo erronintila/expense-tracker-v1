@@ -113,6 +113,8 @@ export const store = new Vuex.Store({
                 axios
                     .get("/api/user")
                     .then(function(response) {
+                        context.dispatch("AUTH_SETTINGS");
+
                         localStorage.setItem("authenticated", "true");
                         localStorage.setItem(
                             "admin",

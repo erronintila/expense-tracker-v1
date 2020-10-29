@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\User;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -336,5 +338,10 @@ class UserController extends Controller
             ],
             200
         );
+    }
+
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'Users - Expense Tracker.xlsx');
     }
 }

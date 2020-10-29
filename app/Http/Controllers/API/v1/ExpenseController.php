@@ -51,7 +51,7 @@ class ExpenseController extends Controller
 
             'tax_rate' => ['required'],
 
-            'is_compound_tax' => ['required'],
+            'is_compound_tax' => ['nullable'],
 
             'is_tax_inclusive' => ['required'],
 

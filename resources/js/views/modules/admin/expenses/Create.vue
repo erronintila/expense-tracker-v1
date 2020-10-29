@@ -61,6 +61,8 @@
                                                 no-title
                                                 scrollable
                                                 color="success"
+                                                :min="minDate"
+                                                :max="maxDate"
                                             >
                                             </v-date-picker>
                                         </v-menu>
@@ -612,6 +614,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import numeral from "numeral";
 import AddVendor from "../../../../components/dialogs/AddVendor";
 
@@ -650,7 +653,7 @@ export default {
                 details_amount: 0,
                 // reimbursable_amount: 0,
                 receipt_number: null,
-                date: null,
+                date: moment().format("YYYY-MM-DD"),
                 remarks: "",
                 is_active: true,
                 expense_type: {
@@ -864,6 +867,52 @@ export default {
         }
     },
     computed: {
+        minDate() {
+            let settings = this.$store.getters.settings;
+
+            switch (settings.submission_date) {
+                case "Weekly":
+                    return moment()
+                        .startOf("week")
+                        .format("YYYY-MM-DD");
+                    break;
+                case "Monthly":
+                    return moment()
+                        .startOf("month")
+                        .format("YYYY-MM-DD");
+                    break;
+                default:
+                    return moment()
+                        .startOf("day")
+                        .format("YYYY-MM-DD");
+                    break;
+            }
+        },
+        maxDate() {
+            let settings = this.$store.getters.settings;
+            let today = moment().format("YYYY-MM-DD");
+            let maxDate = moment().endOf("day");
+
+            switch (settings.submission_date) {
+                case "Weekly":
+                    maxDate = moment()
+                        .endOf("week")
+                        .format("YYYY-MM-DD");
+                    break;
+                case "Monthly":
+                    maxDate = moment()
+                        .endOf("month")
+                        .format("YYYY-MM-DD");
+                    break;
+                default:
+                    maxDate = moment()
+                        .endOf("day")
+                        .format("YYYY-MM-DD");
+                    break;
+            }
+
+            return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+        },
         amount_to_replenish() {
             let remaining_fund = this.mixin_convertToNumber(
                 this.form.employee.remaining_fund

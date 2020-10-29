@@ -27,6 +27,14 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user->getAllPermissions();
     });
 
+    // //
+    // //   Excel Export
+    // //
+
+    // Route::get('/users/export', 'API\v1\UserController@export');
+
+    // Route::get('/employees/export', 'API\v1\EmployeeController@export');
+
     Route::apiResources(
         [
             'activity_logs' => 'API\v1\ActivityLogController',
@@ -58,6 +66,10 @@ Route::middleware('auth:sanctum')->group(function () {
             'settings' => 'API\v1\SettingController',
         ]
     );
+
+    // //
+    // //   Data Controller
+    // //
 
     Route::get('/data/test', 'API\v1\DataController@test');
 
@@ -94,4 +106,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/data/expense_stats', 'API\v1\DataController@expense_stats');
 
     Route::get('/data/permissions', 'API\v1\DataController@permissions');
+
+
+
+
 });

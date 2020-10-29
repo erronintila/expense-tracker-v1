@@ -171,6 +171,8 @@ export default {
                         "Success",
                         "Saved settings successfully"
                     );
+
+                    _this.$store.dispatch("AUTH_USER");
                 })
                 .catch(error => {
                     console.log(error);

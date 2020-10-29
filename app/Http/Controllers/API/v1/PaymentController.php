@@ -45,7 +45,7 @@ class PaymentController extends Controller
 
             "amount" => ['required'],
 
-            "payee" => ['required', 'string', 'max:255'],
+            "payee" => ['nullable', 'string', 'max:255'],
 
             "payee_address" => ['nullable', 'max:255'],
 
