@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Employee;
 use App\Models\ExpenseReport;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
@@ -47,13 +48,21 @@ class PaymentObserver
 
                 $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                $expense->employee->remaining_fund += $expense_amount;
+                // $expense->employee->remaining_fund += $expense_amount;
 
                 $expense->paid_at = now();
 
                 $expense->paid_by = Auth::id();
 
-                $expense->employee->save();
+                $expense->save();
+
+                // $expense->employee->save();
+
+                $employee = Employee::withTrashed()->findOrFail($expense->employee_id);
+
+                $employee->remaining_fund += $expense_amount;
+
+                $employee->save();
             }
         }
         // }

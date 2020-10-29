@@ -465,6 +465,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -490,14 +545,16 @@ __webpack_require__.r(__webpack_exports__);
         remaining_fund: 0,
         total_fund: 0,
         unreported_expenses: 0,
-        unsubmitted_reports: 0
+        unsubmitted_reports: 0,
+        payment_to_receive: 0
       },
       count: {
         awaiting_for_reimbursement_reports: 0,
         expenses_by_date: 0,
         pending_for_approval_reports: 0,
         unreported_expenses: 0,
-        unsubmitted_reports: 0
+        unsubmitted_reports: 0,
+        payment_to_receive: 0
       },
       backgroundColors: ["#36a2eb", "#ff6384", "#ff9f40", "#4bc0c0", "#ffcd56"],
       horizontalBarChartOptions: {},
@@ -1210,52 +1267,74 @@ var render = function() {
                               "v-card",
                               {
                                 staticClass: "mx-auto",
-                                attrs: {
-                                  elevation: hover ? 5 : 2,
-                                  to: { name: "admin.employees.index" }
-                                }
+                                attrs: { elevation: hover ? 5 : 2 }
                               },
                               [
-                                _c("v-card-text", [
-                                  _c("div", [
-                                    _vm._v(
-                                      "\n                                Remaining Fund\n                            "
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      class:
-                                        parseFloat(_vm.total.remaining_fund) <=
-                                        parseFloat(_vm.total.total_fund) * 0.1
-                                          ? "display-1 red--text"
-                                          : "display-1 text--primary"
-                                    },
-                                    [
+                                _c(
+                                  "v-card-text",
+                                  [
+                                    _c("div", [
+                                      _vm._v(
+                                        "\n                                Remaining Fund\n                            "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "ml-0 pl-0",
+                                        attrs: {
+                                          text: "",
+                                          to: {
+                                            name: "admin.employees.index"
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("span", [
+                                          _c(
+                                            "div",
+                                            {
+                                              class:
+                                                parseFloat(
+                                                  _vm.total.remaining_fund
+                                                ) <=
+                                                parseFloat(
+                                                  _vm.total.total_fund
+                                                ) *
+                                                  0.1
+                                                  ? "display-1 red--text"
+                                                  : "display-1 text--primary"
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                        " +
+                                                  _vm._s(
+                                                    _vm.mixin_formatNumber(
+                                                      _vm.total.remaining_fund
+                                                    )
+                                                  ) +
+                                                  "\n                                    "
+                                              )
+                                            ]
+                                          )
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("div", [
                                       _vm._v(
                                         "\n                                " +
                                           _vm._s(
-                                            _vm.mixin_formatNumber(
-                                              _vm.total.remaining_fund
-                                            )
+                                            "Total Revolving Funds: " +
+                                              _vm.total.total_fund
                                           ) +
                                           "\n                            "
                                       )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("div", [
-                                    _vm._v(
-                                      "\n                                " +
-                                        _vm._s(
-                                          "Total Revolving Funds: " +
-                                            _vm.total.total_fund
-                                        ) +
-                                        "\n                            "
-                                    )
-                                  ])
-                                ])
+                                    ])
+                                  ],
+                                  1
+                                )
                               ],
                               1
                             )
@@ -1376,6 +1455,12 @@ var render = function() {
                                                     _vm._v(
                                                       "\n                                                Awaiting Reimbursement:\n                                                Approved reports waiting for\n                                                payment\n                                            "
                                                     )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("div", [
+                                                    _vm._v(
+                                                      "\n                                                Payment to Receive:\n                                                Reimbursed expenses\n                                                waiting to be received by the employee\n                                            "
+                                                    )
                                                   ])
                                                 ])
                                               ],
@@ -1396,7 +1481,7 @@ var render = function() {
                                           {
                                             attrs: {
                                               cols: "12",
-                                              md: "6",
+                                              md: "4",
                                               align: "center",
                                               justify: "center"
                                             }
@@ -1477,7 +1562,7 @@ var render = function() {
                                           {
                                             attrs: {
                                               cols: "12",
-                                              md: "6",
+                                              md: "4",
                                               align: "center",
                                               justify: "center"
                                             }
@@ -1559,7 +1644,7 @@ var render = function() {
                                           {
                                             attrs: {
                                               cols: "12",
-                                              md: "6",
+                                              md: "4",
                                               align: "center",
                                               justify: "center"
                                             }
@@ -1716,6 +1801,87 @@ var render = function() {
                                                           _vm._s(
                                                             _vm.count
                                                               .awaiting_for_reimbursement_reports
+                                                          ) +
+                                                          "\n                                                Reports\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              md: "6",
+                                              align: "center",
+                                              justify: "center"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mt-4 mb-4",
+                                                attrs: {
+                                                  text: "",
+                                                  to: {
+                                                    name: "admin.payments.index"
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("div", [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "orange--text text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                Payment to Receive\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "display-1 text--primary"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.mixin_formatNumber(
+                                                              _vm.total
+                                                                .payment_to_receive
+                                                            )
+                                                          ) +
+                                                          "\n                                            "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        " text-capitalize"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(
+                                                            _vm.count
+                                                              .payment_to_receive
                                                           ) +
                                                           "\n                                                Reports\n                                            "
                                                       )

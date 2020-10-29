@@ -333,7 +333,7 @@ class PaymentController extends Controller
 
                     activity()
                         ->performedOn($payment)
-                        ->withProperties(['attributes' => ["code" => $payment->code, "received_at" => $payment->receoved_at]])
+                        ->withProperties(['attributes' => ["code" => $payment->code, "received_at" => $payment->received_at]])
                         ->log('received payment');
                 }
 

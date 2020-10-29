@@ -269,7 +269,7 @@
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon
-                            v-show="status == 'Active'"
+                            v-show="item.deleted_at == null"
                             small
                             class="mr-2"
                             @click="onShow(item)"

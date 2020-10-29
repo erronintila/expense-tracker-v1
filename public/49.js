@@ -1200,8 +1200,8 @@ var render = function() {
                                   {
                                     name: "show",
                                     rawName: "v-show",
-                                    value: _vm.status == "Active",
-                                    expression: "status == 'Active'"
+                                    value: item.deleted_at == null,
+                                    expression: "item.deleted_at == null"
                                   }
                                 ],
                                 staticClass: "mr-2",

@@ -528,6 +528,26 @@ class DataController extends Controller
             ->get()
             ->where('expense_report', '<>', null);
 
+        // $payment_to_receive = Payment::where([
+        //     ["approved_at", "<>", null],
+        //     ["released_at", "<>", null],
+        //     ["received_at", "=", null],
+        //     ["cancelled_at", "=", null],
+        // ])->get();
+
+        $payment_to_receive =  Expense::with(['expense_report' => function ($q) {
+            $q->where('submitted_at', "<>", null);
+            $q->where('approved_at', "<>", null);
+            $q->where('rejected_at', null);
+            $q->where('cancelled_at', null);
+            $q->where('deleted_at', null);
+            $q->where('payment_id', "<>", null);
+            $q->where('paid_at', null);
+        }])
+            ->whereHas('expense_report')
+            ->get()
+            ->where('expense_report', '<>', null);
+
         //
         //
         //
@@ -572,6 +592,7 @@ class DataController extends Controller
                 $unsubmitted_reports = $unsubmitted_reports->where('employee_id', $request->employee_id);
                 $submitted_reports = $submitted_reports->where('employee_id', $request->employee_id);
                 $approved_reports = $approved_reports->where('employee_id', $request->employee_id);
+                $payment_to_receive = $payment_to_receive->where('employee_id', $request->employee_id);
             }
         }
         // elseif (request()->has('employee_id')) {
@@ -601,7 +622,7 @@ class DataController extends Controller
                 "pending" => $pending_expenses,
                 "reimbursements" => $reimbursements,
                 "replenishments" => $total_expenses - $reimbursements,
-                "total_count" => $total_count
+                "total_count" => $total_count,
             ],
             "total" => [
                 "expenses_by_date" => $expenses_by_date->sum("amount"),
@@ -611,6 +632,7 @@ class DataController extends Controller
                 "unsubmitted_reports" => $unsubmitted_reports->sum("amount"),
                 "pending_for_approval_reports" => $submitted_reports->sum("amount"),
                 "awaiting_for_reimbursement_reports" => $approved_reports->sum("amount"),
+                "payment_to_receive" => $payment_to_receive->sum("amount")
             ],
             "count" => [
                 "expenses_by_date" => count($expenses_by_date),
@@ -618,6 +640,7 @@ class DataController extends Controller
                 "unsubmitted_reports" => $unsubmitted_reports->count(),
                 "pending_for_approval_reports" => $submitted_reports->count(),
                 "awaiting_for_reimbursement_reports" => $approved_reports->count(),
+                "payment_to_receive" => $payment_to_receive->count()
             ],
             // "data" => [
             //     "expenses" => $total_expenses,

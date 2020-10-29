@@ -67,27 +67,39 @@
                     </v-hover>
 
                     <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            class="mx-auto"
-                            :elevation="hover ? 5 : 2"
-                            :to="{ name: 'admin.employees.index' }"
-                        >
+                        <v-card class="mx-auto" :elevation="hover ? 5 : 2">
                             <v-card-text>
                                 <div>
                                     Remaining Fund
                                 </div>
-                                <div
-                                    :class="
-                                        parseFloat(total.remaining_fund) <=
-                                        parseFloat(total.total_fund) * 0.1
-                                            ? 'display-1 red--text'
-                                            : 'display-1 text--primary'
-                                    "
+                                <v-btn
+                                    class="ml-0 pl-0"
+                                    text
+                                    :to="{
+                                        name: 'admin.employees.index'
+                                    }"
                                 >
-                                    {{
-                                        mixin_formatNumber(total.remaining_fund)
-                                    }}
-                                </div>
+                                    <span>
+                                        <div
+                                            :class="
+                                                parseFloat(
+                                                    total.remaining_fund
+                                                ) <=
+                                                parseFloat(total.total_fund) *
+                                                    0.1
+                                                    ? 'display-1 red--text'
+                                                    : 'display-1 text--primary'
+                                            "
+                                        >
+                                            {{
+                                                mixin_formatNumber(
+                                                    total.remaining_fund
+                                                )
+                                            }}
+                                        </div>
+                                    </span>
+                                </v-btn>
+
                                 <div>
                                     {{
                                         `Total Revolving Funds: ${total.total_fund}`
@@ -146,6 +158,11 @@
                                                     Approved reports waiting for
                                                     payment
                                                 </div>
+                                                <div>
+                                                    Payment to Receive:
+                                                    Reimbursed expenses
+                                                    waiting to be received by the employee
+                                                </div>
                                             </v-card-text>
                                         </v-card>
                                     </v-menu>
@@ -153,7 +170,7 @@
                                 <v-row>
                                     <v-col
                                         cols="12"
-                                        md="6"
+                                        md="4"
                                         align="center"
                                         justify="center"
                                     >
@@ -190,7 +207,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-                                        md="6"
+                                        md="4"
                                         align="center"
                                         justify="center"
                                     >
@@ -228,7 +245,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-                                        md="6"
+                                        md="4"
                                         align="center"
                                         justify="center"
                                     >
@@ -309,6 +326,44 @@
                                                 <div class=" text-capitalize">
                                                     {{
                                                         count.awaiting_for_reimbursement_reports
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </div>
+                                        </v-btn>
+                                    </v-col>
+
+                                    <v-col
+                                        cols="12"
+                                        md="6"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name: 'admin.payments.index'
+                                            }"
+                                        >
+                                            <div>
+                                                <div
+                                                    class="orange--text text-capitalize"
+                                                >
+                                                    Payment to Receive
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total.payment_to_receive
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.payment_to_receive
                                                     }}
                                                     Reports
                                                 </div>
@@ -471,14 +526,16 @@ export default {
                 remaining_fund: 0,
                 total_fund: 0,
                 unreported_expenses: 0,
-                unsubmitted_reports: 0
+                unsubmitted_reports: 0,
+                payment_to_receive: 0
             },
             count: {
                 awaiting_for_reimbursement_reports: 0,
                 expenses_by_date: 0,
                 pending_for_approval_reports: 0,
                 unreported_expenses: 0,
-                unsubmitted_reports: 0
+                unsubmitted_reports: 0,
+                payment_to_receive: 0
             },
 
             backgroundColors: [
