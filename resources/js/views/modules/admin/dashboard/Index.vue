@@ -1146,6 +1146,8 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
+        
         this.loadEmployees();
 
         this.load_expense_types_expenses(

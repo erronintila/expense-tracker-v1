@@ -651,5 +651,8 @@ export default {
             this.totalItems = data.total;
         });
     },
+    created() {
+        this.$store.dispatch("AUTH_USER");
+    },
 };
 </script>

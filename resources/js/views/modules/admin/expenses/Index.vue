@@ -366,6 +366,19 @@
                         </tr>
                     </template>
                 </v-data-table>
+
+                <v-row>
+                    <v-col>
+                        <div>
+                            <h4 class="green--text">
+                                Note:
+                            </h4>
+                            <h4 class="grey--text">
+                                Due of encoding and submission of expenses : {{ $store.getters.settings.submission_date}} ({{ maxDate }})
+                            </h4>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-card-text>
         </v-card>
 
@@ -430,13 +443,13 @@ export default {
                 "Last 5 Years"
             ],
             headers: [
+                { text: "Date", value: "date" },
                 {
                     text: "Expense",
                     value: "expense_type.name",
                     sortable: false
                 },
                 { text: "Employee", value: "employee_name", sortable: false },
-                { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
                 {
                     text: "To replenish",
@@ -765,6 +778,37 @@ export default {
                 query: this.expense_type,
                 query: this.date_range
             };
+        },
+        maxDate() {
+            let settings = this.$store.getters.settings;
+            let today = moment().format("YYYY-MM-DD");
+            let maxDate = moment()
+                .endOf("day")
+                .format("YYYY-MM-DD");
+
+            if (settings) {
+                switch (settings.submission_date) {
+                    case "Weekly":
+                        maxDate = moment()
+                            .endOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        maxDate = moment()
+                            .endOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+                    default:
+                        maxDate = moment()
+                            .endOf("day")
+                            .format("YYYY-MM-DD");
+                        break;
+                }
+
+                return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+            }
+
+            return today;
         }
     },
     mounted() {
@@ -774,6 +818,7 @@ export default {
         });
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
         this.loadExpenseTypes();
     }

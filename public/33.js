@@ -392,6 +392,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -402,9 +434,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       loading: true,
+      warning: null,
       headers: [{
-        text: "Description",
-        value: "description"
+        text: "Report No.",
+        value: "code"
+      }, {
+        text: "Period",
+        value: "date"
       }, {
         text: "Employee",
         value: "employee",
@@ -682,6 +718,60 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (action == "submit") {
+        var settings = this.$store.getters.settings;
+        var start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day");
+        var end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
+        var expense_min_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.from);
+        }));
+        var expense_max_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.max(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.to);
+        }));
+
+        if (settings) {
+          switch (settings.submission_date) {
+            case "Weekly":
+              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
+              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+              break;
+
+            case "Monthly":
+              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
+              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+              break;
+
+            default:
+              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+              break;
+          }
+        } // console.log(
+        //     moment(expense_min_date).format("YYYY-MM-DD"),
+        //     moment(expense_max_date).format("YYYY-MM-DD")
+        // );
+        // console.log("start adn end", start, end);
+        // console.log(
+        //     "check min",
+        //     moment(
+        //         moment(expense_min_date).format("YYYY-MM-DD")
+        //     ).isBetween(start, end)
+        // );
+        // console.log(
+        //     "check max",
+        //     moment(
+        //         moment(expense_max_date).format("YYYY-MM-DD")
+        //     ).isBetween(start, end)
+        // );
+
+
+        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_min_date).format("YYYY-MM-DD")).isBetween(start, end) || !moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_max_date).format("YYYY-MM-DD")).isBetween(start, end)) {
+          this.mixin_errorDialog("Error", "Submission of expenses beyond due date is not allowed");
+          return;
+        } // console.log("congrats");
+
+      }
+
       if (action == "approve" && this.selected.map(function (item) {
         return item.status.status;
       }).includes("Approved")) {
@@ -711,6 +801,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
         return;
       }
+
+      if (action == "approve") {
+        var period = this.$store.getters.settings.approval_period;
+        var submission_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.submitted_at);
+        })).format("YYYY-MM-DD");
+        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_date).add(period, "days").format("YYYY-MM-DD");
+        console.log(last_approval_date);
+
+        if (moment__WEBPACK_IMPORTED_MODULE_0___default()().isBetween(submission_date, last_approval_date)) {
+          this.mixin_errorDialog("Error", "Approval of reports beyond due date is not allowed");
+          return;
+        }
+
+        console.log("approved na");
+      }
+
+      return;
 
       if (action == "cancel" && this.selected.map(function (item) {
         return item.status.status;
@@ -783,6 +891,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
         return total + item.total;
       }, 0));
+    },
+    selected: function selected() {
+      console.log(this.selected.length);
+
+      if (this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Submitted")) {
+        var period = this.$store.getters.settings.approval_period;
+        var submission_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.submitted_at);
+        })).format("YYYY-MM-DD");
+        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_date).add(period, "days").format("YYYY-MM-DD");
+
+        if (this.selected.length !== 0) {
+          this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_date);
+        } else {
+          this.warning = null;
+        }
+      }
     }
   },
   computed: {
@@ -792,6 +919,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+    },
+    minDate: function minDate() {
+      var settings = this.$store.getters.settings;
+
+      if (settings) {
+        switch (settings.submission_date) {
+          case "Weekly":
+            return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+            break;
+        }
+      }
+
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+    },
+    maxDate: function maxDate() {
+      var settings = this.$store.getters.settings;
+      var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+      var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+
+      if (settings) {
+        switch (settings.submission_date) {
+          case "Weekly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+            break;
+        }
+
+        return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
+      }
+
+      return today;
     }
   },
   mounted: function mounted() {
@@ -803,6 +976,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
   }
 });
@@ -1359,6 +1533,21 @@ var render = function() {
                         }
                       },
                       {
+                        key: "item.date",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(item.from) +
+                                " ~ " +
+                                _vm._s(item.to) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
                         key: "expanded-item",
                         fn: function(ref) {
                           var headers = ref.headers
@@ -1396,6 +1585,22 @@ var render = function() {
                                               )
                                             ) +
                                             "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Period")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(item.from) +
+                                            " ~ " +
+                                            _vm._s(item.to)
                                         )
                                       ])
                                     ]),
@@ -1680,6 +1885,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
+                  _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
                         _c(
@@ -1705,6 +1911,8 @@ var render = function() {
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
                             _c("td", [
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
@@ -1722,6 +1930,54 @@ var render = function() {
                     : _vm._e()
                 ],
                 2
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c("v-col", [
+                    _c("div", [
+                      _c("h4", { staticClass: "green--text" }, [
+                        _vm._v(
+                          "\n                            Note:\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "grey--text" }, [
+                        _vm._v(
+                          "\n                            Due of submission of expense reports :\n                            " +
+                            _vm._s(
+                              _vm.$store.getters.settings.submission_date
+                            ) +
+                            "\n                            (" +
+                            _vm._s(_vm.maxDate) +
+                            ")\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "grey--text" }, [
+                        _vm._v(
+                          "\n                            Approval period of expense reports :\n                            " +
+                            _vm._s(
+                              _vm.$store.getters.settings.approval_period
+                            ) +
+                            "\n                            days upon submission\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm.warning
+                        ? _c("h4", { staticClass: "red--text" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(_vm.warning) +
+                                "\n                        "
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ])
+                ],
+                1
               )
             ],
             1

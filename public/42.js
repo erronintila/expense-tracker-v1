@@ -407,7 +407,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.remarks = data.remarks;
         _this.form.is_active = data.is_active;
         _this.form.employee = data.employee;
-        _this.form.vendor = data.vendor == null ? null : data.vendor;
+        _this.form.vendor = data.vendor == null ? {
+          id: null,
+          name: "",
+          is_vat_inclusive: true
+        } : data.vendor;
         _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
 
         _this.expense_types = data.employee.expense_types;

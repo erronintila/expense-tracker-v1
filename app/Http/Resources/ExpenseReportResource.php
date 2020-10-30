@@ -25,6 +25,8 @@ class ExpenseReportResource extends JsonResource
             'description' => $this->description,
             'remarks' => $this->remarks,
             'notes' => $this->notes,
+            'from' => date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray()))),
+            'to' => date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray()))),
             // 'employee' => new EmployeeResource($this->employee),
             // 'payment' => new PaymentResource($this->payment),
             'employee' => $this->employee,

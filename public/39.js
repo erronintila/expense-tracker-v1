@@ -629,6 +629,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -993,6 +1006,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.loadVendors();
   }
@@ -1395,6 +1409,43 @@ var render = function() {
                                   )
                                 ],
                                 1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c("v-col", [
+                                    _c("div", { staticClass: "ml-4" }, [
+                                      _c(
+                                        "small",
+                                        { staticClass: "green--text" },
+                                        [
+                                          _vm._v(
+                                            "\n                                            ** Note:\n                                        "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "small",
+                                        { staticClass: "grey--text" },
+                                        [
+                                          _vm._v(
+                                            "\n                                            Due of encoding of expenses : " +
+                                              _vm._s(
+                                                _vm.$store.getters.settings
+                                                  .submission_date
+                                              ) +
+                                              " (" +
+                                              _vm._s(_vm.maxDate) +
+                                              ")\n                                        "
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ])
+                                ],
+                                1
                               )
                             ],
                             1
@@ -1495,18 +1546,6 @@ var render = function() {
                                       })
                                     ],
                                     1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("div", [
-                                        _vm._v(
-                                          "\n                                        Expense Limit: 0\n                                    "
-                                        )
-                                      ])
-                                    ]
                                   )
                                 ],
                                 1

@@ -162,6 +162,19 @@
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <div class="ml-4">
+                                            <small class="green--text">
+                                                ** Note:
+                                            </small>
+                                            <small class="grey--text">
+                                                Due of encoding of expenses : {{ $store.getters.settings.submission_date }} ({{ maxDate }})
+                                            </small>
+                                        </div>
+                                    </v-col>
+                                </v-row>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
 
@@ -215,11 +228,11 @@
                                         </v-autocomplete>
                                     </v-col>
 
-                                    <v-col cols="12" md="4">
+                                    <!-- <v-col cols="12" md="4">
                                         <div>
                                             Expense Limit: 0
                                         </div>
-                                    </v-col>
+                                    </v-col> -->
                                 </v-row>
 
                                 <v-row>
@@ -1022,6 +1035,7 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
         this.loadVendors();
     }

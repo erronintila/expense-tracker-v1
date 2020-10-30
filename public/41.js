@@ -415,6 +415,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -429,6 +442,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       headers: [{
+        text: "Date",
+        value: "date"
+      }, {
         text: "Expense",
         value: "expense_type.name",
         sortable: false
@@ -436,9 +452,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Employee",
         value: "employee_name",
         sortable: false
-      }, {
-        text: "Date",
-        value: "date"
       }, {
         text: "Amount",
         value: "amount"
@@ -739,6 +752,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.expense_type), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+    },
+    maxDate: function maxDate() {
+      var settings = this.$store.getters.settings;
+      var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+      var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+
+      if (settings) {
+        switch (settings.submission_date) {
+          case "Weekly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+            break;
+        }
+
+        return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
+      }
+
+      return today;
     }
   },
   mounted: function mounted() {
@@ -750,6 +788,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.loadExpenseTypes();
   }
@@ -1611,6 +1650,34 @@ var render = function() {
                     : _vm._e()
                 ],
                 2
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c("v-col", [
+                    _c("div", [
+                      _c("h4", { staticClass: "green--text" }, [
+                        _vm._v(
+                          "\n                            Note:\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "grey--text" }, [
+                        _vm._v(
+                          "\n                            Due of encoding and submission of expenses : " +
+                            _vm._s(
+                              _vm.$store.getters.settings.submission_date
+                            ) +
+                            " (" +
+                            _vm._s(_vm.maxDate) +
+                            ")\n                        "
+                        )
+                      ])
+                    ])
+                  ])
+                ],
+                1
               )
             ],
             1

@@ -215,6 +215,9 @@
                             item.status.status
                         }}</v-chip>
                     </template>
+                    <template v-slot:[`item.date`]="{ item }">
+                        {{ item.from }} ~ {{ item.to }}
+                    </template>
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
                             <v-container>
@@ -234,6 +237,11 @@
                                                 )
                                             }}
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Period</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.from }} ~ {{ item.to }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Status</strong></td>
@@ -355,6 +363,7 @@
                             <td class="title">Total</td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
@@ -365,6 +374,29 @@
                         </tr>
                     </template>
                 </v-data-table>
+
+                <v-row>
+                    <v-col>
+                        <div>
+                            <h4 class="green--text">
+                                Note:
+                            </h4>
+                            <h4 class="grey--text">
+                                Due of submission of expense reports :
+                                {{ $store.getters.settings.submission_date }}
+                                ({{ maxDate }})
+                            </h4>
+                            <h4 class="grey--text">
+                                Approval period of expense reports :
+                                {{ $store.getters.settings.approval_period }}
+                                days upon submission
+                            </h4>
+                            <h4 class="red--text" v-if="warning">
+                                {{ warning }}
+                            </h4>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-card-text>
         </v-card>
     </div>
@@ -380,8 +412,10 @@ export default {
     data() {
         return {
             loading: true,
+            warning: null,
             headers: [
-                { text: "Description", value: "description" },
+                { text: "Report No.", value: "code" },
+                { text: "Period", value: "date" },
                 { text: "Employee", value: "employee", sortable: false },
                 { text: "Amount", value: "total", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
@@ -713,6 +747,85 @@ export default {
                 return;
             }
 
+            if (action == "submit") {
+                let settings = this.$store.getters.settings;
+
+                let start = moment().startOf("day");
+                let end = moment().endOf("day");
+
+                let expense_min_date = moment.min(
+                    this.selected.map(item => moment(item.from))
+                );
+                let expense_max_date = moment.max(
+                    this.selected.map(item => moment(item.to))
+                );
+
+                if (settings) {
+                    switch (settings.submission_date) {
+                        case "Weekly":
+                            start = moment()
+                                .startOf("week")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("week")
+                                .format("YYYY-MM-DD");
+                            break;
+                        case "Monthly":
+                            start = moment()
+                                .startOf("month")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("month")
+                                .format("YYYY-MM-DD");
+                            break;
+                        default:
+                            start = moment()
+                                .startOf("day")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("day")
+                                .format("YYYY-MM-DD");
+                            break;
+                    }
+                }
+
+                // console.log(
+                //     moment(expense_min_date).format("YYYY-MM-DD"),
+                //     moment(expense_max_date).format("YYYY-MM-DD")
+                // );
+                // console.log("start adn end", start, end);
+
+                // console.log(
+                //     "check min",
+                //     moment(
+                //         moment(expense_min_date).format("YYYY-MM-DD")
+                //     ).isBetween(start, end)
+                // );
+                // console.log(
+                //     "check max",
+                //     moment(
+                //         moment(expense_max_date).format("YYYY-MM-DD")
+                //     ).isBetween(start, end)
+                // );
+
+                if (
+                    !moment(
+                        moment(expense_min_date).format("YYYY-MM-DD")
+                    ).isBetween(start, end) ||
+                    !moment(
+                        moment(expense_max_date).format("YYYY-MM-DD")
+                    ).isBetween(start, end)
+                ) {
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Submission of expenses beyond due date is not allowed"
+                    );
+                    return;
+                }
+
+                // console.log("congrats");
+            }
+
             if (
                 action == "approve" &&
                 this.selected
@@ -751,6 +864,30 @@ export default {
                 });
                 return;
             }
+
+            if (action == "approve") {
+                let period = this.$store.getters.settings.approval_period;
+                let submission_date = moment
+                    .min(this.selected.map(item => moment(item.submitted_at)))
+                    .format("YYYY-MM-DD");
+                let last_approval_date = moment(submission_date)
+                    .add(period, "days")
+                    .format("YYYY-MM-DD");
+
+                console.log(last_approval_date);
+
+                if (moment().isBetween(submission_date, last_approval_date)) {
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Approval of reports beyond due date is not allowed"
+                    );
+                    return;
+                }
+
+                console.log("approved na");
+            }
+
+            return;
 
             if (
                 action == "cancel" &&
@@ -836,6 +973,28 @@ export default {
             this.totalAmount = this.mixin_formatNumber(
                 this.items.reduce((total, item) => total + item.total, 0)
             );
+        },
+        selected() {
+            console.log(this.selected.length);
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Submitted")
+            ) {
+                let period = this.$store.getters.settings.approval_period;
+                let submission_date = moment
+                    .min(this.selected.map(item => moment(item.submitted_at)))
+                    .format("YYYY-MM-DD");
+                let last_approval_date = moment(submission_date)
+                    .add(period, "days")
+                    .format("YYYY-MM-DD");
+
+                if (this.selected.length !== 0) {
+                    this.warning = `Last Approval Date: ${last_approval_date}; First Submitted Report: ${submission_date}`;
+                } else {
+                    this.warning = null;
+                }
+            }
         }
     },
     computed: {
@@ -847,6 +1006,64 @@ export default {
                 query: this.employee,
                 query: this.date_range
             };
+        },
+        minDate() {
+            let settings = this.$store.getters.settings;
+
+            if (settings) {
+                switch (settings.submission_date) {
+                    case "Weekly":
+                        return moment()
+                            .startOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        return moment()
+                            .startOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+                    default:
+                        return moment()
+                            .startOf("day")
+                            .format("YYYY-MM-DD");
+                        break;
+                }
+            }
+
+            return moment()
+                .startOf("day")
+                .format("YYYY-MM-DD");
+        },
+        maxDate() {
+            let settings = this.$store.getters.settings;
+            let today = moment().format("YYYY-MM-DD");
+            let maxDate = moment()
+                .endOf("day")
+                .format("YYYY-MM-DD");
+
+            if (settings) {
+                switch (settings.submission_date) {
+                    case "Weekly":
+                        maxDate = moment()
+                            .endOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        maxDate = moment()
+                            .endOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+                    default:
+                        maxDate = moment()
+                            .endOf("day")
+                            .format("YYYY-MM-DD");
+                        break;
+                }
+
+                return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+            }
+
+            return today;
         }
     },
     mounted() {
@@ -856,6 +1073,7 @@ export default {
         });
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
     }
 };

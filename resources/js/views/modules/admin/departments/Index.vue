@@ -368,8 +368,5 @@ export default {
             this.totalItems = data.total;
         });
     },
-    created() {
-        console.log(this.$store.getters.user);
-    },
 };
 </script>

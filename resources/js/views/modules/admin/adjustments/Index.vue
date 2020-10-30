@@ -282,6 +282,9 @@ export default {
             this.items = data.items;
             this.totalItems = data.total;
         });
-    }
+    },
+    created() {
+        this.$store.dispatch("AUTH_USER");
+    },
 };
 </script>

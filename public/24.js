@@ -1054,6 +1054,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.load_expense_types_expenses(this.date_range[0], this.date_range[1], this.employee.id);
     this.load_pie_chart();
