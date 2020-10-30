@@ -400,7 +400,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../../node_mod
 
 
 // module
-exports.push([module.i, "\n@media print {\nbody *[data-v-7070bdfc] {\r\n        background: white;\n}\n@page {\r\n        size: Legal landscape;\n}\n}\r\n\r\n/* table {\r\n    width: 100%;\r\n    border: 1px solid lightgrey;\r\n    border-collapse: collapse;\r\n}\r\n\r\ntable th,\r\ntable td {\r\n    border: 1px solid lightgrey;\r\n} */\r\n\r\n/* @media print {\r\n    .v-content {\r\n        padding: 0 !important;\r\n    }\r\n    body {\r\n        overflow: auto;\r\n        height: auto;\r\n    }\r\n\r\n    @page {\r\n        size: Legal landscape;\r\n    }\r\n\r\n    body * {\r\n        visibility: hidden;\r\n    }\r\n\r\n    #section-to-print,\r\n    #section-to-print * {\r\n        visibility: visible;\r\n    }\r\n\r\n    #section-to-print {\r\n        position: absolute;\r\n        left: 0;\r\n        top: 0;\r\n    }\r\n} */\r\n", ""]);
+exports.push([module.i, "\n@media print {\nbody *[data-v-7070bdfc] {\n        background: white;\n}\n@page {\n        size: Legal landscape;\n}\n}\n\n/* table {\n    width: 100%;\n    border: 1px solid lightgrey;\n    border-collapse: collapse;\n}\n\ntable th,\ntable td {\n    border: 1px solid lightgrey;\n} */\n\n/* @media print {\n    .v-content {\n        padding: 0 !important;\n    }\n    body {\n        overflow: auto;\n        height: auto;\n    }\n\n    @page {\n        size: Legal landscape;\n    }\n\n    body * {\n        visibility: hidden;\n    }\n\n    #section-to-print,\n    #section-to-print * {\n        visibility: visible;\n    }\n\n    #section-to-print {\n        position: absolute;\n        left: 0;\n        top: 0;\n    }\n} */\n", ""]);
 
 // exports
 

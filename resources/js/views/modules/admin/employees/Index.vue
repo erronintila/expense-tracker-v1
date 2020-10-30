@@ -135,8 +135,7 @@
                     </template>
 
                     <v-list>
-                        <!-- <a type="button" href="/api/employees/export"> -->
-                        <v-list-item
+                        <!-- <v-list-item
                             @click="onExport"
                             href="/api/employees/export"
                         >
@@ -146,8 +145,7 @@
                             <v-list-item-subtitle>
                                 Export to Excel
                             </v-list-item-subtitle>
-                        </v-list-item>
-                        <!-- </a> -->
+                        </v-list-item> -->
 
                         <v-list-item @click="onPasswordReset">
                             <v-list-item-icon>

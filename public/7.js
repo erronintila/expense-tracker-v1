@@ -482,8 +482,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1231,28 +1229,6 @@ var render = function() {
                   _c(
                     "v-list",
                     [
-                      _c(
-                        "v-list-item",
-                        {
-                          attrs: { href: "/api/employees/export" },
-                          on: { click: _vm.onExport }
-                        },
-                        [
-                          _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("mdi-lock-reset")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("v-list-item-subtitle", [
-                            _vm._v(
-                              "\n                            Export to Excel\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c(
                         "v-list-item",
                         { on: { click: _vm.onPasswordReset } },
