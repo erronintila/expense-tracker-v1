@@ -273,9 +273,12 @@ class ExpenseReportController extends Controller
                 }
 
                 // // Prevent submit if expense report has been submitted or approved or cancelled
-                // if(true) {
-                //     abort(403);
-                // }
+                $submitted = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("submitted_at", "<>", null)->count();
+
+                if ($submitted > 0) {
+                    return response("Expense Report has already been submitted", 403);
+                }
 
                 foreach ($request->ids as $id) {
 
@@ -301,9 +304,12 @@ class ExpenseReportController extends Controller
                 }
 
                 // // Prevent approve if expense report has been approved or cancelled
-                // if(true) {
-                //     abort(403);
-                // }
+                $approved = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("approved_at", "<>", null)->count();
+
+                if ($approved > 0) {
+                    return response("Expense Report has already been approved", 422);
+                }
 
                 foreach ($request->ids as $id) {
 
@@ -329,9 +335,12 @@ class ExpenseReportController extends Controller
                 }
 
                 // // Prevent approve if expense report has been approved or cancelled
-                // if(true) {
-                //     abort(403);
-                // }
+                $cancelled = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("cancelled_at", "<>", null)->count();
+
+                if ($cancelled > 0) {
+                    return response("Expense Report has already been cancelled", 422);
+                }
 
                 foreach ($request->ids as $id) {
 
@@ -351,15 +360,18 @@ class ExpenseReportController extends Controller
 
             case 'reject':
 
-                // if (!app("auth")->user()->hasPermissionTo('reject expense reports')) {
+                if (!app("auth")->user()->hasPermissionTo('reject expense reports')) {
 
-                //     abort(403);
-                // }
+                    abort(403);
+                }
 
                 // // Prevent approve if expense report has been approved or cancelled
-                // if(true) {
-                //     abort(403);
-                // }
+                $rejected = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("rejected_at", "<>", null)->count();
+
+                if ($rejected > 0) {
+                    return response("Expense Report has already been rejected", 422);
+                }
 
                 foreach ($request->ids as $id) {
 
@@ -451,7 +463,6 @@ class ExpenseReportController extends Controller
 
                         $new_expense->save();
                     }
-
                 }
 
                 $message = "Expense Report(s) duplicated successfully";
@@ -483,15 +494,34 @@ class ExpenseReportController extends Controller
                     abort(403);
                 }
 
-                // // Prevent update if expense report has been cancelled
-                // // Approved expense report can only be edited by Admin if expense report has no payment yet
-                // if(true) {
-                //     abort(403);
-                // }
-
                 $this->validator($request->all(), $id)->validate();
 
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
+
+                // // Prevent update if expense report has been cancelled
+                if (Auth::user()->is_admin) {
+
+                    if ($expense_report->payment_id > 0) {
+
+                        return response("Expense Report already has payment", 422);
+                    }
+
+                    if ($expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
+
+                        return response("Action can't be performed", 422);
+                    }
+                } else {
+
+                    if ($expense_report->approved_at !== null || $expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
+
+                        return response("Action can't be performed", 422);
+                    }
+                    
+                    if ($expense_report->payment_id > 0) {
+
+                        return response("Expense Report already has payment", 422);
+                    }
+                }
 
                 $expense_report->description = $request->description;
 
@@ -547,6 +577,13 @@ class ExpenseReportController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $deleted = ExpenseReport::whereIn("id", $request->ids)
+            ->where("deleted_at", "<>", null)->count();
+
+        if ($deleted > 0) {
+            return response("Expense Report has already been cancelled", 422);
+        }
+
         foreach ($request->ids as $id) {
 
             $expense_report = ExpenseReport::find($id);
@@ -674,7 +711,7 @@ class ExpenseReportController extends Controller
 
         activity()
             ->performedOn($expense_report)
-            ->withProperties(['attributes' => [ "code" => $expense_report->code, $key => $value]])
+            ->withProperties(['attributes' => ["code" => $expense_report->code, $key => $value]])
             ->log($action . ' expense report');
     }
 }
