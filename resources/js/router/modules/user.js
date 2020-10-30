@@ -140,6 +140,31 @@ const userRoutes = [
                     //     keepAlive: false
                     // }
             },
+            /**
+             *
+             *
+             * Payments
+             *
+             *
+             */
+            {
+                path: "/payments",
+                name: "user.payments.index",
+                component: () =>
+                    import("../../views/modules/user/payments/Index.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
+            },
+            {
+                path: "/payments/:id",
+                name: "user.payments.show",
+                component: () =>
+                    import("../../views/modules/user/payments/Show.vue"),
+                    // meta: {
+                    //     keepAlive: false
+                    // }
+            },
         ]
     },
 ];

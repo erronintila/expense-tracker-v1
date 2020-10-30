@@ -62,11 +62,11 @@
                                         <td class="title">Total</td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
                                             <strong>{{ total }}</strong>
                                         </td>
-                                        <td></td>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -75,14 +75,22 @@
                                     <v-icon
                                         small
                                         class="mr-2"
-                                        @click="$router.push(`/expenses/${item.id}`)"
+                                        @click="
+                                            $router.push(
+                                                `/expenses/${item.id}`
+                                            )
+                                        "
                                     >
                                         mdi-eye
                                     </v-icon>
                                     <v-icon
                                         small
                                         class="mr-2"
-                                        @click="$router.push(`/expenses/${item.id}/edit`)"
+                                        @click="
+                                            $router.push(
+                                                `/expenses/${item.id}/edit`
+                                            )
+                                        "
                                     >
                                         mdi-pencil
                                     </v-icon>
@@ -119,57 +127,77 @@
                                     <td :colspan="headers.length">
                                         <v-container>
                                             <table>
-                                    <tr>
-                                        <td><strong>Reimbursable</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatNumber(
-                                                    item.reimbursable_amount
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Code</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.code }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Description</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.description }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Remarks</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.remarks }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Created</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.created_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Cancelled</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.deleted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                </table>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Reimbursable</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                item.reimbursable_amount
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Code</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.code }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Description</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ item.description }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Remarks</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.remarks }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Created</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatDate(
+                                                                item.created_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Cancelled</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatDate(
+                                                                item.deleted_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </v-container>
                                     </td>
                                 </template>
@@ -209,7 +237,7 @@ import DateRangePicker from "../../../../components/daterangepicker/DateRangePic
 
 export default {
     components: {
-        DateRangePicker,
+        DateRangePicker
     },
     data() {
         return {
@@ -249,7 +277,6 @@ export default {
             ],
             items: [],
             selected: [],
-            employees: [],
             expenses: [],
             total: 0,
             form: {
@@ -257,7 +284,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                employee: 0,
+                employee: this.$store.getters.user.employee
             },
             errors: {
                 date_range: [],
@@ -265,7 +292,6 @@ export default {
                 description: [],
                 remarks: [],
                 notes: [],
-                employee: [],
                 expenses: []
             }
         };
@@ -273,7 +299,7 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenses(this.form.employee);
+            this.loadExpenses(this.form.employee.id);
         },
         getData() {
             let _this = this;
@@ -286,7 +312,7 @@ export default {
                     _this.form.description = data.description;
                     _this.form.remarks = data.remarks;
                     _this.form.notes = data.notes;
-                    _this.form.employee = data.employee.id;
+                    _this.form.employee = data.employee;
                     _this.form.status = data.status;
                     _this.expenses = data.expenses;
                     // _this.submitted_at = data.submitted_at;
@@ -308,11 +334,13 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
         loadExpenses(emp_id) {
-            // let emp_id = emp_id == null ? this.employee : emp_id;
             let start_date = this.date_range[0];
             let end_date = this.date_range[1];
             let _this = this;
@@ -335,34 +363,17 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
                 });
         },
-        loadEmployees() {
-            let _this = this;
-
-            axios
-                .get("/api/data/employees")
-                .then(response => {
-                    _this.employees = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
-                });
+        onRefresh() {
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
             let _this = this;
-
-            if (_this.form.employee == null || _this.form.employee <= 0) {
-                _this.$dialog.message.error("User Account Unauthorized", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
 
             _this.$refs.form.validate();
 
@@ -382,7 +393,7 @@ export default {
                         description: _this.form.description,
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
-                        employee_id: _this.form.employee,
+                        employee_id: _this.form.employee.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
@@ -402,18 +413,14 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
 
                 return;
             }
-        },
-    },
-    computed: {
-        default_description() {
-            return `Expense Report Summary (${moment(this.date_range[0]).format(
-                "LL"
-            )} - ${moment(this.date_range[1]).format("LL")})`;
         }
     },
     watch: {
@@ -424,9 +431,14 @@ export default {
             );
         }
     },
+    computed: {
+        default_description() {
+            return `Expense Report Summary (${moment(this.date_range[0]).format(
+                "LL"
+            )} - ${moment(this.date_range[1]).format("LL")})`;
+        }
+    },
     created() {
-        this.$store.dispatch("AUTH_USER");
-        this.loadEmployees();
         this.getData();
     }
 };

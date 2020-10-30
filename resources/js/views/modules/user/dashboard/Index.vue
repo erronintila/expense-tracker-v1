@@ -1,45 +1,45 @@
 <template>
-    <v-card class="elevation-0 pt-0">
-        <v-card-title class="pt-0">
-            <h4 class="title green--text">Dashboard</h4>
-            <v-spacer></v-spacer>
-            <v-menu
-                :close-on-content-click="false"
-                :nudge-width="200"
-                offset-y
-                left
-                bottom
-            >
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                </template>
+    <div>
+        <v-card class="elevation-0 pt-0">
+            <v-card-title class="pt-0">
+                <h4 class="title green--text">Dashboard</h4>
+                <v-spacer></v-spacer>
+                <v-menu
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    left
+                    bottom
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on">
+                            <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                    </template>
 
-                <v-card>
-                    <v-list>
-                        <v-list-item>
-                            <DateRangePicker
-                                :preset="preset"
-                                :presets="presets"
-                                :value="date_range"
-                                @updateDates="updateDates"
-                            ></DateRangePicker>
-                        </v-list-item>
-                    </v-list>
-                </v-card>
-            </v-menu>
-        </v-card-title>
-        <v-card-subtitle> </v-card-subtitle>
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <DateRangePicker
+                                    :preset="preset"
+                                    :presets="presets"
+                                    :value="date_range"
+                                    @updateDates="updateDates"
+                                ></DateRangePicker>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+            </v-card-title>
+            <v-card-subtitle> </v-card-subtitle>
 
-        <div>
             <v-row>
                 <v-col cols="12" md="4">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
                             class="mx-auto mb-3"
                             :elevation="hover ? 5 : 2"
-                            :to="{ name: 'admin.expenses.index' }"
+                            :to="{ name: 'user.expenses.index' }"
                         >
                             <v-card-text>
                                 <div class="green--text">Total Expenses</div>
@@ -56,30 +56,39 @@
                     </v-hover>
 
                     <v-hover v-slot:default="{ hover }">
-                        <v-card
-                            class="mx-auto"
-                            :elevation="hover ? 5 : 2"
-                            :to="{ name: 'admin.employees.index' }"
-                        >
+                        <v-card class="mx-auto" :elevation="hover ? 5 : 2">
                             <v-card-text>
                                 <div>
                                     Remaining Fund
                                 </div>
-                                <div
-                                    :class="
-                                        parseFloat(total.remaining_fund) <=
-                                        parseFloat(total.total_fund) * 0.1
-                                            ? 'display-1 red--text'
-                                            : 'display-1 text--primary'
-                                    "
+                                <v-btn
+                                    class="ml-0 pl-0"
+                                    text
                                 >
-                                    {{
-                                        mixin_formatNumber(total.remaining_fund)
-                                    }}
-                                </div>
+                                    <span>
+                                        <div
+                                            :class="
+                                                parseFloat(
+                                                    total.remaining_fund
+                                                ) <=
+                                                parseFloat(total.total_fund) *
+                                                    0.1
+                                                    ? 'display-1 red--text'
+                                                    : 'display-1 text--primary'
+                                            "
+                                        >
+                                            {{
+                                                mixin_formatNumber(
+                                                    total.remaining_fund
+                                                )
+                                            }}
+                                        </div>
+                                    </span>
+                                </v-btn>
+
                                 <div>
                                     {{
-                                        `Total Revolving Funds: ${total.total_fund}`
+                                        `Total Revolving Fund: ${total.total_fund}`
                                     }}
                                 </div>
                             </v-card-text>
@@ -135,6 +144,11 @@
                                                     Approved reports waiting for
                                                     payment
                                                 </div>
+                                                <div>
+                                                    Payment to Receive:
+                                                    Reimbursed expenses
+                                                    waiting to be received by the employee
+                                                </div>
                                             </v-card-text>
                                         </v-card>
                                     </v-menu>
@@ -142,7 +156,7 @@
                                 <v-row>
                                     <v-col
                                         cols="12"
-                                        md="6"
+                                        md="4"
                                         align="center"
                                         justify="center"
                                     >
@@ -150,7 +164,7 @@
                                             text
                                             class="mt-4 mb-4"
                                             :to="{
-                                                name: 'admin.expenses.index'
+                                                name: 'user.expenses.index'
                                             }"
                                         >
                                             <span>
@@ -179,7 +193,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-                                        md="6"
+                                        md="4"
                                         align="center"
                                         justify="center"
                                     >
@@ -188,7 +202,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'user.expense_reports.index'
                                             }"
                                         >
                                             <span>
@@ -217,7 +231,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-                                        md="6"
+                                        md="4"
                                         align="center"
                                         justify="center"
                                     >
@@ -226,7 +240,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'user.expense_reports.index'
                                             }"
                                         >
                                             <div>
@@ -277,7 +291,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'user.expense_reports.index'
                                             }"
                                         >
                                             <div>
@@ -304,6 +318,44 @@
                                             </div>
                                         </v-btn>
                                     </v-col>
+
+                                    <v-col
+                                        cols="12"
+                                        md="6"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name: 'user.payments.index'
+                                            }"
+                                        >
+                                            <div>
+                                                <div
+                                                    class="orange--text text-capitalize"
+                                                >
+                                                    Payment to Receive
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total.payment_to_receive
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.payment_to_receive
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </div>
+                                        </v-btn>
+                                    </v-col>
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -311,92 +363,126 @@
                 </v-col>
             </v-row>
 
-            <v-hover v-slot:default="{ hover }">
-                <v-card :elevation="hover ? 5 : 2" class="mx-auto">
-                    <v-toolbar flat dense>
-                        <v-toolbar-title>
-                            Expenses by category
-                        </v-toolbar-title>
-                        <v-spacer></v-spacer>
-                    </v-toolbar>
-                    <v-row class="ml-4 mb-4">
-                        <v-col md="4" class="mt-5">
-                            <DoughnutChart
-                                ref="donut_chart"
-                                :data="doughnutChartData"
-                                :options="doughnutChartOptions"
-                            ></DoughnutChart>
-                        </v-col>
-                        <v-col cols="12" md="8">
-                            <v-card
-                                flat
-                                class="overflow-y-auto"
-                                max-height="500"
+            <div>
+                <v-hover v-slot:default="{ hover }">
+                    <v-card :elevation="hover ? 5 : 2" class="mx-auto">
+                        <v-toolbar flat dense>
+                            <v-toolbar-title>
+                                Expenses by category
+                            </v-toolbar-title>
+
+                            <v-spacer></v-spacer>
+
+                            <!-- <v-menu
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                offset-y
+                                left
+                                bottom
                             >
-                                <v-card-text>
-                                    <HorizontalBarChart
-                                        ref="horizontalBar_chart"
-                                        :data="horizontalBarChartData"
-                                        :options="horizontalBarChartOptions"
-                                    ></HorizontalBarChart>
-                                </v-card-text>
-                            </v-card>
-                        </v-col>
-                    </v-row>
-                </v-card>
-            </v-hover>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on">
+                                        <v-icon>mdi-dots-vertical</v-icon>
+                                    </v-btn>
+                                </template>
 
-            <v-hover v-slot:default="{ hover }">
-                <v-card :elevation="hover ? 5 : 2" class="mx-auto">
-                    <v-toolbar flat dense>
-                        <v-toolbar-title>
-                            Expenses by date
-                        </v-toolbar-title>
+                                <v-card>
+                                    <v-list>
+                                        <v-list-item>
+                                            <v-select
+                                                v-model="filter"
+                                                label="Filter"
+                                                :items="filterItems"
+                                                item-text="text"
+                                                item-value="value"
+                                                @change="onCategoryChange"
+                                            ></v-select>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-card>
+                            </v-menu> -->
+                        </v-toolbar>
+                        <v-row class="ml-4 mb-4">
+                            <v-col md="4" class="mt-5">
+                                <DoughnutChart
+                                    ref="donut_chart"
+                                    :data="doughnutChartData"
+                                    :options="doughnutChartOptions"
+                                ></DoughnutChart>
+                            </v-col>
+                            <v-col cols="12" md="8">
+                                <v-card
+                                    flat
+                                    class="overflow-y-auto"
+                                    max-height="500"
+                                >
+                                    <v-card-text>
+                                        <HorizontalBarChart
+                                            ref="horizontalBar_chart"
+                                            :data="horizontalBarChartData"
+                                            :options="horizontalBarChartOptions"
+                                        ></HorizontalBarChart>
+                                    </v-card-text>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-hover>
+            </div>
 
-                        <v-spacer></v-spacer>
+            <div>
+                <v-hover v-slot:default="{ hover }">
+                    <v-card :elevation="hover ? 5 : 2" class="mx-auto">
+                        <v-toolbar flat dense>
+                            <v-toolbar-title>
+                                Expenses by date
+                            </v-toolbar-title>
 
-                        <v-menu
-                            :close-on-content-click="false"
-                            :nudge-width="200"
-                            offset-y
-                            left
-                            bottom
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn icon v-bind="attrs" v-on="on">
-                                    <v-icon>mdi-dots-vertical</v-icon>
-                                </v-btn>
-                            </template>
+                            <v-spacer></v-spacer>
 
-                            <v-card>
-                                <v-list>
-                                    <v-list-item>
-                                        <v-select
-                                            v-model="groupBy"
-                                            label="Group by"
-                                            :items="groupByItems"
-                                            item-text="text"
-                                            item-value="value"
-                                            @change="onTimeUnitChange"
-                                        ></v-select>
-                                    </v-list-item>
-                                </v-list>
-                            </v-card>
-                        </v-menu>
-                    </v-toolbar>
-                    <v-row>
-                        <v-col cols="12">
-                            <LineChart
-                                ref="line_chart"
-                                :data="lineChartData"
-                                :options="lineChartOptions"
-                            ></LineChart>
-                        </v-col>
-                    </v-row>
-                </v-card>
-            </v-hover>
-        </div>
-    </v-card>
+                            <v-menu
+                                :close-on-content-click="false"
+                                :nudge-width="200"
+                                offset-y
+                                left
+                                bottom
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on">
+                                        <v-icon>mdi-dots-vertical</v-icon>
+                                    </v-btn>
+                                </template>
+
+                                <v-card>
+                                    <v-list>
+                                        <v-list-item>
+                                            <v-select
+                                                v-model="groupBy"
+                                                label="Group by"
+                                                :items="groupByItems"
+                                                item-text="text"
+                                                item-value="value"
+                                                @change="onTimeUnitChange"
+                                            ></v-select>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-card>
+                            </v-menu>
+                        </v-toolbar>
+                        <v-row>
+                            <v-col cols="12">
+                                <LineChart
+                                    ref="line_chart"
+                                    :data="lineChartData"
+                                    :options="lineChartOptions"
+                                ></LineChart>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-hover>
+            </div>
+        </v-card>
+    </div>
 </template>
 
 <script>
@@ -405,8 +491,6 @@ import randomcolor from "randomcolor";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import DoughnutChart from "../../../../components/chart/DoughnutChart";
-// import PieChart from "./components/PieChart";
-// import BarChart from "./components/BarChart";
 import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
 import LineChart from "../../../../components/chart/LineChart";
 
@@ -428,27 +512,17 @@ export default {
                 remaining_fund: 0,
                 total_fund: 0,
                 unreported_expenses: 0,
-                unsubmitted_reports: 0
+                unsubmitted_reports: 0,
+                payment_to_receive: 0
             },
             count: {
                 awaiting_for_reimbursement_reports: 0,
                 expenses_by_date: 0,
                 pending_for_approval_reports: 0,
                 unreported_expenses: 0,
-                unsubmitted_reports: 0
+                unsubmitted_reports: 0,
+                payment_to_receive: 0
             },
-            // total_expenses: 0,
-            // total_reimbursements: 0,
-            // total_pending_reports: 0,
-            // total_count: {
-            //     expenses: 0,
-            //     replenishments: 0,
-            //     reimbursements: 0,
-            //     unreported: 0
-            // },
-
-            // fund: 0,
-            // remaining_fund: 0,
 
             backgroundColors: [
                 "#36a2eb",
@@ -468,7 +542,11 @@ export default {
             lineChartData: {},
 
             filter: { text: "Expenses by type", value: "expense_type" },
-            filterItems: [{ text: "Expenses by type", value: "expense_type" }],
+            filterItems: [
+                { text: "Expenses by type", value: "expense_type" },
+                { text: "Expenses per employee", value: "employee" },
+                { text: "Expenses per department", value: "department" }
+            ],
 
             groupBy: "month",
             groupByItems: [
@@ -518,139 +596,229 @@ export default {
                 { text: "Protein (g)", value: "protein" },
                 { text: "Iron (%)", value: "iron" }
             ],
-            items: []
+            items: [],
+
+            employee: this.$store.getters.user.employee,
         };
     },
     methods: {
-        load_expense_types_expenses(start, end) {
+        load_department_expenses(start, end, employee) {
             let _this = this;
 
-            this.$store.dispatch("AUTH_USER").then(response => {
-                let data = response.employee == null ? 0 : response.employee.id;
+            axios
+                .get("/api/data/departments_expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end,
+                        employee_id: employee,
+                        admin_page: false
+                    }
+                })
+                .then(response => {
+                    _this.expenses_by_category = response.data;
 
-                axios
-                    .get("/api/data/expense_types_expenses_summary", {
-                        params: {
-                            start_date: start,
-                            end_date: end,
-                            employee_id: data
-                        }
-                    })
-                    .then(response => {
-                        _this.expenses_by_category = response.data;
+                    let labels = response.data.map(item => item.text);
 
-                        let labels = response.data.map(item => item.text);
+                    let data = response.data.map(item => item.value);
 
-                        let data = response.data.map(item => item.value);
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
+                    );
 
-                        let backgroundColors = _this.getBackgroundColors(
-                            data.length
-                        );
+                    let sum = response.data.reduce(function(a, b) {
+                        return a + b.value;
+                    }, 0);
 
-                        let sum = response.data.reduce(function(a, b) {
-                            return a + b.value;
-                        }, 0);
+                    let percentages = response.data.map(
+                        item => (item.value / sum) * 100
+                    );
 
-                        let percentages = response.data.map(
-                            item => (item.value / sum) * 100
-                        );
+                    this.updatePieChartValues(
+                        labels,
+                        percentages,
+                        backgroundColors
+                    );
 
-                        this.updatePieChartValues(
-                            labels,
-                            percentages,
-                            backgroundColors
-                        );
+                    this.updateBarChartValues(labels, data, backgroundColors);
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
 
-                        this.updateBarChartValues(
-                            labels,
-                            data,
-                            backgroundColors
-                        );
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-                    });
-            });
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
         },
-        load_expenses_summary(start, end, time_unit) {
+        load_expense_types_expenses(start, end, employee) {
             let _this = this;
 
-            this.$store.dispatch("AUTH_USER").then(response => {
-                let data = response.employee == null ? 0 : response.employee.id;
+            axios
+                .get("/api/data/expense_types_expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end,
+                        employee_id: employee,
+                        admin_page: false
+                    }
+                })
+                .then(response => {
+                    _this.expenses_by_category = response.data;
 
-                axios
-                    .get("/api/data/expenses_summary", {
-                        params: {
-                            start_date: start,
-                            end_date: end,
-                            time_unit: time_unit,
-                            employee_id: data
-                        }
-                    })
-                    .then(response => {
-                        switch (_this.groupBy) {
-                            case "day":
-                                _this.lineChart_labels = response.data.map(
-                                    item => item.text
-                                );
-                                break;
-                            case "week":
-                                _this.lineChart_labels = response.data.map(
-                                    item =>
-                                        `${moment(item.text).format(
-                                            "YYYY-MM"
-                                        )} W:${this.getWeekInMonth(
-                                            new Date(item.text)
-                                        )}`
-                                );
-                                break;
-                            case "month":
-                                _this.lineChart_labels = response.data.map(
-                                    item => moment(item.text).format("MMM YYYY")
-                                );
-                                break;
-                            case "quarter":
-                                _this.lineChart_labels = response.data.map(
-                                    item =>
-                                        `${moment(item.text).format(
-                                            "YYYY"
-                                        )} Q:${moment(item.text).format("Q")}`
-                                );
-                                break;
-                            case "year":
-                                _this.lineChart_labels = response.data.map(
-                                    item => moment(item.text).format("YYYY")
-                                );
-                                break;
-                            default:
-                                break;
-                        }
+                    let labels = response.data.map(item => item.text);
 
-                        _this.lineChart_data = response.data.map(
-                            item => item.value
-                        );
+                    let data = response.data.map(item => item.value);
 
-                        this.updateLineChartValues(
-                            _this.lineChart_labels,
-                            _this.lineChart_data
-                        );
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
+                    );
 
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-                    });
-            });
+                    let sum = response.data.reduce(function(a, b) {
+                        return a + b.value;
+                    }, 0);
+
+                    let percentages = response.data.map(
+                        item => (item.value / sum) * 100
+                    );
+
+                    this.updatePieChartValues(
+                        labels,
+                        percentages,
+                        backgroundColors
+                    );
+
+                    this.updateBarChartValues(labels, data, backgroundColors);
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
+        },
+        load_employees_expenses(start, end, employee) {
+            let _this = this;
+
+            axios
+                .get("/api/data/employees_expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end,
+                        employee_id: employee,
+                        admin_page: false
+                    }
+                })
+                .then(response => {
+                    _this.expenses_by_category = response.data;
+
+                    let labels = response.data.map(item => item.text);
+
+                    let data = response.data.map(item => item.value);
+
+                    let backgroundColors = _this.getBackgroundColors(
+                        data.length
+                    );
+
+                    let sum = response.data.reduce(function(a, b) {
+                        return a + b.value;
+                    }, 0);
+
+                    let percentages = response.data.map(
+                        item => (item.value / sum) * 100
+                    );
+
+                    this.updatePieChartValues(
+                        labels,
+                        percentages,
+                        backgroundColors
+                    );
+
+                    this.updateBarChartValues(labels, data, backgroundColors);
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
+        },
+        load_expenses_summary(start, end, time_unit, employee) {
+            let _this = this;
+
+            axios
+                .get("/api/data/expenses_summary", {
+                    params: {
+                        start_date: start,
+                        end_date: end,
+                        time_unit: time_unit,
+                        employee_id: employee,
+                        admin_page: false
+                    }
+                })
+                .then(response => {
+                    switch (_this.groupBy) {
+                        case "day":
+                            _this.lineChart_labels = response.data.map(
+                                item => item.text
+                            );
+                            break;
+                        case "week":
+                            _this.lineChart_labels = response.data.map(
+                                item =>
+                                    `${moment(item.text).format(
+                                        "YYYY-MM"
+                                    )} W:${this.getWeekInMonth(
+                                        new Date(item.text)
+                                    )}`
+                            );
+                            break;
+                        case "month":
+                            _this.lineChart_labels = response.data.map(item =>
+                                moment(item.text).format("MMM YYYY")
+                            );
+                            break;
+                        case "quarter":
+                            _this.lineChart_labels = response.data.map(
+                                item =>
+                                    `${moment(item.text).format(
+                                        "YYYY"
+                                    )} Q:${moment(item.text).format("Q")}`
+                            );
+                            break;
+                        case "year":
+                            _this.lineChart_labels = response.data.map(item =>
+                                moment(item.text).format("YYYY")
+                            );
+                            break;
+                        default:
+                            break;
+                    }
+
+                    _this.lineChart_data = response.data.map(
+                        item => item.value
+                    );
+
+                    this.updateLineChartValues(
+                        _this.lineChart_labels,
+                        _this.lineChart_data
+                    );
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
         },
         load_bar_chart() {
             this.horizontalBarChartOptions = {
@@ -668,12 +836,11 @@ export default {
                         display: function(context) {
                             return (
                                 context.dataset.data[context.dataIndex] !== 0
-                            );
+                            ); // or >= 1 or ...
                         },
                         borderWidth: 2,
                         borderColor: "white",
                         borderRadius: 20,
-                        // color: 0,
                         font: {
                             weight: "bold"
                         },
@@ -737,6 +904,8 @@ export default {
             };
 
             this.lineChartOptions = {
+                // hoverBorderWidth: 20,
+                // legend: false,
                 maintainAspectRatio: false,
                 tooltips: {
                     mode: "index",
@@ -787,7 +956,6 @@ export default {
                         type: "line",
                         data: [],
                         backgroundColor: "#dbffe5",
-                        // backgroundColor: "transparent",
                         borderColor: "#4caf50",
                         pointBorderColor: "#4caf50",
                         pointBackgroundColor: "#4caf50",
@@ -860,13 +1028,35 @@ export default {
             let start = this.date_range[0];
             let end = this.date_range[1];
 
-            this.load_expense_types_expenses(start, end);
+            switch (this.filter) {
+                case "expense_type":
+                    this.load_expense_types_expenses(
+                        start,
+                        end,
+                        this.employee.id
+                    );
+                    break;
+                case "department":
+                    this.load_department_expenses(start, end, this.employee.id);
+                    break;
+                case "employee":
+                    this.load_employees_expenses(start, end, this.employee.id);
+                    break;
+                default:
+                    this.load_expense_types_expenses(
+                        start,
+                        end,
+                        this.employee.id
+                    );
+                    break;
+            }
         },
         onTimeUnitChange() {
             this.load_expenses_summary(
                 this.date_range[0],
                 this.date_range[1],
-                this.groupBy
+                this.groupBy,
+                this.employee.id
             );
         },
         updateDates(e) {
@@ -878,32 +1068,43 @@ export default {
 
             this.onTimeUnitChange();
 
-            this.getExpenseStats(this.date_range[0], this.date_range[1]);
+            this.getExpenseStats(
+                this.date_range[0],
+                this.date_range[1],
+                this.employee.id
+            );
         },
-        getExpenseStats(start, end) {
+        updateEmployee() {
+            this.onCategoryChange();
+
+            this.onTimeUnitChange();
+
+            this.getExpenseStats(
+                this.date_range[0],
+                this.date_range[1],
+                this.employee.id
+            );
+        },
+        getExpenseStats(start, end, emp) {
             let _this = this;
 
-            this.$store.dispatch("AUTH_USER").then(response => {
-                let data = response.employee == null ? 0 : response.employee.id;
+            axios
+                .get(
+                    `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${emp}`
+                )
+                .then(response => {
+                    _this.total = response.data.total;
+                    _this.count = response.data.count;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
 
-                axios
-                    .get(
-                        `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${data}`
-                    )
-                    .then(response => {
-                        _this.total = response.data.total;
-                        _this.count = response.data.count;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-                    });
-            });
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
         }
     },
     created() {
@@ -911,28 +1112,26 @@ export default {
 
         this.load_expense_types_expenses(
             this.date_range[0],
-            this.date_range[1]
+            this.date_range[1],
+            this.employee.id
         );
 
         this.load_pie_chart();
         this.load_bar_chart();
         this.load_line_chart();
 
-        // this.onTimeUnitChange();
-
         this.load_expenses_summary(
             this.date_range[0],
             this.date_range[1],
-            this.groupBy
+            this.groupBy,
+            this.employee.id
         );
 
-        this.getExpenseStats(this.date_range[0], this.date_range[1]);
+        this.getExpenseStats(
+            this.date_range[0],
+            this.date_range[1],
+            this.employee.id
+        );
     }
 };
 </script>
-
-<style scoped>
-/* .theme--light .v-card {
-    border-left: 3px solid green !important;
-} */
-</style>

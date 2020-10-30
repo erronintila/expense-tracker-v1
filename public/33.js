@@ -765,7 +765,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         // );
 
 
-        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_min_date).format("YYYY-MM-DD")).isBetween(start, end) || !moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_max_date).format("YYYY-MM-DD")).isBetween(start, end)) {
+        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_min_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, '[]') || !moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_max_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, '[]')) {
           this.mixin_errorDialog("Error", "Submission of expenses beyond due date is not allowed");
           return;
         } // console.log("congrats");
@@ -803,14 +803,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (action == "approve") {
+        var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"); // console.log(today);
+        // return;
+
         var period = this.$store.getters.settings.approval_period;
         var submission_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
           return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.submitted_at);
         })).format("YYYY-MM-DD");
         var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_date).add(period, "days").format("YYYY-MM-DD");
-        console.log(last_approval_date);
 
-        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()().isBetween(submission_date, last_approval_date)) {
+        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isBetween(submission_date, last_approval_date, undefined, '[]')) {
           this.mixin_errorDialog("Error", "Approval of reports beyond due date is not allowed");
           return;
         }

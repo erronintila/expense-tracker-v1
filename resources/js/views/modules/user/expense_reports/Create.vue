@@ -62,11 +62,13 @@
                                         <td class="title">Total</td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
                                             <strong>{{ total }}</strong>
                                         </td>
                                         <td></td>
-                                        <!-- <td></td> -->
                                     </tr>
                                 </template>
                                 <template v-slot:[`item.actions`]="{ item }">
@@ -74,7 +76,9 @@
                                         small
                                         class="mr-2"
                                         @click="
-                                            $router.push(`/expenses/${item.id}`)
+                                            $router.push(
+                                                `/expenses/${item.id}`
+                                            )
                                         "
                                     >
                                         mdi-eye
@@ -273,7 +277,6 @@ export default {
             ],
             items: [],
             selected: [],
-            employees: [],
             expenses: [],
             total: 0,
             form: {
@@ -281,7 +284,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                employee: 0,
+                employee: this.$store.getters.user.employee
             },
             errors: {
                 date_range: [],
@@ -289,7 +292,6 @@ export default {
                 description: [],
                 remarks: [],
                 notes: [],
-                employee: [],
                 expenses: []
             }
         };
@@ -304,39 +306,34 @@ export default {
             let end_date = this.date_range[1];
             let _this = this;
 
-            this.$store.dispatch("AUTH_USER").then(response => {
-                let item = response.employee == null ? 0 : response.employee.id;
+            axios
+                .get("/api/data/expenses", {
+                    params: {
+                        create_report: true,
+                        employee_id: _this.form.employee.id,
+                        start_date: start_date,
+                        end_date: end_date
+                    }
+                })
+                .then(response => {
+                    _this.items = response.data.data;
+                    // _this.total = response.data.total;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
 
-                axios
-                    .get("/api/data/expenses", {
-                        params: {
-                            create_report: true,
-                            employee_id: item,
-                            start_date: start_date,
-                            end_date: end_date
-                        }
-                    })
-                    .then(response => {
-                        _this.items = response.data.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
-                    });
-            });
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
+        },
+        onRefresh() {
+            Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
             let _this = this;
-
-            if (_this.form.employee == null || _this.form.employee <= 0) {
-                _this.$dialog.message.error("User Account Unauthorized", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
 
             _this.$refs.form.validate();
 
@@ -356,7 +353,7 @@ export default {
                         description: _this.form.description,
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
-                        employee_id: _this.form.employee,
+                        employee_id: _this.form.employee.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
@@ -376,19 +373,14 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
 
                 return;
             }
-        },
-    },
-    watch: {
-        selected() {
-            this.total = this.selected.reduce(
-                (total, item) => total + item.amount,
-                0
-            );
         }
     },
     computed: {
@@ -398,8 +390,15 @@ export default {
             )} - ${moment(this.date_range[1]).format("LL")})`;
         }
     },
+    watch: {
+        selected() {
+            this.total = this.selected.reduce(
+                (total, item) => total + item.amount,
+                0
+            );
+        }
+    },
     created() {
-        this.$store.dispatch("AUTH_USER");
         this.loadExpenses();
     }
 };

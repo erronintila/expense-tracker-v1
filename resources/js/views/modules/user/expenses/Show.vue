@@ -13,115 +13,283 @@
 
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="employee"
-                                label="Employee"
-                                readonly
-                            >
-                            </v-text-field>
-                        </v-col>
+                    <v-expansion-panels v-model="panel" multiple class="mt-4">
+                        <v-expansion-panel>
+                            <v-expansion-panel-header>
+                                <div class="green--text">Basic Information</div>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.date"
+                                            label="Date"
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.employee.fullname"
+                                            label="Employee"
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="expense_type"
-                                label="Expense Type"
-                                readonly
-                            >
-                            </v-text-field>
-                        </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.vendor.name"
+                                            label="Vendor"
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="vendor"
-                                label="Vendor"
-                                readonly
-                            >
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.receipt_number"
+                                            label="Receipt No."
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
 
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="receipt_number"
-                                label="Receipt No."
-                                readonly
-                            ></v-text-field>
-                        </v-col>
+                        <!-- **************************************************************
+                            Expense Details
+                        *************************************************************** -->
+                        <v-expansion-panel>
+                            <v-expansion-panel-header>
+                                <div class="green--text">
+                                    Expense Details
+                                </div>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.expense_type.name"
+                                            label="Expense Type"
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field v-model="date" label="Date" readonly>
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.sub_type.name"
+                                            label="Sub Type"
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
 
-                    <v-row>
-                        <v-col cols="12">
-                            <v-data-table
-                                :headers="headers"
-                                :items="items"
-                                :items-per-page="5"
-                                :footer-props="{
-                                    itemsPerPageOptions: [5, 10, 20]
-                                }"
-                            >
-                                <template v-slot:[`item.amount`]="{ item }">
-                                    {{ mixin_formatNumber(item.amount) }}
-                                </template>
-                                <template
-                                    slot="body.append"
-                                    v-if="items.length > 0"
-                                >
-                                    <tr class="green--text hidden-md-and-up">
-                                        <td class="title">
-                                            Total:
-                                            <strong>{{
-                                                mixin_formatNumber(amount)
-                                            }}</strong>
-                                        </td>
-                                    </tr>
-                                    <tr class="green--text hidden-sm-and-down">
-                                        <td class="title">Total</td>
-                                        <td>
-                                            <strong>{{
-                                                mixin_formatNumber(amount)
-                                            }}</strong>
-                                        </td>
-                                    </tr>
-                                </template>
-                                <template v-slot:top>
-                                    <v-toolbar flat color="white">
-                                        Expense Details
-                                        <v-spacer></v-spacer>
-                                    </v-toolbar>
-                                </template>
-                            </v-data-table>
-                        </v-col>
-                    </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.description"
+                                            label="Description"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-col>
 
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-textarea
-                                rows="1"
-                                label="Remarks"
-                                v-model="remarks"
-                                readonly
-                            ></v-textarea>
-                        </v-col>
-                    </v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.amount"
+                                            label="Amount"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
 
-                    <small class="text--secondary">
-                        * indicates required field
-                    </small>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="items"
+                                            :items-per-page="5"
+                                            :footer-props="{
+                                                itemsPerPageOptions: [5, 10, 20]
+                                            }"
+                                        >
+                                            <template
+                                                slot="body.append"
+                                                v-if="items.length > 0"
+                                            >
+                                                <tr
+                                                    class="green--text hidden-md-and-up"
+                                                >
+                                                    <td class="title">
+                                                        Total:
+                                                        <strong>{{
+                                                            form.amount
+                                                        }}</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr
+                                                    class="green--text hidden-sm-and-down"
+                                                >
+                                                    <td class="title">Total</td>
+                                                    <td>
+                                                        <strong>{{
+                                                            form.details_quantity
+                                                        }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <strong>{{
+                                                            form.details_amount
+                                                        }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <strong>{{
+                                                            form.amount
+                                                        }}</strong>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </template>
+                                        </v-data-table>
+                                    </v-col>
+                                </v-row>
 
-                    <!-- <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="editDetails"
-                            >Edit Details</v-btn
-                        >
-                    </v-card-actions> -->
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="amount_to_reimburse"
+                                            label="Reimbursable Amount"
+                                            readonly
+                                            :hint="
+                                                `The amount involves spending from your own pocket`
+                                            "
+                                            persistent-hint
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field
+                                            v-model="form.tax_rate"
+                                            label="Tax Rate"
+                                            suffix="%"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="form.tax_amount"
+                                            label="Tax Amount"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <div class="green--text">
+                                            Expense Summary
+                                        </div>
+                                        <table class="ml-4">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        Remaining Fund
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                form.employee
+                                                                    .remaining_fund
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Amount to reimburse
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                amount_to_reimburse
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Amount to replenish
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                amount_to_replenish
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3"><hr /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Total
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td
+                                                        class="green--text text--darken-4 text-right"
+                                                    >
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                expense_amount
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </v-col>
+                                </v-row>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </v-expansion-panels>
+
+                    <v-card class="mt-4">
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" md="6">
+                                        <v-textarea
+                                            :rows="1"
+                                            v-model="form.remarks"
+                                            label="Remarks"
+                                            readonly
+                                        ></v-textarea>
+                                    </v-col>
+                                    <v-col cols="12" md="6">
+                                        <v-textarea
+                                            rows="1"
+                                            label="Notes"
+                                            readonly
+                                        ></v-textarea>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                    </v-card>
                 </v-container>
             </v-form>
         </v-card>
@@ -134,55 +302,150 @@ import numeral from "numeral";
 export default {
     data() {
         return {
+            panel: [0, 1],
+            itemize: false,
+            // paid_through_fund: false,
+            reimbursable_amount: false,
+            // reimbursable: false,
+            openAddVendor: false,
+            dialog: false,
             valid: false,
             menu: false,
-            code: null,
-            description: null,
-            amount: 0,
-            receipt_number: null,
-            date: null,
-            remarks: null,
-            is_active: true,
-            expense_type: null,
-            expense_types: [],
-            employee: null,
-            employees: [],
-            vendor: null,
-            vendors: [],
-            particular: "",
-            particular_amount: 0,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
-                { text: "Amount", value: "amount", sortable: false }
+                { text: "Quantity", value: "quantity", sortable: false },
+                { text: "Amount", value: "amount", sortable: false },
+                { text: "Total", value: "total", sortable: false },
+                { text: "", value: "actions", sortable: false }
             ],
-            items: []
+            items: [],
+            expense_types: [],
+            sub_types: [],
+            employees: [],
+            vendors: [],
+            form: {
+                code: null,
+                description: null,
+                amount: 0,
+                detials_quantity: 0,
+                details_amount: 0,
+                receipt_number: null,
+                date: null,
+                remarks: "",
+                is_active: true,
+                expense_type: {
+                    id: null,
+                    name: "",
+                    limit: null,
+                    sub_types: null
+                },
+                sub_type: { id: null, name: "", limit: null },
+                employee: {
+                    id: null,
+                    remaining_fund: 0,
+                    fund: 0,
+                    expense_types: null
+                },
+                vendor: { id: null, name: "", is_vat_inclusive: true },
+                is_reimbursable: false,
+
+                revolving_fund: 0,
+                reimbursable_amount: 0,
+                details: {
+                    description: "",
+                    amount: 0
+                },
+
+                is_tax_inclusive: true,
+                tax_name: "",
+                tax_rate: 0,
+                tax_amount: 0
+            }
         };
     },
     methods: {
         getData() {
             let _this = this;
 
-            axios
-                .get("/api/expenses/" + _this.$route.params.id)
-                .then(response => {
-                    let data = response.data.data;
+            this.loadEmployees().then(
+                axios
+                    .get("/api/expenses/" + _this.$route.params.id)
+                    .then(response => {
+                        let data = response.data.data;
 
-                    _this.code = data.code;
-                    _this.description = data.description;
-                    _this.amount = data.amount;
-                    _this.receipt_number = data.receipt_number;
-                    _this.date = data.date;
-                    _this.remarks = data.remarks;
-                    _this.is_active = data.is_active;
-                    _this.expense_type =
-                        data.expense_type == null
-                            ? null
-                            : data.expense_type.name;
-                    _this.employee =
-                        data.employee == null ? null : data.employee.fullname;
-                    _this.vendor =
-                        data.vendor == null ? null : data.vendor.name;
-                    _this.items = data.expense_details;
+                        _this.form.code = data.code;
+                        _this.form.description = data.description;
+
+                        _this.form.receipt_number = data.receipt_number;
+                        _this.form.date = data.date;
+                        _this.form.remarks = data.remarks;
+                        _this.form.is_active = data.is_active;
+                        _this.form.employee = data.employee;
+                        _this.form.vendor =
+                            data.vendor == null ? { id: null, name: "", is_vat_inclusive: true } : data.vendor;
+
+                        _this.form.expense_type = data.expense_type;
+                        // _this.form.sub_type = data.sub_type_id;
+
+                        _this.expense_types = data.employee.expense_types;
+                        _this.sub_types = data.expense_type.sub_types;
+
+                        _this.form.is_tax_inclusive = data.is_tax_inclusive;
+                        _this.form.tax_name = data.tax_name;
+                        _this.form.tax_rate = data.tax_rate;
+                        _this.form.tax_amount = data.tax_amount;
+
+                        if (data.details !== null) {
+                            _this.itemize = true;
+                            _this.items = data.details;
+                        } else {
+                            // _this.itemize = false;
+                            // _this.items = [];
+                            _this.form.amount = data.amount;
+                        }
+
+                        _this.sub_types.unshift({
+                            id: null,
+                            name: "None",
+                            limit: null
+                        });
+                        _this.form.sub_type =
+                            data.sub_type == null
+                                ? { id: null, name: "None", limit: null }
+                                : data.sub_type;
+
+                        if (data.revolving_fund > 0) {
+                            _this.paid_through_fund = true;
+                            _this.form.revolving_fund = data.revolving_fund;
+                        } else {
+                            _this.paid_through_fund = false;
+                            _this.form.revolving_fund = 0;
+                        }
+
+                        _this.form.reimbursable_amount =
+                            data.reimbursable_amount;
+
+                        _this.form.employee.remaining_fund +=
+                            data.amount - data.reimbursable_amount;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+                    })
+            );
+        },
+        loadExpenseTypes() {
+            let _this = this;
+
+            axios
+                .get("/api/data/expense_types")
+                .then(response => {
+                    _this.expense_types = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -194,23 +457,211 @@ export default {
                     );
                 });
         },
-        editDetails() {
-            this.$router.push({
-                name: "user.expenses.edit",
-                params: { id: this.$route.params.id }
+        loadEmployees() {
+            let _this = this;
+
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/data/employees")
+                    .then(response => {
+                        _this.employees = response.data.data;
+
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+
+                        reject();
+                    });
             });
+        },
+        loadVendors() {
+            let _this = this;
+
+            axios
+                .get("/api/data/vendors")
+                .then(response => {
+                    _this.vendors = response.data.data;
+
+                    _this.vendors.unshift({
+                        id: null,
+                        name: "No Vendor",
+                        tin: ""
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
+        },
+        onRefresh() {
+            Object.assign(this.$data, this.$options.data.apply(this));
+        },
+        onSave() {
+            let _this = this;
+
+            _this.$refs.form.validate();
+
+            if (
+                _this.amount_to_replenish > _this.form.employee.remaining_fund
+            ) {
+                _this.$dialog.message.error(
+                    "Revolving fund amount is greater than remaining fund",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
+
+            if (_this.$refs.form.validate()) {
+                axios
+                    .put("/api/expenses/" + _this.$route.params.id, {
+                        code: _this.form.code,
+                        description: _this.form.description,
+                        amount: _this.form.amount,
+                        reimbursable_amount: _this.form.reimbursable_amount,
+                        receipt_number: _this.form.receipt_number,
+                        date: _this.form.date,
+                        remarks: _this.form.remarks,
+                        is_active: _this.form.is_active,
+                        expense_type_id: _this.form.expense_type.id,
+                        sub_type_id: _this.form.sub_type.id,
+                        employee_id: _this.form.employee.id,
+                        vendor_id: _this.form.vendor,
+                        details: _this.itemize ? _this.items : null
+                    })
+                    .then(function(response) {
+                        _this.onRefresh();
+
+                        _this.$dialog.message.success(
+                            "Expense updated successfully.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+
+                        _this.$router.push({ name: "user.expenses.index" });
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+                    });
+
+                return;
+            }
+        },
+        addItem() {
+            let description = this.form.details.description;
+            let amount = this.mixin_convertToNumber(this.form.details.amount);
+
+            if (description == "" || amount <= 0) {
+                return;
+            }
+
+            this.items.push({
+                description: description,
+                amount: amount
+            });
+
+            this.dialog = false;
+            this.form.details.description = "";
+            this.form.details.amount = 0;
+        },
+        onRemove(item) {
+            const index = this.items.indexOf(item);
+            confirm("Are you sure you want to remove this item?") &&
+                this.items.splice(index, 1);
+        },
+        loadSubTypes(e) {
+            this.form.sub_type = { id: null, name: "", limit: null };
+            this.sub_types = e.sub_types;
+            this.sub_types.push({ id: null, name: "None", limit: null });
+        }
+    },
+    computed: {
+        amount_to_replenish() {
+            let remaining_fund = this.mixin_convertToNumber(
+                this.form.employee.remaining_fund
+            );
+            let amount = this.mixin_convertToNumber(this.form.amount);
+
+            if (remaining_fund >= amount) {
+                return amount;
+            }
+
+            return amount - Math.abs(remaining_fund - amount);
+        },
+        amount_to_reimburse() {
+            let remaining_fund = this.mixin_convertToNumber(
+                this.form.employee.remaining_fund
+            );
+            let amount = this.mixin_convertToNumber(this.form.amount);
+
+            if (remaining_fund < amount) {
+                let to_replenish = Math.abs(remaining_fund - amount);
+
+                this.form.reimbursable_amount = to_replenish;
+
+                return to_replenish;
+            }
+
+            return 0;
+        },
+        expense_amount() {
+            return this.mixin_convertToNumber(this.form.amount);
+        },
+        display_reimbursable_amount() {
+            return (
+                parseFloat(this.form.amount) >
+                parseFloat(this.form.employee.remaining_fund)
+            );
         }
     },
     watch: {
         items() {
-            this.amount = this.items.reduce(
+            this.form.amount = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.total),
+                0
+            );
+
+            this.form.details_amount = this.items.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.amount),
+                0
+            );
+
+            this.form.details_quantity = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.quantity),
+                0
+            );
+        },
+        itemize() {
+            this.form.amount = this.items.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        this.loadVendors();
         this.getData();
     }
 };

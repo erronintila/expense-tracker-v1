@@ -242,6 +242,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -280,7 +284,6 @@ __webpack_require__.r(__webpack_exports__);
       }],
       items: [],
       selected: [],
-      employees: [],
       expenses: [],
       total: 0,
       form: {
@@ -288,7 +291,7 @@ __webpack_require__.r(__webpack_exports__);
         description: "",
         remarks: "",
         notes: "",
-        employee: 0
+        employee: this.$store.getters.user.employee
       },
       errors: {
         date_range: [],
@@ -296,7 +299,6 @@ __webpack_require__.r(__webpack_exports__);
         description: [],
         remarks: [],
         notes: [],
-        employee: [],
         expenses: []
       }
     };
@@ -312,36 +314,27 @@ __webpack_require__.r(__webpack_exports__);
 
       var _this = this;
 
-      this.$store.dispatch("AUTH_USER").then(function (response) {
-        var item = response.employee == null ? 0 : response.employee.id;
-        axios.get("/api/data/expenses", {
-          params: {
-            create_report: true,
-            employee_id: item,
-            start_date: start_date,
-            end_date: end_date
-          }
-        }).then(function (response) {
-          _this.items = response.data.data;
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
+      axios.get("/api/data/expenses", {
+        params: {
+          create_report: true,
+          employee_id: _this.form.employee.id,
+          start_date: start_date,
+          end_date: end_date
+        }
+      }).then(function (response) {
+        _this.items = response.data.data; // _this.total = response.data.total;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-        });
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
-
-      if (_this.form.employee == null || _this.form.employee <= 0) {
-        _this.$dialog.message.error("User Account Unauthorized", {
-          position: "top-right",
-          timeout: 2000
-        });
-
-        return;
-      }
 
       _this.$refs.form.validate();
 
@@ -360,7 +353,7 @@ __webpack_require__.r(__webpack_exports__);
           description: _this.form.description,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          employee_id: _this.form.employee,
+          employee_id: _this.form.employee.id,
           expenses: _this.selected
         }).then(function (response) {
           _this.$dialog.message.success("Expense Report created successfully.", {
@@ -381,6 +374,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  computed: {
+    default_description: function default_description() {
+      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
+    }
+  },
   watch: {
     selected: function selected() {
       this.total = this.selected.reduce(function (total, item) {
@@ -388,13 +386,7 @@ __webpack_require__.r(__webpack_exports__);
       }, 0);
     }
   },
-  computed: {
-    default_description: function default_description() {
-      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
-    }
-  },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
     this.loadExpenses();
   }
 });
@@ -808,6 +800,12 @@ var render = function() {
                                         _c("td", { staticClass: "title" }, [
                                           _vm._v("Total")
                                         ]),
+                                        _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
+                                        _c("td"),
                                         _vm._v(" "),
                                         _c("td"),
                                         _vm._v(" "),

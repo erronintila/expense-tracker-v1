@@ -230,6 +230,34 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -268,7 +296,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }],
       items: [],
       selected: [],
-      employees: [],
       expenses: [],
       total: 0,
       form: {
@@ -276,7 +303,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         description: "",
         remarks: "",
         notes: "",
-        employee: 0
+        employee: this.$store.getters.user.employee
       },
       errors: {
         date_range: [],
@@ -284,7 +311,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         description: [],
         remarks: [],
         notes: [],
-        employee: [],
         expenses: []
       }
     };
@@ -292,7 +318,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   methods: {
     updateDates: function updateDates(e) {
       this.date_range = e;
-      this.loadExpenses(this.form.employee);
+      this.loadExpenses(this.form.employee.id);
     },
     getData: function getData() {
       var _this = this;
@@ -305,7 +331,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this.form.description = data.description;
         _this.form.remarks = data.remarks;
         _this.form.notes = data.notes;
-        _this.form.employee = data.employee.id;
+        _this.form.employee = data.employee;
         _this.form.status = data.status;
         _this.expenses = data.expenses; // _this.submitted_at = data.submitted_at;
         // _this.reviewed_at = data.reviewed_at;
@@ -328,7 +354,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     loadExpenses: function loadExpenses(emp_id) {
-      // let emp_id = emp_id == null ? this.employee : emp_id;
       var start_date = this.date_range[0];
       var end_date = this.date_range[1];
 
@@ -351,29 +376,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    loadEmployees: function loadEmployees() {
-      var _this = this;
-
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
-
-      if (_this.form.employee == null || _this.form.employee <= 0) {
-        _this.$dialog.message.error("User Account Unauthorized", {
-          position: "top-right",
-          timeout: 2000
-        });
-
-        return;
-      }
 
       _this.$refs.form.validate();
 
@@ -392,7 +399,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           description: _this.form.description,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          employee_id: _this.form.employee,
+          employee_id: _this.form.employee.id,
           expenses: _this.selected
         }).then(function (response) {
           _this.$dialog.message.success("Expense Report updated successfully.", {
@@ -413,11 +420,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     }
   },
-  computed: {
-    default_description: function default_description() {
-      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
-    }
-  },
   watch: {
     selected: function selected() {
       this.total = this.selected.reduce(function (total, item) {
@@ -425,9 +427,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }, 0);
     }
   },
+  computed: {
+    default_description: function default_description() {
+      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
+    }
+  },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
-    this.loadEmployees();
     this.getData();
   }
 });
@@ -686,13 +691,13 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.mixin_formatNumber(
                                                             item.reimbursable_amount
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -722,7 +727,11 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      _vm._s(item.description)
+                                                      "\n                                                    " +
+                                                        _vm._s(
+                                                          item.description
+                                                        ) +
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -752,14 +761,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.mixin_formatDate(
                                                             item.created_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ]),
@@ -775,14 +784,14 @@ var render = function() {
                                                   _vm._v(" "),
                                                   _c("td", [
                                                     _vm._v(
-                                                      "\n                                        " +
+                                                      "\n                                                    " +
                                                         _vm._s(
                                                           _vm.mixin_formatDate(
                                                             item.deleted_at,
                                                             "YYYY-MM-DD HH:mm:ss"
                                                           )
                                                         ) +
-                                                        "\n                                    "
+                                                        "\n                                                "
                                                     )
                                                   ])
                                                 ])
@@ -842,15 +851,15 @@ var render = function() {
                                         _vm._v(" "),
                                         _c("td"),
                                         _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
+                                        _c("td"),
+                                        _vm._v(" "),
                                         _c("td", [
                                           _c("strong", [
                                             _vm._v(_vm._s(_vm.total))
                                           ])
                                         ]),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td"),
                                         _vm._v(" "),
                                         _c("td"),
                                         _vm._v(" "),

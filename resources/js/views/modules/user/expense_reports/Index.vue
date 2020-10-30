@@ -131,6 +131,15 @@
                             </v-list-item-subtitle>
                         </v-list-item>
 
+                        <!-- <v-list-item>
+                            <v-list-item-icon>
+                                <v-icon>mdi-plus</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Add Payment
+                            </v-list-item-subtitle>
+                        </v-list-item> -->
+
                         <v-list-item @click="onUpdate('duplicate', 'put')">
                             <v-list-item-icon>
                                 <v-icon>mdi-content-copy</v-icon>
@@ -138,7 +147,6 @@
                             <v-list-item-subtitle>
                                 Duplicate Report(s)
                             </v-list-item-subtitle>
-
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -180,6 +188,9 @@
                             item.status.status
                         }}</v-chip>
                     </template>
+                    <template v-slot:[`item.date`]="{ item }">
+                        {{ item.from }} ~ {{ item.to }}
+                    </template>
                     <template v-slot:expanded-item="{ headers, item }">
                         <td :colspan="headers.length">
                             <v-container>
@@ -199,6 +210,11 @@
                                                 )
                                             }}
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Period</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.from }} ~ {{ item.to }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Status</strong></td>
@@ -303,47 +319,12 @@
                         {{ mixin_getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <!-- <v-icon small class="mr-2" @click="onShow(item)">
+                        <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon
-                            v-show="status !== 'Cancelled'"
-                            small
-                            class="mr-2"
-                            @click="onEdit(item)"
-                        >
+                        <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
-                        </v-icon> -->
-
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                    small
-                                    class="mr-2"
-                                    @click="onShow(item)"
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    mdi-eye
-                                </v-icon>
-                            </template>
-                            <span>View Data</span>
-                        </v-tooltip>
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                    v-show="status !== 'Cancelled'"
-                                    small
-                                    class="mr-2"
-                                    @click="onEdit(item)"
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    mdi-pencil
-                                </v-icon>
-                            </template>
-                            <span>Edit Data</span>
-                        </v-tooltip>
+                        </v-icon>
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -353,6 +334,7 @@
                         </tr>
                         <tr class="green--text hidden-sm-and-down">
                             <td class="title">Total</td>
+                            <td></td>
                             <td></td>
                             <td>
                                 <strong>{{ totalAmount }}</strong>
@@ -364,6 +346,29 @@
                         </tr>
                     </template>
                 </v-data-table>
+
+                <v-row>
+                    <v-col>
+                        <div>
+                            <h4 class="green--text">
+                                Note:
+                            </h4>
+                            <h4 class="grey--text">
+                                Due of submission of expense reports :
+                                {{ $store.getters.settings.submission_date }}
+                                ({{ maxDate }})
+                            </h4>
+                            <h4 class="grey--text">
+                                Approval period of expense reports :
+                                {{ $store.getters.settings.approval_period }}
+                                days upon submission
+                            </h4>
+                            <h4 class="red--text" v-if="warning">
+                                {{ warning }}
+                            </h4>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-card-text>
         </v-card>
     </div>
@@ -379,8 +384,10 @@ export default {
     data() {
         return {
             loading: true,
+            warning: null,
             headers: [
-                { text: "Description", value: "description" },
+                { text: "Report No.", value: "code" },
+                { text: "Period", value: "date" },
                 { text: "Amount", value: "total", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status", sortable: false },
@@ -388,8 +395,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            employee: 0,
-            employees: [],
+            employee: this.$store.getters.user.employee,
             date_range: [
                 moment()
                     .startOf("month")
@@ -415,14 +421,23 @@ export default {
                 "Last 5 Years"
             ],
             totalAmount: 0,
-            status: "Active",
+            status: "All Expense Reports",
             statuses: [
-                "Active",
-                "For Submission",
-                "Pending",
-                "Approved",
-                "Cancelled",
-                "Completed"
+                "All Expense Reports",
+                "Unsubmitted Expense Reports",
+                "Submitted Expense Reports",
+                "Approved Expense Reports",
+                "Rejected Expense Reports",
+                "Reimbursed Expense Reports",
+                // "Overdue Expense Reports",
+                "Cancelled Expense Reports"
+                // "Archived Expense Reports"
+                // "For Submission",
+                // "Pending",
+                // "Approved",
+                // "Cancelled",
+                // "Completed"
+                // "Archived"
             ],
             selected: [],
             search: "",
@@ -449,60 +464,31 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                // let employee_id = _this.employee;
+                let employee_id = _this.employee.id;
                 let range = _this.date_range;
 
                 axios
-                    .get("/api/user")
-                    .then(response => {
-                        let emp = response.data.data.employee;
-
-                        _this.employee = emp == null ? 0 : emp.id;
-
-                        let employee_id = _this.employee;
-
-                        if (employee_id !== 0) {
-                            axios
-                                .get("/api/expense_reports", {
-                                    params: {
-                                        search: search,
-                                        sortBy: sortBy[0],
-                                        sortType: sortDesc[0] ? "desc" : "asc",
-                                        page: page,
-                                        itemsPerPage: itemsPerPage,
-                                        status: status,
-                                        employee_id: employee_id,
-                                        start_date: range[0],
-                                        end_date: range[1]
-                                    }
-                                })
-                                .then(response => {
-                                    let items = response.data.data;
-                                    let total = response.data.meta.total;
-
-                                    _this.loading = false;
-
-                                    resolve({ items, total });
-                                })
-                                .catch(error => {
-                                    console.log(error);
-                                    console.log(error.response);
-
-                                    _this.loading = false;
-
-                                    _this.mixin_errorDialog(
-                                        `Error ${error.response.status}`,
-                                        error.response.statusText
-                                    );
-                                });
-                        } else {
-                            let items = [];
-                            let total = 0;
-
-                            resolve({ items, total });
-
-                            _this.loading = false;
+                    .get("/api/expense_reports", {
+                        params: {
+                            search: search,
+                            sortBy: sortBy[0],
+                            sortType: sortDesc[0] ? "desc" : "asc",
+                            page: page,
+                            itemsPerPage: itemsPerPage,
+                            status: status,
+                            employee_id: employee_id,
+                            start_date: range[0],
+                            end_date: range[1],
+                            admin_page: false
                         }
+                    })
+                    .then(response => {
+                        let items = response.data.data;
+                        let total = response.data.meta.total;
+
+                        _this.loading = false;
+
+                        resolve({ items, total });
                     })
                     .catch(error => {
                         console.log(error);
@@ -513,12 +499,13 @@ export default {
                             error.response.statusText
                         );
 
-                        reject();
+                        _this.loading = false;
                     });
             });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
             this.selected = [];
         },
         onShow(item) {
@@ -566,18 +553,6 @@ export default {
             if (
                 this.selected
                     .map(item => item.status.status)
-                    .includes("Approved")
-            ) {
-                this.$dialog.message.error("Report has been approved", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
-
-            if (
-                this.selected
-                    .map(item => item.status.status)
                     .includes("Cancelled")
             ) {
                 this.$dialog.message.error(
@@ -593,12 +568,27 @@ export default {
             if (
                 this.selected
                     .map(item => item.status.status)
-                    .includes("Paid/Reimbursed")
+                    .includes("Approved")
             ) {
-                this.$dialog.message.error("Report has been paid/reimbursed", {
+                this.$dialog.message.error("Report has been approved", {
                     position: "top-right",
                     timeout: 2000
                 });
+                return;
+            }
+
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Paid/Reimbursed")
+            ) {
+                this.$dialog.message.error(
+                    "Paid/reimbursed expense reports can't be cancelled",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
                 return;
             }
 
@@ -636,6 +626,7 @@ export default {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
                                 });
+
                                 _this.selected = [];
                             })
                             .catch(function(error) {
@@ -666,7 +657,7 @@ export default {
                 action == "submit" &&
                 !this.selected
                     .map(item => item.status.status)
-                    .includes("For Submission")
+                    .includes("Unsubmitted")
             ) {
                 this.$dialog.message.error("Action can't be completed", {
                     position: "top-right",
@@ -692,9 +683,9 @@ export default {
                 action == "submit" &&
                 this.selected
                     .map(item => item.status.status)
-                    .includes("Cancelled")
+                    .includes("Reimbursed")
             ) {
-                this.$dialog.message.error("Report has been cancelled", {
+                this.$dialog.message.error("Report has been paid/reimbursed", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -705,9 +696,112 @@ export default {
                 action == "submit" &&
                 this.selected
                     .map(item => item.status.status)
-                    .includes("Paid/Reimbursed")
+                    .includes("Cancelled")
             ) {
-                this.$dialog.message.error("Report has been paid/reimbursed", {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (action == "submit") {
+                let settings = this.$store.getters.settings;
+
+                let start = moment().startOf("day");
+                let end = moment().endOf("day");
+
+                let expense_min_date = moment.min(
+                    this.selected.map(item => moment(item.from))
+                );
+                let expense_max_date = moment.max(
+                    this.selected.map(item => moment(item.to))
+                );
+
+                if (settings) {
+                    switch (settings.submission_date) {
+                        case "Weekly":
+                            start = moment()
+                                .startOf("week")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("week")
+                                .format("YYYY-MM-DD");
+                            break;
+                        case "Monthly":
+                            start = moment()
+                                .startOf("month")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("month")
+                                .format("YYYY-MM-DD");
+                            break;
+                        default:
+                            start = moment()
+                                .startOf("day")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("day")
+                                .format("YYYY-MM-DD");
+                            break;
+                    }
+                }
+
+                // console.log(
+                //     moment(expense_min_date).format("YYYY-MM-DD"),
+                //     moment(expense_max_date).format("YYYY-MM-DD")
+                // );
+                // console.log("start adn end", start, end);
+
+                // console.log(
+                //     "check min",
+                //     moment(
+                //         moment(expense_min_date).format("YYYY-MM-DD")
+                //     ).isBetween(start, end)
+                // );
+                // console.log(
+                //     "check max",
+                //     moment(
+                //         moment(expense_max_date).format("YYYY-MM-DD")
+                //     ).isBetween(start, end)
+                // );
+
+                if (
+                    !moment(
+                        moment(expense_min_date).format("YYYY-MM-DD")
+                    ).isBetween(start, end, undefined, "[]") ||
+                    !moment(
+                        moment(expense_max_date).format("YYYY-MM-DD")
+                    ).isBetween(start, end, undefined, "[]")
+                ) {
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Submission of expenses beyond due date is not allowed"
+                    );
+                    return;
+                }
+            }
+
+            if (
+                action == "cancel" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Cancelled")
+            ) {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "cancel" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
+                this.$dialog.message.error("Report has been approved", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -741,6 +835,7 @@ export default {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
                                 });
+
                                 _this.selected = [];
                             })
                             .catch(function(error) {
@@ -771,6 +866,28 @@ export default {
             this.totalAmount = this.mixin_formatNumber(
                 this.items.reduce((total, item) => total + item.total, 0)
             );
+        },
+        selected() {
+            console.log(this.selected.length);
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Submitted")
+            ) {
+                let period = this.$store.getters.settings.approval_period;
+                let submission_date = moment
+                    .min(this.selected.map(item => moment(item.submitted_at)))
+                    .format("YYYY-MM-DD");
+                let last_approval_date = moment(submission_date)
+                    .add(period, "days")
+                    .format("YYYY-MM-DD");
+
+                if (this.selected.length !== 0) {
+                    this.warning = `Last Approval Date: ${last_approval_date}; First Submitted Report: ${submission_date}`;
+                } else {
+                    this.warning = null;
+                }
+            }
         }
     },
     computed: {
@@ -782,6 +899,64 @@ export default {
                 query: this.employee,
                 query: this.date_range
             };
+        },
+        minDate() {
+            let settings = this.$store.getters.settings;
+
+            if (settings) {
+                switch (settings.submission_date) {
+                    case "Weekly":
+                        return moment()
+                            .startOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        return moment()
+                            .startOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+                    default:
+                        return moment()
+                            .startOf("day")
+                            .format("YYYY-MM-DD");
+                        break;
+                }
+            }
+
+            return moment()
+                .startOf("day")
+                .format("YYYY-MM-DD");
+        },
+        maxDate() {
+            let settings = this.$store.getters.settings;
+            let today = moment().format("YYYY-MM-DD");
+            let maxDate = moment()
+                .endOf("day")
+                .format("YYYY-MM-DD");
+
+            if (settings) {
+                switch (settings.submission_date) {
+                    case "Weekly":
+                        maxDate = moment()
+                            .endOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        maxDate = moment()
+                            .endOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+                    default:
+                        maxDate = moment()
+                            .endOf("day")
+                            .format("YYYY-MM-DD");
+                        break;
+                }
+
+                return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+            }
+
+            return today;
         }
     },
     mounted() {
@@ -792,6 +967,6 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-    },
+    }
 };
 </script>

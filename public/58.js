@@ -391,6 +391,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -401,9 +406,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       loading: true,
+      warning: null,
       headers: [{
-        text: "Description",
-        value: "description"
+        text: "Report No.",
+        value: "code"
+      }, {
+        text: "Period",
+        value: "date"
       }, {
         text: "Amount",
         value: "total",
@@ -424,14 +433,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      employee: 0,
-      employees: [],
+      employee: this.$store.getters.user.employee,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       totalAmount: 0,
-      status: "Active",
-      statuses: ["Active", "For Submission", "Pending", "Approved", "Cancelled", "Completed"],
+      status: "All Expense Reports",
+      statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", // "Overdue Expense Reports",
+      "Cancelled Expense Reports" // "Archived Expense Reports"
+      // "For Submission",
+      // "Pending",
+      // "Approved",
+      // "Cancelled",
+      // "Completed"
+      // "Archived"
+      ],
       selected: [],
       search: "",
       totalItems: 0,
@@ -462,58 +478,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var search = _this.search.trim().toLowerCase();
 
-        var status = _this.status; // let employee_id = _this.employee;
-
+        var status = _this.status;
+        var employee_id = _this.employee.id;
         var range = _this.date_range;
-        axios.get("/api/user").then(function (response) {
-          var emp = response.data.data.employee;
-          _this.employee = emp == null ? 0 : emp.id;
-          var employee_id = _this.employee;
-
-          if (employee_id !== 0) {
-            axios.get("/api/expense_reports", {
-              params: {
-                search: search,
-                sortBy: sortBy[0],
-                sortType: sortDesc[0] ? "desc" : "asc",
-                page: page,
-                itemsPerPage: itemsPerPage,
-                status: status,
-                employee_id: employee_id,
-                start_date: range[0],
-                end_date: range[1]
-              }
-            }).then(function (response) {
-              var items = response.data.data;
-              var total = response.data.meta.total;
-              _this.loading = false;
-              resolve({
-                items: items,
-                total: total
-              });
-            })["catch"](function (error) {
-              console.log(error);
-              console.log(error.response);
-              _this.loading = false;
-
-              _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-            });
-          } else {
-            var items = [];
-            var total = 0;
-            resolve({
-              items: items,
-              total: total
-            });
-            _this.loading = false;
+        axios.get("/api/expense_reports", {
+          params: {
+            search: search,
+            sortBy: sortBy[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
+            page: page,
+            itemsPerPage: itemsPerPage,
+            status: status,
+            employee_id: employee_id,
+            start_date: range[0],
+            end_date: range[1],
+            admin_page: false
           }
+        }).then(function (response) {
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this.loading = false;
+          resolve({
+            items: items,
+            total: total
+          });
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
 
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
-          reject();
+          _this.loading = false;
         });
       });
     },
@@ -566,16 +561,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (this.selected.map(function (item) {
         return item.status.status;
-      }).includes("Approved")) {
-        this.$dialog.message.error("Report has been approved", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (this.selected.map(function (item) {
-        return item.status.status;
       }).includes("Cancelled")) {
         this.$dialog.message.error("Report has already been cancelled", {
           position: "top-right",
@@ -586,8 +571,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (this.selected.map(function (item) {
         return item.status.status;
+      }).includes("Approved")) {
+        this.$dialog.message.error("Report has been approved", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (this.selected.map(function (item) {
+        return item.status.status;
       }).includes("Paid/Reimbursed")) {
-        this.$dialog.message.error("Report has been paid/reimbursed", {
+        this.$dialog.message.error("Paid/reimbursed expense reports can't be cancelled", {
           position: "top-right",
           timeout: 2000
         });
@@ -644,7 +639,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (action == "submit" && !this.selected.map(function (item) {
         return item.status.status;
-      }).includes("For Submission")) {
+      }).includes("Unsubmitted")) {
         this.$dialog.message.error("Action can't be completed", {
           position: "top-right",
           timeout: 2000
@@ -664,8 +659,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (action == "submit" && this.selected.map(function (item) {
         return item.status.status;
-      }).includes("Cancelled")) {
-        this.$dialog.message.error("Report has been cancelled", {
+      }).includes("Reimbursed")) {
+        this.$dialog.message.error("Report has been paid/reimbursed", {
           position: "top-right",
           timeout: 2000
         });
@@ -674,8 +669,81 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (action == "submit" && this.selected.map(function (item) {
         return item.status.status;
-      }).includes("Paid/Reimbursed")) {
-        this.$dialog.message.error("Report has been paid/reimbursed", {
+      }).includes("Cancelled")) {
+        this.$dialog.message.error("Report has been cancelled", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (action == "submit") {
+        var settings = this.$store.getters.settings;
+        var start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day");
+        var end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
+        var expense_min_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.from);
+        }));
+        var expense_max_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.max(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.to);
+        }));
+
+        if (settings) {
+          switch (settings.submission_date) {
+            case "Weekly":
+              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
+              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+              break;
+
+            case "Monthly":
+              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
+              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+              break;
+
+            default:
+              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+              break;
+          }
+        } // console.log(
+        //     moment(expense_min_date).format("YYYY-MM-DD"),
+        //     moment(expense_max_date).format("YYYY-MM-DD")
+        // );
+        // console.log("start adn end", start, end);
+        // console.log(
+        //     "check min",
+        //     moment(
+        //         moment(expense_min_date).format("YYYY-MM-DD")
+        //     ).isBetween(start, end)
+        // );
+        // console.log(
+        //     "check max",
+        //     moment(
+        //         moment(expense_max_date).format("YYYY-MM-DD")
+        //     ).isBetween(start, end)
+        // );
+
+
+        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_min_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "[]") || !moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_max_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "[]")) {
+          this.mixin_errorDialog("Error", "Submission of expenses beyond due date is not allowed");
+          return;
+        }
+      }
+
+      if (action == "cancel" && this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Cancelled")) {
+        this.$dialog.message.error("Report has been cancelled", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (action == "cancel" && this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Approved")) {
+        this.$dialog.message.error("Report has been approved", {
           position: "top-right",
           timeout: 2000
         });
@@ -733,6 +801,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
         return total + item.total;
       }, 0));
+    },
+    selected: function selected() {
+      console.log(this.selected.length);
+
+      if (this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Submitted")) {
+        var period = this.$store.getters.settings.approval_period;
+        var submission_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.submitted_at);
+        })).format("YYYY-MM-DD");
+        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_date).add(period, "days").format("YYYY-MM-DD");
+
+        if (this.selected.length !== 0) {
+          this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_date);
+        } else {
+          this.warning = null;
+        }
+      }
     }
   },
   computed: {
@@ -742,6 +829,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+    },
+    minDate: function minDate() {
+      var settings = this.$store.getters.settings;
+
+      if (settings) {
+        switch (settings.submission_date) {
+          case "Weekly":
+            return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+            break;
+        }
+      }
+
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+    },
+    maxDate: function maxDate() {
+      var settings = this.$store.getters.settings;
+      var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+      var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+
+      if (settings) {
+        switch (settings.submission_date) {
+          case "Weekly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+            break;
+        }
+
+        return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
+      }
+
+      return today;
     }
   },
   mounted: function mounted() {
@@ -1235,6 +1368,21 @@ var render = function() {
                         }
                       },
                       {
+                        key: "item.date",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(item.from) +
+                                " ~ " +
+                                _vm._s(item.to) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
                         key: "expanded-item",
                         fn: function(ref) {
                           var headers = ref.headers
@@ -1272,6 +1420,22 @@ var render = function() {
                                               )
                                             ) +
                                             "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Period")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(item.from) +
+                                            " ~ " +
+                                            _vm._s(item.to)
                                         )
                                       ])
                                     ]),
@@ -1500,110 +1664,39 @@ var render = function() {
                           var item = ref.item
                           return [
                             _c(
-                              "v-tooltip",
+                              "v-icon",
                               {
-                                attrs: { bottom: "" },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var on = ref.on
-                                        var attrs = ref.attrs
-                                        return [
-                                          _c(
-                                            "v-icon",
-                                            _vm._g(
-                                              _vm._b(
-                                                {
-                                                  staticClass: "mr-2",
-                                                  attrs: { small: "" },
-                                                  on: {
-                                                    click: function($event) {
-                                                      return _vm.onShow(item)
-                                                    }
-                                                  }
-                                                },
-                                                "v-icon",
-                                                attrs,
-                                                false
-                                              ),
-                                              on
-                                            ),
-                                            [
-                                              _vm._v(
-                                                "\n                                mdi-eye\n                            "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
+                                staticClass: "mr-2",
+                                attrs: { small: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onShow(item)
+                                  }
+                                }
                               },
-                              [_vm._v(" "), _c("span", [_vm._v("View Data")])]
+                              [
+                                _vm._v(
+                                  "\n                        mdi-eye\n                    "
+                                )
+                              ]
                             ),
                             _vm._v(" "),
                             _c(
-                              "v-tooltip",
+                              "v-icon",
                               {
-                                attrs: { bottom: "" },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var on = ref.on
-                                        var attrs = ref.attrs
-                                        return [
-                                          _c(
-                                            "v-icon",
-                                            _vm._g(
-                                              _vm._b(
-                                                {
-                                                  directives: [
-                                                    {
-                                                      name: "show",
-                                                      rawName: "v-show",
-                                                      value:
-                                                        _vm.status !==
-                                                        "Cancelled",
-                                                      expression:
-                                                        "status !== 'Cancelled'"
-                                                    }
-                                                  ],
-                                                  staticClass: "mr-2",
-                                                  attrs: { small: "" },
-                                                  on: {
-                                                    click: function($event) {
-                                                      return _vm.onEdit(item)
-                                                    }
-                                                  }
-                                                },
-                                                "v-icon",
-                                                attrs,
-                                                false
-                                              ),
-                                              on
-                                            ),
-                                            [
-                                              _vm._v(
-                                                "\n                                mdi-pencil\n                            "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
+                                staticClass: "mr-2",
+                                attrs: { small: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onEdit(item)
+                                  }
+                                }
                               },
-                              [_vm._v(" "), _c("span", [_vm._v("Edit Data")])]
+                              [
+                                _vm._v(
+                                  "\n                        mdi-pencil\n                    "
+                                )
+                              ]
                             )
                           ]
                         }
@@ -1621,6 +1714,7 @@ var render = function() {
                   }
                 },
                 [
+                  _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
@@ -1650,6 +1744,8 @@ var render = function() {
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),
+                            _c("td"),
+                            _vm._v(" "),
                             _c("td", [
                               _c("strong", [_vm._v(_vm._s(_vm.totalAmount))])
                             ]),
@@ -1667,6 +1763,54 @@ var render = function() {
                     : _vm._e()
                 ],
                 2
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c("v-col", [
+                    _c("div", [
+                      _c("h4", { staticClass: "green--text" }, [
+                        _vm._v(
+                          "\n                            Note:\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "grey--text" }, [
+                        _vm._v(
+                          "\n                            Due of submission of expense reports :\n                            " +
+                            _vm._s(
+                              _vm.$store.getters.settings.submission_date
+                            ) +
+                            "\n                            (" +
+                            _vm._s(_vm.maxDate) +
+                            ")\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "grey--text" }, [
+                        _vm._v(
+                          "\n                            Approval period of expense reports :\n                            " +
+                            _vm._s(
+                              _vm.$store.getters.settings.approval_period
+                            ) +
+                            "\n                            days upon submission\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm.warning
+                        ? _c("h4", { staticClass: "red--text" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(_vm.warning) +
+                                "\n                        "
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ])
+                ],
+                1
               )
             ],
             1

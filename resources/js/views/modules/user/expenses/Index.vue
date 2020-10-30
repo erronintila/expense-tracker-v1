@@ -3,6 +3,7 @@
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Expenses</h4>
+
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
@@ -126,6 +127,14 @@
                                 Restore
                             </v-list-item-title>
                         </v-list-item> -->
+                        <!-- <v-list-item>
+                            <v-list-item-icon>
+                                <v-icon>mdi-plus</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Add Expense Report
+                            </v-list-item-subtitle>
+                        </v-list-item> -->
 
                         <v-list-item @click="onDelete">
                             <v-list-item-icon>
@@ -138,6 +147,7 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
@@ -186,7 +196,19 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Reimbursable</strong></td>
+                                        <td><strong>To Replenish</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatNumber(
+                                                    item.amount -
+                                                        item.reimbursable_amount
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>To Reimburse</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
@@ -194,6 +216,29 @@
                                                     item.reimbursable_amount
                                                 )
                                             }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tax</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatNumber(
+                                                    item.tax_amount
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tax rate</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatNumber(
+                                                    item.tax_rate
+                                                )
+                                            }}
+                                            %
                                         </td>
                                     </tr>
                                     <tr>
@@ -261,42 +306,32 @@
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ mixin_formatNumber(item.amount) }}
                     </template>
-                    <template v-slot:[`item.actions`]="{ item }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                    small
-                                    class="mr-2"
-                                    @click="onShow(item)"
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    mdi-eye
-                                </v-icon>
-                            </template>
-                            <span>View Data</span>
-                        </v-tooltip>
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                    small
-                                    class="mr-2"
-                                    @click="onEdit(item)"
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    mdi-pencil
-                                </v-icon>
-                            </template>
-                            <span>Edit Data</span>
-                        </v-tooltip>
+                    <template v-slot:[`item.replenishment`]="{ item }">
+                        {{
+                            mixin_formatNumber(
+                                item.amount - item.reimbursable_amount
+                            )
+                        }}
                     </template>
-                    <template v-slot:[`item.expense_report`]="{ item }">
+                    <!-- <template v-slot:[`item.expense_report`]="{ item }">
                         {{
                             item.expense_report == null
                                 ? "None"
                                 : item.expense_report.code
                         }}
+                    </template> -->
+                    <template v-slot:[`item.status.status`]="{ item }">
+                        <v-chip :color="item.status.color" dark small>{{
+                            item.status.status
+                        }}</v-chip>
+                    </template>
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small class="mr-2" @click="onShow(item)">
+                            mdi-eye
+                        </v-icon>
+                        <v-icon small class="mr-2" @click="onEdit(item)">
+                            mdi-pencil
+                        </v-icon>
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -311,6 +346,9 @@
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
+                            <td>
+                                <strong>{{ totalReplenishment }}</strong>
+                            </td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -318,8 +356,43 @@
                         </tr>
                     </template>
                 </v-data-table>
+
+                <v-row>
+                    <v-col>
+                        <div>
+                            <h4 class="green--text">
+                                Note:
+                            </h4>
+                            <h4 class="grey--text">
+                                Due of encoding and submission of expenses : {{ $store.getters.settings.submission_date}} ({{ maxDate }})
+                            </h4>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-card-text>
         </v-card>
+
+        <!-- <v-row>
+            <v-col cols="12" md="4">
+                <v-card elevation="0">
+                    <v-card-subtitle>
+                        <div class="green--text">Total Expenses: 0</div>
+                        <div class="green--text">Unreported Expenses: 0</div>
+                        <div class="green--text">Approved Expenses: 0</div>
+                    </v-card-subtitle>
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="4">
+                <v-card elevation="0">
+                    <v-card-title> </v-card-title>
+                    <v-card-subtitle>
+                        <div class="green--text">Total Expenses: 0</div>
+                        <div class="green--text">Unreported Expenses: 0</div>
+                        <div class="green--text">Approved Expenses: 0</div>
+                    </v-card-subtitle>
+                </v-card>
+            </v-col>
+        </v-row> -->
     </div>
 </template>
 
@@ -360,29 +433,44 @@ export default {
                 "Last 5 Years"
             ],
             headers: [
+                { text: "Date", value: "date" },
                 {
                     text: "Expense",
                     value: "expense_type.name",
                     sortable: false
                 },
-                { text: "Date", value: "date" },
                 { text: "Amount", value: "amount" },
-                { text: "Report", value: "expense_report", sortable: false },
+                {
+                    text: "To replenish",
+                    value: "replenishment",
+                    sortable: false
+                },
                 { text: "Last Updated", value: "updated_at" },
+                { text: "Status", value: "status.status", sortable: false },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            employee: 0,
-            // employees: [],
+            employee: this.$store.getters.user.employee.id,
             expense_type: 0,
             expense_types: [],
-            status: "Active",
-            statuses: ["Active", "Cancelled", "Unreported Expenses"],
+            status: "All Expenses",
+            statuses: [
+                "All Expenses",
+                "Unreported Expenses",
+                "Unsubmitted Expenses",
+                "Submitted Expenses",
+                "Approved Expenses",
+                "Rejected Expenses",
+                "Cancelled Expenses",
+                "Reimbursed Expenses"
+                // "Archived Expenses"
+            ],
             selected: [],
             search: "",
             totalItems: 0,
             totalAmount: 0,
+            totalReplenishment: 0,
             options: {
                 sortBy: ["created_at"],
                 sortDesc: [true],
@@ -405,72 +493,43 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
+                let employee_id = _this.employee;
                 let expense_type_id = _this.expense_type;
                 let range = _this.date_range;
 
                 axios
-                    .get("/api/user")
-                    .then(response => {
-                        let emp = response.data.data.employee;
-
-                        _this.employee = emp == null ? 0 : emp.id;
-
-                        let employee_id = _this.employee;
-
-                        if (employee_id !== 0) {
-                            axios
-                                .get("/api/expenses", {
-                                    params: {
-                                        search: search,
-                                        sortBy: sortBy[0],
-                                        sortType: sortDesc[0] ? "desc" : "asc",
-                                        page: page,
-                                        itemsPerPage: itemsPerPage,
-                                        status: status,
-                                        employee_id: employee_id,
-                                        expense_type_id: expense_type_id,
-                                        start_date: range[0],
-                                        end_date: range[1]
-                                    }
-                                })
-                                .then(response => {
-                                    let items = response.data.data;
-                                    let total = response.data.meta.total;
-
-                                    _this.loading = false;
-
-                                    resolve({ items, total });
-                                })
-                                .catch(error => {
-                                    console.log(error);
-                                    console.log(error.response);
-
-                                    _this.loading = false;
-
-                                    _this.mixin_errorDialog(
-                                        `Error ${error.response.status}`,
-                                        error.response.statusText
-                                    );
-                                });
-                        } else {
-                            let items = [];
-                            let total = 0;
-
-                            resolve({ items, total });
-
-                            _this.loading = false;
+                    .get("/api/expenses", {
+                        params: {
+                            search: search,
+                            sortBy: sortBy[0],
+                            sortType: sortDesc[0] ? "desc" : "asc",
+                            page: page,
+                            itemsPerPage: itemsPerPage,
+                            status: status,
+                            employee_id: employee_id,
+                            expense_type_id: expense_type_id,
+                            start_date: range[0],
+                            end_date: range[1]
                         }
+                    })
+                    .then(response => {
+                        let items = response.data.data;
+                        let total = response.data.meta.total;
+
+                        _this.loading = false;
+
+                        resolve({ items, total });
                     })
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
 
-                        reject();
-
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
+
+                        _this.loading = false;
                     });
             });
         },
@@ -580,7 +639,7 @@ export default {
                         })
                         .then(function(response) {
                             _this.$dialog.message.success(
-                                "Cancelled successfully",
+                                "Cancelled successfully.",
                                 {
                                     position: "top-right",
                                     timeout: 2000
@@ -590,6 +649,7 @@ export default {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
+
                             _this.selected = [];
                         })
                         .catch(function(error) {
@@ -633,6 +693,7 @@ export default {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
+
                             _this.selected = [];
                         })
                         .catch(function(error) {
@@ -662,6 +723,14 @@ export default {
             this.totalAmount = this.mixin_formatNumber(
                 this.items.reduce((total, item) => total + item.amount, 0)
             );
+
+            this.totalReplenishment = this.mixin_formatNumber(
+                this.items.reduce(
+                    (total, item) =>
+                        total + (item.amount - item.reimbursable_amount),
+                    0
+                )
+            );
         }
     },
     computed: {
@@ -670,10 +739,41 @@ export default {
                 ...this.options,
                 query: this.search,
                 query: this.status,
+                query: this.employee,
                 query: this.expense_type,
-                query: this.date_range,
-                query: this.employee
+                query: this.date_range
             };
+        },
+        maxDate() {
+            let settings = this.$store.getters.settings;
+            let today = moment().format("YYYY-MM-DD");
+            let maxDate = moment()
+                .endOf("day")
+                .format("YYYY-MM-DD");
+
+            if (settings) {
+                switch (settings.submission_date) {
+                    case "Weekly":
+                        maxDate = moment()
+                            .endOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        maxDate = moment()
+                            .endOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+                    default:
+                        maxDate = moment()
+                            .endOf("day")
+                            .format("YYYY-MM-DD");
+                        break;
+                }
+
+                return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+            }
+
+            return today;
         }
     },
     mounted() {
@@ -683,6 +783,7 @@ export default {
         });
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadExpenseTypes();
     }
 };

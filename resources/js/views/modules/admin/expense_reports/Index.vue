@@ -811,10 +811,10 @@ export default {
                 if (
                     !moment(
                         moment(expense_min_date).format("YYYY-MM-DD")
-                    ).isBetween(start, end) ||
+                    ).isBetween(start, end, undefined, '[]') ||
                     !moment(
                         moment(expense_max_date).format("YYYY-MM-DD")
-                    ).isBetween(start, end)
+                    ).isBetween(start, end, undefined, '[]')
                 ) {
                     this.mixin_errorDialog(
                         "Error",
@@ -866,6 +866,9 @@ export default {
             }
 
             if (action == "approve") {
+                let today = moment().format("YYYY-MM-DD");
+                // console.log(today);
+                // return;
                 let period = this.$store.getters.settings.approval_period;
                 let submission_date = moment
                     .min(this.selected.map(item => moment(item.submitted_at)))
@@ -874,9 +877,7 @@ export default {
                     .add(period, "days")
                     .format("YYYY-MM-DD");
 
-                console.log(last_approval_date);
-
-                if (!moment().isBetween(submission_date, last_approval_date)) {
+                if (!moment(today).isBetween(submission_date, last_approval_date, undefined, '[]')) {
                     this.mixin_errorDialog(
                         "Error",
                         "Approval of reports beyond due date is not allowed"

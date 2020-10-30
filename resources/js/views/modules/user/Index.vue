@@ -180,7 +180,12 @@ export default {
                 icon: "mdi-file-chart",
                 text: "Expense Reports",
                 link: { name: "user.expense_reports.index" }
-            }
+            },
+            {
+                icon: "mdi-currency-usd",
+                text: "Payments",
+                link: { name: "user.payments.index" }
+            },
         ]
     }),
     computed: {

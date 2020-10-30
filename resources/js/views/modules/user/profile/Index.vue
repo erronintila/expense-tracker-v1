@@ -39,26 +39,7 @@
                                                 </v-avatar>
                                             </v-col>
                                         </v-row>
-
-                                        <v-row v-if="user.employee === null">
-                                            <v-col
-                                                cols="12"
-                                                align="center"
-                                                justify="center"
-                                            >
-                                                <div>
-                                                    {{ user.username }}
-                                                </div>
-                                                <h3 class="display-1 green--text">
-                                                    {{ user.name }}
-                                                </h3>
-                                                <div class="text--primary">
-                                                    {{ user.email }}
-                                                </div>
-                                            </v-col>
-                                        </v-row>
-
-                                        <v-row v-else>
+                                        <v-row v-if="user.employee !== null">
                                             <v-col
                                                 cols="12"
                                                 align="center"
@@ -70,9 +51,17 @@
                                                             .name
                                                     }}
                                                 </div>
-                                                <h3 class="display-1 green--text">
+                                                <h3
+                                                    class="display-1 green--text"
+                                                >
                                                     {{
-                                                        `${user.employee.last_name}, ${user.employee.first_name} ${user.employee.suffix || ""}`
+                                                        `${
+                                                            user.employee
+                                                                .last_name
+                                                        }, ${user.employee
+                                                            .first_name ||
+                                                            ""} ${user.employee
+                                                            .suffix || ""}`
                                                     }}
                                                 </h3>
                                                 <p>
@@ -84,6 +73,25 @@
                                                             .mobile_number
                                                     }}<br />
                                                     {{ user.employee.email }}
+                                                </div>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row v-else>
+                                            <v-col
+                                                cols="12"
+                                                align="center"
+                                                justify="center"
+                                            >
+                                                <div>
+                                                    {{ user.username }}
+                                                </div>
+                                                <p
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{ user.name }}
+                                                </p>
+                                                <div class="text--primary">
+                                                    {{ user.email }}
                                                 </div>
                                             </v-col>
                                         </v-row>
@@ -328,6 +336,7 @@
                                             transition="scale-transition"
                                             offset-y
                                             min-width="290px"
+                                            :close-on-content-click="false"
                                         >
                                             <template
                                                 v-slot:activator="{ on, attrs }"
@@ -356,6 +365,7 @@
                                                 no-title
                                                 scrollable
                                                 color="success"
+                                                :max="maxDate"
                                             >
                                             </v-date-picker>
                                         </v-menu>
@@ -373,6 +383,7 @@
                                             "
                                             @input="errors.mobile_number = []"
                                             label="Mobile Number"
+                                            type="number"
                                         ></v-text-field>
                                     </v-col>
 
@@ -390,6 +401,7 @@
                                                 errors.telephone_number = []
                                             "
                                             label="Telephone Number"
+                                            type="number"
                                         ></v-text-field>
                                     </v-col>
 
@@ -431,6 +443,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
     data() {
         return {
@@ -519,7 +533,7 @@ export default {
         onUpdateData() {
             let _this = this;
 
-            _this.$refs.form.validate();
+            // _this.$refs.form.validate();
 
             if (_this.$refs.form.validate() && this.user.employee == null) {
                 axios
@@ -532,8 +546,6 @@ export default {
                         employee_id: 0
                     })
                     .then(function(response) {
-                        // _this.onRefresh();
-
                         _this.$dialog.message.success(
                             "User account updated successfully.",
                             {
@@ -546,9 +558,12 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errors = error.response.data.errors;
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.errors = error.response.data.errors;
                     });
 
                 return;
@@ -590,7 +605,10 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
                     });
             }
         },
@@ -623,9 +641,16 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.password_errors = error.response.data.errors;
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
-                        _this.mixin_errorDialog(`Error ${error.response.status}`, error.response.statusText);
+                        if (error.response) {
+                            if (error.response.data) {
+                                _this.password_errors = error.response.data.errors;
+                            }
+                        }
                     });
             }
         },
@@ -635,6 +660,11 @@ export default {
             this.password = "";
             this.password_confirmation = "";
             this.$refs.form_password.resetValidation();
+        }
+    },
+    computed: {
+        maxDate() {
+            return moment().format("YYYY-MM-DD");
         }
     },
     created() {
