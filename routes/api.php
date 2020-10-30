@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Route::get('/users/export', 'API\v1\UserController@export');
 
-    // Route::get('/employees/export', 'API\v1\EmployeeController@export');
+    Route::get('/employees/export', 'API\v1\EmployeeController@export');
 
     Route::apiResources(
         [

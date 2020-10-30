@@ -135,14 +135,19 @@
                     </template>
 
                     <v-list>
-                        <!-- <v-list-item @click="onExport">
+                        <!-- <a type="button" href="/api/employees/export"> -->
+                        <v-list-item
+                            @click="onExport"
+                            href="/api/employees/export"
+                        >
                             <v-list-item-icon>
                                 <v-icon>mdi-lock-reset</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
                                 Export to Excel
                             </v-list-item-subtitle>
-                        </v-list-item> -->
+                        </v-list-item>
+                        <!-- </a> -->
 
                         <v-list-item @click="onPasswordReset">
                             <v-list-item-icon>
@@ -603,14 +608,9 @@ export default {
                 }
             });
         },
-        // onExport() {
-        //     axios.get("/api/employees/export").then(response => {
-        //         console.log(response);
-        //     }).catch(error => {
-        //         console.log(error);
-        //         console.log(error.response);
-        //     });
-        // }
+        onExport() {
+            axios.get("/api/employees/export");
+        }
     },
     watch: {
         params: {
@@ -653,6 +653,6 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-    },
+    }
 };
 </script>

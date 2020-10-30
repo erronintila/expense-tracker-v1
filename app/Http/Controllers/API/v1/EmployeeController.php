@@ -470,10 +470,8 @@ class EmployeeController extends Controller
         );
     }
 
-    // public function export()
-    // {
-    //     Excel::download(new EmployeesExport, 'Employees.csv');
-
-    //     return response("Exported successfully", 200);
-    // }
+    public function export()
+    {
+        return Excel::download(new EmployeesExport, 'Employees.csv');
+    }
 }
