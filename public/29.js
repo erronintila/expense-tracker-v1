@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -324,6 +326,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -405,6 +410,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/permissions").then(function (response) {
+        console.log(response);
         _this.permissions = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -470,6 +476,11 @@ __webpack_require__.r(__webpack_exports__);
         });
         return;
       }
+    }
+  },
+  computed: {
+    maxDate: function maxDate() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
   },
   created: function created() {
@@ -940,7 +951,8 @@ var render = function() {
                                         attrs: {
                                           "no-title": "",
                                           scrollable: "",
-                                          color: "success"
+                                          color: "success",
+                                          max: _vm.maxDate
                                         },
                                         model: {
                                           value: _vm.form.birthdate,
@@ -1205,7 +1217,8 @@ var render = function() {
                                         attrs: {
                                           "show-select": "",
                                           headers: _vm.headers,
-                                          items: _vm.permissions
+                                          items: _vm.permissions,
+                                          "group-by": "category"
                                         },
                                         model: {
                                           value: _vm.selected,

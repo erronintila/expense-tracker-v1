@@ -336,6 +336,7 @@
                                             transition="scale-transition"
                                             offset-y
                                             min-width="290px"
+                                            :close-on-content-click="false"
                                         >
                                             <template
                                                 v-slot:activator="{ on, attrs }"
@@ -364,6 +365,7 @@
                                                 no-title
                                                 scrollable
                                                 color="success"
+                                                :max="maxDate"
                                             >
                                             </v-date-picker>
                                         </v-menu>
@@ -381,6 +383,7 @@
                                             "
                                             @input="errors.mobile_number = []"
                                             label="Mobile Number"
+                                            type="number"
                                         ></v-text-field>
                                     </v-col>
 
@@ -398,6 +401,7 @@
                                                 errors.telephone_number = []
                                             "
                                             label="Telephone Number"
+                                            type="number"
                                         ></v-text-field>
                                     </v-col>
 
@@ -439,6 +443,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
     data() {
         return {
@@ -654,6 +660,11 @@ export default {
             this.password = "";
             this.password_confirmation = "";
             this.$refs.form_password.resetValidation();
+        }
+    },
+    computed: {
+        maxDate() {
+            return moment().format("YYYY-MM-DD");
         }
     },
     created() {

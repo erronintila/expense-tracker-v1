@@ -876,18 +876,14 @@ export default {
 
                 console.log(last_approval_date);
 
-                if (moment().isBetween(submission_date, last_approval_date)) {
+                if (!moment().isBetween(submission_date, last_approval_date)) {
                     this.mixin_errorDialog(
                         "Error",
                         "Approval of reports beyond due date is not allowed"
                     );
                     return;
                 }
-
-                console.log("approved na");
             }
-
-            return;
 
             if (
                 action == "cancel" &&

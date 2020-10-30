@@ -82,19 +82,24 @@ class UserSeeder extends Seeder
             }
 
             if ($model == "expenses") {
-                Permission::create(['name' => 'add expense notes', 'category' => $model]);
+                Permission::create(['name' => 'add expenses beyond due date', 'category' => $model]);
+                // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 
             if ($model == "expense reports") {
-                Permission::create(['name' => 'approve expense reports', 'category' => $model]);
-                Permission::create(['name' => 'reject expense reports', 'category' => $model]);
                 Permission::create(['name' => 'submit expense reports', 'category' => $model]);
+                Permission::create(['name' => 'submit expense reports beyond due date', 'category' => $model]);
+                Permission::create(['name' => 'approve expense reports', 'category' => $model]);
+                Permission::create(['name' => 'approve expense reports beyond due date', 'category' => $model]);
+                Permission::create(['name' => 'reject expense reports', 'category' => $model]);
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
-                Permission::create(['name' => 'add expense report notes', 'category' => $model]);
+                
+                // Permission::create(['name' => 'add expense report notes', 'category' => $model]);
             }
 
             if ($model == "payments") {
-                Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
+                Permission::create(['name' => 'receive payments', 'category' => $model]);
+                // Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
                 // Permission::create(['name' => 'approve payments', 'category' => $model]);
             }
         }

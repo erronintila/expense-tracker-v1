@@ -288,6 +288,7 @@
                                         show-select
                                         :headers="headers"
                                         :items="permissions"
+                                        group-by="category"
                                     ></v-data-table>
                                 </v-col>
                             </v-row>

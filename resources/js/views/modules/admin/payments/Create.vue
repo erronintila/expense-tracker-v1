@@ -53,6 +53,7 @@
                                     no-title
                                     scrollable
                                     color="success"
+                                    :max="maxDate"
                                 >
                                 </v-date-picker>
                             </v-menu>
@@ -413,6 +414,11 @@ export default {
 
                 return;
             }
+        }
+    },
+    computed: {
+        maxDate() {
+            return moment().format("YYYY-MM-DD");
         }
     },
     watch: {

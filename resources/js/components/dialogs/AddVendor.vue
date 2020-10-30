@@ -31,6 +31,10 @@
 
                             <v-col cols="12" md="6">
                                 <v-radio-group
+                                    @change="
+                                        no_tin = false;
+                                        form.tin = '';
+                                    "
                                     v-model="form.is_vat_inclusive"
                                     row
                                 >
@@ -70,6 +74,7 @@
                                             form.tin = no_tin ? 'N/A' : '';
                                         }
                                     "
+                                    :readonly="form.is_vat_inclusive"
                                 ></v-checkbox>
                             </v-col>
 

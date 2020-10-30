@@ -810,15 +810,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_date).add(period, "days").format("YYYY-MM-DD");
         console.log(last_approval_date);
 
-        if (moment__WEBPACK_IMPORTED_MODULE_0___default()().isBetween(submission_date, last_approval_date)) {
+        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()().isBetween(submission_date, last_approval_date)) {
           this.mixin_errorDialog("Error", "Approval of reports beyond due date is not allowed");
           return;
         }
-
-        console.log("approved na");
       }
-
-      return;
 
       if (action == "cancel" && this.selected.map(function (item) {
         return item.status.status;

@@ -29,7 +29,7 @@
                         </v-col>
 
                         <v-col>
-                            <v-radio-group v-model="form.is_vat_inclusive" row>
+                            <v-radio-group v-model="form.is_vat_inclusive" @change="no_tin = false; form.tin = ''" row>
                                 <v-radio label="VAT" :value="true"></v-radio>
                                 <v-radio
                                     label="Non-VAT"
@@ -63,6 +63,7 @@
                                         form.tin = no_tin ? 'N/A' : '';
                                     }
                                 "
+                                :readonly="form.is_vat_inclusive"
                             ></v-checkbox>
                         </v-col>
 

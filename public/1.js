@@ -171,6 +171,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props: {
   //     openDialog: {
@@ -401,6 +406,12 @@ var render = function() {
                                 "v-radio-group",
                                 {
                                   attrs: { row: "" },
+                                  on: {
+                                    change: function($event) {
+                                      _vm.no_tin = false
+                                      _vm.form.tin = ""
+                                    }
+                                  },
                                   model: {
                                     value: _vm.form.is_vat_inclusive,
                                     callback: function($$v) {
@@ -473,7 +484,10 @@ var render = function() {
                             { attrs: { cols: "12", md: "3" } },
                             [
                               _c("v-checkbox", {
-                                attrs: { label: "N/A" },
+                                attrs: {
+                                  label: "N/A",
+                                  readonly: _vm.form.is_vat_inclusive
+                                },
                                 on: {
                                   click: function() {
                                     _vm.form.tin = _vm.no_tin ? "N/A" : ""

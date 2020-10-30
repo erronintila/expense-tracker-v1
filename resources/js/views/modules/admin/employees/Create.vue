@@ -179,6 +179,7 @@
                                             no-title
                                             scrollable
                                             color="success"
+                                            :max="maxDate"
                                         >
                                         </v-date-picker>
                                     </v-menu>
@@ -292,6 +293,7 @@
                                         show-select
                                         :headers="headers"
                                         :items="permissions"
+                                        group-by="category"
                                     ></v-data-table>
                                 </v-col>
                             </v-row>
@@ -314,6 +316,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
     data() {
         return {
@@ -404,6 +408,7 @@ export default {
             axios
                 .get("/api/data/permissions")
                 .then(response => {
+                    console.log(response);
                     _this.permissions = response.data;
                 })
                 .catch(error => {
@@ -481,6 +486,11 @@ export default {
 
                 return;
             }
+        }
+    },
+    computed: {
+        maxDate() {
+            return moment().format("YYYY-MM-DD");
         }
     },
     created() {

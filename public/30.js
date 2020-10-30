@@ -320,6 +320,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1234,7 +1235,8 @@ var render = function() {
                                         attrs: {
                                           "show-select": "",
                                           headers: _vm.headers,
-                                          items: _vm.permissions
+                                          items: _vm.permissions,
+                                          "group-by": "category"
                                         },
                                         model: {
                                           value: _vm.selected,

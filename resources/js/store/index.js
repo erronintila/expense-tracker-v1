@@ -67,14 +67,14 @@ export const store = new Vuex.Store({
                                 resolve(response);
                             })
                             .catch(error => {
-                                // console.log(error);
+                                console.log(error);
                                 // console.log(error.response);
 
                                 reject(error);
                             });
                     })
                     .catch(error => {
-                        // console.log(error);
+                        console.log(error);
 
                         reject(error);
                     });
@@ -91,17 +91,19 @@ export const store = new Vuex.Store({
 
                         context.commit("SET_AUTHENTICATED", false);
                         context.commit("SET_USER", null);
+                        context.commit("SET_SETTINGS", null);
 
                         resolve(response);
                     })
                     .catch(function(error) {
                         localStorage.removeItem("authenticated");
 
-                        // console.log(error);
+                        console.log(error);
                         // console.log(error.response);
 
                         context.commit("SET_AUTHENTICATED", false);
                         context.commit("SET_USER", null);
+                        context.commit("SET_SETTINGS", null);
 
                         reject(error);
                     });
@@ -127,7 +129,7 @@ export const store = new Vuex.Store({
                         resolve(response.data.data);
                     })
                     .catch(function(error) {
-                        // console.log(error);
+                        console.log(error);
                         // console.log(error.response);
 
                         localStorage.removeItem("authenticated");
@@ -152,7 +154,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(function(error) {
                         console.log(error);
-                        console.log(error.response);
+                        // console.log(error.response);
 
                         context.commit("SET_SETTINGS", null);
 

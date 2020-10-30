@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -449,6 +451,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -639,6 +646,11 @@ __webpack_require__.r(__webpack_exports__);
       this.password = "";
       this.password_confirmation = "";
       this.$refs.form_password.resetValidation();
+    }
+  },
+  computed: {
+    maxDate: function maxDate() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
   },
   created: function created() {
@@ -1580,7 +1592,8 @@ var render = function() {
                                               attrs: {
                                                 transition: "scale-transition",
                                                 "offset-y": "",
-                                                "min-width": "290px"
+                                                "min-width": "290px",
+                                                "close-on-content-click": false
                                               },
                                               scopedSlots: _vm._u([
                                                 {
@@ -1656,7 +1669,8 @@ var render = function() {
                                                 attrs: {
                                                   "no-title": "",
                                                   scrollable: "",
-                                                  color: "success"
+                                                  color: "success",
+                                                  max: _vm.maxDate
                                                 },
                                                 model: {
                                                   value:
@@ -1689,7 +1703,8 @@ var render = function() {
                                               counter: 30,
                                               "error-messages":
                                                 _vm.errors.mobile_number,
-                                              label: "Mobile Number"
+                                              label: "Mobile Number",
+                                              type: "number"
                                             },
                                             on: {
                                               input: function($event) {
@@ -1724,7 +1739,8 @@ var render = function() {
                                               counter: 30,
                                               "error-messages":
                                                 _vm.errors.telephone_number,
-                                              label: "Telephone Number"
+                                              label: "Telephone Number",
+                                              type: "number"
                                             },
                                             on: {
                                               input: function($event) {

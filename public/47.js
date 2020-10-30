@@ -265,6 +265,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -407,6 +408,11 @@ __webpack_require__.r(__webpack_exports__);
         });
         return;
       }
+    }
+  },
+  computed: {
+    maxDate: function maxDate() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
   },
   watch: {
@@ -594,7 +600,8 @@ var render = function() {
                                 attrs: {
                                   "no-title": "",
                                   scrollable: "",
-                                  color: "success"
+                                  color: "success",
+                                  max: _vm.maxDate
                                 },
                                 model: {
                                   value: _vm.form.date,

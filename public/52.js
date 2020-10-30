@@ -224,20 +224,6 @@ var render = function() {
               _c(
                 "v-btn",
                 {
-                  staticClass: "mr-2",
-                  attrs: {
-                    color: "green",
-                    to: { name: "admin.settings.employee" },
-                    outlined: "",
-                    dark: ""
-                  }
-                },
-                [_vm._v("\n                Employee Settings\n            ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
                   attrs: { color: "green", dark: "" },
                   on: { click: _vm.onSave }
                 },

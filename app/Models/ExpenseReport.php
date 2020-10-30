@@ -27,7 +27,7 @@ class ExpenseReport extends Model
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = ['updated_at'];
+    protected static $logAttributesToIgnore = ['updated_at', "updated_by", "paid_at", "paid_by"];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
