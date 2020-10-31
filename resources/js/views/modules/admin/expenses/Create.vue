@@ -883,23 +883,25 @@ export default {
         minDate() {
             let settings = this.$store.getters.settings;
 
-            switch (settings.submission_date) {
-                case "Weekly":
-                    return moment()
-                        .startOf("week")
-                        .format("YYYY-MM-DD");
-                    break;
-                case "Monthly":
-                    return moment()
-                        .startOf("month")
-                        .format("YYYY-MM-DD");
-                    break;
-                default:
-                    return moment()
-                        .startOf("day")
-                        .format("YYYY-MM-DD");
-                    break;
-            }
+            return moment().subtract(settings.expense_encoding_period - 1, 'days').format("YYYY-MM-DD");
+
+            // switch (settings.submission_date) {
+            //     case "Weekly":
+            //         return moment()
+            //             .startOf("week")
+            //             .format("YYYY-MM-DD");
+            //         break;
+            //     case "Monthly":
+            //         return moment()
+            //             .startOf("month")
+            //             .format("YYYY-MM-DD");
+            //         break;
+            //     default:
+            //         return moment()
+            //             .startOf("day")
+            //             .format("YYYY-MM-DD");
+            //         break;
+            // }
         },
         maxDate() {
             let settings = this.$store.getters.settings;

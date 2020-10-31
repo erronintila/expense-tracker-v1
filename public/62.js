@@ -911,20 +911,23 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     minDate: function minDate() {
       var settings = this.$store.getters.settings;
-
-      switch (settings.submission_date) {
-        case "Weekly":
-          return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
-          break;
-
-        case "Monthly":
-          return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
-          break;
-
-        default:
-          return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
-          break;
-      }
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(settings.expense_encoding_period - 1, 'days').format("YYYY-MM-DD"); // switch (settings.submission_date) {
+      //     case "Weekly":
+      //         return moment()
+      //             .startOf("week")
+      //             .format("YYYY-MM-DD");
+      //         break;
+      //     case "Monthly":
+      //         return moment()
+      //             .startOf("month")
+      //             .format("YYYY-MM-DD");
+      //         break;
+      //     default:
+      //         return moment()
+      //             .startOf("day")
+      //             .format("YYYY-MM-DD");
+      //         break;
+      // }
     },
     maxDate: function maxDate() {
       var settings = this.$store.getters.settings;

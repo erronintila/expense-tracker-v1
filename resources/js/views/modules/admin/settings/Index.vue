@@ -40,7 +40,7 @@
                     </v-expansion-panel-content>
                 </v-expansion-panel> -->
 
-                <!-- <v-expansion-panel>
+                <v-expansion-panel>
                     <v-expansion-panel-header>
                         <div class="green--text">
                             Expenses
@@ -52,10 +52,12 @@
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-text-field
+                                            v-model="settings.expense_encoding_period"
                                             label="Expense Encoding Period"
-                                            value="1"
                                             suffix="days"
-                                            :hint="'Allowed period for expenses to be encoded based on date'"
+                                            :hint="
+                                                'Allowed period for expenses to be encoded based on date'
+                                            "
                                             persistent-hint
                                         ></v-text-field>
                                     </v-col>
@@ -63,7 +65,7 @@
                             </v-form>
                         </v-container>
                     </v-expansion-panel-content>
-                </v-expansion-panel> -->
+                </v-expansion-panel>
 
                 <v-expansion-panel>
                     <v-expansion-panel-header>
@@ -77,9 +79,7 @@
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-select
-                                            v-model="
-                                                settings.submission_date
-                                            "
+                                            v-model="settings.submission_date"
                                             label="Submission Date"
                                             :items="[
                                                 'Daily',
@@ -94,9 +94,7 @@
                                     </v-col>
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="
-                                                settings.approval_period
-                                            "
+                                            v-model="settings.approval_period"
                                             label="Approval Period"
                                             suffix="days"
                                             :hint="
@@ -126,6 +124,7 @@ export default {
                 company_name: "Twin-Circa Marketing",
                 currency: "Philippine Peso",
                 expiry_period: 1,
+                expense_encoding_period: 1,
                 submission_date: "Weekly",
                 approval_period: 1
             },

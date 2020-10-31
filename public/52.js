@@ -127,8 +127,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -137,6 +135,7 @@ __webpack_require__.r(__webpack_exports__);
         company_name: "Twin-Circa Marketing",
         currency: "Philippine Peso",
         expiry_period: 1,
+        expense_encoding_period: 1,
         submission_date: "Weekly",
         approval_period: 1
       },
@@ -252,6 +251,76 @@ var render = function() {
                   _c("v-expansion-panel-header", [
                     _c("div", { staticClass: "green--text" }, [
                       _vm._v(
+                        "\n                        Expenses\n                    "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel-content",
+                    [
+                      _c(
+                        "v-container",
+                        [
+                          _c(
+                            "v-form",
+                            { ref: "formExpenses" },
+                            [
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Expense Encoding Period",
+                                          suffix: "days",
+                                          hint:
+                                            "Allowed period for expenses to be encoded based on date",
+                                          "persistent-hint": ""
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings
+                                              .expense_encoding_period,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings,
+                                              "expense_encoding_period",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "settings.expense_encoding_period"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-expansion-panel",
+                [
+                  _c("v-expansion-panel-header", [
+                    _c("div", { staticClass: "green--text" }, [
+                      _vm._v(
                         "\n                        Expense Reports\n                    "
                       )
                     ])
@@ -291,8 +360,7 @@ var render = function() {
                                               $$v
                                             )
                                           },
-                                          expression:
-                                            "\n                                            settings.submission_date\n                                        "
+                                          expression: "settings.submission_date"
                                         }
                                       })
                                     ],
@@ -321,8 +389,7 @@ var render = function() {
                                               $$v
                                             )
                                           },
-                                          expression:
-                                            "\n                                            settings.approval_period\n                                        "
+                                          expression: "settings.approval_period"
                                         }
                                       })
                                     ],
