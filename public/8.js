@@ -486,6 +486,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1039,7 +1040,8 @@ var render = function() {
                     "nudge-width": 200,
                     "offset-y": "",
                     left: "",
-                    bottom: ""
+                    bottom: "",
+                    eager: ""
                   },
                   scopedSlots: _vm._u([
                     {

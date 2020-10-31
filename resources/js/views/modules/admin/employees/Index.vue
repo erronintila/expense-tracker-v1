@@ -52,6 +52,7 @@
                     offset-y
                     left
                     bottom
+                    eager
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
