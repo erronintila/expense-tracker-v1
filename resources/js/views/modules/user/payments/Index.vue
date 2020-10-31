@@ -11,24 +11,6 @@
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
-                            :to="{ name: 'admin.payments.create' }"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Add New</span>
-                </v-tooltip>
-
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
                             dark
                             fab
                             x-small
@@ -135,21 +117,6 @@
                                 Receive Payment(s)
                             </v-list-item-subtitle>
                         </v-list-item>
-
-                        <!-- <v-list-item @click="onUpdate('cancel', 'delete')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Advance Payment
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <!-- <v-list-item  @click="onUpdate('complete', 'put')">
-                            <v-list-item-title>
-                                Complete Transaction(s)
-                            </v-list-item-title>
-                        </v-list-item> -->
                     </v-list>
                 </v-menu>
             </v-card-title>
@@ -310,8 +277,8 @@ export default {
         return {
             loading: true,
             headers: [
-                { text: "Description", value: "description" },
                 { text: "Date", value: "date" },
+                { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status" },
@@ -320,6 +287,7 @@ export default {
             ],
             totalAmount: 0,
             items: [],
+            employee: this.$store.getters.user.employee.id,
             status: "All Payments",
             statuses: [
                 "All Payments",
@@ -328,7 +296,7 @@ export default {
                 // "Unreported Advance Payments",
                 "Released Payments",
                 "Completed Payments",
-                "Cancelled Payments",
+                "Cancelled Payments"
                 // "Approved",
                 // "Released",
                 // "Received",
@@ -385,6 +353,7 @@ export default {
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
                 let range = _this.date_range;
+                let employee_id = _this.employee;
 
                 axios
                     .get("/api/payments", {
@@ -396,7 +365,8 @@ export default {
                             itemsPerPage: itemsPerPage,
                             status: status,
                             start_date: range[0],
-                            end_date: range[1]
+                            end_date: range[1],
+                            employee_id: employee_id,
                         }
                     })
                     .then(response => {
@@ -553,7 +523,8 @@ export default {
                 ...this.options,
                 query: this.search,
                 query: this.status,
-                query: this.date_range
+                query: this.date_range,
+                query: this.employee,
             };
         }
     },
@@ -565,6 +536,6 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-    },
+    }
 };
 </script>

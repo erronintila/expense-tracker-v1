@@ -15,20 +15,6 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="form.description"
-                                :rules="[
-                                    ...mixin_validation.required,
-                                    ...mixin_validation.minLength(100)
-                                ]"
-                                :counter="100"
-                                :error-messages="errors.description"
-                                label="Description *"
-                                required
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                             <v-menu
                                 ref="menu"
                                 v-model="menu"
@@ -57,6 +43,37 @@
                                 >
                                 </v-date-picker>
                             </v-menu>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-autocomplete
+                                v-model="form.employee"
+                                :rules="mixin_validation.required"
+                                :items="employees"
+                                :error-messages="errors.employee"
+                                @input="errors.employee = []"
+                                @change="loadExpenseReports"
+                                item-value="id"
+                                item-text="fullname"
+                                label="Employee *"
+                                return-object
+                                required
+                            >
+                            </v-autocomplete>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="form.description"
+                                :rules="[
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minLength(100)
+                                ]"
+                                :counter="100"
+                                :error-messages="errors.description"
+                                label="Description *"
+                                required
+                            ></v-text-field>
                         </v-col>
 
                         <!-- <v-col cols="12" md="4">
@@ -292,6 +309,7 @@ export default {
             ],
             items: [],
             selected: [],
+            employees: [],
             total: 0,
             form: {
                 code: "",
@@ -306,9 +324,11 @@ export default {
                 payee_address: "",
                 payee_phone: "",
                 remarks: "",
-                notes: ""
+                notes: "",
+                employee: { id: null }
             },
             errors: {
+                employee: [],
                 code: [],
                 reference_no: [],
                 voucher_no: [],
@@ -333,6 +353,24 @@ export default {
             this.date_range = e;
             this.loadExpenseReports();
         },
+        loadEmployees() {
+            let _this = this;
+
+            axios
+                .get("/api/data/employees")
+                .then(response => {
+                    _this.employees = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
+        },
         loadExpenseReports() {
             let start_date = this.date_range[0];
             let end_date = this.date_range[1];
@@ -343,7 +381,8 @@ export default {
                     params: {
                         create_payment: true,
                         start_date: start_date,
-                        end_date: end_date
+                        end_date: end_date,
+                        employee_id: _this.form.employee.id
                     }
                 })
                 .then(response => {
@@ -385,7 +424,8 @@ export default {
                         payee_phone: _this.form.payee_phone,
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
-                        expense_reports: _this.selected
+                        expense_reports: _this.selected,
+                        employee: _this.form.employee.id
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -431,7 +471,8 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-        this.loadExpenseReports();
+        // this.loadExpenseReports();
+        this.loadEmployees();
     }
 };
 </script>

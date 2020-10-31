@@ -86,6 +86,15 @@
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
+                            <v-list-item>
+                                <v-select
+                                    v-model="employee"
+                                    :items="employees"
+                                    item-text="fullname"
+                                    item-value="id"
+                                    label="Employee"
+                                ></v-select>
+                            </v-list-item>
                         </v-list>
                     </v-card>
                 </v-menu>
@@ -261,6 +270,11 @@
                             item.status.status
                         }}</v-chip>
                     </template>
+                    <template v-slot:[`item.employee`]="{ item }">
+                        {{
+                            `${item.employee.last_name}, ${item.employee.first_name} ${item.employee.middle_name}`
+                        }}
+                    </template>
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{ mixin_getHumanDate(item.created_at) }}
                     </template>
@@ -293,6 +307,7 @@
                             <td class="title">Total</td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
@@ -319,8 +334,9 @@ export default {
         return {
             loading: true,
             headers: [
-                { text: "Description", value: "description" },
                 { text: "Date", value: "date" },
+                { text: "Employee", value: "employee" },
+                { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status" },
@@ -329,6 +345,8 @@ export default {
             ],
             totalAmount: 0,
             items: [],
+            employee: 0,
+            employees: [],
             status: "All Payments",
             statuses: [
                 "All Payments",
@@ -337,7 +355,7 @@ export default {
                 // "Unreported Advance Payments",
                 "Released Payments",
                 "Completed Payments",
-                "Cancelled Payments",
+                "Cancelled Payments"
                 // "Approved",
                 // "Released",
                 // "Received",
@@ -383,6 +401,28 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
+        loadEmployees() {
+            let _this = this;
+
+            axios
+                .get("/api/data/employees")
+                .then(response => {
+                    _this.employees = response.data.data;
+                    _this.employees.unshift({
+                        id: 0,
+                        fullname: "All Employees"
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
+        },
         getDataFromApi() {
             let _this = this;
 
@@ -394,6 +434,7 @@ export default {
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
                 let range = _this.date_range;
+                let employee_id = _this.employee;
 
                 axios
                     .get("/api/payments", {
@@ -405,7 +446,8 @@ export default {
                             itemsPerPage: itemsPerPage,
                             status: status,
                             start_date: range[0],
-                            end_date: range[1]
+                            end_date: range[1],
+                            employee_id: employee_id,
                         }
                     })
                     .then(response => {
@@ -433,6 +475,7 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.selected = [];
+            this.loadEmployees();
         },
         onShow(item) {
             this.$router.push({
@@ -562,7 +605,8 @@ export default {
                 ...this.options,
                 query: this.search,
                 query: this.status,
-                query: this.date_range
+                query: this.date_range,
+                query: this.employee,
             };
         }
     },
@@ -574,6 +618,7 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-    },
+        this.loadEmployees();
+    }
 };
 </script>

@@ -330,6 +330,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -341,11 +356,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       loading: true,
       headers: [{
-        text: "Description",
-        value: "description"
-      }, {
         text: "Date",
         value: "date"
+      }, {
+        text: "Employee",
+        value: "employee"
+      }, {
+        text: "Description",
+        value: "description"
       }, {
         text: "Amount",
         value: "amount"
@@ -365,6 +383,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       totalAmount: 0,
       items: [],
+      employee: 0,
+      employees: [],
       status: "All Payments",
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
@@ -393,6 +413,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
+    loadEmployees: function loadEmployees() {
+      var _this = this;
+
+      axios.get("/api/data/employees").then(function (response) {
+        _this.employees = response.data.data;
+
+        _this.employees.unshift({
+          id: 0,
+          fullname: "All Employees"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      });
+    },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -410,6 +447,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var status = _this.status;
         var range = _this.date_range;
+        var employee_id = _this.employee;
         axios.get("/api/payments", {
           params: {
             search: search,
@@ -419,7 +457,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             status: status,
             start_date: range[0],
-            end_date: range[1]
+            end_date: range[1],
+            employee_id: employee_id
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -442,6 +481,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.selected = [];
+      this.loadEmployees();
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -568,7 +608,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.employee), _objectSpread2));
     }
   },
   mounted: function mounted() {
@@ -581,6 +621,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     this.$store.dispatch("AUTH_USER");
+    this.loadEmployees();
   }
 });
 
@@ -816,6 +857,28 @@ var render = function() {
                                     _vm.status = $$v
                                   },
                                   expression: "status"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.employees,
+                                  "item-text": "fullname",
+                                  "item-value": "id",
+                                  label: "Employee"
+                                },
+                                model: {
+                                  value: _vm.employee,
+                                  callback: function($$v) {
+                                    _vm.employee = $$v
+                                  },
+                                  expression: "employee"
                                 }
                               })
                             ],
@@ -1162,6 +1225,25 @@ var render = function() {
                         }
                       },
                       {
+                        key: "item.employee",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(
+                                  item.employee.last_name +
+                                    ", " +
+                                    item.employee.first_name +
+                                    " " +
+                                    item.employee.middle_name
+                                ) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
                         key: "item.created_at",
                         fn: function(ref) {
                           var item = ref.item
@@ -1256,6 +1338,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
+                  _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
                         _c(
@@ -1276,6 +1359,8 @@ var render = function() {
                             _c("td", { staticClass: "title" }, [
                               _vm._v("Total")
                             ]),
+                            _vm._v(" "),
+                            _c("td"),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),

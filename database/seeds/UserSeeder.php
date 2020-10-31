@@ -105,7 +105,7 @@ class UserSeeder extends Seeder
         }
 
         // create roles and assign existing permissions
-
+        
         $roleUser = Role::create(['name' => 'Standard User']);
         $roleUser->givePermissionTo("add expenses");
         $roleUser->givePermissionTo("edit expenses");
@@ -118,6 +118,9 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("view expense reports");
         $roleUser->givePermissionTo("view all expense reports");
         $roleUser->givePermissionTo("submit expense reports");
+        $roleUser->givePermissionTo("view payments");
+        $roleUser->givePermissionTo("view all payments");
+        $roleUser->givePermissionTo("receive payments");
         // $roleUser->givePermissionTo("duplicate expense reports");
         $roleUser->givePermissionTo("add vendors");
         $roleUser->givePermissionTo("edit employees");

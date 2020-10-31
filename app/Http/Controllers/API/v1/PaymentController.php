@@ -54,6 +54,8 @@ class PaymentController extends Controller
             "remarks"  => ['nullable'],
 
             "notes" => ['nullable'],
+
+            "employee" => ['required'],
         ]);
     }
 
@@ -144,6 +146,14 @@ class PaymentController extends Controller
             $payments = $payments->whereBetween("date", [$request->start_date, $request->end_date]);
         }
 
+        if (request()->has('employee_id')) {
+
+            if ($request->employee_id > 0) {
+
+                $payments = $payments->where("employee_id", $request->employee_id);
+            }
+        }
+
         $payments = $payments->where(function ($query) use ($search) {
 
             $query->where('code', "like", "%" . $search . "%");
@@ -211,6 +221,8 @@ class PaymentController extends Controller
 
         $payment->received_at = null;
         //////////
+
+        $payment->employee_id = $request->employee;
 
         $payment->save();
 

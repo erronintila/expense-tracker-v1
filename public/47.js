@@ -266,6 +266,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -299,6 +316,7 @@ __webpack_require__.r(__webpack_exports__);
       }],
       items: [],
       selected: [],
+      employees: [],
       total: 0,
       form: {
         code: "",
@@ -313,9 +331,13 @@ __webpack_require__.r(__webpack_exports__);
         payee_address: "",
         payee_phone: "",
         remarks: "",
-        notes: ""
+        notes: "",
+        employee: {
+          id: null
+        }
       },
       errors: {
+        employee: [],
         code: [],
         reference_no: [],
         voucher_no: [],
@@ -340,6 +362,18 @@ __webpack_require__.r(__webpack_exports__);
       this.date_range = e;
       this.loadExpenseReports();
     },
+    loadEmployees: function loadEmployees() {
+      var _this = this;
+
+      axios.get("/api/data/employees").then(function (response) {
+        _this.employees = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      });
+    },
     loadExpenseReports: function loadExpenseReports() {
       var start_date = this.date_range[0];
       var end_date = this.date_range[1];
@@ -350,7 +384,8 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           create_payment: true,
           start_date: start_date,
-          end_date: end_date
+          end_date: end_date,
+          employee_id: _this.form.employee.id
         }
       }).then(function (response) {
         _this.items = response.data.data;
@@ -386,7 +421,8 @@ __webpack_require__.r(__webpack_exports__);
           payee_phone: _this.form.payee_phone,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          expense_reports: _this.selected
+          expense_reports: _this.selected,
+          employee: _this.form.employee.id
         }).then(function (response) {
           _this.onRefresh();
 
@@ -423,8 +459,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
-    this.loadExpenseReports();
+    this.$store.dispatch("AUTH_USER"); // this.loadExpenseReports();
+
+    this.loadEmployees();
   }
 });
 
@@ -499,32 +536,6 @@ var render = function() {
                   _c(
                     "v-row",
                     [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.minLength(100)
-                              ),
-                              counter: 100,
-                              "error-messages": _vm.errors.description,
-                              label: "Description *",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.form.description,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "description", $$v)
-                              },
-                              expression: "form.description"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c(
                         "v-col",
                         { attrs: { cols: "12", md: "4" } },
@@ -614,6 +625,65 @@ var render = function() {
                             ],
                             1
                           )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-autocomplete", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required,
+                              items: _vm.employees,
+                              "error-messages": _vm.errors.employee,
+                              "item-value": "id",
+                              "item-text": "fullname",
+                              label: "Employee *",
+                              "return-object": "",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.employee = []
+                              },
+                              change: _vm.loadExpenseReports
+                            },
+                            model: {
+                              value: _vm.form.employee,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "employee", $$v)
+                              },
+                              expression: "form.employee"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(100)
+                              ),
+                              counter: 100,
+                              "error-messages": _vm.errors.description,
+                              label: "Description *",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.form.description,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "description", $$v)
+                              },
+                              expression: "form.description"
+                            }
+                          })
                         ],
                         1
                       ),

@@ -189,6 +189,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -202,6 +211,7 @@ __webpack_require__.r(__webpack_exports__);
       menu: false,
       search: "",
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
+      employee: "",
       code: "",
       reference_no: "",
       voucher_no: "",
@@ -259,7 +269,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.payee_phone = data.payee_phone;
         _this.remarks = data.remarks;
         _this.notes = data.notes;
-        _this.items = data.expense_reports; // _this.selected.splice(0, 0, ...data.expenses);
+        _this.items = data.expense_reports;
+        _this.employee = "".concat(data.employee.last_name, ", ").concat(data.employee.first_name, " ").concat(data.employee.middle_name); // _this.selected.splice(0, 0, ...data.expenses);
         // _this.loadExpenses(data.employee.id);
       })["catch"](function (error) {
         console.log(error);
@@ -386,24 +397,6 @@ var render = function() {
                         { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "Description", readonly: "" },
-                            model: {
-                              value: _vm.description,
-                              callback: function($$v) {
-                                _vm.description = $$v
-                              },
-                              expression: "description"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
                             attrs: { label: "Date", readonly: "" },
                             model: {
                               value: _vm.date,
@@ -422,6 +415,42 @@ var render = function() {
                         { attrs: { cols: "12", md: "4" } },
                         [
                           _c("v-text-field", {
+                            attrs: { label: "Employee", readonly: "" },
+                            model: {
+                              value: _vm.employee,
+                              callback: function($$v) {
+                                _vm.employee = $$v
+                              },
+                              expression: "employee"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Description", readonly: "" },
+                            model: {
+                              value: _vm.description,
+                              callback: function($$v) {
+                                _vm.description = $$v
+                              },
+                              expression: "description"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
                             attrs: { label: "Voucher No.", readonly: "" },
                             model: {
                               value: _vm.voucher_no,
@@ -429,60 +458,6 @@ var render = function() {
                                 _vm.voucher_no = $$v
                               },
                               expression: "voucher_no"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Payee", readonly: "" },
-                            model: {
-                              value: _vm.payee,
-                              callback: function($$v) {
-                                _vm.payee = $$v
-                              },
-                              expression: "payee"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Payee Address", readonly: "" },
-                            model: {
-                              value: _vm.payee_address,
-                              callback: function($$v) {
-                                _vm.payee_address = $$v
-                              },
-                              expression: "payee_address"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Payee Phone No.", readonly: "" },
-                            model: {
-                              value: _vm.payee_phone,
-                              callback: function($$v) {
-                                _vm.payee_phone = $$v
-                              },
-                              expression: "payee_phone"
                             }
                           })
                         ],

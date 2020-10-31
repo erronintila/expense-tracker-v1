@@ -14,18 +14,27 @@
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-row>
+
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="description"
-                                label="Description"
+                                v-model="date"
+                                label="Date"
                                 readonly
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="date"
-                                label="Date"
+                                v-model="employee"
+                                label="Employee"
+                                readonly
+                            ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field
+                                v-model="description"
+                                label="Description"
                                 readonly
                             ></v-text-field>
                         </v-col>
@@ -38,7 +47,7 @@
                             ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <!-- <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="payee"
                                 label="Payee"
@@ -60,7 +69,7 @@
                                 label="Payee Phone No."
                                 readonly
                             ></v-text-field>
-                        </v-col>
+                        </v-col> -->
                     </v-row>
 
                     <v-row>
@@ -195,6 +204,7 @@ export default {
                     .endOf("week")
                     .format("YYYY-MM-DD")
             ],
+            employee: "",
             code: "",
             reference_no: "",
             voucher_no: "",
@@ -240,6 +250,7 @@ export default {
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
                     _this.items = data.expense_reports;
+                    _this.employee = `${data.employee.last_name}, ${data.employee.first_name} ${data.employee.middle_name}`
 
                     // _this.selected.splice(0, 0, ...data.expenses);
 

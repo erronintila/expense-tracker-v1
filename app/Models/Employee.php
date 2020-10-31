@@ -54,7 +54,7 @@ class Employee extends Model
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = [ 'updated_at'];
+    protected static $logAttributesToIgnore = ['updated_at'];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
@@ -198,5 +198,10 @@ class Employee extends Model
     public function sub_types()
     {
         return $this->belongsToMany(SubType::class)->withPivot('limit')->withTimestamps();
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

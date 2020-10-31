@@ -157,4 +157,9 @@ class Payment extends Model
     {
         return $this->belongsToMany(Expense::class);
     }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }
