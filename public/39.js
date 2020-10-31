@@ -642,6 +642,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -889,24 +894,29 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     minDate: function minDate() {
+      if (this.mixin_can("add expenses beyond encoding period")) {
+        return null;
+      }
+
       var settings = this.$store.getters.settings;
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(settings.expense_encoding_period - 1, 'days').format("YYYY-MM-DD"); // switch (settings.submission_date) {
-      //     case "Weekly":
-      //         return moment()
-      //             .startOf("week")
-      //             .format("YYYY-MM-DD");
-      //         break;
-      //     case "Monthly":
-      //         return moment()
-      //             .startOf("month")
-      //             .format("YYYY-MM-DD");
-      //         break;
-      //     default:
-      //         return moment()
-      //             .startOf("day")
-      //             .format("YYYY-MM-DD");
-      //         break;
-      // }
+      var submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
+      var encodingMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(settings.expense_encoding_period - 1, "days").format("YYYY-MM-DD");
+
+      switch (settings.submission_date) {
+        case "Weekly":
+          submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
+          break;
+
+        case "Monthly":
+          submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
+          break;
+
+        default:
+          submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+          break;
+      }
+
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(encodingMinDate).isSameOrAfter(submissionMinDate) ? encodingMinDate : submissionMinDate;
     },
     maxDate: function maxDate() {
       var settings = this.$store.getters.settings;
@@ -1434,12 +1444,12 @@ var render = function() {
                                         { staticClass: "grey--text" },
                                         [
                                           _vm._v(
-                                            "\n                                            Due of encoding of expenses : " +
+                                            "\n                                            Due of encoding of expenses :\n                                            " +
                                               _vm._s(
                                                 _vm.$store.getters.settings
                                                   .submission_date
                                               ) +
-                                              " (" +
+                                              "\n                                            (" +
                                               _vm._s(_vm.maxDate) +
                                               ")\n                                        "
                                           )

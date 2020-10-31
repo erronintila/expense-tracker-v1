@@ -127,6 +127,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -277,6 +279,11 @@ var render = function() {
                                         attrs: {
                                           label: "Expense Encoding Period",
                                           suffix: "days",
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
                                           hint:
                                             "Allowed period for expenses to be encoded based on date",
                                           "persistent-hint": ""
@@ -375,6 +382,11 @@ var render = function() {
                                         attrs: {
                                           label: "Approval Period",
                                           suffix: "days",
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
                                           hint:
                                             "Allowed period for expense reports to be approved based on submission date",
                                           "persistent-hint": "",

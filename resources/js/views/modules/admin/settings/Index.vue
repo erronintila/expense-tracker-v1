@@ -55,6 +55,7 @@
                                             v-model="settings.expense_encoding_period"
                                             label="Expense Encoding Period"
                                             suffix="days"
+                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
                                             :hint="
                                                 'Allowed period for expenses to be encoded based on date'
                                             "
@@ -97,6 +98,7 @@
                                             v-model="settings.approval_period"
                                             label="Approval Period"
                                             suffix="days"
+                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
                                             :hint="
                                                 'Allowed period for expense reports to be approved based on submission date'
                                             "
