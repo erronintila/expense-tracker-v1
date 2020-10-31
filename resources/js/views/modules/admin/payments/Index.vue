@@ -541,6 +541,19 @@ export default {
                 return;
             }
 
+            if (
+                action == "receive" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Completed")
+            ) {
+                this.$dialog.message.error("Payment has already been received", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+            
             this.$confirm(`Do you want to ${action} payment(s)?`).then(res => {
                 if (res) {
                     let ids = _this.selected.map(item => {

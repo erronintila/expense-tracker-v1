@@ -549,6 +549,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (action == "receive" && this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Completed")) {
+        this.$dialog.message.error("Payment has already been received", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
       this.$confirm("Do you want to ".concat(action, " payment(s)?")).then(function (res) {
         if (res) {
           var ids = _this.selected.map(function (item) {
