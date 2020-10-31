@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else if (to.matched.some(record => record.meta.requiresVisitor)) {
-        if (!store.getters.isAuthenticated) {
+        if (!store.getters.authenticated) {
             next();
         } else {
             if (store.getters.admin) {
