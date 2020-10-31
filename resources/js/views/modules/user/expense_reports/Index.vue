@@ -355,7 +355,7 @@
                             </h4>
                             <h4 class="grey--text">
                                 Due of submission of expense reports :
-                                {{ $store.getters.settings.submission_date }}
+                                {{ $store.getters.settings.submission_period }}
                                 ({{ maxDate }})
                             </h4>
                             <h4 class="grey--text">
@@ -719,7 +719,7 @@ export default {
                 );
 
                 if (settings) {
-                    switch (settings.submission_date) {
+                    switch (settings.submission_period) {
                         case "Weekly":
                             start = moment()
                                 .startOf("week")
@@ -875,15 +875,15 @@ export default {
                     .includes("Submitted")
             ) {
                 let period = this.$store.getters.settings.approval_period;
-                let submission_date = moment
+                let submission_period = moment
                     .min(this.selected.map(item => moment(item.submitted_at)))
                     .format("YYYY-MM-DD");
-                let last_approval_date = moment(submission_date)
+                let last_approval_date = moment(submission_period)
                     .add(period, "days")
                     .format("YYYY-MM-DD");
 
                 if (this.selected.length !== 0) {
-                    this.warning = `Last Approval Date: ${last_approval_date}; First Submitted Report: ${submission_date}`;
+                    this.warning = `Last Approval Date: ${last_approval_date}; First Submitted Report: ${submission_period}`;
                 } else {
                     this.warning = null;
                 }
@@ -904,7 +904,7 @@ export default {
             let settings = this.$store.getters.settings;
 
             if (settings) {
-                switch (settings.submission_date) {
+                switch (settings.submission_period) {
                     case "Weekly":
                         return moment()
                             .startOf("week")
@@ -935,7 +935,7 @@ export default {
                 .format("YYYY-MM-DD");
 
             if (settings) {
-                switch (settings.submission_date) {
+                switch (settings.submission_period) {
                     case "Weekly":
                         maxDate = moment()
                             .endOf("week")

@@ -26,8 +26,8 @@ class CreateExpenseReportsTable extends Migration
             // ]));
             $table->text('notes')->nullable();
 
-            $table->date('submission_due_date')->nullable();
-            $table->date('approval_due_date')->nullable();
+            $table->text('submission_period', 50)->default("Weekly");
+            $table->integer('approval_period')->default(3);
 
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('reviewed_at')->nullable();

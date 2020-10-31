@@ -861,7 +861,7 @@ __webpack_require__.r(__webpack_exports__);
       var submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
       var encodingMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(settings.expense_encoding_period - 1, 'days').format("YYYY-MM-DD");
 
-      switch (settings.submission_date) {
+      switch (settings.submission_period) {
         case "Weekly":
           submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
           break;
@@ -882,7 +882,7 @@ __webpack_require__.r(__webpack_exports__);
       var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
       var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
 
-      switch (settings.submission_date) {
+      switch (settings.submission_period) {
         case "Weekly":
           maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
           break;
@@ -1372,7 +1372,7 @@ var render = function() {
                                             "\n                                            Due of encoding of expenses : " +
                                               _vm._s(
                                                 _vm.$store.getters.settings
-                                                  .submission_date
+                                                  .submission_period
                                               ) +
                                               " (" +
                                               _vm._s(_vm.maxDate) +

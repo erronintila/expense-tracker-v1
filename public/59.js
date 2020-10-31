@@ -689,7 +689,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }));
 
         if (settings) {
-          switch (settings.submission_date) {
+          switch (settings.submission_period) {
             case "Weekly":
               start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
               end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
@@ -809,13 +809,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return item.status.status;
       }).includes("Submitted")) {
         var period = this.$store.getters.settings.approval_period;
-        var submission_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
+        var submission_period = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
           return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.submitted_at);
         })).format("YYYY-MM-DD");
-        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_date).add(period, "days").format("YYYY-MM-DD");
+        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_period).add(period, "days").format("YYYY-MM-DD");
 
         if (this.selected.length !== 0) {
-          this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_date);
+          this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_period);
         } else {
           this.warning = null;
         }
@@ -834,7 +834,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var settings = this.$store.getters.settings;
 
       if (settings) {
-        switch (settings.submission_date) {
+        switch (settings.submission_period) {
           case "Weekly":
             return moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
             break;
@@ -857,7 +857,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
 
       if (settings) {
-        switch (settings.submission_date) {
+        switch (settings.submission_period) {
           case "Weekly":
             maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
             break;
@@ -1780,7 +1780,7 @@ var render = function() {
                         _vm._v(
                           "\n                            Due of submission of expense reports :\n                            " +
                             _vm._s(
-                              _vm.$store.getters.settings.submission_date
+                              _vm.$store.getters.settings.submission_period
                             ) +
                             "\n                            (" +
                             _vm._s(_vm.maxDate) +

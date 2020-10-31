@@ -177,9 +177,9 @@ class UserSeeder extends Seeder
             "user_id" => $user->id,
         ]);
 
-        Setting::set("expense_encoding_period", 1);
-        Setting::set("submission_date", "Weekly");
-        Setting::set("approval_period", 1);
+        Setting::set("expense_encoding_period", 2);
+        Setting::set("submission_period", "Weekly");
+        Setting::set("approval_period", 3);
         Setting::save();
     }
 }

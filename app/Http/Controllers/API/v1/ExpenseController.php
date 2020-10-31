@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use anlutro\LaravelSettings\Facade as Setting;
 
 class ExpenseController extends Controller
 {
@@ -266,6 +267,8 @@ class ExpenseController extends Controller
 
         $expense->is_tax_inclusive = $request->is_tax_inclusive;
 
+        $expense->encoding_period = setting("encoding_period");
+
         $expense->save();
 
         return response(
@@ -381,6 +384,7 @@ class ExpenseController extends Controller
 
                 $expense->is_tax_inclusive = $request->is_tax_inclusive;
 
+                $expense->encoding_period = setting("encoding_period");
 
                 $expense->save();
 

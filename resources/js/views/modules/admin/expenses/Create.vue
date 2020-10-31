@@ -173,7 +173,7 @@
                                                 Due of encoding of expenses :
                                                 {{
                                                     $store.getters.settings
-                                                        .submission_date
+                                                        .submission_period
                                                 }}
                                                 ({{ maxDate }})
                                             </small>
@@ -896,7 +896,7 @@ export default {
                 .subtract(settings.expense_encoding_period - 1, "days")
                 .format("YYYY-MM-DD");
 
-            switch (settings.submission_date) {
+            switch (settings.submission_period) {
                 case "Weekly":
                     submissionMinDate = moment()
                         .startOf("week")
@@ -923,7 +923,7 @@ export default {
             let today = moment().format("YYYY-MM-DD");
             let maxDate = moment().endOf("day");
 
-            switch (settings.submission_date) {
+            switch (settings.submission_period) {
                 case "Weekly":
                     maxDate = moment()
                         .endOf("week")

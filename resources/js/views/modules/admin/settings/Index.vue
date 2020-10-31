@@ -80,7 +80,7 @@
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-select
-                                            v-model="settings.submission_date"
+                                            v-model="settings.submission_period"
                                             label="Submission Date"
                                             :items="[
                                                 'Daily',
@@ -127,7 +127,7 @@ export default {
                 currency: "Philippine Peso",
                 expiry_period: 1,
                 expense_encoding_period: 1,
-                submission_date: "Weekly",
+                submission_period: "Weekly",
                 approval_period: 1
             },
             panel: [0, 1, 2, 3]

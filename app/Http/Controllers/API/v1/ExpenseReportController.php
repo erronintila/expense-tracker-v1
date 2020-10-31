@@ -207,9 +207,11 @@ class ExpenseReportController extends Controller
 
         $expense_report->notes = $request->notes;
 
-        $expense_report->save();
-
         $expense_report->code = generate_code(ExpenseReport::class, "EXR", 10);
+
+        $expense_report->submission_period = setting("submission_period");
+
+        $expense_report->approval_period = setting("approval_period");
 
         $expense_report->save();
 
@@ -521,7 +523,7 @@ class ExpenseReportController extends Controller
 
                         return response("Action can't be performed", 422);
                     }
-                    
+
                     if ($expense_report->payment_id > 0) {
 
                         return response("Expense Report already has payment", 422);
@@ -535,6 +537,10 @@ class ExpenseReportController extends Controller
                 $expense_report->remarks = $request->remarks;
 
                 $expense_report->notes = $request->notes;
+
+                $expense_report->submission_period = setting("submission_period");
+
+                $expense_report->approval_period = setting("approval_period");
 
                 $expense_report->save();
 

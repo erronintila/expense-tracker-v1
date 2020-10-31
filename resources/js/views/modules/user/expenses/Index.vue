@@ -364,7 +364,7 @@
                                 Note:
                             </h4>
                             <h4 class="grey--text">
-                                Due of encoding and submission of expenses : {{ $store.getters.settings.submission_date}} ({{ maxDate }})
+                                Due of encoding and submission of expenses : {{ $store.getters.settings.submission_period}} ({{ maxDate }})
                             </h4>
                         </div>
                     </v-col>
@@ -752,7 +752,7 @@ export default {
                 .format("YYYY-MM-DD");
 
             if (settings) {
-                switch (settings.submission_date) {
+                switch (settings.submission_period) {
                     case "Weekly":
                         maxDate = moment()
                             .endOf("week")

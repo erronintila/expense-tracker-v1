@@ -38,7 +38,7 @@ class CreateExpensesTable extends Migration
             // ]));
             $table->text('notes')->nullable();
 
-            $table->date('expiry_date')->nullable();
+            $table->integer('encoding_period')->default(2);
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('sub_type_id')->nullable();

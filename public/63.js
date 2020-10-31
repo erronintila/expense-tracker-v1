@@ -726,7 +726,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
 
       if (settings) {
-        switch (settings.submission_date) {
+        switch (settings.submission_period) {
           case "Weekly":
             maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
             break;
@@ -1609,7 +1609,7 @@ var render = function() {
                         _vm._v(
                           "\n                            Due of encoding and submission of expenses : " +
                             _vm._s(
-                              _vm.$store.getters.settings.submission_date
+                              _vm.$store.getters.settings.submission_period
                             ) +
                             " (" +
                             _vm._s(_vm.maxDate) +

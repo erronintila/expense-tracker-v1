@@ -138,7 +138,7 @@ __webpack_require__.r(__webpack_exports__);
         currency: "Philippine Peso",
         expiry_period: 1,
         expense_encoding_period: 1,
-        submission_date: "Weekly",
+        submission_period: "Weekly",
         approval_period: 1
       },
       panel: [0, 1, 2, 3]
@@ -359,15 +359,16 @@ var render = function() {
                                           "persistent-hint": ""
                                         },
                                         model: {
-                                          value: _vm.settings.submission_date,
+                                          value: _vm.settings.submission_period,
                                           callback: function($$v) {
                                             _vm.$set(
                                               _vm.settings,
-                                              "submission_date",
+                                              "submission_period",
                                               $$v
                                             )
                                           },
-                                          expression: "settings.submission_date"
+                                          expression:
+                                            "settings.submission_period"
                                         }
                                       })
                                     ],
