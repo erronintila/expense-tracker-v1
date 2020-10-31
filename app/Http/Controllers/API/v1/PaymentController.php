@@ -16,7 +16,7 @@ class PaymentController extends Controller
         $this->middleware(['permission:view all payments'], ['only' => ['index']]);
         $this->middleware(['permission:view payments'], ['only' => ['show']]);
         $this->middleware(['permission:add payments'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:edit payments'], ['only' => ['edit', 'update']]);
+        // $this->middleware(['permission:edit payments'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete payments'], ['only' => ['destroy']]);
     }
 
@@ -332,6 +332,11 @@ class PaymentController extends Controller
 
                 break;
             case 'receive':
+
+                if (!app("auth")->user()->hasPermissionTo('receive payments')) {
+
+                    abort(403);
+                }
 
                 foreach ($request->ids as $id) {
 

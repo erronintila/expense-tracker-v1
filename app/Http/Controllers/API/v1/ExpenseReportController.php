@@ -329,7 +329,7 @@ class ExpenseReportController extends Controller
 
             case 'cancel':
 
-                if (!app("auth")->user()->hasPermissionTo('approve expense reports')) {
+                if (!app("auth")->user()->hasPermissionTo('cancel expense reports')) {
 
                     abort(403);
                 }
@@ -390,6 +390,11 @@ class ExpenseReportController extends Controller
                 break;
 
             case 'duplicate':
+
+                if (!app("auth")->user()->hasPermissionTo('duplicate expense reports')) {
+
+                    abort(403);
+                }
 
                 foreach ($request->ids as $value) {
 

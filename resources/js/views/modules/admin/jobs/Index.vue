@@ -7,7 +7,7 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add jobs')">
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -165,7 +165,7 @@
                     class="elevation-0"
                 >
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onEdit(item)">
+                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit jobs')">
                             mdi-pencil
                         </v-icon>
                     </template>

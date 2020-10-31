@@ -77,6 +77,10 @@ export default {
                 }
             });
         },
+        mixin_can(permissionName) {
+            let permissions = this.$store.getters.user.permissions;
+            return permissions.indexOf(permissionName) !== -1;
+        }
     },
     computed: {
         mixin_currentUser() {

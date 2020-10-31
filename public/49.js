@@ -673,44 +673,50 @@ var render = function() {
                 "v-tooltip",
                 {
                   attrs: { bottom: "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                {
-                                  staticClass: "elevation-3 mr-2",
-                                  attrs: {
-                                    color: "green",
-                                    to: { name: "admin.payments.create" },
-                                    dark: "",
-                                    fab: "",
-                                    "x-small": ""
-                                  }
-                                },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-plus")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
+                  scopedSlots: _vm._u(
+                    [
+                      _vm.mixin_can("add payments")
+                        ? {
+                            key: "activator",
+                            fn: function(ref) {
+                              var on = ref.on
+                              var attrs = ref.attrs
+                              return [
+                                _c(
+                                  "v-btn",
+                                  _vm._g(
+                                    _vm._b(
+                                      {
+                                        staticClass: "elevation-3 mr-2",
+                                        attrs: {
+                                          color: "green",
+                                          to: { name: "admin.payments.create" },
+                                          dark: "",
+                                          fab: "",
+                                          "x-small": ""
+                                        }
+                                      },
+                                      "v-btn",
+                                      attrs,
+                                      false
+                                    ),
+                                    on
+                                  ),
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-plus")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        : null
+                    ],
+                    null,
+                    true
+                  )
                 },
                 [_vm._v(" "), _c("span", [_vm._v("Add New")])]
               ),

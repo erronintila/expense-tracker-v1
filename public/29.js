@@ -328,6 +328,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -484,6 +485,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadJobs();
     this.loadExpenseTypes();
     this.loadPermissions();
@@ -1216,6 +1218,7 @@ var render = function() {
                                     ? _c("v-data-table", {
                                         attrs: {
                                           "show-select": "",
+                                          "items-per-page": -1,
                                           headers: _vm.headers,
                                           items: _vm.permissions,
                                           "group-by": "category"

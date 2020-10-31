@@ -7,7 +7,10 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add expense reports')"
+                    >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -349,7 +352,7 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)">
+                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit expense reports')">
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -811,10 +814,10 @@ export default {
                 if (
                     !moment(
                         moment(expense_min_date).format("YYYY-MM-DD")
-                    ).isBetween(start, end, undefined, '[]') ||
+                    ).isBetween(start, end, undefined, "[]") ||
                     !moment(
                         moment(expense_max_date).format("YYYY-MM-DD")
-                    ).isBetween(start, end, undefined, '[]')
+                    ).isBetween(start, end, undefined, "[]")
                 ) {
                     this.mixin_errorDialog(
                         "Error",
@@ -877,7 +880,14 @@ export default {
                     .add(period, "days")
                     .format("YYYY-MM-DD");
 
-                if (!moment(today).isBetween(submission_date, last_approval_date, undefined, '[]')) {
+                if (
+                    !moment(today).isBetween(
+                        submission_date,
+                        last_approval_date,
+                        undefined,
+                        "[]"
+                    )
+                ) {
                     this.mixin_errorDialog(
                         "Error",
                         "Approval of reports beyond due date is not allowed"

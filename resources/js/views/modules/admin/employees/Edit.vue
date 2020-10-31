@@ -286,6 +286,7 @@
                                         v-if="form.role == 'Administrator'"
                                         v-model="selected"
                                         show-select
+                                        :items-per-page="-1"
                                         :headers="headers"
                                         :items="permissions"
                                         group-by="category"
@@ -529,6 +530,7 @@ export default {
         },
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadJobs();
         this.loadExpenseTypes();
         this.getData();

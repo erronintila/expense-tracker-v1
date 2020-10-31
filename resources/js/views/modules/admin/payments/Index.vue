@@ -7,7 +7,7 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add payments')">
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"

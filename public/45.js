@@ -462,44 +462,50 @@ var render = function() {
                 "v-tooltip",
                 {
                   attrs: { bottom: "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                {
-                                  staticClass: "elevation-3 mr-2",
-                                  attrs: {
-                                    color: "green",
-                                    to: { name: "admin.jobs.create" },
-                                    dark: "",
-                                    fab: "",
-                                    "x-small": ""
-                                  }
-                                },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-plus")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
+                  scopedSlots: _vm._u(
+                    [
+                      _vm.mixin_can("add jobs")
+                        ? {
+                            key: "activator",
+                            fn: function(ref) {
+                              var on = ref.on
+                              var attrs = ref.attrs
+                              return [
+                                _c(
+                                  "v-btn",
+                                  _vm._g(
+                                    _vm._b(
+                                      {
+                                        staticClass: "elevation-3 mr-2",
+                                        attrs: {
+                                          color: "green",
+                                          to: { name: "admin.jobs.create" },
+                                          dark: "",
+                                          fab: "",
+                                          "x-small": ""
+                                        }
+                                      },
+                                      "v-btn",
+                                      attrs,
+                                      false
+                                    ),
+                                    on
+                                  ),
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-plus")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        : null
+                    ],
+                    null,
+                    true
+                  )
                 },
                 [_vm._v(" "), _c("span", [_vm._v("Add New")])]
               ),
@@ -859,23 +865,25 @@ var render = function() {
                       fn: function(ref) {
                         var item = ref.item
                         return [
-                          _c(
-                            "v-icon",
-                            {
-                              staticClass: "mr-2",
-                              attrs: { small: "" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.onEdit(item)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        mdi-pencil\n                    "
+                          _vm.mixin_can("edit jobs")
+                            ? _c(
+                                "v-icon",
+                                {
+                                  staticClass: "mr-2",
+                                  attrs: { small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.onEdit(item)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        mdi-pencil\n                    "
+                                  )
+                                ]
                               )
-                            ]
-                          )
+                            : _vm._e()
                         ]
                       }
                     }

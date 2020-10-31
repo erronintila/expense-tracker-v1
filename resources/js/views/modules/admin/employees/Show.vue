@@ -438,6 +438,7 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.getData();
         this.getExpenseStats();
     }

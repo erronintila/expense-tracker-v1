@@ -6,7 +6,7 @@
             <v-spacer></v-spacer>
 
             <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
+                <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add departments')">
                     <v-btn
                         class="elevation-3 mr-2"
                         color="green"
@@ -155,7 +155,7 @@
                     <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon> -->
-                    <v-icon small class="mr-2" @click="onEdit(item)">
+                    <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit departments')">
                         mdi-pencil
                     </v-icon>
                 </template>

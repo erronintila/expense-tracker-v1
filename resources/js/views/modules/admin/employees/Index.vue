@@ -7,7 +7,10 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add employees')"
+                    >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -261,6 +264,7 @@
                             mdi-eye
                         </v-icon>
                         <v-icon
+                            v-if="mixin_can('edit employees')"
                             small
                             class="mr-2"
                             @click="
