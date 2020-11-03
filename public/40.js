@@ -614,6 +614,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -845,6 +846,24 @@ __webpack_require__.r(__webpack_exports__);
     },
     onSave: function onSave() {
       var _this = this;
+
+      if (_this.form.employee.id == null) {
+        _this.$dialog.message.error("No Employee Selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
+
+      if (_this.form.expense_type.id == null) {
+        _this.$dialog.message.error("No Expense Type Selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
 
       _this.$refs.form.validate();
 
@@ -1639,6 +1658,11 @@ var render = function() {
                                       _c("v-text-field", {
                                         attrs: {
                                           label: "Amount",
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
                                           readonly: _vm.itemize,
                                           type: "number"
                                         },

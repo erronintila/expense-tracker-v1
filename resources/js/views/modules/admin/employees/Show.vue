@@ -51,8 +51,24 @@
                                                 {{ mobile_number }}<br />
                                                 {{ email }}
                                             </div>
-                                            Revolving Fund:
-                                            <div
+                                            <div>
+                                                Revolving Fund:
+                                            </div>
+                                            
+                                            <v-btn text class="green--text" @click="validateFund">
+                                                {{
+                                                    remaining_fund == fund
+                                                        ? `${mixin_formatNumber(
+                                                              remaining_fund
+                                                          )}`
+                                                        : `${mixin_formatNumber(
+                                                              remaining_fund
+                                                          )} / ${mixin_formatNumber(
+                                                              fund
+                                                          )}`
+                                                }}
+                                            </v-btn>
+                                            <!-- <div
                                                 class="text-sm-body-2 text-md-body-1 text-lg-h6 text-xl-h4 green--text"
                                             >
                                                 {{
@@ -66,7 +82,7 @@
                                                               fund
                                                           )}`
                                                 }}
-                                            </div>
+                                            </div> -->
                                         </v-col>
                                     </v-row>
                                 </v-card-text>
@@ -362,6 +378,12 @@ export default {
         };
     },
     methods: {
+        validateFund() {
+            axios.get("/api/data/validateFund").then(response => {}).catch(error => {
+                console.log(error);
+                console.log(error.reponse);
+            });
+        },
         getData() {
             let _this = this;
 

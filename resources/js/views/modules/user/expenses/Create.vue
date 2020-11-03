@@ -246,6 +246,7 @@
                                         <v-text-field
                                             v-model="form.amount"
                                             label="Amount"
+                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
                                             :readonly="itemize"
                                             type="number"
                                         ></v-text-field>
@@ -738,6 +739,32 @@ export default {
             let _this = this;
 
             _this.$refs.form.validate();
+
+            if (
+                _this.form.employee.id == null
+            ) {
+                _this.$dialog.message.error(
+                    "No Employee Selected",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
+
+            if (
+                _this.form.expense_type.id == null
+            ) {
+                _this.$dialog.message.error(
+                    "No Expense Type Selected",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
 
             if (
                 _this.amount_to_replenish > _this.form.employee.remaining_fund

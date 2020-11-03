@@ -336,6 +336,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -378,6 +394,12 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    validateFund: function validateFund() {
+      axios.get("/api/data/validateFund").then(function (response) {})["catch"](function (error) {
+        console.log(error);
+        console.log(error.reponse);
+      });
+    },
     getData: function getData() {
       var _this = this;
 
@@ -615,14 +637,21 @@ var render = function() {
                                                     )
                                                   ]
                                                 ),
-                                                _vm._v(
-                                                  "\n                                        Revolving Fund:\n                                        "
-                                                ),
+                                                _vm._v(" "),
+                                                _c("div", [
+                                                  _vm._v(
+                                                    "\n                                            Revolving Fund:\n                                        "
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
                                                 _c(
-                                                  "div",
+                                                  "v-btn",
                                                   {
-                                                    staticClass:
-                                                      "text-sm-body-2 text-md-body-1 text-lg-h6 text-xl-h4 green--text"
+                                                    staticClass: "green--text",
+                                                    attrs: { text: "" },
+                                                    on: {
+                                                      click: _vm.validateFund
+                                                    }
                                                   },
                                                   [
                                                     _vm._v(
@@ -646,7 +675,8 @@ var render = function() {
                                                     )
                                                   ]
                                                 )
-                                              ]
+                                              ],
+                                              1
                                             )
                                           ],
                                           1

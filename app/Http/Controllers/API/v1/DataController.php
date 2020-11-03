@@ -726,4 +726,9 @@ class DataController extends Controller
             "expenses" => ""
         ]);
     }
+
+    public function validateFund() {
+        $this->validateFund();
+        return response("Validated fund", 200);
+    }
 }

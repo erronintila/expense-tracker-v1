@@ -30,9 +30,14 @@
                                         </div> -->
                                         <div class="paragraph-text mt-2">
                                             <br />
-                                            <br />Try going back to previous page
-                                            and repeating your action. Or,
+                                            <br />Try going back to previous
+                                            page and repeating your action. Or,
                                             contact helpdesk for support.
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <v-btn @click="$router.go(-1)">Go back</v-btn>
+                                            <v-btn :to="`${isAdmin ? '/admin/' : '/'}dashboard`">Go to dashboard</v-btn>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -51,6 +56,14 @@ export default {
         return {
             src: require("../../assets/img/500.svg")
         };
-    }
+    },
+    computed: {
+        isAdmin() {
+            return this.$store.getters.admin;
+        }
+    },
+    mounted() {
+        // console.log(this.$store.getters.admin);
+    },
 };
 </script>

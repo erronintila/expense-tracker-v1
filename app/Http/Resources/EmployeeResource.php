@@ -45,7 +45,7 @@ class EmployeeResource extends JsonResource
             'permissions' => $user->getAllPermissions(),
             'expense_types' => ExpenseTypeResource::collection($this->expense_types),
             'pivot_expense_types' => $this->expense_types,
-            'pivot_sub_types' => $this->sub_types
+            'pivot_sub_types' => $this->sub_types,
         ];
     }
 }

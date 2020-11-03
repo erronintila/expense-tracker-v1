@@ -430,9 +430,9 @@ class ExpenseReportController extends Controller
 
                     $new_report->deleted_by = null;
 
-                    $new_report->save();
+                    // $new_report->save();
 
-                    $new_report->code = "ER" . date("Y") . str_pad($new_report->id, 5, '0', STR_PAD_LEFT);
+                    $new_report->code = generate_code(ExpenseReport::class, "EXR", 10);
 
                     $new_report->save();
 
@@ -441,6 +441,8 @@ class ExpenseReportController extends Controller
                         $expense = Expense::withTrashed()->find($value["id"]);
 
                         $new_expense = $expense->replicate();
+
+                        $new_expense->code = generate_code(ExpenseReport::class, "EXP", 10);;
 
                         $new_expense->submitted_at = null;
 
@@ -651,7 +653,7 @@ class ExpenseReportController extends Controller
         $this->logUpdateActivity($expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled);
     }
 
-    public function updateExpense(Expense $expense, $reviewed, $submitted, $approved, $rejected, $cancelled)
+    public function updateExpense(Expense $expense, $submitted, $reviewed, $approved, $rejected, $cancelled)
     {
         $expense->submitted_at = $submitted ? now() : $expense->submitted_at;
         $expense->reviewed_at = $reviewed ? now() : $expense->reviewed_at;

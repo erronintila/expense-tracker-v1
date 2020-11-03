@@ -427,6 +427,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -771,8 +776,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_min_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "[]") || !moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_max_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "[]")) {
           this.mixin_errorDialog("Error", "Submission of expenses beyond due date is not allowed");
           return;
-        } // console.log("congrats");
-
+        }
       }
 
       if (action == "approve" && this.selected.map(function (item) {
@@ -894,8 +898,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, 0));
     },
     selected: function selected() {
-      console.log(this.selected.length);
-
       if (this.selected.map(function (item) {
         return item.status.status;
       }).includes("Submitted")) {
@@ -904,12 +906,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.submitted_at);
         })).format("YYYY-MM-DD");
         var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_period).add(period, "days").format("YYYY-MM-DD");
-
-        if (this.selected.length !== 0) {
-          this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_period);
-        } else {
-          this.warning = null;
-        }
+        this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_period);
+      } else if (this.selected.length == 0) {
+        this.warning = null;
       }
     }
   },

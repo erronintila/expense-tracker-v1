@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Expense;
+use Illuminate\Support\Facades\Auth;
+
 if (!function_exists('generate_code')) {
 
     function generate_code($model, $prefix, $minLength)
@@ -13,6 +16,24 @@ if (!function_exists('generate_code')) {
         $ref = $prefix . date("Ym") . str_pad($data + 1, $minLength, '0', STR_PAD_LEFT);
 
         return $ref;
+    }
+}
+
+if (!function_exists('validated_remaining_fund')) {
+
+    function validated_remaining_fund()
+    {
+        $employee = Auth::user()->employee;
+
+        $expenses = Expense::where("employee_id", $employee->id)
+            ->where("cancelled_at", null)
+            ->where("rejected_at", null)
+            ->where("deleted_at", null)
+            ->get();
+
+        $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
+
+        return $employee->fund - $deduct;
     }
 }
 

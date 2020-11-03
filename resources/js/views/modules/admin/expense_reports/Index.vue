@@ -352,7 +352,12 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit expense reports')">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="mixin_can('edit expense reports')"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -825,8 +830,6 @@ export default {
                     );
                     return;
                 }
-
-                // console.log("congrats");
             }
 
             if (
@@ -982,7 +985,6 @@ export default {
             );
         },
         selected() {
-            console.log(this.selected.length);
             if (
                 this.selected
                     .map(item => item.status.status)
@@ -996,11 +998,9 @@ export default {
                     .add(period, "days")
                     .format("YYYY-MM-DD");
 
-                if (this.selected.length !== 0) {
-                    this.warning = `Last Approval Date: ${last_approval_date}; First Submitted Report: ${submission_period}`;
-                } else {
-                    this.warning = null;
-                }
+                this.warning = `Last Approval Date: ${last_approval_date}; First Submitted Report: ${submission_period}`;
+            } else if (this.selected.length == 0) {
+                this.warning = null;
             }
         }
     },

@@ -52,11 +52,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       src: __webpack_require__(/*! ../../assets/img/403.svg */ "./resources/js/assets/img/403.svg")
     };
+  },
+  computed: {
+    isAdmin: function isAdmin() {
+      return this.$store.getters.admin;
+    }
   }
 });
 
@@ -155,15 +165,45 @@ var render = function() {
                                         "div",
                                         { staticClass: "paragraph-text mt-2" },
                                         [
+                                          _c("br"),
+                                          _vm._v(" "),
+                                          _c("br"),
                                           _vm._v(
-                                            "\n                                        Contact helpdesk for support.\n                                        "
-                                          ),
-                                          _c("br"),
-                                          _vm._v(" "),
-                                          _c("br"),
-                                          _vm._v(" "),
-                                          _c("br")
+                                            "Try going back to previous\n                                        page and repeating your action. Or,\n                                        contact helpdesk for support.\n                                    "
+                                          )
                                         ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "mt-4" },
+                                        [
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.$router.go(-1)
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("Go back")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                to:
+                                                  (_vm.isAdmin
+                                                    ? "/admin/"
+                                                    : "/") + "dashboard"
+                                              }
+                                            },
+                                            [_vm._v("Go to dashboard")]
+                                          )
+                                        ],
+                                        1
                                       )
                                     ]
                                   )

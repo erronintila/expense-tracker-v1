@@ -107,6 +107,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/permissions', 'API\v1\DataController@permissions');
 
+    Route::get('/data/validateFund', 'API\v1\DataController@validateFund');
+
 
 
 

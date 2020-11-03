@@ -267,7 +267,7 @@ class ExpenseController extends Controller
 
         $expense->is_tax_inclusive = $request->is_tax_inclusive;
 
-        $expense->encoding_period = setting("encoding_period");
+        $expense->encoding_period = setting("expense_encoding_period");
 
         $expense->save();
 
@@ -384,7 +384,7 @@ class ExpenseController extends Controller
 
                 $expense->is_tax_inclusive = $request->is_tax_inclusive;
 
-                $expense->encoding_period = setting("encoding_period");
+                $expense->encoding_period = setting("expense_encoding_period");
 
                 $expense->save();
 
