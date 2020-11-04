@@ -1,19 +1,19 @@
 <template>
     <div>
-        <PrintDetailed></PrintDetailed>
+        <ShowSummary></ShowSummary>
     </div>
 </template>
 
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import PrintDetailed from "./components/PrintDetailed";
-import PrintSummary from "./components/PrintSummary";
+import ShowDetailed from "./components/ShowDetailed";
+import ShowSummary from "./components/ShowSummary";
 
 export default {
     components: {
-        PrintDetailed,
-        PrintSummary
+        ShowSummary,
+        ShowDetailed
     },
 };
 </script>

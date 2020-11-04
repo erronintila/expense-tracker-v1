@@ -193,7 +193,15 @@
                         <v-btn
                             color="green"
                             dark
-                            :to="{ name: 'admin.expense_reports.print' }"
+                            :to="{ name: 'admin.expense_reports.detailed' }"
+                        >
+                            View Detailed
+                        </v-btn>
+
+                        <v-btn
+                            color="green"
+                            dark
+                            :to="{ name: 'admin.expense_reports.summary' }"
                         >
                             View Summary
                         </v-btn>
@@ -246,7 +254,7 @@ export default {
             headers: [
                 { text: "Date", value: "date", sortable: false },
                 {
-                    text: "Description",
+                    text: "Type",
                     value: "expense_type.name",
                     sortable: false
                 },

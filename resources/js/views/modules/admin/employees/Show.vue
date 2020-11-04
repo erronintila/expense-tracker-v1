@@ -54,8 +54,12 @@
                                             <div>
                                                 Revolving Fund:
                                             </div>
-                                            
-                                            <v-btn text class="green--text" @click="validateFund">
+
+                                            <v-btn
+                                                text
+                                                class="green--text"
+                                                @click="validateFund"
+                                            >
                                                 {{
                                                     remaining_fund == fund
                                                         ? `${mixin_formatNumber(
@@ -178,7 +182,9 @@
                                         :elevation="hover ? 5 : 2"
                                     >
                                         <v-card-title class="green--text">{{
-                                            mixin_formatNumber(total_reimbursements)
+                                            mixin_formatNumber(
+                                                total_reimbursements
+                                            )
                                         }}</v-card-title>
                                         <v-card-subtitle>
                                             Reimbursements
@@ -357,6 +363,7 @@ export default {
 
             selection: 1,
             panel: 0,
+            id: "",
             fullname: "",
             first_name: "",
             middle_name: "",
@@ -379,9 +386,13 @@ export default {
     },
     methods: {
         validateFund() {
-            axios.get("/api/data/validateFund").then(response => {}).catch(error => {
+            let _this = this;
+
+            axios.get(`/api/data/validateFund?id=${this.id}`).then(response => {
+                _this.getData();
+            }).catch(error => {
                 console.log(error);
-                console.log(error.reponse);
+                console.log(error.response);
             });
         },
         getData() {
@@ -392,6 +403,7 @@ export default {
                 .then(function(response) {
                     let data = response.data.data;
 
+                    _this.id = data.id;
                     _this.fullname = data.fullname;
                     _this.first_name = data.first_name;
                     _this.middle_name = data.middle_name;

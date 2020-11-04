@@ -190,6 +190,7 @@
                         <!-- <v-btn color="green" dark @click="onEdit"
                             >Edit Details</v-btn
                         > -->
+                        
                         <v-btn
                             color="green"
                             dark
@@ -246,7 +247,7 @@ export default {
             headers: [
                 { text: "Date", value: "date", sortable: false },
                 {
-                    text: "Description",
+                    text: "Type",
                     value: "expense_type.name",
                     sortable: false
                 },

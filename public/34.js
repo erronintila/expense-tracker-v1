@@ -232,6 +232,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -253,7 +261,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         value: "date",
         sortable: false
       }, {
-        text: "Description",
+        text: "Type",
         value: "expense_type.name",
         sortable: false
       }, {
@@ -814,7 +822,23 @@ var render = function() {
                           attrs: {
                             color: "green",
                             dark: "",
-                            to: { name: "admin.expense_reports.print" }
+                            to: { name: "admin.expense_reports.detailed" }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        View Detailed\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "green",
+                            dark: "",
+                            to: { name: "admin.expense_reports.summary" }
                           }
                         },
                         [

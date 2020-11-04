@@ -19,23 +19,27 @@ if (!function_exists('generate_code')) {
     }
 }
 
-if (!function_exists('validated_remaining_fund')) {
+// if (!function_exists('validate_remaining_fund')) {
 
-    function validated_remaining_fund()
-    {
-        $employee = Auth::user()->employee;
+//     function validate_remaining_fund()
+//     {
+//         $employee = Auth::user()->employee;
 
-        $expenses = Expense::where("employee_id", $employee->id)
-            ->where("cancelled_at", null)
-            ->where("rejected_at", null)
-            ->where("deleted_at", null)
-            ->get();
+//         $expenses = Expense::where("employee_id", $employee->id)
+//             ->where("cancelled_at", null)
+//             ->where("rejected_at", null)
+//             ->where("deleted_at", null)
+//             ->get();
 
-        $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
+//         $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
 
-        return $employee->fund - $deduct;
-    }
-}
+//         // return $employee->fund - $deduct;
+
+//         $employee->remaining_fund = $employee->fund - $deduct;
+
+//         $employee->save();
+//     }
+// }
 
 // if (!function_exists('add_note')) {
 

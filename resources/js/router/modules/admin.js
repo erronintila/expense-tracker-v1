@@ -666,12 +666,28 @@ const adminRoutes = [
                     }
                 }
             },
+            // {
+            //     path: "/admin/expense_reports/print/:id",
+            //     name: "admin.expense_reports.print",
+            //     component: () =>
+            //         import(
+            //             "../../views/modules/admin/expense_reports/Print.vue"
+            //         )
+            // },
             {
-                path: "/admin/expense_reports/print/:id",
-                name: "admin.expense_reports.print",
+                path: "/admin/expense_reports/:id/summary",
+                name: "admin.expense_reports.summary",
                 component: () =>
                     import(
-                        "../../views/modules/admin/expense_reports/Print.vue"
+                        "../../views/modules/admin/expense_reports/ShowSummary.vue"
+                    )
+            },
+            {
+                path: "/admin/expense_reports/:id/detailed",
+                name: "admin.expense_reports.detailed",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/expense_reports/ShowDetailed.vue"
                     )
             },
             /**
