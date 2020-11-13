@@ -47,11 +47,12 @@ class ExpenseReportResource extends JsonResource
             'cancelled_by' => User::withTrashed()->find($this->cancelled_by ?? 0),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'total' => $this->expenses()->withTrashed()->get()->sum('amount'),
-            'total_reimbursable' => $this->expenses()->withTrashed()->get()->sum('reimbursable_amount'),
+            'total' => $this->total_amount(),
+            'total_reimbursable' => $this->total_reimbursable_amount(),
+            'paid' => $this->total_amount() - $this->balance(),
+            'payments' => $this->pivot_payments,
             'payment_id' => $this->payment_id,
-            // 'balance' => $this->pivot_payments
-            'balance' => $this->balance()
+            'balance' => $this->balance(),
         ];
     }
 }

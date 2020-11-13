@@ -135,21 +135,9 @@ class ExpenseReport extends Model
         return $this->belongsTo(Payment::class);
     }
 
-    public function pivot_payments()
+    public function payments()
     {
-        return $this->belongsToMany(Payment::class)->withPivot('amount');
-    }
-
-    public function balance()
-    {
-        $sum_payment = 0;
-
-        foreach ($this->pivot_payments as $payment)
-        {
-            $sum_payment += $payment->pivot->amount;
-        }
-
-        return $sum_payment;
+        return $this->belongsToMany(Payment::class)->withPivot('payment');
     }
 
     /**
@@ -334,5 +322,25 @@ class ExpenseReport extends Model
         return date('Y-m-d', max(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
     }
 
-    
+    public function total_amount() 
+    {
+        return $this->expenses()->withTrashed()->get()->sum('amount');
+    }
+
+    public function total_reimbursable_amount() 
+    {
+        return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
+    }
+
+    public function balance()
+    {
+        $sum_payment = 0;
+
+        foreach ($this->payments as $payment)
+        {
+            $sum_payment += $payment->pivot->payment;
+        }
+
+        return $this->total_amount() - $sum_payment;
+    }
 }
