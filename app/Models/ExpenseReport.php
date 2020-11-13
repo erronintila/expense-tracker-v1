@@ -135,6 +135,23 @@ class ExpenseReport extends Model
         return $this->belongsTo(Payment::class);
     }
 
+    public function pivot_payments()
+    {
+        return $this->belongsToMany(Payment::class)->withPivot('amount');
+    }
+
+    public function balance()
+    {
+        $sum_payment = 0;
+
+        foreach ($this->pivot_payments as $payment)
+        {
+            $sum_payment += $payment->pivot->amount;
+        }
+
+        return $sum_payment;
+    }
+
     /**
      * Displays the employee associated with Expense Report.
      *
@@ -317,13 +334,5 @@ class ExpenseReport extends Model
         return date('Y-m-d', max(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
     }
 
-    /**
-     * balance
-     *
-     * @return void
-     */
-    public function balance()
-    {
-        return 0;
-    }
+    
 }

@@ -327,6 +327,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         var _this$selected;
 
         var data = response.data.data;
+        console.log(data);
         _this.code = data.code;
         _this.description = data.description;
         _this.remarks = data.remarks;

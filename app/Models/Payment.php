@@ -119,6 +119,11 @@ class Payment extends Model
     {
         return $this->hasMany(ExpenseReport::class);
     }
+
+    public function pivot_expense_reports()
+    {
+        return $this->belongsToMany(ExpenseReport::class)->withPivot('amount');
+    }
     
     /**
      * expenses

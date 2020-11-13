@@ -50,6 +50,8 @@ class ExpenseReportResource extends JsonResource
             'total' => $this->expenses()->withTrashed()->get()->sum('amount'),
             'total_reimbursable' => $this->expenses()->withTrashed()->get()->sum('reimbursable_amount'),
             'payment_id' => $this->payment_id,
+            // 'balance' => $this->pivot_payments
+            'balance' => $this->balance()
         ];
     }
 }

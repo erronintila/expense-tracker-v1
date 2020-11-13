@@ -17,7 +17,7 @@ class CreateExpenseReportPaymentTable extends Migration
             $table->id();
             $table->unsignedBigInteger('expense_report_id');
             $table->unsignedBigInteger('payment_id');
-            $table->double('amount', 10, 2)->nullable();
+            $table->double('payment', 10, 2)->nullable();
             $table->timestamps();
 
             // $table->foreign('expense_report_id')
