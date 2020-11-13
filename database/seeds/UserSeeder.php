@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
             "payments",
             "expense reports",
             "expenses",
-            "adjustments",
+            // "adjustments",
             "activity logs",
             "settings",
             "authentication"
@@ -78,6 +78,7 @@ class UserSeeder extends Seeder
             Permission::create(['name' => 'export ' . $model, 'category' => $model]);
 
             if ($model == "employees") {
+                Permission::create(['name' => 'edit employees fund', 'category' => $model]);
                 Permission::create(['name' => 'restore employees', 'category' => $model]);
             }
 

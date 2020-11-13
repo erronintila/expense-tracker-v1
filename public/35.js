@@ -13,6 +13,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jspdf */ "./node_modules/jspdf/dist/jspdf.es.min.js");
+/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jspdf-autotable */ "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js");
+/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -101,6 +104,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -167,7 +173,7 @@ __webpack_require__.r(__webpack_exports__);
       footer = ["Total", this.column_headers.delivery_expense, this.column_headers["gas_&_oil"], this.column_headers["meal_&_lodging"], this.column_headers.miscellaneous, this.column_headers["postage,_telephone_&_fax"], this.column_headers["repairs_&_maintenance"], this.column_headers.representation, this.column_headers.supplies, this.column_headers.transportation, this.column_headers.total];
       rows.push(footer); // basic config
 
-      var doc = new jsPDF({
+      var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
         orientation: "landscape",
         unit: "in",
         format: action == "print" ? "letter" : [13, 8.5]
@@ -247,6 +253,13 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this.headers.unshift({
+            text: "Particulars",
+            value: "particulars",
+            sortable: false,
+            divider: true
+          });
+
+          _this.headers.unshift({
             text: "Date",
             value: "date",
             sortable: false,
@@ -276,6 +289,7 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.loadExpenseTypes().then(function () {
         axios.get("/api/data/print?expense_report_detailed=true&expense_report_id=".concat(_this.$route.params.id)).then(function (response) {
+          console.log(response.data);
           var rows = response.data.data;
           _this.items = rows;
           _this.expense_report = response.data.expense_report;
@@ -496,6 +510,8 @@ var render = function() {
                               { staticClass: "green--text hidden-sm-and-down" },
                               [
                                 _c("td", [_vm._v("Total")]),
+                                _vm._v(" "),
+                                _c("td"),
                                 _vm._v(" "),
                                 _vm._l(_vm.column_headers, function(
                                   value,

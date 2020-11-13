@@ -10,16 +10,60 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Expense extends Model
 {
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | INITIALIZATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     use SoftDeletes, LogsActivity;
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LARAVEL MODEL CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
     protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes that are not mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [
+        // 'expense_report_id'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        // 'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // 'email_verified_at' => 'datetime',
+    ];
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LIBRARY/PACKAGE CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
     /**
      * Activity Logs Configuration
      *
      *
      */
-
     // // log changes to all the $fillable/$guarded attributes of the model
     protected static $logUnguarded = true;
     // protected static $logFillable = true;
@@ -61,32 +105,11 @@ class Expense extends Model
         ]);
     }
 
-    /**
-     * The attributes that are not mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = [
-        // 'expense_report_id'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        // 'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        // 'email_verified_at' => 'datetime',
-    ];
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | RELATIONSHIPS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
     /**
      * Displays the expense type associated with expense.
@@ -132,6 +155,32 @@ class Expense extends Model
     {
         return $this->belongsTo(ExpenseReport::class);
     }
+
+    /**
+     * payments
+     *
+     * @return void
+     */
+    public function payments()
+    {
+        return $this->belongsToMany(Payment::class);
+    }
+
+    /**
+     * tax
+     *
+     * @return void
+     */
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class);
+    }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | CUSTOM FIELDS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
     /**
      * Displays the current status of expense.
@@ -284,7 +333,8 @@ class Expense extends Model
         return $arr;
     }
 
-    public function expired() {
+    public function expired()
+    {
         //compare date of submission to expiry date
         return false;
     }
@@ -309,13 +359,13 @@ class Expense extends Model
         return date('F d, Y', strtotime($this->date));
     }
 
-    public function payments()
+    /**
+     * balance
+     *
+     * @return void
+     */
+    public function balance()
     {
-        return $this->belongsToMany(Payment::class);
-    }
-
-    public function tax()
-    {
-        return $this->belongsTo(Tax::class);
+        return 0;
     }
 }

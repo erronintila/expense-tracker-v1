@@ -22,6 +22,11 @@ const routes = [
         meta: {
             requiresAuth: true
         }
+    },
+    {
+        path: "/playground",
+        name: "playground",
+        component: () => import("../../views/Playground"),
     }
 ];
 

@@ -8,9 +8,11 @@ require("./bootstrap");
 window.Vue = require("vue");
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Import Packages/Libraries
- *
+ * ------------------------------------------------------------------------------------------------------------------
  */
+
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
@@ -25,10 +27,11 @@ import numeral from "numeral";
 import JsonExcel from "vue-json-excel";
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Load Instances
- *
- *
+ * ------------------------------------------------------------------------------------------------------------------
  */
+
 const vuetify = new Vuetify({
     theme: {
         themes: {
@@ -52,10 +55,11 @@ const vuetify = new Vuetify({
 // };
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Load Packages/Libraries
- *
- *
+ * ------------------------------------------------------------------------------------------------------------------
  */
+
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Vuetify);
@@ -71,27 +75,30 @@ Vue.use(ChartDataLabels);
 Vue.component("download-excel", JsonExcel);
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Libraries configuration
- *
- *
+ * ------------------------------------------------------------------------------------------------------------------
  */
+
 window.Chart.plugins.unregister(ChartDataLabels);
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Import Vue components/files
- *
- *
+ * ------------------------------------------------------------------------------------------------------------------
  */
+
 import { store } from "./store/index";
 import { router } from "./router/index";
 import App from "./views/layouts/App.vue";
 import Mixin from "./mixins/index";
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Axios configuration
- *
- *
+ * ------------------------------------------------------------------------------------------------------------------
  */
+
 // axios.defaults.headers.common["Authorization"] =
 //     "Bearer " + localStorage.getItem("access_token");
 
@@ -122,18 +129,21 @@ axios.interceptors.response.use(
 );
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Global functions / properties / variables
- *
- *
+ * ------------------------------------------------------------------------------------------------------------------
  */
+
 Vue.mixin(Mixin);
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
  * components and automatically register them with their "basename".
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ * ------------------------------------------------------------------------------------------------------------------
  */
 
 // const files = require.context('./', true, /\.vue$/i)
@@ -145,9 +155,11 @@ Vue.mixin(Mixin);
 // Vue.use(components);
 
 /**
+ * ------------------------------------------------------------------------------------------------------------------
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
+ * ------------------------------------------------------------------------------------------------------------------
  */
 
 const app = new Vue({

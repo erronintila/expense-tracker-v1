@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | USER INFORMATION ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
     Route::get('/user', function (Request $request) {
 
         return new UserResource($request->user());
@@ -27,19 +33,27 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user->getAllPermissions();
     });
 
-    // //
-    // //   Excel Export
-    // //
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LARAVEL LIBRARY/PACKAGE ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
-    // Route::get('/users/export', 'API\v1\UserController@export');
+    // Route::get('/users/export', 'API\v1\UserController@export'); // Excel Export Package
 
-    Route::get('/employees/export', 'API\v1\EmployeeController@export');
+    Route::get('/employees/export', 'API\v1\EmployeeController@export'); // Excel Export Package
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | API RESOURCES ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
     Route::apiResources(
         [
             'activity_logs' => 'API\v1\ActivityLogController',
 
-            'adjustments' => 'API\v1\AdjustmentController',
+            // 'adjustments' => 'API\v1\AdjustmentController',
 
             'departments' => 'API\v1\DepartmentController',
 
@@ -67,9 +81,11 @@ Route::middleware('auth:sanctum')->group(function () {
         ]
     );
 
-    // //
-    // //   Data Controller
-    // //
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | DATA CONTROLLER ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
     Route::get('/data/test', 'API\v1\DataController@test');
 
@@ -108,8 +124,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/data/permissions', 'API\v1\DataController@permissions');
 
     Route::get('/data/validateFund', 'API\v1\DataController@validateFund');
-
-
-
-
 });

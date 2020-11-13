@@ -11,8 +11,62 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class ExpenseReport extends Model
 {
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | INITIALIZATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     use SoftDeletes, LogsActivity;
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LARAVEL MODEL CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    // protected $softCascade = ['expenses'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [
+        // 'code', 'description', 'remarks', 'notes', 'employee_id'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        // 'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // 'email_verified_at' => 'datetime',
+    ];
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LIBRARY/PACKAGE CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     /**
      * Activity Logs Configuration
      *
@@ -60,42 +114,12 @@ class ExpenseReport extends Model
         ]);
     }
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    // protected $softCascade = ['expenses'];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = [
-        // 'code', 'description', 'remarks', 'notes', 'employee_id'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        // 'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        // 'email_verified_at' => 'datetime',
-    ];
-
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | RELATIONSHIPS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+   
     /**
      * Displays the expenses associated with Expense Report.
      *
@@ -134,6 +158,12 @@ class ExpenseReport extends Model
     //         ->withTimestamps();
     // }
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | CUSTOM FIELDS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     /**
      * Displays the status of Expense Report
      *
@@ -247,11 +277,21 @@ class ExpenseReport extends Model
         return $arr;
     }
 
+    /**
+     * late_submitted
+     *
+     * @return void
+     */
     public function late_submitted()
     {
         return false;
     }
 
+    /**
+     * late_approved
+     *
+     * @return void
+     */
     public function late_approved()
     {
         return false;
@@ -275,5 +315,15 @@ class ExpenseReport extends Model
     public function max_end_date()
     {
         return date('Y-m-d', max(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
+    }
+
+    /**
+     * balance
+     *
+     * @return void
+     */
+    public function balance()
+    {
+        return 0;
     }
 }

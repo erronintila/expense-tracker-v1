@@ -105,42 +105,42 @@ const adminRoutes = [
              *
              *
              */
-            {
-                path: "/admin/adjustments",
-                name: "admin.adjustments.index",
-                component: () =>
-                    import("../../views/modules/admin/adjustments/Index.vue"),
-                beforeEnter: (to, from, next) => {
-                    if (
-                        store.getters.user.permissions.includes(
-                            "view all adjustments"
-                        )
-                    ) {
-                        next();
-                    } else {
-                        next({ name: "error_403" });
-                    }
-                }
-            },
-            {
-                path: "/admin/adjustments/manage-fund",
-                name: "admin.adjustments.manage.fund",
-                component: () =>
-                    import(
-                        "../../views/modules/admin/adjustments/AdjustFund.vue"
-                    ),
-                beforeEnter: (to, from, next) => {
-                    if (
-                        store.getters.user.permissions.includes(
-                            "add adjustments"
-                        )
-                    ) {
-                        next();
-                    } else {
-                        next({ name: "error_403" });
-                    }
-                }
-            },
+            // {
+            //     path: "/admin/adjustments",
+            //     name: "admin.adjustments.index",
+            //     component: () =>
+            //         import("../../views/modules/admin/adjustments/Index.vue"),
+            //     beforeEnter: (to, from, next) => {
+            //         if (
+            //             store.getters.user.permissions.includes(
+            //                 "view all adjustments"
+            //             )
+            //         ) {
+            //             next();
+            //         } else {
+            //             next({ name: "error_403" });
+            //         }
+            //     }
+            // },
+            // {
+            //     path: "/admin/adjustments/manage-fund",
+            //     name: "admin.adjustments.manage.fund",
+            //     component: () =>
+            //         import(
+            //             "../../views/modules/admin/adjustments/AdjustFund.vue"
+            //         ),
+            //     beforeEnter: (to, from, next) => {
+            //         if (
+            //             store.getters.user.permissions.includes(
+            //                 "add adjustments"
+            //             )
+            //         ) {
+            //             next();
+            //         } else {
+            //             next({ name: "error_403" });
+            //         }
+            //     }
+            // },
             // {
             //     path: "/admin/adjustments/create",
             //     name: "admin.adjustments.create",
@@ -282,6 +282,23 @@ const adminRoutes = [
                     if (
                         store.getters.user.permissions.includes(
                             "edit employees"
+                        )
+                    ) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+            },
+            {
+                path: "/admin/employees/:id/edit/fund",
+                name: "admin.employees.edit.fund",
+                component: () =>
+                    import("../../views/modules/admin/employees/EditFund.vue"),
+                beforeEnter: (to, from, next) => {
+                    if (
+                        store.getters.user.permissions.includes(
+                            "edit employees fund"
                         )
                     ) {
                         next();

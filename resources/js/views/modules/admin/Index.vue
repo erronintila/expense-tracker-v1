@@ -285,11 +285,11 @@ export default {
                         text: "Expense Types",
                         link: { name: "admin.expense_types.index" }
                     },
-                    {
-                        icon: "mdi-text-box-plus-outline",
-                        text: "Adjustments",
-                        link: { name: "admin.adjustments.index" }
-                    },
+                    // {
+                    //     icon: "mdi-text-box-plus-outline",
+                    //     text: "Adjustments",
+                    //     link: { name: "admin.adjustments.index" }
+                    // },
                     // {
                     //     icon: "mdi-circle-medium",
                     //     text: "Users",

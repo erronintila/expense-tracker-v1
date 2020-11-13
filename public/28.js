@@ -329,6 +329,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -361,7 +385,9 @@ __webpack_require__.r(__webpack_exports__);
         address: null,
         role: "Standard User",
         username: "",
-        can_login: true
+        can_login: true,
+        has_fund: false,
+        fund: 0
       },
       errors: {
         code: [],
@@ -378,7 +404,9 @@ __webpack_require__.r(__webpack_exports__);
         address: [],
         username: [],
         role: [],
-        can_login: []
+        can_login: [],
+        has_fund: [],
+        fund: []
       }
     };
   },
@@ -432,6 +460,12 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this = this;
 
+      var fund = 0;
+
+      if (this.form.has_fund) {
+        fund = this.form.fund == "" ? 0 : this.form.fund;
+      }
+
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
@@ -452,7 +486,8 @@ __webpack_require__.r(__webpack_exports__);
           can_login: _this.form.can_login,
           role: _this.form.role,
           permissions: _this.selected,
-          expense_types: _this.selected_expense_types
+          expense_types: _this.selected_expense_types,
+          fund: fund
         }).then(function (response) {
           _this.$dialog.message.success("Employee created successfully.", {
             position: "top-right",
@@ -1098,7 +1133,70 @@ var render = function() {
                               )
                             ],
                             1
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-checkbox", {
+                                    attrs: {
+                                      label: "has Revolving Fund",
+                                      "error-messages": _vm.errors.has_fund
+                                    },
+                                    model: {
+                                      value: _vm.form.has_fund,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "has_fund", $$v)
+                                      },
+                                      expression: "form.has_fund"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _vm.form.has_fund
+                            ? _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Revolving Fund",
+                                          rules: [],
+                                          "error-messages": _vm.errors.fund,
+                                          type: "number"
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            _vm.errors.fund = []
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.form.fund,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "fund", $$v)
+                                          },
+                                          expression: "form.fund"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            : _vm._e()
                         ],
                         1
                       )

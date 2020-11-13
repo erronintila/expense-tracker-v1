@@ -186,7 +186,7 @@ class EmployeeController extends Controller
 
         $employee = new Employee();
 
-        $employee->code = generate_code(Employee::class, "EMP", 10);
+        $employee->code = $request->code ?? generate_code(Employee::class, "EMP", 10);
 
         $employee->first_name = $request->first_name;
 
@@ -209,6 +209,10 @@ class EmployeeController extends Controller
         $employee->job_id = $request->job_id;
 
         $employee->address = $request->address;
+
+        $employee->fund = $request->fund;
+
+        $employee->remaining_fund = $request->fund;
 
         //// Assign a User to the Employee
 
@@ -329,6 +333,21 @@ class EmployeeController extends Controller
 
                 break;
             case 'settings':
+
+                break;
+            case 'update fund':
+                if (!app("auth")->user()->hasPermissionTo('edit employees fund')) {
+
+                    abort(403);
+                }
+
+                $employee = Employee::withTrashed()->findOrFail($id);
+
+                $employee->fund = $request->fund;
+
+                $employee->remaining_fund = $request->remaining_fund;
+
+                $employee->save();
 
                 break;
             default:

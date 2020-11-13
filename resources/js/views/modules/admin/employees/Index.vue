@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="elevation-0 p-0 m-0">
+        <v-card class="elevation-0 p-0 m-0" >
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Employees</h4>
 
@@ -157,6 +157,15 @@
                             </v-list-item-icon>
                             <v-list-item-subtitle>
                                 Reset Password
+                            </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item @click="onEditFund">
+                            <v-list-item-icon>
+                                <v-icon>mdi-text-box-plus-outline</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Edit Revolving Fund
                             </v-list-item-subtitle>
                         </v-list-item>
 
@@ -472,6 +481,19 @@ export default {
         //         params: { id: item.id }
         //     });
         // },
+        onEditFund() {
+            if (this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            this.$router.push(
+                `/admin/employees/${this.selected[0].id}/edit/fund`
+            );
+        },
         onPasswordReset() {
             let _this = this;
 

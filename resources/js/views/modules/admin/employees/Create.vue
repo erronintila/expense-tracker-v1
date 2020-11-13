@@ -237,6 +237,30 @@
                                     ></v-textarea>
                                 </v-col>
                             </v-row>
+
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-checkbox
+                                        v-model="form.has_fund"
+                                        label="has Revolving Fund"
+                                        :error-messages="errors.has_fund"
+                                    ></v-checkbox>
+                                </v-col>
+                            </v-row>
+
+                            <v-row v-if="form.has_fund">
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.fund"
+                                        label="Revolving Fund"
+                                        :rules="[]"
+                                        :error-messages="errors.fund"
+                                        @input="errors.fund = []"
+                                        type="number"
+                                    >
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                     <v-expansion-panel>
@@ -346,7 +370,9 @@ export default {
                 address: null,
                 role: "Standard User",
                 username: "",
-                can_login: true
+                can_login: true,
+                has_fund: false,
+                fund: 0
             },
             errors: {
                 code: [],
@@ -363,7 +389,9 @@ export default {
                 address: [],
                 username: [],
                 role: [],
-                can_login: []
+                can_login: [],
+                has_fund: [],
+                fund: []
             }
         };
     },
@@ -433,6 +461,11 @@ export default {
         },
         onSave() {
             let _this = this;
+            let fund = 0;
+
+            if(this.form.has_fund) {
+                fund = this.form.fund == "" ? 0 : this.form.fund;
+            }
 
             _this.$refs.form.validate();
 
@@ -455,7 +488,8 @@ export default {
                         can_login: _this.form.can_login,
                         role: _this.form.role,
                         permissions: _this.selected,
-                        expense_types: _this.selected_expense_types
+                        expense_types: _this.selected_expense_types,
+                        fund: fund
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(

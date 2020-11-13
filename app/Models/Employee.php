@@ -11,8 +11,20 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Employee extends Model
 {
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | INITIALIZATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     use SoftDeletes, LogsActivity;
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LARAVEL MODEL CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     /**
      * The attributes that are not mass assignable.
      *
@@ -40,6 +52,12 @@ class Employee extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LIBRARY/PACKAGE CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     /**
      * Activity Logs Configuration
      *
@@ -87,6 +105,12 @@ class Employee extends Model
         ]);
     }
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | RELATIONSHIPS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     /**
      * Displays the user account associated with employee.
      *
@@ -148,15 +172,10 @@ class Employee extends Model
     }
 
     /**
-     * Displays the fullname of employee.
+     * adjustments
      *
      * @return void
      */
-    public function name()
-    {
-        return $this->first_name . ' ' . $this->last_name;
-    }
-
     public function adjustments()
     {
         return $this->hasMany(Adjustment::class);
@@ -170,6 +189,52 @@ class Employee extends Model
     public function expense_reports()
     {
         return $this->hasMany(ExpenseReport::class);
+    }
+
+    /**
+     * expense_types
+     *
+     * @return void
+     */
+    public function expense_types()
+    {
+        return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
+    }
+
+    /**
+     * sub_types
+     *
+     * @return void
+     */
+    public function sub_types()
+    {
+        return $this->belongsToMany(SubType::class)->withPivot('limit')->withTimestamps();
+    }
+
+    /**
+     * payments
+     *
+     * @return void
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | CUSTOM FIELDS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    /**
+     * Displays the fullname of employee.
+     *
+     * @return void
+     */
+    public function name()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     // public function remaining_fund()
@@ -190,18 +255,4 @@ class Employee extends Model
     //     return $this->fund - $expenses;
     // }
 
-    public function expense_types()
-    {
-        return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
-    }
-
-    public function sub_types()
-    {
-        return $this->belongsToMany(SubType::class)->withPivot('limit')->withTimestamps();
-    }
-
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
 }

@@ -10,8 +10,53 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Payment extends Model
 {
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | INITIALIZATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     use SoftDeletes, LogsActivity;
+    
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LARAVEL MODEL CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    /**
+     * The attributes that are not mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [
+        // 'deleted_at'
+    ];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        // 'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        // 'email_verified_at' => 'datetime',
+    ];
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LIBRARY/PACKAGE CONFIGURATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     /**
      * Activity Logs Configuration
      *
@@ -59,38 +104,53 @@ class Payment extends Model
         ]);
     }
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | RELATIONSHIPS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
     /**
-     * The attributes that are not mass assignable.
+     * expense_reports
      *
-     * @var array
+     * @return void
      */
-    protected $guarded = [
-        // 'deleted_at'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        // 'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        // 'email_verified_at' => 'datetime',
-    ];
-
     public function expense_reports()
     {
         return $this->hasMany(ExpenseReport::class);
     }
+    
+    /**
+     * expenses
+     *
+     * @return void
+     */
+    public function expenses()
+    {
+        return $this->belongsToMany(Expense::class);
+    }
+    
+    /**
+     * employee
+     *
+     * @return void
+     */
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | CUSTOM FIELDS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    /**
+     * status
+     *
+     * @return void
+     */
     public function status()
     {
         $arr = [
@@ -151,15 +211,5 @@ class Payment extends Model
         ];
 
         return $arr;
-    }
-
-    public function expenses()
-    {
-        return $this->belongsToMany(Expense::class);
-    }
-
-    public function employee()
-    {
-        return $this->belongsTo(Employee::class);
     }
 }
