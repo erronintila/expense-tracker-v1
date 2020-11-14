@@ -6,7 +6,7 @@
             :clipped="$vuetify.breakpoint.lgAndUp"
             floating
             app
-            v-if="loggedIn"
+            v-if="mixin_loggedIn"
         >
             <v-list dense shaped>
                 <v-list-item two-line>
@@ -109,7 +109,7 @@
             color="green"
             class="elevation-1"
             dark
-            v-if="loggedIn"
+            v-if="mixin_loggedIn"
         >
             <v-app-bar-nav-icon
                 @click.stop="drawer = !drawer"
@@ -137,7 +137,7 @@
         <!-- End of App Bar -->
 
         <!-- Main View -->
-        <v-main>
+        <v-main v-if="mixin_loggedIn">
             <!-- <v-container> -->
             <v-row class="ml-2 mr-2 mt-4">
                 <v-col>
@@ -188,11 +188,6 @@ export default {
             },
         ]
     }),
-    computed: {
-        loggedIn() {
-            return this.$store.getters.authenticated;
-        }
-    },
     methods: {
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error

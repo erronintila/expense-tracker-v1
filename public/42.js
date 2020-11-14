@@ -435,6 +435,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -644,7 +647,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var arr = this.selected.map(function (item) {
         return item.expense_report_id === null;
-      });
+      }); // this.mixin_is_empty(
+      //     _this.selected.length,
+      //     "No item(s) selected bitch"
+      // );
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -652,7 +658,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           timeout: 2000
         });
         return;
-      }
+      } // this.mixin_check_if_error(
+      //     arr.includes(false),
+      //     "Expense(s) can't be cancelled bitch"
+      // );
+
 
       if (arr.includes(false)) {
         this.$dialog.message.error("Expense(s) can't be cancelled", {

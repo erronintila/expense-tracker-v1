@@ -358,7 +358,7 @@
   KEY `subject` (`subject_type`,`subject_id`),
   KEY `causer` (`causer_type`,`causer_id`),
   KEY `activity_log_log_name_index` (`log_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="employee_expense_type" view="colnames">
 <left>924</left>
@@ -437,7 +437,7 @@
 <table name="expense_type_vendor" view="colnames">
 <left>1144</left>
 <top>1341</top>
-<width>143</width>
+<width>178</width>
 <height>158</height>
 <sql_create_table>CREATE TABLE `expense_type_vendor` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,

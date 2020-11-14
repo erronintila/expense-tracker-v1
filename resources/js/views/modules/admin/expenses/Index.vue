@@ -341,7 +341,12 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit expenses')">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="mixin_can('edit expenses')"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -378,9 +383,7 @@
                             </h4>
                             <h4 class="grey--text">
                                 Due of encoding and submission of expenses :
-                                {{
-                                    $store.getters.settings.submission_period
-                                }}
+                                {{ $store.getters.settings.submission_period }}
                                 ({{ maxDate }})
                             </h4>
                         </div>
@@ -653,6 +656,11 @@ export default {
                 item => item.expense_report_id === null
             );
 
+            // this.mixin_is_empty(
+            //     _this.selected.length,
+            //     "No item(s) selected bitch"
+            // );
+
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
@@ -660,6 +668,11 @@ export default {
                 });
                 return;
             }
+
+            // this.mixin_check_if_error(
+            //     arr.includes(false),
+            //     "Expense(s) can't be cancelled bitch"
+            // );
 
             if (arr.includes(false)) {
                 this.$dialog.message.error("Expense(s) can't be cancelled", {

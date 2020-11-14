@@ -54,6 +54,12 @@ class ExpenseResource extends JsonResource
             'tax_name' => $this->tax_name,
             'tax_rate' => $this->tax_rate,
             'tax_amount' => $this->tax_amount,
+
+            'submitted' => $this->submitted(),
+            'reviewed' => $this->reviewed(),
+            'approved' => $this->approved(),
+            'rejected' => $this->rejected(),
+            'cancelled' => $this->cancelled(),
         ];
     }
 }

@@ -77,6 +77,17 @@ export default {
                 }
             });
         },
+        mixin_is_empty(value, message) {
+            if (value == "" || value == null || value == 0) {
+                this.mixin_errorDialog("Error ", message);
+                return;
+            }
+        },
+        mixin_check_if_error(value, message) {
+            if (value) {
+                this.mixin_errorDialog("Error ", message);
+            }
+        },
         mixin_can(permissionName) {
             let permissions = this.$store.getters.user.permissions;
             return permissions.indexOf(permissionName) !== -1;
@@ -88,6 +99,9 @@ export default {
         },
         mixin_permissions() {
             return this.$store.getters.getPermissions;
+        },
+        mixin_loggedIn() {
+            return this.$store.getters.authenticated;
         }
     }
 };

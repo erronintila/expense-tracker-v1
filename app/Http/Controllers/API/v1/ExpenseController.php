@@ -92,7 +92,6 @@ class ExpenseController extends Controller
         $expenses = Expense::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Cancelled Expenses':
@@ -113,7 +112,6 @@ class ExpenseController extends Controller
 
                     break;
                 case 'Rejected Expenses':
-
                     $expenses = $expenses->where([
                         ["expense_report_id", "<>", null],
                         ["submitted_at", "<>", null],
@@ -124,6 +122,15 @@ class ExpenseController extends Controller
 
                     break;
                 case 'Approved Expenses':
+
+                    // $expenses = $expenses->filter(function ($item) {
+                    //     return (
+                    //         $item->submitted() !== null &&
+                    //         $item->approved() !== null &&
+                    //         $item->rejected() == null &&
+                    //         $item->cancelled() == null
+                    //     );
+                    // });
 
                     $expenses = $expenses->where([
                         ["expense_report_id", "<>", null],
@@ -176,28 +183,22 @@ class ExpenseController extends Controller
         }
 
         if (request()->has('start_date') && request()->has('end_date')) {
-
             $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
         }
 
         if (request()->has('employee_id')) {
-
             if ($request->employee_id > 0) {
-
                 $expenses = $expenses->where("employee_id", $request->employee_id);
             }
         }
 
         if (request()->has('expense_type_id')) {
-
             if ($request->expense_type_id > 0) {
-
                 $expenses = $expenses->where("expense_type_id", $request->expense_type_id);
             }
         }
 
         $expenses = $expenses->where(function ($query) use ($search) {
-
             $query->where('code', "like", "%" . $search . "%");
 
             $query->orWhere("description", "like", "%" . $search . "%");
@@ -315,15 +316,12 @@ class ExpenseController extends Controller
             case 'restore':
 
                 if (request()->has("ids")) {
-
                     foreach ($request->ids as $id) {
-
                         $expense = Expense::withTrashed()->findOrFail($id);
 
                         $expense->restore();
                     }
                 } else {
-
                     $expense = Expense::withTrashed()->findOrFail($id);
 
                     $expense->restore();
@@ -409,9 +407,7 @@ class ExpenseController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
-
             foreach ($request->ids as $id) {
-
                 $expense = Expense::findOrFail($id);
 
                 // // Prevent delete if expense has an expense report and user is not admin

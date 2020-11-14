@@ -208,11 +208,6 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
-  computed: {
-    loggedIn: function loggedIn() {
-      return this.$store.getters.authenticated;
-    }
-  },
   methods: {
     toProfile: function toProfile() {
       // Added () => {} on router, used to prevent NavigationDuplicated error
@@ -261,7 +256,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loggedIn
+      _vm.mixin_loggedIn
         ? _c(
             "v-navigation-drawer",
             {
@@ -506,7 +501,7 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.loggedIn
+      _vm.mixin_loggedIn
         ? _c(
             "v-app-bar",
             {
@@ -598,18 +593,20 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c(
-        "v-main",
-        [
-          _c(
-            "v-row",
-            { staticClass: "ml-2 mr-2 mt-4" },
-            [_c("v-col", [_c("router-view")], 1)],
+      _vm.mixin_loggedIn
+        ? _c(
+            "v-main",
+            [
+              _c(
+                "v-row",
+                { staticClass: "ml-2 mr-2 mt-4" },
+                [_c("v-col", [_c("router-view")], 1)],
+                1
+              )
+            ],
             1
           )
-        ],
-        1
-      )
+        : _vm._e()
     ],
     1
   )
