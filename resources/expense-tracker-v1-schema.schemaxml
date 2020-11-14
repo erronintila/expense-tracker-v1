@@ -106,7 +106,7 @@
   `description` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `amount` double(10,2) NOT NULL DEFAULT 0.00,
   `reimbursable_amount` double(10,2) NOT NULL DEFAULT 0.00,
-  `tax_name` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tax_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tax_rate` double(10,2) NOT NULL DEFAULT 0.00,
   `is_compound_tax` tinyint(1) NOT NULL DEFAULT 0,
   `is_tax_inclusive` tinyint(1) NOT NULL DEFAULT 0,
@@ -116,13 +116,13 @@
   `details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `remarks` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `encoding_period` int(11) NOT NULL DEFAULT 2,
   `expense_type_id` bigint(20) unsigned NOT NULL,
   `sub_type_id` bigint(20) unsigned DEFAULT NULL,
   `employee_id` bigint(20) unsigned NOT NULL,
   `vendor_id` bigint(20) unsigned DEFAULT NULL,
   `expense_report_id` bigint(20) unsigned DEFAULT NULL,
   `tax_id` bigint(20) unsigned DEFAULT NULL,
-  `expiry_date` date DEFAULT NULL,
   `submitted_at` timestamp NULL DEFAULT NULL,
   `reviewed_at` timestamp NULL DEFAULT NULL,
   `approved_at` timestamp NULL DEFAULT NULL,
@@ -227,13 +227,13 @@
   UNIQUE KEY `adjustments_code_unique` (`code`),
   KEY `adjustments_employee_id_foreign` (`employee_id`),
   CONSTRAINT `adjustments_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_reports" view="colnames">
 <left>675</left>
 <top>734</top>
 <width>194</width>
-<height>682</height>
+<height>655</height>
 <sql_create_table>CREATE TABLE `expense_reports` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -241,8 +241,8 @@
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remarks` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `submission_due_date` date DEFAULT NULL,
-  `approval_due_date` date DEFAULT NULL,
+  `submission_period` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Weekly',
+  `approval_period` int(11) NOT NULL DEFAULT 3,
   `submitted_at` timestamp NULL DEFAULT NULL,
   `reviewed_at` timestamp NULL DEFAULT NULL,
   `approved_at` timestamp NULL DEFAULT NULL,
@@ -267,13 +267,13 @@
   KEY `expense_reports_payment_id_foreign` (`payment_id`),
   CONSTRAINT `expense_reports_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE,
   CONSTRAINT `expense_reports_payment_id_foreign` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="payments" view="colnames">
 <left>221</left>
 <top>763</top>
 <width>188</width>
-<height>620</height>
+<height>610</height>
 <sql_create_table>CREATE TABLE `payments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -307,10 +307,9 @@
   PRIMARY KEY (`id`),
   UNIQUE KEY `payments_code_unique` (`code`),
   UNIQUE KEY `payments_reference_no_unique` (`reference_no`),
-  UNIQUE KEY `payments_voucher_no_unique` (`voucher_no`),
   KEY `payments_employee_id_foreign` (`employee_id`),
   CONSTRAINT `payments_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="vendors" view="colnames">
 <left>1140</left>
@@ -359,7 +358,7 @@
   KEY `subject` (`subject_type`,`subject_id`),
   KEY `causer` (`causer_type`,`causer_id`),
   KEY `activity_log_log_name_index` (`log_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="employee_expense_type" view="colnames">
 <left>924</left>
@@ -400,11 +399,11 @@
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `expense_report_id` bigint(20) unsigned NOT NULL,
   `payment_id` bigint(20) unsigned NOT NULL,
-  `amount` double(10,2) DEFAULT NULL,
+  `payment` double(10,2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="settings" view="colnames">
 <left>38</left>
@@ -417,7 +416,7 @@
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `settings_key_index` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="taxes" view="colnames">
 <left>678</left>
@@ -430,6 +429,20 @@
   `rate` double(10,2) NOT NULL DEFAULT 0.00,
   `is_compound_tax` tinyint(1) NOT NULL DEFAULT 0,
   `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+</table>
+<table name="expense_type_vendor" view="colnames">
+<left>1144</left>
+<top>1341</top>
+<width>143</width>
+<height>158</height>
+<sql_create_table>CREATE TABLE `expense_type_vendor` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `expense_type_id` bigint(20) unsigned NOT NULL,
+  `vendor_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)

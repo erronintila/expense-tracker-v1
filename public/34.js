@@ -240,6 +240,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
 
 
 
@@ -289,6 +292,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       employee: 0,
       employees: [],
       expenses: [],
+      status: {
+        color: "",
+        status: ""
+      },
       rules: {
         date_range: [],
         code: [],
@@ -466,7 +473,21 @@ var render = function() {
               _c(
                 "v-container",
                 [
-                  _c("v-row", [_c("v-spacer")], 1),
+                  _c(
+                    "v-row",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c("div", { class: _vm.status.color + "--text mr-4" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.status.status) +
+                            "\n                    "
+                        )
+                      ])
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c(
                     "v-row",

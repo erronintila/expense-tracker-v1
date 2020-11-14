@@ -314,7 +314,6 @@ class Expense extends Model
         }
 
         if (!$reported && $submitted) {
-
             $arr = [
                 'color' => 'orange',
                 'remarks' => 'Expense is not yet submitted',
@@ -367,5 +366,75 @@ class Expense extends Model
     public function balance()
     {
         return 0;
+    }
+
+    public function submitted()
+    {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report) {
+            return [
+                "submitted_at" => $expense_report->submitted_at,
+                "submitted_by" => $expense_report->submitted_by
+            ];
+        }
+
+        return null;
+    }
+
+    public function reviewed()
+    {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report) {
+            return [
+                "reviewed_at" => $expense_report->reviewed_at,
+                "reviewed_by" => $expense_report->reviewed_by
+            ];
+        }
+
+        return null;
+    }
+
+    public function approved()
+    {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report) {
+            return [
+                "approved_at" => $expense_report->approved_at,
+                "approved_by" => $expense_report->approved_by
+            ];
+        }
+
+        return null;
+    }
+
+    public function rejected()
+    {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report) {
+            return [
+                "rejected_at" => $expense_report->rejected_at,
+                "rejected_by" => $expense_report->rejected_by
+            ];
+        }
+
+        return null;
+    }
+
+    public function cancelled()
+    {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report) {
+            return [
+                "cancelled_at" => $expense_report->cancelled_at,
+                "cancelled_by" => $expense_report->cancelled_by
+            ];
+        }
+
+        return null;
     }
 }

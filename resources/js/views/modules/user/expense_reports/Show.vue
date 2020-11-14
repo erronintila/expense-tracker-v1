@@ -15,6 +15,9 @@
                 <v-container>
                     <v-row>
                         <v-spacer></v-spacer>
+                        <div :class="`${status.color}--text mr-4`">
+                            {{ status.status }}
+                        </div>
                     </v-row>
 
                     <v-row>
@@ -264,6 +267,7 @@ export default {
             notes: "",
             employee: this.$store.getters.user.employee.id,
             expenses: [],
+            status: { color: "", status: "" },
         };
     },
     methods: {

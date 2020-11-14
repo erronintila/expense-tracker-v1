@@ -15,6 +15,9 @@
                 <v-container>
                     <v-row>
                         <v-spacer></v-spacer>
+                        <div :class="`${status.color}--text mr-4`">
+                            {{ status.status }}
+                        </div>
                     </v-row>
 
                     <v-row>
@@ -272,6 +275,7 @@ export default {
             employee: 0,
             employees: [],
             expenses: [],
+            status: { color: "", status: "" },
             rules: {
                 date_range: [],
                 code: [],
