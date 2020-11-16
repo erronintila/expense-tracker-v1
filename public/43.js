@@ -199,116 +199,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -390,7 +280,12 @@ __webpack_require__.r(__webpack_exports__);
         is_tax_inclusive: true,
         tax_name: "",
         tax_rate: 0,
-        tax_amount: 0
+        tax_amount: 0,
+        status: {
+          color: "",
+          remarks: "",
+          status: ""
+        }
       }
     };
   },
@@ -400,6 +295,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadEmployees().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
+        console.log(data);
         _this.form.code = data.code;
         _this.form.description = data.description;
         _this.form.receipt_number = data.receipt_number;
@@ -420,6 +316,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.tax_name = data.tax_name;
         _this.form.tax_rate = data.tax_rate;
         _this.form.tax_amount = data.tax_amount;
+        _this.form.status = data.status;
 
         if (data.details !== null) {
           _this.itemize = true;
@@ -715,664 +612,330 @@ var render = function() {
                 "v-container",
                 [
                   _c(
-                    "v-expansion-panels",
-                    {
-                      staticClass: "mt-4",
-                      attrs: { multiple: "" },
-                      model: {
-                        value: _vm.panel,
-                        callback: function($$v) {
-                          _vm.panel = $$v
-                        },
-                        expression: "panel"
-                      }
-                    },
+                    "v-row",
                     [
-                      _c(
-                        "v-expansion-panel",
-                        [
-                          _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "green--text" }, [
-                              _vm._v("Basic Information")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-expansion-panel-content",
-                            [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: { label: "Date", readonly: "" },
-                                        model: {
-                                          value: _vm.form.date,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "date", $$v)
-                                          },
-                                          expression: "form.date"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Employee",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.employee.fullname,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.employee,
-                                              "fullname",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.employee.fullname"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Vendor",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.vendor.name,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.vendor,
-                                              "name",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.vendor.name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Receipt No.",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.receipt_number,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "receipt_number",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.receipt_number"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
+                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                        _c(
+                          "div",
+                          [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(_vm.form.expense_type.name) +
+                                "\n                            " +
+                                _vm._s(
+                                  _vm.form.sub_type == null ||
+                                    _vm.form.sub_type.id == null
+                                    ? ""
+                                    : "(" + _vm.form.sub_type.name + ")"
+                                ) +
+                                "\n                            "
+                            ),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  text: "",
+                                  color: "green",
+                                  to:
+                                    "/admin/expenses/" +
+                                    _vm.$route.params.id +
+                                    "/edit"
+                                }
+                              },
+                              [_vm._v("Edit")]
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "display-1 green--text" }, [
+                          _vm._v(
+                            "\n                            PHP " +
+                              _vm._s(_vm.mixin_formatNumber(_vm.form.amount)) +
+                              "\n                        "
                           )
-                        ],
-                        1
-                      ),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(_vm.form.date) +
+                              "\n                        "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(_vm.form.employee.fullname) +
+                              "\n                        "
+                          )
+                        ])
+                      ]),
                       _vm._v(" "),
-                      _c(
-                        "v-expansion-panel",
-                        [
-                          _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "green--text" }, [
-                              _vm._v(
-                                "\n                                Expense Details\n                            "
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-expansion-panel-content",
-                            [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Expense Type",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.expense_type.name,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.expense_type,
-                                              "name",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.expense_type.name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Sub Type",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.sub_type.name,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.sub_type,
-                                              "name",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.sub_type.name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Description",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.description,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "description",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.description"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Amount",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.amount,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "amount", $$v)
-                                          },
-                                          expression: "form.amount"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12" } },
-                                    [
-                                      _c(
-                                        "v-data-table",
-                                        {
-                                          attrs: {
-                                            headers: _vm.headers,
-                                            items: _vm.items,
-                                            "items-per-page": 5,
-                                            "footer-props": {
-                                              itemsPerPageOptions: [5, 10, 20]
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm.items.length > 0
-                                            ? _c(
-                                                "template",
-                                                { slot: "body.append" },
-                                                [
-                                                  _c(
-                                                    "tr",
-                                                    {
-                                                      staticClass:
-                                                        "green--text hidden-md-and-up"
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "td",
-                                                        {
-                                                          staticClass: "title"
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            "\n                                                    Total:\n                                                    "
-                                                          ),
-                                                          _c("strong", [
-                                                            _vm._v(
-                                                              _vm._s(
-                                                                _vm.form.amount
-                                                              )
-                                                            )
-                                                          ])
-                                                        ]
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "tr",
-                                                    {
-                                                      staticClass:
-                                                        "green--text hidden-sm-and-down"
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "td",
-                                                        {
-                                                          staticClass: "title"
-                                                        },
-                                                        [_vm._v("Total")]
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v(
-                                                            _vm._s(
-                                                              _vm.form
-                                                                .details_quantity
-                                                            )
-                                                          )
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v(
-                                                            _vm._s(
-                                                              _vm.form
-                                                                .details_amount
-                                                            )
-                                                          )
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v(
-                                                            _vm._s(
-                                                              _vm.form.amount
-                                                            )
-                                                          )
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td")
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            : _vm._e()
-                                        ],
-                                        2
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Reimbursable Amount",
-                                          readonly: "",
-                                          hint:
-                                            "The amount involves spending from your own pocket",
-                                          "persistent-hint": ""
-                                        },
-                                        model: {
-                                          value: _vm.amount_to_reimburse,
-                                          callback: function($$v) {
-                                            _vm.amount_to_reimburse = $$v
-                                          },
-                                          expression: "amount_to_reimburse"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "2" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Tax Rate",
-                                          suffix: "%",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.tax_rate,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "tax_rate", $$v)
-                                          },
-                                          expression: "form.tax_rate"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Tax Amount",
-                                          readonly: ""
-                                        },
-                                        model: {
-                                          value: _vm.form.tax_amount,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "tax_amount",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.tax_amount"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c("v-col", [
-                                    _c("div", { staticClass: "green--text" }, [
-                                      _vm._v(
-                                        "\n                                        Expense Summary\n                                    "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("table", { staticClass: "ml-4" }, [
-                                      _c("tbody", [
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Remaining Fund\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.form.employee
-                                                        .remaining_fund
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Amount to reimburse\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.amount_to_reimburse
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Amount to replenish\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.amount_to_replenish
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c(
-                                            "td",
-                                            { attrs: { colspan: "3" } },
-                                            [_c("hr")]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                                    Total\n                                                "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "td",
-                                            {
-                                              staticClass:
-                                                "green--text text--darken-4 text-right"
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                                    " +
-                                                  _vm._s(
-                                                    _vm.mixin_formatNumber(
-                                                      _vm.expense_amount
-                                                    )
-                                                  ) +
-                                                  "\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ])
-                                      ])
-                                    ])
-                                  ])
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
+                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                        _c("div", [
+                          _vm._v("Receipt: #" + _vm._s(_vm.form.receipt_number))
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v("Vendor: " + _vm._s(_vm.form.vendor.name))
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          [
+                            _vm._v(
+                              "\n                            Status:\n                            "
+                            ),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: _vm.form.status.color,
+                                  "x-small": "",
+                                  dark: ""
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(_vm.form.status.status) +
+                                    "\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ])
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-card",
-                    { staticClass: "mt-4" },
+                    "v-row",
                     [
-                      _c(
-                        "v-card-text",
-                        [
-                          _c(
-                            "v-container",
-                            [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: {
-                                          rows: 1,
-                                          label: "Remarks",
-                                          readonly: ""
+                      _c("v-col", { attrs: { cols: "12" } }, [
+                        _c("div", [
+                          _vm._v("Description: " + _vm._s(_vm.form.description))
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v(
+                            "\n                            Tax (" +
+                              _vm._s(_vm.form.tax_rate) +
+                              "% inclusive):\n                            " +
+                              _vm._s(_vm.form.tax_amount) +
+                              "\n                        "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          [
+                            _c(
+                              "v-data-table",
+                              {
+                                attrs: {
+                                  headers: _vm.headers,
+                                  items: _vm.items,
+                                  "items-per-page": 5,
+                                  "footer-props": {
+                                    itemsPerPageOptions: [5, 10, 20]
+                                  }
+                                }
+                              },
+                              [
+                                _vm.items.length > 0
+                                  ? _c("template", { slot: "body.append" }, [
+                                      _c(
+                                        "tr",
+                                        {
+                                          staticClass:
+                                            "green--text hidden-md-and-up"
                                         },
-                                        model: {
-                                          value: _vm.form.remarks,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "remarks", $$v)
-                                          },
-                                          expression: "form.remarks"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: {
-                                          rows: "1",
-                                          label: "Notes",
-                                          readonly: ""
-                                        }
-                                      })
-                                    ],
-                                    1
+                                        [
+                                          _c("td", { staticClass: "title" }, [
+                                            _vm._v(
+                                              "\n                                            Total:\n                                            "
+                                            ),
+                                            _c("strong", [
+                                              _vm._v(_vm._s(_vm.form.amount))
+                                            ])
+                                          ])
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "tr",
+                                        {
+                                          staticClass:
+                                            "green--text hidden-sm-and-down"
+                                        },
+                                        [
+                                          _c("td", { staticClass: "title" }, [
+                                            _vm._v("Total")
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.form.details_quantity
+                                                )
+                                              )
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v(
+                                                _vm._s(_vm.form.details_amount)
+                                              )
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v(_vm._s(_vm.form.amount))
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td")
+                                        ]
+                                      )
+                                    ])
+                                  : _vm._e()
+                              ],
+                              2
+                            )
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                        _c("div", [
+                          _vm._v(
+                            "\n                            Remarks :\n                        "
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                        _c("table", { attrs: { width: "100%" } }, [
+                          _c("tbody", [
+                            _c("tr", [
+                              _c("td", [
+                                _vm._v(
+                                  "\n                                        Amount to reimburse\n                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(":")]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "green--text text--darken-4 text-right"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.amount_to_reimburse
+                                        )
+                                      ) +
+                                      "\n                                    "
                                   )
-                                ],
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td", [
+                                _vm._v(
+                                  "\n                                        Amount to replenish\n                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(":")]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "green--text text--darken-4 text-right"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.amount_to_replenish
+                                        )
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c(
+                                "td",
+                                { attrs: { colspan: "3" } },
+                                [_c("v-divider")],
                                 1
                               )
-                            ],
-                            1
-                          )
+                            ]),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td", [
+                                _vm._v(
+                                  "\n                                        Total\n                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(":")]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "green--text text--darken-4 text-right"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.expense_amount
+                                        )
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12" } },
+                        [
+                          _c("v-divider", { staticClass: "mb-4" }),
+                          _vm._v(" "),
+                          _c("div", [
+                            _vm._v(
+                              "\n                            Notes :\n                        "
+                            )
+                          ])
                         ],
                         1
                       )

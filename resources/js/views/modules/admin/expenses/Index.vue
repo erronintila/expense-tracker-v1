@@ -280,23 +280,44 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Remarks</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.remarks }}</td>
-                                    </tr>
-                                    <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.created_at,
+                                                    item.created.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Created By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.created.created_by == null ? "" : item.created.created_by.name }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Updated</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.updated.updated_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Updated By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.updated.updated_by == null ? "" : item.updated.updated_by.name }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="item.deleted">
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
                                         <td>
@@ -307,6 +328,18 @@
                                                 )
                                             }}
                                         </td>
+                                    </tr>
+                                    <tr v-if="item.deleted">
+                                        <td><strong>Cancelled By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.deleted.deleted_by == null ? "" : item.deleted.deleted_by.name }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="item.remarks">
+                                        <td><strong>Remarks</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.remarks }}</td>
                                     </tr>
                                 </table>
                             </v-container>
@@ -459,7 +492,11 @@ export default {
                     value: "expense_type.name",
                     sortable: false
                 },
-                { text: "Employee", value: "employee_name", sortable: false },
+                {
+                    text: "Employee",
+                    value: "employee.fullname",
+                    sortable: false
+                },
                 { text: "Amount", value: "amount" },
                 {
                     text: "To replenish",
@@ -537,6 +574,8 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+
+                        console.log(items);
 
                         _this.loading = false;
 

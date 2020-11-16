@@ -418,6 +418,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1361,16 +1394,6 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Remarks")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(item.remarks))])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
                                         _c("strong", [_vm._v("Created")])
                                       ]),
                                       _vm._v(" "),
@@ -1381,7 +1404,7 @@ var render = function() {
                                           "\n                                        " +
                                             _vm._s(
                                               _vm.mixin_formatDate(
-                                                item.created_at,
+                                                item.created.created_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
                                             ) +
@@ -1392,7 +1415,27 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Cancelled")])
+                                        _c("strong", [_vm._v("Created By")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.created.created_by == null
+                                                ? ""
+                                                : item.created.created_by.name
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Updated")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
@@ -1402,14 +1445,97 @@ var render = function() {
                                           "\n                                        " +
                                             _vm._s(
                                               _vm.mixin_formatDate(
-                                                item.deleted_at,
+                                                item.updated.updated_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
                                             ) +
                                             "\n                                    "
                                         )
                                       ])
-                                    ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Updated By")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.updated.updated_by == null
+                                                ? ""
+                                                : item.updated.updated_by.name
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    item.deleted
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Cancelled")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatDate(
+                                                    item.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.deleted
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Cancelled By")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  item.deleted.deleted_by ==
+                                                    null
+                                                    ? ""
+                                                    : item.deleted.deleted_by
+                                                        .name
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.remarks
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Remarks")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(_vm._s(item.remarks))
+                                          ])
+                                        ])
+                                      : _vm._e()
                                   ])
                                 ])
                               ],

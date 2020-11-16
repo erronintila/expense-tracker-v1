@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use anlutro\LaravelSettings\Facade as Setting;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -101,77 +102,146 @@ class ExpenseController extends Controller
                     break;
                 case 'Reimbursed Expenses':
 
-                    $expenses = $expenses->where([
-                        ["expense_report_id", "<>", null],
-                        ["submitted_at", "<>", null],
-                        ["approved_at", "<>", null],
-                        ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
-                        ["paid_at", "<>", null],
-                    ]);
+                    $expenses = $expenses->whereHas("expense_report", function ($query) {
+
+                        $query->where([
+
+                            ["submitted_at", "<>", null],
+
+                            ["approved_at", "<>", null],
+
+                            ["rejected_at", "=", null],
+
+                            ["cancelled_at", "=", null],
+
+                            ["paid_at", "<>", null],
+
+                        ]);
+                    });
+
+                    // $expenses = $expenses->where([
+                    //     ["expense_report_id", "<>", null],
+                    //     ["submitted_at", "<>", null],
+                    //     ["approved_at", "<>", null],
+                    //     ["rejected_at", "=", null],
+                    //     ["cancelled_at", "=", null],
+                    //     ["paid_at", "<>", null],
+                    // ]);
 
                     break;
                 case 'Rejected Expenses':
-                    $expenses = $expenses->where([
-                        ["expense_report_id", "<>", null],
-                        ["submitted_at", "<>", null],
-                        // ["approved_at", "<>", null],
-                        ["rejected_at", "<>", null],
-                        // ["cancelled_at", "=", null],
-                    ]);
+
+                    $expenses = $expenses->whereHas("expense_report", function ($query) {
+
+                        $query->where([
+
+                            ["expense_report_id", "<>", null],
+
+                            ["submitted_at", "<>", null],
+
+                            // ["approved_at", "<>", null],
+
+                            ["rejected_at", "<>", null],
+
+                            // ["cancelled_at", "=", null],
+                        ]);
+                    });
+
+                    // $expenses = $expenses->where([
+                    //     ["expense_report_id", "<>", null],
+                    //     ["submitted_at", "<>", null],
+                    //     // ["approved_at", "<>", null],
+                    //     ["rejected_at", "<>", null],
+                    //     // ["cancelled_at", "=", null],
+                    // ]);
 
                     break;
                 case 'Approved Expenses':
 
-                    // $expenses = $expenses->filter(function ($item) {
-                    //     return (
-                    //         $item->submitted() !== null &&
-                    //         $item->approved() !== null &&
-                    //         $item->rejected() == null &&
-                    //         $item->cancelled() == null
-                    //     );
-                    // });
+                    $expenses = $expenses->whereHas("expense_report", function ($query) {
 
-                    $expenses = $expenses->where([
-                        ["expense_report_id", "<>", null],
-                        ["submitted_at", "<>", null],
-                        ["approved_at", "<>", null],
-                        ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
-                    ]);
+                        $query->where([
+
+                            ["submitted_at", "<>", null],
+
+                            ["approved_at", "<>", null],
+                            
+                            ["rejected_at", "=", null],
+
+                            ["cancelled_at", "=", null],
+                        ]);
+                    });
+
+                    // $expenses = $expenses->where([
+                    //     ["expense_report_id", "<>", null],
+                    //     ["submitted_at", "<>", null],
+                    //     ["approved_at", "<>", null],
+                    //     ["rejected_at", "=", null],
+                    //     ["cancelled_at", "=", null],
+                    // ]);
 
                     break;
                 case 'Submitted Expenses':
 
-                    $expenses = $expenses->where([
-                        ["expense_report_id", "<>", null],
-                        ["submitted_at", "<>", null],
-                        ["approved_at", "=", null],
-                        ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
-                    ]);
+                    $expenses = $expenses->whereHas("expense_report", function ($query) {
+
+                        $query->where([
+
+                            ["submitted_at", "<>", null],
+
+                            ["approved_at", "=", null],
+
+                            ["rejected_at", "=", null],
+
+                            ["cancelled_at", "=", null],
+                        ]);
+                    });
+
+                    // $expenses = $expenses->where([
+                    //     ["expense_report_id", "<>", null],
+                    //     ["submitted_at", "<>", null],
+                    //     ["approved_at", "=", null],
+                    //     ["rejected_at", "=", null],
+                    //     ["cancelled_at", "=", null],
+                    // ]);
 
                     break;
                 case 'Unsubmitted Expenses':
 
-                    $expenses = $expenses->where([
-                        ["expense_report_id", "<>", null],
-                        ["submitted_at", "=", null],
-                        ["approved_at", "=", null],
-                        ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
-                    ]);
+                    $expenses = $expenses->whereHas("expense_report", function ($query) {
+
+                        $query->where([
+
+                            ["submitted_at", "=", null],
+
+                            ["approved_at", "=", null],
+
+                            ["rejected_at", "=", null],
+                            
+                            ["cancelled_at", "=", null],
+                        ]);
+                    });
+
+                    // $expenses = $expenses->where([
+                    //     ["expense_report_id", "<>", null],
+                    //     ["submitted_at", "=", null],
+                    //     ["approved_at", "=", null],
+                    //     ["rejected_at", "=", null],
+                    //     ["cancelled_at", "=", null],
+                    // ]);
 
                     break;
                 case 'Unreported Expenses':
 
-                    $expenses = $expenses->where([
-                        ["expense_report_id", "=", null],
-                        ["submitted_at", "=", null],
-                        ["approved_at", "=", null],
-                        ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
-                    ]);
+                    $expenses = $expenses->doesnthave("expense_report");
+
+                    // $expenses = $expenses->where([
+                    //     ["expense_report_id", "=", null],
+                    //     ["submitted_at", "=", null],
+                    //     ["approved_at", "=", null],
+                    //     ["rejected_at", "=", null],
+                    //     ["cancelled_at", "=", null],
+                    // ]);
 
                     break;
                 default:
@@ -267,6 +337,10 @@ class ExpenseController extends Controller
         $expense->tax_amount = $request->tax_amount;
 
         $expense->is_tax_inclusive = $request->is_tax_inclusive;
+
+        $expense->created_by = Auth::id();
+
+        $expense->updated_by = Auth::id();
 
         $expense->encoding_period = setting("expense_encoding_period");
 
@@ -383,6 +457,8 @@ class ExpenseController extends Controller
                 $expense->is_tax_inclusive = $request->is_tax_inclusive;
 
                 $expense->encoding_period = setting("expense_encoding_period");
+
+                $expense->updated_by = Auth::id();
 
                 $expense->save();
 

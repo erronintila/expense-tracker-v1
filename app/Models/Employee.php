@@ -61,7 +61,7 @@ class Employee extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model
@@ -234,7 +234,7 @@ class Employee extends Model
      */
     public function name()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name . "" . ($this->middle_name ?  " " . $this->middle_name . " " : " ") . $this->last_name . ($this->suffix ? ", " . $this->suffix : "");
     }
 
     // public function remaining_fund()
@@ -254,5 +254,4 @@ class Employee extends Model
 
     //     return $this->fund - $expenses;
     // }
-
 }

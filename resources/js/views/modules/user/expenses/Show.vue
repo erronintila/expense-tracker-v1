@@ -13,283 +13,173 @@
 
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <v-expansion-panels v-model="panel" multiple class="mt-4">
-                        <v-expansion-panel>
-                            <v-expansion-panel-header>
-                                <div class="green--text">Basic Information</div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.date"
-                                            label="Date"
-                                            readonly
+                    <v-row>
+                        <v-col cols="12" md="8">
+                            <div>
+                                {{ form.expense_type.name }}
+                                {{
+                                    form.sub_type == null ||
+                                    form.sub_type.id == null
+                                        ? ""
+                                        : `(${form.sub_type.name})`
+                                }}
+                                <v-btn
+                                    text
+                                    color="green"
+                                    :to="
+                                        `/admin/expenses/${$route.params.id}/edit`
+                                    "
+                                    >Edit</v-btn
+                                >
+                            </div>
+                            <div class="display-1 green--text">
+                                PHP {{ mixin_formatNumber(form.amount) }}
+                            </div>
+                            <div>
+                                {{ form.date }}
+                            </div>
+                            <div>
+                                {{ form.employee.fullname }}
+                            </div>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <div>Receipt: #{{ form.receipt_number }}</div>
+                            <div>Vendor: {{ form.vendor.name }}</div>
+                            <div>
+                                Status:
+                                <v-btn :color="form.status.color" x-small dark>
+                                    {{ form.status.status }}
+                                </v-btn>
+                            </div>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12">
+                            <div>Description: {{ form.description }}</div>
+                            <div>
+                                Tax ({{ form.tax_rate }}% inclusive):
+                                {{ form.tax_amount }}
+                            </div>
+                            <div>
+                                <v-data-table
+                                    :headers="headers"
+                                    :items="items"
+                                    :items-per-page="5"
+                                    :footer-props="{
+                                        itemsPerPageOptions: [5, 10, 20]
+                                    }"
+                                >
+                                    <template
+                                        slot="body.append"
+                                        v-if="items.length > 0"
+                                    >
+                                        <tr
+                                            class="green--text hidden-md-and-up"
                                         >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.employee.fullname"
-                                            label="Employee"
-                                            readonly
+                                            <td class="title">
+                                                Total:
+                                                <strong>{{
+                                                    form.amount
+                                                }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            class="green--text hidden-sm-and-down"
                                         >
-                                        </v-text-field>
-                                    </v-col>
+                                            <td class="title">Total</td>
+                                            <td>
+                                                <strong>{{
+                                                    form.details_quantity
+                                                }}</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{
+                                                    form.details_amount
+                                                }}</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{
+                                                    form.amount
+                                                }}</strong>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </template>
+                                </v-data-table>
+                            </div>
+                        </v-col>
 
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.vendor.name"
-                                            label="Vendor"
-                                            readonly
+                        <v-col cols="12" md="8">
+                            <div>
+                                Remarks :
+                            </div>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <table width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Amount to reimburse
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            class="green--text text--darken-4 text-right"
                                         >
-                                        </v-text-field>
-                                    </v-col>
-
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.receipt_number"
-                                            label="Receipt No."
-                                            readonly
+                                            {{
+                                                mixin_formatNumber(
+                                                    amount_to_reimburse
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Amount to replenish
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            class="green--text text--darken-4 text-right"
                                         >
-                                        </v-text-field>
-                                    </v-col>
-                                </v-row>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-
-                        <!-- **************************************************************
-                            Expense Details
-                        *************************************************************** -->
-                        <v-expansion-panel>
-                            <v-expansion-panel-header>
-                                <div class="green--text">
-                                    Expense Details
-                                </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.expense_type.name"
-                                            label="Expense Type"
-                                            readonly
+                                            {{
+                                                mixin_formatNumber(
+                                                    amount_to_replenish
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <v-divider></v-divider>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Total
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            class="green--text text--darken-4 text-right"
                                         >
-                                        </v-text-field>
-                                    </v-col>
+                                            {{
+                                                mixin_formatNumber(
+                                                    expense_amount
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </v-col>
 
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.sub_type.name"
-                                            label="Sub Type"
-                                            readonly
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.description"
-                                            label="Description"
-                                            readonly
-                                        ></v-text-field>
-                                    </v-col>
-
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.amount"
-                                            label="Amount"
-                                            readonly
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12">
-                                        <v-data-table
-                                            :headers="headers"
-                                            :items="items"
-                                            :items-per-page="5"
-                                            :footer-props="{
-                                                itemsPerPageOptions: [5, 10, 20]
-                                            }"
-                                        >
-                                            <template
-                                                slot="body.append"
-                                                v-if="items.length > 0"
-                                            >
-                                                <tr
-                                                    class="green--text hidden-md-and-up"
-                                                >
-                                                    <td class="title">
-                                                        Total:
-                                                        <strong>{{
-                                                            form.amount
-                                                        }}</strong>
-                                                    </td>
-                                                </tr>
-                                                <tr
-                                                    class="green--text hidden-sm-and-down"
-                                                >
-                                                    <td class="title">Total</td>
-                                                    <td>
-                                                        <strong>{{
-                                                            form.details_quantity
-                                                        }}</strong>
-                                                    </td>
-                                                    <td>
-                                                        <strong>{{
-                                                            form.details_amount
-                                                        }}</strong>
-                                                    </td>
-                                                    <td>
-                                                        <strong>{{
-                                                            form.amount
-                                                        }}</strong>
-                                                    </td>
-                                                    <td></td>
-                                                </tr>
-                                            </template>
-                                        </v-data-table>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="amount_to_reimburse"
-                                            label="Reimbursable Amount"
-                                            readonly
-                                            :hint="
-                                                `The amount involves spending from your own pocket`
-                                            "
-                                            persistent-hint
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12" md="2">
-                                        <v-text-field
-                                            v-model="form.tax_rate"
-                                            label="Tax Rate"
-                                            suffix="%"
-                                            readonly
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.tax_amount"
-                                            label="Tax Amount"
-                                            readonly
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col>
-                                        <div class="green--text">
-                                            Expense Summary
-                                        </div>
-                                        <table class="ml-4">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        Remaining Fund
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                form.employee
-                                                                    .remaining_fund
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Amount to reimburse
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                amount_to_reimburse
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Amount to replenish
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                amount_to_replenish
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="3"><hr /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Total
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                expense_amount
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </v-col>
-                                </v-row>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-
-                    <v-card class="mt-4">
-                        <v-card-text>
-                            <v-container>
-                                <v-row>
-                                    <v-col cols="12" md="6">
-                                        <v-textarea
-                                            :rows="1"
-                                            v-model="form.remarks"
-                                            label="Remarks"
-                                            readonly
-                                        ></v-textarea>
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-textarea
-                                            rows="1"
-                                            label="Notes"
-                                            readonly
-                                        ></v-textarea>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
+                        <v-col cols="12">
+                            <v-divider class="mb-4"></v-divider>
+                            <div>
+                                Notes :
+                            </div>
+                        </v-col>
+                    </v-row>
                 </v-container>
             </v-form>
         </v-card>
@@ -359,7 +249,8 @@ export default {
                 is_tax_inclusive: true,
                 tax_name: "",
                 tax_rate: 0,
-                tax_amount: 0
+                tax_amount: 0,
+                status: { color: "", remarks: "", status: "" }
             }
         };
     },
@@ -394,6 +285,8 @@ export default {
                         _this.form.tax_name = data.tax_name;
                         _this.form.tax_rate = data.tax_rate;
                         _this.form.tax_amount = data.tax_amount;
+
+                        _this.form.status = data.status;
 
                         if (data.details !== null) {
                             _this.itemize = true;

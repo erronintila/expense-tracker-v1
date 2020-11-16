@@ -37,13 +37,14 @@ class EmployeeResource extends JsonResource
             'remaining_fund' => $this->remaining_fund,
             'job' => $this->job,
             'department' => $this->job->department,
-            'fullname' => $this->last_name . ", " . $this->first_name . " " . $this->middle_name . " " . ($this->suffix ?? ""),
+            'fullname' => $this->name(),
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'user' => $user,
             'role' => $user->is_admin ? ["Administrator"] : $user->getRoleNames(),
             'permissions' => $user->getAllPermissions(),
             'expense_types' => ExpenseTypeResource::collection($this->expense_types),
+
             'pivot_expense_types' => $this->expense_types,
             'pivot_sub_types' => $this->sub_types,
         ];

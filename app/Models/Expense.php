@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\User;
 
 class Expense extends Model
 {
@@ -195,12 +196,21 @@ class Expense extends Model
             'status' => 'Error',
         ];
 
+        // $reported = is_null($this->expense_report_id);
+        // $submitted = is_null($this->submitted_at);
+        // $reviewed = is_null($this->reviewed_at);
+        // $approved = is_null($this->approved_at);
+        // $cancelled = is_null($this->cancelled_at);
+        // $rejected = is_null($this->rejected_at);
+        // $deleted = is_null($this->deleted_at);
+        // $paid = is_null($this->paid_at);
+
         $reported = is_null($this->expense_report_id);
-        $submitted = is_null($this->submitted_at);
-        $reviewed = is_null($this->reviewed_at);
-        $approved = is_null($this->approved_at);
-        $cancelled = is_null($this->cancelled_at);
-        $rejected = is_null($this->rejected_at);
+        $submitted = is_null($this->submitted());
+        $reviewed = is_null($this->reviewed());
+        $approved = is_null($this->approved());
+        $cancelled = is_null($this->cancelled());
+        $rejected = is_null($this->rejected());
         $deleted = is_null($this->deleted_at);
         $paid = is_null($this->paid_at);
 
@@ -368,6 +378,42 @@ class Expense extends Model
         return 0;
     }
 
+    public function created_by_user()
+    {
+        if ($this->created_at) {
+            return [
+                "created_at" => $this->created_at,
+                "created_by" => User::find($this->created_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function updated_by_user()
+    {
+        if ($this->updated_at) {
+            return [
+                "updated_at" => $this->updated_at,
+                "updated_by" => User::find($this->updated_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function deleted_by_user()
+    {
+        if ($this->deleted_at) {
+            return [
+                "deleted_at" => $this->deleted_at,
+                "deleted_by" => User::find($this->deleted_by)
+            ];
+        }
+
+        return null;
+    }
+
     public function submitted()
     {
         $expense_report = $this->expense_report;
@@ -375,7 +421,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->submitted_at) {
             return [
                 "submitted_at" => $expense_report->submitted_at,
-                "submitted_by" => $expense_report->submitted_by
+                "submitted_by" => User::find($this->submitted_by)
             ];
         }
 
@@ -389,7 +435,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->reviewed_at) {
             return [
                 "reviewed_at" => $expense_report->reviewed_at,
-                "reviewed_by" => $expense_report->reviewed_by
+                "reviewed_by" => User::find($this->reviewed_by)
             ];
         }
 
@@ -403,7 +449,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->approved_at) {
             return [
                 "approved_at" => $expense_report->approved_at,
-                "approved_by" => $expense_report->approved_by
+                "approved_by" => User::find($this->approved_by)
             ];
         }
 
@@ -417,7 +463,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->rejected_at) {
             return [
                 "rejected_at" => $expense_report->rejected_at,
-                "rejected_by" => $expense_report->rejected_by
+                "rejected_by" => User::find($this->rejected_by)
             ];
         }
 
@@ -431,9 +477,16 @@ class Expense extends Model
         if ($expense_report && $expense_report->cancelled_at) {
             return [
                 "cancelled_at" => $expense_report->cancelled_at,
-                "cancelled_by" => $expense_report->cancelled_by
+                "cancelled_by" => User::find($this->cancelled_by)
             ];
         }
+
+        return null;
+    }
+
+    public function reimbursed() {
+        
+        $expense_report = $this->expense_report;
 
         return null;
     }
