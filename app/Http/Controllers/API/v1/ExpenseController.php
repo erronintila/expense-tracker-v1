@@ -431,7 +431,7 @@ class ExpenseController extends Controller
                 // // Prevent delete if expense has an expense report and user is not admin
                 // if(true && !Auth::user()->is_admin) {
                 //     abort(403);
-                // }
+                // }    
 
                 $expense->delete();
             }

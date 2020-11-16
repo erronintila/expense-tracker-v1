@@ -323,7 +323,7 @@
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.deleted_at,
+                                                    item.deleted.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}

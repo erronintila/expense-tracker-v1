@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Expense;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseObserver
 {
@@ -32,7 +33,6 @@ class ExpenseObserver
         $rejected = $expense->getOriginal("rejected_at");
 
         if ($rejected == null && $expense->rejected_at !== null) {
-
             $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
             $expense->employee->remaining_fund += $expense_amount;
@@ -51,6 +51,19 @@ class ExpenseObserver
         $expense->employee->remaining_fund = ($remaining_fund + $original_deducted_amount) - $new_amount;
 
         $expense->employee->save();
+    }
+
+    /**
+     * Handle the expense "deleting" event.
+     *
+     * @param  \App\Expense  $expense
+     * @return void
+     */
+    public function deleting(Expense $expense)
+    {
+        $expense->deleted_by = Auth::id();
+
+        $expense->save();
     }
 
     /**

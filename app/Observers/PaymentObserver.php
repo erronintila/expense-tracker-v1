@@ -90,6 +90,10 @@ class PaymentObserver
                 }
             }
         }
+
+        $payment->deleted_by = Auth::id();
+
+        $payment->save();
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\ExpenseReport;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseReportObserver
 {
@@ -26,6 +27,19 @@ class ExpenseReportObserver
     public function updated(ExpenseReport $expenseReport)
     {
         //
+    }
+
+    /**
+     * Handle the expense report "deleting" event.
+     *
+     * @param  \App\Models\ExpenseReport  $expenseReport
+     * @return void
+     */
+    public function deleting(ExpenseReport $expenseReport)
+    {
+        $expenseReport->deleted_by = Auth::id();
+
+        $expenseReport->save();
     }
 
     /**
