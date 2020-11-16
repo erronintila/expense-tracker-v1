@@ -432,6 +432,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -538,6 +568,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          console.log(items);
           _this.loading = false;
           resolve({
             items: items,
@@ -1645,7 +1676,7 @@ var render = function() {
                                           "\n                                        " +
                                             _vm._s(
                                               _vm.mixin_formatDate(
-                                                item.created_at,
+                                                item.created.created_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
                                             ) +
@@ -1656,7 +1687,27 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Submitted")])
+                                        _c("strong", [_vm._v("Created By")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              item.created.created_by == null
+                                                ? ""
+                                                : item.created.created_by.name
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Updated")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
@@ -1666,7 +1717,7 @@ var render = function() {
                                           "\n                                        " +
                                             _vm._s(
                                               _vm.mixin_formatDate(
-                                                item.submitted_at,
+                                                item.updated.updated_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
                                             ) +
@@ -1677,7 +1728,7 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Submitted By")])
+                                        _c("strong", [_vm._v("Updated By")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
@@ -1686,96 +1737,161 @@ var render = function() {
                                         _vm._v(
                                           "\n                                        " +
                                             _vm._s(
-                                              item.submitted_by == null
+                                              item.updated.updated_by == null
                                                 ? ""
-                                                : item.submitted_by.name
+                                                : item.updated.updated_by.name
                                             ) +
                                             "\n                                    "
                                         )
                                       ])
                                     ]),
                                     _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Approved")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm.mixin_formatDate(
-                                                item.approved_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ]),
+                                    item.submitted
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Submitted")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatDate(
+                                                    item.submitted.submitted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
                                     _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Approved By")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              item.approved_by == null
-                                                ? ""
-                                                : item.approved_by.name
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ]),
+                                    item.submitted
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Submitted By")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  item.submitted.submitted_by ==
+                                                    null
+                                                    ? ""
+                                                    : item.submitted
+                                                        .submitted_by.name
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
                                     _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Cancelled")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm.mixin_formatDate(
-                                                item.deleted_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ]),
+                                    item.approved
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Approved")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatDate(
+                                                    item.approved.approved_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
                                     _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Cancelled By")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              item.deleted_by == null
-                                                ? ""
-                                                : item.deleted_by.name
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ])
+                                    item.approved
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Approved By")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  item.approved.approved_by ==
+                                                    null
+                                                    ? ""
+                                                    : item.approved.approved_by
+                                                        .name
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.deleted
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Cancelled")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatDate(
+                                                    item.deleted.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.deleted
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Cancelled By")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  item.deleted.deleted_by ==
+                                                    null
+                                                    ? ""
+                                                    : item.deleted.deleted_by
+                                                        .name
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e()
                                   ])
                                 ])
                               ],

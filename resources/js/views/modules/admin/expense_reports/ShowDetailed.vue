@@ -346,7 +346,6 @@ export default {
                         `/api/data/print?expense_report_detailed=true&expense_report_id=${_this.$route.params.id}`
                     )
                     .then(response => {
-                        console.log(response.data);
                         let rows = response.data.data;
 
                         _this.items = rows;

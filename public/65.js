@@ -197,8 +197,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -247,6 +245,7 @@ __webpack_require__.r(__webpack_exports__);
         receipt_number: null,
         date: null,
         remarks: "",
+        notes: "",
         is_active: true,
         expense_type: {
           id: null,
@@ -300,6 +299,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.receipt_number = data.receipt_number;
         _this.form.date = data.date;
         _this.form.remarks = data.remarks;
+        _this.form.notes = data.notes;
         _this.form.is_active = data.is_active;
         _this.form.employee = data.employee;
         _this.form.vendor = data.vendor == null ? {
@@ -619,14 +619,7 @@ var render = function() {
                           [
                             _vm._v(
                               "\n                            " +
-                                _vm._s(_vm.form.expense_type.name) +
-                                "\n                            " +
-                                _vm._s(
-                                  _vm.form.sub_type == null ||
-                                    _vm.form.sub_type.id == null
-                                    ? ""
-                                    : "(" + _vm.form.sub_type.name + ")"
-                                ) +
+                                _vm._s(_vm.form.employee.fullname) +
                                 "\n                            "
                             ),
                             _c(
@@ -641,7 +634,11 @@ var render = function() {
                                     "/edit"
                                 }
                               },
-                              [_vm._v("Edit")]
+                              [
+                                _vm._v(
+                                  "\n                                Edit\n                            "
+                                )
+                              ]
                             )
                           ],
                           1
@@ -658,15 +655,22 @@ var render = function() {
                         _c("div", [
                           _vm._v(
                             "\n                            " +
-                              _vm._s(_vm.form.date) +
+                              _vm._s(_vm.form.expense_type.name) +
+                              "\n                            " +
+                              _vm._s(
+                                _vm.form.sub_type == null ||
+                                  _vm.form.sub_type.id == null
+                                  ? ""
+                                  : "(" + _vm.form.sub_type.name + ")"
+                              ) +
                               "\n                        "
                           )
                         ]),
                         _vm._v(" "),
                         _c("div", [
                           _vm._v(
-                            "\n                            " +
-                              _vm._s(_vm.form.employee.fullname) +
+                            "\n                            Date: " +
+                              _vm._s(_vm.form.date) +
                               "\n                        "
                           )
                         ])
@@ -816,9 +820,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("v-col", { attrs: { cols: "12", md: "8" } }, [
                         _c("div", [
-                          _vm._v(
-                            "\n                            Remarks :\n                        "
-                          )
+                          _vm._v("Remarks : " + _vm._s(_vm.form.remarks))
                         ])
                       ]),
                       _vm._v(" "),
@@ -931,9 +933,7 @@ var render = function() {
                           _c("v-divider", { staticClass: "mb-4" }),
                           _vm._v(" "),
                           _c("div", [
-                            _vm._v(
-                              "\n                            Notes :\n                        "
-                            )
+                            _vm._v("Notes : " + _vm._s(_vm.form.notes))
                           ])
                         ],
                         1

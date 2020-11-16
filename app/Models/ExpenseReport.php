@@ -8,6 +8,7 @@ use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\User;
 
 class ExpenseReport extends Model
 {
@@ -342,5 +343,108 @@ class ExpenseReport extends Model
         }
 
         return $this->total_amount() - $sum_payment;
+    }
+
+    public function created_by_user()
+    {
+        if ($this->created_at) {
+            return [
+                "created_at" => $this->created_at,
+                "created_by" => User::withTrashed()->findOrFail($this->created_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function updated_by_user()
+    {
+        if ($this->updated_at) {
+            return [
+                "updated_at" => $this->updated_at,
+                "updated_by" => User::withTrashed()->findOrFail($this->updated_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function deleted_by_user()
+    {
+        if ($this->deleted_at) {
+            return [
+                "deleted_at" => $this->deleted_at,
+                "deleted_by" => User::withTrashed()->findOrFail($this->deleted_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function submitted()
+    {
+        if ($this->submitted_at) {
+            return [
+                "submitted_at" => $this->submitted_at,
+                "submitted_by" => User::withTrashed()->findOrFail($this->submitted_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function reviewed()
+    {
+        if ($this->reviewed_at) {
+            return [
+                "reviewed_at" => $this->reviewed_at,
+                "reviewed_by" => User::withTrashed()->findOrFail($this->reviewed_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function approved()
+    {
+        if ($this->approved_at) {
+            return [
+                "approved_at" => $this->approved_at,
+                "approved_by" => User::withTrashed()->findOrFail($this->approved_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function rejected()
+    {
+        if ($this->rejected_at) {
+            return [
+                "rejected_at" => $this->rejected_at,
+                "rejected_by" => User::withTrashed()->findOrFail($this->rejected_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function cancelled()
+    {
+        if ($this->cancelled_at) {
+            return [
+                "cancelled_at" => $this->cancelled_at,
+                "cancelled_by" => User::withTrashed()->findOrFail($this->cancelled_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function reimbursed() {
+
+        $expense_report = $this->expense_report;
+
+        return null;
     }
 }

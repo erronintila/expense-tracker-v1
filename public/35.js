@@ -289,7 +289,6 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.loadExpenseTypes().then(function () {
         axios.get("/api/data/print?expense_report_detailed=true&expense_report_id=".concat(_this.$route.params.id)).then(function (response) {
-          console.log(response.data);
           var rows = response.data.data;
           _this.items = rows;
           _this.expense_report = response.data.expense_report;

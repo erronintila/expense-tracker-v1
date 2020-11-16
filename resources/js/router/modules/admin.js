@@ -933,7 +933,7 @@ const adminRoutes = [
                     import("../../views/modules/admin/vendors/Show.vue"),
                 beforeEnter: (to, from, next) => {
                     if (
-                        store.getters.user.permissionsp.includes("view vendors")
+                        store.getters.user.permissions.includes("view vendors")
                     ) {
                         next();
                     } else {

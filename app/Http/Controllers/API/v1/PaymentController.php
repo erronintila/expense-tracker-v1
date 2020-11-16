@@ -77,7 +77,6 @@ class PaymentController extends Controller
         $payments = Payment::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Cancelled Payments':
@@ -142,20 +141,16 @@ class PaymentController extends Controller
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
-
             $payments = $payments->whereBetween("date", [$request->start_date, $request->end_date]);
         }
 
         if (request()->has('employee_id')) {
-
             if ($request->employee_id > 0) {
-
                 $payments = $payments->where("employee_id", $request->employee_id);
             }
         }
 
         $payments = $payments->where(function ($query) use ($search) {
-
             $query->where('code', "like", "%" . $search . "%");
 
             $query->orWhere('reference_no', "like", "%" . $search . "%");
@@ -224,10 +219,13 @@ class PaymentController extends Controller
 
         $payment->employee_id = $request->employee;
 
+        $payment->created_by = Auth::id();
+
+        $payment->updated_by = Auth::id();
+
         $payment->save();
 
         foreach ($request->expense_reports as $expense_report) {
-
             $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
 
             $expense_report->payment_id = $payment->id;
@@ -304,7 +302,6 @@ class PaymentController extends Controller
                 //unfininshed
 
                 foreach ($request->ids as $id) {
-
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->approved_at = now();
@@ -320,7 +317,6 @@ class PaymentController extends Controller
                 //unfininshed
 
                 foreach ($request->ids as $id) {
-
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->released_at = now();
@@ -334,12 +330,10 @@ class PaymentController extends Controller
             case 'receive':
 
                 if (!app("auth")->user()->hasPermissionTo('receive payments')) {
-
                     abort(403);
                 }
 
                 foreach ($request->ids as $id) {
-
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->received_at = now();
@@ -362,7 +356,6 @@ class PaymentController extends Controller
                 //unfininshed
 
                 foreach ($request->ids as $id) {
-
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->approved_at = now();
@@ -409,11 +402,12 @@ class PaymentController extends Controller
 
                 $payment->notes = $request->notes;
 
+                $payment->updated_by = Auth::id();
+
                 $payment->save();
 
                 // set existing references to null
                 foreach ($payment->expense_reports as $key => $value) {
-
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
 
                     $expense_report->payment_id = null;
@@ -422,7 +416,6 @@ class PaymentController extends Controller
                 }
 
                 foreach ($request->expense_reports as $key => $value) {
-
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
 
                     $expense_report->payment_id = $payment->id;
@@ -450,28 +443,23 @@ class PaymentController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has('ids')) {
-
             foreach ($request->ids as $id) {
-
                 $payment = Payment::withTrashed()->findOrFail($id);
 
                 $payment->delete();
 
                 foreach ($payment->expense_reports as $expense_report) {
-
                     $expense_report->payment_id = null;
 
                     $expense_report->save();
                 }
             }
         } else {
-
             $payment = Payment::withTrashed()->findOrFail($id);
 
             $payment->delete();
 
             foreach ($payment->expense_reports as $expense_report) {
-
                 $expense_report->payment_id = null;
 
                 $expense_report->save();

@@ -103,7 +103,6 @@ class ExpenseController extends Controller
                 case 'Reimbursed Expenses':
 
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
-
                         $query->where([
 
                             ["submitted_at", "<>", null],
@@ -123,7 +122,6 @@ class ExpenseController extends Controller
                 case 'Rejected Expenses':
 
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
-
                         $query->where([
 
                             ["expense_report_id", "<>", null],
@@ -142,7 +140,6 @@ class ExpenseController extends Controller
                 case 'Approved Expenses':
 
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
-
                         $query->where([
 
                             ["submitted_at", "<>", null],
@@ -159,7 +156,6 @@ class ExpenseController extends Controller
                 case 'Submitted Expenses':
 
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
-
                         $query->where([
 
                             ["submitted_at", "<>", null],
@@ -176,7 +172,6 @@ class ExpenseController extends Controller
                 case 'Unsubmitted Expenses':
 
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
-
                         $query->where([
 
                             ["submitted_at", "=", null],
@@ -369,7 +364,7 @@ class ExpenseController extends Controller
                 $expense_type = ExpenseType::withTrashed()->findOrFail($request->expense_type_id);
 
                 // // Prevent update if expense has an approve expense report and user is not admin
-                // if(true) {
+                // if(true && !Auth::user()->is_admin) {
                 //     abort(403);
                 // }
 
@@ -434,7 +429,7 @@ class ExpenseController extends Controller
                 $expense = Expense::withTrashed()->findOrFail($id);
 
                 // // Prevent delete if expense has an expense report and user is not admin
-                // if(true) {
+                // if(true && !Auth::user()->is_admin) {
                 //     abort(403);
                 // }
 
@@ -444,7 +439,7 @@ class ExpenseController extends Controller
             $expense = Expense::withTrashed()->findOrFail($id);
 
             // // Prevent delete if expense has an expense report and user is not admin
-            // if(true) {
+            // if(true && !Auth::user()->is_admin) {
             //     abort(403);
             // }
 

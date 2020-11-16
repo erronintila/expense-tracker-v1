@@ -36,6 +36,8 @@ class CreateExpenseReportsTable extends Migration
             $table->timestamp('cancelled_at')->nullable();
             $table->timestamp('paid_at')->nullable();
 
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('submitted_by')->nullable();
             $table->unsignedBigInteger('reviewed_by')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();

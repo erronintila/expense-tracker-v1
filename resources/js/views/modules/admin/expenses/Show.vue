@@ -16,6 +16,21 @@
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>
+                                {{ form.employee.fullname }}
+                                <v-btn
+                                    text
+                                    color="green"
+                                    :to="
+                                        `/admin/expenses/${$route.params.id}/edit`
+                                    "
+                                >
+                                    Edit
+                                </v-btn>
+                            </div>
+                            <div class="display-1 green--text">
+                                PHP {{ mixin_formatNumber(form.amount) }}
+                            </div>
+                             <div>
                                 {{ form.expense_type.name }}
                                 {{
                                     form.sub_type == null ||
@@ -23,23 +38,9 @@
                                         ? ""
                                         : `(${form.sub_type.name})`
                                 }}
-                                <v-btn
-                                    text
-                                    color="green"
-                                    :to="
-                                        `/admin/expenses/${$route.params.id}/edit`
-                                    "
-                                    >Edit</v-btn
-                                >
-                            </div>
-                            <div class="display-1 green--text">
-                                PHP {{ mixin_formatNumber(form.amount) }}
                             </div>
                             <div>
-                                {{ form.date }}
-                            </div>
-                            <div>
-                                {{ form.employee.fullname }}
+                                Date: {{ form.date }}
                             </div>
                         </v-col>
                         <v-col cols="12" md="4">
@@ -111,9 +112,7 @@
                         </v-col>
 
                         <v-col cols="12" md="8">
-                            <div>
-                                Remarks :
-                            </div>
+                            <div>Remarks : {{ form.remarks }}</div>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -175,9 +174,7 @@
 
                         <v-col cols="12">
                             <v-divider class="mb-4"></v-divider>
-                            <div>
-                                Notes :
-                            </div>
+                            <div>Notes : {{ form.notes }}</div>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -222,6 +219,7 @@ export default {
                 receipt_number: null,
                 date: null,
                 remarks: "",
+                notes: "",
                 is_active: true,
                 expense_type: {
                     id: null,
@@ -271,6 +269,7 @@ export default {
                         _this.form.receipt_number = data.receipt_number;
                         _this.form.date = data.date;
                         _this.form.remarks = data.remarks;
+                        _this.form.notes = data.notes;
                         _this.form.is_active = data.is_active;
                         _this.form.employee = data.employee;
                         _this.form.vendor =

@@ -232,72 +232,102 @@
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.created_at,
+                                                    item.created.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Created By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                item.created.created_by == null ? "" : item.created.created_by.name
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Updated</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.updated.updated_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Updated By</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                item.updated.updated_by == null ? "" : item.updated.updated_by.name
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="item.submitted">
                                         <td><strong>Submitted</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.submitted_at,
+                                                    item.submitted.submitted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="item.submitted">
                                         <td><strong>Submitted By</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.submitted_by == null ? "" : item.submitted_by.name,
+                                                item.submitted.submitted_by == null ? "" : item.submitted.submitted_by.name
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="item.approved">
                                         <td><strong>Approved</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.approved_at,
+                                                    item.approved.approved_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="item.approved">
                                         <td><strong>Approved By</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.approved_by == null ? "" : item.approved_by.name,
+                                                item.approved.approved_by == null ? "" : item.approved.approved_by.name
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="item.deleted">
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.deleted_at,
+                                                    item.deleted.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="item.deleted">
                                         <td><strong>Cancelled By</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.deleted_by == null ? "" : item.deleted_by.name,
+                                                item.deleted.deleted_by == null ? "" : item.deleted.deleted_by.name
                                             }}
                                         </td>
                                     </tr>
