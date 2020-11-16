@@ -1,0 +1,8 @@
+expense can still edit if approved
+resubmission when report is rejected
+allowed times to resubmit report
+use eloquent model on querying data with relationships
+update expense and expense report settings once approved to finalize settings history of each transaction
+gethumandate error: always a few seconds ago (seen on expenses and expense reports)
+add view expense when viewing expense report data
+sql query excel data on expenses
