@@ -228,7 +228,7 @@ class PaymentController extends Controller
 
         foreach ($request->expense_reports as $expense_report) {
 
-            $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
+            $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
 
             $expense_report->payment_id = $payment->id;
 
@@ -381,7 +381,7 @@ class PaymentController extends Controller
 
                 $this->validator($request->all(), null)->validate();
 
-                $payment = Payment::findOrFail($id);
+                $payment = Payment::withTrashed()->findOrFail($id);
 
                 $payment->code = $request->code;
 
@@ -414,7 +414,7 @@ class PaymentController extends Controller
                 // set existing references to null
                 foreach ($payment->expense_reports as $key => $value) {
 
-                    $expense_report = ExpenseReport::findOrFail($value["id"]);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
 
                     $expense_report->payment_id = null;
 
@@ -423,7 +423,7 @@ class PaymentController extends Controller
 
                 foreach ($request->expense_reports as $key => $value) {
 
-                    $expense_report = ExpenseReport::findOrFail($value["id"]);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
 
                     $expense_report->payment_id = $payment->id;
 
@@ -453,7 +453,7 @@ class PaymentController extends Controller
 
             foreach ($request->ids as $id) {
 
-                $payment = Payment::findOrFail($id);
+                $payment = Payment::withTrashed()->findOrFail($id);
 
                 $payment->delete();
 
@@ -466,7 +466,7 @@ class PaymentController extends Controller
             }
         } else {
 
-            $payment = Payment::findOrFail($id);
+            $payment = Payment::withTrashed()->findOrFail($id);
 
             $payment->delete();
 

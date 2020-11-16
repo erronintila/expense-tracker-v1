@@ -54,7 +54,6 @@ class ExpenseTypeController extends Controller
         $expense_types = ExpenseType::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Archived':
@@ -98,9 +97,7 @@ class ExpenseTypeController extends Controller
         $expense_type->save();
 
         if (request()->has("sub_types")) {
-
             foreach ($request->sub_types as $item) {
-
                 $sub_type = new SubType();
 
                 $sub_type->name = $item["name"];
@@ -156,16 +153,28 @@ class ExpenseTypeController extends Controller
 
             case 'restore':
 
-                $expense_type = ExpenseType::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                if (request()->has("ids")) {
+                    foreach ($request->ids as $id) {
+                        $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+
+                        $expense_type->restore();
+                    }
+                } else {
+                    $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+
+                    $expense_type->restore();
+                }
+
+                // $expense_type = ExpenseType::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
 
                 break;
             default:
 
                 $this->validator($request->all(), $id)->validate();
 
-                $expense_type = ExpenseType::findOrFail($id);
+                $expense_type = ExpenseType::withTrashed()->findOrFail($id);
 
                 $expense_type->name = $request->name;
 
@@ -174,16 +183,12 @@ class ExpenseTypeController extends Controller
                 $expense_type->save();
 
                 foreach ($expense_type->sub_types as $sub_type) {
-
                     $sub_type->delete();
                 }
 
                 foreach ($request->sub_types as $key => $value) {
-
                     $sub_type = SubType::withTrashed()->updateOrCreate(
-
                         ['id' => $value["id"]],
-
                         [
                             'name' => $value["name"],
 
@@ -248,7 +253,19 @@ class ExpenseTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $expense_type = ExpenseType::whereIn('id', $request->ids)->delete();
+        if (request()->has("ids")) {
+            foreach ($request->ids as $id) {
+                $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+
+                $expense_type->delete();
+            }
+        } else {
+            $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+
+            $expense_type->delete();
+        }
+
+        // $expense_type = ExpenseType::whereIn('id', $request->ids)->delete();
 
         return response(
             [

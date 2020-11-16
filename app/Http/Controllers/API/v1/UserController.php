@@ -66,7 +66,6 @@ class UserController extends Controller
         $users = User::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Archived':
@@ -93,7 +92,6 @@ class UserController extends Controller
         }
 
         $users = $users->where(function ($query) use ($search) {
-
             $query->where("name", "like", "%" . $search . "%");
 
             $query->orWhere("username", "like", "%" . $search . "%");
@@ -135,10 +133,8 @@ class UserController extends Controller
         $user->save();
 
         if (request()->has("employee_id")) {
-
             if ($request->employee_id > 0) {
-
-                $employee = Employee::find($request->employee_id);
+                $employee = Employee::withTrashed()->findOrFail($request->employee_id);
 
                 $employee->user_id = $user->id;
 
@@ -189,26 +185,69 @@ class UserController extends Controller
 
             case 'restore':
 
-                $user = User::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                if (request()->has("ids")) {
+                    foreach ($request->ids as $id) {
+                        $user = User::withTrashed()->findOrFail($id);
+        
+                        $user->restore();
+                    }
+                } else {
+                    $user = User::withTrashed()->findOrFail($id);
+        
+                    $user->restore();
+                }
+
+                // $user = User::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
 
                 break;
             case 'password_reset':
 
                 if (!app("auth")->user()->hasPermissionTo('reset user passwords')) {
-
                     abort(403);
                 }
 
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('password' => Hash::make('password')));
+                if (request()->has("ids")) {
+                    foreach ($request->ids as $id) {
+                        $user = User::withTrashed()->findOrFail($id);
+
+                        $user->password = Hash::make('password');
+        
+                        $user->save();
+                    }
+                } else {
+                    $user = User::withTrashed()->findOrFail($id);
+
+                    $user->password = Hash::make('password');
+        
+                    $user->save();
+                }
+
+                // $user = User::whereIn('id', $request->ids)
+                //     ->update(array('password' => Hash::make('password')));
 
                 break;
             case 'verify':
 
-                $user = User::whereIn('id', $request->ids)
-                    ->update(array('email_verified_at' => now()));
+                if (request()->has("ids")) {
+                    foreach ($request->ids as $id) {
+                        $user = User::withTrashed()->findOrFail($id);
+
+                        $user->email_verified_at = now();
+        
+                        $user->save();
+                    }
+                } else {
+                    $user = User::withTrashed()->findOrFail($id);
+
+                    $user->email_verified_at = now();
+        
+                    $user->save();
+                }
+
+                // $user = User::whereIn('id', $request->ids)
+                //     ->update(array('email_verified_at' => now()));
 
                 break;
             case 'change_password':
@@ -218,13 +257,12 @@ class UserController extends Controller
                     'password' => ['required', 'confirmed', 'string', 'max:255'],
                 ]);
 
-                User::find(auth()->user()->id)->update(['password' => Hash::make($request->password)]);
+                User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make($request->password)]);
 
                 break;
             default:
 
                 if (!app("auth")->user()->hasPermissionTo('edit employees')) {
-
                     abort(403);
                 }
 
@@ -237,7 +275,7 @@ class UserController extends Controller
                     'email'     => ['required', 'email', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
                 ]);
 
-                $user = User::findOrFail($id);
+                $user = User::withTrashed()->findOrFail($id);
 
                 $user->name = $request->name;
 
@@ -252,19 +290,16 @@ class UserController extends Controller
                 $user->save();
 
                 if ($user->employee !== null) {
-
                     $user->employee->user_id = null;
 
                     $user->employee->save();
                 }
 
                 if (request()->has("employee_id")) {
-
                     if ($request->employee_id > 0) {
-
                         $empid = $request->employee_id;
 
-                        $employee = Employee::find($empid);
+                        $employee = Employee::withTrashed()->findOrFail($empid);
 
                         $employee->user_id = $user->id;
 
@@ -273,7 +308,6 @@ class UserController extends Controller
                 }
 
                 if (request()->has('employee') && $user->employee != null) {
-
                     $user->employee->first_name = $request->employee["first_name"];
 
                     $user->employee->middle_name = $request->employee["middle_name"];
@@ -318,14 +352,14 @@ class UserController extends Controller
     {
         if (request()->has("ids")) {
             foreach ($request->ids as $id) {
-                $user = User::findOrFail($id);
+                $user = User::withTrashed()->findOrFail($id);
 
                 if (!($user->hasRole('Super Admin'))) {
                     $user->delete();
                 }
             }
         } else {
-            $user = User::findOrFail($id);
+            $user = User::withTrashed()->findOrFail($id);
 
             if (!($user->hasRole('Super Admin'))) {
                 $user->delete();

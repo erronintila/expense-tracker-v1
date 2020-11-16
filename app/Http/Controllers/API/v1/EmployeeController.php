@@ -327,10 +327,6 @@ class EmployeeController extends Controller
                     $user->restore();
                 }
 
-                // $employee = Employee::withTrashed()
-                //     ->whereIn('id', $request->ids)
-                //     ->restore();
-
                 break;
             case 'settings':
 
@@ -393,7 +389,7 @@ class EmployeeController extends Controller
 
                     // foreach ($employee->expense_types as $item) {
 
-                    //     $expense_type = ExpenseType::withTrashed()->find($item["expense_type_id"]);
+                    //     $expense_type = ExpenseType::withTrashed()->findOrFail($item["expense_type_id"]);
 
                     //     foreach ($expense_type->sub_types as $item2) {
 
@@ -478,8 +474,6 @@ class EmployeeController extends Controller
 
             $user->delete();
         }
-
-        // $employee = Employee::whereIn('id', $request->ids)->delete();
 
         return response(
             [

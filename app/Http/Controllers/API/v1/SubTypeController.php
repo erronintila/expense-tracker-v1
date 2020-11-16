@@ -64,7 +64,7 @@ class SubTypeController extends Controller
 
             foreach ($request->sub_types as $key => $value) {
 
-                $sub_type = SubType::findOrFail($value["id"]);
+                $sub_type = SubType::withTrashed()->findOrFail($value["id"]);
 
                 if (count($sub_type->expenses)) {
 
@@ -80,7 +80,7 @@ class SubTypeController extends Controller
             }
         } else {
 
-            $sub_type = SubType::findOrFail($id);
+            $sub_type = SubType::withTrashed()->findOrFail($id);
 
             if (count($sub_type->expenses)) {
 

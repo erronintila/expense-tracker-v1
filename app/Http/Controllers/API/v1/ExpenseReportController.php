@@ -217,7 +217,7 @@ class ExpenseReportController extends Controller
 
         foreach ($request->expenses as $key => $value) {
 
-            $expense = Expense::find($value["id"]);
+            $expense = Expense::withTrashed()->findOrFail($value["id"]);
 
             $expense->expense_report_id = $expense_report->id;
 
@@ -284,7 +284,7 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->ids as $id) {
 
-                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, true, false, false, false, false);
 
@@ -315,7 +315,7 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->ids as $id) {
 
-                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, false, false, true, false, false);
 
@@ -346,7 +346,7 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->ids as $id) {
 
-                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, false, false, false, false, true);
 
@@ -377,7 +377,7 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->ids as $id) {
 
-                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, false, false, false, true, false);
 
@@ -400,7 +400,7 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->ids as $value) {
 
-                    $expense_report = ExpenseReport::withTrashed()->find($value);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($value);
 
                     $new_report = $expense_report->replicate();
 
@@ -438,7 +438,7 @@ class ExpenseReportController extends Controller
 
                     foreach ($expense_report->expenses()->withTrashed()->get() as $key => $value) {
 
-                        $expense = Expense::withTrashed()->find($value["id"]);
+                        $expense = Expense::withTrashed()->findOrFail($value["id"]);
 
                         $new_expense = $expense->replicate();
 
@@ -482,7 +482,7 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->ids as $id) {
 
-                    $expense_report = ExpenseReport::withTrashed()->find($id);
+                    $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $expense_report->restore();
 
@@ -549,7 +549,7 @@ class ExpenseReportController extends Controller
                 // set existing references to null
                 foreach ($expense_report->expenses as $key => $value) {
 
-                    $expense = Expense::withTrashed()->find($value["id"]);
+                    $expense = Expense::withTrashed()->findOrFail($value["id"]);
 
                     $expense->expense_report_id = null;
 
@@ -560,7 +560,7 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->expenses as $key => $value) {
 
-                    $expense = Expense::withTrashed()->find($value["id"]);
+                    $expense = Expense::withTrashed()->findOrFail($value["id"]);
 
                     $expense->expense_report_id = $expense_report->id;
 
@@ -599,7 +599,7 @@ class ExpenseReportController extends Controller
 
         foreach ($request->ids as $id) {
 
-            $expense_report = ExpenseReport::find($id);
+            $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
             // // Prevent delete if expense report has been cancelled/deleted
             // // Approved expense report can only be cancelled/deleted by Admin if expense report has no payment yet

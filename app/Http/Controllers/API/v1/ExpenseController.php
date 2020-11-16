@@ -119,15 +119,6 @@ class ExpenseController extends Controller
                         ]);
                     });
 
-                    // $expenses = $expenses->where([
-                    //     ["expense_report_id", "<>", null],
-                    //     ["submitted_at", "<>", null],
-                    //     ["approved_at", "<>", null],
-                    //     ["rejected_at", "=", null],
-                    //     ["cancelled_at", "=", null],
-                    //     ["paid_at", "<>", null],
-                    // ]);
-
                     break;
                 case 'Rejected Expenses':
 
@@ -147,14 +138,6 @@ class ExpenseController extends Controller
                         ]);
                     });
 
-                    // $expenses = $expenses->where([
-                    //     ["expense_report_id", "<>", null],
-                    //     ["submitted_at", "<>", null],
-                    //     // ["approved_at", "<>", null],
-                    //     ["rejected_at", "<>", null],
-                    //     // ["cancelled_at", "=", null],
-                    // ]);
-
                     break;
                 case 'Approved Expenses':
 
@@ -171,14 +154,6 @@ class ExpenseController extends Controller
                             ["cancelled_at", "=", null],
                         ]);
                     });
-
-                    // $expenses = $expenses->where([
-                    //     ["expense_report_id", "<>", null],
-                    //     ["submitted_at", "<>", null],
-                    //     ["approved_at", "<>", null],
-                    //     ["rejected_at", "=", null],
-                    //     ["cancelled_at", "=", null],
-                    // ]);
 
                     break;
                 case 'Submitted Expenses':
@@ -197,14 +172,6 @@ class ExpenseController extends Controller
                         ]);
                     });
 
-                    // $expenses = $expenses->where([
-                    //     ["expense_report_id", "<>", null],
-                    //     ["submitted_at", "<>", null],
-                    //     ["approved_at", "=", null],
-                    //     ["rejected_at", "=", null],
-                    //     ["cancelled_at", "=", null],
-                    // ]);
-
                     break;
                 case 'Unsubmitted Expenses':
 
@@ -217,31 +184,15 @@ class ExpenseController extends Controller
                             ["approved_at", "=", null],
 
                             ["rejected_at", "=", null],
-                            
+
                             ["cancelled_at", "=", null],
                         ]);
                     });
-
-                    // $expenses = $expenses->where([
-                    //     ["expense_report_id", "<>", null],
-                    //     ["submitted_at", "=", null],
-                    //     ["approved_at", "=", null],
-                    //     ["rejected_at", "=", null],
-                    //     ["cancelled_at", "=", null],
-                    // ]);
 
                     break;
                 case 'Unreported Expenses':
 
                     $expenses = $expenses->doesnthave("expense_report");
-
-                    // $expenses = $expenses->where([
-                    //     ["expense_report_id", "=", null],
-                    //     ["submitted_at", "=", null],
-                    //     ["approved_at", "=", null],
-                    //     ["rejected_at", "=", null],
-                    //     ["cancelled_at", "=", null],
-                    // ]);
 
                     break;
                 default:
@@ -298,7 +249,7 @@ class ExpenseController extends Controller
             'employee_id' => ['required'],
         ]);
 
-        $employee = Employee::findOrFail($request->employee_id);
+        $employee = Employee::withTrashed()->findOrFail($request->employee_id);
 
         $this->validator($request->all(), null, $employee->remaining_fund)->validate();
 
@@ -401,10 +352,6 @@ class ExpenseController extends Controller
                     $expense->restore();
                 }
 
-                // $expense = Expense::withTrashed()
-                //     ->whereIn('id', $request->ids)
-                //     ->restore();
-
                 break;
             default:
 
@@ -417,7 +364,7 @@ class ExpenseController extends Controller
 
                 $this->validator($request->all(), $id, $employee->remaining_fund)->validate();
 
-                $expense = Expense::findOrFail($id);
+                $expense = Expense::withTrashed()->findOrFail($id);
 
                 $expense_type = ExpenseType::withTrashed()->findOrFail($request->expense_type_id);
 
@@ -484,7 +431,7 @@ class ExpenseController extends Controller
     {
         if (request()->has("ids")) {
             foreach ($request->ids as $id) {
-                $expense = Expense::findOrFail($id);
+                $expense = Expense::withTrashed()->findOrFail($id);
 
                 // // Prevent delete if expense has an expense report and user is not admin
                 // if(true) {
@@ -494,7 +441,7 @@ class ExpenseController extends Controller
                 $expense->delete();
             }
         } else {
-            $expense = Expense::findOrFail($id);
+            $expense = Expense::withTrashed()->findOrFail($id);
 
             // // Prevent delete if expense has an expense report and user is not admin
             // if(true) {
@@ -503,8 +450,6 @@ class ExpenseController extends Controller
 
             $expense->delete();
         }
-
-        // $expense = Expense::whereIn('id', $request->ids)->delete();
 
         return response(
             [

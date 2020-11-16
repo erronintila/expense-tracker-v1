@@ -52,7 +52,6 @@ class DepartmentController extends Controller
         $departments = Department::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Archived':
@@ -138,16 +137,28 @@ class DepartmentController extends Controller
 
             case 'restore':
 
-                $department = Department::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                if (request()->has("ids")) {
+                    foreach ($request->ids as $id) {
+                        $department = Department::withTrashed()->findOrFail($id);
+
+                        $department->restore();
+                    }
+                } else {
+                    $department = Department::withTrashed()->findOrFail($id);
+
+                    $department->restore();
+                }
+
+                // $department = Department::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
 
                 break;
             default:
 
                 $this->validator($request->all(), $id)->validate();
 
-                $department = Department::findOrFail($id);
+                $department = Department::withTrashed()->findOrFail($id);
 
                 $department->name = $request->name;
 
@@ -174,16 +185,13 @@ class DepartmentController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
-
             foreach ($request->ids as $id) {
-
-                $department = Department::findOrFail($id);
+                $department = Department::withTrashed()->findOrFail($id);
 
                 $department->delete();
             }
         } else {
-
-            $department = Department::findOrFail($id);
+            $department = Department::withTrashed()->findOrFail($id);
 
             $department->delete();
         }

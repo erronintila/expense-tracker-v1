@@ -124,7 +124,7 @@ class AdjustmentController extends Controller
 
                 case 'Manage Revolving Fund':
 
-                    $employee = Employee::findOrFail($request->employee);
+                    $employee = Employee::withTrashed()->findOrFail($request->employee);
 
                     $new_fund = ($employee->fund + $request->add_amount) - $request->subtract_amount;
 

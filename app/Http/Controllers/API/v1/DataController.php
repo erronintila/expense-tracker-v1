@@ -811,7 +811,7 @@ class DataController extends Controller
 
         // // $this->validate_remaining_fund();
 
-        $employee = Employee::findOrFail($request->id);;
+        $employee = Employee::withTrashed()->findOrFail($request->id);;
 
         $expenses = Expense::where("employee_id", $employee->id)
             ->where("cancelled_at", null)

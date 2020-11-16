@@ -36,7 +36,7 @@ class PaymentObserver
 
         foreach ($payment->expense_reports as $expense_report) {
 
-            $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
+            $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
 
             $expense_report->paid_at = now();
 

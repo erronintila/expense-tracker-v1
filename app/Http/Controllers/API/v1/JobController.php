@@ -59,7 +59,6 @@ class JobController extends Controller
         // }
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Archived':
@@ -76,9 +75,7 @@ class JobController extends Controller
         }
 
         if (request()->has('department_id')) {
-
             if ($request->department_id > 0) {
-
                 $jobs = $jobs->where('department_id', $request->department_id);
             }
         }
@@ -153,16 +150,28 @@ class JobController extends Controller
 
             case 'restore':
 
-                $job = Job::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                if (request()->has("ids")) {
+                    foreach ($request->ids as $id) {
+                        $job = Job::withTrashed()->findOrFail($id);
+        
+                        $job->restore();
+                    }
+                } else {
+                    $job = Job::withTrashed()->findOrFail($id);
+        
+                    $job->restore();
+                }
+
+                // $job = Job::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
 
                 break;
             default:
 
                 $this->validator($request->all(), $id)->validate();
 
-                $job = Job::findOrFail($id);
+                $job = Job::withTrashed()->findOrFail($id);
 
                 $job->name = $request->name;
 
@@ -189,7 +198,19 @@ class JobController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $job = Job::whereIn('id', $request->ids)->delete();
+        if (request()->has("ids")) {
+            foreach ($request->ids as $id) {
+                $job = Job::withTrashed()->findOrFail($id);
+
+                $job->delete();
+            }
+        } else {
+            $job = Job::withTrashed()->findOrFail($id);
+
+            $job->delete();
+        }
+        
+        // $job = Job::whereIn('id', $request->ids)->delete();
 
         return response(
             [

@@ -72,7 +72,6 @@ class VendorController extends Controller
         $vendors = Vendor::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Archived':
@@ -89,7 +88,6 @@ class VendorController extends Controller
         }
 
         $vendors = $vendors->where(function ($query) use ($search) {
-
             $query->where('code', "like", "%" . $search . "%");
 
             $query->orWhere("name", "like", "%" . $search . "%");
@@ -145,10 +143,9 @@ class VendorController extends Controller
         $vendor->save();
 
         if (request()->has("expense_types")) {
-
             $vendor->expense_types()->sync($request->expense_types);
 
-            // $expense_types = ExpenseType::find($request->expense_types);
+            // $expense_types = ExpenseType::withTrashed()->findOrFail($request->expense_types);
 
             // $vendor->expense_types()->attach($expense_types);
         }
@@ -196,16 +193,28 @@ class VendorController extends Controller
 
             case 'restore':
 
-                $vendor = Vendor::withTrashed()
-                    ->whereIn('id', $request->ids)
-                    ->restore();
+                if (request()->has("ids")) {
+                    foreach ($request->ids as $id) {
+                        $vendor = Vendor::withTrashed()->findOrFail($id);
+        
+                        $vendor->restore();
+                    }
+                } else {
+                    $vendor = Vendor::withTrashed()->findOrFail($id);
+        
+                    $vendor->restore();
+                }
+
+                // $vendor = Vendor::withTrashed()
+                //     ->whereIn('id', $request->ids)
+                //     ->restore();
 
                 break;
             default:
 
                 $this->validator($request->all(), $id)->validate();
 
-                $vendor = Vendor::findOrFail($id);
+                $vendor = Vendor::withTrashed()->findOrFail($id);
 
                 $vendor->code = $request->code;
 
@@ -232,7 +241,6 @@ class VendorController extends Controller
                 $vendor->save();
 
                 if (request()->has("expense_types")) {
-
                     $vendor->expense_types()->sync($request->expense_types);
                 }
 
@@ -255,7 +263,19 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $vendor = Vendor::whereIn('id', $request->ids)->delete();
+        if (request()->has("ids")) {
+            foreach ($request->ids as $id) {
+                $vendor = Vendor::withTrashed()->findOrFail($id);
+
+                $vendor->delete();
+            }
+        } else {
+            $vendor = Vendor::withTrashed()->findOrFail($id);
+
+            $vendor->delete();
+        }
+
+        // $vendor = Vendor::whereIn('id', $request->ids)->delete();
 
         return response(
             [
