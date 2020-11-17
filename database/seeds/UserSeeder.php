@@ -2,6 +2,7 @@
 
 use App\Models\Employee;
 use App\Models\Job;
+use App\Models\ExpenseType;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +46,6 @@ class UserSeeder extends Seeder
         // create permissions
 
         foreach ($models as $model) {
-
             if ($model == "activity logs") {
                 Permission::create(['name' => 'export ' . $model, 'category' => $model]);
                 Permission::create(['name' => 'delete ' . $model, 'category' => $model]);
@@ -156,11 +156,15 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
-            'is_admin' => false,
+            'is_admin' => true,
             'can_login' => true,
         ]);
 
-        $user->assignRole('Standard User');
+        foreach (Permission::all() as $permission) {
+            $user->givePermissionTo($permission->pluck("name"));
+        }
+
+        // $user->assignRole('Standard User');
 
         $employee = Employee::create([
             'code' => generate_code(Employee::class, "EMP", 10),
@@ -176,7 +180,13 @@ class UserSeeder extends Seeder
             'address' => "Polomolok, South Cotabato",
             "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
             "user_id" => $user->id,
+            "fund" => 1000,
+            "remaining_fund" => 1000,
         ]);
+
+        // foreach (ExpenseType::all() as $expense_types) {
+            $employee->expense_types()->sync(ExpenseType::all());
+        // }
 
         Setting::set("expense_encoding_period", 2);
         Setting::set("submission_period", "Weekly");

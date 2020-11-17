@@ -5,16 +5,12 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReportResource;
 use App\Models\Expense;
-use App\Models\ExpenseDetail;
 use App\Models\ExpenseReport;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Spatie\Activitylog\Models\Activity;
 
 class ExpenseReportController extends Controller
 {
@@ -284,9 +280,9 @@ class ExpenseReportController extends Controller
 
                     $this->updateReport($expense_report, true, false, false, false, false);
 
-                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                        $this->updateExpense($expense, true, false, false, false, false);
-                    }
+                    // foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                    //     $this->updateExpense($expense, true, false, false, false, false);
+                    // }
                 }
 
                 $message = "Expense Report(s) submitted successfully";
@@ -312,9 +308,9 @@ class ExpenseReportController extends Controller
 
                     $this->updateReport($expense_report, false, false, true, false, false);
 
-                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                        $this->updateExpense($expense, false, false, true, false, false);
-                    }
+                    // foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                    //     $this->updateExpense($expense, false, false, true, false, false);
+                    // }
                 }
 
                 $message = "Expense Report(s) approved successfully";
@@ -340,9 +336,9 @@ class ExpenseReportController extends Controller
 
                     $this->updateReport($expense_report, false, false, false, false, true);
 
-                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                        $this->updateExpense($expense, false, false, false, false, true);
-                    }
+                    // foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                    //     $this->updateExpense($expense, false, false, false, false, true);
+                    // }
                 }
 
                 $message = "Expense Report(s) cancelled successfully";
@@ -368,9 +364,9 @@ class ExpenseReportController extends Controller
 
                     $this->updateReport($expense_report, false, false, false, true, false);
 
-                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                        $this->updateExpense($expense, false, false, false, true, false);
-                    }
+                    // foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                    //     $this->updateExpense($expense, false, false, false, true, false);
+                    // }
                 }
 
                 $message = "Expense Report(s) rejected successfully";
@@ -426,7 +422,6 @@ class ExpenseReportController extends Controller
                         $new_expense = $expense->replicate();
 
                         $new_expense->code = generate_code(ExpenseReport::class, "EXP", 10);
-                        ;
 
                         $new_expense->submitted_at = null;
 
@@ -572,7 +567,25 @@ class ExpenseReportController extends Controller
             return response("Expense Report has already been cancelled", 422);
         }
 
-        foreach ($request->ids as $id) {
+        if (request()->has("ids")) {
+            foreach ($request->ids as $id) {
+                $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
+
+                // // Prevent delete if expense report has been cancelled/deleted
+                // // Approved expense report can only be cancelled/deleted by Admin if expense report has no payment yet
+                // if(true && !Auth::user()->is_admin) {
+                //     abort(403);
+                // }
+
+                // $expense_report->deleted_by = Auth::id();
+
+                $expense_report->delete();
+
+                foreach ($expense_report->expenses as $expense) {
+                    $expense->delete();
+                }
+            }
+        } else {
             $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
             // // Prevent delete if expense report has been cancelled/deleted
@@ -581,7 +594,7 @@ class ExpenseReportController extends Controller
             //     abort(403);
             // }
 
-            $expense_report->deleted_by = Auth::id();
+            // $expense_report->deleted_by = Auth::id();
 
             $expense_report->delete();
 

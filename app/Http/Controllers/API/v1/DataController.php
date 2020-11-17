@@ -44,7 +44,6 @@ class DataController extends Controller
     public function print(Request $request)
     {
         if (request()->has("expense_report_detailed")) {
-
             $expense_types = ExpenseType::withTrashed()->get();
             $expense_report = ExpenseReport::withTrashed()->where("id", $request->expense_report_id);
 
@@ -100,20 +99,20 @@ class DataController extends Controller
                     // });
                 });
 
-                $main2 = [];
+            $main2 = [];
 
-                foreach ($expenses as $key => $expense) {
-                    $temp2 = [];
-                    array_push($temp2, $expense);
+            foreach ($expenses as $key => $expense) {
+                $temp2 = [];
+                array_push($temp2, $expense);
     
-                    foreach ($expense_types as $key => $value) {
-                        if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp2)) {
-                            $temp2[str_replace(' ', '_', strtolower($value["name"]))] = 0;
-                        }
+                foreach ($expense_types as $key => $value) {
+                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp2)) {
+                        $temp2[str_replace(' ', '_', strtolower($value["name"]))] = 0;
                     }
-    
-                    array_push($main2, $temp2);
                 }
+    
+                array_push($main2, $temp2);
+            }
 
 
 
@@ -232,7 +231,6 @@ class DataController extends Controller
 
         if (request()->has("summary")) {
             if ($request->summary) {
-
                 $expenses = $expenses->where("id", $request->id);
                 return $expenses;
             }
@@ -330,7 +328,6 @@ class DataController extends Controller
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
-
             $start_date = Carbon::parse($request->start_date)->startOfDay();
 
             $end_date = Carbon::parse($request->end_date)->endOfDay();
@@ -811,11 +808,19 @@ class DataController extends Controller
 
         // // $this->validate_remaining_fund();
 
-        $employee = Employee::withTrashed()->findOrFail($request->id);;
+        $employee = Employee::withTrashed()->findOrFail($request->id);
 
         $expenses = Expense::where("employee_id", $employee->id)
-            ->where("cancelled_at", null)
-            ->where("rejected_at", null)
+            ->whereHas("expense_report", function ($query) {
+                $query->where([
+
+                    ["cancelled_at", "=", null],
+
+                    ["rejected_at", "=", null],
+
+                    ["deleted_at", "=", null],
+                ]);
+            })
             ->where("deleted_at", null)
             ->get();
 

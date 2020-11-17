@@ -421,7 +421,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->submitted_at) {
             return [
                 "submitted_at" => $expense_report->submitted_at,
-                "submitted_by" => User::withTrashed()->findOrFail($this->submitted_by)
+                "submitted_by" => User::withTrashed()->findOrFail($expense_report->submitted_by)
             ];
         }
 
@@ -435,7 +435,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->reviewed_at) {
             return [
                 "reviewed_at" => $expense_report->reviewed_at,
-                "reviewed_by" => User::withTrashed()->findOrFail($this->reviewed_by)
+                "reviewed_by" => User::withTrashed()->findOrFail($expense_report->reviewed_by)
             ];
         }
 
@@ -449,7 +449,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->approved_at) {
             return [
                 "approved_at" => $expense_report->approved_at,
-                "approved_by" => User::withTrashed()->findOrFail($this->approved_by)
+                "approved_by" => User::withTrashed()->findOrFail($expense_report->approved_by)
             ];
         }
 
@@ -463,7 +463,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->rejected_at) {
             return [
                 "rejected_at" => $expense_report->rejected_at,
-                "rejected_by" => User::withTrashed()->findOrFail($this->rejected_by)
+                "rejected_by" => User::withTrashed()->findOrFail($expense_report->rejected_by)
             ];
         }
 
@@ -477,7 +477,7 @@ class Expense extends Model
         if ($expense_report && $expense_report->cancelled_at) {
             return [
                 "cancelled_at" => $expense_report->cancelled_at,
-                "cancelled_by" => User::withTrashed()->findOrFail($this->cancelled_by)
+                "cancelled_by" => User::withTrashed()->findOrFail($expense_report->cancelled_by)
             ];
         }
 

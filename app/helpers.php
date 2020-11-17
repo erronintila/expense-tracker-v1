@@ -4,7 +4,6 @@ use App\Models\Expense;
 use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('generate_code')) {
-
     function generate_code($model, $prefix, $minLength)
     {
         // $data = $model::latest('id')->first();
@@ -54,5 +53,47 @@ if (!function_exists('generate_code')) {
 //         $model->notes = json_encode($notes);
 
 //         $model->save();
+//     }
+// }
+
+// if (!function_exists('is_report_submitted')) {
+//     function is_report_submitted($model)
+//     {
+//         return $model->submitted_at == null;
+//     }
+// }
+
+// if (!function_exists('is_report_reviewed')) {
+//     function is_report_reviewed($model)
+//     {
+//         return $model->reviewed_at == null;
+//     }
+// }
+
+// if (!function_exists('is_report_approved')) {
+//     function is_report_approved($model)
+//     {
+//         return $model->approved_at == null;
+//     }
+// }
+
+// if (!function_exists('is_report_rejected')) {
+//     function is_report_rejected($model)
+//     {
+//         return $model->rejected_at == null;
+//     }
+// }
+
+// if (!function_exists('is_report_deleted')) {
+//     function is_report_deleted($model)
+//     {
+//         return $model->deleted_at == null;
+//     }
+// }
+
+// if (!function_exists('validate_report_submission')) {
+//     function validate_report_submission($model)
+//     {
+//         return $model->deleted_at == null;
 //     }
 // }

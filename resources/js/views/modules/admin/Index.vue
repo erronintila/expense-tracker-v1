@@ -101,6 +101,37 @@
             </v-list>
 
             <template v-slot:append>
+                <div
+                    class="text-center mt-5 mb-5"
+                    v-if="$store.getters.user.employee.fund > 0"
+                >
+                    <div>
+                        <v-divider width="50%" inset></v-divider>
+                    </div>
+                    <div class="overline text--secondary">
+                        Remaining Fund
+                    </div>
+                    <v-btn
+                        text
+                        class="headline green--text"
+                        @click="mixin_validate_fund"
+                    >
+                        {{
+                            mixin_formatNumber(
+                                $store.getters.user.employee.remaining_fund
+                            )
+                        }}
+                    </v-btn>
+                    <div class="text--secondary">
+                        /
+                        {{
+                            mixin_formatNumber(
+                                $store.getters.user.employee.fund
+                            )
+                        }}
+                    </div>
+                </div>
+
                 <div class="pa-2">
                     <v-btn block color="green" dark outlined @click="onLogout">
                         Logout

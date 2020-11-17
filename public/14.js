@@ -233,6 +233,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -434,6 +465,68 @@ var render = function() {
                     key: "append",
                     fn: function() {
                       return [
+                        _vm.$store.getters.user.employee.fund > 0
+                          ? _c(
+                              "div",
+                              { staticClass: "text-center mt-5 mb-5" },
+                              [
+                                _c(
+                                  "div",
+                                  [
+                                    _c("v-divider", {
+                                      attrs: { width: "50%", inset: "" }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "overline text--secondary" },
+                                  [
+                                    _vm._v(
+                                      "\n                    Remaining Fund\n                "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "headline green--text",
+                                    attrs: { text: "" },
+                                    on: { click: _vm.mixin_validate_fund }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                    " +
+                                        _vm._s(
+                                          _vm.mixin_formatNumber(
+                                            _vm.$store.getters.user.employee
+                                              .remaining_fund
+                                          )
+                                        ) +
+                                        "\n                "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "text--secondary" }, [
+                                  _vm._v(
+                                    "\n                    /\n                    " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.$store.getters.user.employee.fund
+                                        )
+                                      ) +
+                                      "\n                "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
                         _c(
                           "div",
                           { staticClass: "pa-2" },
@@ -465,7 +558,7 @@ var render = function() {
                 ],
                 null,
                 false,
-                1979733975
+                2433904659
               ),
               model: {
                 value: _vm.drawer,

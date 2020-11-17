@@ -91,7 +91,21 @@ export default {
         mixin_can(permissionName) {
             let permissions = this.$store.getters.user.permissions;
             return permissions.indexOf(permissionName) !== -1;
-        }
+        },
+        mixin_validate_fund() {
+            let _this = this;
+            let employee_id = this.$store.getters.user.employee.id;
+
+            axios
+                .get(`/api/data/validateFund?id=${employee_id}`)
+                .then(response => {
+                    _this.$store.dispatch("AUTH_USER");
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
     },
     computed: {
         mixin_currentUser() {

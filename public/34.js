@@ -13,7 +13,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
 //
 //
 //
@@ -295,13 +294,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
   data: function data() {
     return {
       // date_range: [
@@ -367,10 +364,7 @@ __webpack_require__.r(__webpack_exports__);
         payments: [],
         payment_id: null,
         balance: 0,
-        employee: {
-          id: null,
-          fullname: ""
-        },
+        employee: this.$store.getters.user.employee,
         payment: {
           id: null
         },
@@ -395,7 +389,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.form.code = data.code;
         _this.form.reference_no = data.reference_no;
         _this.form.description = data.description;
@@ -814,7 +807,8 @@ var render = function() {
                                                     "\n                                                    " +
                                                       _vm._s(
                                                         _vm.mixin_formatDate(
-                                                          item.created_at,
+                                                          item.created
+                                                            .created_at,
                                                           "YYYY-MM-DD HH:mm:ss"
                                                         )
                                                       ) +
@@ -823,28 +817,31 @@ var render = function() {
                                                 ])
                                               ]),
                                               _vm._v(" "),
-                                              _c("tr", [
-                                                _c("td", [
-                                                  _c("strong", [
-                                                    _vm._v("Cancelled")
+                                              item.deleted
+                                                ? _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Cancelled")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            _vm.mixin_formatDate(
+                                                              item.deleted
+                                                                .deleted_at,
+                                                              "YYYY-MM-DD HH:mm:ss"
+                                                            )
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
                                                   ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("td", [_vm._v(":")]),
-                                                _vm._v(" "),
-                                                _c("td", [
-                                                  _vm._v(
-                                                    "\n                                                    " +
-                                                      _vm._s(
-                                                        _vm.mixin_formatDate(
-                                                          item.deleted_at,
-                                                          "YYYY-MM-DD HH:mm:ss"
-                                                        )
-                                                      ) +
-                                                      "\n                                                "
-                                                  )
-                                                ])
-                                              ])
+                                                : _vm._e()
                                             ])
                                           ])
                                         ],
@@ -984,44 +981,46 @@ var render = function() {
                         )
                       ]),
                       _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: {
-                                color: "green",
-                                dark: "",
-                                to: { name: "admin.expense_reports.detailed" }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                            View Detailed\n                        "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: {
-                                color: "green",
-                                dark: "",
-                                to: { name: "admin.expense_reports.summary" }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                            View Summary\n                        "
-                              )
-                            ]
-                          )
-                        ],
-                        1
-                      )
+                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                        _c(
+                          "div",
+                          { staticClass: "text-right" },
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: "green",
+                                  dark: "",
+                                  to: { name: "admin.expense_reports.detailed" }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                            View Detailed\n                        "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: "green",
+                                  dark: "",
+                                  to: { name: "admin.expense_reports.summary" }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                            View Summary\n                        "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ])
                     ],
                     1
                   )
