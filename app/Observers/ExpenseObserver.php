@@ -30,17 +30,17 @@ class ExpenseObserver
      */
     public function updated(Expense $expense)
     {
-        $rejected = $expense->getOriginal("rejected_at");
+        // $rejected = $expense->expense_report->getOriginal("rejected_at");
 
-        if ($rejected == null && $expense->rejected_at !== null) {
-            $expense_amount = $expense->amount - $expense->reimbursable_amount;
+        // if ($rejected == null && $expense->expense_report->rejected_at !== null) {
+        //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-            $expense->employee->remaining_fund += $expense_amount;
+        //     $expense->employee->remaining_fund += $expense_amount;
 
-            $expense->employee->save();
+        //     $expense->employee->save();
 
-            return;
-        }
+        //     return;
+        // }
 
         $original_deducted_amount = $expense->getOriginal("amount") - $expense->getOriginal("reimbursable_amount");
 

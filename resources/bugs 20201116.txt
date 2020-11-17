@@ -6,3 +6,4 @@ update expense and expense report settings once approved to finalize settings hi
 gethumandate error: always a few seconds ago (seen on expenses and expense reports)
 add view expense when viewing expense report data
 sql query excel data on expenses
+rejecting plus cancelling report duplicates subtraction on remaining fund

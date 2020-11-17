@@ -462,6 +462,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -512,12 +529,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       status: "All Expense Reports",
       statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", // "Overdue Expense Reports",
       "Cancelled Expense Reports" // "Archived Expense Reports"
-      // "For Submission",
-      // "Pending",
-      // "Approved",
-      // "Cancelled",
-      // "Completed"
-      // "Archived"
       ],
       selected: [],
       search: "",
@@ -706,175 +717,247 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
+    // onUpdate(action, method) {
+    //     let _this = this;
+    //     if (_this.selected.length == 0) {
+    //         this.$dialog.message.error("No item(s) selected", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (
+    //         action == "submit" &&
+    //         !this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Unsubmitted")
+    //     ) {
+    //         this.$dialog.message.error("Action can't be completed", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (
+    //         action == "submit" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Approved")
+    //     ) {
+    //         this.$dialog.message.error("Report has been approved", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (
+    //         action == "submit" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Reimbursed")
+    //     ) {
+    //         this.$dialog.message.error("Report has been paid/reimbursed", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (
+    //         action == "submit" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Cancelled")
+    //     ) {
+    //         this.$dialog.message.error("Report has been cancelled", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (action == "submit") {
+    //         let settings = this.$store.getters.settings;
+    //         let start = moment().startOf("day");
+    //         let end = moment().endOf("day");
+    //         let expense_min_date = moment.min(
+    //             this.selected.map(item => moment(item.from))
+    //         );
+    //         let expense_max_date = moment.max(
+    //             this.selected.map(item => moment(item.to))
+    //         );
+    //         if (settings) {
+    //             switch (settings.submission_period) {
+    //                 case "Weekly":
+    //                     start = moment()
+    //                         .startOf("week")
+    //                         .format("YYYY-MM-DD");
+    //                     end = moment()
+    //                         .endOf("week")
+    //                         .format("YYYY-MM-DD");
+    //                     break;
+    //                 case "Monthly":
+    //                     start = moment()
+    //                         .startOf("month")
+    //                         .format("YYYY-MM-DD");
+    //                     end = moment()
+    //                         .endOf("month")
+    //                         .format("YYYY-MM-DD");
+    //                     break;
+    //                 default:
+    //                     start = moment()
+    //                         .startOf("day")
+    //                         .format("YYYY-MM-DD");
+    //                     end = moment()
+    //                         .endOf("day")
+    //                         .format("YYYY-MM-DD");
+    //                     break;
+    //             }
+    //         }
+    //         if (
+    //             !moment(
+    //                 moment(expense_min_date).format("YYYY-MM-DD")
+    //             ).isBetween(start, end, undefined, "[]") ||
+    //             !moment(
+    //                 moment(expense_max_date).format("YYYY-MM-DD")
+    //             ).isBetween(start, end, undefined, "[]")
+    //         ) {
+    //             this.mixin_errorDialog(
+    //                 "Error",
+    //                 "Submission of expenses beyond due date is not allowed"
+    //             );
+    //             return;
+    //         }
+    //     }
+    //     if (
+    //         action == "approve" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Approved")
+    //     ) {
+    //         this.$dialog.message.error("Report has been approved", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (
+    //         action == "approve" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Cancelled")
+    //     ) {
+    //         this.$dialog.message.error("Report has been cancelled", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (
+    //         action == "approve" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Reimbursed")
+    //     ) {
+    //         this.$dialog.message.error("Report has been paid/reimbursed", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (action == "approve") {
+    //         let today = moment().format("YYYY-MM-DD");
+    //         // console.log(today);
+    //         // return;
+    //         let period = this.$store.getters.settings.approval_period;
+    //         let submission_period = moment
+    //             .min(this.selected.map(item => moment(item.submitted_at)))
+    //             .format("YYYY-MM-DD");
+    //         let last_approval_date = moment(submission_period)
+    //             .add(period, "days")
+    //             .format("YYYY-MM-DD");
+    //         if (
+    //             !moment(today).isBetween(
+    //                 submission_period,
+    //                 last_approval_date,
+    //                 undefined,
+    //                 "[]"
+    //             )
+    //         ) {
+    //             this.mixin_errorDialog(
+    //                 "Error",
+    //                 "Approval of reports beyond due date is not allowed"
+    //             );
+    //             return;
+    //         }
+    //     }
+    //     if (
+    //         action == "cancel" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Cancelled")
+    //     ) {
+    //         this.$dialog.message.error("Report has been cancelled", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     if (
+    //         action == "reject" &&
+    //         this.selected
+    //             .map(item => item.status.status)
+    //             .includes("Rejected")
+    //     ) {
+    //         this.$dialog.message.error("Report has been rejected", {
+    //             position: "top-right",
+    //             timeout: 2000
+    //         });
+    //         return;
+    //     }
+    //     this.$confirm(`Do you want to ${action} expense report(s)?`).then(
+    //         res => {
+    //             if (res) {
+    //                 let ids = _this.selected.map(item => {
+    //                     return item.id;
+    //                 });
+    //                 axios({
+    //                     method: method,
+    //                     url: `/api/expense_reports/${_this.selected[0].id}`,
+    //                     data: {
+    //                         ids: ids,
+    //                         action: action
+    //                     }
+    //                 })
+    //                     .then(function(response) {
+    //                         _this.$dialog.message.success(
+    //                             response.data.message,
+    //                             {
+    //                                 position: "top-right",
+    //                                 timeout: 2000
+    //                             }
+    //                         );
+    //                         _this.getDataFromApi().then(data => {
+    //                             _this.items = data.items;
+    //                             _this.totalItems = data.total;
+    //                         });
+    //                         _this.selected = [];
+    //                     })
+    //                     .catch(function(error) {
+    //                         console.log(error);
+    //                         console.log(error.response);
+    //                         _this.mixin_errorDialog(
+    //                             `Error ${error.response.status}`,
+    //                             error.response.statusText
+    //                         );
+    //                     });
+    //             }
+    //         }
+    //     );
+    // },
+    // ------------------------------------------------------------------------------------------------------------------
+    //
+    // ------------------------------------------------------------------------------------------------------------------
     onUpdate: function onUpdate(action, method) {
       var _this = this;
-
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "submit" && !this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Unsubmitted")) {
-        this.$dialog.message.error("Action can't be completed", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "submit" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Approved")) {
-        this.$dialog.message.error("Report has been approved", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "submit" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Reimbursed")) {
-        this.$dialog.message.error("Report has been paid/reimbursed", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "submit" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Cancelled")) {
-        this.$dialog.message.error("Report has been cancelled", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "submit") {
-        var settings = this.$store.getters.settings;
-        var start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day");
-        var end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
-        var expense_min_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
-          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.from);
-        }));
-        var expense_max_date = moment__WEBPACK_IMPORTED_MODULE_0___default.a.max(this.selected.map(function (item) {
-          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.to);
-        }));
-
-        if (settings) {
-          switch (settings.submission_period) {
-            case "Weekly":
-              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
-              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
-              break;
-
-            case "Monthly":
-              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
-              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
-              break;
-
-            default:
-              start = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
-              end = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
-              break;
-          }
-        } // console.log(
-        //     moment(expense_min_date).format("YYYY-MM-DD"),
-        //     moment(expense_max_date).format("YYYY-MM-DD")
-        // );
-        // console.log("start adn end", start, end);
-        // console.log(
-        //     "check min",
-        //     moment(
-        //         moment(expense_min_date).format("YYYY-MM-DD")
-        //     ).isBetween(start, end)
-        // );
-        // console.log(
-        //     "check max",
-        //     moment(
-        //         moment(expense_max_date).format("YYYY-MM-DD")
-        //     ).isBetween(start, end)
-        // );
-
-
-        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_min_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "[]") || !moment__WEBPACK_IMPORTED_MODULE_0___default()(moment__WEBPACK_IMPORTED_MODULE_0___default()(expense_max_date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "[]")) {
-          this.mixin_errorDialog("Error", "Submission of expenses beyond due date is not allowed");
-          return;
-        }
-      }
-
-      if (action == "approve" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Approved")) {
-        this.$dialog.message.error("Report has been approved", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "approve" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Cancelled")) {
-        this.$dialog.message.error("Report has been cancelled", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "approve" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Reimbursed")) {
-        this.$dialog.message.error("Report has been paid/reimbursed", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "approve") {
-        var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"); // console.log(today);
-        // return;
-
-        var period = this.$store.getters.settings.approval_period;
-        var submission_period = moment__WEBPACK_IMPORTED_MODULE_0___default.a.min(this.selected.map(function (item) {
-          return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.submitted_at);
-        })).format("YYYY-MM-DD");
-        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(submission_period).add(period, "days").format("YYYY-MM-DD");
-
-        if (!moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isBetween(submission_period, last_approval_date, undefined, "[]")) {
-          this.mixin_errorDialog("Error", "Approval of reports beyond due date is not allowed");
-          return;
-        }
-      }
-
-      if (action == "cancel" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Cancelled")) {
-        this.$dialog.message.error("Report has been cancelled", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "reject" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Rejected")) {
-        this.$dialog.message.error("Report has been rejected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
 
       this.$confirm("Do you want to ".concat(action, " expense report(s)?")).then(function (res) {
         if (res) {
@@ -890,10 +973,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               action: action
             }
           }).then(function (response) {
-            _this.$dialog.message.success(response.data.message, {
-              position: "top-right",
-              timeout: 2000
-            });
+            _this.mixin_successDialog("Success", response.data.message);
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -905,10 +985,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog(error.response.data.status, error.response.data.message);
           });
         }
       });
+    },
+    onSubmit: function onSubmit() {
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.onUpdate("submit", "put");
+    },
+    onReview: function onReview() {
+      this.onUpdate("review", "put");
+    },
+    onApprove: function onApprove() {
+      this.onUpdate("approve", "put");
+    },
+    onReject: function onReject() {
+      this.onUpdate("reject", "put");
+    },
+    onDuplicate: function onDuplicate() {
+      this.onUpdate("duplicate", "put");
     }
   },
   watch: {
@@ -1369,13 +1469,7 @@ var render = function() {
                     [
                       _c(
                         "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("submit", "put")
-                            }
-                          }
-                        },
+                        { on: { click: _vm.onSubmit } },
                         [
                           _c(
                             "v-list-item-icon",
@@ -1394,13 +1488,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("approve", "put")
-                            }
-                          }
-                        },
+                        { on: { click: _vm.onApprove } },
                         [
                           _c(
                             "v-list-item-icon",
@@ -1419,13 +1507,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("reject", "put")
-                            }
-                          }
-                        },
+                        { on: { click: _vm.onReject } },
                         [
                           _c(
                             "v-list-item-icon",
@@ -1463,13 +1545,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onUpdate("duplicate", "put")
-                            }
-                          }
-                        },
+                        { on: { click: _vm.onDuplicate } },
                         [
                           _c(
                             "v-list-item-icon",

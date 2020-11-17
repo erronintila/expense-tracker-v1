@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReportResource;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
+use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,8 @@ use Illuminate\Validation\Rule;
 
 class ExpenseReportController extends Controller
 {
+    use ApiResponse;
+
     public function __construct()
     {
         $this->middleware(['permission:view all expense reports'], ['only' => ['index']]);
@@ -272,17 +275,13 @@ class ExpenseReportController extends Controller
                     ->where("submitted_at", "<>", null)->count();
 
                 if ($submitted > 0) {
-                    return response("Expense Report has already been submitted", 403);
+                    return $this->errorResponse("Expense Report has already been submitted.", 422);
                 }
 
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, true, false, false, false, false);
-
-                    // foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                    //     $this->updateExpense($expense, true, false, false, false, false);
-                    // }
                 }
 
                 $message = "Expense Report(s) submitted successfully";
@@ -300,17 +299,13 @@ class ExpenseReportController extends Controller
                     ->where("approved_at", "<>", null)->count();
 
                 if ($approved > 0) {
-                    return response("Expense Report has already been approved", 422);
+                    return $this->errorResponse("Expense Report has already been approved.", 422);
                 }
 
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, false, false, true, false, false);
-
-                    // foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                    //     $this->updateExpense($expense, false, false, true, false, false);
-                    // }
                 }
 
                 $message = "Expense Report(s) approved successfully";
@@ -328,7 +323,7 @@ class ExpenseReportController extends Controller
                     ->where("cancelled_at", "<>", null)->count();
 
                 if ($cancelled > 0) {
-                    return response("Expense Report has already been cancelled", 422);
+                    return $this->errorResponse("Expense Report has already been cancelled.", 422);
                 }
 
                 foreach ($request->ids as $id) {
@@ -356,7 +351,7 @@ class ExpenseReportController extends Controller
                     ->where("rejected_at", "<>", null)->count();
 
                 if ($rejected > 0) {
-                    return response("Expense Report has already been rejected", 422);
+                    return $this->errorResponse("Expense Report has already been rejected.", 422);
                 }
 
                 foreach ($request->ids as $id) {
@@ -364,9 +359,15 @@ class ExpenseReportController extends Controller
 
                     $this->updateReport($expense_report, false, false, false, true, false);
 
-                    // foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                    //     $this->updateExpense($expense, false, false, false, true, false);
-                    // }
+                    foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+                        $expense_amount = $expense->amount - $expense->reimbursable_amount;
+
+                        $expense->employee->remaining_fund += $expense_amount;
+
+                        $expense->employee->disableLogging();
+
+                        $expense->employee->save();
+                    }
                 }
 
                 $message = "Expense Report(s) rejected successfully";

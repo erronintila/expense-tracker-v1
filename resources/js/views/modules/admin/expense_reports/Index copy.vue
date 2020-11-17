@@ -125,7 +125,7 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onSubmit">
+                        <v-list-item @click="onUpdate('submit', 'put')">
                             <v-list-item-icon>
                                 <v-icon>mdi-file-send-outline</v-icon>
                             </v-list-item-icon>
@@ -134,7 +134,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
 
-                        <v-list-item @click="onApprove">
+                        <v-list-item @click="onUpdate('approve', 'put')">
                             <v-list-item-icon>
                                 <v-icon>mdi-file-check-outline</v-icon>
                             </v-list-item-icon>
@@ -143,7 +143,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
 
-                        <v-list-item @click="onReject">
+                        <v-list-item @click="onUpdate('reject', 'put')">
                             <v-list-item-icon>
                                 <v-icon>mdi-close</v-icon>
                             </v-list-item-icon>
@@ -170,7 +170,7 @@
                             </v-list-item-subtitle>
                         </v-list-item> -->
 
-                        <v-list-item @click="onDuplicate">
+                        <v-list-item @click="onUpdate('duplicate', 'put')">
                             <v-list-item-icon>
                                 <v-icon>mdi-content-copy</v-icon>
                             </v-list-item-icon>
@@ -273,10 +273,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.created.created_by == null
-                                                    ? ""
-                                                    : item.created.created_by
-                                                          .name
+                                                item.created.created_by == null ? "" : item.created.created_by.name
                                             }}
                                         </td>
                                     </tr>
@@ -297,10 +294,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.updated.updated_by == null
-                                                    ? ""
-                                                    : item.updated.updated_by
-                                                          .name
+                                                item.updated.updated_by == null ? "" : item.updated.updated_by.name
                                             }}
                                         </td>
                                     </tr>
@@ -321,11 +315,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.submitted.submitted_by ==
-                                                null
-                                                    ? ""
-                                                    : item.submitted
-                                                          .submitted_by.name
+                                                item.submitted.submitted_by == null ? "" : item.submitted.submitted_by.name
                                             }}
                                         </td>
                                     </tr>
@@ -346,11 +336,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.approved.approved_by ==
-                                                null
-                                                    ? ""
-                                                    : item.approved.approved_by
-                                                          .name
+                                                item.approved.approved_by == null ? "" : item.approved.approved_by.name
                                             }}
                                         </td>
                                     </tr>
@@ -371,10 +357,7 @@
                                         <td>:</td>
                                         <td>
                                             {{
-                                                item.deleted.deleted_by == null
-                                                    ? ""
-                                                    : item.deleted.deleted_by
-                                                          .name
+                                                item.deleted.deleted_by == null ? "" : item.deleted.deleted_by.name
                                             }}
                                         </td>
                                     </tr>
@@ -517,6 +500,12 @@ export default {
                 // "Overdue Expense Reports",
                 "Cancelled Expense Reports"
                 // "Archived Expense Reports"
+                // "For Submission",
+                // "Pending",
+                // "Approved",
+                // "Cancelled",
+                // "Completed"
+                // "Archived"
             ],
             selected: [],
             search: "",
@@ -735,268 +724,238 @@ export default {
                 }
             );
         },
-        // onUpdate(action, method) {
-        //     let _this = this;
-
-        //     if (_this.selected.length == 0) {
-        //         this.$dialog.message.error("No item(s) selected", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (
-        //         action == "submit" &&
-        //         !this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Unsubmitted")
-        //     ) {
-        //         this.$dialog.message.error("Action can't be completed", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (
-        //         action == "submit" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Approved")
-        //     ) {
-        //         this.$dialog.message.error("Report has been approved", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (
-        //         action == "submit" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Reimbursed")
-        //     ) {
-        //         this.$dialog.message.error("Report has been paid/reimbursed", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (
-        //         action == "submit" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Cancelled")
-        //     ) {
-        //         this.$dialog.message.error("Report has been cancelled", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (action == "submit") {
-        //         let settings = this.$store.getters.settings;
-
-        //         let start = moment().startOf("day");
-        //         let end = moment().endOf("day");
-
-        //         let expense_min_date = moment.min(
-        //             this.selected.map(item => moment(item.from))
-        //         );
-        //         let expense_max_date = moment.max(
-        //             this.selected.map(item => moment(item.to))
-        //         );
-
-        //         if (settings) {
-        //             switch (settings.submission_period) {
-        //                 case "Weekly":
-        //                     start = moment()
-        //                         .startOf("week")
-        //                         .format("YYYY-MM-DD");
-        //                     end = moment()
-        //                         .endOf("week")
-        //                         .format("YYYY-MM-DD");
-        //                     break;
-        //                 case "Monthly":
-        //                     start = moment()
-        //                         .startOf("month")
-        //                         .format("YYYY-MM-DD");
-        //                     end = moment()
-        //                         .endOf("month")
-        //                         .format("YYYY-MM-DD");
-        //                     break;
-        //                 default:
-        //                     start = moment()
-        //                         .startOf("day")
-        //                         .format("YYYY-MM-DD");
-        //                     end = moment()
-        //                         .endOf("day")
-        //                         .format("YYYY-MM-DD");
-        //                     break;
-        //             }
-        //         }
-
-        //         if (
-        //             !moment(
-        //                 moment(expense_min_date).format("YYYY-MM-DD")
-        //             ).isBetween(start, end, undefined, "[]") ||
-        //             !moment(
-        //                 moment(expense_max_date).format("YYYY-MM-DD")
-        //             ).isBetween(start, end, undefined, "[]")
-        //         ) {
-        //             this.mixin_errorDialog(
-        //                 "Error",
-        //                 "Submission of expenses beyond due date is not allowed"
-        //             );
-        //             return;
-        //         }
-        //     }
-
-        //     if (
-        //         action == "approve" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Approved")
-        //     ) {
-        //         this.$dialog.message.error("Report has been approved", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (
-        //         action == "approve" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Cancelled")
-        //     ) {
-        //         this.$dialog.message.error("Report has been cancelled", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (
-        //         action == "approve" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Reimbursed")
-        //     ) {
-        //         this.$dialog.message.error("Report has been paid/reimbursed", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (action == "approve") {
-        //         let today = moment().format("YYYY-MM-DD");
-        //         // console.log(today);
-        //         // return;
-        //         let period = this.$store.getters.settings.approval_period;
-        //         let submission_period = moment
-        //             .min(this.selected.map(item => moment(item.submitted_at)))
-        //             .format("YYYY-MM-DD");
-        //         let last_approval_date = moment(submission_period)
-        //             .add(period, "days")
-        //             .format("YYYY-MM-DD");
-
-        //         if (
-        //             !moment(today).isBetween(
-        //                 submission_period,
-        //                 last_approval_date,
-        //                 undefined,
-        //                 "[]"
-        //             )
-        //         ) {
-        //             this.mixin_errorDialog(
-        //                 "Error",
-        //                 "Approval of reports beyond due date is not allowed"
-        //             );
-        //             return;
-        //         }
-        //     }
-
-        //     if (
-        //         action == "cancel" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Cancelled")
-        //     ) {
-        //         this.$dialog.message.error("Report has been cancelled", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     if (
-        //         action == "reject" &&
-        //         this.selected
-        //             .map(item => item.status.status)
-        //             .includes("Rejected")
-        //     ) {
-        //         this.$dialog.message.error("Report has been rejected", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     this.$confirm(`Do you want to ${action} expense report(s)?`).then(
-        //         res => {
-        //             if (res) {
-        //                 let ids = _this.selected.map(item => {
-        //                     return item.id;
-        //                 });
-
-        //                 axios({
-        //                     method: method,
-        //                     url: `/api/expense_reports/${_this.selected[0].id}`,
-        //                     data: {
-        //                         ids: ids,
-        //                         action: action
-        //                     }
-        //                 })
-        //                     .then(function(response) {
-        //                         _this.$dialog.message.success(
-        //                             response.data.message,
-        //                             {
-        //                                 position: "top-right",
-        //                                 timeout: 2000
-        //                             }
-        //                         );
-        //                         _this.getDataFromApi().then(data => {
-        //                             _this.items = data.items;
-        //                             _this.totalItems = data.total;
-        //                         });
-
-        //                         _this.selected = [];
-        //                     })
-        //                     .catch(function(error) {
-        //                         console.log(error);
-        //                         console.log(error.response);
-
-        //                         _this.mixin_errorDialog(
-        //                             `Error ${error.response.status}`,
-        //                             error.response.statusText
-        //                         );
-        //                     });
-        //             }
-        //         }
-        //     );
-        // },
-        // ------------------------------------------------------------------------------------------------------------------
-        //
-        // ------------------------------------------------------------------------------------------------------------------
         onUpdate(action, method) {
             let _this = this;
+
+            if (_this.selected.length == 0) {
+                this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "submit" &&
+                !this.selected
+                    .map(item => item.status.status)
+                    .includes("Unsubmitted")
+            ) {
+                this.$dialog.message.error("Action can't be completed", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "submit" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
+                this.$dialog.message.error("Report has been approved", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "submit" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Reimbursed")
+            ) {
+                this.$dialog.message.error("Report has been paid/reimbursed", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "submit" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Cancelled")
+            ) {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (action == "submit") {
+                let settings = this.$store.getters.settings;
+
+                let start = moment().startOf("day");
+                let end = moment().endOf("day");
+
+                let expense_min_date = moment.min(
+                    this.selected.map(item => moment(item.from))
+                );
+                let expense_max_date = moment.max(
+                    this.selected.map(item => moment(item.to))
+                );
+
+                if (settings) {
+                    switch (settings.submission_period) {
+                        case "Weekly":
+                            start = moment()
+                                .startOf("week")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("week")
+                                .format("YYYY-MM-DD");
+                            break;
+                        case "Monthly":
+                            start = moment()
+                                .startOf("month")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("month")
+                                .format("YYYY-MM-DD");
+                            break;
+                        default:
+                            start = moment()
+                                .startOf("day")
+                                .format("YYYY-MM-DD");
+                            end = moment()
+                                .endOf("day")
+                                .format("YYYY-MM-DD");
+                            break;
+                    }
+                }
+
+                // console.log(
+                //     moment(expense_min_date).format("YYYY-MM-DD"),
+                //     moment(expense_max_date).format("YYYY-MM-DD")
+                // );
+                // console.log("start adn end", start, end);
+
+                // console.log(
+                //     "check min",
+                //     moment(
+                //         moment(expense_min_date).format("YYYY-MM-DD")
+                //     ).isBetween(start, end)
+                // );
+                // console.log(
+                //     "check max",
+                //     moment(
+                //         moment(expense_max_date).format("YYYY-MM-DD")
+                //     ).isBetween(start, end)
+                // );
+
+                if (
+                    !moment(
+                        moment(expense_min_date).format("YYYY-MM-DD")
+                    ).isBetween(start, end, undefined, "[]") ||
+                    !moment(
+                        moment(expense_max_date).format("YYYY-MM-DD")
+                    ).isBetween(start, end, undefined, "[]")
+                ) {
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Submission of expenses beyond due date is not allowed"
+                    );
+                    return;
+                }
+            }
+
+            if (
+                action == "approve" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
+                this.$dialog.message.error("Report has been approved", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "approve" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Cancelled")
+            ) {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "approve" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Reimbursed")
+            ) {
+                this.$dialog.message.error("Report has been paid/reimbursed", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (action == "approve") {
+                let today = moment().format("YYYY-MM-DD");
+                // console.log(today);
+                // return;
+                let period = this.$store.getters.settings.approval_period;
+                let submission_period = moment
+                    .min(this.selected.map(item => moment(item.submitted_at)))
+                    .format("YYYY-MM-DD");
+                let last_approval_date = moment(submission_period)
+                    .add(period, "days")
+                    .format("YYYY-MM-DD");
+
+                if (
+                    !moment(today).isBetween(
+                        submission_period,
+                        last_approval_date,
+                        undefined,
+                        "[]"
+                    )
+                ) {
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Approval of reports beyond due date is not allowed"
+                    );
+                    return;
+                }
+            }
+
+            if (
+                action == "cancel" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Cancelled")
+            ) {
+                this.$dialog.message.error("Report has been cancelled", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (
+                action == "reject" &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Rejected")
+            ) {
+                this.$dialog.message.error("Report has been rejected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
             this.$confirm(`Do you want to ${action} expense report(s)?`).then(
                 res => {
@@ -1014,11 +973,13 @@ export default {
                             }
                         })
                             .then(function(response) {
-                                _this.mixin_successDialog(
-                                    "Success",
-                                    response.data.message
+                                _this.$dialog.message.success(
+                                    response.data.message,
+                                    {
+                                        position: "top-right",
+                                        timeout: 2000
+                                    }
                                 );
-
                                 _this.getDataFromApi().then(data => {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
@@ -1031,33 +992,13 @@ export default {
                                 console.log(error.response);
 
                                 _this.mixin_errorDialog(
-                                    error.response.data.status,
-                                    error.response.data.message
+                                    `Error ${error.response.status}`,
+                                    error.response.statusText
                                 );
                             });
                     }
                 }
             );
-        },
-        onSubmit() {
-            if (this.selected.length == 0) {
-                this.mixin_errorDialog("Error", "No item(s) selected");
-                return;
-            }
-
-            this.onUpdate("submit", "put");
-        },
-        onReview() {
-            this.onUpdate("review", "put");
-        },
-        onApprove() {
-            this.onUpdate("approve", "put");
-        },
-        onReject() {
-            this.onUpdate("reject", "put");
-        },
-        onDuplicate() {
-            this.onUpdate("duplicate", "put");
         }
     },
     watch: {
