@@ -175,7 +175,6 @@
                                                     $store.getters.settings
                                                         .submission_period
                                                 }}
-                                                ({{ maxDate }})
                                             </small>
                                         </div>
                                     </v-col>

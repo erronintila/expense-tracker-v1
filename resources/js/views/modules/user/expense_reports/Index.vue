@@ -346,7 +346,7 @@
                         }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">

@@ -346,7 +346,7 @@
                         </td>
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated.updated_at)}}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ mixin_formatNumber(item.amount) }}
@@ -638,7 +638,7 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-            this.status = "Active";
+            this.status = "All Expenses";
             this.loadEmployees();
             this.loadExpenseTypes();
             this.selected = [];

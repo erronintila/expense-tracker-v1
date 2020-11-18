@@ -84,6 +84,19 @@
                                         <v-spacer></v-spacer>
                                     </v-row>
                                 </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/admin/expenses/${item.id}`
+                                            )
+                                        "
+                                    >
+                                        mdi-eye
+                                    </v-icon>
+                                </template>
                                 <template
                                     v-slot:expanded-item="{ headers, item }"
                                 >
@@ -138,7 +151,8 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.created.created_at,
+                                                                item.created
+                                                                    .created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -154,7 +168,8 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.deleted.deleted_at,
+                                                                item.deleted
+                                                                    .deleted_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -228,21 +243,146 @@
 
                         <v-col cols="12" md="4">
                             <div class="text-right">
-                            <v-btn
-                                color="green"
-                                dark
-                                :to="{ name: 'admin.expense_reports.detailed' }"
-                            >
-                                View Detailed
-                            </v-btn>
+                                <v-btn
+                                    color="green"
+                                    dark
+                                    :to="{
+                                        name: 'admin.expense_reports.detailed'
+                                    }"
+                                >
+                                    View Detailed
+                                </v-btn>
 
-                            <v-btn
-                                color="green"
-                                dark
-                                :to="{ name: 'admin.expense_reports.summary' }"
-                            >
-                                View Summary
-                            </v-btn>
+                                <v-btn
+                                    color="green"
+                                    dark
+                                    :to="{
+                                        name: 'admin.expense_reports.summary'
+                                    }"
+                                >
+                                    View Summary
+                                </v-btn>
+                            </div>
+                        </v-col>
+                    </v-row>
+
+                    <v-divider class="mb-4"></v-divider>
+
+                    <v-row class="text--secondary text-caption">
+                        <v-col cols="12" md="5">
+                            <div>Other Details :</div>
+
+                            <table class="table" width="100%">
+                                <tbody>
+                                    <tr v-if="form.created">
+                                        <td>Created By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.created.created_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.created.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.submitted">
+                                        <td>Submitted By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                form.submitted.submitted_by.name
+                                            }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.submitted.submitted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <!-- <tr v-if="created.created_at">
+                                        <td>Reviewed By</td>
+                                        <td>: </td>
+                                        <td>{{ form.reviewed.reviewed_by.name }}</td>
+                                        <td>{{ mixin_formatDate(form.reviewed.reviewed_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                    </tr> -->
+                                    <tr v-if="form.approved">
+                                        <td>Approved By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.approved.approved_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.approved.approved_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.rejected">
+                                        <td>Rejected By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.rejected.rejected_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.rejected.rejected_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.deleted">
+                                        <td>Cancelled By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.deleted.deleted_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.deleted.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </v-col>
+
+                        <v-col cols="12" md="7">
+                            <div>History :</div>
+                            <div>
+                                <table class="table" width="100%">
+                                    <tbody>
+                                        <tr
+                                            v-for="item in form.logs"
+                                            :key="item.id"
+                                        >
+                                            <td>
+                                                {{
+                                                    mixin_formatDate(
+                                                        item.created_at,
+                                                        "YYYY-MM-DD HH:mm:ss"
+                                                    )
+                                                }}
+                                            </td>
+                                            <td>{{ item.causer.name }}</td>
+                                            <td>{{ item.description }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </v-col>
                     </v-row>
@@ -288,15 +428,6 @@ import numeral from "numeral";
 export default {
     data() {
         return {
-            // date_range: [
-            //     moment()
-            //         .startOf("month")
-            //         .format("YYYY-MM-DD"),
-            //     moment()
-            //         .endOf("month")
-            //         .format("YYYY-MM-DD")
-            // ],
-            // selected: [],
             headers: [
                 { text: "Date", value: "date", sortable: false },
                 {
@@ -307,17 +438,10 @@ export default {
                 { text: "Receipt", value: "receipt_number", sortable: false },
                 { text: "Vendor", value: "vendor.name", sortable: false },
                 { text: "Amount", value: "amount", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
-            // items: [],
             total: 0,
-            // code: "",
-            // description: "",
-            // remarks: "",
-            // notes: "",
-            // expenses: [],
-            // status: { color: "", status: "" },
-            // employee: { id: null, fullname: "" },
 
             form: {
                 code: "",
@@ -342,27 +466,28 @@ export default {
                 payment: { id: null },
                 expenses: [],
 
-                created: null,
-                updated: null,
-                deleted: null,
-                submitted: null,
-                approved: null,
-                rejected: null,
-                cancelled: null
+                created: { created_at: null, created_by: { name: "" } },
+                updated: { updated_at: null, updated_by: { name: "" } },
+                deleted: { deleted_at: null, deleted_by: { name: "" } },
+                submitted: { submitted_at: null, submitted_by: { name: "" } },
+                reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+                approved: { approved_at: null, approved_by: { name: "" } },
+                rejected: { rejected_at: null, rejected_by: { name: "" } },
+                cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+
+                logs: []
             }
         };
     },
     methods: {
-        // updateDates(e) {
-        //     this.date_range = e;
-        //     this.loadExpenses(this.employee);
-        // },
         getData() {
             let _this = this;
             axios
                 .get(`/api/expense_reports/${_this.$route.params.id}`)
                 .then(response => {
                     let data = response.data.data;
+
+                    console.log(data);
 
                     _this.form.code = data.code;
                     _this.form.reference_no = data.reference_no;
@@ -394,25 +519,7 @@ export default {
                     _this.form.rejected = data.rejected;
                     _this.form.cancelled = data.cancelled;
 
-                    // _this.code = data.code;
-                    // _this.description = data.description;
-                    // _this.remarks = data.remarks;
-                    // _this.notes = data.notes;
-                    // _this.employee = data.employee;
-                    // _this.status = data.status;
-                    // _this.expenses = data.expenses;
-                    // _this.submitted_at = data.submitted_at;
-                    // _this.reviewed_at = data.reviewed_at;
-                    // _this.approved_at = data.approved_at;
-                    // _this.cancelled_at = data.cancelled_at;
-                    // _this.created_at = data.created_at;
-                    // _this.updated_at = data.updated_at;
-                    // _this.deleted_at = data.deleted_at;
-                    // _this.total = data.total;
-
-                    // _this.selected.splice(0, 0, ...data.expenses);
-
-                    // _this.loadExpenses(data.employee.id);
+                    _this.form.logs = data.logs;
                 })
                 .catch(error => {
                     console.log(error);
@@ -424,49 +531,7 @@ export default {
                     );
                 });
         }
-        // loadExpenses(emp_id) {
-        //     let start_date = this.date_range[0];
-        //     let end_date = this.date_range[1];
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/expenses", {
-        //             params: {
-        //                 update_report: true,
-        //                 employee_id: emp_id,
-        //                 start_date: start_date,
-        //                 end_date: end_date,
-        //                 expense_report_id: _this.$route.params.id
-        //             }
-        //         })
-        //         .then(response => {
-        //             _this.items = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
-        // onEdit() {
-        //     this.$router.push({
-        //         name: "admin.expense_reports.edit",
-        //         params: { id: this.$route.params.id }
-        //     });
-        // }
     },
-    // watch: {
-    //     selected() {
-    //         this.total = this.selected.reduce(
-    //             (total, item) => total + item.amount,
-    //             0
-    //         );
-    //     }
-    // },
     created() {
         this.getData();
     }

@@ -10,7 +10,7 @@ if (!function_exists('generate_code')) {
 
         // $ref = $prefix . str_pad($data == null ? 1 : $data->id + 1, $minLength, '0', STR_PAD_LEFT);
 
-        $data = $model::whereYear("created_at", date("Y"))->whereMonth("created_at", date("m"))->count();
+        $data = $model::withTrashed()->whereYear("created_at", date("Y"))->whereMonth("created_at", date("m"))->count();
 
         $ref = $prefix . date("Ym") . str_pad($data + 1, $minLength, '0', STR_PAD_LEFT);
 

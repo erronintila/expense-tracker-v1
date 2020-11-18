@@ -46,6 +46,10 @@ class ActivityLogController extends Controller
         //     $activity_logs = $activity_logs->whereBetween("created_at", [$start_date, $end_date]);
         // }
 
+        if (request()->has('start_date') && request()->has('end_date')) {
+            $activity_logs = $activity_logs->whereBetween("created_at", [$request->start_date, $request->end_date]);
+        }
+
         if (request()->has('user_id')) {
 
             if ($request->user_id > 0) {

@@ -234,6 +234,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -623,6 +631,21 @@ var render = function() {
                   _c(
                     "v-list",
                     [
+                      _c(
+                        "v-list-item",
+                        [
+                          _c("DateRangePicker", {
+                            attrs: {
+                              preset: _vm.preset,
+                              presets: _vm.presets,
+                              value: _vm.date_range
+                            },
+                            on: { updateDates: _vm.updateDates }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-list-item",
                         [

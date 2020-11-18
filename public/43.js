@@ -196,6 +196,100 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -283,7 +377,56 @@ __webpack_require__.r(__webpack_exports__);
           color: "",
           remarks: "",
           status: ""
-        }
+        },
+        created: {
+          created_at: null,
+          created_by: {
+            name: ""
+          }
+        },
+        updated: {
+          updated_at: null,
+          updated_by: {
+            name: ""
+          }
+        },
+        deleted: {
+          deleted_at: null,
+          deleted_by: {
+            name: ""
+          }
+        },
+        submitted: {
+          submitted_at: null,
+          submitted_by: {
+            name: ""
+          }
+        },
+        reviewed: {
+          reviewed_at: null,
+          reviewed_by: {
+            name: ""
+          }
+        },
+        approved: {
+          approved_at: null,
+          approved_by: {
+            name: ""
+          }
+        },
+        rejected: {
+          rejected_at: null,
+          rejected_by: {
+            name: ""
+          }
+        },
+        cancelled: {
+          cancelled_at: null,
+          cancelled_by: {
+            name: ""
+          }
+        },
+        logs: []
       }
     };
   },
@@ -348,6 +491,14 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
         _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
+        _this.form.created = data.created;
+        _this.form.updated = data.updated;
+        _this.form.deleted = data.deleted;
+        _this.form.submitted = data.submitted;
+        _this.form.approved = data.approved;
+        _this.form.rejected = data.rejected;
+        _this.form.cancelled = data.cancelled;
+        _this.form.logs = data.logs;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -667,13 +818,7 @@ var render = function() {
                           )
                         ]),
                         _vm._v(" "),
-                        _c("div", [
-                          _vm._v(
-                            "\n                            Date: " +
-                              _vm._s(_vm.form.date) +
-                              "\n                        "
-                          )
-                        ])
+                        _c("div", [_vm._v("Date: " + _vm._s(_vm.form.date))])
                       ]),
                       _vm._v(" "),
                       _c("v-col", { attrs: { cols: "12", md: "4" } }, [
@@ -938,6 +1083,182 @@ var render = function() {
                         ],
                         1
                       )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider", { staticClass: "mb-4" }),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    { staticClass: "text--secondary text-caption" },
+                    [
+                      _c("v-col", { attrs: { cols: "12" } }, [
+                        _c("div", [_vm._v("Other Details :")]),
+                        _vm._v(" "),
+                        _c(
+                          "table",
+                          { staticClass: "table", attrs: { width: "100%" } },
+                          [
+                            _c("tbody", [
+                              _vm.form.created
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Created By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.created.created_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.created.created_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.submitted
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Submitted By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.submitted.submitted_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.submitted.submitted_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.approved
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Approved By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.approved.approved_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.approved.approved_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.rejected
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Rejected By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.rejected.rejected_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.rejected.rejected_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.deleted
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Cancelled By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.deleted.deleted_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.deleted.deleted_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e()
+                            ])
+                          ]
+                        )
+                      ])
                     ],
                     1
                   )

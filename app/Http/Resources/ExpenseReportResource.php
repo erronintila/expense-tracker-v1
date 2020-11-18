@@ -6,6 +6,7 @@ use App\Models\Expense;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\Activitylog\Models\Activity;
 
 class ExpenseReportResource extends JsonResource
 {
@@ -18,6 +19,19 @@ class ExpenseReportResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
+
+        $activities = Activity::where("subject_type", "App\Models\ExpenseReport")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
+        $logs = [];
+        
+        foreach ($activities as $activity) {
+            $temp = [
+                "causer" => User::find($activity['causer_id']),
+                "created_at" => $activity['created_at'],
+                "description" => $activity['description'],
+            ];
+
+            array_push($logs, $temp);
+        }
 
         return [
             'id' => $this->id,
@@ -68,6 +82,8 @@ class ExpenseReportResource extends JsonResource
             'approved' => $this->approved(),
             'rejected' => $this->rejected(),
             'cancelled' => $this->cancelled(),
+
+            'logs' => $logs,
         ];
     }
 }

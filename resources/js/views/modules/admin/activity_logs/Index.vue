@@ -76,6 +76,14 @@
                 <v-card>
                     <v-list>
                         <v-list-item>
+                                <DateRangePicker
+                                    :preset="preset"
+                                    :presets="presets"
+                                    :value="date_range"
+                                    @updateDates="updateDates"
+                                ></DateRangePicker>
+                            </v-list-item>
+                        <v-list-item>
                             <v-select
                                 v-model="user"
                                 :items="users"
@@ -218,10 +226,40 @@
 </template>
 
 <script>
+import moment from "moment";
+import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+
 export default {
+    components: {
+        DateRangePicker
+    },
     data() {
         return {
             loading: true,
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ],
+            preset: "",
+            presets: [
+                "Today",
+                "Yesterday",
+                "Last 7 Days",
+                "Last 30 Days",
+                "This Week",
+                "This Month",
+                "This Quarter",
+                "This Year",
+                "Last Week",
+                "Last Month",
+                "Last Quarter",
+                "Last Year",
+                "Last 5 Years"
+            ],
             headers: [
                 { text: "User", value: "user", sortable: false },
                 { text: "Description", value: "description", sortable: false },
@@ -245,6 +283,9 @@ export default {
         };
     },
     methods: {
+        updateDates(e) {
+            this.date_range = e;
+        },
         getDataFromApi() {
             let _this = this;
 
@@ -255,6 +296,7 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let user_id = _this.user.id;
+                let range = _this.date_range;
 
                 axios
                     .get("/api/activity_logs", {
@@ -264,7 +306,9 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            user_id: user_id
+                            user_id: user_id,
+                            start_date: range[0],
+                            end_date: range[1]
                         }
                     })
                     .then(response => {
@@ -436,7 +480,8 @@ export default {
             return {
                 ...this.options,
                 query: this.search,
-                query: this.user
+                query: this.user,
+                query: this.date_range
             };
         }
     },

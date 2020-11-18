@@ -647,7 +647,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -1468,9 +1467,7 @@ var render = function() {
                                                 _vm.$store.getters.settings
                                                   .submission_period
                                               ) +
-                                              "\n                                            (" +
-                                              _vm._s(_vm.maxDate) +
-                                              ")\n                                        "
+                                              "\n                                        "
                                           )
                                         ]
                                       )

@@ -1393,9 +1393,7 @@ var render = function() {
                                                 _vm.$store.getters.settings
                                                   .submission_period
                                               ) +
-                                              " (" +
-                                              _vm._s(_vm.maxDate) +
-                                              ")\n                                        "
+                                              "\n                                        "
                                           )
                                         ]
                                       )

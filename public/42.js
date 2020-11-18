@@ -628,7 +628,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.status = "Active";
+      this.status = "All Expenses";
       this.loadEmployees();
       this.loadExpenseTypes();
       this.selected = [];
@@ -1631,7 +1631,9 @@ var render = function() {
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  _vm.mixin_getHumanDate(item.updated_at)
+                                  _vm.mixin_getHumanDate(
+                                    item.updated.updated_at
+                                  )
                                 ) +
                                 "\n                "
                             )

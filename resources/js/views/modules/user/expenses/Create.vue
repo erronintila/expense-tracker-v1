@@ -153,7 +153,7 @@
                                                 ** Note:
                                             </small>
                                             <small class="grey--text">
-                                                Due of encoding of expenses : {{ $store.getters.settings.submission_period }} ({{ maxDate }})
+                                                Due of encoding of expenses : {{ $store.getters.settings.submission_period }}
                                             </small>
                                         </div>
                                     </v-col>

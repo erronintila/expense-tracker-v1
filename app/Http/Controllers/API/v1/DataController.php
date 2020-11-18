@@ -20,6 +20,7 @@ use App\Models\Job;
 use App\Models\Payment;
 use App\Models\SubType;
 use App\Models\Vendor;
+use App\Traits\ApiResponse;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -30,6 +31,8 @@ use Spatie\Permission\Models\Permission;
 
 class DataController extends Controller
 {
+    use ApiResponse;
+    
     public function test()
     {
         $activity = Activity::all()->last();
@@ -113,8 +116,6 @@ class DataController extends Controller
     
                 array_push($main2, $temp2);
             }
-
-
 
             return response()->json([
                 "temp" => $main2,
@@ -811,7 +812,8 @@ class DataController extends Controller
         $employee = Employee::withTrashed()->findOrFail($request->id);
 
         $expenses = Expense::where("employee_id", $employee->id)
-            ->whereHas("expense_report", function ($query) {
+            ->where("deleted_at", null)
+            ->orWhereHas("expense_report", function ($query) {
                 $query->where([
 
                     ["cancelled_at", "=", null],
@@ -821,7 +823,6 @@ class DataController extends Controller
                     ["deleted_at", "=", null],
                 ]);
             })
-            ->where("deleted_at", null)
             ->get();
 
         $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");

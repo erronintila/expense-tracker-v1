@@ -393,7 +393,7 @@
                         }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated.updated_at) }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-2" @click="onShow(item)">
@@ -564,8 +564,6 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        console.log(items);
 
                         _this.loading = false;
 

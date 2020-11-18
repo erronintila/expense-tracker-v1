@@ -30,7 +30,7 @@
                             <div class="display-1 green--text">
                                 PHP {{ mixin_formatNumber(form.amount) }}
                             </div>
-                             <div>
+                            <div>
                                 {{ form.expense_type.name }}
                                 {{
                                     form.sub_type == null ||
@@ -39,9 +39,7 @@
                                         : `(${form.sub_type.name})`
                                 }}
                             </div>
-                            <div>
-                                Date: {{ form.date }}
-                            </div>
+                            <div>Date: {{ form.date }}</div>
                         </v-col>
                         <v-col cols="12" md="4">
                             <div>Receipt: #{{ form.receipt_number }}</div>
@@ -177,6 +175,102 @@
                             <div>Notes : {{ form.notes }}</div>
                         </v-col>
                     </v-row>
+
+                    <v-divider class="mb-4"></v-divider>
+
+                    <v-row class="text--secondary text-caption">
+                        <v-col cols="12">
+                            <div>Other Details :</div>
+
+                            <table class="table" width="100%">
+                                <tbody>
+                                    <tr v-if="form.created">
+                                        <td>Created By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.created.created_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.created.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.submitted">
+                                        <td>Submitted By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                form.submitted.submitted_by.name
+                                            }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.submitted.submitted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <!-- <tr v-if="created.created_at">
+                                        <td>Reviewed By</td>
+                                        <td>: </td>
+                                        <td>{{ form.reviewed.reviewed_by.name }}</td>
+                                        <td>{{ mixin_formatDate(form.reviewed.reviewed_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                    </tr> -->
+                                    <tr v-if="form.approved">
+                                        <td>Approved By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.approved.approved_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.approved.approved_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.rejected">
+                                        <td>Rejected By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.rejected.rejected_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.rejected.rejected_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.deleted">
+                                        <td>Cancelled By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.deleted.deleted_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.deleted.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </v-col>
+                    </v-row>
                 </v-container>
             </v-form>
         </v-card>
@@ -248,7 +342,18 @@ export default {
                 tax_name: "",
                 tax_rate: 0,
                 tax_amount: 0,
-                status: { color: "", remarks: "", status: "" }
+                status: { color: "", remarks: "", status: "" },
+
+                created: { created_at: null, created_by: { name: "" } },
+                updated: { updated_at: null, updated_by: { name: "" } },
+                deleted: { deleted_at: null, deleted_by: { name: "" } },
+                submitted: { submitted_at: null, submitted_by: { name: "" } },
+                reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+                approved: { approved_at: null, approved_by: { name: "" } },
+                rejected: { rejected_at: null, rejected_by: { name: "" } },
+                cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+
+                logs: []
             }
         };
     },
@@ -322,6 +427,16 @@ export default {
 
                         _this.form.employee.remaining_fund +=
                             data.amount - data.reimbursable_amount;
+
+                        _this.form.created = data.created;
+                        _this.form.updated = data.updated;
+                        _this.form.deleted = data.deleted;
+                        _this.form.submitted = data.submitted;
+                        _this.form.approved = data.approved;
+                        _this.form.rejected = data.rejected;
+                        _this.form.cancelled = data.cancelled;
+
+                        _this.form.logs = data.logs;
                     })
                     .catch(error => {
                         console.log(error);

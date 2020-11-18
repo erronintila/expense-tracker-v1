@@ -37,6 +37,8 @@ class ExpenseReportObserver
      */
     public function deleting(ExpenseReport $expenseReport)
     {
+        $expenseReport->disableLogging();
+
         $expenseReport->deleted_by = Auth::id();
 
         $expenseReport->save();

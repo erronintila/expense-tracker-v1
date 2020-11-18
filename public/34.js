@@ -296,20 +296,151 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      // date_range: [
-      //     moment()
-      //         .startOf("month")
-      //         .format("YYYY-MM-DD"),
-      //     moment()
-      //         .endOf("month")
-      //         .format("YYYY-MM-DD")
-      // ],
-      // selected: [],
       headers: [{
         text: "Date",
         value: "date",
@@ -331,18 +462,14 @@ __webpack_require__.r(__webpack_exports__);
         value: "amount",
         sortable: false
       }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
+      }, {
         text: "",
         value: "data-table-expand"
       }],
-      // items: [],
       total: 0,
-      // code: "",
-      // description: "",
-      // remarks: "",
-      // notes: "",
-      // expenses: [],
-      // status: { color: "", status: "" },
-      // employee: { id: null, fullname: "" },
       form: {
         code: "",
         reference_no: "",
@@ -369,26 +496,65 @@ __webpack_require__.r(__webpack_exports__);
           id: null
         },
         expenses: [],
-        created: null,
-        updated: null,
-        deleted: null,
-        submitted: null,
-        approved: null,
-        rejected: null,
-        cancelled: null
+        created: {
+          created_at: null,
+          created_by: {
+            name: ""
+          }
+        },
+        updated: {
+          updated_at: null,
+          updated_by: {
+            name: ""
+          }
+        },
+        deleted: {
+          deleted_at: null,
+          deleted_by: {
+            name: ""
+          }
+        },
+        submitted: {
+          submitted_at: null,
+          submitted_by: {
+            name: ""
+          }
+        },
+        reviewed: {
+          reviewed_at: null,
+          reviewed_by: {
+            name: ""
+          }
+        },
+        approved: {
+          approved_at: null,
+          approved_by: {
+            name: ""
+          }
+        },
+        rejected: {
+          rejected_at: null,
+          rejected_by: {
+            name: ""
+          }
+        },
+        cancelled: {
+          cancelled_at: null,
+          cancelled_by: {
+            name: ""
+          }
+        },
+        logs: []
       }
     };
   },
   methods: {
-    // updateDates(e) {
-    //     this.date_range = e;
-    //     this.loadExpenses(this.employee);
-    // },
     getData: function getData() {
       var _this = this;
 
       axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
+        console.log(data);
         _this.form.code = data.code;
         _this.form.reference_no = data.reference_no;
         _this.form.description = data.description;
@@ -414,71 +580,16 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.submitted = data.submitted;
         _this.form.approved = data.approved;
         _this.form.rejected = data.rejected;
-        _this.form.cancelled = data.cancelled; // _this.code = data.code;
-        // _this.description = data.description;
-        // _this.remarks = data.remarks;
-        // _this.notes = data.notes;
-        // _this.employee = data.employee;
-        // _this.status = data.status;
-        // _this.expenses = data.expenses;
-        // _this.submitted_at = data.submitted_at;
-        // _this.reviewed_at = data.reviewed_at;
-        // _this.approved_at = data.approved_at;
-        // _this.cancelled_at = data.cancelled_at;
-        // _this.created_at = data.created_at;
-        // _this.updated_at = data.updated_at;
-        // _this.deleted_at = data.deleted_at;
-        // _this.total = data.total;
-        // _this.selected.splice(0, 0, ...data.expenses);
-        // _this.loadExpenses(data.employee.id);
+        _this.form.cancelled = data.cancelled;
+        _this.form.logs = data.logs;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
 
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
-    } // loadExpenses(emp_id) {
-    //     let start_date = this.date_range[0];
-    //     let end_date = this.date_range[1];
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/expenses", {
-    //             params: {
-    //                 update_report: true,
-    //                 employee_id: emp_id,
-    //                 start_date: start_date,
-    //                 end_date: end_date,
-    //                 expense_report_id: _this.$route.params.id
-    //             }
-    //         })
-    //         .then(response => {
-    //             _this.items = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
-    // onEdit() {
-    //     this.$router.push({
-    //         name: "admin.expense_reports.edit",
-    //         params: { id: this.$route.params.id }
-    //     });
-    // }
-
+    }
   },
-  // watch: {
-  //     selected() {
-  //         this.total = this.selected.reduce(
-  //             (total, item) => total + item.amount,
-  //             0
-  //         );
-  //     }
-  // },
   created: function created() {
     this.getData();
   }
@@ -714,6 +825,33 @@ var render = function() {
                                     ]
                                   },
                                   proxy: true
+                                },
+                                {
+                                  key: "item.actions",
+                                  fn: function(ref) {
+                                    var item = ref.item
+                                    return [
+                                      _c(
+                                        "v-icon",
+                                        {
+                                          staticClass: "mr-2",
+                                          attrs: { small: "" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.$router.push(
+                                                "/admin/expenses/" + item.id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    mdi-eye\n                                "
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  }
                                 },
                                 {
                                   key: "expanded-item",
@@ -992,12 +1130,14 @@ var render = function() {
                                 attrs: {
                                   color: "green",
                                   dark: "",
-                                  to: { name: "admin.expense_reports.detailed" }
+                                  to: {
+                                    name: "admin.expense_reports.detailed"
+                                  }
                                 }
                               },
                               [
                                 _vm._v(
-                                  "\n                            View Detailed\n                        "
+                                  "\n                                View Detailed\n                            "
                                 )
                               ]
                             ),
@@ -1008,18 +1148,235 @@ var render = function() {
                                 attrs: {
                                   color: "green",
                                   dark: "",
-                                  to: { name: "admin.expense_reports.summary" }
+                                  to: {
+                                    name: "admin.expense_reports.summary"
+                                  }
                                 }
                               },
                               [
                                 _vm._v(
-                                  "\n                            View Summary\n                        "
+                                  "\n                                View Summary\n                            "
                                 )
                               ]
                             )
                           ],
                           1
                         )
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider", { staticClass: "mb-4" }),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    { staticClass: "text--secondary text-caption" },
+                    [
+                      _c("v-col", { attrs: { cols: "12", md: "5" } }, [
+                        _c("div", [_vm._v("Other Details :")]),
+                        _vm._v(" "),
+                        _c(
+                          "table",
+                          { staticClass: "table", attrs: { width: "100%" } },
+                          [
+                            _c("tbody", [
+                              _vm.form.created
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Created By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.created.created_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.created.created_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.submitted
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Submitted By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.submitted.submitted_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.submitted.submitted_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.approved
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Approved By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.approved.approved_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.approved.approved_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.rejected
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Rejected By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.rejected.rejected_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.rejected.rejected_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.form.deleted
+                                ? _c("tr", [
+                                    _c("td", [_vm._v("Cancelled By")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.form.deleted.deleted_by.name
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              _vm.form.deleted.deleted_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
+                                : _vm._e()
+                            ])
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-col", { attrs: { cols: "12", md: "7" } }, [
+                        _c("div", [_vm._v("History :")]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c(
+                            "table",
+                            { staticClass: "table", attrs: { width: "100%" } },
+                            [
+                              _c(
+                                "tbody",
+                                _vm._l(_vm.form.logs, function(item) {
+                                  return _c("tr", { key: item.id }, [
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                            " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              item.created_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                        "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(item.causer.name))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.description))])
+                                  ])
+                                }),
+                                0
+                              )
+                            ]
+                          )
+                        ])
                       ])
                     ],
                     1

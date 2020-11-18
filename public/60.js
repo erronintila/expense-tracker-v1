@@ -1761,7 +1761,9 @@ var render = function() {
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  _vm.mixin_getHumanDate(item.updated_at)
+                                  _vm.mixin_getHumanDate(
+                                    item.updated.updated_at
+                                  )
                                 ) +
                                 "\n                "
                             )

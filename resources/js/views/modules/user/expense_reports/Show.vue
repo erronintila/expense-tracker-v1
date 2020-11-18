@@ -84,6 +84,19 @@
                                         <v-spacer></v-spacer>
                                     </v-row>
                                 </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/expenses/${item.id}`
+                                            )
+                                        "
+                                    >
+                                        mdi-eye
+                                    </v-icon>
+                                </template>
                                 <template
                                     v-slot:expanded-item="{ headers, item }"
                                 >
@@ -238,6 +251,127 @@
                             </div>
                         </v-col>
                     </v-row>
+
+                    <v-divider class="mb-4"></v-divider>
+
+                    <v-row class="text--secondary text-caption">
+                        <v-col cols="12" md="5">
+                            <div>Other Details :</div>
+
+                            <table class="table" width="100%">
+                                <tbody>
+                                    <tr v-if="form.created">
+                                        <td>Created By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.created.created_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.created.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.submitted">
+                                        <td>Submitted By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                form.submitted.submitted_by.name
+                                            }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.submitted.submitted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <!-- <tr v-if="created.created_at">
+                                        <td>Reviewed By</td>
+                                        <td>: </td>
+                                        <td>{{ form.reviewed.reviewed_by.name }}</td>
+                                        <td>{{ mixin_formatDate(form.reviewed.reviewed_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                    </tr> -->
+                                    <tr v-if="form.approved">
+                                        <td>Approved By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.approved.approved_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.approved.approved_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.rejected">
+                                        <td>Rejected By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.rejected.rejected_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.rejected.rejected_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="form.deleted">
+                                        <td>Cancelled By</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ form.deleted.deleted_by.name }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    form.deleted.deleted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </v-col>
+
+                        <v-col cols="12" md="7">
+                            <div>History :</div>
+                            <div>
+                                <table class="table" width="100%">
+                                    <tbody>
+                                        <tr
+                                            v-for="item in form.logs"
+                                            :key="item.id"
+                                        >
+                                            <td>
+                                                {{
+                                                    mixin_formatDate(
+                                                        item.created_at,
+                                                        "YYYY-MM-DD HH:mm:ss"
+                                                    )
+                                                }}
+                                            </td>
+                                            <td>{{ item.causer.name }}</td>
+                                            <td>{{ item.description }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </v-col>
+                    </v-row>
                 </v-container>
             </v-form>
         </v-card>
@@ -261,6 +395,7 @@ export default {
                 { text: "Receipt", value: "receipt_number", sortable: false },
                 { text: "Vendor", value: "vendor.name", sortable: false },
                 { text: "Amount", value: "amount", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             total: 0,
@@ -287,13 +422,16 @@ export default {
                 payment: { id: null },
                 expenses: [],
 
-                created: null,
-                updated: null,
-                deleted: null,
-                submitted: null,
-                approved: null,
-                rejected: null,
-                cancelled: null
+                created: { created_at: null, created_by: { name: "" } },
+                updated: { updated_at: null, updated_by: { name: "" } },
+                deleted: { deleted_at: null, deleted_by: { name: "" } },
+                submitted: { submitted_at: null, submitted_by: { name: "" } },
+                reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+                approved: { approved_at: null, approved_by: { name: "" } },
+                rejected: { rejected_at: null, rejected_by: { name: "" } },
+                cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+
+                logs: []
             }
         };
     },
@@ -336,6 +474,8 @@ export default {
                     _this.form.approved = data.approved;
                     _this.form.rejected = data.rejected;
                     _this.form.cancelled = data.cancelled;
+
+                    _this.form.logs = data.logs;
                 })
                 .catch(error => {
                     console.log(error);

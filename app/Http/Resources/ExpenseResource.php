@@ -3,8 +3,10 @@
 namespace App\Http\Resources;
 
 use App\Models\ExpenseReport;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\Activitylog\Models\Activity;
 
 use function GuzzleHttp\json_decode;
 
@@ -19,6 +21,20 @@ class ExpenseResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
+
+        $activities = Activity::where("subject_type", "App\Models\Expense")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
+        $logs = [];
+        
+        foreach ($activities as $activity) {
+            $temp = [
+                "causer" => User::find($activity['causer_id']),
+                "created_at" => $activity['created_at'],
+                "description" => $activity['description'],
+            ];
+
+            array_push($logs, $temp);
+        }
+
         return [
             'id' => $this->id,
             'code' => $this->code,
@@ -63,6 +79,8 @@ class ExpenseResource extends JsonResource
             'approved' => $this->approved(),
             'rejected' => $this->rejected(),
             'cancelled' => $this->cancelled(),
+
+            'logs' => $logs
         ];
     }
 }
