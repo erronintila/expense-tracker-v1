@@ -175,13 +175,13 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.created_at,
+                                                                item.created.created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <tr v-if="item.deleted">
                                                     <td>
                                                         <strong
                                                             >Cancelled</strong
@@ -191,7 +191,7 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.deleted_at,
+                                                                item.deleted.deleted_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}

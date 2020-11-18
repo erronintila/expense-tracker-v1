@@ -61,7 +61,7 @@
                             <div>Description: {{ form.description }}</div>
                             <div>
                                 Tax ({{ form.tax_rate }}% inclusive):
-                                {{ form.tax_amount }}
+                                {{ form.tax_amount }} {{ form.is_tax_inclusive ? `- Inclusive` : `- Exclusive` }}
                             </div>
                             <div>
                                 <v-data-table

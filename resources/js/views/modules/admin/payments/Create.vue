@@ -428,6 +428,8 @@ export default {
                         employee: _this.form.employee.id
                     })
                     .then(function(response) {
+                        console.log(response);
+                        
                         _this.onRefresh();
 
                         _this.$dialog.message.success(

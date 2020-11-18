@@ -74,8 +74,10 @@ class ExpenseObserver
      */
     public function deleted(Expense $expense)
     {
-        if($expense->expense_report()->withTrashed()->first()->rejected_at) {
-            return;
+        if ($expense->expense_report) {
+            if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
+                return;
+            }
         }
 
         // $expense_amount = $expense->revolving_fund;
@@ -94,8 +96,10 @@ class ExpenseObserver
      */
     public function restored(Expense $expense)
     {
-        if($expense->expense_report()->withTrashed()->first()->rejected_at) {
-            return;
+        if ($expense->expense_report) {
+            if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
+                return;
+            }
         }
 
         $expense_amount = $expense->amount - $expense->reimbursable_amount;

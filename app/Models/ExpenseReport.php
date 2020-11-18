@@ -71,7 +71,7 @@ class ExpenseReport extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model
@@ -82,7 +82,7 @@ class ExpenseReport extends Model
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = ['updated_at', "updated_by", "paid_at", "paid_by"];
+    protected static $logAttributesToIgnore = ['updated_at', "updated_by"];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
@@ -138,7 +138,7 @@ class ExpenseReport extends Model
 
     public function payments()
     {
-        return $this->belongsToMany(Payment::class)->withPivot('payment');
+        return $this->belongsToMany(Payment::class)->withPivot('payment')->withTimestamps();
     }
 
     /**
@@ -189,7 +189,7 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->paid_at);
+        $paid = is_null($this->payments);
 
         if (!$deleted) {
             $arr = [
@@ -222,24 +222,37 @@ class ExpenseReport extends Model
         }
 
         if (!$paid) {
-
-            switch ($this->payment->status()["status"]) {
-                case 'Completed':
-                    $arr = [
-                        'color' => 'green',
-                        'remarks' => 'Payment transaction was completed',
-                        'status' => 'Reimbursed',
-                    ];
-                    break;
-
-                default:
-                    $arr = [
-                        'color' => 'cyan',
-                        'remarks' => 'Processing Payment',
-                        'status' => 'Approved',
-                    ];
-                    break;
+            if ($this->balance() == 0) {
+                $arr = [
+                    'color' => 'green',
+                    'remarks' => 'Payment transaction was completed',
+                    'status' => 'Reimbursed',
+                ];
+            } else {
+                $arr = [
+                    'color' => 'cyan',
+                    'remarks' => 'Processing Payment',
+                    'status' => 'Approved',
+                ];
             }
+            
+            // switch ($this->payment->status()["status"]) {
+            //     case 'Completed':
+            //         $arr = [
+            //             'color' => 'green',
+            //             'remarks' => 'Payment transaction was completed',
+            //             'status' => 'Reimbursed',
+            //         ];
+            //         break;
+
+            //     default:
+            //         $arr = [
+            //             'color' => 'cyan',
+            //             'remarks' => 'Processing Payment',
+            //             'status' => 'Approved',
+            //         ];
+            //         break;
+            // }
 
             return $arr;
         }
@@ -323,12 +336,12 @@ class ExpenseReport extends Model
         return date('Y-m-d', max(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
     }
 
-    public function total_amount() 
+    public function total_amount()
     {
         return $this->expenses()->withTrashed()->get()->sum('amount');
     }
 
-    public function total_reimbursable_amount() 
+    public function total_reimbursable_amount()
     {
         return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
     }
@@ -337,8 +350,7 @@ class ExpenseReport extends Model
     {
         $sum_payment = 0;
 
-        foreach ($this->payments as $payment)
-        {
+        foreach ($this->payments as $payment) {
             $sum_payment += $payment->pivot->payment;
         }
 
@@ -441,8 +453,8 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function reimbursed() {
-
+    public function reimbursed()
+    {
         $expense_report = $this->expense_report;
 
         return null;

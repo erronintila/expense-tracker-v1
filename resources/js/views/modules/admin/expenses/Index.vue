@@ -148,6 +148,15 @@
                             </v-list-item-subtitle>
                         </v-list-item> -->
 
+                        <!-- <v-list-item @click="$router.push('/admin/expenses/create/bulk')">
+                            <v-list-item-icon>
+                                <v-icon>mdi-plus</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Add Bulk Expense(s)
+                            </v-list-item-subtitle>
+                        </v-list-item> -->
+
                         <v-list-item @click="onDelete">
                             <v-list-item-icon>
                                 <v-icon>mdi-close</v-icon>
@@ -575,6 +584,8 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
+                        console.log(items);
+
                         _this.loading = false;
 
                         resolve({ items, total });
@@ -690,7 +701,7 @@ export default {
         onDelete() {
             let _this = this;
             let arr = this.selected.map(
-                item => item.expense_report_id === null
+                item => item.expense_report === null
             );
 
             // this.mixin_is_empty(
@@ -719,7 +730,7 @@ export default {
                 return;
             }
 
-            this.$confirm("Cancel expense(s)?").then(res => {
+            this.$confirm("Do you want to cancel expense(s)?").then(res => {
                 if (res) {
                     axios
                         .delete(`/api/expenses/${_this.selected[0].id}`, {

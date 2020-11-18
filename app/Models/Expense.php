@@ -73,7 +73,7 @@ class Expense extends Model
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = ['updated_at', "updated_by", "paid_at", "paid_by"];
+    protected static $logAttributesToIgnore = ['updated_at', "updated_by"];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
@@ -212,7 +212,7 @@ class Expense extends Model
         $cancelled = is_null($this->cancelled());
         $rejected = is_null($this->rejected());
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->paid_at);
+        $paid = is_null($this->reimbursed());
 
         if (!$deleted) {
             $arr = [

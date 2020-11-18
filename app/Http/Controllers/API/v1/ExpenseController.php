@@ -111,9 +111,9 @@ class ExpenseController extends Controller
 
                             ["rejected_at", "=", null],
 
-                            ["cancelled_at", "=", null],
+                            ["cancelled_at", "=", null]
 
-                            ["paid_at", "<>", null],
+                            // ["paid_at", "<>", null],
 
                         ]);
                     });

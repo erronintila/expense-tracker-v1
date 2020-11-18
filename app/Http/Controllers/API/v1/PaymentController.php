@@ -7,6 +7,7 @@ use App\Http\Resources\PaymentResource;
 use App\Models\ExpenseReport;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -225,22 +226,22 @@ class PaymentController extends Controller
 
         $payment->save();
 
-        foreach ($request->expense_reports as $expense_report) {
-            $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
+        // foreach ($request->expense_reports as $expense_report) {
+        //     $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
 
-            $expense_report->payment_id = $payment->id;
+        //     $expense_report->payment_id = $payment->id;
 
-            $expense_report->save();
+        //     $expense_report->save();
 
-            // foreach ($expense_report->expenses as $expense) {
+        //     // foreach ($expense_report->expenses as $expense) {
 
-            //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
+        //     //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-            //     $expense->employee->remaining_fund += $expense_amount;
+        //     //     $expense->employee->remaining_fund += $expense_amount;
 
-            //     $expense->employee->save();
-            // }
-        }
+        //     //     $expense->employee->save();
+        //     // }
+        // }
 
         // activity()
         //     ->withProperties([
@@ -254,11 +255,23 @@ class PaymentController extends Controller
         //     ])
         //     ->log("Created Payment");
 
+        if (request()->has("expense_reports")) {
+            $arr = [];
+
+            foreach ($request->expense_reports as $item) {
+                $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
+
+                $arr[$expense_report->id] = ['payment' => $expense_report->total_amount()];
+            }
+            
+            $payment->pivot_expense_reports()->sync($arr);
+        }
+
         return response(
             [
                 'data' => new PaymentResource($payment),
 
-                'message' => 'Created successfully'
+                'message' => 'Created successfully',
             ],
             201
         );
@@ -407,20 +420,32 @@ class PaymentController extends Controller
                 $payment->save();
 
                 // set existing references to null
-                foreach ($payment->expense_reports as $key => $value) {
-                    $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
+                // foreach ($payment->expense_reports as $key => $value) {
+                //     $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
 
-                    $expense_report->payment_id = null;
+                //     $expense_report->payment_id = null;
 
-                    $expense_report->save();
-                }
+                //     $expense_report->save();
+                // }
 
-                foreach ($request->expense_reports as $key => $value) {
-                    $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
+                // foreach ($request->expense_reports as $key => $value) {
+                //     $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
 
-                    $expense_report->payment_id = $payment->id;
+                //     $expense_report->payment_id = $payment->id;
 
-                    $expense_report->save();
+                //     $expense_report->save();
+                // }
+
+                if (request()->has("expense_reports")) {
+                    $arr = [];
+        
+                    foreach ($request->expense_reports as $item) {
+                        $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
+        
+                        $arr[$expense_report->id] = ['payment' => $expense_report->total_amount()];
+                    }
+                    
+                    $payment->pivot_expense_reports()->sync($arr);
                 }
 
                 break;
@@ -448,22 +473,26 @@ class PaymentController extends Controller
 
                 $payment->delete();
 
-                foreach ($payment->expense_reports as $expense_report) {
-                    $expense_report->payment_id = null;
+                // foreach ($payment->expense_reports as $expense_report) {
+                //     $expense_report->payment_id = null;
 
-                    $expense_report->save();
-                }
+                //     $expense_report->save();
+                // }
+
+                $payment->pivot_expense_reports()->sync([]);
             }
         } else {
             $payment = Payment::withTrashed()->findOrFail($id);
 
             $payment->delete();
 
-            foreach ($payment->expense_reports as $expense_report) {
-                $expense_report->payment_id = null;
+            // foreach ($payment->expense_reports as $expense_report) {
+            //     $expense_report->payment_id = null;
 
-                $expense_report->save();
-            }
+            //     $expense_report->save();
+            // }
+
+            $payment->pivot_expense_reports()->sync([]);
         }
 
         return response(

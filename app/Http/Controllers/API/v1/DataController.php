@@ -619,7 +619,7 @@ class DataController extends Controller
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
             $q->where('payment_id', "<>", null);
-            $q->where('paid_at', null);
+            // $q->where('paid_at', null);
         }])
             ->whereHas('expense_report')
             ->get()

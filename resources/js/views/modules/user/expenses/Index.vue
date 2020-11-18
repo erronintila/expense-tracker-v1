@@ -641,7 +641,7 @@ export default {
         onDelete() {
             let _this = this;
             let arr = this.selected.map(
-                item => item.expense_report_id === null
+                item => item.expense_report === null
             );
 
             if (_this.selected.length == 0) {
@@ -660,7 +660,7 @@ export default {
                 return;
             }
 
-            this.$confirm("Cancel expense(s)?").then(res => {
+            this.$confirm("Do you want to cancel expense(s)?").then(res => {
                 if (res) {
                     axios
                         .delete(`/api/expenses/${_this.selected[0].id}`, {

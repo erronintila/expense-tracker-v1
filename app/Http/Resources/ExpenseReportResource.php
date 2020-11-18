@@ -66,7 +66,7 @@ class ExpenseReportResource extends JsonResource
             'total' => $this->total_amount(),
             'total_reimbursable' => $this->total_reimbursable_amount(),
             'paid' => $this->total_amount() - $this->balance(),
-            'payments' => $this->pivot_payments,
+            'payments' => $this->payments,
             'payment_id' => $this->payment_id,
             'balance' => $this->balance(),
 

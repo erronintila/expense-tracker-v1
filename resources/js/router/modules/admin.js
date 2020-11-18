@@ -440,6 +440,21 @@ const adminRoutes = [
                     }
                 }
             },
+            // {
+            //     path: "/admin/expenses/create/bulk",
+            //     name: "admin.expenses.create.bulk",
+            //     component: () =>
+            //         import("../../views/modules/admin/expenses/CreateBulk.vue"),
+            //     beforeEnter: (to, from, next) => {
+            //         if (
+            //             store.getters.user.permissions.includes("add expenses")
+            //         ) {
+            //             next();
+            //         } else {
+            //             next({ name: "error_403" });
+            //         }
+            //     }
+            // },
             {
                 path: "/admin/expenses/:id/edit",
                 name: "admin.expenses.edit",

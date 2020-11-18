@@ -34,7 +34,7 @@ class CreateExpenseReportsTable extends Migration
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
             $table->timestamp('cancelled_at')->nullable();
-            $table->timestamp('paid_at')->nullable();
+            // $table->timestamp('paid_at')->nullable();
 
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -43,17 +43,17 @@ class CreateExpenseReportsTable extends Migration
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->unsignedBigInteger('rejected_by')->nullable();
             $table->unsignedBigInteger('cancelled_by')->nullable();
-            $table->unsignedBigInteger('paid_by')->nullable();
+            // $table->unsignedBigInteger('paid_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->unsignedBigInteger('employee_id')->unsigned();
-            $table->unsignedBigInteger('payment_id')->nullable();
+            // $table->unsignedBigInteger('payment_id')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('payment_id')->references('id')->on('payments');
+            // $table->foreign('payment_id')->references('id')->on('payments');
 
             // $table->foreign('submitted_by')->references('id')->on('users');
             // $table->foreign('reviewed_by')->references('id')->on('users');

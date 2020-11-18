@@ -38,11 +38,11 @@ class PaymentObserver
 
             $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
 
-            $expense_report->paid_at = now();
+            // $expense_report->paid_at = now();
 
-            $expense_report->paid_by = Auth::id();
+            // $expense_report->paid_by = Auth::id();
 
-            $expense_report->save();
+            // $expense_report->save();
 
             foreach ($expense_report->expenses as $expense) {
 
@@ -50,9 +50,9 @@ class PaymentObserver
 
                 // $expense->employee->remaining_fund += $expense_amount;
 
-                $expense->paid_at = now();
+                // $expense->paid_at = now();
 
-                $expense->paid_by = Auth::id();
+                // $expense->paid_by = Auth::id();
 
                 $expense->save();
 

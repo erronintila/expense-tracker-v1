@@ -138,6 +138,23 @@
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <div class="ml-4">
+                                            <small class="green--text">
+                                                ** Note:
+                                            </small>
+                                            <small class="grey--text">
+                                                Due of encoding of expenses :
+                                                {{
+                                                    $store.getters.settings
+                                                        .submission_period
+                                                }}
+                                            </small>
+                                        </div>
+                                    </v-col>
+                                </v-row>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
 

@@ -1,6 +1,9 @@
 <template>
     <div>
         <v-card class="elevation-0 pt-0">
+            <!-- **************************************************************
+                Card Title
+            *************************************************************** -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -8,12 +11,18 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">Edit Expense</h4>
+                <h4 class="title green--text">New Expense</h4>
             </v-card-title>
 
+            <!-- **************************************************************
+                Form
+            *************************************************************** -->
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-expansion-panels v-model="panel" multiple class="mt-4">
+                        <!-- **************************************************************
+                            Basic Information
+                        *************************************************************** -->
                         <v-expansion-panel>
                             <v-expansion-panel-header>
                                 <div class="green--text">Basic Information</div>
@@ -138,7 +147,6 @@
                                                 </template>
                                             </template>
                                         </v-autocomplete>
-                                        <!-- </v-form> -->
                                     </v-col>
 
                                     <v-col cols="12" md="4">
@@ -223,6 +231,12 @@
                                         >
                                         </v-autocomplete>
                                     </v-col>
+
+                                    <!-- <v-col cols="12" md="4">
+                                        <div>
+                                            Expense Limit: 0
+                                        </div>
+                                    </v-col> -->
                                 </v-row>
 
                                 <v-row>
@@ -233,8 +247,9 @@
                                             </small>
                                             <small class="grey--text">
                                                 Expense amount exceeding the
-                                                remaining fund will be
-                                                considered as reimbursable.
+                                                remaining fund/expense limit
+                                                will be considered as
+                                                reimbursable.
                                             </small>
                                         </div>
                                     </v-col>
@@ -589,13 +604,13 @@
                                             label="Remarks"
                                         ></v-textarea>
                                     </v-col>
-                                    <v-col cols="12" md="6">
+                                    <!-- <v-col cols="12" md="6">
                                         <v-textarea
                                             rows="1"
                                             label="Notes"
                                             readonly
                                         ></v-textarea>
-                                    </v-col>
+                                    </v-col> -->
                                 </v-row>
 
                                 <small class="text--secondary">
@@ -656,7 +671,7 @@ export default {
                 details_amount: 0,
                 // reimbursable_amount: 0,
                 receipt_number: null,
-                date: null,
+                date: moment().format("YYYY-MM-DD"),
                 remarks: "",
                 is_active: true,
                 expense_type: {
@@ -672,7 +687,12 @@ export default {
                     fund: 0,
                     expense_types: null
                 },
-                vendor: { id: null, name: "", tin: "", is_vat_inclusive: false },
+                vendor: {
+                    id: null,
+                    name: "",
+                    tin: "",
+                    is_vat_inclusive: false
+                },
                 // particular: "",
                 // particular_amount: 0,
                 // particular_reimbursable_amount: 0,
@@ -682,7 +702,9 @@ export default {
                 reimbursable_amount: 0,
                 details: {
                     description: "",
-                    amount: 0
+                    quantity: 1,
+                    amount: 0,
+                    total: 0
                 },
 
                 is_tax_inclusive: true,
@@ -710,89 +732,16 @@ export default {
         };
     },
     methods: {
-        getData() {
-            let _this = this;
-
-            this.loadEmployees().then(
-                axios
-                    .get("/api/expenses/" + _this.$route.params.id)
-                    .then(response => {
-                        let data = response.data.data;
-
-                        _this.form.code = data.code;
-                        _this.form.description = data.description;
-
-                        _this.form.receipt_number = data.receipt_number;
-                        _this.form.date = data.date;
-                        _this.form.remarks = data.remarks;
-                        _this.form.is_active = data.is_active;
-                        _this.form.employee = data.employee;
-
-                        _this.form.vendor =
-                            data.vendor == null ? { id: null, name: "", tin: "", is_vat_inclusive: false } : data.vendor;
-
-                        _this.form.expense_type = data.expense_type;
-                        // _this.form.sub_type = data.sub_type_id;
-
-                        _this.expense_types = data.employee.expense_types;
-                        _this.sub_types = data.expense_type.sub_types;
-
-                        _this.form.is_tax_inclusive = data.is_tax_inclusive;
-                        _this.form.tax_name = data.tax_name;
-                        _this.form.tax_rate = data.tax_rate;
-                        _this.form.tax_amount = data.tax_amount;
-
-                        if (data.details !== null) {
-                            _this.itemize = true;
-                            _this.items = data.details;
-                        } else {
-                            // _this.itemize = false;
-                            // _this.items = [];
-                            _this.form.amount = data.amount;
-                        }
-
-                        _this.sub_types.unshift({
-                            id: null,
-                            name: "None",
-                            limit: null
-                        });
-                        _this.form.sub_type =
-                            data.sub_type == null
-                                ? { id: null, name: "None", limit: null }
-                                : data.sub_type;
-
-                        if (data.revolving_fund > 0) {
-                            _this.paid_through_fund = true;
-                            _this.form.revolving_fund = data.revolving_fund;
-                        } else {
-                            _this.paid_through_fund = false;
-                            _this.form.revolving_fund = 0;
-                        }
-
-                        _this.form.reimbursable_amount =
-                            data.reimbursable_amount;
-
-                        _this.form.employee.remaining_fund +=
-                            data.amount - data.reimbursable_amount;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-                    })
-            );
-        },
         loadExpenseTypes() {
+            this.expense_types = this.form.employee.expense_types;
+        },
+        loadEmployees() {
             let _this = this;
 
             axios
-                .get("/api/data/expense_types")
+                .get("/api/data/employees")
                 .then(response => {
-                    _this.expense_types = response.data.data;
+                    _this.employees = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -803,30 +752,6 @@ export default {
                         error.response.statusText
                     );
                 });
-        },
-        loadEmployees() {
-            let _this = this;
-
-            return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/data/employees")
-                    .then(response => {
-                        _this.employees = response.data.data;
-
-                        resolve();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        reject();
-                    });
-            });
         },
         loadVendors() {
             let _this = this;
@@ -885,8 +810,6 @@ export default {
                 return;
             }
 
-            _this.$refs.form.validate();
-
             if (
                 _this.amount_to_replenish > _this.form.employee.remaining_fund
             ) {
@@ -900,14 +823,11 @@ export default {
                 return;
             }
 
-            if (_this.$refs.form.validate()) {
-                if (!_this.form.vendor.is_vat_inclusive) {
-                    _this.form.tax_rate = 0;
-                    _this.form.tax_amount = 0;
-                }
+            _this.$refs.form.validate();
 
+            if (_this.$refs.form.validate()) {
                 axios
-                    .put("/api/expenses/" + _this.$route.params.id, {
+                    .post("/api/expenses", {
                         code: _this.form.code,
                         description: _this.form.description,
                         amount: _this.form.amount,
@@ -930,7 +850,7 @@ export default {
                         _this.onRefresh();
 
                         _this.$dialog.message.success(
-                            "Expense updated successfully.",
+                            "Expense created successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
@@ -939,7 +859,7 @@ export default {
 
                         _this.$store.dispatch("AUTH_USER");
 
-                        _this.$router.push({ name: "admin.expenses.index" });
+                        _this.$router.go(-1);
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -989,7 +909,7 @@ export default {
         loadSubTypes(e) {
             this.form.sub_type = { id: null, name: "", limit: null };
             this.sub_types = e.sub_types;
-            this.sub_types.push({ id: null, name: "None", limit: null });
+            this.sub_types.unshift({ id: null, name: "None", limit: null });
         }
     },
     computed: {
@@ -997,10 +917,12 @@ export default {
             if (this.mixin_can("add expenses beyond encoding period")) {
                 return null;
             }
-            
+
             let settings = this.$store.getters.settings;
             let submissionMinDate = moment().endOf("day");
-            let encodingMinDate =  moment().subtract(settings.expense_encoding_period - 1, 'days').format("YYYY-MM-DD");
+            let encodingMinDate = moment()
+                .subtract(settings.expense_encoding_period - 1, "days")
+                .format("YYYY-MM-DD");
 
             switch (settings.submission_period) {
                 case "Weekly":
@@ -1020,7 +942,9 @@ export default {
                     break;
             }
 
-            return moment(encodingMinDate).isSameOrAfter(submissionMinDate) ? encodingMinDate : submissionMinDate;
+            return moment(encodingMinDate).isSameOrAfter(submissionMinDate)
+                ? encodingMinDate
+                : submissionMinDate;
         },
         maxDate() {
             let settings = this.$store.getters.settings;
@@ -1072,6 +996,8 @@ export default {
 
                 return to_replenish;
             }
+
+            this.form.reimbursable_amount = 0;
 
             return 0;
         },
@@ -1146,17 +1072,17 @@ export default {
                 (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
+        },
+        "form.vendor": function() {
+            this.form.tax_rate = 0;
+            this.form.tax_amount = 0;
+            this.form.is_tax_inclusive = true;
         }
-        // "form.vendor": function() {
-        //     this.form.tax_rate = 0;
-        //     this.form.tax_amount = 0;
-        //     this.form.is_tax_inclusive = true;
-        // }
     },
     created() {
         this.$store.dispatch("AUTH_USER");
+        this.loadEmployees();
         this.loadVendors();
-        this.getData();
     }
 };
 </script>
