@@ -395,6 +395,8 @@ __webpack_require__.r(__webpack_exports__);
             timeout: 2000
           });
 
+          _this.$store.dispatch("AUTH_USER");
+
           _this.$router.push({
             name: "admin.expense_reports.index"
           });
@@ -421,6 +423,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.loadExpenses();
   }

@@ -206,6 +206,8 @@ __webpack_require__.r(__webpack_exports__);
                 timeout: 2000
               });
 
+              _this.$store.dispatch("AUTH_USER");
+
               _this.$router.push("/admin/employees");
             })["catch"](function (error) {
               console.log(error);
@@ -266,6 +268,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
   }
 });

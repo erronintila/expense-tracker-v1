@@ -811,6 +811,8 @@ export default {
                             }
                         );
 
+                        _this.$store.dispatch("AUTH_USER");
+
                         _this.$router.go(-1);
                     })
                     .catch(function(error) {

@@ -599,6 +599,8 @@ __webpack_require__.r(__webpack_exports__);
             position: "top-right",
             timeout: 2000
           });
+
+          _this.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -621,6 +623,8 @@ __webpack_require__.r(__webpack_exports__);
             position: "top-right",
             timeout: 2000
           });
+
+          _this.$store.dispatch("AUTH_USER");
 
           _this.dialogPassword = false;
           _this.old_password = "";

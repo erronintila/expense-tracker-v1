@@ -7,6 +7,12 @@ update expense and expense report settings once approved to finalize settings hi
 sql query excel data on expenses
 deleting parent with active child records
 add note when rejecting or cancelling or just add note for admin
+add restore in expenses without report when deleted
+autorefresh remaining fund info on sidebar
+activity log expense  - 17 Oct 2020 11:09 AM		Associated with the report titled 'sample' - erronintila.twincirc
+no note on editing expenses
+expense cant be cancelled even if no report
+
 
 *****From the Doc: 
 
@@ -23,9 +29,9 @@ Print Detailed Report
 Print Batch Reports
 Mark late approved expense reports
 Multiple Payments
-Add Notes when rejecting
+------Add Notes when rejecting
 Allow resubmission
-Add JSON Notes/Comments (required when rejecting)
+-----Add JSON Notes/Comments (required when cancelling)
 
 Advance Payment
 Link payment with employee

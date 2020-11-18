@@ -600,6 +600,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {
                         console.log(error);
@@ -631,6 +633,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$store.dispatch("AUTH_USER");
 
                         _this.dialogPassword = false;
                         _this.old_password = "";

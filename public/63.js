@@ -873,6 +873,8 @@ __webpack_require__.r(__webpack_exports__);
             timeout: 2000
           });
 
+          _this.$store.dispatch("AUTH_USER");
+
           _this.$router.push({
             name: "user.expenses.index"
           });
@@ -886,6 +888,8 @@ __webpack_require__.r(__webpack_exports__);
         });
         return;
       }
+
+      this.$store.dispatch("AUTH_USER");
     },
     addItem: function addItem() {
       var description = this.form.details.description;

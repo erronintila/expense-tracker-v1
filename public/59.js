@@ -407,6 +407,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             timeout: 2000
           });
 
+          _this.$store.dispatch("AUTH_USER");
+
           _this.$router.push({
             name: "user.expense_reports.index"
           });
@@ -433,6 +435,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   created: function created() {
+    this.$store.dispatch("AUTH_USER");
     this.getData();
   }
 });

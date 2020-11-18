@@ -401,6 +401,8 @@ export default {
                             }
                         );
 
+                        _this.$store.dispatch("AUTH_USER");
+
                         _this.$router.push({
                             name: "admin.expense_reports.index"
                         });
@@ -435,6 +437,7 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
         this.loadExpenses();
     }

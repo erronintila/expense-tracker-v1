@@ -527,6 +527,8 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
+                            _this.$store.dispatch("AUTH_USER");
+
                             _this.selected = [];
                         })
                         .catch(function(error) {
@@ -575,6 +577,8 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
+                            _this.$store.dispatch("AUTH_USER");
+
                             _this.selected = [];
                         })
                         .catch(function(error) {
@@ -619,6 +623,8 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
+                            _this.$store.dispatch("AUTH_USER");
+
                             _this.selected = [];
                         })
                         .catch(function(error) {
@@ -634,6 +640,7 @@ export default {
             });
         },
         onExport() {
+            this.$store.dispatch("AUTH_USER");
             axios.get("/api/employees/export");
         }
     },

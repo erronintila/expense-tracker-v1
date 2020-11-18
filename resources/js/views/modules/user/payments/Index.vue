@@ -507,6 +507,8 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
+                            _this.$store.dispatch("AUTH_USER");
+
                             _this.selected = [];
                         })
                         .catch(function(error) {

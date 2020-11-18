@@ -887,6 +887,8 @@ export default {
                             }
                         );
 
+                        _this.$store.dispatch("AUTH_USER");
+
                         _this.$router.push({ name: "user.expenses.index" });
                     })
                     .catch(function(error) {
@@ -903,6 +905,8 @@ export default {
 
                 return;
             }
+
+            this.$store.dispatch("AUTH_USER");
         },
         addItem() {
             let description = this.form.details.description;

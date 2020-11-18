@@ -691,6 +691,49 @@ export default {
                 return;
             }
 
+            // let notes = await this.$dialog.prompt({
+            //     text: "Please add note",
+            //     title: "Do you want to cancel expense report(s)?"
+            // });
+
+            // if (notes) {
+            //     axios
+            //         .delete(`/api/expense_reports/${_this.selected[0].id}`, {
+            //             params: {
+            //                 ids: _this.selected.map(item => {
+            //                     return item.id;
+            //                 }),
+            //                 notes: notes
+            //             }
+            //         })
+            //         .then(function(response) {
+            //             _this.$dialog.message.success(
+            //                 "Expense report(s) cancelled successfully",
+            //                 {
+            //                     position: "top-right",
+            //                     timeout: 2000
+            //                 }
+            //             );
+            //             _this.getDataFromApi().then(data => {
+            //                 _this.items = data.items;
+            //                 _this.totalItems = data.total;
+            //             });
+
+            //             _this.selected = [];
+            //         })
+            //         .catch(function(error) {
+            //             console.log(error);
+            //             console.log(error.response);
+
+            //             _this.mixin_errorDialog(
+            //                 `Error ${error.response.status}`,
+            //                 error.response.statusText
+            //             );
+            //         });
+            // }
+
+            // // return;
+
             this.$confirm("Do you want to cancel expense report(s)?").then(
                 res => {
                     if (res) {
@@ -717,6 +760,8 @@ export default {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
                                 });
+
+                                _this.$store.dispatch("AUTH_USER");
 
                                 _this.selected = [];
                             })
@@ -1022,6 +1067,8 @@ export default {
                                     _this.totalItems = data.total;
                                 });
 
+                                _this.$store.dispatch("AUTH_USER");
+
                                 _this.selected = [];
                             })
                             .catch(function(error) {
@@ -1051,8 +1098,54 @@ export default {
         onApprove() {
             this.onUpdate("approve", "put");
         },
-        onReject() {
-            this.onUpdate("reject", "put");
+        async onReject() {
+            // this.onUpdate("reject", "put");
+            let _this = this;
+
+            let notes = await this.$dialog.prompt({
+                text: "Please specify an appropriate reason for rejection",
+                title: "Do you want to reject expense report(s)?"
+            });
+
+            if (notes) {
+                let ids = _this.selected.map(item => {
+                    return item.id;
+                });
+
+                axios({
+                    method: "put",
+                    url: `/api/expense_reports/${_this.selected[0].id}`,
+                    data: {
+                        ids: ids,
+                        action: "reject",
+                        notes: notes
+                    }
+                })
+                    .then(function(response) {
+                        _this.mixin_successDialog(
+                            "Success",
+                            response.data.message
+                        );
+
+                        _this.getDataFromApi().then(data => {
+                            _this.items = data.items;
+                            _this.totalItems = data.total;
+                        });
+
+                        _this.$store.dispatch("AUTH_USER");
+
+                        _this.selected = [];
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            error.response.data.status,
+                            error.response.data.message
+                        );
+                    });
+            }
         },
         onDuplicate() {
             this.onUpdate("duplicate", "put");

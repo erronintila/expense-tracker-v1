@@ -737,10 +737,13 @@ export default {
                                     timeout: 2000
                                 }
                             );
+
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
+
+                            _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -781,10 +784,13 @@ export default {
                                 position: "top-right",
                                 timeout: 2000
                             });
+                            
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
+
+                            _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })

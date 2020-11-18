@@ -30,21 +30,6 @@ class ExpenseReportObserver
     }
 
     /**
-     * Handle the expense report "deleting" event.
-     *
-     * @param  \App\Models\ExpenseReport  $expenseReport
-     * @return void
-     */
-    public function deleting(ExpenseReport $expenseReport)
-    {
-        $expenseReport->disableLogging();
-
-        $expenseReport->deleted_by = Auth::id();
-
-        $expenseReport->save();
-    }
-
-    /**
      * Handle the expense report "deleted" event.
      *
      * @param  \App\Models\ExpenseReport  $expenseReport

@@ -451,24 +451,6 @@ export default {
                     })
             );
         },
-        loadExpenseTypes() {
-            let _this = this;
-
-            axios
-                .get("/api/data/expense_types")
-                .then(response => {
-                    _this.expense_types = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
         loadEmployees() {
             let _this = this;
 
@@ -493,121 +475,6 @@ export default {
                     });
             });
         },
-        loadVendors() {
-            let _this = this;
-
-            axios
-                .get("/api/data/vendors")
-                .then(response => {
-                    _this.vendors = response.data.data;
-
-                    _this.vendors.unshift({
-                        id: null,
-                        name: "No Vendor",
-                        tin: ""
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-        },
-        onSave() {
-            let _this = this;
-
-            _this.$refs.form.validate();
-
-            if (
-                _this.amount_to_replenish > _this.form.employee.remaining_fund
-            ) {
-                _this.$dialog.message.error(
-                    "Revolving fund amount is greater than remaining fund",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
-                return;
-            }
-
-            if (_this.$refs.form.validate()) {
-                axios
-                    .put("/api/expenses/" + _this.$route.params.id, {
-                        code: _this.form.code,
-                        description: _this.form.description,
-                        amount: _this.form.amount,
-                        reimbursable_amount: _this.form.reimbursable_amount,
-                        receipt_number: _this.form.receipt_number,
-                        date: _this.form.date,
-                        remarks: _this.form.remarks,
-                        is_active: _this.form.is_active,
-                        expense_type_id: _this.form.expense_type.id,
-                        sub_type_id: _this.form.sub_type.id,
-                        employee_id: _this.form.employee.id,
-                        vendor_id: _this.form.vendor,
-                        details: _this.itemize ? _this.items : null
-                    })
-                    .then(function(response) {
-                        _this.onRefresh();
-
-                        _this.$dialog.message.success(
-                            "Expense updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
-                        _this.$router.push({ name: "user.expenses.index" });
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-                    });
-
-                return;
-            }
-        },
-        addItem() {
-            let description = this.form.details.description;
-            let amount = this.mixin_convertToNumber(this.form.details.amount);
-
-            if (description == "" || amount <= 0) {
-                return;
-            }
-
-            this.items.push({
-                description: description,
-                amount: amount
-            });
-
-            this.dialog = false;
-            this.form.details.description = "";
-            this.form.details.amount = 0;
-        },
-        onRemove(item) {
-            const index = this.items.indexOf(item);
-            confirm("Are you sure you want to remove this item?") &&
-                this.items.splice(index, 1);
-        },
-        loadSubTypes(e) {
-            this.form.sub_type = { id: null, name: "", limit: null };
-            this.sub_types = e.sub_types;
-            this.sub_types.push({ id: null, name: "None", limit: null });
-        }
     },
     computed: {
         amount_to_replenish() {
@@ -673,7 +540,7 @@ export default {
         }
     },
     created() {
-        this.loadVendors();
+        this.$store.dispatch("AUTH_USER");
         this.getData();
     }
 };

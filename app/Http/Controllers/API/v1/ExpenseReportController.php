@@ -359,6 +359,12 @@ class ExpenseReportController extends Controller
 
                     $this->updateReport($expense_report, false, false, false, true, false);
 
+                    $expense_report->notes = $request->notes ?? "";
+
+                    $expense_report->disableLogging();
+
+                    $expense_report->save();
+
                     foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
                         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
@@ -578,7 +584,15 @@ class ExpenseReportController extends Controller
                 //     abort(403);
                 // }
 
-                // $expense_report->deleted_by = Auth::id();
+                $expense_report->deleted_by = Auth::id();
+
+                // $expense_report->notes = $request->notes;
+
+                $expense_report->disableLogging();
+
+                $expense_report->save();
+
+                $expense_report->enableLogging();
 
                 $expense_report->delete();
 

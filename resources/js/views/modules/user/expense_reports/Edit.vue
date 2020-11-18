@@ -405,6 +405,8 @@ export default {
                             }
                         );
 
+                        _this.$store.dispatch("AUTH_USER");
+
                         _this.$router.push({
                             name: "user.expense_reports.index"
                         });
@@ -439,6 +441,7 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.getData();
     }
 };

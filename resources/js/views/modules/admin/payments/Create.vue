@@ -438,6 +438,8 @@ export default {
                             }
                         );
 
+                        _this.$store.dispatch("AUTH_USER");
+
                         _this.$router.push({ name: "admin.payments.index" });
                     })
                     .catch(function(error) {

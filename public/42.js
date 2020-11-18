@@ -724,6 +724,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.totalItems = data.total;
             });
 
+            _this.$store.dispatch("AUTH_USER");
+
             _this.selected = [];
           })["catch"](function (error) {
             console.log(error);
@@ -762,6 +764,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             });
+
+            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {

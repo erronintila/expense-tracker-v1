@@ -818,6 +818,8 @@ __webpack_require__.r(__webpack_exports__);
             timeout: 2000
           });
 
+          _this.$store.dispatch("AUTH_USER");
+
           _this.$router.go(-1);
         })["catch"](function (error) {
           console.log(error);

@@ -209,6 +209,8 @@ export default {
                                         }
                                     );
 
+                                    _this.$store.dispatch("AUTH_USER");
+
                                     _this.$router.push("/admin/employees");
                                 })
                                 .catch(function(error) {
@@ -291,6 +293,7 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
     }
 };

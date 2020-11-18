@@ -908,6 +908,8 @@ __webpack_require__.r(__webpack_exports__);
             timeout: 2000
           });
 
+          _this.$store.dispatch("AUTH_USER");
+
           _this.$router.push({
             name: "admin.expenses.index"
           });
