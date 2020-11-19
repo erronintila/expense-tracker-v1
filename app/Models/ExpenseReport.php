@@ -131,10 +131,10 @@ class ExpenseReport extends Model
         return $this->hasMany(Expense::class);
     }
 
-    public function payment()
-    {
-        return $this->belongsTo(Payment::class);
-    }
+    // public function payment()
+    // {
+    //     return $this->belongsTo(Payment::class);
+    // }
 
     public function payments()
     {
@@ -166,7 +166,7 @@ class ExpenseReport extends Model
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
-    | CUSTOM FIELDS
+    | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
     
@@ -175,7 +175,7 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function status()
+    public function getStatus()
     {
         $arr = [
             'color' => 'red',
@@ -189,7 +189,7 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->payments);
+        $paid = $this->payments->count() === 0;
 
         if (!$deleted) {
             $arr = [
@@ -222,7 +222,7 @@ class ExpenseReport extends Model
         }
 
         if (!$paid) {
-            if ($this->balance() == 0) {
+            if ($this->getBalance() == 0) {
                 $arr = [
                     'color' => 'green',
                     'remarks' => 'Payment transaction was completed',
@@ -236,7 +236,7 @@ class ExpenseReport extends Model
                 ];
             }
             
-            // switch ($this->payment->status()["status"]) {
+            // switch ($this->payment->getStatus()["status"]) {
             //     case 'Completed':
             //         $arr = [
             //             'color' => 'green',
@@ -301,7 +301,7 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function late_submitted()
+    public function isLateSubmitted()
     {
         return false;
     }
@@ -311,7 +311,7 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function late_approved()
+    public function isLateApproved()
     {
         return false;
     }
@@ -321,7 +321,7 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function min_start_date()
+    public function getExpenseStartDate()
     {
         return date('Y-m-d', min(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
     }
@@ -331,22 +331,22 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function max_end_date()
+    public function getExpenseEndDate()
     {
         return date('Y-m-d', max(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
     }
 
-    public function total_amount()
+    public function getTotalExpenseAmount()
     {
         return $this->expenses()->withTrashed()->get()->sum('amount');
     }
 
-    public function total_reimbursable_amount()
+    public function getTotalReimbursableAmount()
     {
         return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
     }
 
-    public function balance()
+    public function getBalance()
     {
         $sum_payment = 0;
 
@@ -354,10 +354,10 @@ class ExpenseReport extends Model
             $sum_payment += $payment->pivot->payment;
         }
 
-        return $this->total_amount() - $sum_payment;
+        return $this->getTotalExpenseAmount() - $sum_payment;
     }
 
-    public function created_by_user()
+    public function getCreatedInfo()
     {
         if ($this->created_at) {
             return [
@@ -369,7 +369,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function updated_by_user()
+    public function getUpdatedInfo()
     {
         if ($this->updated_at) {
             return [
@@ -381,7 +381,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function deleted_by_user()
+    public function getDeletedInfo()
     {
         if ($this->deleted_at) {
             return [
@@ -393,7 +393,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function submitted()
+    public function getSubmittedInfo()
     {
         if ($this->submitted_at) {
             return [
@@ -405,7 +405,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function reviewed()
+    public function getReviewedInfo()
     {
         if ($this->reviewed_at) {
             return [
@@ -417,7 +417,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function approved()
+    public function getApprovedInfo()
     {
         if ($this->approved_at) {
             return [
@@ -429,7 +429,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function rejected()
+    public function getRejectedInfo()
     {
         if ($this->rejected_at) {
             return [
@@ -441,7 +441,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function cancelled()
+    public function getCancelledInfo()
     {
         if ($this->cancelled_at) {
             return [
@@ -453,7 +453,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function reimbursed()
+    public function getReimbursedInfo()
     {
         $expense_report = $this->expense_report;
 

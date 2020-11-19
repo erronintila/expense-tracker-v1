@@ -593,7 +593,7 @@ var render = function() {
             { staticClass: "pt-0" },
             [
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Payments")
+                _vm._v("Payment Records")
               ]),
               _vm._v(" "),
               _c("v-spacer"),
@@ -865,7 +865,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-list-item-subtitle", [
                             _vm._v(
-                              "\n                            Receive Payment(s)\n                        "
+                              "\n                            Mark as Received\n                        "
                             )
                           ])
                         ],

@@ -290,6 +290,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -746,10 +764,12 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
                   _c(
                     "v-row",
                     [
-                      _c("v-col", { attrs: { cols: "12" } }, [
+                      _c("v-col", [
                         _c("div", [
                           _vm._v("Description: " + _vm._s(_vm.form.description))
                         ]),
@@ -760,7 +780,7 @@ var render = function() {
                               _vm._s(_vm.form.tax_rate) +
                               "%):\n                            " +
                               _vm._s(_vm.form.tax_amount) +
-                              " " +
+                              "\n                            " +
                               _vm._s(
                                 _vm.form.is_tax_inclusive
                                   ? "- Inclusive"
@@ -768,8 +788,18 @@ var render = function() {
                               ) +
                               "\n                        "
                           )
-                        ]),
-                        _vm._v(" "),
+                        ])
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c("v-col", { attrs: { cols: "12" } }, [
                         _c(
                           "div",
                           [
@@ -852,8 +882,16 @@ var render = function() {
                           ],
                           1
                         )
-                      ]),
-                      _vm._v(" "),
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
                       _c("v-col", { attrs: { cols: "12", md: "8" } }, [
                         _c("div", [
                           _vm._v("Remarks : " + _vm._s(_vm.form.remarks))

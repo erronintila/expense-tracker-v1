@@ -316,8 +316,8 @@ class DataController extends Controller
             $expense_reports = $expense_reports
                 ->where("approved_at", "<>", null)
                 ->where("submitted_at", "<>", null)
-                ->where("cancelled_at", null)
-                ->where("payment_id", null);
+                ->where("cancelled_at", null);
+            // ->where("payment_id", null);
         }
 
         if (request()->has("employee_id")) {
@@ -325,7 +325,8 @@ class DataController extends Controller
         }
 
         if (request()->has("payment_id")) {
-            $expense_reports = $expense_reports->where("payment_id", $request->payment_id);
+            // $expense_reports = $expense_reports->where("payment_id", $request->payment_id);
+            $expense_reports = $expense_reports;
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
@@ -599,7 +600,7 @@ class DataController extends Controller
             $q->where('rejected_at', null);
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
-            $q->where('payment_id', null);
+            // $q->where('payment_id', null);
         }])
             ->whereHas('expense_report')
             ->get()
@@ -618,7 +619,7 @@ class DataController extends Controller
             $q->where('rejected_at', null);
             $q->where('cancelled_at', null);
             $q->where('deleted_at', null);
-            $q->where('payment_id', "<>", null);
+            // $q->where('payment_id', "<>", null);
             // $q->where('paid_at', null);
         }])
             ->whereHas('expense_report')
@@ -640,12 +641,18 @@ class DataController extends Controller
             ->get()
             ->where('expense_report', '<>', null);
 
-        $total_expenses = Expense::with("expense_report.payment")
-            ->whereBetween('date', ["2020-01-01", "2020-12-31"])
+        // $total_expenses = Expense::with("expense_report.payment")
+        //     ->whereBetween('date', ["2020-01-01", "2020-12-31"])
+        //     ->where(function ($q) {
+        //         $q->whereHas("expense_report", function ($q) {
+        //             $q->whereDoesntHave("payment");
+        //         });
+        //         $q->orWhereDoesntHave("expense_report");
+        //     })
+        //     ->get();
+        $total_expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])
             ->where(function ($q) {
-                $q->whereHas("expense_report", function ($q) {
-                    $q->whereDoesntHave("payment");
-                });
+                $q->whereHas("expense_report");
                 $q->orWhereDoesntHave("expense_report");
             })
             ->get();

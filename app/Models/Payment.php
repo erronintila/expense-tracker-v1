@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -110,15 +111,15 @@ class Payment extends Model
     |------------------------------------------------------------------------------------------------------------------------------------
     */
     
-    /**
-     * expense_reports
-     *
-     * @return void
-     */
-    public function expense_reports()
-    {
-        return $this->hasMany(ExpenseReport::class);
-    }
+    // /**
+    //  * expense_reports
+    //  *
+    //  * @return void
+    //  */
+    // public function expense_reports()
+    // {
+    //     return $this->hasMany(ExpenseReport::class);
+    // }
 
     public function pivot_expense_reports()
     {
@@ -147,7 +148,7 @@ class Payment extends Model
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
-    | CUSTOM FIELDS
+    | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
     
@@ -156,7 +157,7 @@ class Payment extends Model
      *
      * @return void
      */
-    public function status()
+    public function getStatus()
     {
         $arr = [
             'color' => 'red',
@@ -216,5 +217,89 @@ class Payment extends Model
         ];
 
         return $arr;
+    }
+
+    public function getCreatedInfo()
+    {
+        if ($this->created_at) {
+            return [
+                "created_at" => $this->created_at,
+                "created_by" => User::withTrashed()->find($this->created_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function getUpdatedInfo()
+    {
+        if ($this->updated_at) {
+            return [
+                "updated_at" => $this->updated_at,
+                "updated_by" => User::withTrashed()->find($this->updated_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function getDeletedInfo()
+    {
+        if ($this->deleted_at) {
+            return [
+                "deleted_at" => $this->deleted_at,
+                "deleted_by" => User::withTrashed()->find($this->deleted_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function getApprovedInfo()
+    {
+        if ($this->approved_at) {
+            return [
+                "approved_at" => $this->approved_at,
+                "approved_by" => User::withTrashed()->find($this->approved_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function getCancelledInfo()
+    {
+        if ($this->cancelled_at) {
+            return [
+                "cancelled_at" => $this->cancelled_at,
+                "cancelled_by" => User::withTrashed()->find($this->cancelled_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function getReleasedInfo()
+    {
+        if ($this->released_at) {
+            return [
+                "released_at" => $this->released_at,
+                "released_by" => User::withTrashed()->find($this->released_by)
+            ];
+        }
+
+        return null;
+    }
+
+    public function getReceivedInfo()
+    {
+        if ($this->received_at) {
+            return [
+                "received_at" => $this->received_at,
+                "received_by" => User::withTrashed()->find($this->received_by)
+            ];
+        }
+
+        return null;
     }
 }

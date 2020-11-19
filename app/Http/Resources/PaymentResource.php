@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +17,7 @@ class PaymentResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
+        $expense_reports = ExpenseReportResource::collection($this->pivot_expense_reports()->withTrashed()->get());
 
         return [
             'id' => $this->id,
@@ -27,24 +29,31 @@ class PaymentResource extends JsonResource
             "cheque_no" => $this->cheque_no,
             "cheque_date" => $this->cheque_date,
             "amount" => $this->amount,
-            "payee" => $this->payee,
-            "payee_address" => $this->payee_address,
-            "payee_phone" => $this->payee_phone,
+            // "payee" => $this->payee,
+            // "payee_address" => $this->payee_address,
+            // "payee_phone" => $this->payee_phone,
             "remarks"  => $this->remarks,
             "notes" => $this->notes,
-            "expense_reports" => ExpenseReportResource::collection($this->expense_reports()->withTrashed()->get()),
-            'employee' => $this->employee ?? [],
+            "expense_reports" => $expense_reports,
+            "total_expense_amount" => $expense_reports,
+            'employee' => new EmployeeResource($this->employee) ?? [],
+
             // 'approved_at' => Carbon::parse($this->approved_at)->toDateTimeString(),
             // 'cancelled_at' => Carbon::parse($this->cancelled_at)->toDateTimeString(),
             // 'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             // 'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             // 'deleted_at' => Carbon::parse($this->deleted_at)->toDateTimeString(),
-            'approved_at' => $this->approved_at,
-            'cancelled_at' => $this->cancelled_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
-            'status' => $this->status(),
+            'created' => $this->getCreatedInfo(),
+            'updated' => $this->getUpdatedInfo(),
+            'deleted' => $this->getDeletedInfo(),
+            'approved' => $this->getApprovedInfo(),
+            'cancelled' => $this->getCancelledInfo(),
+            'released' => $this->getReleasedInfo(),
+            'received' => $this->getReceivedInfo(),
+
+            'status' => $this->getStatus(),
+
+            'logs' => [],
         ];
     }
 }

@@ -283,6 +283,65 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -298,21 +357,39 @@ __webpack_require__.r(__webpack_exports__);
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
-      headers: [{
-        text: "Employee",
-        value: "employee"
+      headers: [// { text: "Employee", value: "employee" },
+      // { text: "Description", value: "description" },
+      // { text: "Amount", value: "total" },
+      // { text: "Created", value: "created" },
+      // { text: "", value: "data-table-expand" },
+      {
+        text: "Period",
+        value: "period",
+        sortable: false
+      }, {
+        text: "Code",
+        value: "code",
+        sortable: false
       }, {
         text: "Description",
-        value: "description"
+        value: "description",
+        sortable: false
       }, {
         text: "Amount",
-        value: "total"
+        value: "total",
+        sortable: false
       }, {
-        text: "Created",
-        value: "created_at"
+        text: "Balance",
+        value: "balance",
+        sortable: false
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
       }, {
         text: "",
-        value: "data-table-expand"
+        value: "data-table-expand",
+        sortable: false
       }],
       items: [],
       selected: [],
@@ -323,7 +400,7 @@ __webpack_require__.r(__webpack_exports__);
         reference_no: "",
         voucher_no: "",
         description: "",
-        date: "",
+        date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
         cheque_no: "",
         cheque_date: "",
         amount: "",
@@ -515,7 +592,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("New Payment")
+                _vm._v("New Payment Record")
               ])
             ],
             1
@@ -824,6 +901,67 @@ var render = function() {
                                     }
                                   },
                                   {
+                                    key: "item.created",
+                                    fn: function(ref) {
+                                      var item = ref.item
+                                      return [
+                                        _vm._v(
+                                          "\n                                " +
+                                            _vm._s(
+                                              _vm.mixin_formatDate(
+                                                item.created.created_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                            "
+                                        )
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    key: "item.period",
+                                    fn: function(ref) {
+                                      var item = ref.item
+                                      return [
+                                        _vm._v(
+                                          "\n                                " +
+                                            _vm._s(item.from) +
+                                            " ~ " +
+                                            _vm._s(item.to) +
+                                            "\n                            "
+                                        )
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    key: "item.actions",
+                                    fn: function(ref) {
+                                      var item = ref.item
+                                      return [
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            staticClass: "mr-2",
+                                            attrs: { small: "" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.$router.push(
+                                                  "/admin/expense_reports/" +
+                                                    item.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    mdi-eye\n                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    }
+                                  },
+                                  {
                                     key: "expanded-item",
                                     fn: function(ref) {
                                       var headers = ref.headers
@@ -838,50 +976,129 @@ var render = function() {
                                             _c(
                                               "v-container",
                                               [
-                                                _c(
-                                                  "v-card",
-                                                  {
-                                                    key: item.id,
-                                                    staticClass: "mx-auto",
-                                                    attrs: {
-                                                      tile: "",
-                                                      flat: ""
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("div", [
-                                                      _c("strong", [
-                                                        _vm._v("Expenses")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _vm._l(
-                                                      item.expenses,
-                                                      function(item) {
-                                                        return _c(
-                                                          "div",
-                                                          { key: item.id },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                " +
-                                                                _vm._s(
-                                                                  item.date +
-                                                                    " (" +
-                                                                    item
-                                                                      .expense_type
-                                                                      .name +
-                                                                    "): " +
-                                                                    item.amount
-                                                                ) +
-                                                                "\n                                            "
+                                                item ? _c("div") : _vm._e(),
+                                                _vm._v(" "),
+                                                _c("div", [
+                                                  _vm._v(
+                                                    "\n                                            Expenses\n                                        "
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("v-simple-table", {
+                                                  attrs: { dense: "" },
+                                                  scopedSlots: _vm._u(
+                                                    [
+                                                      {
+                                                        key: "default",
+                                                        fn: function() {
+                                                          return [
+                                                            _c("thead", [
+                                                              _c("tr", [
+                                                                _c(
+                                                                  "th",
+                                                                  {
+                                                                    staticClass:
+                                                                      "text-left"
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "\n                                                            Date\n                                                        "
+                                                                    )
+                                                                  ]
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "th",
+                                                                  {
+                                                                    staticClass:
+                                                                      "text-left"
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "\n                                                            Expense\n                                                        "
+                                                                    )
+                                                                  ]
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "th",
+                                                                  {
+                                                                    staticClass:
+                                                                      "text-left"
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "\n                                                            Amount\n                                                        "
+                                                                    )
+                                                                  ]
+                                                                )
+                                                              ])
+                                                            ]),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "tbody",
+                                                              _vm._l(
+                                                                item.expenses,
+                                                                function(item) {
+                                                                  return _c(
+                                                                    "tr",
+                                                                    {
+                                                                      key:
+                                                                        item.id
+                                                                    },
+                                                                    [
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          "\n                                                            " +
+                                                                            _vm._s(
+                                                                              item.date
+                                                                            ) +
+                                                                            "\n                                                        "
+                                                                        )
+                                                                      ]),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          "\n                                                            " +
+                                                                            _vm._s(
+                                                                              item
+                                                                                .expense_type
+                                                                                .name
+                                                                            ) +
+                                                                            "\n                                                        "
+                                                                        )
+                                                                      ]),
+                                                                      _vm._v(
+                                                                        " "
+                                                                      ),
+                                                                      _c("td", [
+                                                                        _vm._v(
+                                                                          "\n                                                            " +
+                                                                            _vm._s(
+                                                                              _vm.mixin_formatNumber(
+                                                                                item.amount
+                                                                              )
+                                                                            ) +
+                                                                            "\n                                                        "
+                                                                        )
+                                                                      ])
+                                                                    ]
+                                                                  )
+                                                                }
+                                                              ),
+                                                              0
                                                             )
                                                           ]
-                                                        )
+                                                        },
+                                                        proxy: true
                                                       }
-                                                    )
-                                                  ],
-                                                  2
-                                                )
+                                                    ],
+                                                    null,
+                                                    true
+                                                  )
+                                                })
                                               ],
                                               1
                                             )
@@ -915,11 +1132,15 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
                                       _c("td", [
                                         _c("strong", [
                                           _vm._v(_vm._s(_vm.total))
                                         ])
                                       ]),
+                                      _vm._v(" "),
+                                      _c("td"),
                                       _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),

@@ -53,9 +53,13 @@
                         </v-col>
                     </v-row>
 
+                    <v-divider></v-divider>
+
                     <v-row>
                         <v-col>Description: {{ form.description }} </v-col>
                     </v-row>
+
+                    <v-divider></v-divider>
 
                     <v-row>
                         <v-col cols="12">
@@ -183,6 +187,8 @@
                         </v-col>
                     </v-row>
 
+                    <v-divider></v-divider>
+
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>Remarks : {{ form.remarks }}</div>
@@ -210,7 +216,7 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            (-) {{ mixin_formatNumber(0) }}
+                                            (-) {{ mixin_formatNumber(form.paid) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -219,14 +225,14 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <th class="text-left">
                                             Amount to be reimbursed
-                                        </td>
+                                        </th>
                                         <td>:</td>
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            {{ mixin_formatNumber(form.total) }}
+                                            {{ mixin_formatNumber(form.balance) }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -462,7 +468,7 @@ export default {
                 payment_id: null,
                 balance: 0,
 
-                employee: this.$store.getters.user.employee,
+                employee: {id: null, name: ""},
                 payment: { id: null },
                 expenses: [],
 

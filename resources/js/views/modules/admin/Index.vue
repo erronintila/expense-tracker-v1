@@ -287,7 +287,7 @@ export default {
             },
             {
                 icon: "mdi-currency-usd",
-                text: "Payments",
+                text: "Payment Records",
                 link: { name: "admin.payments.index" }
             },
             {

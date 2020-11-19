@@ -179,7 +179,7 @@ class Expense extends Model
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
-    | CUSTOM FIELDS
+    | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
@@ -188,7 +188,7 @@ class Expense extends Model
      *
      * @return void
      */
-    public function status()
+    public function getStatus()
     {
         $arr = [
             'color' => 'red',
@@ -206,13 +206,13 @@ class Expense extends Model
         // $paid = is_null($this->paid_at);
 
         $reported = is_null($this->expense_report_id);
-        $submitted = is_null($this->submitted());
-        $reviewed = is_null($this->reviewed());
-        $approved = is_null($this->approved());
-        $cancelled = is_null($this->cancelled());
-        $rejected = is_null($this->rejected());
+        $submitted = is_null($this->getSubmittedInfo());
+        $reviewed = is_null($this->getReviewedInfo());
+        $approved = is_null($this->getApprovedInfo());
+        $cancelled = is_null($this->getCancelledInfo());
+        $rejected = is_null($this->getRejectedInfo());
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->reimbursed());
+        $paid = is_null($this->getReimbursedInfo());
 
         if (!$deleted) {
             $arr = [
@@ -262,7 +262,7 @@ class Expense extends Model
 
         // if (!$paid) {
 
-        //     switch ($this->payment->status()["status"]) {
+        //     switch ($this->payment->getStatus()["status"]) {
         //         case 'Completed':
         //             $arr = [
         //                 'color' => 'green',
@@ -342,7 +342,7 @@ class Expense extends Model
         return $arr;
     }
 
-    public function expired()
+    public function getExpiryDate()
     {
         //compare date of submission to expiry date
         return false;
@@ -353,7 +353,7 @@ class Expense extends Model
      *
      * @return void
      */
-    public function amount_formatted()
+    public function getFormattedAmount()
     {
         return "₱ " . number_format($this->amount, 2);
     }
@@ -363,7 +363,7 @@ class Expense extends Model
      *
      * @return void
      */
-    public function date_formatted()
+    public function getFormattedDate()
     {
         return date('F d, Y', strtotime($this->date));
     }
@@ -373,12 +373,12 @@ class Expense extends Model
      *
      * @return void
      */
-    public function balance()
+    public function getBalance()
     {
         return 0;
     }
 
-    public function created_by_user()
+    public function getCreatedInfo()
     {
         if ($this->created_at) {
             return [
@@ -390,7 +390,7 @@ class Expense extends Model
         return null;
     }
 
-    public function updated_by_user()
+    public function getUpdatedInfo()
     {
         if ($this->updated_at) {
             return [
@@ -402,7 +402,7 @@ class Expense extends Model
         return null;
     }
 
-    public function deleted_by_user()
+    public function getDeletedInfo()
     {
         if ($this->deleted_at) {
             return [
@@ -414,7 +414,7 @@ class Expense extends Model
         return null;
     }
 
-    public function submitted()
+    public function getSubmittedInfo()
     {
         $expense_report = $this->expense_report;
 
@@ -428,7 +428,7 @@ class Expense extends Model
         return null;
     }
 
-    public function reviewed()
+    public function getReviewedInfo()
     {
         $expense_report = $this->expense_report;
 
@@ -442,7 +442,7 @@ class Expense extends Model
         return null;
     }
 
-    public function approved()
+    public function getApprovedInfo()
     {
         $expense_report = $this->expense_report;
 
@@ -456,7 +456,7 @@ class Expense extends Model
         return null;
     }
 
-    public function rejected()
+    public function getRejectedInfo()
     {
         $expense_report = $this->expense_report;
 
@@ -470,7 +470,7 @@ class Expense extends Model
         return null;
     }
 
-    public function cancelled()
+    public function getCancelledInfo()
     {
         $expense_report = $this->expense_report;
 
@@ -484,7 +484,7 @@ class Expense extends Model
         return null;
     }
 
-    public function reimbursed() {
+    public function getReimbursedInfo() {
 
         $expense_report = $this->expense_report;
 

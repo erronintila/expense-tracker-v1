@@ -345,6 +345,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -463,6 +466,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          console.log(items);
           _this.loading = false;
           resolve({
             items: items,
@@ -664,7 +668,7 @@ var render = function() {
             { staticClass: "pt-0" },
             [
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Payments")
+                _vm._v("Payment Records")
               ]),
               _vm._v(" "),
               _c("v-spacer"),
@@ -718,7 +722,7 @@ var render = function() {
                     true
                   )
                 },
-                [_vm._v(" "), _c("span", [_vm._v("Add New")])]
+                [_vm._v(" "), _c("span", [_vm._v("Add New Record")])]
               ),
               _vm._v(" "),
               _c(
@@ -1010,7 +1014,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-list-item-subtitle", [
                             _vm._v(
-                              "\n                            Receive Payment(s)\n                        "
+                              "\n                            Mark as Received\n                        "
                             )
                           ])
                         ],
@@ -1035,7 +1039,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-list-item-subtitle", [
                             _vm._v(
-                              "\n                            Cancel Payment(s)\n                        "
+                              "\n                            Cancel Payment Record(s)\n                        "
                             )
                           ])
                         ],
@@ -1154,64 +1158,12 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Payee")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(item.payee))])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
                                         _c("strong", [_vm._v("Remarks")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(_vm._s(item.remarks))])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Created at")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm.mixin_formatDate(
-                                                item.created_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Cancelled")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm.mixin_formatDate(
-                                                item.deleted_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
                                     ])
                                   ])
                                 ])

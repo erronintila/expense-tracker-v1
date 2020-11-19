@@ -37,7 +37,7 @@ class EmployeeResource extends JsonResource
             'remaining_fund' => $this->remaining_fund,
             'job' => $this->job,
             'department' => $this->job->department,
-            'fullname' => $this->name(),
+            'fullname' => $this->getFullName(),
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             'user' => $user,

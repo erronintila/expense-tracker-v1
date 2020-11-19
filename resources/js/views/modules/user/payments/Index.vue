@@ -2,7 +2,7 @@
     <div>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <h4 class="title green--text">Payments</h4>
+                <h4 class="title green--text">Payment Records</h4>
 
                 <v-spacer></v-spacer>
 
@@ -114,7 +114,7 @@
                                 <v-icon>mdi-credit-card-check-outline</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
-                                Receive Payment(s)
+                                Mark as Received
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>

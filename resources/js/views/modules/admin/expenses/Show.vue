@@ -53,13 +53,27 @@
                         </v-col>
                     </v-row>
 
+                    <v-divider></v-divider>
+
                     <v-row>
-                        <v-col cols="12">
+                        <v-col>
                             <div>Description: {{ form.description }}</div>
                             <div>
                                 Tax ({{ form.tax_rate }}%):
-                                {{ form.tax_amount }} {{ form.is_tax_inclusive ? `- Inclusive` : `- Exclusive` }}
+                                {{ form.tax_amount }}
+                                {{
+                                    form.is_tax_inclusive
+                                        ? `- Inclusive`
+                                        : `- Exclusive`
+                                }}
                             </div>
+                        </v-col>
+                    </v-row>
+
+                    <v-divider></v-divider>
+
+                    <v-row>
+                        <v-col cols="12">
                             <div>
                                 <v-data-table
                                     :headers="headers"
@@ -108,7 +122,11 @@
                                 </v-data-table>
                             </div>
                         </v-col>
+                    </v-row>
 
+                    <v-divider></v-divider>
+
+                    <v-row>
                         <v-col cols="12" md="8">
                             <div>Remarks : {{ form.remarks }}</div>
                         </v-col>
@@ -472,7 +490,7 @@ export default {
                         reject();
                     });
             });
-        },
+        }
     },
     computed: {
         amount_to_replenish() {

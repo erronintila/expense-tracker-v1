@@ -305,7 +305,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }, {
         icon: "mdi-currency-usd",
-        text: "Payments",
+        text: "Payment Records",
         link: {
           name: "admin.payments.index"
         }

@@ -8,7 +8,7 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">New Payment</h4>
+                <h4 class="title green--text">New Payment Record</h4>
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
@@ -170,9 +170,11 @@
                                         <td class="title">Total</td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
                                         <td>
                                             <strong>{{ total }}</strong>
                                         </td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -215,29 +217,86 @@
                                             item.employee.suffix
                                     }}
                                 </template>
+                                <template v-slot:[`item.created`]="{ item }">
+                                    {{
+                                        mixin_formatDate(
+                                            item.created.created_at,
+                                            "YYYY-MM-DD HH:mm:ss"
+                                        )
+                                    }}
+                                </template>
+                                <template v-slot:[`item.period`]="{ item }">
+                                    {{ item.from }} ~ {{ item.to }}
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/admin/expense_reports/${item.id}`
+                                            )
+                                        "
+                                    >
+                                        mdi-eye
+                                    </v-icon>
+                                </template>
                                 <template
                                     v-slot:expanded-item="{ headers, item }"
                                 >
                                     <td :colspan="headers.length">
                                         <v-container>
-                                            <v-card
-                                                class="mx-auto"
-                                                tile
-                                                flat
-                                                :key="item.id"
-                                            >
-                                                <div>
-                                                    <strong>Expenses</strong>
-                                                </div>
-                                                <div
-                                                    v-for="item in item.expenses"
-                                                    :key="item.id"
-                                                >
-                                                    {{
-                                                        `${item.date} (${item.expense_type.name}): ${item.amount}`
-                                                    }}
-                                                </div>
-                                            </v-card>
+                                            <div v-if="item"></div>
+                                            <div>
+                                                Expenses
+                                            </div>
+                                            <v-simple-table dense>
+                                                <template v-slot:default>
+                                                    <thead>
+                                                        <tr>
+                                                            <th
+                                                                class="text-left"
+                                                            >
+                                                                Date
+                                                            </th>
+                                                            <th
+                                                                class="text-left"
+                                                            >
+                                                                Expense
+                                                            </th>
+                                                            <th
+                                                                class="text-left"
+                                                            >
+                                                                Amount
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            v-for="item in item.expenses"
+                                                            :key="item.id"
+                                                        >
+                                                            <td>
+                                                                {{ item.date }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    item
+                                                                        .expense_type
+                                                                        .name
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    mixin_formatNumber(
+                                                                        item.amount
+                                                                    )
+                                                                }}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </template>
+                                            </v-simple-table>
                                         </v-container>
                                     </td>
                                 </template>
@@ -301,11 +360,19 @@ export default {
                 "This Year"
             ],
             headers: [
-                { text: "Employee", value: "employee" },
-                { text: "Description", value: "description" },
-                { text: "Amount", value: "total" },
-                { text: "Created", value: "created_at" },
-                { text: "", value: "data-table-expand" }
+                // { text: "Employee", value: "employee" },
+                // { text: "Description", value: "description" },
+                // { text: "Amount", value: "total" },
+                // { text: "Created", value: "created" },
+                // { text: "", value: "data-table-expand" },
+
+                { text: "Period", value: "period", sortable: false },
+                { text: "Code", value: "code", sortable: false },
+                { text: "Description", value: "description", sortable: false },
+                { text: "Amount", value: "total", sortable: false },
+                { text: "Balance", value: "balance", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
+                { text: "", value: "data-table-expand", sortable: false }
             ],
             items: [],
             selected: [],
@@ -316,7 +383,7 @@ export default {
                 reference_no: "",
                 voucher_no: "",
                 description: "",
-                date: "",
+                date: moment().format("YYYY-MM-DD"),
                 cheque_no: "",
                 cheque_date: "",
                 amount: "",

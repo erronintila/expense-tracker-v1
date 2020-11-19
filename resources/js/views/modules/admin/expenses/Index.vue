@@ -288,7 +288,7 @@
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
                                         <td>
@@ -344,7 +344,7 @@
                                         <td>
                                             {{ item.deleted.deleted_by == null ? "" : item.deleted.deleted_by.name }}
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <tr v-if="item.remarks">
                                         <td><strong>Remarks</strong></td>
                                         <td>:</td>

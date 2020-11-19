@@ -96,7 +96,7 @@ class ExpenseReportController extends Controller
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
-                        ["payment_id", "<>", null],
+                        // ["payment_id", "<>", null],
                     ]);
 
                     break;
@@ -492,9 +492,9 @@ class ExpenseReportController extends Controller
 
                 // // Prevent update if expense report has been cancelled
                 if (Auth::user()->is_admin) {
-                    if ($expense_report->payment_id > 0) {
-                        return response("Expense Report already has payment", 422);
-                    }
+                    // if ($expense_report->payment_id > 0) {
+                    //     return response("Expense Report already has payment", 422);
+                    // }
 
                     if ($expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
                         return response("Action can't be performed", 422);
@@ -504,9 +504,9 @@ class ExpenseReportController extends Controller
                         return response("Action can't be performed", 422);
                     }
 
-                    if ($expense_report->payment_id > 0) {
-                        return response("Expense Report already has payment", 422);
-                    }
+                    // if ($expense_report->payment_id > 0) {
+                    //     return response("Expense Report already has payment", 422);
+                    // }
                 }
 
                 $expense_report->description = $request->description;

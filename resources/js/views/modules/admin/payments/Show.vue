@@ -14,63 +14,37 @@
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-row>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="date"
-                                label="Date"
-                                readonly
-                            ></v-text-field>
+                        <v-col cols="12" md="8">
+                            <div>
+                                {{ form.employee.fullname }}
+                            </div>
+                            <div class="display-1 green--text">
+                                PHP {{ mixin_formatNumber(form.amount) }}
+                            </div>
+                            <div>Date: {{ form.date }}</div>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="employee"
-                                label="Employee"
-                                readonly
-                            ></v-text-field>
+                            <div class="headline green--text">
+                                #{{ form.code }}
+                            </div>
+                            <div>Voucher: {{ form.voucher_no }}</div>
+                            <div>
+                                Status:
+                                <v-btn :color="form.status.color" x-small dark>
+                                    {{ form.status.status }}
+                                </v-btn>
+                            </div>
                         </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="description"
-                                label="Description"
-                                readonly
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="voucher_no"
-                                label="Voucher No."
-                                readonly
-                            ></v-text-field>
-                        </v-col>
-
-                        <!-- <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="payee"
-                                label="Payee"
-                                readonly
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="payee_address"
-                                label="Payee Address"
-                                readonly
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="payee_phone"
-                                label="Payee Phone No."
-                                readonly
-                            ></v-text-field>
-                        </v-col> -->
                     </v-row>
+
+                    <v-divider></v-divider>
+
+                    <v-row>
+                        <v-col>Description: {{ form.description }} </v-col>
+                    </v-row>
+
+                    <v-divider></v-divider>
 
                     <v-row>
                         <v-col cols="12">
@@ -85,12 +59,19 @@
                                 show-expand
                                 class="elevation-0"
                             >
-                                <template
+                                <!-- <template
                                     slot="body.append"
                                     v-if="items.length > 0"
                                 >
-                                    <tr class="green--text">
+                                    <tr class="green--text hidden-md-and-up">
+                                        <td class="title">
+                                            Total:
+                                            <strong>{{ form.amount }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="green--text hidden-sm-and-down">
                                         <td class="title">Total</td>
+                                        <td></td>
                                         <td></td>
                                         <td>
                                             <strong>{{
@@ -99,12 +80,29 @@
                                         </td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
                                     </tr>
+                                </template> -->
+                                <template v-slot:[`item.period`]="{ item }">
+                                    {{ item.from }} ~ {{ item.to }}
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/admin/expense_reports/${item.id}`
+                                            )
+                                        "
+                                    >
+                                        mdi-eye
+                                    </v-icon>
                                 </template>
                                 <template v-slot:[`item.created_at`]="{ item }">
                                     {{
                                         mixin_formatDate(
-                                            item.created_at,
+                                            item.created.created_at,
                                             "YYYY-MM-DD HH:mm:ss"
                                         )
                                     }}
@@ -112,10 +110,16 @@
                                 <template v-slot:[`item.total`]="{ item }">
                                     {{ mixin_formatNumber(item.total) }}
                                 </template>
+                                <template v-slot:[`item.balance`]="{ item }">
+                                    {{ mixin_formatNumber(item.balance) }}
+                                </template>
                                 <template v-slot:top>
                                     <v-row>
-                                        Expense Reports
-
+                                        <v-col>
+                                            <div class="text--secondary">
+                                                Expense Reports
+                                            </div>
+                                        </v-col>
                                         <v-spacer></v-spacer>
                                     </v-row>
                                 </template>
@@ -133,7 +137,75 @@
                                 >
                                     <td :colspan="headers.length">
                                         <v-container>
-                                            <v-card
+                                            <div v-if="item"></div>
+                                            <div>
+                                                Expenses
+                                            </div>
+                                            <v-simple-table dense>
+                                                <template v-slot:default>
+                                                    <thead>
+                                                        <tr>
+                                                            <th
+                                                                class="text-left"
+                                                            >
+                                                                Date
+                                                            </th>
+                                                            <th
+                                                                class="text-left"
+                                                            >
+                                                                Expense
+                                                            </th>
+                                                            <th
+                                                                class="text-left"
+                                                            >
+                                                                Amount
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            v-for="item in item.expenses"
+                                                            :key="item.id"
+                                                        >
+                                                            <td>
+                                                                {{ item.date }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    item
+                                                                        .expense_type
+                                                                        .name
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    mixin_formatNumber(
+                                                                        item.amount
+                                                                    )
+                                                                }}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </template>
+                                            </v-simple-table>
+
+                                            <!-- <table class="table" width="100%" border="1">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Date</td>
+                                                        <td>Expense</td>
+                                                        <td>Amount</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item in item.expenses" :key="item.id">
+                                                        <td>{{ item.date }}</td>
+                                                        <td>{{ item.expense_type.name }}</td>
+                                                        <td>{{ item.amount }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table> -->
+                                            <!-- <v-card
                                                 class="mx-auto"
                                                 tile
                                                 flat
@@ -150,7 +222,7 @@
                                                         `${item.date} (${item.expense_type.name}): ${item.amount}`
                                                     }}
                                                 </div>
-                                            </v-card>
+                                            </v-card> -->
                                         </v-container>
                                     </td>
                                 </template>
@@ -158,24 +230,82 @@
                         </v-col>
                     </v-row>
 
+                    <v-divider></v-divider>
+
                     <v-row>
-                        <v-col cols="12" md="6">
-                            <v-textarea
-                                v-model="remarks"
-                                label="Remarks"
-                                rows="1"
-                                readonly
-                            >
-                            </v-textarea>
+                        <v-col cols="12" md="8">
+                            <div>Remarks : {{ form.remarks }}</div>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <table width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Total Expense Amount Balance
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            class="green--text text--darken-4 text-right"
+                                        >
+                                            {{ mixin_formatNumber(0) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Paid Amount
+                                        </td>
+                                        <td>:</td>
+                                        <td
+                                            class="green--text text--darken-4 text-right"
+                                        >
+                                            (-) {{ mixin_formatNumber(0) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <v-divider></v-divider>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-left">
+                                            Amount to be reimbursed
+                                        </th>
+                                        <td>:</td>
+                                        <td
+                                            class="green--text text--darken-4 text-right"
+                                        >
+                                            {{ mixin_formatNumber(0) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
                         </v-col>
                     </v-row>
 
-                    <v-card-actions>
+                    <v-divider class="mb-4"></v-divider>
+
+                    <v-row>
+                        <v-col cols="12" md="8"> Notes : {{ form.notes }} </v-col>
+                        <v-col cols="12" md="4">
+                            <div class="text-right">
+                                <v-btn
+                                    color="green"
+                                    dark
+                                    @click="cancelPayment"
+                                >
+                                    Cancel Payment
+                                </v-btn>
+                            </div>
+                        </v-col>
+                    </v-row>
+
+                    <!-- <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="cancelPayment"
-                            >Cancel Payment</v-btn
-                        >
-                    </v-card-actions>
+                        <v-btn color="green" dark @click="cancelPayment">
+                            Cancel Payment
+                        </v-btn>
+                    </v-card-actions> -->
                 </v-container>
             </v-form>
         </v-card>
@@ -219,14 +349,42 @@ export default {
             remarks: "",
             notes: "",
             headers: [
-                { text: "Employee", value: "employee", sortable: false },
+                { text: "Period", value: "period", sortable: false },
+                { text: "Code", value: "code", sortable: false },
                 { text: "Description", value: "description", sortable: false },
                 { text: "Amount", value: "total", sortable: false },
-                { text: "Created", value: "created_at", sortable: false },
+                { text: "Balance", value: "balance", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand", sortable: false }
             ],
             items: [],
-            total: 0
+            total: 0,
+            form: {
+                amount: 0,
+                cheque_date: "",
+                cheque_no: "",
+                code: "",
+                date: "",
+                description: "",
+                employee: { id: null, name: "" },
+                expense_reports: [],
+                notes: "",
+                reference_no: "",
+                remarks: "",
+                status: "",
+                voucher_no: "",
+
+                created: { created_at: null, created_by: { name: "" } },
+                updated: { updated_at: null, updated_by: { name: "" } },
+                deleted: { deleted_at: null, deleted_by: { name: "" } },
+                submitted: { submitted_at: null, submitted_by: { name: "" } },
+                reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+                approved: { approved_at: null, approved_by: { name: "" } },
+                rejected: { rejected_at: null, rejected_by: { name: "" } },
+                cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+
+                logs: []
+            }
         };
     },
     methods: {
@@ -236,6 +394,9 @@ export default {
                 .get(`/api/payments/${_this.$route.params.id}`)
                 .then(response => {
                     let data = response.data.data;
+
+                    console.log(data);
+
                     _this.code = data.code;
                     _this.reference_no = data.reference_no;
                     _this.voucher_no = data.voucher_no;
@@ -250,11 +411,36 @@ export default {
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
                     _this.items = data.expense_reports;
-                    _this.employee = `${data.employee.last_name}, ${data.employee.first_name} ${data.employee.middle_name}`
+                    _this.employee = `${data.employee.last_name}, ${data.employee.first_name} ${data.employee.middle_name}`;
 
                     // _this.selected.splice(0, 0, ...data.expenses);
 
                     // _this.loadExpenses(data.employee.id);
+
+                    _this.form.amount = data.amount;
+                    _this.form.cheque_date = data.cheque_date;
+                    _this.form.cheque_no = data.cheque_no;
+                    _this.form.code = data.code;
+                    _this.form.date = data.date;
+                    _this.form.description = data.description;
+                    _this.form.employee = data.employee;
+                    _this.form.expense_reports = data.expense_reports;
+                    _this.form.notes = data.notes;
+                    _this.form.reference_no = data.reference_no;
+                    _this.form.remarks = data.remarks;
+                    _this.form.status = data.status;
+                    _this.form.voucher_no = data.voucher_no;
+
+                    _this.form.created = data.created;
+                    _this.form.updated = data.updated;
+                    _this.form.deleted = data.deleted;
+                    _this.form.submitted = data.submitted;
+                    _this.form.reviewed = data.reviewed;
+                    _this.form.approved = data.approved;
+                    _this.form.rejected = data.rejected;
+                    _this.form.cancelled = data.cancelled;
+
+                    _this.form.logs = data.logs;
                 })
                 .catch(error => {
                     console.log(error);

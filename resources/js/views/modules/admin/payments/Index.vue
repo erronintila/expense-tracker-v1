@@ -2,12 +2,15 @@
     <div>
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <h4 class="title green--text">Payments</h4>
+                <h4 class="title green--text">Payment Records</h4>
 
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add payments')">
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add payments')"
+                    >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -21,7 +24,7 @@
                             <v-icon dark>mdi-plus</v-icon>
                         </v-btn>
                     </template>
-                    <span>Add New</span>
+                    <span>Add New Record</span>
                 </v-tooltip>
 
                 <v-tooltip bottom>
@@ -141,7 +144,7 @@
                                 <v-icon>mdi-credit-card-check-outline</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
-                                Receive Payment(s)
+                                Mark as Received
                             </v-list-item-subtitle>
                         </v-list-item>
 
@@ -159,7 +162,7 @@
                                 <v-icon>mdi-close</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
-                                Cancel Payment(s)
+                                Cancel Payment Record(s)
                             </v-list-item-subtitle>
                         </v-list-item>
 
@@ -222,40 +225,40 @@
                                         <td>:</td>
                                         <td>{{ item.voucher_no }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td><strong>Payee</strong></td>
                                         <td>:</td>
                                         <td>{{ item.payee }}</td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <td><strong>Remarks</strong></td>
                                         <td>:</td>
                                         <td>{{ item.remarks }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td><strong>Created at</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.created_at,
+                                                    item.created.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="item.deleted">
                                         <td><strong>Cancelled</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.deleted_at,
+                                                    item.deleted.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <!-- <tr>
                                         <td><strong>Status</strong></td>
                                         <td>:</td>
@@ -447,12 +450,14 @@ export default {
                             status: status,
                             start_date: range[0],
                             end_date: range[1],
-                            employee_id: employee_id,
+                            employee_id: employee_id
                         }
                     })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+
+                        console.log(items);
 
                         _this.loading = false;
 
@@ -547,13 +552,16 @@ export default {
                     .map(item => item.status.status)
                     .includes("Completed")
             ) {
-                this.$dialog.message.error("Payment has already been received", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.$dialog.message.error(
+                    "Payment has already been received",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
                 return;
             }
-            
+
             this.$confirm(`Do you want to ${action} payment(s)?`).then(res => {
                 if (res) {
                     let ids = _this.selected.map(item => {
@@ -619,7 +627,7 @@ export default {
                 query: this.search,
                 query: this.status,
                 query: this.date_range,
-                query: this.employee,
+                query: this.employee
             };
         }
     },

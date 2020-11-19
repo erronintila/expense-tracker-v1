@@ -54,7 +54,7 @@ class ExpenseResource extends JsonResource
             // 'expense_report_id' => $this->expense_report_id,
             
             'details' => json_decode($this->details),
-            'status' => $this->status(),
+            'status' => $this->getStatus(),
 
             'is_tax_inclusive' => $this->is_tax_inclusive,
             'tax_name' => $this->tax_name,
@@ -71,14 +71,14 @@ class ExpenseResource extends JsonResource
             // 'updated_at' => $this->updated_at,
             // 'deleted_at' => $this->deleted_at,  
 
-            'created' => $this->created_by_user(),
-            'updated' => $this->updated_by_user(),
-            'deleted' => $this->deleted_by_user(),
-            'submitted' => $this->submitted(),
-            'reviewed' => $this->reviewed(),
-            'approved' => $this->approved(),
-            'rejected' => $this->rejected(),
-            'cancelled' => $this->cancelled(),
+            'created' => $this->getCreatedInfo(),
+            'updated' => $this->getUpdatedInfo(),
+            'deleted' => $this->getDeletedInfo(),
+            'submitted' => $this->getSubmittedInfo(),
+            'reviewed' => $this->getReviewedInfo(),
+            'approved' => $this->getApprovedInfo(),
+            'rejected' => $this->getRejectedInfo(),
+            'cancelled' => $this->getCancelledInfo(),
 
             'logs' => $logs
         ];

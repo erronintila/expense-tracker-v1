@@ -223,7 +223,7 @@ class Employee extends Model
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
-    | CUSTOM FIELDS
+    | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
     
@@ -232,7 +232,7 @@ class Employee extends Model
      *
      * @return void
      */
-    public function name()
+    public function getFullName()
     {
         return $this->first_name . "" . ($this->middle_name ?  " " . $this->middle_name . " " : " ") . $this->last_name . ($this->suffix ? ", " . $this->suffix : "");
     }

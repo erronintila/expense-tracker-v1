@@ -436,6 +436,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -491,7 +497,10 @@ __webpack_require__.r(__webpack_exports__);
         payments: [],
         payment_id: null,
         balance: 0,
-        employee: this.$store.getters.user.employee,
+        employee: {
+          id: null,
+          name: ""
+        },
         payment: {
           id: null
         },
@@ -750,6 +759,8 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
                   _c(
                     "v-row",
                     [
@@ -761,6 +772,8 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("v-divider"),
                   _vm._v(" "),
                   _c(
                     "v-row",
@@ -1001,6 +1014,8 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
                   _c(
                     "v-row",
                     [
@@ -1058,7 +1073,9 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\n                                        (-) " +
-                                      _vm._s(_vm.mixin_formatNumber(0)) +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(_vm.form.paid)
+                                      ) +
                                       "\n                                    "
                                   )
                                 ]
@@ -1075,7 +1092,7 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("tr", [
-                              _c("td", [
+                              _c("th", { staticClass: "text-left" }, [
                                 _vm._v(
                                   "\n                                        Amount to be reimbursed\n                                    "
                                 )
@@ -1093,7 +1110,7 @@ var render = function() {
                                   _vm._v(
                                     "\n                                        " +
                                       _vm._s(
-                                        _vm.mixin_formatNumber(_vm.form.total)
+                                        _vm.mixin_formatNumber(_vm.form.balance)
                                       ) +
                                       "\n                                    "
                                   )
