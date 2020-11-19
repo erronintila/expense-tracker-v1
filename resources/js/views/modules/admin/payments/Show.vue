@@ -247,7 +247,7 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            {{ mixin_formatNumber(0) }}
+                                            {{ mixin_formatNumber(totalExpenseBalanceAmount) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -258,7 +258,7 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            (-) {{ mixin_formatNumber(0) }}
+                                            (-) {{ mixin_formatNumber(form.amount) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -274,7 +274,7 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            {{ mixin_formatNumber(0) }}
+                                            {{ mixin_formatNumber(amountToBeReimbursed) }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -359,6 +359,8 @@ export default {
             ],
             items: [],
             total: 0,
+            totalExpenseBalanceAmount: 0,
+            amountToBeReimbursed: 0,
             form: {
                 amount: 0,
                 cheque_date: "",
@@ -494,6 +496,16 @@ export default {
         items() {
             this.total = this.items.reduce(
                 (total, item) => total + item.total,
+                0
+            );
+
+            this.totalExpenseBalanceAmount = this.items.reduce(
+                (total, item) => total + item.total,
+                0
+            );
+
+            this.amountToBeReimbursed = this.items.reduce(
+                (total, item) => total + item.balance,
                 0
             );
         }

@@ -508,6 +508,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -608,7 +610,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          console.log(items);
           _this.loading = false;
           resolve({
             items: items,
@@ -1802,17 +1803,9 @@ var render = function() {
                                   _c("table", [
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Code")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(item.code))])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Reimbursable")])
+                                        _c("strong", [
+                                          _vm._v("Reimbursable Amount")
+                                        ])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
@@ -1832,22 +1825,6 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Period")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          _vm._s(item.from) +
-                                            " ~ " +
-                                            _vm._s(item.to)
-                                        )
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
                                         _c("strong", [_vm._v("Paid")])
                                       ]),
                                       _vm._v(" "),
@@ -1855,12 +1832,36 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(item.paid)
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.mixin_formatNumber(item.paid)
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
+                                    _vm._v(" "),
+                                    item.balance > 0
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Balance")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatNumber(
+                                                    item.balance
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e(),
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
@@ -1870,19 +1871,29 @@ var render = function() {
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(_vm._s(item.status.remarks))
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(item.status.status) +
+                                            "\n                                        (" +
+                                            _vm._s(item.status.remarks) +
+                                            ")\n                                    "
+                                        )
                                       ])
                                     ]),
                                     _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Remarks")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(item.remarks))])
-                                    ])
+                                    item.remarks
+                                      ? _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Remarks")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(_vm._s(item.remarks))
+                                          ])
+                                        ])
+                                      : _vm._e()
                                   ])
                                 ])
                               ],

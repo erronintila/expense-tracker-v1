@@ -392,12 +392,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
       // "Unreported Advance Payments",
-      "Released Payments", "Completed Payments", "Cancelled Payments" // "Approved",
-      // "Released",
-      // "Received",
-      // "Cancelled"
-      // "Completed"
-      ],
+      "Released Payments", "Completed Payments", "Cancelled Payments"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -466,7 +461,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          console.log(items);
           _this.loading = false;
           resolve({
             items: items,
@@ -586,6 +580,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             });
+
+            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -1234,7 +1230,9 @@ var render = function() {
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  _vm.mixin_getHumanDate(item.updated_at)
+                                  _vm.mixin_getHumanDate(
+                                    item.updated.updated_at
+                                  )
                                 ) +
                                 "\n                "
                             )

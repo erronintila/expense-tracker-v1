@@ -68,11 +68,11 @@ class ExpenseReportResource extends JsonResource
             'paid' => $this->getTotalExpenseAmount() - $this->getBalance(),
             'payments' => $this->payments,
             // 'payment_id' => $this->payment_id,
-            'payment_id' => null,
+            // 'payment_id' => null,
             'balance' => $this->getBalance(),
 
             'employee' => new EmployeeResource($this->employee()->withTrashed()->first()),
-            'payment' => $this->payments()->withTrashed()->first(),
+            // 'payment' => $this->payments()->withTrashed()->first(),
             'expenses' => ExpenseResource::collection($this->expenses()->withTrashed()->get()),
 
             'created' => $this->getCreatedInfo(),

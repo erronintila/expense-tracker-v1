@@ -386,6 +386,8 @@ __webpack_require__.r(__webpack_exports__);
       }],
       items: [],
       total: 0,
+      totalExpenseBalanceAmount: 0,
+      amountToBeReimbursed: 0,
       form: {
         amount: 0,
         cheque_date: "",
@@ -542,6 +544,12 @@ __webpack_require__.r(__webpack_exports__);
     items: function items() {
       this.total = this.items.reduce(function (total, item) {
         return total + item.total;
+      }, 0);
+      this.totalExpenseBalanceAmount = this.items.reduce(function (total, item) {
+        return total + item.total;
+      }, 0);
+      this.amountToBeReimbursed = this.items.reduce(function (total, item) {
+        return total + item.balance;
       }, 0);
     }
   },
@@ -1046,7 +1054,11 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\n                                        " +
-                                      _vm._s(_vm.mixin_formatNumber(0)) +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.totalExpenseBalanceAmount
+                                        )
+                                      ) +
                                       "\n                                    "
                                   )
                                 ]
@@ -1071,7 +1083,9 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\n                                        (-) " +
-                                      _vm._s(_vm.mixin_formatNumber(0)) +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(_vm.form.amount)
+                                      ) +
                                       "\n                                    "
                                   )
                                 ]
@@ -1105,7 +1119,11 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\n                                        " +
-                                      _vm._s(_vm.mixin_formatNumber(0)) +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.amountToBeReimbursed
+                                        )
+                                      ) +
                                       "\n                                    "
                                   )
                                 ]

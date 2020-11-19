@@ -261,10 +261,10 @@ class PaymentController extends Controller
             foreach ($request->expense_reports as $item) {
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
 
-                $arr[$expense_report->id] = ['payment' => $expense_report->total_amount()];
+                $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmount()];
             }
             
-            $payment->pivot_expense_reports()->sync($arr);
+            $payment->expense_reports()->sync($arr);
         }
 
         return response(
@@ -442,10 +442,10 @@ class PaymentController extends Controller
                     foreach ($request->expense_reports as $item) {
                         $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
         
-                        $arr[$expense_report->id] = ['payment' => $expense_report->total_amount()];
+                        $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmount()];
                     }
                     
-                    $payment->pivot_expense_reports()->sync($arr);
+                    $payment->expense_reports()->sync($arr);
                 }
 
                 break;
@@ -479,7 +479,7 @@ class PaymentController extends Controller
                 //     $expense_report->save();
                 // }
 
-                $payment->pivot_expense_reports()->sync([]);
+                $payment->expense_reports()->sync([]);
             }
         } else {
             $payment = Payment::withTrashed()->findOrFail($id);
@@ -492,7 +492,7 @@ class PaymentController extends Controller
             //     $expense_report->save();
             // }
 
-            $payment->pivot_expense_reports()->sync([]);
+            $payment->expense_reports()->sync([]);
         }
 
         return response(

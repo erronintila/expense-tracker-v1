@@ -112,10 +112,21 @@ class ExpenseController extends Controller
                             ["rejected_at", "=", null],
 
                             ["cancelled_at", "=", null]
-
-                            // ["paid_at", "<>", null],
-
                         ]);
+
+                        $query->whereHas("payments", function($query) {
+                            $query->where([
+                                ["approved_at", "<>", null],
+                
+                                ["released_at", "<>", null],
+                
+                                ["received_at", "<>", null],
+                
+                                ["cancelled_at", "=", null],
+                
+                                ["deleted_at", "=", null],
+                            ]);
+                        });
                     });
 
                     break;
@@ -150,6 +161,8 @@ class ExpenseController extends Controller
 
                             ["cancelled_at", "=", null],
                         ]);
+
+                        $query->whereDoesntHave("payments");
                     });
 
                     break;
@@ -166,6 +179,8 @@ class ExpenseController extends Controller
 
                             ["cancelled_at", "=", null],
                         ]);
+
+                        $query->whereDoesntHave("payments");
                     });
 
                     break;
@@ -182,6 +197,8 @@ class ExpenseController extends Controller
 
                             ["cancelled_at", "=", null],
                         ]);
+
+                        $query->whereDoesntHave("payments");
                     });
 
                     break;

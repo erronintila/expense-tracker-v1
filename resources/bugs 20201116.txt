@@ -12,7 +12,7 @@ autorefresh remaining fund info on sidebar
 activity log expense  - 17 Oct 2020 11:09 AM		Associated with the report titled 'sample' - erronintila.twincirc
 no note on editing expenses
 expense cant be cancelled even if no report
-
+add logging when payment is applied to a report
 
 *****From the Doc: 
 

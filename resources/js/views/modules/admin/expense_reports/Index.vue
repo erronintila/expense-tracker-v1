@@ -226,12 +226,9 @@
                             <v-container>
                                 <table>
                                     <tr>
-                                        <td><strong>Code</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.code }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Reimbursable</strong></td>
+                                        <td>
+                                            <strong>Reimbursable Amount</strong>
+                                        </td>
                                         <td>:</td>
                                         <td>
                                             {{
@@ -242,25 +239,30 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Period</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.from }} ~ {{ item.to }}</td>
-                                    </tr>
-                                    <tr>
                                         <td><strong>Paid</strong></td>
                                         <td>:</td>
-                                        <td>{{
-                                                mixin_formatNumber(
-                                                    item.paid
-                                                )
-                                            }}</td>
+                                        <td>
+                                            {{ mixin_formatNumber(item.paid) }}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="item.balance > 0">
+                                        <td><strong>Balance</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatNumber(item.balance)
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Status</strong></td>
                                         <td>:</td>
-                                        <td>{{ item.status.remarks }}</td>
+                                        <td>
+                                            {{ item.status.status }}
+                                            ({{ item.status.remarks }})
+                                        </td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="item.remarks">
                                         <td><strong>Remarks</strong></td>
                                         <td>:</td>
                                         <td>{{ item.remarks }}</td>
@@ -573,8 +575,6 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        console.log(items);
 
                         _this.loading = false;
 

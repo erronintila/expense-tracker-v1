@@ -17,7 +17,7 @@ class PaymentResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
-        $expense_reports = ExpenseReportResource::collection($this->pivot_expense_reports()->withTrashed()->get());
+        $expense_reports = ExpenseReportResource::collection($this->expense_reports()->withTrashed()->get());
 
         return [
             'id' => $this->id,

@@ -488,6 +488,12 @@ class Expense extends Model
 
         $expense_report = $this->expense_report;
 
+        if ($expense_report && $expense_report->getBalance() == 0) {
+            return [
+                "reference" => $expense_report->payments()->pluck("code"),
+            ];
+        }
+
         return null;
     }
 }

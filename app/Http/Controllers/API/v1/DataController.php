@@ -594,17 +594,33 @@ class DataController extends Controller
             ->get()
             ->where('expense_report', '<>', null);
 
-        $approved_reports =  Expense::with(['expense_report' => function ($q) {
-            $q->where('submitted_at', "<>", null);
-            $q->where('approved_at', "<>", null);
-            $q->where('rejected_at', null);
-            $q->where('cancelled_at', null);
-            $q->where('deleted_at', null);
-            // $q->where('payment_id', null);
-        }])
-            ->whereHas('expense_report')
-            ->get()
-            ->where('expense_report', '<>', null);
+        // $approved_reports =  Expense::with(['expense_report' => function ($q) {
+        //     $q->where('submitted_at', "<>", null);
+        //     $q->where('approved_at', "<>", null);
+        //     $q->where('rejected_at', null);
+        //     $q->where('cancelled_at', null);
+        //     $q->where('deleted_at', null);
+        //     // $q->where('payment_id', null);
+        // }])
+        //     ->whereHas('expense_report')
+        //     ->get()
+        //     ->where('expense_report', '<>', null);
+
+        $approved_reports = Expense::whereHas("expense_report", function ($query) {
+            $query->where([
+                ["submitted_at", "<>", null],
+
+                ["approved_at", "<>", null],
+
+                ["cancelled_at", "=", null],
+
+                ["rejected_at", "=", null],
+
+                ["deleted_at", "=", null],
+            ]);
+
+            $query->whereDoesntHave("payments");
+        })->get();
 
         // $payment_to_receive = Payment::where([
         //     ["approved_at", "<>", null],
@@ -613,18 +629,46 @@ class DataController extends Controller
         //     ["cancelled_at", "=", null],
         // ])->get();
 
-        $payment_to_receive =  Expense::with(['expense_report' => function ($q) {
-            $q->where('submitted_at', "<>", null);
-            $q->where('approved_at', "<>", null);
-            $q->where('rejected_at', null);
-            $q->where('cancelled_at', null);
-            $q->where('deleted_at', null);
-            // $q->where('payment_id', "<>", null);
-            // $q->where('paid_at', null);
-        }])
-            ->whereHas('expense_report')
-            ->get()
-            ->where('expense_report', '<>', null);
+        // $payment_to_receive =  Expense::with(['expense_report' => function ($q) {
+        //     $q->where('submitted_at', "<>", null);
+        //     $q->where('approved_at', "<>", null);
+        //     $q->where('rejected_at', null);
+        //     $q->where('cancelled_at', null);
+        //     $q->where('deleted_at', null);
+        //     // $q->where('payment_id', "<>", null);
+        //     // $q->where('paid_at', null);
+        // }])
+        //     ->whereHas('expense_report')
+        //     ->get()
+        //     ->where('expense_report', '<>', null);
+
+        $payment_to_receive = Expense::whereHas("expense_report", function ($query) {
+            $query->where([
+                    ["submitted_at", "<>", null],
+    
+                    ["approved_at", "<>", null],
+    
+                    ["cancelled_at", "=", null],
+    
+                    ["rejected_at", "=", null],
+    
+                    ["deleted_at", "=", null],
+                ]);
+    
+            $query->whereHas("payments", function($query) {
+                $query->where([
+                    ["approved_at", "<>", null],
+    
+                    ["released_at", "<>", null],
+    
+                    ["received_at", "=", null],
+    
+                    ["cancelled_at", "=", null],
+    
+                    ["deleted_at", "=", null],
+                ]);
+            });
+        })->get();
 
         //
         //
@@ -832,9 +876,35 @@ class DataController extends Controller
             })
             ->get();
 
+        $paid_expenses = Expense::where("employee_id", $employee->id)
+                ->where("deleted_at", null)
+                ->whereHas("expense_report", function ($query) {
+                    $query->where([
+
+                        ["cancelled_at", "=", null],
+
+                        ["rejected_at", "=", null],
+
+                        ["deleted_at", "=", null],
+                    ]);
+                    $query->whereHas("payments", function ($query) {
+                        $query->where([
+
+                            ["cancelled_at", "=", null],
+    
+                            ["received_at", "<>", null],
+    
+                            ["deleted_at", "=", null],
+                        ]);
+                    });
+                })
+                ->get();
+
         $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
 
-        $employee->remaining_fund = $employee->fund - $deduct;
+        $paid = $paid_expenses->sum("amount") - $paid_expenses->sum("reimbursable_amount");
+
+        $employee->remaining_fund = $employee->fund - $deduct + $paid;
 
         $employee->save();
 

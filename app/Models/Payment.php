@@ -121,7 +121,7 @@ class Payment extends Model
     //     return $this->hasMany(ExpenseReport::class);
     // }
 
-    public function pivot_expense_reports()
+    public function expense_reports()
     {
         return $this->belongsToMany(ExpenseReport::class)->withPivot('payment')->withTimestamps();
     }

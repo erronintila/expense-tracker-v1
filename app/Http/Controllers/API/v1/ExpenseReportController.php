@@ -96,8 +96,20 @@ class ExpenseReportController extends Controller
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
-                        // ["payment_id", "<>", null],
-                    ]);
+                    ])
+                        ->whereHas("payments", function($query) {
+                            $query->where([
+                                ["approved_at", "<>", null],
+                
+                                ["released_at", "<>", null],
+                
+                                ["received_at", "<>", null],
+                
+                                ["cancelled_at", "=", null],
+                
+                                ["deleted_at", "=", null],
+                            ]);
+                        });
 
                     break;
                 case 'Rejected Expense Reports':
@@ -117,7 +129,7 @@ class ExpenseReportController extends Controller
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
-                    ]);
+                    ])->whereDoesntHave("payments");
 
                     break;
                 case 'Submitted Expense Reports':
@@ -127,7 +139,7 @@ class ExpenseReportController extends Controller
                         ["approved_at", "=", null],
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
-                    ]);
+                    ])->whereDoesntHave("payments");
 
                     break;
                 case 'Unsubmitted Expense Reports':
@@ -137,7 +149,7 @@ class ExpenseReportController extends Controller
                         ["approved_at", "=", null],
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
-                    ]);
+                    ])->whereDoesntHave("payments");
 
                     break;
 

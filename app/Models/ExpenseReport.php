@@ -189,7 +189,7 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = $this->payments->count() === 0;
+        $paid = is_null($this->getReimbursedInfo());
 
         if (!$deleted) {
             $arr = [
@@ -455,7 +455,13 @@ class ExpenseReport extends Model
 
     public function getReimbursedInfo()
     {
-        $expense_report = $this->expense_report;
+        $payments = $this->payments->where("received_at", "<>", null);
+
+        if($payments->count() > 0) {
+            return [
+                "payments" => $payments
+            ];
+        }
 
         return null;
     }

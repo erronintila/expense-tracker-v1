@@ -34,7 +34,7 @@ class PaymentObserver
 
         // if ($received == null && $payment->received_at !== null) {
 
-        foreach ($payment->pivot_expense_reports as $expense_report) {
+        foreach ($payment->expense_reports as $expense_report) {
 
             $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
 
@@ -78,7 +78,7 @@ class PaymentObserver
     {
         if ($payment->received_at !== null) {
 
-            foreach ($payment->pivot_expense_reports as $expense_report) {
+            foreach ($payment->expense_reports as $expense_report) {
 
                 foreach ($expense_report->expenses as $expense) {
 
