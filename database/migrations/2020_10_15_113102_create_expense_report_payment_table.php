@@ -20,15 +20,15 @@ class CreateExpenseReportPaymentTable extends Migration
             $table->double('payment', 10, 2)->nullable();
             $table->timestamps();
 
-            // $table->foreign('expense_report_id')
-            //     ->references('id')
-            //     ->on('expense_reports')
-            //     ->onDelete('cascade');
+            $table->foreign('expense_report_id')
+                ->references('id')
+                ->on('expense_reports')
+                ->onDelete('cascade');
 
-            // $table->foreign('payment_id')
-            //     ->references('id')
-            //     ->on('payments')
-            //     ->onDelete('cascade');
+            $table->foreign('payment_id')
+                ->references('id')
+                ->on('payments')
+                ->onDelete('cascade');
         });
     }
 
