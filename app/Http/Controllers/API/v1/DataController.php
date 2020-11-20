@@ -17,14 +17,11 @@ use App\Models\Expense;
 use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
 use App\Models\Job;
-use App\Models\Payment;
-use App\Models\SubType;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
@@ -32,152 +29,42 @@ use Spatie\Permission\Models\Permission;
 class DataController extends Controller
 {
     use ApiResponse;
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | GENERAL
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
     
-    public function test()
+    /**
+     * permissions
+     *
+     * @return void
+     */
+    public function permissions()
     {
-        $activity = Activity::all()->last();
-
-        return $activity;
-        // return $activity->description; //returns 'deleted'
-        // return $activity->changes; //
-
-        return "test";
+        return Permission::all();
     }
-
-    public function print(Request $request)
-    {
-        if (request()->has("expense_report_detailed")) {
-            $expense_types = ExpenseType::withTrashed()->get();
-            $expense_report = ExpenseReport::withTrashed()->where("id", $request->expense_report_id);
-
-            $expense_report = new ExpenseReportResource($expense_report->first());
-
-            $data =  $expense_report->expenses()->withTrashed()->get()
-                ->sortBy("date")
-                ->groupBy("date")
-                ->map(function ($row) {
-                    return $row->groupBy('expense_type.name')->map(function ($row) {
-                        return $row->sum("amount");
-                    });
-                });
-
-            $main = [];
-
-            foreach ($data as $key => $value) {
-                $temp = [];
-                $date = $key;
-
-                foreach ($value as $key => $value) {
-                    $temp[str_replace(' ', '_', strtolower($key))] = $value;
-                }
-
-                $temp["total"] = array_sum(array_values($temp));
-                $temp['date'] = Carbon::parse($date)->toDate()->format("Y-m-d");
-                $temp['particulars'] = "";
-
-                foreach ($expense_types as $key => $value) {
-                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp)) {
-                        $temp[str_replace(' ', '_', strtolower($value["name"]))] = 0;
-                    }
-                }
-
-                array_push($main, $temp);
-            }
-
-            $expenses = $expense_report->expenses()->withTrashed()->orderBy("date")->get()
-                // ->sortBy("date")
-                // ->groupBy("id")
-                ->map(function ($row) {
-                    return [
-                        "description" => $row->description,
-                        "date" => $row->date,
-                        "total" => $row->amount,
-                        "expense_type" => $row->expense_type->name,
-                        str_replace(' ', '_', strtolower($row->expense_type->name)) => $row->amount,
-                        "items" => json_decode($row->details),
-                    ];
-                    // return $row->expense_type;
-                    // return $row->groupBy('expense_type.name')->map(function ($row) {
-                    //     return $row->sum("amount");
-                    // });
-                });
-
-            $main2 = [];
-
-            foreach ($expenses as $key => $expense) {
-                $temp2 = [];
-                array_push($temp2, $expense);
     
-                foreach ($expense_types as $key => $value) {
-                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp2)) {
-                        $temp2[str_replace(' ', '_', strtolower($value["name"]))] = 0;
-                    }
-                }
-    
-                array_push($main2, $temp2);
-            }
-
-            return response()->json([
-                "temp" => $main2,
-                "data" => $main,
-                "expense_report" => $expense_report,
-                "min_date" => collect($main)->min("date"),
-                "max_date" => collect($main)->max("date")
-            ]);
-        }
-
-        if (request()->has("expense_report_summary")) {
-            $expense_types = ExpenseType::withTrashed()->get();
-            $expense_report = ExpenseReport::withTrashed()->where("id", $request->expense_report_id);
-
-            $expense_report = new ExpenseReportResource($expense_report->first());
-
-            $data =  $expense_report->expenses()->withTrashed()->get()
-                ->sortBy("date")->groupBy("date")
-                ->map(function ($row) {
-                    return $row->groupBy('expense_type.name')->map(function ($row) {
-                        return $row->sum("amount");
-                    });
-                });
-
-            $main = [];
-
-            foreach ($data as $key => $value) {
-                $temp = [];
-                $date = $key;
-
-                foreach ($value as $key => $value) {
-                    $temp[str_replace(' ', '_', strtolower($key))] = $value;
-                }
-
-                $temp["total"] = array_sum(array_values($temp));
-                $temp['date'] = Carbon::parse($date)->toDate()->format("Y-m-d");
-
-                foreach ($expense_types as $key => $value) {
-                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp)) {
-                        $temp[str_replace(' ', '_', strtolower($value["name"]))] = 0;
-                    }
-                }
-
-                array_push($main, $temp);
-            }
-
-            return response()->json([
-                "data" => $main,
-                "expense_report" => $expense_report,
-                "min_date" => collect($main)->min("date"),
-                "max_date" => collect($main)->max("date")
-            ]);
-        }
-    }
-
+    /**
+     * users
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function users(Request $request)
     {
         $users = User::orderBy("name");
 
         return UserResource::collection($users->get());
     }
-
+    
+    /**
+     * employees
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function employees(Request $request)
     {
         $employee = Employee::orderBy("last_name");
@@ -188,12 +75,23 @@ class DataController extends Controller
 
         return EmployeeResource::collection($employee->get());
     }
-
+    
+    /**
+     * vendors
+     *
+     * @return void
+     */
     public function vendors()
     {
         return VendorResource::collection(Vendor::orderBy("name")->get());
     }
-
+    
+    /**
+     * departments
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function departments(Request $request)
     {
         $departments = Department::orderBy("name");
@@ -206,13 +104,25 @@ class DataController extends Controller
 
         return DepartmentResource::collection($departments->get());
     }
-
+    
+    /**
+     * expense_types
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function expense_types(Request $request)
     {
         $expense_types = ExpenseType::withTrashed()->orderBy("name")->get();
         return ExpenseTypeResource::collection($expense_types);
     }
-
+    
+    /**
+     * jobs
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function jobs(Request $request)
     {
         $jobs = Job::orderBy("name");
@@ -225,7 +135,13 @@ class DataController extends Controller
 
         return JobResource::collection($jobs->get());
     }
-
+    
+    /**
+     * expenses
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function expenses(Request $request)
     {
         $expenses = Expense::orderBy('date', 'desc');
@@ -303,7 +219,13 @@ class DataController extends Controller
             "total" => $expenses->sum("amount")
         ]);
     }
-
+    
+    /**
+     * expense_reports
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function expense_reports(Request $request)
     {
         $expense_reports = ExpenseReport::orderBy("created_at");
@@ -341,33 +263,103 @@ class DataController extends Controller
         }
 
         if (request()->has("create_payment")) {
-            // $expense_reports = $expense_reports
-            //     ->where("approved_at", "<>", null)
-            //     ->where("submitted_at", "<>", null)
-            //     ->where("cancelled_at", null)
-            //     ->where(function($query) {
-            //         $query->whereDoesntHave("payments");
-            //         $query->orWhereHas("payments", function($query) {
-            //             $query->where("approved_at", null);
-            //             $query->where("released_at", null);
-            //             $query->where("received_at", null);
-            //             $query->where("cancelled_at", "<>", null);
-            //         });
-            //     });
-
             $expense_reports = $expense_reports
+                ->where("approved_at", "<>", null)
                 ->where("submitted_at", "<>", null)
-                ->where("approved_at", "<>", null)  
-                ->where("rejected_at", null)
-                ->where("cancelled_at", null);
+                ->where("cancelled_at", null)
+                ->whereDoesntHave("payments")
+                ->get();
+
+            return response()->json([
+                "data" => ExpenseReportResource::collection($expense_reports),
+            ]);
         }
 
-        // return ExpenseReportResource::collection($expense_reports->get());
         return response()->json([
             "data" => ExpenseReportResource::collection($expense_reports->get()),
         ]);
     }
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | DATA VALIDATION
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    /**
+     * validateFund
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function validateFund(Request $request)
+    {
+
+        // // $this->validate_remaining_fund();
+
+        $employee = Employee::withTrashed()->findOrFail($request->id);
+
+        $expenses = Expense::where("employee_id", $employee->id)
+            ->where("deleted_at", null)
+            ->orWhereHas("expense_report", function ($query) {
+                $query->where([
+
+                    ["cancelled_at", "=", null],
+
+                    ["rejected_at", "=", null],
+
+                    ["deleted_at", "=", null],
+                ]);
+            })
+            ->get();
+
+        $paid_expenses = Expense::where("employee_id", $employee->id)
+                ->where("deleted_at", null)
+                ->whereHas("expense_report", function ($query) {
+                    $query->where([
+
+                        ["cancelled_at", "=", null],
+
+                        ["rejected_at", "=", null],
+
+                        ["deleted_at", "=", null],
+                    ]);
+                    $query->whereHas("payments", function ($query) {
+                        $query->where([
+
+                            ["cancelled_at", "=", null],
+    
+                            ["received_at", "<>", null],
+    
+                            ["deleted_at", "=", null],
+                        ]);
+                    });
+                })
+                ->get();
+
+        $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
+
+        $paid = $paid_expenses->sum("amount") - $paid_expenses->sum("reimbursable_amount");
+
+        $employee->remaining_fund = $employee->fund - $deduct + $paid;
+
+        $employee->save();
+
+        return response("Validated Employee Remaining Fund", 200);
+    }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | DASHBOARD DATA
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    /**
+     * expense_types_expenses_summary
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function expense_types_expenses_summary(Request $request)
     {
         $expense_types = ExpenseType::with(['expenses' => function ($q) use ($request) {
@@ -414,7 +406,13 @@ class DataController extends Controller
 
         return $expense_types_summary;
     }
-
+    
+    /**
+     * employees_expenses_summary
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function employees_expenses_summary(Request $request)
     {
         $employees = Employee::with(['expenses' => function ($q) use ($request) {
@@ -450,7 +448,13 @@ class DataController extends Controller
 
         return $employees_expenses_summary;
     }
-
+    
+    /**
+     * departments_expenses_summary
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function departments_expenses_summary(Request $request)
     {
         $departments = Department::with(['jobs.employees.expenses' => function ($q) use ($request) {
@@ -494,7 +498,13 @@ class DataController extends Controller
 
         return $departments_expenses_summary;
     }
-
+    
+    /**
+     * total_expenses
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function total_expenses(Request $request)
     {
         $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
@@ -507,7 +517,13 @@ class DataController extends Controller
 
         return $expenses;
     }
-
+    
+    /**
+     * expenses_summary
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function expenses_summary(Request $request)
     {
         $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])
@@ -568,7 +584,13 @@ class DataController extends Controller
 
         return "";
     }
-
+    
+    /**
+     * expense_stats
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function expense_stats(Request $request)
     {
         // $expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
@@ -794,14 +816,161 @@ class DataController extends Controller
         return $stats;
     }
 
-    public function permissions()
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | PRINTING DATA
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    /**
+     * print
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function print(Request $request)
     {
-        return Permission::all();
+        if (request()->has("expense_report_detailed")) {
+            $expense_types = ExpenseType::withTrashed()->get();
+            $expense_report = ExpenseReport::withTrashed()->where("id", $request->expense_report_id);
+
+            $expense_report = new ExpenseReportResource($expense_report->first());
+
+            $data =  $expense_report->expenses()->withTrashed()->get()
+                ->sortBy("date")
+                ->groupBy("date")
+                ->map(function ($row) {
+                    return $row->groupBy('expense_type.name')->map(function ($row) {
+                        return $row->sum("amount");
+                    });
+                });
+
+            $main = [];
+
+            foreach ($data as $key => $value) {
+                $temp = [];
+                $date = $key;
+
+                foreach ($value as $key => $value) {
+                    $temp[str_replace(' ', '_', strtolower($key))] = $value;
+                }
+
+                $temp["total"] = array_sum(array_values($temp));
+                $temp['date'] = Carbon::parse($date)->toDate()->format("Y-m-d");
+                $temp['particulars'] = "";
+
+                foreach ($expense_types as $key => $value) {
+                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp)) {
+                        $temp[str_replace(' ', '_', strtolower($value["name"]))] = 0;
+                    }
+                }
+
+                array_push($main, $temp);
+            }
+
+            $expenses = $expense_report->expenses()->withTrashed()->orderBy("date")->get()
+                // ->sortBy("date")
+                // ->groupBy("id")
+                ->map(function ($row) {
+                    return [
+                        "description" => $row->description,
+                        "date" => $row->date,
+                        "total" => $row->amount,
+                        "expense_type" => $row->expense_type->name,
+                        str_replace(' ', '_', strtolower($row->expense_type->name)) => $row->amount,
+                        "items" => json_decode($row->details),
+                    ];
+                    // return $row->expense_type;
+                    // return $row->groupBy('expense_type.name')->map(function ($row) {
+                    //     return $row->sum("amount");
+                    // });
+                });
+
+            $main2 = [];
+
+            foreach ($expenses as $key => $expense) {
+                $temp2 = [];
+                array_push($temp2, $expense);
+    
+                foreach ($expense_types as $key => $value) {
+                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp2)) {
+                        $temp2[str_replace(' ', '_', strtolower($value["name"]))] = 0;
+                    }
+                }
+    
+                array_push($main2, $temp2);
+            }
+
+            return response()->json([
+                "temp" => $main2,
+                "data" => $main,
+                "expense_report" => $expense_report,
+                "min_date" => collect($main)->min("date"),
+                "max_date" => collect($main)->max("date")
+            ]);
+        }
+
+        if (request()->has("expense_report_summary")) {
+            $expense_types = ExpenseType::withTrashed()->get();
+            $expense_report = ExpenseReport::withTrashed()->where("id", $request->expense_report_id);
+
+            $expense_report = new ExpenseReportResource($expense_report->first());
+
+            $data =  $expense_report->expenses()->withTrashed()->get()
+                ->sortBy("date")->groupBy("date")
+                ->map(function ($row) {
+                    return $row->groupBy('expense_type.name')->map(function ($row) {
+                        return $row->sum("amount");
+                    });
+                });
+
+            $main = [];
+
+            foreach ($data as $key => $value) {
+                $temp = [];
+                $date = $key;
+
+                foreach ($value as $key => $value) {
+                    $temp[str_replace(' ', '_', strtolower($key))] = $value;
+                }
+
+                $temp["total"] = array_sum(array_values($temp));
+                $temp['date'] = Carbon::parse($date)->toDate()->format("Y-m-d");
+
+                foreach ($expense_types as $key => $value) {
+                    if (!array_key_exists(str_replace(' ', '_', strtolower($value["name"])), $temp)) {
+                        $temp[str_replace(' ', '_', strtolower($value["name"]))] = 0;
+                    }
+                }
+
+                array_push($main, $temp);
+            }
+
+            return response()->json([
+                "data" => $main,
+                "expense_report" => $expense_report,
+                "min_date" => collect($main)->min("date"),
+                "max_date" => collect($main)->max("date")
+            ]);
+        }
     }
 
-    ////////////
-    ////////////
-    ////////////
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | TESTING
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+    
+    public function test()
+    {
+        $activity = Activity::all()->last();
+
+        return $activity;
+        // return $activity->description; //returns 'deleted'
+        // return $activity->changes; //
+
+        return "test";
+    }
 
     public function expenses_summary1(Request $request)
     {
@@ -867,61 +1036,5 @@ class DataController extends Controller
         return response()->json([
             "expenses" => ""
         ]);
-    }
-
-    public function validateFund(Request $request)
-    {
-
-        // // $this->validate_remaining_fund();
-
-        $employee = Employee::withTrashed()->findOrFail($request->id);
-
-        $expenses = Expense::where("employee_id", $employee->id)
-            ->where("deleted_at", null)
-            ->orWhereHas("expense_report", function ($query) {
-                $query->where([
-
-                    ["cancelled_at", "=", null],
-
-                    ["rejected_at", "=", null],
-
-                    ["deleted_at", "=", null],
-                ]);
-            })
-            ->get();
-
-        $paid_expenses = Expense::where("employee_id", $employee->id)
-                ->where("deleted_at", null)
-                ->whereHas("expense_report", function ($query) {
-                    $query->where([
-
-                        ["cancelled_at", "=", null],
-
-                        ["rejected_at", "=", null],
-
-                        ["deleted_at", "=", null],
-                    ]);
-                    $query->whereHas("payments", function ($query) {
-                        $query->where([
-
-                            ["cancelled_at", "=", null],
-    
-                            ["received_at", "<>", null],
-    
-                            ["deleted_at", "=", null],
-                        ]);
-                    });
-                })
-                ->get();
-
-        $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
-
-        $paid = $paid_expenses->sum("amount") - $paid_expenses->sum("reimbursable_amount");
-
-        $employee->remaining_fund = $employee->fund - $deduct + $paid;
-
-        $employee->save();
-
-        return response("Validated Employee Remaining Fund", 200);
     }
 }

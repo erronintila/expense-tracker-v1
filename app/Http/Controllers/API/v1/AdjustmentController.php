@@ -10,7 +10,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class AdjustmentController extends Controller
-{
+{    
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware(['permission:view all adjustments'], ['only' => ['index']]);

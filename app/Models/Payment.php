@@ -225,7 +225,12 @@ class Payment extends Model
 
         return $arr;
     }
-
+    
+    /**
+     * getCreatedInfoAttribute
+     *
+     * @return void
+     */
     public function getCreatedInfoAttribute()
     {
         if ($this->created_at) {
@@ -237,7 +242,12 @@ class Payment extends Model
 
         return null;
     }
-
+    
+    /**
+     * getUpdatedInfoAttribute
+     *
+     * @return void
+     */
     public function getUpdatedInfoAttribute()
     {
         if ($this->updated_at) {
@@ -249,7 +259,12 @@ class Payment extends Model
 
         return null;
     }
-
+    
+    /**
+     * getDeletedInfoAttribute
+     *
+     * @return void
+     */
     public function getDeletedInfoAttribute()
     {
         if ($this->deleted_at) {
@@ -261,7 +276,12 @@ class Payment extends Model
 
         return null;
     }
-
+    
+    /**
+     * getApprovedInfoAttribute
+     *
+     * @return void
+     */
     public function getApprovedInfoAttribute()
     {
         if ($this->approved_at) {
@@ -273,7 +293,12 @@ class Payment extends Model
 
         return null;
     }
-
+    
+    /**
+     * getCancelledInfoAttribute
+     *
+     * @return void
+     */
     public function getCancelledInfoAttribute()
     {
         if ($this->cancelled_at) {
@@ -285,7 +310,12 @@ class Payment extends Model
 
         return null;
     }
-
+    
+    /**
+     * getReleasedInfoAttribute
+     *
+     * @return void
+     */
     public function getReleasedInfoAttribute()
     {
         if ($this->released_at) {
@@ -297,7 +327,12 @@ class Payment extends Model
 
         return null;
     }
-
+    
+    /**
+     * getReceivedInfoAttribute
+     *
+     * @return void
+     */
     public function getReceivedInfoAttribute()
     {
         if ($this->received_at) {

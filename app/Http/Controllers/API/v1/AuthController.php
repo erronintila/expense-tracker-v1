@@ -10,7 +10,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
-{
+{    
+    /**
+     * register
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function register(Request $request)
     {
         $request->validate([
@@ -43,7 +49,13 @@ class AuthController extends Controller
 
         ], 200);
     }
-
+    
+    /**
+     * login
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -87,7 +99,13 @@ class AuthController extends Controller
 
         return response()->json($validator->errors(), 422);
     }
-
+    
+    /**
+     * logout
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function logout(Request $request)
     {
         // $request->user()->token()->revoke();
@@ -102,12 +120,24 @@ class AuthController extends Controller
             'message' => 'Successfully logged out'
         ]);
     }
-
+    
+    /**
+     * user
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function user(Request $request)
     {
         return new UserResource($request->user());
     }
-
+    
+    /**
+     * userPermissions
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function userPermissions(Request $request)
     {
         return $request->user->getAllPermissions();

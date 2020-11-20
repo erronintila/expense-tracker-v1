@@ -84,7 +84,12 @@ class Adjustment extends Model
     | RELATIONSHIPS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-
+    
+    /**
+     * employee
+     *
+     * @return void
+     */
     public function employee()
     {
         return $this->belongsTo(Employee::class);

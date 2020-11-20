@@ -117,17 +117,32 @@ class ExpenseType extends Model
     {
         return $this->hasMany(Expense::class);
     }
-
+    
+    /**
+     * vendors
+     *
+     * @return void
+     */
     public function vendors()
     {
         return $this->belongsToMany(Vendor::class)->withTimestamps();
     }
-
+    
+    /**
+     * employees
+     *
+     * @return void
+     */
     public function employees()
     {
         return $this->belongsToMany(Employee::class)->withPivot('limit')->withTimestamps();
     }
-
+    
+    /**
+     * sub_types
+     *
+     * @return void
+     */
     public function sub_types()
     {
         return $this->hasMany(SubType::class);

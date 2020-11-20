@@ -16,7 +16,12 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
-{
+{    
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         // $this->middleware(['permission:view all users'], ['only' => ['index']]);
@@ -373,7 +378,12 @@ class UserController extends Controller
             200
         );
     }
-
+    
+    /**
+     * export
+     *
+     * @return void
+     */
     public function export()
     {
         return Excel::download(new UsersExport, 'Users - Expense Tracker.xlsx');

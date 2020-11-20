@@ -16,7 +16,12 @@ use Illuminate\Validation\Rule;
 class ExpenseReportController extends Controller
 {
     use ApiResponse;
-
+    
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware(['permission:view all expense reports'], ['only' => ['index']]);

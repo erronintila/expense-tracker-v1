@@ -11,7 +11,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class JobController extends Controller
-{
+{    
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware(['permission:view all jobs'], ['only' => ['index']]);

@@ -18,7 +18,12 @@ use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
-{
+{    
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware(['permission:view all employees'], ['only' => ['index']]);

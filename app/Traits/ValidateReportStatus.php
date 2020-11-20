@@ -7,7 +7,15 @@ use App\Traits\ApiResponse;
 trait ValidateReportStatus
 {
     use ApiResponse;
-
+    
+    /**
+     * validateReportSubmission
+     *
+     * @param  mixed $transType
+     * @param  mixed $model
+     * @param  mixed $ids
+     * @return void
+     */
     protected function validateReportSubmission($transType, $model, $ids)
     {
         switch ($transType) {
@@ -41,7 +49,15 @@ trait ValidateReportStatus
 
         return null;
     }
-
+    
+    /**
+     * isReportSubmitted
+     *
+     * @param  mixed $transType
+     * @param  mixed $model
+     * @param  mixed $ids
+     * @return void
+     */
     protected function isReportSubmitted($transType, $model, $ids)
     {
         switch ($transType) {
@@ -62,7 +78,15 @@ trait ValidateReportStatus
 
         return false;
     }
-
+    
+    /**
+     * isReportApproved
+     *
+     * @param  mixed $transType
+     * @param  mixed $model
+     * @param  mixed $ids
+     * @return void
+     */
     protected function isReportApproved($transType, $model, $ids)
     {
         switch ($transType) {
@@ -83,7 +107,15 @@ trait ValidateReportStatus
 
         return false;
     }
-
+    
+    /**
+     * isReportReviewed
+     *
+     * @param  mixed $transType
+     * @param  mixed $model
+     * @param  mixed $ids
+     * @return void
+     */
     protected function isReportReviewed($transType, $model, $ids)
     {
         switch ($transType) {
@@ -104,7 +136,15 @@ trait ValidateReportStatus
 
         return false;
     }
-
+    
+    /**
+     * isReportRejected
+     *
+     * @param  mixed $transType
+     * @param  mixed $model
+     * @param  mixed $ids
+     * @return void
+     */
     protected function isReportRejected($transType, $model, $ids)
     {
         switch ($transType) {
@@ -125,7 +165,15 @@ trait ValidateReportStatus
 
         return false;
     }
-
+    
+    /**
+     * isReportCancelled
+     *
+     * @param  mixed $transType
+     * @param  mixed $model
+     * @param  mixed $ids
+     * @return void
+     */
     protected function isReportCancelled($transType, $model, $ids)
     {
         switch ($transType) {

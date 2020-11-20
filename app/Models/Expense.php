@@ -348,7 +348,12 @@ class Expense extends Model
 
         return $arr;
     }
-
+    
+    /**
+     * getExpiryDateAttribute
+     *
+     * @return void
+     */
     public function getExpiryDateAttribute()
     {
         //compare date of submission to expiry date
@@ -384,7 +389,12 @@ class Expense extends Model
     {
         return 0;
     }
-
+    
+    /**
+     * getCreatedInfoAttribute
+     *
+     * @return void
+     */
     public function getCreatedInfoAttribute()
     {
         if ($this->created_at) {
@@ -396,7 +406,12 @@ class Expense extends Model
 
         return null;
     }
-
+    
+    /**
+     * getUpdatedInfoAttribute
+     *
+     * @return void
+     */
     public function getUpdatedInfoAttribute()
     {
         if ($this->updated_at) {
@@ -408,7 +423,12 @@ class Expense extends Model
 
         return null;
     }
-
+    
+    /**
+     * getDeletedInfoAttribute
+     *
+     * @return void
+     */
     public function getDeletedInfoAttribute()
     {
         if ($this->deleted_at) {
@@ -420,7 +440,12 @@ class Expense extends Model
 
         return null;
     }
-
+    
+    /**
+     * getSubmittedInfoAttribute
+     *
+     * @return void
+     */
     public function getSubmittedInfoAttribute()
     {
         $expense_report = $this->expense_report;
@@ -434,7 +459,12 @@ class Expense extends Model
 
         return null;
     }
-
+    
+    /**
+     * getReviewedInfoAttribute
+     *
+     * @return void
+     */
     public function getReviewedInfoAttribute()
     {
         $expense_report = $this->expense_report;
@@ -448,7 +478,12 @@ class Expense extends Model
 
         return null;
     }
-
+    
+    /**
+     * getApprovedInfoAttribute
+     *
+     * @return void
+     */
     public function getApprovedInfoAttribute()
     {
         $expense_report = $this->expense_report;
@@ -462,7 +497,12 @@ class Expense extends Model
 
         return null;
     }
-
+    
+    /**
+     * getRejectedInfoAttribute
+     *
+     * @return void
+     */
     public function getRejectedInfoAttribute()
     {
         $expense_report = $this->expense_report;
@@ -476,7 +516,12 @@ class Expense extends Model
 
         return null;
     }
-
+    
+    /**
+     * getCancelledInfoAttribute
+     *
+     * @return void
+     */
     public function getCancelledInfoAttribute()
     {
         $expense_report = $this->expense_report;
@@ -490,12 +535,18 @@ class Expense extends Model
 
         return null;
     }
-
-    public function getReimbursedInfoAttribute() {
-
+    
+    /**
+     * getReimbursedInfoAttribute
+     *
+     * @return void
+     */
+    public function getReimbursedInfoAttribute()
+    {
         $expense_report = $this->expense_report;
 
-        if ($expense_report && $expense_report->getBalanceAttribute() == 0) {
+        if ($expense_report && $expense_report->getBalanceAttribute() == 0 && $expense_report->getReceivedPaymentAmountAttribute() > 0) {
+        // if ($expense_report && $expense_report->getBalanceAttribute() == 0) {
             return [
                 "reference" => $expense_report->payments()->pluck("code"),
             ];
