@@ -16,11 +16,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {    
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware(['permission:view all expenses'], ['only' => ['index']]);

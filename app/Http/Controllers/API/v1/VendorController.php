@@ -11,11 +11,6 @@ use Illuminate\Validation\Rule;
 
 class VendorController extends Controller
 {    
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware(['permission:view all vendors'], ['only' => ['index']]);

@@ -9,12 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
-{    
-    /**
-     * __construct
-     *
-     * @return void
-     */
+{
     public function __construct()
     {
         $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);

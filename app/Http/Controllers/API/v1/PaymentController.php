@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {    
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware(['permission:view all payments'], ['only' => ['index']]);

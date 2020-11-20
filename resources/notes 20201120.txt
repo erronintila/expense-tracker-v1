@@ -72,6 +72,8 @@ Backend Validation and Refactoring
 ------------------------------------------------------------------------------------------
 Doc Blocks Guide
 ------------------------------------------------------------------------------------------
+https://stackoverflow.com/questions/5741955/what-is-the-proper-way-to-document-files-classes-and-constructors
+
 
 /**
  * Method title.
@@ -89,6 +91,15 @@ protected function method_title(type $arg): type
     /** @var type $arg */
     return $type;
 }
+
+
+
+/** 
+ * Set a persons weight in Kilogram
+ *
+ * @param float $kg Weight in Kilogram
+ */
+public function setWeight($kg) {}
 
 
 

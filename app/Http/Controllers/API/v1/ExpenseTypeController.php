@@ -13,11 +13,6 @@ use Illuminate\Validation\Rule;
 
 class ExpenseTypeController extends Controller
 {    
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware(['permission:view all expense types'], ['only' => ['index']]);

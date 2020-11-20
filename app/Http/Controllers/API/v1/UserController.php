@@ -17,11 +17,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {    
-    /**
-     * __construct
-     *
-     * @return void
-     */
     public function __construct()
     {
         // $this->middleware(['permission:view all users'], ['only' => ['index']]);
