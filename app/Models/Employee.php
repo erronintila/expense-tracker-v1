@@ -52,6 +52,13 @@ class Employee extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['full_name'];
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LIBRARY/PACKAGE CONFIGURATION
@@ -232,7 +239,7 @@ class Employee extends Model
      *
      * @return void
      */
-    public function getFullName()
+    public function getFullNameAttribute()
     {
         return $this->first_name . "" . ($this->middle_name ?  " " . $this->middle_name . " " : " ") . $this->last_name . ($this->suffix ? ", " . $this->suffix : "");
     }

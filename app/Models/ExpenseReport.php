@@ -62,6 +62,13 @@ class ExpenseReport extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
+    // /**
+    //  * The accessors to append to the model's array form.
+    //  *
+    //  * @var array
+    //  */
+    // protected $appends = ['balance'];
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LIBRARY/PACKAGE CONFIGURATION
@@ -175,7 +182,7 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function getStatus()
+    public function getStatusAttribute()
     {
         $arr = [
             'color' => 'red',
@@ -189,7 +196,7 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->getReimbursedInfo());
+        $paid = is_null($this->getReimbursedInfoAttribute());
 
         if (!$deleted) {
             $arr = [
@@ -222,7 +229,7 @@ class ExpenseReport extends Model
         }
 
         if (!$paid) {
-            if ($this->getBalance() == 0) {
+            if ($this->getBalanceAttribute() == 0) {
                 $arr = [
                     'color' => 'green',
                     'remarks' => 'Payment transaction was completed',
@@ -321,7 +328,7 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function getExpenseStartDate()
+    public function getExpenseStartDateAttribute()
     {
         return date('Y-m-d', min(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
     }
@@ -331,22 +338,22 @@ class ExpenseReport extends Model
      *
      * @return void
      */
-    public function getExpenseEndDate()
+    public function getExpenseEndDateAttribute()
     {
         return date('Y-m-d', max(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
     }
 
-    public function getTotalExpenseAmount()
+    public function getTotalExpenseAmountAttribute()
     {
         return $this->expenses()->withTrashed()->get()->sum('amount');
     }
 
-    public function getTotalReimbursableAmount()
+    public function getTotalReimbursableAmountAttribute()
     {
         return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
     }
 
-    public function getBalance()
+    public function getBalanceAttribute()
     {
         $sum_payment = 0;
 
@@ -354,10 +361,10 @@ class ExpenseReport extends Model
             $sum_payment += $payment->pivot->payment;
         }
 
-        return $this->getTotalExpenseAmount() - $sum_payment;
+        return $this->getTotalExpenseAmountAttribute() - $sum_payment;
     }
 
-    public function getCreatedInfo()
+    public function getCreatedInfoAttribute()
     {
         if ($this->created_at) {
             return [
@@ -369,7 +376,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getUpdatedInfo()
+    public function getUpdatedInfoAttribute()
     {
         if ($this->updated_at) {
             return [
@@ -381,7 +388,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getDeletedInfo()
+    public function getDeletedInfoAttribute()
     {
         if ($this->deleted_at) {
             return [
@@ -393,7 +400,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getSubmittedInfo()
+    public function getSubmittedInfoAttribute()
     {
         if ($this->submitted_at) {
             return [
@@ -405,7 +412,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getReviewedInfo()
+    public function getReviewedInfoAttribute()
     {
         if ($this->reviewed_at) {
             return [
@@ -417,7 +424,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getApprovedInfo()
+    public function getApprovedInfoAttribute()
     {
         if ($this->approved_at) {
             return [
@@ -429,7 +436,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getRejectedInfo()
+    public function getRejectedInfoAttribute()
     {
         if ($this->rejected_at) {
             return [
@@ -441,7 +448,7 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getCancelledInfo()
+    public function getCancelledInfoAttribute()
     {
         if ($this->cancelled_at) {
             return [
@@ -453,15 +460,24 @@ class ExpenseReport extends Model
         return null;
     }
 
-    public function getReimbursedInfo()
-    {
-        $payments = $this->payments->where("received_at", "<>", null);
+    public function getReimbursedInfoAttribute()
+    {   
+        $expense_report = $this->expense_report;
 
-        if($payments->count() > 0) {
+        if ($this && $this->getBalanceAttribute() == 0) {
             return [
-                "payments" => $payments
+                "payments" => $this->payments
             ];
         }
+
+
+        // $payments = $this->payments->where("received_at", "<>", null);
+
+        // if($payments->count() > 0) {
+        //     return [
+        //         "payments" => $payments
+        //     ];
+        // }
 
         return null;
     }

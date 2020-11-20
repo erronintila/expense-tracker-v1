@@ -342,6 +342,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -383,7 +388,11 @@ __webpack_require__.r(__webpack_exports__);
         value: "balance",
         sortable: false
       }, {
-        text: "Actions",
+        text: "Payment",
+        value: "balance",
+        sortable: false
+      }, {
+        text: "",
         value: "actions",
         sortable: false
       }, {
@@ -432,6 +441,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    test: function test() {
+      console.log(this.selected);
+    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
@@ -790,6 +802,17 @@ var render = function() {
                           })
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-btn", { on: { click: _vm.test } }, [
+                            _vm._v("Test")
+                          ])
+                        ],
+                        1
                       )
                     ],
                     1
@@ -1139,6 +1162,8 @@ var render = function() {
                                           _vm._v(_vm._s(_vm.total))
                                         ])
                                       ]),
+                                      _vm._v(" "),
+                                      _c("td"),
                                       _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),

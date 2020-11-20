@@ -145,10 +145,6 @@
                                 required
                             ></v-text-field>
                         </v-col>
-
-                        <v-col cols="12" md="4">
-                            <v-btn @click="test">Test</v-btn>
-                        </v-col>
                     </v-row>
 
                     <v-row>
@@ -178,7 +174,6 @@
                                         <td>
                                             <strong>{{ total }}</strong>
                                         </td>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -376,8 +371,7 @@ export default {
                 { text: "Description", value: "description", sortable: false },
                 { text: "Amount", value: "total", sortable: false },
                 { text: "Balance", value: "balance", sortable: false },
-                { text: "Payment", value: "balance", sortable: false },
-                { text: "", value: "actions", sortable: false },
+                { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand", sortable: false }
             ],
             items: [],
@@ -419,9 +413,6 @@ export default {
         };
     },
     methods: {
-        test() {
-            console.log(this.selected);
-        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },

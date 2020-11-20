@@ -157,7 +157,7 @@ class Payment extends Model
      *
      * @return void
      */
-    public function getStatus()
+    public function getStatusAttribute()
     {
         $arr = [
             'color' => 'red',
@@ -219,7 +219,7 @@ class Payment extends Model
         return $arr;
     }
 
-    public function getCreatedInfo()
+    public function getCreatedInfoAttribute()
     {
         if ($this->created_at) {
             return [
@@ -231,7 +231,7 @@ class Payment extends Model
         return null;
     }
 
-    public function getUpdatedInfo()
+    public function getUpdatedInfoAttribute()
     {
         if ($this->updated_at) {
             return [
@@ -243,7 +243,7 @@ class Payment extends Model
         return null;
     }
 
-    public function getDeletedInfo()
+    public function getDeletedInfoAttribute()
     {
         if ($this->deleted_at) {
             return [
@@ -255,7 +255,7 @@ class Payment extends Model
         return null;
     }
 
-    public function getApprovedInfo()
+    public function getApprovedInfoAttribute()
     {
         if ($this->approved_at) {
             return [
@@ -267,7 +267,7 @@ class Payment extends Model
         return null;
     }
 
-    public function getCancelledInfo()
+    public function getCancelledInfoAttribute()
     {
         if ($this->cancelled_at) {
             return [
@@ -279,7 +279,7 @@ class Payment extends Model
         return null;
     }
 
-    public function getReleasedInfo()
+    public function getReleasedInfoAttribute()
     {
         if ($this->released_at) {
             return [
@@ -291,7 +291,7 @@ class Payment extends Model
         return null;
     }
 
-    public function getReceivedInfo()
+    public function getReceivedInfoAttribute()
     {
         if ($this->received_at) {
             return [

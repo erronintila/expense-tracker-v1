@@ -43,15 +43,15 @@ class PaymentResource extends JsonResource
             // 'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             // 'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             // 'deleted_at' => Carbon::parse($this->deleted_at)->toDateTimeString(),
-            'created' => $this->getCreatedInfo(),
-            'updated' => $this->getUpdatedInfo(),
-            'deleted' => $this->getDeletedInfo(),
-            'approved' => $this->getApprovedInfo(),
-            'cancelled' => $this->getCancelledInfo(),
-            'released' => $this->getReleasedInfo(),
-            'received' => $this->getReceivedInfo(),
+            'created' => $this->getCreatedInfoAttribute(),
+            'updated' => $this->getUpdatedInfoAttribute(),
+            'deleted' => $this->getDeletedInfoAttribute(),
+            'approved' => $this->getApprovedInfoAttribute(),
+            'cancelled' => $this->getCancelledInfoAttribute(),
+            'released' => $this->getReleasedInfoAttribute(),
+            'received' => $this->getReceivedInfoAttribute(),
 
-            'status' => $this->getStatus(),
+            'status' => $this->getStatusAttribute(),
 
             'logs' => [],
         ];

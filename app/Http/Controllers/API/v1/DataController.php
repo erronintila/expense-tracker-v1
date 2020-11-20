@@ -312,22 +312,14 @@ class DataController extends Controller
             $expense_reports = $expense_reports->where("id", $request->id);
         }
 
-        if (request()->has("create_payment")) {
-            $expense_reports = $expense_reports
-                ->where("approved_at", "<>", null)
-                ->where("submitted_at", "<>", null)
-                ->where("cancelled_at", null);
-            // ->where("payment_id", null);
-        }
-
         if (request()->has("employee_id")) {
             $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
         }
 
-        if (request()->has("payment_id")) {
-            // $expense_reports = $expense_reports->where("payment_id", $request->payment_id);
-            $expense_reports = $expense_reports;
-        }
+        // if (request()->has("payment_id")) {
+        //     // $expense_reports = $expense_reports->where("payment_id", $request->payment_id);
+        //     $expense_reports = $expense_reports;
+        // }
 
         if (request()->has("start_date") && request()->has("end_date")) {
             $start_date = Carbon::parse($request->start_date)->startOfDay();
@@ -346,6 +338,28 @@ class DataController extends Controller
                     $expense_reports = $expense_reports;
                     break;
             }
+        }
+
+        if (request()->has("create_payment")) {
+            // $expense_reports = $expense_reports
+            //     ->where("approved_at", "<>", null)
+            //     ->where("submitted_at", "<>", null)
+            //     ->where("cancelled_at", null)
+            //     ->where(function($query) {
+            //         $query->whereDoesntHave("payments");
+            //         $query->orWhereHas("payments", function($query) {
+            //             $query->where("approved_at", null);
+            //             $query->where("released_at", null);
+            //             $query->where("received_at", null);
+            //             $query->where("cancelled_at", "<>", null);
+            //         });
+            //     });
+
+            $expense_reports = $expense_reports
+                ->where("submitted_at", "<>", null)
+                ->where("approved_at", "<>", null)  
+                ->where("rejected_at", null)
+                ->where("cancelled_at", null);
         }
 
         // return ExpenseReportResource::collection($expense_reports->get());
@@ -428,7 +442,7 @@ class DataController extends Controller
             array_push(
                 $employees_expenses_summary,
                 [
-                    "text" => $value->name(),
+                    "text" => $value->getFullNameAttribute(),
                     "value" => $total_expenses
                 ]
             );
@@ -655,7 +669,7 @@ class DataController extends Controller
                     ["deleted_at", "=", null],
                 ]);
     
-            $query->whereHas("payments", function($query) {
+            $query->whereHas("payments", function ($query) {
                 $query->where([
                     ["approved_at", "<>", null],
     

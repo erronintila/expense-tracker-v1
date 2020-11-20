@@ -77,11 +77,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       fab: false,
-      links: ["Dashboard", "Profile"]
+      links: ["Dashboard", "Expenses", "Reports"]
     };
   }
 });
@@ -110,25 +143,33 @@ var render = function() {
         "v-app-bar",
         { attrs: { app: "", color: "white", flat: "" } },
         [
+          _c("v-avatar", {
+            attrs: {
+              color: _vm.$vuetify.breakpoint.smAndDown
+                ? "grey darken-1"
+                : "transparent",
+              size: "32"
+            }
+          }),
+          _vm._v(" "),
           _c(
-            "v-container",
-            { staticClass: "py-0 fill-height" },
-            [
-              _c("v-avatar", {
-                staticClass: "mr-10",
-                attrs: { color: "grey darken-1", size: "32" }
-              }),
-              _vm._v(" "),
-              _vm._l(_vm.links, function(link) {
-                return _c("v-btn", { key: link, attrs: { text: "" } }, [
-                  _vm._v("\n                " + _vm._s(link) + "\n            ")
-                ])
-              }),
-              _vm._v(" "),
-              _c("v-spacer")
-            ],
-            2
-          )
+            "v-tabs",
+            {
+              staticClass: "ml-n9",
+              attrs: { centered: "", color: "grey darken-1" }
+            },
+            _vm._l(_vm.links, function(link) {
+              return _c("v-tab", { key: link }, [
+                _vm._v("\n                " + _vm._s(link) + "\n            ")
+              ])
+            }),
+            1
+          ),
+          _vm._v(" "),
+          _c("v-avatar", {
+            staticClass: "hidden-sm-and-down",
+            attrs: { color: "grey darken-1 shrink", size: "32" }
+          })
         ],
         1
       ),

@@ -261,7 +261,7 @@ class PaymentController extends Controller
             foreach ($request->expense_reports as $item) {
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
 
-                $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmount()];
+                $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
             }
             
             $payment->expense_reports()->sync($arr);
@@ -442,7 +442,7 @@ class PaymentController extends Controller
                     foreach ($request->expense_reports as $item) {
                         $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
         
-                        $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmount()];
+                        $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
                     }
                     
                     $payment->expense_reports()->sync($arr);
