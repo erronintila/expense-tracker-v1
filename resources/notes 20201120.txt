@@ -73,6 +73,9 @@ Backend Validation and Refactoring
 Doc Blocks Guide
 ------------------------------------------------------------------------------------------
 https://stackoverflow.com/questions/5741955/what-is-the-proper-way-to-document-files-classes-and-constructors
+https://www.drupal.org/docs/develop/standards/api-documentation-and-comment-standards
+https://stackoverflow.com/questions/5618592/what-are-the-valid-readable-approaches-to-commenting-in-php5/5618786
+https://www.php.net/manual/en/language.oop5.decon.php
 
 
 /**
