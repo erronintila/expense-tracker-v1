@@ -14,6 +14,7 @@ no note on editing expenses
 expense cant be cancelled even if no report
 add logging when payment is applied to a report
 expense report can be edited
+add comments
 
 *****From the Doc: 
 
