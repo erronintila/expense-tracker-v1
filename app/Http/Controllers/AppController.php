@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 class AppController extends Controller
 {    
     /**
-     * index
+     * Show the main application layout.
      *
      * @return void
      */

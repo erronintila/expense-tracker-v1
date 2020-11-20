@@ -111,7 +111,7 @@ class Vendor extends Model
     */
     
     /**
-     * expenses
+     * Displays the expenses associated with vendor.
      *
      * @return void
      */
@@ -121,7 +121,7 @@ class Vendor extends Model
     }
     
     /**
-     * expense_types
+     * Displays the expense types associated with vendor.
      *
      * @return void
      */

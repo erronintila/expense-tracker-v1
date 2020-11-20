@@ -31,7 +31,12 @@ class Tax extends Model
     | RELATIONSHIPS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
+        
+    /**
+     * Displays the expenses associated with tax.
+     *
+     * @return void
+     */
     public function expenses()
     {
         return $this->hasMany(Expense::class);

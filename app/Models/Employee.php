@@ -179,7 +179,7 @@ class Employee extends Model
     }
 
     /**
-     * adjustments
+     * Displays the adjustments associated with employee.
      *
      * @return void
      */
@@ -199,7 +199,7 @@ class Employee extends Model
     }
 
     /**
-     * expense_types
+     * Displays the Expense types associated with employee.
      *
      * @return void
      */
@@ -209,7 +209,7 @@ class Employee extends Model
     }
 
     /**
-     * sub_types
+     * Displays the Expense Type Sub-types associated with employee.
      *
      * @return void
      */
@@ -219,7 +219,7 @@ class Employee extends Model
     }
 
     /**
-     * payments
+     * Displays the payments associated with employee.
      *
      * @return void
      */
@@ -235,7 +235,7 @@ class Employee extends Model
     */
     
     /**
-     * Displays the fullname of employee.
+     * Displays the full name of employee.
      *
      * @return void
      */

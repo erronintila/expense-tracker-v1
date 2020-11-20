@@ -165,7 +165,7 @@ class Expense extends Model
     }
 
     /**
-     * payments
+     * Displays the payments associated with expense.
      *
      * @return void
      */
@@ -175,7 +175,7 @@ class Expense extends Model
     }
 
     /**
-     * tax
+     * Displays the tax associated with expense.
      *
      * @return void
      */

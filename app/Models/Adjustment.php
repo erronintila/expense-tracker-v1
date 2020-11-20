@@ -86,7 +86,7 @@ class Adjustment extends Model
     */
     
     /**
-     * employee
+     * Displays the employee associated with adjustment.
      *
      * @return void
      */

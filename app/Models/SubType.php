@@ -86,7 +86,7 @@ class SubType extends Model
     */
     
     /**
-     * expense_type
+     * Displays the expense type associated with subtype.
      *
      * @return void
      */
@@ -96,7 +96,7 @@ class SubType extends Model
     }
 
     /**
-     * expenses
+     * Displays the expenses associated with subtype.
      *
      * @return void
      */
@@ -106,7 +106,7 @@ class SubType extends Model
     }
 
     /**
-     * employees
+     * Displays the employees associated with subtype.
      *
      * @return void
      */

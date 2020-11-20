@@ -138,11 +138,11 @@ class ExpenseReport extends Model
         return $this->hasMany(Expense::class);
     }
 
-    // public function payment()
-    // {
-    //     return $this->belongsTo(Payment::class);
-    // }
-
+    /**
+     * Displays the payments associated with expense report.
+     *
+     * @return void
+     */
     public function payments()
     {
         return $this->belongsToMany(Payment::class)->withPivot('payment')->withTimestamps();

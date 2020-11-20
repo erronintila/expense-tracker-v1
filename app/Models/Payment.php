@@ -127,14 +127,20 @@ class Payment extends Model
     // {
     //     return $this->hasMany(ExpenseReport::class);
     // }
-
+    
+    /**
+     * Displays the expense reports associated with payment.
+     * Many-To-Many Relationship
+     *
+     * @return void
+     */
     public function expense_reports()
     {
         return $this->belongsToMany(ExpenseReport::class)->withPivot('payment')->withTimestamps();
     }
     
     /**
-     * expenses
+     * Displays the expenses associated with payment.
      *
      * @return void
      */
@@ -144,7 +150,7 @@ class Payment extends Model
     }
     
     /**
-     * employee
+     * Displays the employee associated with payment.
      *
      * @return void
      */

@@ -119,7 +119,7 @@ class ExpenseType extends Model
     }
     
     /**
-     * vendors
+     * Displays the vendors associated with expense type.
      *
      * @return void
      */
@@ -129,7 +129,7 @@ class ExpenseType extends Model
     }
     
     /**
-     * employees
+     * Displays the employees associated with expense type.
      *
      * @return void
      */
@@ -139,7 +139,7 @@ class ExpenseType extends Model
     }
     
     /**
-     * sub_types
+     * Displays the expense types sub-types associated with expense type.
      *
      * @return void
      */
