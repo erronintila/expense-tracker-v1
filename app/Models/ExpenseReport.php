@@ -62,12 +62,12 @@ class ExpenseReport extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
-    // /**
-    //  * The accessors to append to the model's array form.
-    //  *
-    //  * @var array
-    //  */
-    // protected $appends = ['balance'];
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['balance', 'status'];
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
