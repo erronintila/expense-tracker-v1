@@ -131,7 +131,7 @@ class ExpenseReport extends Model
     /**
      * Displays the expenses associated with Expense Report.
      *
-     * @return void
+     * @return mixed
      */
     public function expenses()
     {
@@ -141,7 +141,7 @@ class ExpenseReport extends Model
     /**
      * Displays the payments associated with expense report.
      *
-     * @return void
+     * @return mixed
      */
     public function payments()
     {
@@ -151,7 +151,7 @@ class ExpenseReport extends Model
     /**
      * Displays the employee associated with Expense Report.
      *
-     * @return void
+     * @return mixed
      */
     public function employee()
     {
@@ -180,7 +180,7 @@ class ExpenseReport extends Model
     /**
      * Displays the status of Expense Report
      *
-     * @return void
+     * @return mixed
      */
     public function getStatusAttribute()
     {
@@ -315,7 +315,7 @@ class ExpenseReport extends Model
     /**
      * late_submitted
      *
-     * @return void
+     * @return mixed
      */
     public function isLateSubmitted()
     {
@@ -325,7 +325,7 @@ class ExpenseReport extends Model
     /**
      * late_approved
      *
-     * @return void
+     * @return mixed
      */
     public function isLateApproved()
     {
@@ -335,7 +335,7 @@ class ExpenseReport extends Model
     /**
      * Displays the earliest start date covered by the expense report.
      *
-     * @return void
+     * @return mixed
      */
     public function getExpenseStartDateAttribute()
     {
@@ -345,7 +345,7 @@ class ExpenseReport extends Model
     /**
      * Displays the most recent end date covered by the expense report.
      *
-     * @return void
+     * @return mixed
      */
     public function getExpenseEndDateAttribute()
     {
@@ -355,7 +355,7 @@ class ExpenseReport extends Model
     /**
      * getTotalExpenseAmountAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getTotalExpenseAmountAttribute()
     {
@@ -365,7 +365,7 @@ class ExpenseReport extends Model
     /**
      * getTotalReimbursableAmountAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getTotalReimbursableAmountAttribute()
     {
@@ -375,7 +375,7 @@ class ExpenseReport extends Model
     /**
      * getBalanceAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getBalanceAttribute()
     {
@@ -391,7 +391,7 @@ class ExpenseReport extends Model
     /**
      * getReceivedPaymentAmountAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getReceivedPaymentAmountAttribute()
     {
@@ -410,7 +410,7 @@ class ExpenseReport extends Model
     /**
      * getCreatedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getCreatedInfoAttribute()
     {
@@ -427,7 +427,7 @@ class ExpenseReport extends Model
     /**
      * getUpdatedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getUpdatedInfoAttribute()
     {
@@ -444,7 +444,7 @@ class ExpenseReport extends Model
     /**
      * getDeletedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getDeletedInfoAttribute()
     {
@@ -461,7 +461,7 @@ class ExpenseReport extends Model
     /**
      * getSubmittedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getSubmittedInfoAttribute()
     {
@@ -478,7 +478,7 @@ class ExpenseReport extends Model
     /**
      * getReviewedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getReviewedInfoAttribute()
     {
@@ -495,7 +495,7 @@ class ExpenseReport extends Model
     /**
      * getApprovedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getApprovedInfoAttribute()
     {
@@ -512,7 +512,7 @@ class ExpenseReport extends Model
     /**
      * getRejectedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getRejectedInfoAttribute()
     {
@@ -529,7 +529,7 @@ class ExpenseReport extends Model
     /**
      * getCancelledInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getCancelledInfoAttribute()
     {
@@ -546,7 +546,7 @@ class ExpenseReport extends Model
     /**
      * getReimbursedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getReimbursedInfoAttribute()
     {

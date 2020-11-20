@@ -111,7 +111,7 @@ class Job extends Model
     /**
      * Displays the department associated with job designation.
      *
-     * @return void
+     * @return mixed
      */
     public function department()
     {
@@ -121,7 +121,7 @@ class Job extends Model
     /**
      * Displays the employees associated with job designation.
      *
-     * @return void
+     * @return mixed
      */
     public function employees()
     {
@@ -131,7 +131,7 @@ class Job extends Model
     // /**
     //  * Displays the job histories associated with job designation.
     //  *
-    //  * @return void
+    //  * @return mixed
     //  */
     // public function job_histories()
     // {

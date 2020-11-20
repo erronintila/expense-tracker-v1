@@ -88,7 +88,7 @@ class SubType extends Model
     /**
      * Displays the expense type associated with subtype.
      *
-     * @return void
+     * @return mixed
      */
     public function expense_type()
     {
@@ -98,7 +98,7 @@ class SubType extends Model
     /**
      * Displays the expenses associated with subtype.
      *
-     * @return void
+     * @return mixed
      */
     public function expenses()
     {
@@ -108,7 +108,7 @@ class SubType extends Model
     /**
      * Displays the employees associated with subtype.
      *
-     * @return void
+     * @return mixed
      */
     public function employees()
     {

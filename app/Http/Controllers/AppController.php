@@ -7,7 +7,7 @@ class AppController extends Controller
     /**
      * Show the main application layout.
      *
-     * @return void
+     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {

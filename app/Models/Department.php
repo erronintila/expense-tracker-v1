@@ -134,7 +134,7 @@ class Department extends Model
     /**
      * Displays the jobs associated with department.
      *
-     * @return void
+     * @return mixed
      */
     public function jobs()
     {
@@ -146,7 +146,7 @@ class Department extends Model
      * Has-Many-Through Relationship
      * Get all of the employees for the department.
      *
-     * @return void
+     * @return mixed
      */
     public function employees()
     {

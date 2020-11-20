@@ -121,7 +121,7 @@ class Employee extends Model
     /**
      * Displays the user account associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function user()
     {
@@ -131,7 +131,7 @@ class Employee extends Model
     /**
      * Displays the job designation associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function job()
     {
@@ -141,7 +141,7 @@ class Employee extends Model
     /**
      * Displays the job designation associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function department()
     {
@@ -151,7 +151,7 @@ class Employee extends Model
     /**
      * Displays the expenses associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function expenses()
     {
@@ -161,7 +161,7 @@ class Employee extends Model
     /**
      * Displays the job histories associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function job_histories()
     {
@@ -171,7 +171,7 @@ class Employee extends Model
     /**
      * Displays the allowances associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function allowances()
     {
@@ -181,7 +181,7 @@ class Employee extends Model
     /**
      * Displays the adjustments associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function adjustments()
     {
@@ -191,7 +191,7 @@ class Employee extends Model
     /**
      * Displays the Expense Reports associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function expense_reports()
     {
@@ -201,7 +201,7 @@ class Employee extends Model
     /**
      * Displays the Expense types associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function expense_types()
     {
@@ -211,7 +211,7 @@ class Employee extends Model
     /**
      * Displays the Expense Type Sub-types associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function sub_types()
     {
@@ -221,7 +221,7 @@ class Employee extends Model
     /**
      * Displays the payments associated with employee.
      *
-     * @return void
+     * @return mixed
      */
     public function payments()
     {
@@ -237,7 +237,7 @@ class Employee extends Model
     /**
      * Displays the full name of employee.
      *
-     * @return void
+     * @return mixed
      */
     public function getFullNameAttribute()
     {

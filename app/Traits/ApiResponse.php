@@ -10,7 +10,7 @@ trait ApiResponse
      * @param  mixed $data
      * @param  mixed $message
      * @param  mixed $code
-     * @return void
+     * @return mixed
      */
     protected function successResponse($data, $message = null, $code = 200)
     {
@@ -26,7 +26,7 @@ trait ApiResponse
      *
      * @param  mixed $message
      * @param  mixed $code
-     * @return void
+     * @return mixed $data
      */
     protected function errorResponse($message = null, $code)
     {

@@ -1,0 +1,219 @@
+------------------------------------------------------------------------------------------
+new bugs/updates
+------------------------------------------------------------------------------------------
+expense can still edit if approved
+resubmission when report is rejected
+allowed times to resubmit report
+use eloquent model on querying data with relationships
+update expense and expense report settings once approved to finalize settings history of each transaction
+sql query excel data on expenses
+deleting parent with active child records
+add note when rejecting or cancelling or just add note for admin
+add restore in expenses without report when deleted
+autorefresh remaining fund info on sidebar
+activity log expense  - 17 Oct 2020 11:09 AM		Associated with the report titled 'sample' - erronintila.twincirc
+no note on editing expenses
+expense cant be cancelled even if no report
+add logging when payment is applied to a report
+expense report can be edited
+add comments
+
+------------------------------------------------------------------------------------------
+From the doc (bugs/updates)
+------------------------------------------------------------------------------------------
+
+Limit expense per expense type and sub type
+Remove Reset Password
+
+Label for late encoded expenses
+Add JSON Notes/Comments
+Add Bulk Expenses
+Limit expense per expense type and sub type
+
+Submission of Expense Report with no expenses
+Print Detailed Report
+Print Batch Reports
+Mark late approved expense reports
+Multiple Payments
+------Add Notes when rejecting
+Allow resubmission
+-----Add JSON Notes/Comments (required when cancelling)
+
+Advance Payment
+Link payment with employee
+Advance Payment Monitoring
+Add Notes when rejecting
+Return Advance Payment Amount
+Add JSON Notes/Comments (required when rejecting)
+Display History
+
+Notifications
+Currency
+
+Reload page automatically
+Export to Excel on all models
+Reset Date Range
+Format Numbers (0,0.00)
+Backend Validation
+Permissions
+User Validations
+Remove Allowed Expense types setting on Employee module and transfer to Settings module
+Laravel Export to Excel
+Frontend Validation and Refactoring
+Backend Validation and Refactoring
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------
+Doc Blocks Guide
+------------------------------------------------------------------------------------------
+
+/**
+ * Method title.
+ *
+ * Method description.
+ * 
+ * @param  type  $var
+ * @return type
+ */
+protected function method_title(type $arg): type
+{
+    /** @var type $arg */
+    $type = type::create($arg);
+
+    /** @var type $arg */
+    return $type;
+}
+
+
+
+
+
+
+
+/**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+
+
+
+/**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data, $id)
+
+
+
+
+
+/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+
+
+
+
+/**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+
+
+
+
+
+/**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+
+
+
+
+/**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+
+
+
+
+/**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $id)
+
+
+
+
+
+
+/**
+     * Create folder if none exists
+     *
+     * @param string $folder
+     * @return void
+     */
+
+
+
+
+
+
+/**
+     * Find a permission by its name (and optionally guardName).
+     *
+     * @param string $name
+     * @param string|null $guardName
+     *
+     * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
+     *
+     * @return \Spatie\Permission\Contracts\Permission
+     */
+    public static function findByName(string $name, $guardName = null): PermissionContract
+
+
+
+
+
+
+
+
+/**
+     * Find a permission by its id (and optionally guardName).
+     *
+     * @param int $id
+     * @param string|null $guardName
+     *
+     * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
+     *
+     * @return \Spatie\Permission\Contracts\Permission
+     */
+    public static function findById(int $id, $guardName = null): PermissionContract

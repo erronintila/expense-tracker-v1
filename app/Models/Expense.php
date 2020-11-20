@@ -122,7 +122,7 @@ class Expense extends Model
     /**
      * Displays the expense type associated with expense.
      *
-     * @return void
+     * @return mixed
      */
     public function expense_type()
     {
@@ -132,7 +132,7 @@ class Expense extends Model
     /**
      * Displays the employee associated with expense.
      *
-     * @return void
+     * @return mixed
      */
     public function employee()
     {
@@ -142,7 +142,7 @@ class Expense extends Model
     /**
      * Displays the vendor associated with expense.
      *
-     * @return void
+     * @return mixed
      */
     public function vendor()
     {
@@ -157,7 +157,7 @@ class Expense extends Model
     /**
      * Displays the expense report associated with expense.
      *
-     * @return void
+     * @return mixed
      */
     public function expense_report()
     {
@@ -167,7 +167,7 @@ class Expense extends Model
     /**
      * Displays the payments associated with expense.
      *
-     * @return void
+     * @return mixed
      */
     public function payments()
     {
@@ -177,7 +177,7 @@ class Expense extends Model
     /**
      * Displays the tax associated with expense.
      *
-     * @return void
+     * @return mixed
      */
     public function tax()
     {
@@ -193,7 +193,7 @@ class Expense extends Model
     /**
      * Displays the current status of expense.
      *
-     * @return void
+     * @return mixed
      */
     public function getStatusAttribute()
     {
@@ -352,7 +352,7 @@ class Expense extends Model
     /**
      * getExpiryDateAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getExpiryDateAttribute()
     {
@@ -363,7 +363,7 @@ class Expense extends Model
     /**
      * Displays the formatted amount of the expense.
      *
-     * @return void
+     * @return mixed
      */
     public function getFormattedAmountAttribute()
     {
@@ -373,7 +373,7 @@ class Expense extends Model
     /**
      * Displays the formatted receipt date of the expense.
      *
-     * @return void
+     * @return mixed
      */
     public function getFormattedDateAttribute()
     {
@@ -383,7 +383,7 @@ class Expense extends Model
     /**
      * balance
      *
-     * @return void
+     * @return mixed
      */
     public function getBalanceAttribute()
     {
@@ -393,7 +393,7 @@ class Expense extends Model
     /**
      * getCreatedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getCreatedInfoAttribute()
     {
@@ -410,7 +410,7 @@ class Expense extends Model
     /**
      * getUpdatedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getUpdatedInfoAttribute()
     {
@@ -427,7 +427,7 @@ class Expense extends Model
     /**
      * getDeletedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getDeletedInfoAttribute()
     {
@@ -444,7 +444,7 @@ class Expense extends Model
     /**
      * getSubmittedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getSubmittedInfoAttribute()
     {
@@ -463,7 +463,7 @@ class Expense extends Model
     /**
      * getReviewedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getReviewedInfoAttribute()
     {
@@ -482,7 +482,7 @@ class Expense extends Model
     /**
      * getApprovedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getApprovedInfoAttribute()
     {
@@ -501,7 +501,7 @@ class Expense extends Model
     /**
      * getRejectedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getRejectedInfoAttribute()
     {
@@ -520,7 +520,7 @@ class Expense extends Model
     /**
      * getCancelledInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getCancelledInfoAttribute()
     {
@@ -539,7 +539,7 @@ class Expense extends Model
     /**
      * getReimbursedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getReimbursedInfoAttribute()
     {

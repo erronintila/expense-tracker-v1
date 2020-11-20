@@ -111,7 +111,7 @@ class ExpenseType extends Model
     /**
      * Displays the expenses associated with expense type.
      *
-     * @return void
+     * @return mixed
      */
     public function expenses()
     {
@@ -121,7 +121,7 @@ class ExpenseType extends Model
     /**
      * Displays the vendors associated with expense type.
      *
-     * @return void
+     * @return mixed
      */
     public function vendors()
     {
@@ -131,7 +131,7 @@ class ExpenseType extends Model
     /**
      * Displays the employees associated with expense type.
      *
-     * @return void
+     * @return mixed
      */
     public function employees()
     {
@@ -141,7 +141,7 @@ class ExpenseType extends Model
     /**
      * Displays the expense types sub-types associated with expense type.
      *
-     * @return void
+     * @return mixed
      */
     public function sub_types()
     {

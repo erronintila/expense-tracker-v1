@@ -109,7 +109,7 @@ class User extends Authenticatable
     /**
      * employee
      *
-     * @return void
+     * @return mixed
      */
     public function employee()
     {

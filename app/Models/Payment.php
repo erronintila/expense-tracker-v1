@@ -121,7 +121,7 @@ class Payment extends Model
     // /**
     //  * expense_reports
     //  *
-    //  * @return void
+    //  * @return mixed
     //  */
     // public function expense_reports()
     // {
@@ -132,7 +132,7 @@ class Payment extends Model
      * Displays the expense reports associated with payment.
      * Many-To-Many Relationship
      *
-     * @return void
+     * @return mixed
      */
     public function expense_reports()
     {
@@ -142,7 +142,7 @@ class Payment extends Model
     /**
      * Displays the expenses associated with payment.
      *
-     * @return void
+     * @return mixed
      */
     public function expenses()
     {
@@ -152,7 +152,7 @@ class Payment extends Model
     /**
      * Displays the employee associated with payment.
      *
-     * @return void
+     * @return mixed
      */
     public function employee()
     {
@@ -168,7 +168,7 @@ class Payment extends Model
     /**
      * status
      *
-     * @return void
+     * @return mixed
      */
     public function getStatusAttribute()
     {
@@ -235,7 +235,7 @@ class Payment extends Model
     /**
      * getCreatedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getCreatedInfoAttribute()
     {
@@ -252,7 +252,7 @@ class Payment extends Model
     /**
      * getUpdatedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getUpdatedInfoAttribute()
     {
@@ -269,7 +269,7 @@ class Payment extends Model
     /**
      * getDeletedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getDeletedInfoAttribute()
     {
@@ -286,7 +286,7 @@ class Payment extends Model
     /**
      * getApprovedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getApprovedInfoAttribute()
     {
@@ -303,7 +303,7 @@ class Payment extends Model
     /**
      * getCancelledInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getCancelledInfoAttribute()
     {
@@ -320,7 +320,7 @@ class Payment extends Model
     /**
      * getReleasedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getReleasedInfoAttribute()
     {
@@ -337,7 +337,7 @@ class Payment extends Model
     /**
      * getReceivedInfoAttribute
      *
-     * @return void
+     * @return mixed
      */
     public function getReceivedInfoAttribute()
     {

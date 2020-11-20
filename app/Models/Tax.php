@@ -35,7 +35,7 @@ class Tax extends Model
     /**
      * Displays the expenses associated with tax.
      *
-     * @return void
+     * @return mixed
      */
     public function expenses()
     {

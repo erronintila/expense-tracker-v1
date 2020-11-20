@@ -113,7 +113,7 @@ class Vendor extends Model
     /**
      * Displays the expenses associated with vendor.
      *
-     * @return void
+     * @return mixed
      */
     public function expenses()
     {
@@ -123,7 +123,7 @@ class Vendor extends Model
     /**
      * Displays the expense types associated with vendor.
      *
-     * @return void
+     * @return mixed
      */
     public function expense_types()
     {

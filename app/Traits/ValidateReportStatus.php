@@ -14,7 +14,7 @@ trait ValidateReportStatus
      * @param  mixed $transType
      * @param  mixed $model
      * @param  mixed $ids
-     * @return void
+     * @return mixed
      */
     protected function validateReportSubmission($transType, $model, $ids)
     {
@@ -56,7 +56,7 @@ trait ValidateReportStatus
      * @param  mixed $transType
      * @param  mixed $model
      * @param  mixed $ids
-     * @return void
+     * @return mixed
      */
     protected function isReportSubmitted($transType, $model, $ids)
     {
@@ -114,7 +114,7 @@ trait ValidateReportStatus
      * @param  mixed $transType
      * @param  mixed $model
      * @param  mixed $ids
-     * @return void
+     * @return mixed
      */
     protected function isReportReviewed($transType, $model, $ids)
     {
@@ -143,7 +143,7 @@ trait ValidateReportStatus
      * @param  mixed $transType
      * @param  mixed $model
      * @param  mixed $ids
-     * @return void
+     * @return mixed
      */
     protected function isReportRejected($transType, $model, $ids)
     {
@@ -172,7 +172,7 @@ trait ValidateReportStatus
      * @param  mixed $transType
      * @param  mixed $model
      * @param  mixed $ids
-     * @return void
+     * @return mixed
      */
     protected function isReportCancelled($transType, $model, $ids)
     {

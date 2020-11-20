@@ -88,7 +88,7 @@ class Adjustment extends Model
     /**
      * Displays the employee associated with adjustment.
      *
-     * @return void
+     * @return mixed
      */
     public function employee()
     {
