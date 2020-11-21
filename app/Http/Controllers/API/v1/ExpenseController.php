@@ -291,7 +291,7 @@ class ExpenseController extends Controller
 
         $expense->vendor_id  = $request->vendor_id;
 
-        $expense->details  = json_encode($request->details);
+        $expense->details  = $request->details == null ? null : json_encode($request->details);
 
         $expense->tax_name = $request->tax_name;
 

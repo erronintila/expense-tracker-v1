@@ -25,7 +25,7 @@ class ExpenseReportSeeder extends Seeder
 
                 $expense_report = new ExpenseReport();
 
-                $expense_report->description = $employee->name() . " Expenses";
+                $expense_report->description = $employee->getFullNameAttribute() . " Expenses";
                 $expense_report->remarks = "";
                 $expense_report->employee_id = $employee->id;
                 $expense_report->save();
@@ -36,7 +36,9 @@ class ExpenseReportSeeder extends Seeder
                     $expense->save();
                 }
 
-                $expense_report->code = date("Ymd") . str_pad($expense_report->id, 8, '0', STR_PAD_LEFT);
+                $expense_report->code = generate_code(ExpenseReport::class, "EXR", 10);
+                $expense_report->created_by = 1;
+                $expense_report->updated_by = 1;
                 $expense_report->save();
             }
         }

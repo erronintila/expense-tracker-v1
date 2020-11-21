@@ -28,7 +28,8 @@ class PaymentResource extends JsonResource
             "date" => $this->date,
             "cheque_no" => $this->cheque_no,
             "cheque_date" => $this->cheque_date,
-            "amount" => $this->amount,
+            "amount" => $this->getTotalAmountAttribute(),
+            // "amount" => $this->amount,
             // "payee" => $this->payee,
             // "payee_address" => $this->payee_address,
             // "payee_phone" => $this->payee_phone,
@@ -54,6 +55,8 @@ class PaymentResource extends JsonResource
             'status' => $this->getStatusAttribute(),
 
             'logs' => [],
+
+            'total_amount' => $this->getTotalAmountAttribute()
         ];
     }
 }

@@ -170,7 +170,7 @@ class DepartmentController extends Controller
         return response(
             [
                 'message' => 'Updated successfully',
-                'data' => json_decode($department->notes)
+                'data' => $department->notes == null ? null : json_decode($department->notes)
             ],
             201
         );

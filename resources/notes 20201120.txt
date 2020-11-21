@@ -1,22 +1,36 @@
 ------------------------------------------------------------------------------------------
 new bugs/updates
 ------------------------------------------------------------------------------------------
-expense can still edit if approved
-resubmission when report is rejected
-allowed times to resubmit report
-use eloquent model on querying data with relationships
+user can still edit expense even if approved
 update expense and expense report settings once approved to finalize settings history of each transaction
-sql query excel data on expenses
 deleting parent with active child records
 add note when rejecting or cancelling or just add note for admin
 add restore in expenses without report when deleted
 autorefresh remaining fund info on sidebar
 activity log expense  - 17 Oct 2020 11:09 AM		Associated with the report titled 'sample' - erronintila.twincirc
-no note on editing expenses
 expense cant be cancelled even if no report
 add logging when payment is applied to a report
 expense report can be edited
+
+Travel
+From, To
+
+SLOW PERFORMANCE/ SLOW RETRIEVAL OF DATA ON RESOURCE COLLECTION WITH RESOURCE COLLECTION
+
+
+
+
+------------------------------------------------------------------------------------------
+OPTIONAL
+------------------------------------------------------------------------------------------
+resubmission when report is rejected
 add comments
+no note on editing expenses
+sql query excel data on expenses
+use eloquent model on querying data with relationships
+allowed times to resubmit report
+
+
 
 ------------------------------------------------------------------------------------------
 From the doc (bugs/updates)

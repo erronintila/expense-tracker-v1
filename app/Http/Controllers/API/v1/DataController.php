@@ -878,7 +878,7 @@ class DataController extends Controller
                         "total" => $row->amount,
                         "expense_type" => $row->expense_type->name,
                         str_replace(' ', '_', strtolower($row->expense_type->name)) => $row->amount,
-                        "items" => json_decode($row->details),
+                        "items" => $row->details == null ? null : json_decode($row->details),
                     ];
                     // return $row->expense_type;
                     // return $row->groupBy('expense_type.name')->map(function ($row) {

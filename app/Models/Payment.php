@@ -68,7 +68,7 @@ class Payment extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model
@@ -349,5 +349,22 @@ class Payment extends Model
         }
 
         return null;
+    }
+    
+    /**
+     * getTotalAmountAttribute
+     *
+     * @return mixed
+     */
+    public function getTotalAmountAttribute()
+    {
+        $expense_reports = $this->expense_reports;
+        $sum = 0;
+
+        foreach ($expense_reports as $expense_report) {
+            $sum += $expense_report->pivot->payment;
+        }
+
+        return $sum;
     }
 }

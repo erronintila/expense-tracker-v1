@@ -20,6 +20,10 @@ class PaymentObserver
         // $payment->code = "PV" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
 
         // $payment->save();
+
+        // $payment->amount = $payment->getTotalAmountAttribute();
+
+        // $payment->save();
     }
 
     /**
@@ -30,6 +34,14 @@ class PaymentObserver
      */
     public function updated(Payment $payment)
     {
+        // if($payment->received_at == null) {
+
+        //     $payment->amount = $payment->getTotalAmountAttribute() ?? 0;
+
+        //     $payment->save();
+
+        //     return;
+        // }
         // $received = $payment->getOriginal("received_at");
 
         // if ($received == null && $payment->received_at !== null) {
@@ -66,6 +78,8 @@ class PaymentObserver
             }
         }
         // }
+
+
     }
 
     /**

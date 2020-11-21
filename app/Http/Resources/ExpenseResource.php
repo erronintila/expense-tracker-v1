@@ -53,7 +53,7 @@ class ExpenseResource extends JsonResource
             // 'employee_name' => $this->employee->name(),
             // 'expense_report_id' => $this->expense_report_id,
             
-            'details' => json_decode($this->details),
+            'details' => $this->details == null ? null : json_decode($this->details),
             'status' => $this->getStatusAttribute(),
 
             'is_tax_inclusive' => $this->is_tax_inclusive,

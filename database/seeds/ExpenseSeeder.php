@@ -13,18 +13,18 @@ class ExpenseSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Expense::class, 200)->create();
+        factory(\App\Models\Expense::class, 100)->create();
 
-        $expense_details = [];
+        // $expense_details = [];
 
-        for ($i = 1; $i <= 200; $i++) {
-            $expense = Expense::find($i);
+        // for ($i = 1; $i <= 200; $i++) {
+        //     $expense = Expense::find($i);
 
-            array_push($expense_details, [
-                'description' => $expense->description,
-                'amount' => $expense->amount,
-                'expense_id' => $i,
-            ]);
-        }
+        //     array_push($expense_details, [
+        //         'description' => $expense->description,
+        //         'amount' => $expense->amount,
+        //         'expense_id' => $i,
+        //     ]);
+        // }
     }
 }
