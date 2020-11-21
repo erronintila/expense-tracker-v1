@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class EmployeeResource extends JsonResource
 {
@@ -43,7 +42,8 @@ class EmployeeResource extends JsonResource
             'user' => $user,
             'role' => $user->is_admin ? ["Administrator"] : $user->getRoleNames(),
             'permissions' => $user->getAllPermissions(),
-            'expense_types' => ExpenseTypeResource::collection($this->expense_types),
+            // 'expense_types' => ExpenseTypeResource::collection($this->expense_types),
+            'expense_types' => $this->expense_types,
 
             'pivot_expense_types' => $this->expense_types,
             'pivot_sub_types' => $this->sub_types,

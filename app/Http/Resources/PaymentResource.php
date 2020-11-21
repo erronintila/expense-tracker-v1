@@ -37,7 +37,8 @@ class PaymentResource extends JsonResource
             "notes" => $this->notes,
             "expense_reports" => $expense_reports,
             "total_expense_amount" => $expense_reports,
-            'employee' => new EmployeeResource($this->employee) ?? [],
+            // 'employee' => new EmployeeResource($this->employee) ?? [],
+            'employee' => $this->employee ?? [],
 
             // 'approved_at' => Carbon::parse($this->approved_at)->toDateTimeString(),
             // 'cancelled_at' => Carbon::parse($this->cancelled_at)->toDateTimeString(),

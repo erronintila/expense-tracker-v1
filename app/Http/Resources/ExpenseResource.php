@@ -63,8 +63,10 @@ class ExpenseResource extends JsonResource
 
             'sub_type' => $this->sub_type()->withTrashed()->first(),
             'vendor' => $this->vendor()->withTrashed()->first(),
-            'employee' => new EmployeeResource($this->employee),
-            'expense_type' => new ExpenseTypeResource($this->expense_type),
+            // 'employee' => new EmployeeResource($this->employee),
+            // 'expense_type' => new ExpenseTypeResource($this->expense_type),
+            'employee' => $this->employee()->withTrashed()->first(),
+            'expense_type' => $this->expense_type()->withTrashed()->first(),
             'expense_report' => $this->expense_report()->withTrashed()->first(),
 
             // 'created_at' => $this->created_at,
