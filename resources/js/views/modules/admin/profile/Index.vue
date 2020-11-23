@@ -1,6 +1,23 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+
+        <v-container v-if="user.id == ''" style="height: 400px;">
+            <v-row class="fill-height" align-content="center" justify="center">
+                <v-col class="subtitle-1 text-center" cols="12">
+                    Loading, Please wait...
+                </v-col>
+                <v-col cols="6">
+                    <v-progress-linear
+                        color="green accent-4"
+                        indeterminate
+                        rounded
+                        height="6"
+                    ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </v-container>
+        
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Profile</h4>
                 <v-spacer></v-spacer>
@@ -47,8 +64,8 @@
                                             >
                                                 <div>
                                                     {{
-                                                        user.employee.department
-                                                            .name
+                                                        user.employee.job
+                                                            .department.name
                                                     }}
                                                 </div>
                                                 <h3
@@ -128,7 +145,9 @@
                                                                     v-model="
                                                                         old_password
                                                                     "
-                                                                    :rules="mixin_validation.required"
+                                                                    :rules="
+                                                                        mixin_validation.required
+                                                                    "
                                                                     :error-messages="
                                                                         password_errors.old_password
                                                                     "
@@ -148,7 +167,12 @@
                                                                     v-model="
                                                                         password
                                                                     "
-                                                                    :rules="[...mixin_validation.required, ...mixin_validation.minimumLength(8)]"
+                                                                    :rules="[
+                                                                        ...mixin_validation.required,
+                                                                        ...mixin_validation.minimumLength(
+                                                                            8
+                                                                        )
+                                                                    ]"
                                                                     :error-messages="
                                                                         password_errors.password
                                                                     "
@@ -460,7 +484,7 @@ export default {
                 updated_at: "",
                 employee: {
                     id: 0,
-                    fullname: "",
+                    full_name: "",
                     first_name: "",
                     middle_name: "",
                     last_name: "",
@@ -471,8 +495,7 @@ export default {
                     telephone_number: "",
                     email: "",
                     address: "",
-                    job: "",
-                    department: ""
+                    job: { department: {} }
                 }
             },
             old_password: "",
@@ -652,7 +675,8 @@ export default {
 
                         if (error.response) {
                             if (error.response.data) {
-                                _this.password_errors = error.response.data.errors;
+                                _this.password_errors =
+                                    error.response.data.errors;
                             }
                         }
                     });
@@ -674,6 +698,7 @@ export default {
     created() {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
+            console.log(response);
             _this.user = response;
         });
     }

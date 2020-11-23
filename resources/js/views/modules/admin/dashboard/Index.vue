@@ -1,6 +1,22 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <v-container v-if="loader" style="height: 400px;">
+            <v-row class="fill-height" align-content="center" justify="center">
+                <v-col class="subtitle-1 text-center" cols="12">
+                    Loading, Please wait...
+                </v-col>
+                <v-col cols="6">
+                    <v-progress-linear
+                        color="green accent-4"
+                        indeterminate
+                        rounded
+                        height="6"
+                    ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </v-container>
+
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Dashboard</h4>
                 <v-spacer></v-spacer>
@@ -44,7 +60,7 @@
             </v-card-title>
             <v-card-subtitle> </v-card-subtitle>
 
-            <v-row>
+            <!-- <v-row>
                 <v-col cols="12" md="4">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
@@ -160,8 +176,9 @@
                                                 </div>
                                                 <div>
                                                     Payment to Receive:
-                                                    Reimbursed expenses
-                                                    waiting to be received by the employee
+                                                    Reimbursed expenses waiting
+                                                    to be received by the
+                                                    employee
                                                 </div>
                                             </v-card-text>
                                         </v-card>
@@ -375,13 +392,386 @@
                         </v-card>
                     </v-hover>
                 </v-col>
+            </v-row> -->
+
+            <v-row>
+                <v-col cols="12" md="4">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            class="mx-auto"
+                            :elevation="hover ? 5 : 2"
+                            :to="{ name: 'admin.expenses.index' }"
+                        >
+                            <v-card-text>
+                                <div class="green--text">
+                                    Total Expenses
+                                </div>
+                                <div class="display-1 text--primary">
+                                    {{
+                                        mixin_formatNumber(
+                                            total.expenses_by_date
+                                        )
+                                    }}
+                                </div>
+                                <div>
+                                    {{ count.expenses_by_date }}
+                                    Expenses
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+                </v-col>
+
+                <v-col cols="12" md="4">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card class="mx-auto" :elevation="hover ? 5 : 2">
+                            <v-card-text>
+                                <div>
+                                    Remaining Fund
+                                </div>
+                                <v-btn
+                                    class="ml-0 pl-0"
+                                    text
+                                    :to="{
+                                        name: 'admin.employees.index'
+                                    }"
+                                >
+                                    <span>
+                                        <div
+                                            :class="
+                                                parseFloat(
+                                                    total.remaining_fund
+                                                ) <=
+                                                parseFloat(total.total_fund) *
+                                                    0.1
+                                                    ? 'display-1 red--text'
+                                                    : 'display-1 text--primary'
+                                            "
+                                        >
+                                            {{
+                                                mixin_formatNumber(
+                                                    total.remaining_fund
+                                                )
+                                            }}
+                                        </div>
+                                    </span>
+                                </v-btn>
+
+                                <div>
+                                    {{
+                                        `Total Revolving Fund: ${total.total_fund}`
+                                    }}
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+                </v-col>
+
+                <v-col cols="12" md="4">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card class="mx-auto" :elevation="hover ? 5 : 2">
+                            <v-card-text>
+                                <div>
+                                    Unreported Expenses
+                                </div>
+                                <v-btn
+                                    class="ml-0 pl-0"
+                                    text
+                                    :to="{
+                                        name: 'admin.expenses.index'
+                                    }"
+                                >
+                                    <span>
+                                        <div class="display-1 text--primary">
+                                            {{
+                                                mixin_formatNumber(
+                                                    total.unreported_expenses
+                                                )
+                                            }}
+                                        </div>
+                                    </span>
+                                </v-btn>
+
+                                <div>
+                                    {{
+                                        `Total Unreported: ${count.unreported_expenses}`
+                                    }}
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+                </v-col>
             </v-row>
 
-            <div>
+            <v-row>
+                <v-col cols="12">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            class="mx-auto"
+                            :elevation="hover ? 5 : 2"
+                            height="100%"
+                            style="position: relative"
+                        >
+                            <v-card-text>
+                                <div>
+                                    Expense Reports Summary
+                                    <v-menu offset-y open-on-hover>
+                                        <template
+                                            v-slot:activator="{ on, attrs }"
+                                        >
+                                            <v-btn
+                                                x-small
+                                                icon
+                                                color="green"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                            >
+                                                <v-icon
+                                                    >mdi-information-outline</v-icon
+                                                >
+                                            </v-btn>
+                                        </template>
+                                        <v-card>
+                                            <v-card-text>
+                                                <div>
+                                                    Unsubmitted: Created reports
+                                                    that are not yet submitted
+                                                </div>
+                                                <div>
+                                                    Pending for Approval:
+                                                    Submitted reports waiting
+                                                    for approval
+                                                </div>
+                                                <div>
+                                                    Awaiting Reimbursement:
+                                                    Approved reports waiting for
+                                                    payment
+                                                </div>
+                                                <div>
+                                                    Payment to Receive:
+                                                    Reimbursed expenses waiting
+                                                    to be received by the
+                                                    employee
+                                                </div>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-menu>
+                                </div>
+                                <v-row>
+                                    <!-- <v-col
+                                        cols="12"
+                                        md="4"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name: 'admin.expenses.index'
+                                            }"
+                                        >
+                                            <span>
+                                                <div
+                                                    class="blue-grey--text text-capitalize"
+                                                >
+                                                    Unreported Expenses
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total.unreported_expenses
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.unreported_expenses
+                                                    }}
+                                                    Expenses
+                                                </div>
+                                            </span>
+                                        </v-btn>
+                                    </v-col> -->
+                                    <v-col
+                                        cols="12"
+                                        md="3"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name:
+                                                    'admin.expense_reports.index'
+                                            }"
+                                        >
+                                            <span>
+                                                <div
+                                                    class="orange--text text-capitalize"
+                                                >
+                                                    Unsubmitted
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total.unsubmitted_reports
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.unsubmitted_reports
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </span>
+                                        </v-btn>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        md="3"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name:
+                                                    'admin.expense_reports.index'
+                                            }"
+                                        >
+                                            <div>
+                                                <div
+                                                    :class="
+                                                        parseFloat(
+                                                            total.pending_for_approval_reports
+                                                        ) > 0
+                                                            ? 'red--text text-capitalize'
+                                                            : 'text-capitalize'
+                                                    "
+                                                >
+                                                    Pending for Approval
+                                                </div>
+                                                <div
+                                                    :class="
+                                                        parseFloat(
+                                                            total.pending_for_approval_reports
+                                                        ) > 0
+                                                            ? 'display-1 red--text'
+                                                            : 'display-1 text--primary'
+                                                    "
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total.pending_for_approval_reports
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.pending_for_approval_reports
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </div>
+                                        </v-btn>
+                                    </v-col>
+
+                                    <v-col
+                                        cols="12"
+                                        md="3"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name:
+                                                    'admin.expense_reports.index'
+                                            }"
+                                        >
+                                            <div>
+                                                <div
+                                                    class="green--text text-capitalize"
+                                                >
+                                                    Awaiting Reimbursement
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total.awaiting_for_reimbursement_reports
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.awaiting_for_reimbursement_reports
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </div>
+                                        </v-btn>
+                                    </v-col>
+
+                                    <v-col
+                                        cols="12"
+                                        md="3"
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        <v-btn
+                                            text
+                                            class="mt-4 mb-4"
+                                            :to="{
+                                                name: 'admin.payments.index'
+                                            }"
+                                        >
+                                            <div>
+                                                <div
+                                                    class="orange--text text-capitalize"
+                                                >
+                                                    Payment to Receive
+                                                </div>
+                                                <div
+                                                    class="display-1 text--primary"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total.payment_to_receive
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class=" text-capitalize">
+                                                    {{
+                                                        count.payment_to_receive
+                                                    }}
+                                                    Reports
+                                                </div>
+                                            </div>
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+                </v-col>
+            </v-row>
+
+            <div class="mt-4">
                 <v-hover v-slot:default="{ hover }">
                     <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                         <v-toolbar flat dense>
-                            <v-toolbar-title>
+                            <v-toolbar-title class="green--text">
                                 Expenses by category
                             </v-toolbar-title>
 
@@ -448,7 +838,7 @@
                 <v-hover v-slot:default="{ hover }">
                     <v-card :elevation="hover ? 5 : 2" class="mx-auto">
                         <v-toolbar flat dense>
-                            <v-toolbar-title>
+                            <v-toolbar-title class="green--text">
                                 Expenses by date
                             </v-toolbar-title>
 
@@ -519,6 +909,7 @@ export default {
     },
     data() {
         return {
+            loader: true,
             total: {
                 awaiting_for_reimbursement_reports: 0,
                 expenses_by_date: 0,
@@ -1102,7 +1493,7 @@ export default {
 
             this.expenses_by_category = [];
 
-            this.onCategoryChange();
+            // this.onCategoryChange();
 
             this.onTimeUnitChange();
 
@@ -1113,7 +1504,7 @@ export default {
             );
         },
         updateEmployee() {
-            this.onCategoryChange();
+            // this.onCategoryChange();
 
             this.onTimeUnitChange();
 
@@ -1133,6 +1524,21 @@ export default {
                 .then(response => {
                     _this.total = response.data.total;
                     _this.count = response.data.count;
+
+                    _this.loader = false;
+
+                    this.load_expense_types_expenses(
+                        this.date_range[0],
+                        this.date_range[1],
+                        this.employee.id
+                    );
+
+                    this.load_expenses_summary(
+                        this.date_range[0],
+                        this.date_range[1],
+                        this.groupBy,
+                        this.employee.id
+                    );
                 })
                 .catch(error => {
                     console.log(error);
@@ -1142,36 +1548,26 @@ export default {
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
+
+                    _this.loader = true;
                 });
         }
     },
-    created() {
-        this.$store.dispatch("AUTH_USER");
-        
+    mounted() {
         this.loadEmployees();
-
-        this.load_expense_types_expenses(
-            this.date_range[0],
-            this.date_range[1],
-            this.employee.id
-        );
 
         this.load_pie_chart();
         this.load_bar_chart();
         this.load_line_chart();
-
-        this.load_expenses_summary(
-            this.date_range[0],
-            this.date_range[1],
-            this.groupBy,
-            this.employee.id
-        );
 
         this.getExpenseStats(
             this.date_range[0],
             this.date_range[1],
             this.employee.id
         );
+    },
+    created() {
+        this.$store.dispatch("AUTH_USER");
     }
 };
 </script>

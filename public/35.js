@@ -442,11 +442,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      loader: true,
       headers: [{
         text: "Date",
         value: "date",
@@ -591,11 +607,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.rejected = data.rejected;
         _this.form.cancelled = data.cancelled;
         _this.form.logs = data.logs;
+        _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
 
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+        _this.loader = false;
       });
     }
   },
@@ -625,355 +644,395 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      _vm.loader
+        ? _c(
+            "v-container",
+            { staticStyle: { height: "400px" } },
             [
               _c(
-                "v-btn",
+                "v-row",
                 {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
+                  staticClass: "fill-height",
+                  attrs: { "align-content": "center", justify: "center" }
                 },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                [
+                  _c(
+                    "v-col",
+                    {
+                      staticClass: "subtitle-1 text-center",
+                      attrs: { cols: "12" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                Loading, Please wait...\n            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [
+                      _c("v-progress-linear", {
+                        attrs: {
+                          color: "green accent-4",
+                          indeterminate: "",
+                          rounded: "",
+                          height: "6"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Expense Report Details")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Expense Report Details")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-form",
-            { ref: "form" },
-            [
               _c(
-                "v-container",
+                "v-form",
+                { ref: "form" },
                 [
                   _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                        _c(
-                          "div",
-                          [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(_vm.form.employee.fullname) +
-                                "\n                            "
-                            ),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  text: "",
-                                  color: "green",
-                                  to:
-                                    "/admin/expense_reports/" +
-                                    _vm.$route.params.id +
-                                    "/edit"
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Edit\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "display-1 green--text" }, [
-                          _vm._v(
-                            "\n                            PHP " +
-                              _vm._s(_vm.mixin_formatNumber(_vm.form.total)) +
-                              "\n                        "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", [
-                          _vm._v(
-                            "\n                            Period:\n                            " +
-                              _vm._s(
-                                _vm.form.from == _vm.form.to
-                                  ? _vm.form.from
-                                  : _vm.form.from + " ~ " + _vm.form.to
-                              ) +
-                              "\n                        "
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _c("div", { staticClass: "headline green--text" }, [
-                          _vm._v(
-                            "\n                            #" +
-                              _vm._s(_vm.form.code) +
-                              "\n                        "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          [
-                            _vm._v(
-                              "\n                            Status:\n                            "
-                            ),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: _vm.form.status.color,
-                                  "x-small": "",
-                                  dark: ""
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(_vm.form.status.status) +
-                                    "\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", [
-                        _vm._v(
-                          "Description: " + _vm._s(_vm.form.description) + " "
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
+                    "v-container",
                     [
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12" } },
+                        "v-row",
                         [
-                          _c("v-data-table", {
-                            staticClass: "elevation-0",
-                            attrs: {
-                              elevation: "0",
-                              headers: _vm.headers,
-                              items: _vm.form.expenses,
-                              "hide-default-footer": true,
-                              "disable-pagination": "",
-                              "item-key": "id",
-                              "single-expand": "",
-                              "show-expand": ""
-                            },
-                            scopedSlots: _vm._u(
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _c(
+                              "div",
                               [
-                                {
-                                  key: "item.amount",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(item.amount)
-                                          ) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  }
-                                },
-                                {
-                                  key: "top",
-                                  fn: function() {
-                                    return [
-                                      _c(
-                                        "v-row",
-                                        [
-                                          _c("v-col", [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass: "text--secondary"
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                            List of Expenses :\n                                        "
-                                                )
-                                              ]
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("v-spacer")
-                                        ],
-                                        1
-                                      )
-                                    ]
+                                _vm._v(
+                                  "\n                            " +
+                                    _vm._s(_vm.form.employee.full_name) +
+                                    "\n                            "
+                                ),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      text: "",
+                                      color: "green",
+                                      to:
+                                        "/admin/expense_reports/" +
+                                        _vm.$route.params.id +
+                                        "/edit"
+                                    }
                                   },
-                                  proxy: true
+                                  [
+                                    _vm._v(
+                                      "\n                                Edit\n                            "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "display-1 green--text" },
+                              [
+                                _vm._v(
+                                  "\n                            PHP " +
+                                    _vm._s(
+                                      _vm.mixin_formatNumber(_vm.form.total)
+                                    ) +
+                                    "\n                        "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [
+                              _vm._v(
+                                "\n                            Period:\n                            " +
+                                  _vm._s(
+                                    _vm.form.from == _vm.form.to
+                                      ? _vm.form.from
+                                      : _vm.form.from + " ~ " + _vm.form.to
+                                  ) +
+                                  "\n                        "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c("div", { staticClass: "headline green--text" }, [
+                              _vm._v(
+                                "\n                            #" +
+                                  _vm._s(_vm.form.code) +
+                                  "\n                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _vm._v(
+                                  "\n                            Status:\n                            "
+                                ),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      color: _vm.form.status.color,
+                                      "x-small": "",
+                                      dark: ""
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(_vm.form.status.status) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", [
+                            _vm._v(
+                              "Description: " +
+                                _vm._s(_vm.form.description) +
+                                " "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12" } },
+                            [
+                              _c("v-data-table", {
+                                staticClass: "elevation-0",
+                                attrs: {
+                                  elevation: "0",
+                                  headers: _vm.headers,
+                                  items: _vm.form.expenses,
+                                  "hide-default-footer": true,
+                                  "disable-pagination": "",
+                                  "item-key": "id",
+                                  "single-expand": "",
+                                  "show-expand": ""
                                 },
-                                {
-                                  key: "item.actions",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _c(
-                                        "v-icon",
-                                        {
-                                          staticClass: "mr-2",
-                                          attrs: { small: "" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.$router.push(
-                                                "/admin/expenses/" + item.id
-                                              )
-                                            }
-                                          }
-                                        },
-                                        [
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "item.amount",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
                                           _vm._v(
-                                            "\n                                    mdi-eye\n                                "
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  item.amount
+                                                )
+                                              ) +
+                                              "\n                            "
                                           )
                                         ]
-                                      )
-                                    ]
-                                  }
-                                },
-                                {
-                                  key: "expanded-item",
-                                  fn: function(ref) {
-                                    var headers = ref.headers
-                                    var item = ref.item
-                                    return [
-                                      _c(
-                                        "td",
-                                        { attrs: { colspan: headers.length } },
-                                        [
-                                          _c("v-container", [
-                                            _c("table", [
-                                              _c("tr", [
-                                                _c("td", [
-                                                  _c("strong", [
-                                                    _vm._v("Reimbursable")
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("td", [_vm._v(":")]),
-                                                _vm._v(" "),
-                                                _c("td", [
-                                                  _vm._v(
-                                                    "\n                                                    " +
-                                                      _vm._s(
-                                                        _vm.mixin_formatNumber(
-                                                          item.reimbursable_amount
-                                                        )
-                                                      ) +
-                                                      "\n                                                "
+                                      }
+                                    },
+                                    {
+                                      key: "top",
+                                      fn: function() {
+                                        return [
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c("v-col", [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "text--secondary"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                            List of Expenses :\n                                        "
+                                                    )
+                                                  ]
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("v-spacer")
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      },
+                                      proxy: true
+                                    },
+                                    {
+                                      key: "item.actions",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "v-icon",
+                                            {
+                                              staticClass: "mr-2",
+                                              attrs: { small: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.$router.push(
+                                                    "/admin/expenses/" + item.id
                                                   )
-                                                ])
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("tr", [
-                                                _c("td", [
-                                                  _c("strong", [_vm._v("Code")])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("td", [_vm._v(":")]),
-                                                _vm._v(" "),
-                                                _c("td", [
-                                                  _vm._v(_vm._s(item.code))
-                                                ])
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("tr", [
-                                                _c("td", [
-                                                  _c("strong", [
-                                                    _vm._v("Description")
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("td", [_vm._v(":")]),
-                                                _vm._v(" "),
-                                                _c("td", [
-                                                  _vm._v(
-                                                    "\n                                                    " +
-                                                      _vm._s(item.description) +
-                                                      "\n                                                "
-                                                  )
-                                                ])
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("tr", [
-                                                _c("td", [
-                                                  _c("strong", [
-                                                    _vm._v("Remarks")
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("td", [_vm._v(":")]),
-                                                _vm._v(" "),
-                                                _c("td", [
-                                                  _vm._v(_vm._s(item.remarks))
-                                                ])
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("tr", [
-                                                _c("td", [
-                                                  _c("strong", [
-                                                    _vm._v("Created")
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("td", [_vm._v(":")]),
-                                                _vm._v(" "),
-                                                _c("td", [
-                                                  _vm._v(
-                                                    "\n                                                    " +
-                                                      _vm._s(
-                                                        _vm.mixin_formatDate(
-                                                          item.created
-                                                            .created_at,
-                                                          "YYYY-MM-DD HH:mm:ss"
-                                                        )
-                                                      ) +
-                                                      "\n                                                "
-                                                  )
-                                                ])
-                                              ]),
-                                              _vm._v(" "),
-                                              item.deleted
-                                                ? _c("tr", [
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    mdi-eye\n                                "
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "expanded-item",
+                                      fn: function(ref) {
+                                        var headers = ref.headers
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "td",
+                                            {
+                                              attrs: { colspan: headers.length }
+                                            },
+                                            [
+                                              _c("v-container", [
+                                                _c("table", [
+                                                  _c("tr", [
                                                     _c("td", [
                                                       _c("strong", [
-                                                        _vm._v("Cancelled")
+                                                        _vm._v("Reimbursable")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            _vm.mixin_formatNumber(
+                                                              item.reimbursable_amount
+                                                            )
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Code")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(_vm._s(item.code))
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Description")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            item.description
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Remarks")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        _vm._s(item.remarks)
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Created")
                                                       ])
                                                     ]),
                                                     _vm._v(" "),
@@ -984,418 +1043,464 @@ var render = function() {
                                                         "\n                                                    " +
                                                           _vm._s(
                                                             _vm.mixin_formatDate(
-                                                              item.deleted
-                                                                .deleted_at,
+                                                              item.created
+                                                                .created_at,
                                                               "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                           ) +
                                                           "\n                                                "
                                                       )
                                                     ])
-                                                  ])
-                                                : _vm._e()
-                                            ])
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ]
-                                  }
-                                }
-                              ],
-                              null,
-                              true
-                            )
-                          })
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  item.deleted
+                                                    ? _c("tr", [
+                                                        _c("td", [
+                                                          _c("strong", [
+                                                            _vm._v("Cancelled")
+                                                          ])
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [_vm._v(":")]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            "\n                                                    " +
+                                                              _vm._s(
+                                                                _vm.mixin_formatDate(
+                                                                  item.deleted
+                                                                    .deleted_at,
+                                                                  "YYYY-MM-DD HH:mm:ss"
+                                                                )
+                                                              ) +
+                                                              "\n                                                "
+                                                          )
+                                                        ])
+                                                      ])
+                                                    : _vm._e()
+                                                ])
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              })
+                            ],
+                            1
+                          )
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                        _c("div", [
-                          _vm._v("Remarks : " + _vm._s(_vm.form.remarks))
-                        ])
-                      ]),
+                      ),
                       _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _c("table", { attrs: { width: "100%" } }, [
-                          _c("tbody", [
-                            _c("tr", [
-                              _c("td", [
-                                _vm._v(
-                                  "\n                                        Total Expense Amount\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.form.total)
-                                      ) +
-                                      "\n                                    "
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _c("div", [
+                              _vm._v("Remarks : " + _vm._s(_vm.form.remarks))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c("table", { attrs: { width: "100%" } }, [
+                              _c("tbody", [
+                                _c("tr", [
+                                  _c("td", [
+                                    _vm._v(
+                                      "\n                                        Total Expense Amount\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.form.total
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("td", [
-                                _vm._v(
-                                  "\n                                        Paid Amount\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        (-) " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.form.paid)
-                                      ) +
-                                      "\n                                    "
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("td", [
+                                    _vm._v(
+                                      "\n                                        Paid Amount\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        (-) " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.form.paid
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c(
-                                "td",
-                                { attrs: { colspan: "3" } },
-                                [_c("v-divider")],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("th", { staticClass: "text-left" }, [
-                                _vm._v(
-                                  "\n                                        Amount to be reimbursed\n                                    "
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c(
+                                    "td",
+                                    { attrs: { colspan: "3" } },
+                                    [_c("v-divider")],
+                                    1
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("th", { staticClass: "text-left" }, [
+                                    _vm._v(
+                                      "\n                                        Amount to be reimbursed\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.form.balance
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider", { staticClass: "mb-4" }),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _vm._v(
+                              "\n                        Notes : " +
+                                _vm._s(_vm.form.notes) +
+                                "\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c(
+                              "div",
+                              { staticClass: "text-right" },
+                              [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      color: "green",
+                                      dark: "",
+                                      to: {
+                                        name: "admin.expense_reports.detailed"
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                View Detailed\n                            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      color: "green",
+                                      dark: "",
+                                      to: {
+                                        name: "admin.expense_reports.summary"
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                View Summary\n                            "
+                                    )
+                                  ]
                                 )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
+                              ],
+                              1
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider", { staticClass: "mb-4" }),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        { staticClass: "text--secondary text-caption" },
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "5" } }, [
+                            _c("div", [_vm._v("Other Details :")]),
+                            _vm._v(" "),
+                            _c(
+                              "table",
+                              {
+                                staticClass: "table",
+                                attrs: { width: "100%" }
+                              },
+                              [
+                                _c("tbody", [
+                                  _vm.form.created
+                                    ? _c("tr", [
+                                        _c("td", [_vm._v("Created By")]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v(":")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.form.created.created_by.name
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  _vm.form.created.created_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ])
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.form.submitted
+                                    ? _c("tr", [
+                                        _c("td", [_vm._v("Submitted By")]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v(":")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.form.submitted.submitted_by
+                                                  .name
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  _vm.form.submitted
+                                                    .submitted_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ])
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.form.approved
+                                    ? _c("tr", [
+                                        _c("td", [_vm._v("Approved By")]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v(":")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.form.approved.approved_by
+                                                  .name
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  _vm.form.approved.approved_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ])
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.form.rejected
+                                    ? _c("tr", [
+                                        _c("td", [_vm._v("Rejected By")]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v(":")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.form.rejected.rejected_by
+                                                  .name
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  _vm.form.rejected.rejected_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ])
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.form.deleted
+                                    ? _c("tr", [
+                                        _c("td", [_vm._v("Cancelled By")]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v(":")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.form.deleted.deleted_by.name
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  _vm.form.deleted.deleted_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ])
+                                      ])
+                                    : _vm._e()
+                                ])
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "7" } }, [
+                            _c("div", [_vm._v("History :")]),
+                            _vm._v(" "),
+                            _c("div", [
                               _c(
-                                "td",
+                                "table",
                                 {
-                                  staticClass:
-                                    "green--text text--darken-4 text-right"
+                                  staticClass: "table",
+                                  attrs: { width: "100%" }
                                 },
                                 [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.form.balance)
-                                      ) +
-                                      "\n                                    "
+                                  _c(
+                                    "tbody",
+                                    _vm._l(_vm.form.logs, function(item) {
+                                      return _c("tr", { key: item.id }, [
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  item.created_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(item.causer.name))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(item.description))
+                                        ])
+                                      ])
+                                    }),
+                                    0
                                   )
                                 ]
                               )
                             ])
                           ])
-                        ])
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider", { staticClass: "mb-4" }),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                        _vm._v(
-                          "\n                        Notes : " +
-                            _vm._s(_vm.form.notes) +
-                            "\n                    "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _c(
-                          "div",
-                          { staticClass: "text-right" },
-                          [
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "green",
-                                  dark: "",
-                                  to: {
-                                    name: "admin.expense_reports.detailed"
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                View Detailed\n                            "
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "green",
-                                  dark: "",
-                                  to: {
-                                    name: "admin.expense_reports.summary"
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                View Summary\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider", { staticClass: "mb-4" }),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    { staticClass: "text--secondary text-caption" },
-                    [
-                      _c("v-col", { attrs: { cols: "12", md: "5" } }, [
-                        _c("div", [_vm._v("Other Details :")]),
-                        _vm._v(" "),
-                        _c(
-                          "table",
-                          { staticClass: "table", attrs: { width: "100%" } },
-                          [
-                            _c("tbody", [
-                              _vm.form.created
-                                ? _c("tr", [
-                                    _c("td", [_vm._v("Created By")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(":")]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.form.created.created_by.name
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              _vm.form.created.created_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ])
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.form.submitted
-                                ? _c("tr", [
-                                    _c("td", [_vm._v("Submitted By")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(":")]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.form.submitted.submitted_by.name
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              _vm.form.submitted.submitted_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ])
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.form.approved
-                                ? _c("tr", [
-                                    _c("td", [_vm._v("Approved By")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(":")]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.form.approved.approved_by.name
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              _vm.form.approved.approved_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ])
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.form.rejected
-                                ? _c("tr", [
-                                    _c("td", [_vm._v("Rejected By")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(":")]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.form.rejected.rejected_by.name
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              _vm.form.rejected.rejected_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ])
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.form.deleted
-                                ? _c("tr", [
-                                    _c("td", [_vm._v("Cancelled By")]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(":")]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.form.deleted.deleted_by.name
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              _vm.form.deleted.deleted_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ])
-                                  ])
-                                : _vm._e()
-                            ])
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "7" } }, [
-                        _c("div", [_vm._v("History :")]),
-                        _vm._v(" "),
-                        _c("div", [
-                          _c(
-                            "table",
-                            { staticClass: "table", attrs: { width: "100%" } },
-                            [
-                              _c(
-                                "tbody",
-                                _vm._l(_vm.form.logs, function(item) {
-                                  return _c("tr", { key: item.id }, [
-                                    _c("td", [
-                                      _vm._v(
-                                        "\n                                            " +
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              item.created_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          ) +
-                                          "\n                                        "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(_vm._s(item.causer.name))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.description))])
-                                  ])
-                                }),
-                                0
-                              )
-                            ]
-                          )
-                        ])
-                      ])
+                        ],
+                        1
+                      )
                     ],
                     1
                   )
@@ -1405,9 +1510,6 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

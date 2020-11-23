@@ -54,7 +54,7 @@ class ExpenseResource extends JsonResource
             // 'expense_report_id' => $this->expense_report_id,
             
             'details' => $this->details == null ? null : json_decode($this->details),
-            'status' => $this->getStatusAttribute(),
+            'status' => $this->status,
 
             'is_tax_inclusive' => $this->is_tax_inclusive,
             'tax_name' => $this->tax_name,
@@ -65,22 +65,18 @@ class ExpenseResource extends JsonResource
             'vendor' => $this->vendor()->withTrashed()->first(),
             // 'employee' => new EmployeeResource($this->employee),
             // 'expense_type' => new ExpenseTypeResource($this->expense_type),
-            'employee' => $this->employee()->withTrashed()->first(),
-            'expense_type' => $this->expense_type()->withTrashed()->first(),
+            'employee' => $this->employee()->withTrashed()->with('expense_types.sub_types')->first(),
+            'expense_type' => $this->expense_type()->withTrashed()->with('sub_types')->first(),
             'expense_report' => $this->expense_report()->withTrashed()->first(),
 
-            // 'created_at' => $this->created_at,
-            // 'updated_at' => $this->updated_at,
-            // 'deleted_at' => $this->deleted_at,  
-
-            'created' => $this->getCreatedInfoAttribute(),
-            'updated' => $this->getUpdatedInfoAttribute(),
-            'deleted' => $this->getDeletedInfoAttribute(),
-            'submitted' => $this->getSubmittedInfoAttribute(),
-            'reviewed' => $this->getReviewedInfoAttribute(),
-            'approved' => $this->getApprovedInfoAttribute(),
-            'rejected' => $this->getRejectedInfoAttribute(),
-            'cancelled' => $this->getCancelledInfoAttribute(),
+            'created' => $this->created_info,
+            'updated' => $this->updated_info,
+            'deleted' => $this->deleted_info,
+            'submitted' => $this->submitted_info,
+            'reviewed' => $this->reviewed_info,
+            'approved' => $this->approved_info,
+            'rejected' => $this->rejected_info,
+            'cancelled' => $this->cancelled_info,
 
             'logs' => $logs
         ];

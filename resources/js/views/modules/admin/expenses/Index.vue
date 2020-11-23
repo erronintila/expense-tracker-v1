@@ -503,7 +503,7 @@ export default {
                 },
                 {
                     text: "Employee",
-                    value: "employee.fullname",
+                    value: "employee.full_name",
                     sortable: false
                 },
                 { text: "Amount", value: "amount" },
@@ -583,6 +583,8 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+
+                        console.log(items);
 
                         _this.loading = false;
 

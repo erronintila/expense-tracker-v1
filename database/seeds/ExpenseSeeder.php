@@ -13,7 +13,7 @@ class ExpenseSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Expense::class, 100)->create();
+        factory(\App\Models\Expense::class, 10)->create();
 
         // $expense_details = [];
 

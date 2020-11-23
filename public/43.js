@@ -502,7 +502,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortable: false
       }, {
         text: "Employee",
-        value: "employee.fullname",
+        value: "employee.full_name",
         sortable: false
       }, {
         text: "Amount",
@@ -586,6 +586,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          console.log(items);
           _this.loading = false;
           resolve({
             items: items,

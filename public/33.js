@@ -262,6 +262,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -271,6 +286,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      loader: false,
       valid: false,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
@@ -382,6 +398,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (_this.$refs.form.validate()) {
+        _this.loader = true;
         axios.post("/api/expense_reports", {
           code: _this.form.code,
           description: _this.form.description,
@@ -449,362 +466,390 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      _vm.loader
+        ? _c(
+            "v-container",
+            { staticStyle: { height: "400px" } },
             [
               _c(
-                "v-btn",
+                "v-row",
                 {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
+                  staticClass: "fill-height",
+                  attrs: { "align-content": "center", justify: "center" }
                 },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                [
+                  _c(
+                    "v-col",
+                    {
+                      staticClass: "subtitle-1 text-center",
+                      attrs: { cols: "12" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                Loading, Please wait...\n            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [
+                      _c("v-progress-linear", {
+                        attrs: {
+                          color: "green accent-4",
+                          indeterminate: "",
+                          rounded: "",
+                          height: "6"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("New Expense Report")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("New Expense Report")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-form",
-            {
-              ref: "form",
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
-              }
-            },
-            [
               _c(
-                "v-container",
+                "v-form",
+                {
+                  ref: "form",
+                  model: {
+                    value: _vm.valid,
+                    callback: function($$v) {
+                      _vm.valid = $$v
+                    },
+                    expression: "valid"
+                  }
+                },
                 [
-                  _c("v-row", [_c("v-spacer")], 1),
-                  _vm._v(" "),
                   _c(
-                    "v-row",
+                    "v-container",
                     [
+                      _c("v-row", [_c("v-spacer")], 1),
+                      _vm._v(" "),
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        "v-row",
                         [
-                          _c("v-autocomplete", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required,
-                              items: _vm.employees,
-                              "error-messages": _vm.errors.employee,
-                              "item-value": "id",
-                              "item-text": "fullname",
-                              label: "Employee *",
-                              required: "",
-                              "return-object": ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.employee = []
-                              },
-                              change: _vm.loadExpenses
-                            },
-                            model: {
-                              value: _vm.form.employee,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "employee", $$v)
-                              },
-                              expression: "form.employee"
-                            }
-                          })
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-autocomplete", {
+                                attrs: {
+                                  rules: _vm.mixin_validation.required,
+                                  items: _vm.employees,
+                                  "error-messages": _vm.errors.employee,
+                                  "item-value": "id",
+                                  "item-text": "full_name",
+                                  label: "Employee *",
+                                  required: "",
+                                  "return-object": ""
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.employee = []
+                                  },
+                                  change: _vm.loadExpenses
+                                },
+                                model: {
+                                  value: _vm.form.employee,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "employee", $$v)
+                                  },
+                                  expression: "form.employee"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "8" } },
+                            [
+                              _c("v-combobox", {
+                                attrs: {
+                                  rules: _vm.mixin_validation.required.concat(
+                                    _vm.mixin_validation.minLength(100)
+                                  ),
+                                  counter: 100,
+                                  items: [_vm.default_description],
+                                  "error-messages": _vm.errors.description,
+                                  label: "Description *"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.description = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.description,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "description", $$v)
+                                  },
+                                  expression: "form.description"
+                                }
+                              })
+                            ],
+                            1
+                          )
                         ],
                         1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "8" } },
-                        [
-                          _c("v-combobox", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.minLength(100)
-                              ),
-                              counter: 100,
-                              items: [_vm.default_description],
-                              "error-messages": _vm.errors.description,
-                              label: "Description *"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.description = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.description,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "description", $$v)
-                              },
-                              expression: "form.description"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12" } },
+                        "v-row",
                         [
                           _c(
-                            "v-data-table",
-                            {
-                              staticClass: "elevation-0",
-                              attrs: {
-                                elevation: "0",
-                                headers: _vm.headers,
-                                items: _vm.items,
-                                "items-per-page": 5,
-                                "item-key": "id",
-                                "show-select": "",
-                                "show-expand": "",
-                                "single-expand": ""
-                              },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "item.actions",
-                                    fn: function(ref) {
-                                      var item = ref.item
-                                      return [
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            staticClass: "mr-2",
-                                            attrs: { small: "" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.$router.push(
-                                                  "/admin/expenses/" + item.id
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                    mdi-eye\n                                "
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            staticClass: "mr-2",
-                                            attrs: { small: "" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.$router.push(
-                                                  "/admin/expenses/" +
-                                                    item.id +
-                                                    "/edit"
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                    mdi-pencil\n                                "
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    }
+                            "v-col",
+                            { attrs: { cols: "12" } },
+                            [
+                              _c(
+                                "v-data-table",
+                                {
+                                  staticClass: "elevation-0",
+                                  attrs: {
+                                    elevation: "0",
+                                    headers: _vm.headers,
+                                    items: _vm.items,
+                                    "items-per-page": 5,
+                                    "item-key": "id",
+                                    "show-select": "",
+                                    "show-expand": "",
+                                    "single-expand": ""
                                   },
-                                  {
-                                    key: "top",
-                                    fn: function() {
-                                      return [
-                                        _c(
-                                          "v-row",
-                                          [
-                                            _vm._v(
-                                              "\n                                    Expenses\n\n                                    "
-                                            ),
-                                            _c("v-spacer"),
-                                            _vm._v(" "),
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "item.actions",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          return [
                                             _c(
-                                              "v-btn",
+                                              "v-icon",
                                               {
                                                 staticClass: "mr-2",
-                                                attrs: {
-                                                  to: {
-                                                    name:
-                                                      "admin.expenses.create"
+                                                attrs: { small: "" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.$router.push(
+                                                      "/admin/expenses/" +
+                                                        item.id
+                                                    )
                                                   }
                                                 }
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                        New Item\n                                    "
+                                                  "\n                                    mdi-eye\n                                "
                                                 )
                                               ]
                                             ),
                                             _vm._v(" "),
-                                            _c("DateRangePicker", {
-                                              attrs: {
-                                                preset: _vm.preset,
-                                                presets: _vm.presets,
-                                                value: _vm.date_range,
-                                                solo: true,
-                                                buttonType: true,
-                                                buttonColor: "white",
-                                                buttonDark: false
+                                            _c(
+                                              "v-icon",
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: { small: "" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.$router.push(
+                                                      "/admin/expenses/" +
+                                                        item.id +
+                                                        "/edit"
+                                                    )
+                                                  }
+                                                }
                                               },
-                                              on: {
-                                                updateDates: _vm.updateDates
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    },
-                                    proxy: true
-                                  },
-                                  {
-                                    key: "expanded-item",
-                                    fn: function(ref) {
-                                      var headers = ref.headers
-                                      var item = ref.item
-                                      return [
-                                        _c(
-                                          "td",
-                                          {
-                                            attrs: { colspan: headers.length }
-                                          },
-                                          [
-                                            _c("v-container", [
-                                              _c("table", [
-                                                _c("tr", [
-                                                  _c("td", [
-                                                    _c("strong", [
-                                                      _vm._v("Reimbursable")
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [_vm._v(":")]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
+                                              [
+                                                _vm._v(
+                                                  "\n                                    mdi-pencil\n                                "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        key: "top",
+                                        fn: function() {
+                                          return [
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _vm._v(
+                                                  "\n                                    Expenses\n\n                                    "
+                                                ),
+                                                _c("v-spacer"),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    staticClass: "mr-2",
+                                                    attrs: {
+                                                      to: {
+                                                        name:
+                                                          "admin.expenses.create"
+                                                      }
+                                                    }
+                                                  },
+                                                  [
                                                     _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(
-                                                          _vm.mixin_formatNumber(
-                                                            item.reimbursable_amount
-                                                          )
-                                                        ) +
-                                                        "\n                                                "
+                                                      "\n                                        New Item\n                                    "
                                                     )
-                                                  ])
-                                                ]),
+                                                  ]
+                                                ),
                                                 _vm._v(" "),
-                                                _c("tr", [
-                                                  _c("td", [
-                                                    _c("strong", [
-                                                      _vm._v("Code")
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [_vm._v(":")]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(_vm._s(item.code))
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("tr", [
-                                                  _c("td", [
-                                                    _c("strong", [
-                                                      _vm._v("Description")
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [_vm._v(":")]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(
-                                                          item.description
-                                                        ) +
-                                                        "\n                                                "
-                                                    )
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("tr", [
-                                                  _c("td", [
-                                                    _c("strong", [
-                                                      _vm._v("Remarks")
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [_vm._v(":")]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(_vm._s(item.remarks))
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("tr", [
-                                                  _c("td", [
-                                                    _c("strong", [
-                                                      _vm._v("Created")
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [_vm._v(":")]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(
-                                                          _vm.mixin_formatDate(
-                                                            item.created
-                                                              .created_at,
-                                                            "YYYY-MM-DD HH:mm:ss"
-                                                          )
-                                                        ) +
-                                                        "\n                                                "
-                                                    )
-                                                  ])
-                                                ]),
-                                                _vm._v(" "),
-                                                item.deleted
-                                                  ? _c("tr", [
+                                                _c("DateRangePicker", {
+                                                  attrs: {
+                                                    preset: _vm.preset,
+                                                    presets: _vm.presets,
+                                                    value: _vm.date_range,
+                                                    solo: true,
+                                                    buttonType: true,
+                                                    buttonColor: "white",
+                                                    buttonDark: false
+                                                  },
+                                                  on: {
+                                                    updateDates: _vm.updateDates
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        },
+                                        proxy: true
+                                      },
+                                      {
+                                        key: "expanded-item",
+                                        fn: function(ref) {
+                                          var headers = ref.headers
+                                          var item = ref.item
+                                          return [
+                                            _c(
+                                              "td",
+                                              {
+                                                attrs: {
+                                                  colspan: headers.length
+                                                }
+                                              },
+                                              [
+                                                _c("v-container", [
+                                                  _c("table", [
+                                                    _c("tr", [
                                                       _c("td", [
                                                         _c("strong", [
-                                                          _vm._v("Cancelled")
+                                                          _vm._v("Reimbursable")
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          "\n                                                    " +
+                                                            _vm._s(
+                                                              _vm.mixin_formatNumber(
+                                                                item.reimbursable_amount
+                                                              )
+                                                            ) +
+                                                            "\n                                                "
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v("Code")
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          _vm._s(item.code)
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v("Description")
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          "\n                                                    " +
+                                                            _vm._s(
+                                                              item.description
+                                                            ) +
+                                                            "\n                                                "
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v("Remarks")
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          _vm._s(item.remarks)
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v("Created")
                                                         ])
                                                       ]),
                                                       _vm._v(" "),
@@ -815,155 +860,187 @@ var render = function() {
                                                           "\n                                                    " +
                                                             _vm._s(
                                                               _vm.mixin_formatDate(
-                                                                item.deleted
-                                                                  .deleted_at,
+                                                                item.created
+                                                                  .created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                               )
                                                             ) +
                                                             "\n                                                "
                                                         )
                                                       ])
-                                                    ])
-                                                  : _vm._e()
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    item.deleted
+                                                      ? _c("tr", [
+                                                          _c("td", [
+                                                            _c("strong", [
+                                                              _vm._v(
+                                                                "Cancelled"
+                                                              )
+                                                            ])
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _vm._v(":")
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _vm._v(
+                                                              "\n                                                    " +
+                                                                _vm._s(
+                                                                  _vm.mixin_formatDate(
+                                                                    item.deleted
+                                                                      .deleted_at,
+                                                                    "YYYY-MM-DD HH:mm:ss"
+                                                                  )
+                                                                ) +
+                                                                "\n                                                "
+                                                            )
+                                                          ])
+                                                        ])
+                                                      : _vm._e()
+                                                  ])
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    true
+                                  ),
+                                  model: {
+                                    value: _vm.selected,
+                                    callback: function($$v) {
+                                      _vm.selected = $$v
+                                    },
+                                    expression: "selected"
+                                  }
+                                },
+                                [
+                                  _vm.items.length > 0
+                                    ? _c("template", { slot: "body.append" }, [
+                                        _c(
+                                          "tr",
+                                          {
+                                            staticClass:
+                                              "green--text hidden-md-and-up"
+                                          },
+                                          [
+                                            _c("td", { staticClass: "title" }, [
+                                              _vm._v(
+                                                "\n                                        Total:\n                                        "
+                                              ),
+                                              _c("strong", [
+                                                _vm._v(_vm._s(_vm.total))
                                               ])
                                             ])
-                                          ],
-                                          1
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "tr",
+                                          {
+                                            staticClass:
+                                              "green--text hidden-sm-and-down"
+                                          },
+                                          [
+                                            _c("td", { staticClass: "title" }, [
+                                              _vm._v("Total")
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _c("strong", [
+                                                _vm._v(_vm._s(_vm.total))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td")
+                                          ]
                                         )
-                                      ]
-                                    }
-                                  }
+                                      ])
+                                    : _vm._e()
                                 ],
-                                null,
-                                true
-                              ),
-                              model: {
-                                value: _vm.selected,
-                                callback: function($$v) {
-                                  _vm.selected = $$v
-                                },
-                                expression: "selected"
-                              }
-                            },
-                            [
-                              _vm.items.length > 0
-                                ? _c("template", { slot: "body.append" }, [
-                                    _c(
-                                      "tr",
-                                      {
-                                        staticClass:
-                                          "green--text hidden-md-and-up"
-                                      },
-                                      [
-                                        _c("td", { staticClass: "title" }, [
-                                          _vm._v(
-                                            "\n                                        Total:\n                                        "
-                                          ),
-                                          _c("strong", [
-                                            _vm._v(_vm._s(_vm.total))
-                                          ])
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "tr",
-                                      {
-                                        staticClass:
-                                          "green--text hidden-sm-and-down"
-                                      },
-                                      [
-                                        _c("td", { staticClass: "title" }, [
-                                          _vm._v("Total")
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td"),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _c("strong", [
-                                            _vm._v(_vm._s(_vm.total))
-                                          ])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td")
-                                      ]
-                                    )
-                                  ])
-                                : _vm._e()
+                                2
+                              )
                             ],
-                            2
+                            1
                           )
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "6" } },
-                        [
-                          _c("v-textarea", {
-                            attrs: {
-                              label: "Remarks",
-                              rules: [],
-                              rows: _vm.form.remarks == "" ? 1 : 2
-                            },
-                            model: {
-                              value: _vm.form.remarks,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "remarks", $$v)
-                              },
-                              expression: "form.remarks"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "green", dark: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [_vm._v("Save")]
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.$router.go(-1)
-                            }
-                          }
-                        },
+                        "v-row",
                         [
-                          _vm._v(
-                            "\n                        Cancel\n                    "
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("v-textarea", {
+                                attrs: {
+                                  label: "Remarks",
+                                  rules: [],
+                                  rows: _vm.form.remarks == "" ? 1 : 2
+                                },
+                                model: {
+                                  value: _vm.form.remarks,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "remarks", $$v)
+                                  },
+                                  expression: "form.remarks"
+                                }
+                              })
+                            ],
+                            1
                           )
-                        ]
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "green", dark: "" },
+                              on: { click: _vm.onSave }
+                            },
+                            [_vm._v("Save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.$router.go(-1)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Cancel\n                    "
+                              )
+                            ]
+                          )
+                        ],
+                        1
                       )
                     ],
                     1
@@ -974,9 +1051,6 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

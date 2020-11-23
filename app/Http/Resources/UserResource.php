@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +17,8 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
+        $employee = $this->employee()->withTrashed()->first();
+        $employee = Employee::withTrashed()->where('id', $employee->id)->with("job.department")->first();
 
         return [
             'id' => $this->id,
@@ -27,7 +30,7 @@ class UserResource extends JsonResource
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
             // 'employee' => new EmployeeResource($this->employee),
-            'employee' => $this->employee,
+            'employee' => $employee,
             'role' => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
             'permissions' => $this->getAllPermissions()->pluck("name"),
         ];

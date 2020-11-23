@@ -59,7 +59,22 @@ class Expense extends Model
      *
      * @var array
      */
-    protected $appends = ['status'];
+    protected $appends = [
+        'status', 
+        'reimbursed_info', 
+        'cancelled_info', 
+        'rejected_info', 
+        'approved_info', 
+        'reviewed_info', 
+        'submitted_info',
+        'deleted_info',
+        'updated_info',
+        'created_info',
+        'balance',
+        'formatted_date',
+        'formatted_amount',
+        'expiry_date'
+    ];
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -546,7 +561,7 @@ class Expense extends Model
         $expense_report = $this->expense_report;
 
         if ($expense_report && $expense_report->getBalanceAttribute() == 0 && $expense_report->getReceivedPaymentAmountAttribute() > 0) {
-        // if ($expense_report && $expense_report->getBalanceAttribute() == 0) {
+            // if ($expense_report && $expense_report->getBalanceAttribute() == 0) {
             return [
                 "reference" => $expense_report->payments()->pluck("code"),
             ];

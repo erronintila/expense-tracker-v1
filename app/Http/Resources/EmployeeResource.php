@@ -43,10 +43,10 @@ class EmployeeResource extends JsonResource
             'role' => $user->is_admin ? ["Administrator"] : $user->getRoleNames(),
             'permissions' => $user->getAllPermissions(),
             // 'expense_types' => ExpenseTypeResource::collection($this->expense_types),
-            'expense_types' => $this->expense_types,
+            'expense_types' => $this->expense_types()->withTrashed()->with('sub_types')->get(),
 
-            'pivot_expense_types' => $this->expense_types,
-            'pivot_sub_types' => $this->sub_types,
+            'pivot_expense_types' => $this->expense_types()->withTrashed()->with('sub_types')->get(),
+            'pivot_sub_types' => $this->sub_types()->withTrashed()->get(),
         ];
     }
 }
