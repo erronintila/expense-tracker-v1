@@ -455,8 +455,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1043,8 +1041,7 @@ var render = function() {
                                                         "\n                                                    " +
                                                           _vm._s(
                                                             _vm.mixin_formatDate(
-                                                              item.created
-                                                                .created_at,
+                                                              item.created_at,
                                                               "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                           ) +
@@ -1053,7 +1050,7 @@ var render = function() {
                                                     ])
                                                   ]),
                                                   _vm._v(" "),
-                                                  item.deleted
+                                                  item.deleted_at
                                                     ? _c("tr", [
                                                         _c("td", [
                                                           _c("strong", [
@@ -1068,8 +1065,7 @@ var render = function() {
                                                             "\n                                                    " +
                                                               _vm._s(
                                                                 _vm.mixin_formatDate(
-                                                                  item.deleted
-                                                                    .deleted_at,
+                                                                  item.deleted_at,
                                                                   "YYYY-MM-DD HH:mm:ss"
                                                                 )
                                                               ) +
@@ -1484,7 +1480,13 @@ var render = function() {
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [
-                                          _vm._v(_vm._s(item.causer.name))
+                                          _vm._v(
+                                            _vm._s(
+                                              item.causer == null
+                                                ? "System"
+                                                : item.causer.name
+                                            )
+                                          )
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [

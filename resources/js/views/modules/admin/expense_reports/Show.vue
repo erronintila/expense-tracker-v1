@@ -170,14 +170,13 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.created
-                                                                    .created_at,
+                                                                item.created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
                                                     </td>
                                                 </tr>
-                                                <tr v-if="item.deleted">
+                                                <tr v-if="item.deleted_at">
                                                     <td>
                                                         <strong
                                                             >Cancelled</strong
@@ -187,8 +186,7 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.deleted
-                                                                    .deleted_at,
+                                                                item.deleted_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -399,7 +397,7 @@
                                                     )
                                                 }}
                                             </td>
-                                            <td>{{ item.causer.name }}</td>
+                                            <td>{{ item.causer == null ? 'System' : item.causer.name }}</td>
                                             <td>{{ item.description }}</td>
                                         </tr>
                                     </tbody>

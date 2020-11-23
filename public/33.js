@@ -575,7 +575,7 @@ var render = function() {
                                   items: _vm.employees,
                                   "error-messages": _vm.errors.employee,
                                   "item-value": "id",
-                                  "item-text": "full_name",
+                                  "item-text": "fullname",
                                   label: "Employee *",
                                   required: "",
                                   "return-object": ""

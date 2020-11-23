@@ -56,8 +56,8 @@ class ExpenseReportResource extends JsonResource
             // 'employee' => new EmployeeResource($this->employee()->withTrashed()->first()),
             // 'expenses' => ExpenseResource::collection($this->expenses()->withTrashed()->get()),
 
-            'employee' => $this->employee()->withTrashed()->first(),
-            'expenses' => $this->expenses()->withTrashed()->get(),
+            'employee' => $this->employee()->withTrashed()->with('job.department')->first(),
+            'expenses' => $this->expenses()->withTrashed()->with('expense_type.sub_types')->with('vendor')->get(),
 
             'created' => $this->getCreatedInfoAttribute(),
             'updated' => $this->getUpdatedInfoAttribute(),

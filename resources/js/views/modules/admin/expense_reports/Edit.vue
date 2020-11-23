@@ -42,7 +42,7 @@
                                 @input="errors.employee = []"
                                 @change="loadExpenses"
                                 item-value="id"
-                                item-text="full_name"
+                                item-text="fullname"
                                 label="Employee *"
                                 required
                                 return-object
