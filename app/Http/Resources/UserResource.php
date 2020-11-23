@@ -18,7 +18,7 @@ class UserResource extends JsonResource
     {
         // return parent::toArray($request);
         $employee = $this->employee()->withTrashed()->first();
-        $employee = Employee::withTrashed()->where('id', $employee->id)->with("job.department")->first();
+        $employee = Employee::withTrashed()->where('id', $employee->id ?? 0)->with("job.department")->first();
 
         return [
             'id' => $this->id,

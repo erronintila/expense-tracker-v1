@@ -14,7 +14,7 @@ const routes = baseRoutes.concat(
     authRoutes,
     adminRoutes,
     userRoutes,
-    // errorRoutes
+    errorRoutes
 );
 
 export const router = new VueRouter({

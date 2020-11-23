@@ -82,8 +82,6 @@
                                 elevation="0"
                                 :headers="headers"
                                 :items="form.expenses"
-                                :hide-default-footer="true"
-                                disable-pagination
                                 item-key="id"
                                 single-expand
                                 show-expand

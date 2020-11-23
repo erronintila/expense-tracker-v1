@@ -229,9 +229,14 @@ class ExpenseReport extends Model
         }
 
         if (!$paid) {
-            if ($this->getBalanceAttribute() == 0) {
-                if ($this->getReceivedPaymentAmountAttribute() > 0) {
-                // if (true) {
+            // if ($this->getBalanceAttribute() == 0) {
+            // $arr = [
+            //     'color' => 'green',
+            //     'remarks' => 'Payment transaction was completed',
+            //     'status' => 'Reimbursed',
+            // ];
+            if ($this->getReceivedPaymentAmountAttribute() > 0) {
+                if ($this->getBalanceAttribute() == 0) {
                     $arr = [
                         'color' => 'green',
                         'remarks' => 'Payment transaction was completed',
@@ -239,18 +244,40 @@ class ExpenseReport extends Model
                     ];
                 } else {
                     $arr = [
-                        'color' => 'cyan',
-                        'remarks' => 'Processing Payment',
-                        'status' => 'Approved',
+                        'color' => 'orange',
+                        'remarks' => 'Expense Report has not been fully paid',
+                        'status' => 'Incomplete Payment',
                     ];
                 }
             } else {
                 $arr = [
-                    'color' => 'cyan',
-                    'remarks' => 'Processing Payment',
-                    'status' => 'Approved',
+                    'color' => 'orange',
+                    'remarks' => 'Payment waiting to be received',
+                    'status' => 'Released Payment',
                 ];
             }
+            // if ($this->getBalanceAttribute() == 0) {
+            //     if ($this->getReceivedPaymentAmountAttribute() > 0) {
+            //     // if (true) {
+            //         $arr = [
+            //             'color' => 'green',
+            //             'remarks' => 'Payment transaction was completed',
+            //             'status' => 'Reimbursed',
+            //         ];
+            //     } else {
+            //         $arr = [
+            //             'color' => 'cyan',
+            //             'remarks' => 'Processing Payment',
+            //             'status' => 'Approved',
+            //         ];
+            //     }
+            // } else {
+            //     $arr = [
+            //         'color' => 'cyan',
+            //         'remarks' => 'Processing Payment',
+            //         'status' => 'Approved',
+            //     ];
+            // }
             
             // switch ($this->payment->getStatus()["status"]) {
             //     case 'Completed':
@@ -550,9 +577,7 @@ class ExpenseReport extends Model
      */
     public function getReimbursedInfoAttribute()
     {
-        $expense_report = $this->expense_report;
-
-        if ($this && $this->getBalanceAttribute() == 0) {
+        if ($this->getReceivedPaymentAmountAttribute() > 0) {
             return [
                 "payments" => $this->payments
             ];

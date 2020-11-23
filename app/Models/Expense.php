@@ -253,11 +253,35 @@ class Expense extends Model
         }
 
         if (!$paid) {
-            $arr = [
-                'color' => 'green',
-                'remarks' => 'Expense was paid/reimbursed',
-                'status' => 'Reimbursed',
-            ];
+            // $arr = [
+            //     'color' => 'green',
+            //     'remarks' => 'Expense was paid/reimbursed',
+            //     'status' => 'Reimbursed',
+            // ];
+
+            $expense_report = $this->expense_report;
+
+            if ($expense_report->getReceivedPaymentAmountAttribute() > 0) {
+                if ($expense_report->getBalanceAttribute() == 0) {
+                    $arr = [
+                        'color' => 'green',
+                        'remarks' => 'Payment transaction was completed',
+                        'status' => 'Reimbursed',
+                    ];
+                } else {
+                    $arr = [
+                        'color' => 'orange',
+                        'remarks' => 'Expense Report has not been fully paid',
+                        'status' => 'Incomplete Payment',
+                    ];
+                }
+            } else {
+                $arr = [
+                    'color' => 'orange',
+                    'remarks' => 'Payment waiting to be received',
+                    'status' => 'Released Payment',
+                ];
+            }
 
             return $arr;
         }
@@ -560,10 +584,16 @@ class Expense extends Model
     {
         $expense_report = $this->expense_report;
 
-        if ($expense_report && $expense_report->getBalanceAttribute() == 0 && $expense_report->getReceivedPaymentAmountAttribute() > 0) {
-            // if ($expense_report && $expense_report->getBalanceAttribute() == 0) {
+        // if ($expense_report && $expense_report->getBalanceAttribute() == 0 && $expense_report->getReceivedPaymentAmountAttribute() > 0) {
+        //     // if ($expense_report && $expense_report->getBalanceAttribute() == 0) {
+        //     return [
+        //         "reference" => $expense_report->payments()->pluck("code"),
+        //     ];
+        // }
+
+        if ($expense_report && $this->expense_report->getReceivedPaymentAmountAttribute() > 0) {
             return [
-                "reference" => $expense_report->payments()->pluck("code"),
+                "payments" => $this->payments
             ];
         }
 
