@@ -18,6 +18,19 @@ From, To
 SLOW PERFORMANCE/ SLOW RETRIEVAL OF DATA ON RESOURCE COLLECTION WITH RESOURCE COLLECTION
 
 
+activity logs error
+
+change status of approved expense when there is unreceived pauyment
+
+history payments on show
+
+other datails payments on show
+
+error dashboard on selecting first the category then employee
+
+error dashboard awaiting reimbursement if partial payment
+
+
 
 
 ------------------------------------------------------------------------------------------
