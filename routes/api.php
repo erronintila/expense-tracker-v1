@@ -89,11 +89,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/test', 'API\v1\DataController@test');
 
-    Route::get('/data/print', 'API\v1\DataController@print');
-
     Route::get('/data/users', 'API\v1\DataController@users');
-
-    // Route::get('/data/adjustments', 'API\v1\DataController@adjustments');
 
     Route::get('/data/employees', 'API\v1\DataController@employees');
 
@@ -109,19 +105,33 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/expense_reports', 'API\v1\DataController@expense_reports');
 
-    Route::get('/data/expense_types_expenses_summary', 'API\v1\DataController@expense_types_expenses_summary');
-
-    Route::get('/data/employees_expenses_summary', 'API\v1\DataController@employees_expenses_summary');
-
-    Route::get('/data/departments_expenses_summary', 'API\v1\DataController@departments_expenses_summary');
-
-    Route::get('/data/total_expenses', 'API\v1\DataController@total_expenses');
-
-    Route::get('/data/expenses_summary', 'API\v1\DataController@expenses_summary');
-
-    Route::get('/data/expense_stats', 'API\v1\DataController@expense_stats');
-
     Route::get('/data/permissions', 'API\v1\DataController@permissions');
 
     Route::get('/data/validateFund', 'API\v1\DataController@validateFund');
+    
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | DASHBOARD CONTROLLER ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    Route::get('/data/expense_types_expenses_summary', 'API\v1\DashboardController@expense_types_expenses_summary');
+
+    Route::get('/data/employees_expenses_summary', 'API\v1\DashboardController@employees_expenses_summary');
+
+    Route::get('/data/departments_expenses_summary', 'API\v1\DashboardController@departments_expenses_summary');
+
+    Route::get('/data/total_expenses', 'API\v1\DashboardController@total_expenses');
+
+    Route::get('/data/expense_stats', 'API\v1\DashboardController@expense_stats');
+
+    Route::get('/data/expenses_summary', 'API\v1\DashboardController@expenses_summary');
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | PRINT CONTROLLER ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    Route::get('/data/print', 'API\v1\PrintController@print');
 });

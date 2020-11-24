@@ -196,7 +196,7 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->getReimbursedInfoAttribute());
+        $paid = ($this->payments->count() > 0);
 
         if (!$deleted) {
             $arr = [
@@ -228,13 +228,7 @@ class ExpenseReport extends Model
             return $arr;
         }
 
-        if (!$paid) {
-            // if ($this->getBalanceAttribute() == 0) {
-            // $arr = [
-            //     'color' => 'green',
-            //     'remarks' => 'Payment transaction was completed',
-            //     'status' => 'Reimbursed',
-            // ];
+        if ($paid) {
             if ($this->getReceivedPaymentAmountAttribute() > 0) {
                 if ($this->getBalanceAttribute() == 0) {
                     $arr = [
@@ -244,58 +238,18 @@ class ExpenseReport extends Model
                     ];
                 } else {
                     $arr = [
-                        'color' => 'orange',
+                        'color' => 'blue',
                         'remarks' => 'Expense Report has not been fully paid',
                         'status' => 'Incomplete Payment',
                     ];
                 }
             } else {
                 $arr = [
-                    'color' => 'orange',
+                    'color' => 'blue',
                     'remarks' => 'Payment waiting to be received',
                     'status' => 'Released Payment',
                 ];
             }
-            // if ($this->getBalanceAttribute() == 0) {
-            //     if ($this->getReceivedPaymentAmountAttribute() > 0) {
-            //     // if (true) {
-            //         $arr = [
-            //             'color' => 'green',
-            //             'remarks' => 'Payment transaction was completed',
-            //             'status' => 'Reimbursed',
-            //         ];
-            //     } else {
-            //         $arr = [
-            //             'color' => 'cyan',
-            //             'remarks' => 'Processing Payment',
-            //             'status' => 'Approved',
-            //         ];
-            //     }
-            // } else {
-            //     $arr = [
-            //         'color' => 'cyan',
-            //         'remarks' => 'Processing Payment',
-            //         'status' => 'Approved',
-            //     ];
-            // }
-            
-            // switch ($this->payment->getStatus()["status"]) {
-            //     case 'Completed':
-            //         $arr = [
-            //             'color' => 'green',
-            //             'remarks' => 'Payment transaction was completed',
-            //             'status' => 'Reimbursed',
-            //         ];
-            //         break;
-
-            //     default:
-            //         $arr = [
-            //             'color' => 'cyan',
-            //             'remarks' => 'Processing Payment',
-            //             'status' => 'Approved',
-            //         ];
-            //         break;
-            // }
 
             return $arr;
         }
@@ -432,6 +386,25 @@ class ExpenseReport extends Model
         }
 
         return $sum_received_payment;
+    }
+
+    /**
+     * getReceivedPaymentAmountAttribute
+     *
+     * @return mixed
+     */
+    public function getUnreceivedPaymentAmountAttribute()
+    {
+        $payments = $this->payments()->where("received_at", null)->get();
+        $sum_unreceived_payment = 0;
+
+        // return $payments;
+
+        foreach ($payments as $payment) {
+            $sum_unreceived_payment += $payment->pivot->payment;
+        }
+
+        return $sum_unreceived_payment;
     }
     
     /**
@@ -582,15 +555,6 @@ class ExpenseReport extends Model
                 "payments" => $this->payments
             ];
         }
-
-
-        // $payments = $this->payments->where("received_at", "<>", null);
-
-        // if($payments->count() > 0) {
-        //     return [
-        //         "payments" => $payments
-        //     ];
-        // }
 
         return null;
     }

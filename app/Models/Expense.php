@@ -234,7 +234,7 @@ class Expense extends Model
         $cancelled = is_null($this->getCancelledInfoAttribute());
         $rejected = is_null($this->getRejectedInfoAttribute());
         $deleted = is_null($this->deleted_at);
-        $paid = is_null($this->getReimbursedInfoAttribute());
+        $paid = ($this->expense_report == null ? 0 : $this->expense_report->payments->count() > 0);
 
         if (!$deleted) {
             $arr = [
@@ -252,7 +252,7 @@ class Expense extends Model
             return $arr;
         }
 
-        if (!$paid) {
+        if ($paid) {
             // $arr = [
             //     'color' => 'green',
             //     'remarks' => 'Expense was paid/reimbursed',
@@ -270,14 +270,14 @@ class Expense extends Model
                     ];
                 } else {
                     $arr = [
-                        'color' => 'orange',
+                        'color' => 'blue',
                         'remarks' => 'Expense Report has not been fully paid',
                         'status' => 'Incomplete Payment',
                     ];
                 }
             } else {
                 $arr = [
-                    'color' => 'orange',
+                    'color' => 'blue',
                     'remarks' => 'Payment waiting to be received',
                     'status' => 'Released Payment',
                 ];

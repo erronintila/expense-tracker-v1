@@ -18,8 +18,16 @@ class CreateExpenseTypesTable extends Migration
             $table->string("code")->unique()->nullable();
             $table->string('name', 100)->unique();
             $table->double("limit", 10, 2)->nullable();
+            $table->unsignedBigInteger('expense_type_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
+        });
+
+        Schema::table('expense_types', function (Blueprint $table) {
+            $table->foreign('expense_type_id')
+                ->references('id')
+                ->on('expense_types')
+                ->onDelete('cascade');
         });
     }
 
