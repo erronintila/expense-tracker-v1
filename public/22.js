@@ -110,11 +110,156 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       fab: false,
-      links: ["Dashboard", "Expenses", "Reports"]
+      links: ["Dashboard", "Expenses", "Reports"],
+      itemize: false,
+      headers: [{
+        text: "Dessert (100g serving)",
+        align: "start",
+        sortable: false,
+        value: "name"
+      }, {
+        text: "Calories",
+        value: "calories"
+      }, {
+        text: "Fat (g)",
+        value: "fat"
+      }, {
+        text: "Carbs (g)",
+        value: "carbs"
+      }, {
+        text: "Protein (g)",
+        value: "protein"
+      }, {
+        text: "Iron (%)",
+        value: "iron"
+      }],
+      desserts: [{
+        name: "Frozen Yogurt",
+        calories: 159,
+        fat: 6.0,
+        carbs: 24,
+        protein: 4.0,
+        iron: "1%"
+      }, {
+        name: "Ice cream sandwich",
+        calories: 237,
+        fat: 9.0,
+        carbs: 37,
+        protein: 4.3,
+        iron: "1%"
+      }, {
+        name: "Eclair",
+        calories: 262,
+        fat: 16.0,
+        carbs: 23,
+        protein: 6.0,
+        iron: "7%"
+      }, {
+        name: "Cupcake",
+        calories: 305,
+        fat: 3.7,
+        carbs: 67,
+        protein: 4.3,
+        iron: "8%"
+      }]
     };
   }
 });
@@ -140,168 +285,139 @@ var render = function() {
     "div",
     [
       _c(
-        "v-app-bar",
-        { attrs: { app: "", color: "white", flat: "" } },
-        [
-          _c("v-avatar", {
-            attrs: {
-              color: _vm.$vuetify.breakpoint.smAndDown
-                ? "grey darken-1"
-                : "transparent",
-              size: "32"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "v-tabs",
-            {
-              staticClass: "ml-n9",
-              attrs: { centered: "", color: "grey darken-1" }
-            },
-            _vm._l(_vm.links, function(link) {
-              return _c("v-tab", { key: link }, [
-                _vm._v("\n                " + _vm._s(link) + "\n            ")
-              ])
-            }),
-            1
-          ),
-          _vm._v(" "),
-          _c("v-avatar", {
-            staticClass: "hidden-sm-and-down",
-            attrs: { color: "grey darken-1 shrink", size: "32" }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
         "v-main",
-        { staticClass: "grey lighten-3" },
         [
           _c(
             "v-container",
             [
               _c(
-                "v-row",
+                "v-card",
+                { staticClass: "mx-auto mb-4", attrs: { outlined: "" } },
                 [
                   _c(
-                    "v-col",
+                    "v-list-item",
+                    { attrs: { "three-line": "" } },
                     [
                       _c(
-                        "v-sheet",
-                        { attrs: { "min-height": "70vh", rounded: "lg" } },
+                        "v-list-item-content",
                         [
                           _c(
-                            "v-card",
-                            { attrs: { "min-height": "70vh" } },
+                            "v-list-item-title",
+                            { staticClass: "headline mb-1" },
                             [
+                              _vm._v(
+                                "\n                            Basic Information\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "\n                            Note: Lorem ipsum dolor sit, amet consectetur\n                            adipisicing elit. Explicabo enim eum similique\n                            nihil a, repellat, fugiat debitis placeat, illo\n                            ipsa molestias quaerat excepturi. Labore\n                            inventore molestiae a rerum, omnis expedita!\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-container",
+                    [
+                      _c("v-text-field", { attrs: { label: "Date" } }),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Employee" } }),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Vendor" } }),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Receipt No." } })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card",
+                { staticClass: "mx-auto mb-4", attrs: { outlined: "" } },
+                [
+                  _c(
+                    "v-list-item",
+                    { attrs: { "three-line": "" } },
+                    [
+                      _c(
+                        "v-list-item-content",
+                        [
+                          _c(
+                            "v-list-item-title",
+                            { staticClass: "headline mb-1" },
+                            [
+                              _vm._v(
+                                "\n                            Expense Details\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "\n                            Note: Lorem ipsum dolor sit, amet consectetur\n                            adipisicing elit. Explicabo enim eum similique\n                            nihil a, repellat, fugiat debitis placeat, illo\n                            ipsa molestias quaerat excepturi. Labore\n                            inventore molestiae a rerum, omnis expedita!\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-container",
+                    [
+                      _c("v-text-field", { attrs: { label: "Expense Type" } }),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Sub Type" } }),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Description" } }),
+                      _vm._v(" "),
+                      _c("v-checkbox", {
+                        attrs: { label: "Itemize Expenses" },
+                        model: {
+                          value: _vm.itemize,
+                          callback: function($$v) {
+                            _vm.itemize = $$v
+                          },
+                          expression: "itemize"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.itemize
+                        ? _c(
+                            "v-row",
+                            [
+                              _c("v-spacer"),
+                              _vm._v(" "),
                               _c(
-                                "v-card-text",
+                                "v-col",
+                                { staticClass: "text-right" },
                                 [
                                   _c(
-                                    "v-speed-dial",
+                                    "v-btn",
                                     {
-                                      staticStyle: { position: "absolute" },
                                       attrs: {
-                                        bottom: "",
-                                        right: "",
-                                        direction: "top",
-                                        transition: "slide-y-reverse-transition"
-                                      },
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "activator",
-                                          fn: function() {
-                                            return [
-                                              _c(
-                                                "v-btn",
-                                                {
-                                                  attrs: {
-                                                    color: "green darken-2",
-                                                    dark: "",
-                                                    fab: ""
-                                                  },
-                                                  model: {
-                                                    value: _vm.fab,
-                                                    callback: function($$v) {
-                                                      _vm.fab = $$v
-                                                    },
-                                                    expression: "fab"
-                                                  }
-                                                },
-                                                [
-                                                  _vm.fab
-                                                    ? _c("v-icon", [
-                                                        _vm._v(
-                                                          "\n                                                mdi-close\n                                            "
-                                                        )
-                                                      ])
-                                                    : _c("v-icon", [
-                                                        _vm._v(
-                                                          "\n                                                mdi-account-circle\n                                            "
-                                                        )
-                                                      ])
-                                                ],
-                                                1
-                                              )
-                                            ]
-                                          },
-                                          proxy: true
-                                        }
-                                      ]),
-                                      model: {
-                                        value: _vm.fab,
-                                        callback: function($$v) {
-                                          _vm.fab = $$v
-                                        },
-                                        expression: "fab"
+                                        color: "green",
+                                        outlined: "",
+                                        rounded: "",
+                                        text: ""
                                       }
                                     },
                                     [
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            fab: "",
-                                            dark: "",
-                                            small: "",
-                                            color: "green"
-                                          }
-                                        },
-                                        [_c("v-icon", [_vm._v("mdi-pencil")])],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            fab: "",
-                                            dark: "",
-                                            small: "",
-                                            color: "indigo"
-                                          }
-                                        },
-                                        [_c("v-icon", [_vm._v("mdi-plus")])],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            fab: "",
-                                            dark: "",
-                                            small: "",
-                                            color: "red"
-                                          }
-                                        },
-                                        [_c("v-icon", [_vm._v("mdi-delete")])],
-                                        1
+                                      _vm._v(
+                                        "\n                                New Item\n                            "
                                       )
-                                    ],
-                                    1
+                                    ]
                                   )
                                 ],
                                 1
@@ -309,8 +425,59 @@ var render = function() {
                             ],
                             1
                           )
-                        ],
-                        1
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.itemize
+                        ? _c("v-data-table", {
+                            attrs: {
+                              headers: _vm.headers,
+                              items: _vm.desserts,
+                              "items-per-page": 5
+                            }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Amount" } }),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Tax Rate" } }),
+                      _vm._v(" "),
+                      _c("v-text-field", { attrs: { label: "Tax Amount" } }),
+                      _vm._v(" "),
+                      _c("v-textarea", { attrs: { label: "Remarks" } })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "green",
+                            outlined: "",
+                            rounded: "",
+                            text: ""
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Save\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        { attrs: { outlined: "", rounded: "", text: "" } },
+                        [
+                          _vm._v(
+                            "\n                        Cancel\n                    "
+                          )
+                        ]
                       )
                     ],
                     1

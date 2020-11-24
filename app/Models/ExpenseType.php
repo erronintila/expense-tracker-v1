@@ -49,6 +49,15 @@ class ExpenseType extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'has_expenses'
+    ];
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LIBRARY/PACKAGE CONFIGURATION
@@ -58,7 +67,7 @@ class ExpenseType extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model
@@ -145,7 +154,8 @@ class ExpenseType extends Model
      */
     public function sub_types()
     {
-        return $this->hasMany(SubType::class);
+        // return $this->hasMany(SubType::class);
+        return $this->hasMany($this);
     }
 
     /*
@@ -153,4 +163,9 @@ class ExpenseType extends Model
     | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    public function getHasExpensesAttribute()
+    {
+        return $this->expenses->count() > 0;
+    }
 }

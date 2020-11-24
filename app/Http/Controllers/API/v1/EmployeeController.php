@@ -329,6 +329,13 @@ class EmployeeController extends Controller
 
                 break;
             case 'settings':
+                
+                $employee = Employee::withTrashed()->findOrFail($id);
+
+                if (request()->has("expense_types")) {
+
+                    $employee->expense_types()->sync($request->expense_types);
+                }
 
                 break;
             case 'update fund':

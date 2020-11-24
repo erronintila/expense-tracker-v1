@@ -36,7 +36,7 @@ class DashboardController extends Controller
                     $q->where('employee_id', $request->employee_id);
                 }
             }
-        }])->get();
+        }])->where('expense_type_id', null)->get();
 
         $expense_types_summary = [];
 

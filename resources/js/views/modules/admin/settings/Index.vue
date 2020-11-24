@@ -4,7 +4,7 @@
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Settings</h4>
                 <v-spacer></v-spacer>
-                <!-- <v-btn
+                <v-btn
                     color="green"
                     :to="{ name: 'admin.settings.employee' }"
                     outlined
@@ -12,7 +12,7 @@
                     class="mr-2"
                 >
                     Employee Settings
-                </v-btn> -->
+                </v-btn>
                 <v-btn color="green" @click="onSave" dark>Save Changes</v-btn>
             </v-card-title>
 

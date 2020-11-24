@@ -266,7 +266,7 @@ class ExpenseController extends Controller
 
         $this->validator($request->all(), null, $employee->remaining_fund)->validate();
 
-        $expense_type = ExpenseType::withTrashed()->findOrFail($request->expense_type_id);
+        $expense_type = ExpenseType::withTrashed()->findOrFail($request->sub_type_id ?? $request->expense_type_id);
 
         $expense = new Expense();
 
@@ -379,7 +379,7 @@ class ExpenseController extends Controller
 
                 $expense = Expense::withTrashed()->findOrFail($id);
 
-                $expense_type = ExpenseType::withTrashed()->findOrFail($request->expense_type_id);
+                $expense_type = ExpenseType::withTrashed()->findOrFail($request->sub_type_id ?? $request->expense_type_id);
 
                 // // Prevent update if expense has an approve expense report and user is not admin
                 // if(true && !Auth::user()->is_admin) {

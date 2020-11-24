@@ -166,7 +166,7 @@ class Expense extends Model
 
     public function sub_type()
     {
-        return $this->belongsTo(SubType::class);
+        return $this->belongsTo(ExpenseType::class);
     }
 
     /**

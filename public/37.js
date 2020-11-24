@@ -155,6 +155,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -165,11 +167,10 @@ __webpack_require__.r(__webpack_exports__);
       headers: [{
         text: "Name",
         value: "name"
-      }, // {
-      //     text: "Limit",
-      //     value: "limit"
-      // },
-      {
+      }, {
+        text: "Limit",
+        value: "limit"
+      }, {
         text: "",
         value: "actions",
         sortable: false
@@ -339,6 +340,35 @@ var render = function() {
                           })
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: [],
+                              "error-messages": _vm.errors.limit,
+                              label: "Default Amount Limit *",
+                              required: "",
+                              type: "number"
+                            },
+                            on: {
+                              input: function() {
+                                _vm.errors.limit = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.limit,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "limit", $$v)
+                              },
+                              expression: "form.limit"
+                            }
+                          })
+                        ],
+                        1
                       )
                     ],
                     1
@@ -386,6 +416,21 @@ var render = function() {
                                                 _vm.subtype = $$v
                                               },
                                               expression: "subtype"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-text-field", {
+                                            staticClass: "mx-4",
+                                            attrs: {
+                                              label: "Default amount limit",
+                                              type: "number"
+                                            },
+                                            model: {
+                                              value: _vm.subtype_limit,
+                                              callback: function($$v) {
+                                                _vm.subtype_limit = $$v
+                                              },
+                                              expression: "subtype_limit"
                                             }
                                           }),
                                           _vm._v(" "),

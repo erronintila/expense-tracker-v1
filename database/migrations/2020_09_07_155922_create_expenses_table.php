@@ -74,7 +74,7 @@ class CreateExpensesTable extends Migration
                 ->onDelete('cascade');
             $table->foreign('sub_type_id')
                 ->references('id')
-                ->on('sub_types');
+                ->on('expense_types');
             $table->foreign('employee_id')
                 ->references('id')
                 ->on('employees');

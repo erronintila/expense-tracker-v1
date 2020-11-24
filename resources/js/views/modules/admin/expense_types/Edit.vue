@@ -33,7 +33,7 @@
                             ></v-text-field>
                         </v-col>
 
-                        <!-- <v-col cols="12" md="4">
+                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.limit"
                                 :rules="[]"
@@ -43,10 +43,11 @@
                                         errors.limit = [];
                                     }
                                 "
-                                label="Expense Amount Limit *"
+                                label="Default Amount Limit *"
                                 required
+                                type="number"
                             ></v-text-field>
-                        </v-col> -->
+                        </v-col>
                     </v-row>
 
                     <v-row>
@@ -62,8 +63,8 @@
                                         </template>
                                     </v-text-field>
                                 </v-card-title> -->
-                                <v-data-table :headers="headers" :items="items">
-                                    <template v-slot:top>
+                            <v-data-table :headers="headers" :items="items">
+                                <template v-slot:top>
                                     <v-row>
                                         <v-text-field
                                             v-model="subtype"
@@ -71,47 +72,63 @@
                                             class="mx-4"
                                         >
                                         </v-text-field>
-                                        <!-- <v-text-field
+                                        <v-text-field
                                             v-model="subtype_limit"
-                                            label="Sub type expense amount limit"
+                                            label="Default amount limit"
                                             class="mx-4"
+                                            type="number"
                                         >
-                                        </v-text-field> -->
-                                        <v-btn @click="addItem" class="mx-4">Add</v-btn>
+                                        </v-text-field>
+                                        <v-btn @click="addItem" class="mx-4"
+                                            >Add</v-btn
+                                        >
                                     </v-row>
                                 </template>
-                                    <template v-slot:[`item.name`]="props">
-                                        <v-edit-dialog
-                                            :return-value.sync="props.item.name"
-                                        >
-                                            {{ props.item.name }}
-                                            <template v-slot:input>
-                                                <v-text-field
-                                                    v-model="props.item.name"
-                                                    :rules="[]"
-                                                    label="Edit"
-                                                    single-line
-                                                    counter
-                                                ></v-text-field>
-                                            </template>
-                                        </v-edit-dialog>
-                                    </template>
-                                    <template
-                                        v-slot:[`item.actions`]="{ item }"
+                                <template v-slot:[`item.name`]="props">
+                                    <v-edit-dialog
+                                        :return-value.sync="props.item.name"
                                     >
-                                        <v-icon
-                                            small
-                                            class="mr-2"
-                                            @click="
-                                                () => {
-                                                    onDeleteSubType(item);
-                                                }
-                                            "
-                                        >
-                                            mdi-delete
-                                        </v-icon>
-                                    </template>
-                                </v-data-table>
+                                        {{ props.item.name }}
+                                        <template v-slot:input>
+                                            <v-text-field
+                                                v-model="props.item.name"
+                                                :rules="[]"
+                                                label="Edit"
+                                                single-line
+                                            ></v-text-field>
+                                        </template>
+                                    </v-edit-dialog>
+                                </template>
+                                <template v-slot:[`item.limit`]="props">
+                                    <v-edit-dialog
+                                        :return-value.sync="props.item.limit"
+                                    >
+                                        {{ props.item.limit }}
+                                        <template v-slot:input>
+                                            <v-text-field
+                                                v-model="props.item.limit"
+                                                :rules="[]"
+                                                label="Edit"
+                                                single-line
+                                                type="number"
+                                            ></v-text-field>
+                                        </template>
+                                    </v-edit-dialog>
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            () => {
+                                                onDeleteSubType(item);
+                                            }
+                                        "
+                                    >
+                                        mdi-delete
+                                    </v-icon>
+                                </template>
+                            </v-data-table>
                             <!-- </v-card> -->
                         </v-col>
                     </v-row>
@@ -144,10 +161,10 @@ export default {
                     text: "Name",
                     value: "name"
                 },
-                // {
-                //     text: "Limit",
-                //     value: "limit"
-                // },
+                {
+                    text: "Limit",
+                    value: "limit"
+                },
                 { text: "", value: "actions", sortable: false }
             ],
             items: [],
@@ -166,8 +183,10 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/expense_types/" + _this.$route.params.id)
+                .get(`/api/expense_types/${_this.$route.params.id}`)
                 .then(response => {
+                    console.log(response);
+
                     _this.form.name = response.data.data.name;
                     _this.form.limit = response.data.data.limit;
                     _this.items = response.data.data.sub_types;
@@ -183,6 +202,8 @@ export default {
                 });
         },
         onSave() {
+            // console.log(this.items);
+            // return;
             let _this = this;
 
             _this.$refs.form.validate();
@@ -213,7 +234,7 @@ export default {
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
 
                         if (error.response) {
@@ -230,32 +251,43 @@ export default {
             if (this.subtype.length == 0 || this.subtype == "") {
                 return;
             }
-            this.items.push({ id: null, name: this.subtype, limit: this.subtype_limit });
+            this.items.push({
+                id: null,
+                name: this.subtype,
+                limit: this.subtype_limit
+            });
             this.subtype = "";
             this.subtype_limit = null;
         },
         onDeleteSubType(item) {
             let _this = this;
 
-            this.$confirm("Do you want to delete sub type?").then(res => {
+            this.$confirm("Do you want to remove sub type?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/sub_types/${item.id}`)
-                        .then(response => {
-                            const index = _this.items.indexOf(item);
-                            _this.items.splice(index, 1);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
-                        });
+                    const index = _this.items.indexOf(item);
+                    _this.items.splice(index, 1);
                 }
             });
+
+            // this.$confirm("Do you want to delete sub type?").then(res => {
+            //     if (res) {
+            //         axios
+            //             .delete(`/api/expense_types/${item.id}`)
+            //             .then(response => {
+            //                 const index = _this.items.indexOf(item);
+            //                 _this.items.splice(index, 1);
+            //             })
+            //             .catch(error => {
+            //                 console.log(error);
+            //                 console.log(error.response);
+
+            //                 _this.mixin_errorDialog(
+            //                     `Error ${error.response.status}`,
+            //                     error.response.data.message
+            //                 );
+            //             });
+            //     }
+            // });
         }
     },
     created() {

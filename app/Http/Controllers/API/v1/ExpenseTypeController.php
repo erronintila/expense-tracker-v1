@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class ExpenseTypeController extends Controller
-{    
+{
     public function __construct()
     {
         $this->middleware(['permission:view all expense types'], ['only' => ['index']]);
@@ -51,7 +51,7 @@ class ExpenseTypeController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $expense_types = ExpenseType::orderBy($sortBy, $sortType);
+        $expense_types = ExpenseType::where('expense_type_id', null)->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -92,17 +92,17 @@ class ExpenseTypeController extends Controller
 
         $expense_type->name = $request->name;
 
-        $expense_type->limit = $request->limit;
+        $expense_type->limit = is_numeric($request->limit) && ($request->limit > 0) ? $request->limit : null;
 
         $expense_type->save();
 
         if (request()->has("sub_types")) {
             foreach ($request->sub_types as $item) {
-                $sub_type = new SubType();
+                $sub_type = new ExpenseType();
 
                 $sub_type->name = $item["name"];
 
-                $sub_type->limit = $item["limit"];
+                $sub_type->limit = is_numeric($item["limit"]) && ($item["limit"] > 0) ? $item["limit"] : null;
 
                 $sub_type->expense_type_id = $expense_type->id;
 
@@ -128,7 +128,7 @@ class ExpenseTypeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+        $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
 
         return response(
             [
@@ -155,12 +155,12 @@ class ExpenseTypeController extends Controller
 
                 if (request()->has("ids")) {
                     foreach ($request->ids as $id) {
-                        $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+                        $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
 
                         $expense_type->restore();
                     }
                 } else {
-                    $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+                    $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
 
                     $expense_type->restore();
                 }
@@ -174,25 +174,44 @@ class ExpenseTypeController extends Controller
 
                 $this->validator($request->all(), $id)->validate();
 
-                $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+                $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
 
                 $expense_type->name = $request->name;
 
-                $expense_type->limit = $request->limit;
+                $expense_type->limit = is_numeric($request->limit) && ($request->limit > 0) ? $request->limit : null;
 
                 $expense_type->save();
+
+                ///////
+                
+                // foreach ($expense_type->sub_types as $sub_type) {
+                //     if ($sub_type->expenses) {
+                //         foreach ($expense_type->sub_types as $sub_type) {
+                //             $sub_type->restore();
+                //         }
+
+                //         return response(
+                //             [
+                //                 'message' => 'Expense type/s has been associated with expenses'
+                //             ],
+                //             422
+                //         );
+                //     }
+
+                //     $sub_type->delete();
+                // }
 
                 foreach ($expense_type->sub_types as $sub_type) {
                     $sub_type->delete();
                 }
 
                 foreach ($request->sub_types as $key => $value) {
-                    $sub_type = SubType::withTrashed()->updateOrCreate(
+                    $sub_type = ExpenseType::withTrashed()->updateOrCreate(
                         ['id' => $value["id"]],
                         [
                             'name' => $value["name"],
 
-                            "limit" => $value["limit"],
+                            "limit" => is_numeric($value["limit"]) && ($value["limit"] > 0) ? $value["limit"] : null,
 
                             'expense_type_id' => $expense_type->id,
 
@@ -261,6 +280,15 @@ class ExpenseTypeController extends Controller
             }
         } else {
             $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+
+            if ($expense_type->expenses) {
+                return response(
+                    [
+                        'message' => 'Record has been associated with expenses'
+                    ],
+                    422
+                );
+            }
 
             $expense_type->delete();
         }

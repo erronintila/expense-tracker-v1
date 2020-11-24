@@ -113,7 +113,15 @@ class DataController extends Controller
      */
     public function expense_types(Request $request)
     {
-        $expense_types = ExpenseType::withTrashed()->orderBy("name")->get();
+        if(request()->has('id')) {
+
+            $expense_type = ExpenseType::withTrashed()->findOrFail($request->id);
+
+            return new ExpenseTypeResource($expense_type);
+        }
+
+        $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->get();
+
         return ExpenseTypeResource::collection($expense_types);
     }
     

@@ -33,6 +33,12 @@ error format when printing more than 1 page
 
 error when directly printing, jspdf
 
+expense limit
+
+expense type custom field like transpo, place of origin and destination
+
+payment method
+
 
 ------------------------------------------------------------------------------------------
 DONE

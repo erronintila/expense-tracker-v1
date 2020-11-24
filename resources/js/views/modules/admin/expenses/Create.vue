@@ -15,6 +15,7 @@
                 </v-col>
             </v-row>
         </v-container>
+
         <v-card v-else class="elevation-0 pt-0">
             <!-- **************************************************************
                 Card Title
@@ -200,7 +201,7 @@
                         <!-- **************************************************************
                             Expense Details
                         *************************************************************** -->
-                        <v-expansion-panel>
+                        <v-expansion-panel v-if="form.employee.id !== null">
                             <v-expansion-panel-header>
                                 <div class="green--text">
                                     Expense Details ({{
@@ -247,11 +248,14 @@
                                         </v-autocomplete>
                                     </v-col>
 
-                                    <!-- <v-col cols="12" md="4">
-                                        <div>
-                                            Expense Limit: 0
-                                        </div>
-                                    </v-col> -->
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            label="Expense Limit"
+                                            v-model="form.expense_type.limit"
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-col>
                                 </v-row>
 
                                 <v-row>
@@ -282,7 +286,12 @@
                                         <v-text-field
                                             v-model="form.amount"
                                             label="Amount"
-                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
+                                            :rules="[
+                                                ...mixin_validation.required,
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             :readonly="itemize"
                                             type="number"
                                         ></v-text-field>
@@ -428,6 +437,20 @@
                                                                             </v-text-field>
                                                                         </v-col>
                                                                     </v-row>
+                                                                    <v-row>
+                                                                        <v-col>
+                                                                            <div>
+                                                                                Limit:
+                                                                                {{
+                                                                                    form
+                                                                                        .expense_type
+                                                                                        .limit
+                                                                                }}
+                                                                                /
+                                                                                quantity
+                                                                            </div>
+                                                                        </v-col>
+                                                                    </v-row>
                                                                 </v-container>
                                                             </v-card-text>
 
@@ -448,8 +471,9 @@
                                                                     @click="
                                                                         addItem
                                                                     "
-                                                                    >Add</v-btn
                                                                 >
+                                                                    Add
+                                                                </v-btn>
                                                             </v-card-actions>
                                                         </v-card>
                                                     </v-dialog>
@@ -606,7 +630,7 @@
                         </v-expansion-panel>
                     </v-expansion-panels>
 
-                    <v-card class="mt-4">
+                    <v-card class="mt-4" v-if="form.employee.id !== null">
                         <v-card-text>
                             <v-container>
                                 <v-row>
@@ -800,29 +824,19 @@ export default {
         onSave() {
             let _this = this;
 
-            if (
-                _this.form.employee.id == null
-            ) {
-                _this.$dialog.message.error(
-                    "No Employee Selected",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
+            if (_this.form.employee.id == null) {
+                _this.$dialog.message.error("No Employee Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
                 return;
             }
 
-            if (
-                _this.form.expense_type.id == null
-            ) {
-                _this.$dialog.message.error(
-                    "No Expense Type Selected",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
+            if (_this.form.expense_type.id == null) {
+                _this.$dialog.message.error("No Expense Type Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
                 return;
             }
 

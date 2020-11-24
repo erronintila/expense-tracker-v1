@@ -215,7 +215,7 @@ class Employee extends Model
      */
     public function sub_types()
     {
-        return $this->belongsToMany(SubType::class)->withPivot('limit')->withTimestamps();
+        return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
     }
 
     /**

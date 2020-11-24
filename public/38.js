@@ -142,6 +142,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -152,11 +169,10 @@ __webpack_require__.r(__webpack_exports__);
       headers: [{
         text: "Name",
         value: "name"
-      }, // {
-      //     text: "Limit",
-      //     value: "limit"
-      // },
-      {
+      }, {
+        text: "Limit",
+        value: "limit"
+      }, {
         text: "",
         value: "actions",
         sortable: false
@@ -176,7 +192,8 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/expense_types/" + _this.$route.params.id).then(function (response) {
+      axios.get("/api/expense_types/".concat(_this.$route.params.id)).then(function (response) {
+        console.log(response);
         _this.form.name = response.data.data.name;
         _this.form.limit = response.data.data.limit;
         _this.items = response.data.data.sub_types;
@@ -188,6 +205,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onSave: function onSave() {
+      // console.log(this.items);
+      // return;
       var _this = this;
 
       _this.$refs.form.validate();
@@ -210,7 +229,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
 
           if (error.response) {
             if (error.response.data) {
@@ -237,20 +256,30 @@ __webpack_require__.r(__webpack_exports__);
     onDeleteSubType: function onDeleteSubType(item) {
       var _this = this;
 
-      this.$confirm("Do you want to delete sub type?").then(function (res) {
+      this.$confirm("Do you want to remove sub type?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/sub_types/".concat(item.id)).then(function (response) {
-            var index = _this.items.indexOf(item);
+          var index = _this.items.indexOf(item);
 
-            _this.items.splice(index, 1);
-          })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
-          });
+          _this.items.splice(index, 1);
         }
-      });
+      }); // this.$confirm("Do you want to delete sub type?").then(res => {
+      //     if (res) {
+      //         axios
+      //             .delete(`/api/expense_types/${item.id}`)
+      //             .then(response => {
+      //                 const index = _this.items.indexOf(item);
+      //                 _this.items.splice(index, 1);
+      //             })
+      //             .catch(error => {
+      //                 console.log(error);
+      //                 console.log(error.response);
+      //                 _this.mixin_errorDialog(
+      //                     `Error ${error.response.status}`,
+      //                     error.response.data.message
+      //                 );
+      //             });
+      //     }
+      // });
     }
   },
   created: function created() {
@@ -358,6 +387,35 @@ var render = function() {
                           })
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: [],
+                              "error-messages": _vm.errors.limit,
+                              label: "Default Amount Limit *",
+                              required: "",
+                              type: "number"
+                            },
+                            on: {
+                              input: function() {
+                                _vm.errors.limit = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.limit,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "limit", $$v)
+                              },
+                              expression: "form.limit"
+                            }
+                          })
+                        ],
+                        1
                       )
                     ],
                     1
@@ -393,6 +451,21 @@ var render = function() {
                                                 _vm.subtype = $$v
                                               },
                                               expression: "subtype"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-text-field", {
+                                            staticClass: "mx-4",
+                                            attrs: {
+                                              label: "Default amount limit",
+                                              type: "number"
+                                            },
+                                            model: {
+                                              value: _vm.subtype_limit,
+                                              callback: function($$v) {
+                                                _vm.subtype_limit = $$v
+                                              },
+                                              expression: "subtype_limit"
                                             }
                                           }),
                                           _vm._v(" "),
@@ -451,8 +524,7 @@ var render = function() {
                                                       attrs: {
                                                         rules: [],
                                                         label: "Edit",
-                                                        "single-line": "",
-                                                        counter: ""
+                                                        "single-line": ""
                                                       },
                                                       model: {
                                                         value: props.item.name,
@@ -480,9 +552,87 @@ var render = function() {
                                         },
                                         [
                                           _vm._v(
-                                            "\n                                        " +
+                                            "\n                                    " +
                                               _vm._s(props.item.name) +
-                                              "\n                                        "
+                                              "\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  }
+                                },
+                                {
+                                  key: "item.limit",
+                                  fn: function(props) {
+                                    return [
+                                      _c(
+                                        "v-edit-dialog",
+                                        {
+                                          attrs: {
+                                            "return-value": props.item.limit
+                                          },
+                                          on: {
+                                            "update:returnValue": function(
+                                              $event
+                                            ) {
+                                              return _vm.$set(
+                                                props.item,
+                                                "limit",
+                                                $event
+                                              )
+                                            },
+                                            "update:return-value": function(
+                                              $event
+                                            ) {
+                                              return _vm.$set(
+                                                props.item,
+                                                "limit",
+                                                $event
+                                              )
+                                            }
+                                          },
+                                          scopedSlots: _vm._u(
+                                            [
+                                              {
+                                                key: "input",
+                                                fn: function() {
+                                                  return [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: [],
+                                                        label: "Edit",
+                                                        "single-line": "",
+                                                        type: "number"
+                                                      },
+                                                      model: {
+                                                        value: props.item.limit,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            props.item,
+                                                            "limit",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "props.item.limit"
+                                                      }
+                                                    })
+                                                  ]
+                                                },
+                                                proxy: true
+                                              }
+                                            ],
+                                            null,
+                                            true
+                                          )
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    " +
+                                              _vm._s(props.item.limit) +
+                                              "\n                                    "
                                           )
                                         ]
                                       )
@@ -507,7 +657,7 @@ var render = function() {
                                         },
                                         [
                                           _vm._v(
-                                            "\n                                        mdi-delete\n                                    "
+                                            "\n                                    mdi-delete\n                                "
                                           )
                                         ]
                                       )

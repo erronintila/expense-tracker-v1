@@ -145,7 +145,7 @@ class VendorController extends Controller
         if (request()->has("expense_types")) {
             $vendor->expense_types()->sync($request->expense_types);
 
-            // $expense_types = ExpenseType::withTrashed()->findOrFail($request->expense_types);
+            // $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($request->expense_types);
 
             // $vendor->expense_types()->attach($expense_types);
         }
