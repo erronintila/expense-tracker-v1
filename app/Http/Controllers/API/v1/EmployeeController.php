@@ -87,30 +87,32 @@ class EmployeeController extends Controller
 
         // $sortBy = $sortBy == "fullname" ? "last_name" : $sortBy;
 
+        $employees = Employee::with('job.department', 'user', 'expense_types.sub_types');
+
         switch ($sortBy) {
             case 'fullname':
 
-                $employees = Employee::orderBy("last_name", $sortType);
+                $employees = $employees->orderBy("last_name", $sortType);
 
                 break;
             case 'job.name':
 
-                $employees = Employee::orderBy("last_name", $sortType);
+                $employees = $employees->orderBy("last_name", $sortType);
 
                 break;
             case 'department.name':
 
-                $employees = Employee::orderBy("last_name", $sortType);
+                $employees = $employees->orderBy("last_name", $sortType);
 
                 break;
             case 'revolving_fund':
 
-                $employees = Employee::orderBy("fund", $sortType);
+                $employees = $employees->orderBy("fund", $sortType);
 
                 break;
             default:
 
-                $employees = Employee::orderBy($sortBy, $sortType);
+                $employees = $employees->orderBy($sortBy, $sortType);
 
                 break;
         }

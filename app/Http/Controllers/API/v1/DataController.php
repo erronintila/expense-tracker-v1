@@ -133,7 +133,7 @@ class DataController extends Controller
      */
     public function jobs(Request $request)
     {
-        $jobs = Job::orderBy("name");
+        $jobs = Job::with('department')->orderBy("name");
 
         if (request()->has("department_id")) {
             if ($request->department_id > 0) {

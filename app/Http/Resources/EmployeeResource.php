@@ -17,7 +17,7 @@ class EmployeeResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
-        $user = User::withTrashed()->findOrFail($this->user_id);
+        // $user = User::withTrashed()->findOrFail($this->user_id);
 
         return [
             'id' => $this->id,
@@ -39,14 +39,18 @@ class EmployeeResource extends JsonResource
             'fullname' => $this->getFullNameAttribute(),
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
-            'user' => $user,
-            'role' => $user->is_admin ? ["Administrator"] : $user->getRoleNames(),
-            'permissions' => $user->getAllPermissions(),
+            'user' => $this->user,
+            'role' => $this->user->is_admin ? ["Administrator"] : $this->user->getRoleNames(),
+            'permissions' => $this->user->getAllPermissions(),
             // 'expense_types' => ExpenseTypeResource::collection($this->expense_types),
-            'expense_types' => $this->expense_types()->withTrashed()->with('sub_types')->get(),
+            // 'expense_types' => $this->expense_types()->withTrashed()->with('sub_types')->get(),
 
-            'pivot_expense_types' => $this->expense_types()->withTrashed()->with('sub_types')->get(),
-            'pivot_sub_types' => $this->sub_types()->withTrashed()->get(),
+            // 'pivot_expense_types' => $this->expense_types()->withTrashed()->with('sub_types')->get(),
+            // 'pivot_sub_types' => $this->sub_types()->withTrashed()->get(),
+            'expense_types' => null,
+
+            'pivot_expense_types' => null,
+            'pivot_sub_types' => null,
         ];
     }
 }
