@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Expense;
-use App\Models\ExpenseDetail;
 use Illuminate\Database\Seeder;
 
 class ExpenseSeeder extends Seeder
@@ -13,7 +11,7 @@ class ExpenseSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Expense::class, 100)->create();
+        factory(\App\Models\Expense::class, 500)->create();
 
         // $expense_details = [];
 

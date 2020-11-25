@@ -8,15 +8,12 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use anlutro\LaravelSettings\Facade as Setting;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
-{    
+{
     public function __construct()
     {
         $this->middleware(['permission:view all expenses'], ['only' => ['index']]);
@@ -115,7 +112,7 @@ class ExpenseController extends Controller
                             ["cancelled_at", "=", null]
                         ]);
 
-                        $query->whereHas("payments", function($query) {
+                        $query->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
                 
@@ -449,7 +446,7 @@ class ExpenseController extends Controller
                 // // Prevent delete if expense has an expense report and user is not admin
                 // if(true && !Auth::user()->is_admin) {
                 //     abort(403);
-                // }    
+                // }
 
                 $expense->delete();
             }
