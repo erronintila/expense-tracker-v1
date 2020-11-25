@@ -101,49 +101,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       panel: [0],
+      valid: false,
       employees: [],
       employee: {
         id: null,
@@ -169,7 +131,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       },
       // expense_type_limit: null
-      pivot_expense_types: null,
+      pivot_expense_types: [],
       pivot_sub_types: null
     };
   },
@@ -191,7 +153,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/expense_types").then(function (response) {
-        console.log(response);
         _this.all_expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -200,31 +161,58 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    save_expense_types: function save_expense_types() {
-      console.log("pivot sub types", this.pivot_sub_types); // console.log("allowed", this.allowed_expense_types);
-      // console.log("expense_type", this.expense_type);
-      // console.log("sub_types", this.sub_types);
+    onSave: function onSave() {
+      var _this = this;
+
+      console.log(_this.allowed_expense_types); // return;
+
+      _this.$refs.form.validate();
+
+      if (_this.$refs.form.validate()) {
+        _this.loader = true;
+        axios.put("/api/employees/" + _this.employee.id, {
+          action: "settings",
+          expense_types: _this.allowed_expense_types.map(function (item) {
+            return item.id;
+          })
+        }).then(function (response) {
+          _this.$dialog.message.success("Employee settings updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this.$store.dispatch("AUTH_USER"); // _this.$router.push({ name: "admin.employees.index" });
+
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          if (error.response) {
+            if (error.response.data) {
+              _this.errors = error.response.data.errors;
+            }
+          }
+        });
+        return;
+      }
     }
   },
   watch: {
     employee: function employee(item) {
-      // console.log("employee", item);
       // this.expense_types = item.expense_types;
       this.allowed_expense_types = item.pivot_expense_types;
-      this.pivot_sub_types = item.pivot_sub_types;
+      this.pivot_expense_types = item.pivot_expense_types;
     },
     allowed_expense_types: function allowed_expense_types(items) {
-      // console.log("allowed expense types", items);
       this.expense_types = items;
       this.sub_types = []; // this.expense_type_limit = null;
     },
     expense_type: function expense_type(item) {
-      var expense_type_id = item.id;
-      console.log("expense_type_id", expense_type_id);
-      console.log("pivotsubtypes", this.pivot_sub_types); // let subtypes = this.pivot_sub_types.filter(item =>
+      var expense_type_id = item.id; // let subtypes = this.pivot_sub_types.filter(item =>
       //     item.id.includes(expense_type_id)
       // );
-      // console.log("filtered subtypes", subtypes);
 
       this.sub_types = this.pivot_sub_types;
     }
@@ -343,277 +331,159 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
-            "v-expansion-panels",
+            "v-form",
             {
-              attrs: { multiple: "" },
+              ref: "form",
               model: {
-                value: _vm.panel,
+                value: _vm.valid,
                 callback: function($$v) {
-                  _vm.panel = $$v
+                  _vm.valid = $$v
                 },
-                expression: "panel"
+                expression: "valid"
               }
             },
             [
               _c(
-                "v-expansion-panel",
+                "v-expansion-panels",
+                {
+                  attrs: { multiple: "" },
+                  model: {
+                    value: _vm.panel,
+                    callback: function($$v) {
+                      _vm.panel = $$v
+                    },
+                    expression: "panel"
+                  }
+                },
                 [
-                  _c("v-expansion-panel-header", [
-                    _c("div", { staticClass: "green--text" }, [
-                      _vm._v(
-                        "\n                        Expense Types\n                    "
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
                   _c(
-                    "v-expansion-panel-content",
+                    "v-expansion-panel",
                     [
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c("v-select", {
-                                attrs: {
-                                  items: _vm.all_expense_types,
-                                  "item-text": "name",
-                                  "item-value": "id",
-                                  "return-object": "",
-                                  label: "Allowed Expense Types",
-                                  multiple: ""
-                                },
-                                scopedSlots: _vm._u([
-                                  {
-                                    key: "selection",
-                                    fn: function(ref) {
-                                      var item = ref.item
-                                      var index = ref.index
-                                      return [
-                                        index === 0
-                                          ? _c(
-                                              "v-chip",
-                                              { attrs: { small: "" } },
-                                              [
-                                                _c("span", [
-                                                  _vm._v(_vm._s(item.name))
-                                                ])
-                                              ]
-                                            )
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        index === 1
-                                          ? _c(
-                                              "span",
-                                              {
-                                                staticClass:
-                                                  "grey--text caption"
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "(+" +
-                                                    _vm._s(
-                                                      _vm.allowed_expense_types
-                                                        .length - 1
-                                                    ) +
-                                                    "\n                                        others)"
-                                                )
-                                              ]
-                                            )
-                                          : _vm._e()
-                                      ]
-                                    }
-                                  }
-                                ]),
-                                model: {
-                                  value: _vm.allowed_expense_types,
-                                  callback: function($$v) {
-                                    _vm.allowed_expense_types = $$v
-                                  },
-                                  expression: "allowed_expense_types"
-                                }
-                              })
-                            ],
-                            1
+                      _c("v-expansion-panel-header", [
+                        _c("div", { staticClass: "green--text" }, [
+                          _vm._v(
+                            "\n                            Expense Types\n                        "
                           )
-                        ],
-                        1
-                      ),
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
-                        "v-row",
+                        "v-expansion-panel-content",
                         [
                           _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
+                            "v-row",
                             [
-                              _c("v-autocomplete", {
-                                attrs: {
-                                  items: _vm.expense_types,
-                                  "item-text": "name",
-                                  "item-value": "id",
-                                  "return-object": "",
-                                  label: "Expense Type"
-                                },
-                                model: {
-                                  value: _vm.expense_type,
-                                  callback: function($$v) {
-                                    _vm.expense_type = $$v
-                                  },
-                                  expression: "expense_type"
-                                }
-                              })
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.all_expense_types,
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      "return-object": "",
+                                      label: "Allowed Expense Types",
+                                      multiple: ""
+                                    },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "selection",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          var index = ref.index
+                                          return [
+                                            index === 0
+                                              ? _c(
+                                                  "v-chip",
+                                                  { attrs: { small: "" } },
+                                                  [
+                                                    _c("span", [
+                                                      _vm._v(_vm._s(item.name))
+                                                    ])
+                                                  ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            index === 1
+                                              ? _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "grey--text caption"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "(+" +
+                                                        _vm._s(
+                                                          _vm
+                                                            .allowed_expense_types
+                                                            .length - 1
+                                                        ) +
+                                                        "\n                                            others)"
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]
+                                        }
+                                      }
+                                    ]),
+                                    model: {
+                                      value: _vm.allowed_expense_types,
+                                      callback: function($$v) {
+                                        _vm.allowed_expense_types = $$v
+                                      },
+                                      expression: "allowed_expense_types"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             ],
                             1
                           ),
                           _vm._v(" "),
                           _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c("v-text-field", {
-                                attrs: { label: "Expense Amount Limit" },
-                                model: {
-                                  value: _vm.expense_type_limit,
-                                  callback: function($$v) {
-                                    _vm.expense_type_limit = $$v
-                                  },
-                                  expression: "expense_type_limit"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _vm._v(
-                                "\n                            Sub Types\n                            "
-                              ),
-                              _c("v-data-table", {
-                                attrs: {
-                                  headers: _vm.headerExpenseTypes,
-                                  items: _vm.sub_types
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "item.pivot.limit",
-                                      fn: function(props) {
-                                        return [
-                                          _c(
-                                            "v-edit-dialog",
-                                            {
-                                              attrs: {
-                                                "return-value":
-                                                  props.item.pivot.limit
-                                              },
-                                              on: {
-                                                "update:returnValue": function(
-                                                  $event
-                                                ) {
-                                                  return _vm.$set(
-                                                    props.item.pivot,
-                                                    "limit",
-                                                    $event
-                                                  )
-                                                },
-                                                "update:return-value": function(
-                                                  $event
-                                                ) {
-                                                  return _vm.$set(
-                                                    props.item.pivot,
-                                                    "limit",
-                                                    $event
-                                                  )
-                                                }
-                                              },
-                                              scopedSlots: _vm._u(
-                                                [
-                                                  {
-                                                    key: "input",
-                                                    fn: function() {
-                                                      return [
-                                                        _c("v-text-field", {
-                                                          attrs: {
-                                                            rules: [],
-                                                            label:
-                                                              "Expense Amount Limit",
-                                                            "single-line": "",
-                                                            counter: ""
-                                                          },
-                                                          model: {
-                                                            value:
-                                                              props.item.pivot
-                                                                .limit,
-                                                            callback: function(
-                                                              $$v
-                                                            ) {
-                                                              _vm.$set(
-                                                                props.item
-                                                                  .pivot,
-                                                                "limit",
-                                                                $$v
-                                                              )
-                                                            },
-                                                            expression:
-                                                              "\n                                                    props.item.pivot.limit\n                                                "
-                                                          }
-                                                        })
-                                                      ]
-                                                    },
-                                                    proxy: true
-                                                  }
-                                                ],
-                                                null,
-                                                true
-                                              )
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                        " +
-                                                  _vm._s(
-                                                    props.item.pivot.limit
-                                                  ) +
-                                                  "\n                                        "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
+                            "v-row",
                             [
                               _c(
-                                "v-btn",
-                                { on: { click: _vm.save_expense_types } },
-                                [_vm._v("Save Changes")]
+                                "v-col",
+                                [
+                                  _c("v-data-table", {
+                                    attrs: {
+                                      headers: _vm.headerExpenseTypes,
+                                      items: _vm.pivot_expense_types
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "4" } },
+                                [
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { color: "green" },
+                                      on: { click: _vm.onSave }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Save Changes\n                                "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
                               )
                             ],
                             1

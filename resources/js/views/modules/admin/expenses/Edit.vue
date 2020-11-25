@@ -192,12 +192,17 @@
                             </v-list-item-title> -->
                                 <v-list-item-subtitle>
                                     Remaining Fund:
-                                    {{
+                                    
+                                    <v-btn color="green" dark small outlined>{{
                                         mixin_formatNumber(
                                             form.employee.remaining_fund
                                         )
-                                    }}
-                                    ~ Expense Limit: 0.00
+                                    }}</v-btn>
+                                    ~ Expense Limit: <v-btn color="green" dark small outlined>{{
+                                        mixin_formatNumber(
+                                            0
+                                        )
+                                    }}</v-btn>
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle>
                                     Note: Expense amount exceeding the remaining

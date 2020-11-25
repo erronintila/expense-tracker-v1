@@ -334,7 +334,25 @@ class EmployeeController extends Controller
 
                 if (request()->has("expense_types")) {
 
+                    $employee->expense_types()->sync([]);
+
                     $employee->expense_types()->sync($request->expense_types);
+
+                    // $employee->expense_types()->sync([]);
+                    
+                    // $expense_types_id = [];
+
+                    // foreach ($request->expense_types as $id) {
+                    //     $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+
+                    //     array_push($expense_types_id, $expense_type->id);
+
+                    //     foreach ($expense_type->sub_types()->withTrashed()->get() as $sub_type) {
+                    //         array_push($expense_types_id, $sub_type->id);
+                    //     }
+                    // }
+
+                    // $employee->expense_types()->sync($expense_types_id);
                 }
 
                 break;

@@ -528,6 +528,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -1488,17 +1493,54 @@ var render = function() {
                                     ]
                                   ),
                                   _vm._v(" "),
-                                  _c("v-list-item-subtitle", [
-                                    _vm._v(
-                                      "\n                                Remaining Fund:\n                                " +
-                                        _vm._s(
-                                          _vm.mixin_formatNumber(
-                                            _vm.form.employee.remaining_fund
+                                  _c(
+                                    "v-list-item-subtitle",
+                                    [
+                                      _vm._v(
+                                        "\n                                Remaining Fund:\n                                \n                                "
+                                      ),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "green",
+                                            dark: "",
+                                            small: "",
+                                            outlined: ""
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.mixin_formatNumber(
+                                                _vm.form.employee.remaining_fund
+                                              )
+                                            )
                                           )
-                                        ) +
-                                        "\n                                ~ Expense Limit: 0.00\n                            "
-                                    )
-                                  ]),
+                                        ]
+                                      ),
+                                      _vm._v(
+                                        "\n                                ~ Expense Limit: "
+                                      ),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "green",
+                                            dark: "",
+                                            small: "",
+                                            outlined: ""
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(_vm.mixin_formatNumber(0))
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  ),
                                   _vm._v(" "),
                                   _c("v-list-item-subtitle", [
                                     _vm._v(

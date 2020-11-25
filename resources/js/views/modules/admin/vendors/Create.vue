@@ -14,26 +14,10 @@
             <v-form ref="form">
                 <v-container>
                     <v-card class="mx-auto mb-4" flat>
-                        <v-list-item three-line>
-                            <v-list-item-content>
-                                <div class="overline green--text mb-4">
-                                    BASIC DETAILS
-                                </div>
-                                <!-- <v-list-item-title class="headline mb-1">
-                                    Basic Information
-                                </v-list-item-title> -->
-                                <v-list-item-subtitle>
-                                    Note: Lorem ipsum dolor sit, amet
-                                    consectetur adipisicing elit. Explicabo enim
-                                    eum similique nihil a, repellat, fugiat
-                                    debitis placeat, illo ipsa molestias quaerat
-                                    excepturi. Labore inventore molestiae a
-                                    rerum, omnis expedita!
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
-
                         <v-container>
+                            <div class="overline green--text">
+                                BASIC DETAILS
+                            </div>
                             <v-row>
                                 <v-col cols="12" md="9">
                                     <v-text-field

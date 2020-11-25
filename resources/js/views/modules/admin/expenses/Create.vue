@@ -196,12 +196,18 @@
                             </v-list-item-title> -->
                                 <v-list-item-subtitle>
                                     Remaining Fund:
-                                    {{
+
+                                    <v-btn color="green" dark small outlined>{{
                                         mixin_formatNumber(
                                             form.employee.remaining_fund
                                         )
-                                    }}
-                                    ~ Expense Limit: 0.00
+                                    }}</v-btn>
+                                    ~ Expense Limit:
+                                    <v-btn color="green" dark small outlined>{{
+                                        mixin_formatNumber(
+                                            expense_amount_limit
+                                        )
+                                    }}</v-btn>
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle>
                                     Note: Expense amount exceeding the remaining
@@ -564,7 +570,7 @@ export default {
                     id: null,
                     name: "",
                     limit: null,
-                    sub_types: null
+                    sub_types: { id: null, name: "None", limit: null }
                 },
                 sub_type: { id: null, name: "", limit: null },
                 employee: {
@@ -785,6 +791,7 @@ export default {
                 this.items.splice(index, 1);
         },
         loadSubTypes(e) {
+            console.log(this.form.expense_type);
             this.form.sub_type = { id: null, name: "", limit: null };
             this.sub_types = e.sub_types;
             this.sub_types.unshift({ id: null, name: "None", limit: null });
@@ -926,6 +933,11 @@ export default {
             this.form.details.total = total;
 
             return total;
+        },
+        expense_amount_limit() {
+            return this.form.sub_type.limit == null
+                ? this.form.expense_type.limit
+                : this.form.sub_type.limit;
         }
     },
     watch: {

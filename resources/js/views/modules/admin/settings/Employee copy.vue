@@ -68,14 +68,6 @@
                                 </v-col>
                             </v-row>
                             <v-row>
-                                <v-col>
-                                    <v-data-table
-                                        :headers="headerExpenseTypes"
-                                        :items="pivot_expense_types"
-                                    ></v-data-table>
-                                </v-col>
-                            </v-row>
-                            <v-row>
                                 <v-col cols="12" md="4">
                                     <v-btn @click="onSave" color="green">
                                         Save Changes
@@ -112,7 +104,7 @@ export default {
             expense_type: { id: null, sub_types: null, pivot: { limit: null } },
             // expense_type_limit: null
 
-            pivot_expense_types: [],
+            pivot_expense_types: null,
             pivot_sub_types: null
         };
     },
@@ -123,6 +115,7 @@ export default {
                 .get("/api/data/employees")
                 .then(response => {
                     console.log(response);
+
                     _this.employees = response.data.data;
                 })
                 .catch(error => {
@@ -140,6 +133,7 @@ export default {
             axios
                 .get("/api/data/expense_types")
                 .then(response => {
+                    console.log(response);
                     _this.all_expense_types = response.data.data;
                 })
                 .catch(error => {
@@ -167,11 +161,10 @@ export default {
                 axios
                     .put("/api/employees/" + _this.employee.id, {
                         action: "settings",
-                        expense_types: _this.allowed_expense_types.map(
-                            item => item.id
-                        )
+                        expense_types: _this.allowed_expense_types.map(item => item.id)
                     })
                     .then(function(response) {
+                        console.log(response);
                         _this.$dialog.message.success(
                             "Employee settings updated successfully.",
                             {
@@ -206,12 +199,15 @@ export default {
     },
     watch: {
         employee(item) {
+            // console.log("employee", item);
             // this.expense_types = item.expense_types;
             this.allowed_expense_types = item.pivot_expense_types;
 
-            this.pivot_expense_types = item.pivot_expense_types;
+            this.pivot_sub_types = item.pivot_sub_types;
         },
         allowed_expense_types(items) {
+            // console.log("allowed expense types", items);
+
             this.expense_types = items;
             this.sub_types = [];
             // this.expense_type_limit = null;
@@ -219,9 +215,14 @@ export default {
         expense_type(item) {
             let expense_type_id = item.id;
 
+            console.log("expense_type_id", expense_type_id);
+            console.log("pivotsubtypes", this.pivot_sub_types);
+
             // let subtypes = this.pivot_sub_types.filter(item =>
             //     item.id.includes(expense_type_id)
             // );
+
+            // console.log("filtered subtypes", subtypes);
 
             this.sub_types = this.pivot_sub_types;
         }

@@ -532,6 +532,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -592,7 +598,11 @@ __webpack_require__.r(__webpack_exports__);
           id: null,
           name: "",
           limit: null,
-          sub_types: null
+          sub_types: {
+            id: null,
+            name: "None",
+            limit: null
+          }
         },
         sub_type: {
           id: null,
@@ -786,6 +796,7 @@ __webpack_require__.r(__webpack_exports__);
       confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
     },
     loadSubTypes: function loadSubTypes(e) {
+      console.log(this.form.expense_type);
       this.form.sub_type = {
         id: null,
         name: "",
@@ -900,6 +911,9 @@ __webpack_require__.r(__webpack_exports__);
       var total = (this.mixin_convertToNumber(this.form.details.quantity) * this.mixin_convertToNumber(this.form.details.amount)).toFixed(2);
       this.form.details.total = total;
       return total;
+    },
+    expense_amount_limit: function expense_amount_limit() {
+      return this.form.sub_type.limit == null ? this.form.expense_type.limit : this.form.sub_type.limit;
     }
   },
   watch: {
@@ -1406,17 +1420,58 @@ var render = function() {
                                     ]
                                   ),
                                   _vm._v(" "),
-                                  _c("v-list-item-subtitle", [
-                                    _vm._v(
-                                      "\n                                Remaining Fund:\n                                " +
-                                        _vm._s(
-                                          _vm.mixin_formatNumber(
-                                            _vm.form.employee.remaining_fund
+                                  _c(
+                                    "v-list-item-subtitle",
+                                    [
+                                      _vm._v(
+                                        "\n                                Remaining Fund:\n\n                                "
+                                      ),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "green",
+                                            dark: "",
+                                            small: "",
+                                            outlined: ""
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.mixin_formatNumber(
+                                                _vm.form.employee.remaining_fund
+                                              )
+                                            )
                                           )
-                                        ) +
-                                        "\n                                ~ Expense Limit: 0.00\n                            "
-                                    )
-                                  ]),
+                                        ]
+                                      ),
+                                      _vm._v(
+                                        "\n                                ~ Expense Limit:\n                                "
+                                      ),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "green",
+                                            dark: "",
+                                            small: "",
+                                            outlined: ""
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.mixin_formatNumber(
+                                                _vm.expense_amount_limit
+                                              )
+                                            )
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  ),
                                   _vm._v(" "),
                                   _c("v-list-item-subtitle", [
                                     _vm._v(

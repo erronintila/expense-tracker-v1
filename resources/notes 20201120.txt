@@ -39,6 +39,8 @@ expense type custom field like transpo, place of origin and destination
 
 payment method
 
+fix activity logs format
+
 
 ------------------------------------------------------------------------------------------
 DONE

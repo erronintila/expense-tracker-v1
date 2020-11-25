@@ -280,21 +280,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -608,35 +593,6 @@ var render = function() {
                     { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
                     [
                       _c(
-                        "v-list-item",
-                        { attrs: { "three-line": "" } },
-                        [
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "overline green--text mb-4" },
-                                [
-                                  _vm._v(
-                                    "\n                            BASIC DETAILS\n                        "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("v-list-item-subtitle", [
-                                _vm._v(
-                                  "\n                            Note: Lorem ipsum dolor sit, amet consectetur\n                            adipisicing elit. Explicabo enim eum similique\n                            nihil a, repellat, fugiat debitis placeat, illo\n                            ipsa molestias quaerat excepturi. Labore\n                            inventore molestiae a rerum, omnis expedita!\n                        "
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
                         "v-form",
                         {
                           ref: "form",
@@ -652,6 +608,16 @@ var render = function() {
                           _c(
                             "v-container",
                             [
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text" },
+                                [
+                                  _vm._v(
+                                    "\n                            BASIC DETAILS\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
                               _c("DateRangePicker", {
                                 attrs: {
                                   preset: _vm.preset,
