@@ -527,7 +527,7 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
-                            _this.$store.dispatch("AUTH_USER");
+                            // _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -577,7 +577,7 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
-                            _this.$store.dispatch("AUTH_USER");
+                            // _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -623,7 +623,7 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
-                            _this.$store.dispatch("AUTH_USER");
+                            // _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -640,7 +640,7 @@ export default {
             });
         },
         onExport() {
-            this.$store.dispatch("AUTH_USER");
+            // this.$store.dispatch("AUTH_USER");
             axios.get("/api/employees/export");
         }
     },
@@ -677,14 +677,14 @@ export default {
             };
         }
     },
-    mounted() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    },
+    // mounted() {
+    //     this.getDataFromApi().then(data => {
+    //         this.items = data.items;
+    //         this.totalItems = data.total;
+    //     });
+    // },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        // this.$store.dispatch("AUTH_USER");
     }
 };
 </script>

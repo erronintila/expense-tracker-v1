@@ -413,11 +413,11 @@ export default {
             };
         }
     },
-    mounted() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    }
+    // mounted() {
+    //     this.getDataFromApi().then(data => {
+    //         this.items = data.items;
+    //         this.totalItems = data.total;
+    //     });
+    // }
 };
 </script>

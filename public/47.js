@@ -411,14 +411,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _objectSpread2));
     }
   },
-  mounted: function mounted() {
-    var _this4 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
-    });
-  },
+  // mounted() {
+  //     this.getDataFromApi().then(data => {
+  //         this.items = data.items;
+  //         this.totalItems = data.total;
+  //     });
+  // },
   created: function created() {
     this.loadDepartments();
   }

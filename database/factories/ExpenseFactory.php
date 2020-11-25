@@ -61,6 +61,7 @@ $factory->define(Expense::class, function (Faker $faker) {
     $reimbursable_amount = $employee->remaining_fund < $expenses["amount"] ? abs($employee->remaining_fund - $expenses["amount"]) : 0;
 
     return [
+        'code' => null,
         'description' => $expenses["description"],
         'amount' => $expenses["amount"],
         'reimbursable_amount' => $expenses["amount"],
