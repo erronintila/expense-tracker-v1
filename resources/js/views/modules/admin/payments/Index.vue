@@ -452,8 +452,6 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        console.log(items);
-
                         _this.loading = false;
 
                         resolve({ items, total });

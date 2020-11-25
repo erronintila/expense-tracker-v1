@@ -170,22 +170,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -342,155 +326,189 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-form",
-            {
-              ref: "form",
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
-              }
-            },
+            { ref: "form" },
             [
               _c(
                 "v-container",
                 [
                   _c(
-                    "v-row",
+                    "v-card",
+                    { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
                     [
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.minLength(150)
-                              ),
-                              counter: 150,
-                              "error-messages": _vm.errors.name,
-                              label: "Name *",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.form.name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "name", $$v)
-                              },
-                              expression: "form.name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
+                        "v-list-item",
+                        { attrs: { "three-line": "" } },
                         [
                           _c(
-                            "v-radio-group",
-                            {
-                              attrs: { row: "" },
-                              on: {
-                                change: function($event) {
-                                  _vm.no_tin = false
-                                  _vm.form.tin = ""
-                                }
-                              },
-                              model: {
-                                value: _vm.form.is_vat_inclusive,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.form, "is_vat_inclusive", $$v)
-                                },
-                                expression: "form.is_vat_inclusive"
-                              }
-                            },
+                            "v-list-item-content",
                             [
-                              _c("v-radio", {
-                                attrs: { label: "VAT", value: true }
-                              }),
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text mb-4" },
+                                [
+                                  _vm._v(
+                                    "\n                                BASIC DETAILS\n                            "
+                                  )
+                                ]
+                              ),
                               _vm._v(" "),
-                              _c("v-radio", {
-                                attrs: { label: "Non-VAT", value: false }
-                              })
+                              _c("v-list-item-subtitle", [
+                                _vm._v(
+                                  "\n                                Note: Lorem ipsum dolor sit, amet\n                                consectetur adipisicing elit. Explicabo enim\n                                eum similique nihil a, repellat, fugiat\n                                debitis placeat, illo ipsa molestias quaerat\n                                excepturi. Labore inventore molestiae a\n                                rerum, omnis expedita!\n                            "
+                                )
+                              ])
                             ],
                             1
                           )
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "9", md: "3" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required,
-                              "error-messages": _vm.errors.tin,
-                              counter: 100,
-                              label: "Tax Identification Number (TIN) *",
-                              required: "",
-                              readonly: _vm.no_tin
-                            },
-                            scopedSlots: _vm._u([
-                              {
-                                key: "append",
-                                fn: function() {
-                                  return undefined
-                                },
-                                proxy: true
-                              }
-                            ]),
-                            model: {
-                              value: _vm.form.tin,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "tin", $$v)
-                              },
-                              expression: "form.tin"
-                            }
-                          })
-                        ],
-                        1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-col",
-                        { attrs: { cols: "3", md: "1" } },
+                        "v-container",
                         [
-                          _c("v-checkbox", {
-                            attrs: {
-                              label: "N/A",
-                              readonly: _vm.form.is_vat_inclusive
-                            },
-                            on: {
-                              click: function() {
-                                _vm.form.tin = _vm.no_tin ? "N/A" : ""
-                              }
-                            },
-                            model: {
-                              value: _vm.no_tin,
-                              callback: function($$v) {
-                                _vm.no_tin = $$v
-                              },
-                              expression: "no_tin"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "9" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(150)
+                                      ),
+                                      counter: 150,
+                                      "error-messages": _vm.errors.name,
+                                      label: "Name",
+                                      required: ""
+                                    },
+                                    model: {
+                                      value: _vm.form.name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "name", $$v)
+                                      },
+                                      expression: "form.name"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "3" } },
+                                [
+                                  _c(
+                                    "v-radio-group",
+                                    {
+                                      attrs: { row: "" },
+                                      on: {
+                                        change: function($event) {
+                                          _vm.no_tin = false
+                                          _vm.form.tin = ""
+                                        }
+                                      },
+                                      model: {
+                                        value: _vm.form.is_vat_inclusive,
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.form,
+                                            "is_vat_inclusive",
+                                            $$v
+                                          )
+                                        },
+                                        expression: "form.is_vat_inclusive"
+                                      }
+                                    },
+                                    [
+                                      _c("v-radio", {
+                                        attrs: { label: "VAT", value: true }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-radio", {
+                                        attrs: {
+                                          label: "Non-VAT",
+                                          value: false
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "9", md: "9" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.mixin_validation.required,
+                                      "error-messages": _vm.errors.tin,
+                                      counter: 100,
+                                      label: "Tax Identification Number (TIN)",
+                                      required: "",
+                                      readonly: _vm.no_tin
+                                    },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "append",
+                                        fn: function() {
+                                          return undefined
+                                        },
+                                        proxy: true
+                                      }
+                                    ]),
+                                    model: {
+                                      value: _vm.form.tin,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "tin", $$v)
+                                      },
+                                      expression: "form.tin"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "3", md: "3" } },
+                                [
+                                  _c("v-checkbox", {
+                                    attrs: {
+                                      label: "N/A",
+                                      readonly: _vm.form.is_vat_inclusive
+                                    },
+                                    on: {
+                                      click: function() {
+                                        _vm.form.tin = _vm.no_tin ? "N/A" : ""
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.no_tin,
+                                      callback: function($$v) {
+                                        _vm.no_tin = $$v
+                                      },
+                                      expression: "no_tin"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
                               rules: [],
@@ -504,15 +522,8 @@ var render = function() {
                               },
                               expression: "form.email"
                             }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
+                          }),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
                               rules: [],
@@ -527,15 +538,8 @@ var render = function() {
                               },
                               expression: "form.contact_person"
                             }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
+                          }),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
                               rules: [],
@@ -556,15 +560,8 @@ var render = function() {
                               },
                               expression: "form.mobile_number"
                             }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
+                          }),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
                               rules: [],
@@ -585,15 +582,8 @@ var render = function() {
                               },
                               expression: "form.telephone_number"
                             }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
+                          }),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
                               counter: 100,
@@ -613,27 +603,14 @@ var render = function() {
                               },
                               expression: "form.website"
                             }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12" } },
-                        [
+                          }),
+                          _vm._v(" "),
                           _c("v-textarea", {
                             attrs: {
                               rules: _vm.mixin_validation.required,
                               "error-messages": _vm.errors.address,
-                              label: "Address *",
-                              rows: "1"
+                              label: "Address",
+                              rows: "3"
                             },
                             on: {
                               input: function($event) {
@@ -650,41 +627,35 @@ var render = function() {
                           })
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("small", { staticClass: "text--secondary" }, [
-                    _vm._v(
-                      "\n                    * indicates required field\n                "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "success", dark: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [_vm._v("Save")]
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.$router.go(-1)
-                            }
-                          }
-                        },
-                        [_vm._v("Cancel")]
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "success", dark: "" },
+                              on: { click: _vm.onSave }
+                            },
+                            [_vm._v("Save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.$router.go(-1)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          )
+                        ],
+                        1
                       )
                     ],
                     1

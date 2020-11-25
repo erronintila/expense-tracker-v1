@@ -157,6 +157,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -313,7 +322,7 @@ var render = function() {
                     [
                       _c(
                         "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        { attrs: { cols: "12", md: "8" } },
                         [
                           _c("v-text-field", {
                             attrs: {
@@ -407,40 +416,67 @@ var render = function() {
                                       _c(
                                         "v-row",
                                         [
-                                          _c("v-text-field", {
-                                            staticClass: "mx-4",
-                                            attrs: { label: "Sub type name" },
-                                            model: {
-                                              value: _vm.subtype,
-                                              callback: function($$v) {
-                                                _vm.subtype = $$v
-                                              },
-                                              expression: "subtype"
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _c("v-text-field", {
-                                            staticClass: "mx-4",
-                                            attrs: {
-                                              label: "Default amount limit",
-                                              type: "number"
-                                            },
-                                            model: {
-                                              value: _vm.subtype_limit,
-                                              callback: function($$v) {
-                                                _vm.subtype_limit = $$v
-                                              },
-                                              expression: "subtype_limit"
-                                            }
-                                          }),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "8" } },
+                                            [
+                                              _c("v-text-field", {
+                                                staticClass: "mx-4",
+                                                attrs: {
+                                                  label: "Sub type name"
+                                                },
+                                                model: {
+                                                  value: _vm.subtype,
+                                                  callback: function($$v) {
+                                                    _vm.subtype = $$v
+                                                  },
+                                                  expression: "subtype"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
                                           _vm._v(" "),
                                           _c(
-                                            "v-btn",
-                                            {
-                                              staticClass: "mx-4",
-                                              on: { click: _vm.addItem }
-                                            },
-                                            [_vm._v("Add")]
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "3" } },
+                                            [
+                                              _c("v-text-field", {
+                                                staticClass: "mx-4",
+                                                attrs: {
+                                                  label: "Default amount limit",
+                                                  type: "number"
+                                                },
+                                                model: {
+                                                  value: _vm.subtype_limit,
+                                                  callback: function($$v) {
+                                                    _vm.subtype_limit = $$v
+                                                  },
+                                                  expression: "subtype_limit"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "1" } },
+                                            [
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  staticClass: "mx-4",
+                                                  on: { click: _vm.addItem }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            Add\n                                        "
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
                                           )
                                         ],
                                         1

@@ -52,6 +52,37 @@
         <!-- ------------------------------------------------------------------------------------------------------------ -->
 
         <v-main>
+            <v-form ref="form">
+                <v-container>
+                    <v-card class="mx-auto mb-4" flat>
+                        <v-list-item three-line>
+                            <v-list-item-content>
+                                <div class="overline green--text mb-4">
+                                    BASIC DETAILS
+                                </div>
+                                <!-- <v-list-item-title class="headline mb-1">
+                                    Basic Information
+                                </v-list-item-title> -->
+                                <v-list-item-subtitle>
+                                    Note: Lorem ipsum dolor sit, amet
+                                    consectetur adipisicing elit. Explicabo enim
+                                    eum similique nihil a, repellat, fugiat
+                                    debitis placeat, illo ipsa molestias quaerat
+                                    excepturi. Labore inventore molestiae a
+                                    rerum, omnis expedita!
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <v-container>
+                            <v-text-field label="Date"></v-text-field>
+                            <v-text-field label="Employee"></v-text-field>
+                            <v-text-field label="Vendor"></v-text-field>
+                            <v-text-field label="Receipt No."></v-text-field>
+                        </v-container>
+                    </v-card>
+                </v-container>
+            </v-form>
             <v-container>
                 <v-card class="mx-auto mb-4" outlined>
                     <v-list-item three-line>
@@ -103,7 +134,10 @@
                         <v-text-field label="Expense Type"></v-text-field>
                         <v-text-field label="Sub Type"></v-text-field>
                         <v-text-field label="Description"></v-text-field>
-                        <v-checkbox v-model="itemize" label="Itemize Expenses"></v-checkbox>
+                        <v-checkbox
+                            v-model="itemize"
+                            label="Itemize Expenses"
+                        ></v-checkbox>
 
                         <v-row v-if="itemize">
                             <v-spacer></v-spacer>
@@ -244,7 +278,7 @@ export default {
                 carbs: 67,
                 protein: 4.3,
                 iron: "8%"
-            },
+            }
         ]
     })
 };

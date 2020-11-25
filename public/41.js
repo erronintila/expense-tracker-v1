@@ -524,6 +524,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1109,7 +1117,7 @@ var render = function() {
                                                         .required,
                                                     "error-messages":
                                                       _vm.errors.date,
-                                                    label: "Date *",
+                                                    label: "Date",
                                                     readonly: ""
                                                   },
                                                   on: {
@@ -1177,7 +1185,7 @@ var render = function() {
                                   "error-messages": _vm.errors.employee_id,
                                   "item-value": "id",
                                   "item-text": "fullname",
-                                  label: "Employee *",
+                                  label: "Employee",
                                   "return-object": "",
                                   required: ""
                                 },
@@ -1204,7 +1212,7 @@ var render = function() {
                                   "item-value": "id",
                                   "item-text": "name",
                                   "return-object": "",
-                                  label: "Vendor *"
+                                  label: "Vendor"
                                 },
                                 on: {
                                   input: function($event) {
@@ -1309,7 +1317,7 @@ var render = function() {
                                             _vm.errors.expense_type_id,
                                           "item-value": "id",
                                           "item-text": "name",
-                                          label: "Expense Type *",
+                                          label: "Expense Type",
                                           required: ""
                                         },
                                         on: {
@@ -1345,7 +1353,7 @@ var render = function() {
                                           "error-messages": _vm.errors.sub_type,
                                           "item-value": "id",
                                           "item-text": "name",
-                                          label: "Sub Type *",
+                                          label: "Sub Type (optional)",
                                           required: "",
                                           "return-object": ""
                                         },
@@ -1459,7 +1467,7 @@ var render = function() {
                                           rules: [],
                                           "error-messages":
                                             _vm.errors.receipt_number,
-                                          label: "Receipt No. *",
+                                          label: "Receipt No.",
                                           required: ""
                                         },
                                         on: {
@@ -2019,50 +2027,56 @@ var render = function() {
                                 }
                               }),
                               _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
+                              _vm.form.vendor.is_vat_inclusive
+                                ? _c(
+                                    "v-row",
                                     [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Tax Rate",
-                                          suffix: "%"
-                                        },
-                                        model: {
-                                          value: _vm.form.tax_rate,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "tax_rate", $$v)
-                                          },
-                                          expression: "form.tax_rate"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "8" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: { label: "Tax Amount" },
-                                        model: {
-                                          value: _vm.taxable_amount,
-                                          callback: function($$v) {
-                                            _vm.taxable_amount = $$v
-                                          },
-                                          expression: "taxable_amount"
-                                        }
-                                      })
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Tax Rate",
+                                              suffix: "%"
+                                            },
+                                            model: {
+                                              value: _vm.form.tax_rate,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "tax_rate",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.tax_rate"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "8" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: { label: "Tax Amount" },
+                                            model: {
+                                              value: _vm.taxable_amount,
+                                              callback: function($$v) {
+                                                _vm.taxable_amount = $$v
+                                              },
+                                              expression: "taxable_amount"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
                                     ],
                                     1
                                   )
-                                ],
-                                1
-                              ),
+                                : _vm._e(),
                               _vm._v(" "),
                               _c("v-textarea", {
                                 attrs: {
@@ -2100,7 +2114,13 @@ var render = function() {
                                   _c("v-col", { staticClass: "text-right" }, [
                                     _c("div", { staticClass: "green--text" }, [
                                       _vm._v(
-                                        "\n                                    0.00\n                                "
+                                        "\n                                    " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.amount_to_replenish
+                                            )
+                                          ) +
+                                          "\n                                "
                                       )
                                     ])
                                   ])
@@ -2124,7 +2144,13 @@ var render = function() {
                                   _c("v-col", { staticClass: "text-right" }, [
                                     _c("div", { staticClass: "green--text" }, [
                                       _vm._v(
-                                        "\n                                    0.00\n                                "
+                                        "\n                                    " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.amount_to_reimburse
+                                            )
+                                          ) +
+                                          "\n                                "
                                       )
                                     ])
                                   ])
@@ -2157,7 +2183,13 @@ var render = function() {
                                   _c("v-col", { staticClass: "text-right" }, [
                                     _c("div", { staticClass: "green--text" }, [
                                       _vm._v(
-                                        "\n                                    0.00\n                                "
+                                        "\n                                    " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.expense_amount
+                                            )
+                                          ) +
+                                          "\n                                "
                                       )
                                     ])
                                   ])
@@ -2275,7 +2307,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************************************************************!*\
   !*** ./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e& ***!
   \*********************************************************************************************/
-/*! no static exports found */
+/*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

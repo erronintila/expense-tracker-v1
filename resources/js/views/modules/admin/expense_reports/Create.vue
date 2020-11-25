@@ -26,14 +26,38 @@
                 <h4 class="title green--text">New Expense Report</h4>
             </v-card-title>
 
-            <v-form ref="form" v-model="valid">
-                <v-container>
-                    <v-row>
-                        <v-spacer></v-spacer>
-                    </v-row>
+            <v-container>
+                <v-card class="mx-auto mb-4" flat>
+                    <v-list-item three-line>
+                        <v-list-item-content>
+                            <div class="overline green--text mb-4">
+                                BASIC DETAILS
+                            </div>
+                            <!-- <v-list-item-title class="headline mb-1">
+                            Basic Information
+                        </v-list-item-title> -->
+                            <v-list-item-subtitle>
+                                Note: Lorem ipsum dolor sit, amet consectetur
+                                adipisicing elit. Explicabo enim eum similique
+                                nihil a, repellat, fugiat debitis placeat, illo
+                                ipsa molestias quaerat excepturi. Labore
+                                inventore molestiae a rerum, omnis expedita!
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
 
-                    <v-row>
-                        <v-col cols="12" md="4">
+                    <v-form ref="form" v-model="valid">
+                        <v-container>
+                            <DateRangePicker
+                                :preset="preset"
+                                :presets="presets"
+                                :value="date_range"
+                                :solo="false"
+                                :buttonType="false"
+                                :buttonColor="'white'"
+                                :buttonDark="false"
+                                @updateDates="updateDates"
+                            ></DateRangePicker>
                             <v-autocomplete
                                 v-model="form.employee"
                                 :rules="mixin_validation.required"
@@ -43,13 +67,11 @@
                                 @change="loadExpenses"
                                 item-value="id"
                                 item-text="fullname"
-                                label="Employee *"
+                                label="Employee"
                                 required
                                 return-object
                             >
                             </v-autocomplete>
-                        </v-col>
-                        <v-col cols="12" md="8">
                             <v-combobox
                                 v-model="form.description"
                                 :rules="[
@@ -60,13 +82,13 @@
                                 :items="[default_description]"
                                 :error-messages="errors.description"
                                 @input="errors.description = []"
-                                label="Description *"
+                                label="Description"
                             ></v-combobox>
-                        </v-col>
-                    </v-row>
 
-                    <v-row>
-                        <v-col cols="12">
+                            <div class="overline green--text">
+                                Expenses
+                            </div>
+
                             <v-data-table
                                 elevation="0"
                                 v-model="selected"
@@ -77,7 +99,6 @@
                                 show-select
                                 show-expand
                                 single-expand
-                                class="elevation-0"
                             >
                                 <template
                                     slot="body.append"
@@ -128,8 +149,6 @@
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
-                                        Expenses
-
                                         <v-spacer></v-spacer>
 
                                         <v-btn
@@ -140,16 +159,6 @@
                                         >
                                             New Item
                                         </v-btn>
-                                        <DateRangePicker
-                                            :preset="preset"
-                                            :presets="presets"
-                                            :value="date_range"
-                                            :solo="true"
-                                            :buttonType="true"
-                                            :buttonColor="'white'"
-                                            :buttonDark="false"
-                                            @updateDates="updateDates"
-                                        ></DateRangePicker>
                                     </v-row>
                                 </template>
                                 <template
@@ -206,7 +215,8 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.created.created_at,
+                                                                item.created
+                                                                    .created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -222,7 +232,8 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.deleted.deleted_at,
+                                                                item.deleted
+                                                                    .deleted_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -233,21 +244,16 @@
                                     </td>
                                 </template>
                             </v-data-table>
-                        </v-col>
-                    </v-row>
 
-                    <v-row>
-                        <v-col cols="12" md="6">
                             <v-textarea
                                 v-model="form.remarks"
                                 label="Remarks"
                                 :rules="[]"
-                                :rows="form.remarks == '' ? 1 : 2"
+                                :rows="3"
                             >
                             </v-textarea>
-                        </v-col>
-                    </v-row>
-
+                        </v-container>
+                    </v-form>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
@@ -255,8 +261,8 @@
                             Cancel
                         </v-btn>
                     </v-card-actions>
-                </v-container>
-            </v-form>
+                </v-card>
+            </v-container>
         </v-card>
     </div>
 </template>

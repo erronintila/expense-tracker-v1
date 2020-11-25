@@ -11,72 +11,98 @@
                 <h4 class="title green--text">Edit Vendor</h4>
             </v-card-title>
 
-            <v-form ref="form" v-model="valid">
+            <v-form ref="form">
                 <v-container>
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="form.name"
-                                :rules="[
-                                    ...mixin_validation.required,
-                                    ...mixin_validation.minLength(150)
-                                ]"
-                                :counter="150"
-                                :error-messages="errors.name"
-                                label="Name *"
-                                required
-                            ></v-text-field>
-                        </v-col>
+                    <v-card class="mx-auto mb-4" flat>
+                        <v-list-item three-line>
+                            <v-list-item-content>
+                                <div class="overline green--text mb-4">
+                                    BASIC DETAILS
+                                </div>
+                                <!-- <v-list-item-title class="headline mb-1">
+                                    Basic Information
+                                </v-list-item-title> -->
+                                <v-list-item-subtitle>
+                                    Note: Lorem ipsum dolor sit, amet
+                                    consectetur adipisicing elit. Explicabo enim
+                                    eum similique nihil a, repellat, fugiat
+                                    debitis placeat, illo ipsa molestias quaerat
+                                    excepturi. Labore inventore molestiae a
+                                    rerum, omnis expedita!
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
 
-                        <v-col>
-                            <v-radio-group v-model="form.is_vat_inclusive" @change="no_tin = false; form.tin = ''" row>
-                                <v-radio label="VAT" :value="true"></v-radio>
-                                <v-radio
-                                    label="Non-VAT"
-                                    :value="false"
-                                ></v-radio>
-                            </v-radio-group>
-                        </v-col>
-                    </v-row>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" md="9">
+                                    <v-text-field
+                                        v-model="form.name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(150)
+                                        ]"
+                                        :counter="150"
+                                        :error-messages="errors.name"
+                                        label="Name"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
 
-                    <v-row>
-                        <v-col cols="9" md="3">
-                            <v-text-field
-                                v-model="form.tin"
-                                :rules="mixin_validation.required"
-                                :error-messages="errors.tin"
-                                :counter="100"
-                                label="Tax Identification Number (TIN) *"
-                                required
-                                :readonly="no_tin"
-                            >
-                                <template v-slot:append> </template>
-                            </v-text-field>
-                        </v-col>
+                                <v-col cols="12" md="3">
+                                    <v-radio-group
+                                        v-model="form.is_vat_inclusive"
+                                        @change="
+                                            no_tin = false;
+                                            form.tin = '';
+                                        "
+                                        row
+                                    >
+                                        <v-radio
+                                            label="VAT"
+                                            :value="true"
+                                        ></v-radio>
+                                        <v-radio
+                                            label="Non-VAT"
+                                            :value="false"
+                                        ></v-radio>
+                                    </v-radio-group>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="9" md="9">
+                                    <v-text-field
+                                        v-model="form.tin"
+                                        :rules="mixin_validation.required"
+                                        :error-messages="errors.tin"
+                                        :counter="100"
+                                        label="Tax Identification Number (TIN)"
+                                        required
+                                        :readonly="no_tin"
+                                    >
+                                        <template v-slot:append> </template>
+                                    </v-text-field>
+                                </v-col>
 
-                        <v-col cols="3" md="1">
-                            <v-checkbox
-                                v-model="no_tin"
-                                label="N/A"
-                                @click="
-                                    () => {
-                                        form.tin = no_tin ? 'N/A' : '';
-                                    }
-                                "
-                                :readonly="form.is_vat_inclusive"
-                            ></v-checkbox>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
+                                <v-col cols="3" md="3">
+                                    <v-checkbox
+                                        v-model="no_tin"
+                                        label="N/A"
+                                        @click="
+                                            () => {
+                                                form.tin = no_tin ? 'N/A' : '';
+                                            }
+                                        "
+                                        :readonly="form.is_vat_inclusive"
+                                    ></v-checkbox>
+                                </v-col>
+                            </v-row>
                             <v-text-field
                                 v-model="form.email"
                                 :rules="[]"
                                 :error-messages="errors.email"
                                 label="Email Address"
                             ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.contact_person"
                                 :rules="[]"
@@ -84,9 +110,6 @@
                                 :counter="100"
                                 label="Contact Person"
                             ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.mobile_number"
                                 :rules="[]"
@@ -96,9 +119,6 @@
                                 label="Mobile Number"
                                 type="number"
                             ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.telephone_number"
                                 :rules="[]"
@@ -108,9 +128,6 @@
                                 label="Telephone Number"
                                 type="number"
                             ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.website"
                                 :counter="100"
@@ -119,56 +136,23 @@
                                 @input="errors.website = []"
                                 label="Website"
                             ></v-text-field>
-                        </v-col>
-
-                        <!-- <v-col cols="12" md="4">
-                            <v-select
-                                v-model="selected_expense_types"
-                                :items="expense_types"
-                                item-text="name"
-                                item-value="id"
-                                label="Link with Expense Types"
-                                multiple
-                            >
-                                <template v-slot:selection="{ item, index }">
-                                    <v-chip v-if="index === 0" small>
-                                        <span>{{ item.name }}</span>
-                                    </v-chip>
-                                    <span
-                                        v-if="index === 1"
-                                        class="grey--text caption"
-                                        >(+{{
-                                            selected_expense_types.length - 1
-                                        }}
-                                        others)</span
-                                    >
-                                </template>
-                            </v-select>
-                        </v-col> -->
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12">
                             <v-textarea
                                 v-model="form.address"
                                 :rules="mixin_validation.required"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
-                                label="Address *"
-                                rows="1"
+                                label="Address"
+                                rows="3"
                             ></v-textarea>
-                        </v-col>
-                    </v-row>
-
-                    <small class="text--secondary">
-                        * indicates required field
-                    </small>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn @click="$router.go(-1)">Cancel</v-btn>
-                    </v-card-actions>
+                        </v-container>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="success" dark @click="onSave"
+                                >Save</v-btn
+                            >
+                            <v-btn @click="$router.go(-1)">Cancel</v-btn>
+                        </v-card-actions>
+                    </v-card>
                 </v-container>
             </v-form>
         </v-card>

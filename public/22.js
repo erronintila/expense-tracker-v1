@@ -204,6 +204,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -287,6 +321,71 @@ var render = function() {
       _c(
         "v-main",
         [
+          _c(
+            "v-form",
+            { ref: "form" },
+            [
+              _c(
+                "v-container",
+                [
+                  _c(
+                    "v-card",
+                    { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
+                    [
+                      _c(
+                        "v-list-item",
+                        { attrs: { "three-line": "" } },
+                        [
+                          _c(
+                            "v-list-item-content",
+                            [
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text mb-4" },
+                                [
+                                  _vm._v(
+                                    "\n                                BASIC DETAILS\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("v-list-item-subtitle", [
+                                _vm._v(
+                                  "\n                                Note: Lorem ipsum dolor sit, amet\n                                consectetur adipisicing elit. Explicabo enim\n                                eum similique nihil a, repellat, fugiat\n                                debitis placeat, illo ipsa molestias quaerat\n                                excepturi. Labore inventore molestiae a\n                                rerum, omnis expedita!\n                            "
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-container",
+                        [
+                          _c("v-text-field", { attrs: { label: "Date" } }),
+                          _vm._v(" "),
+                          _c("v-text-field", { attrs: { label: "Employee" } }),
+                          _vm._v(" "),
+                          _c("v-text-field", { attrs: { label: "Vendor" } }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: { label: "Receipt No." }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-container",
             [

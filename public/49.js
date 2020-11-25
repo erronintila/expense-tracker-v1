@@ -294,74 +294,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -457,9 +389,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    test: function test() {
-      console.log(this.selected);
-    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
@@ -530,8 +459,6 @@ __webpack_require__.r(__webpack_exports__);
           expense_reports: _this.selected,
           employee: _this.form.employee.id
         }).then(function (response) {
-          console.log(response);
-
           _this.onRefresh();
 
           _this.$dialog.message.success("Payment created successfully.", {
@@ -690,11 +617,42 @@ var render = function() {
                     "v-container",
                     [
                       _c(
-                        "v-row",
+                        "v-card",
+                        { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
                         [
                           _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
+                            "v-list-item",
+                            { attrs: { "three-line": "" } },
+                            [
+                              _c(
+                                "v-list-item-content",
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "overline green--text mb-4"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                BASIC DETAILS\n                            "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-list-item-subtitle", [
+                                    _vm._v(
+                                      "\n                                Note: Lorem ipsum dolor sit, amet\n                                consectetur adipisicing elit. Explicabo enim\n                                eum similique nihil a, repellat, fugiat\n                                debitis placeat, illo ipsa molestias quaerat\n                                excepturi. Labore inventore molestiae a\n                                rerum, omnis expedita!\n                            "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-container",
                             [
                               _c(
                                 "v-menu",
@@ -723,7 +681,7 @@ var render = function() {
                                                         .required,
                                                     "error-messages":
                                                       _vm.errors.date,
-                                                    label: "Date *",
+                                                    label: "Date",
                                                     readonly: ""
                                                   },
                                                   on: {
@@ -781,15 +739,8 @@ var render = function() {
                                   })
                                 ],
                                 1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
+                              ),
+                              _vm._v(" "),
                               _c("v-autocomplete", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required,
@@ -797,7 +748,7 @@ var render = function() {
                                   "error-messages": _vm.errors.employee,
                                   "item-value": "id",
                                   "item-text": "fullname",
-                                  label: "Employee *",
+                                  label: "Employee",
                                   "return-object": "",
                                   required: ""
                                 },
@@ -814,15 +765,8 @@ var render = function() {
                                   },
                                   expression: "form.employee"
                                 }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
+                              }),
+                              _vm._v(" "),
                               _c("v-text-field", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required.concat(
@@ -830,7 +774,7 @@ var render = function() {
                                   ),
                                   counter: 100,
                                   "error-messages": _vm.errors.description,
-                                  label: "Description *",
+                                  label: "Description",
                                   required: ""
                                 },
                                 model: {
@@ -840,15 +784,8 @@ var render = function() {
                                   },
                                   expression: "form.description"
                                 }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
+                              }),
+                              _vm._v(" "),
                               _c("v-text-field", {
                                 attrs: {
                                   rules: [],
@@ -863,32 +800,18 @@ var render = function() {
                                   },
                                   expression: "form.voucher_no"
                                 }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c("v-btn", { on: { click: _vm.test } }, [
-                                _vm._v("Test")
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12" } },
-                            [
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text mb-4" },
+                                [
+                                  _vm._v(
+                                    "\n                            Expense Reports\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
                               _c(
                                 "v-data-table",
                                 {
@@ -910,62 +833,36 @@ var render = function() {
                                         key: "top",
                                         fn: function() {
                                           return [
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _vm._v(
-                                                  "\n                                    Expense Reports\n\n                                    "
-                                                ),
-                                                _c("v-spacer"),
-                                                _vm._v(" "),
-                                                _c("DateRangePicker", {
-                                                  attrs: {
-                                                    preset: _vm.preset,
-                                                    presets: _vm.presets,
-                                                    value: _vm.date_range,
-                                                    solo: true,
-                                                    buttonType: true,
-                                                    buttonColor: "white",
-                                                    buttonDark: false
-                                                  },
-                                                  on: {
-                                                    updateDates: _vm.updateDates
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            ),
+                                            _c("DateRangePicker", {
+                                              attrs: {
+                                                preset: _vm.preset,
+                                                presets: _vm.presets,
+                                                value: _vm.date_range,
+                                                solo: false,
+                                                buttonType: false,
+                                                buttonColor: "white",
+                                                buttonDark: false
+                                              },
+                                              on: {
+                                                updateDates: _vm.updateDates
+                                              }
+                                            }),
                                             _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        "append-icon":
-                                                          "mdi-magnify",
-                                                        label: "Search",
-                                                        "single-line": "",
-                                                        "hide-details": ""
-                                                      },
-                                                      model: {
-                                                        value: _vm.search,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.search = $$v
-                                                        },
-                                                        expression: "search"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            )
+                                            _c("v-text-field", {
+                                              attrs: {
+                                                "append-icon": "mdi-magnify",
+                                                label: "Search",
+                                                "single-line": "",
+                                                "hide-details": ""
+                                              },
+                                              model: {
+                                                value: _vm.search,
+                                                callback: function($$v) {
+                                                  _vm.search = $$v
+                                                },
+                                                expression: "search"
+                                              }
+                                            })
                                           ]
                                         },
                                         proxy: true
@@ -1258,23 +1155,10 @@ var render = function() {
                                     : _vm._e()
                                 ],
                                 2
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "6" } },
-                            [
+                              ),
+                              _vm._v(" "),
                               _c("v-textarea", {
-                                attrs: { label: "Remarks", rows: "1" },
+                                attrs: { label: "Remarks", rows: "3" },
                                 model: {
                                   value: _vm.form.remarks,
                                   callback: function($$v) {
@@ -1288,42 +1172,38 @@ var render = function() {
                           )
                         ],
                         1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "green", dark: "" },
-                              on: { click: _vm.onSave }
-                            },
-                            [_vm._v("Save")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              on: {
-                                click: function($event) {
-                                  return _vm.$router.go(-1)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        Cancel\n                    "
-                              )
-                            ]
-                          )
-                        ],
-                        1
                       )
                     ],
                     1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green", dark: "" },
+                      on: { click: _vm.onSave }
+                    },
+                    [_vm._v("Save")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_vm._v("\n                Cancel\n            ")]
                   )
                 ],
                 1

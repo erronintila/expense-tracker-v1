@@ -479,7 +479,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/payments/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.code = data.code;
         _this.reference_no = data.reference_no;
         _this.voucher_no = data.voucher_no;

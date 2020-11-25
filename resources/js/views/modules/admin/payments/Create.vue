@@ -25,11 +25,29 @@
 
                 <h4 class="title green--text">New Payment Record</h4>
             </v-card-title>
-
             <v-form ref="form" v-model="valid">
                 <v-container>
-                    <v-row>
-                        <v-col cols="12" md="4">
+                    <v-card class="mx-auto mb-4" flat>
+                        <v-list-item three-line>
+                            <v-list-item-content>
+                                <div class="overline green--text mb-4">
+                                    BASIC DETAILS
+                                </div>
+                                <!-- <v-list-item-title class="headline mb-1">
+                                    Basic Information
+                                </v-list-item-title> -->
+                                <v-list-item-subtitle>
+                                    Note: Lorem ipsum dolor sit, amet
+                                    consectetur adipisicing elit. Explicabo enim
+                                    eum similique nihil a, repellat, fugiat
+                                    debitis placeat, illo ipsa molestias quaerat
+                                    excepturi. Labore inventore molestiae a
+                                    rerum, omnis expedita!
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <v-container>
                             <v-menu
                                 ref="menu"
                                 v-model="menu"
@@ -43,7 +61,7 @@
                                         :rules="mixin_validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
-                                        label="Date *"
+                                        label="Date"
                                         readonly
                                         v-bind="attrs"
                                         v-on="on"
@@ -58,9 +76,6 @@
                                 >
                                 </v-date-picker>
                             </v-menu>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                             <v-autocomplete
                                 v-model="form.employee"
                                 :rules="mixin_validation.required"
@@ -70,14 +85,11 @@
                                 @change="loadExpenseReports"
                                 item-value="id"
                                 item-text="fullname"
-                                label="Employee *"
+                                label="Employee"
                                 return-object
                                 required
                             >
                             </v-autocomplete>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.description"
                                 :rules="[
@@ -86,72 +98,9 @@
                                 ]"
                                 :counter="100"
                                 :error-messages="errors.description"
-                                label="Description *"
+                                label="Description"
                                 required
                             ></v-text-field>
-                        </v-col>
-
-                        <!-- <v-col cols="12" md="4">
-                            <v-menu
-                                v-model="menu_payee"
-                                :close-on-content-click="false"
-                                :nudge-width="200"
-                                offset-y
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field
-                                        v-model="form.payee"
-                                        :rules="mixin_validation.required"
-                                        :error-messages="errors.payee"
-                                        @input="errors.payee = []"
-                                        label="Payee *"
-                                        readonly
-                                        v-bind="attrs"
-                                        v-on="on"
-                                    ></v-text-field>
-                                </template>
-
-                                <v-card>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col cols="12" md="8">
-                                                <v-text-field
-                                                    v-model="form.payee"
-                                                    :rules="
-                                                        mixin_validation.required
-                                                    "
-                                                    :counter="100"
-                                                    label="Payee *"
-                                                    required
-                                                ></v-text-field>
-                                            </v-col>
-
-                                            <v-col cols="12" md="4">
-                                                <v-text-field
-                                                    v-model="form.payee_phone"
-                                                    :rules="[]"
-                                                    :counter="100"
-                                                    label="Payee Phone No."
-                                                    required
-                                                ></v-text-field>
-                                            </v-col>
-
-                                            <v-col cols="12">
-                                                <v-text-field
-                                                    v-model="form.payee_address"
-                                                    :rules="[]"
-                                                    :counter="100"
-                                                    label="Payee Address"
-                                                    required
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card>
-                            </v-menu>
-                        </v-col> -->
-
-                        <v-col cols="12" md="4">
                             <v-text-field
                                 v-model="form.voucher_no"
                                 :rules="[]"
@@ -159,15 +108,11 @@
                                 label="Voucher No."
                                 required
                             ></v-text-field>
-                        </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-btn @click="test">Test</v-btn>
-                        </v-col>
-                    </v-row>
+                            <div class="overline green--text mb-4">
+                                Expense Reports
+                            </div>
 
-                    <v-row>
-                        <v-col cols="12">
                             <v-data-table
                                 elevation="0"
                                 v-model="selected"
@@ -200,33 +145,24 @@
                                     </tr>
                                 </template>
                                 <template v-slot:top>
-                                    <v-row>
-                                        Expense Reports
+                                    <DateRangePicker
+                                        :preset="preset"
+                                        :presets="presets"
+                                        :value="date_range"
+                                        :solo="false"
+                                        :buttonType="false"
+                                        :buttonColor="'white'"
+                                        :buttonDark="false"
+                                        @updateDates="updateDates"
+                                    ></DateRangePicker>
 
-                                        <v-spacer></v-spacer>
-
-                                        <DateRangePicker
-                                            :preset="preset"
-                                            :presets="presets"
-                                            :value="date_range"
-                                            :solo="true"
-                                            :buttonType="true"
-                                            :buttonColor="'white'"
-                                            :buttonDark="false"
-                                            @updateDates="updateDates"
-                                        ></DateRangePicker>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>
-                                            <v-text-field
-                                                v-model="search"
-                                                append-icon="mdi-magnify"
-                                                label="Search"
-                                                single-line
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
+                                    <v-text-field
+                                        v-model="search"
+                                        append-icon="mdi-magnify"
+                                        label="Search"
+                                        single-line
+                                        hide-details
+                                    ></v-text-field>
                                 </template>
                                 <template v-slot:[`item.employee`]="{ item }">
                                     {{
@@ -321,29 +257,25 @@
                                     </td>
                                 </template>
                             </v-data-table>
-                        </v-col>
-                    </v-row>
 
-                    <v-row>
-                        <v-col cols="12" md="6">
                             <v-textarea
                                 v-model="form.remarks"
                                 label="Remarks"
-                                rows="1"
+                                rows="3"
                             >
                             </v-textarea>
-                        </v-col>
-                    </v-row>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn @click="$router.go(-1)">
-                            Cancel
-                        </v-btn>
-                    </v-card-actions>
+                        </v-container>
+                    </v-card>
                 </v-container>
             </v-form>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green" dark @click="onSave">Save</v-btn>
+                <v-btn @click="$router.go(-1)">
+                    Cancel
+                </v-btn>
+            </v-card-actions>
         </v-card>
     </div>
 </template>
@@ -435,9 +367,6 @@ export default {
         };
     },
     methods: {
-        test() {
-            console.log(this.selected);
-        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
@@ -522,8 +451,6 @@ export default {
                         employee: _this.form.employee.id
                     })
                     .then(function(response) {
-                        console.log(response);
-                        
                         _this.onRefresh();
 
                         _this.$dialog.message.success(

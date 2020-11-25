@@ -659,7 +659,7 @@ var render = function() {
                   _c(
                     "v-expansion-panels",
                     {
-                      attrs: { multiple: "" },
+                      attrs: { flat: "", multiple: "" },
                       model: {
                         value: _vm.panel,
                         callback: function($$v) {
@@ -673,9 +673,9 @@ var render = function() {
                         "v-expansion-panel",
                         [
                           _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "green--text" }, [
+                            _c("div", { staticClass: "overline green--text" }, [
                               _vm._v(
-                                "\n                            Basic Information\n                        "
+                                "\n                            Basic Details\n                        "
                               )
                             ])
                           ]),
@@ -1298,9 +1298,9 @@ var render = function() {
                         "v-expansion-panel",
                         [
                           _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "green--text" }, [
+                            _c("div", { staticClass: "overline green--text" }, [
                               _vm._v(
-                                "\n                            Account Information\n                        "
+                                "\n                            Account Details\n                        "
                               )
                             ])
                           ]),
@@ -1438,7 +1438,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("small", { staticClass: "text--secondary" }, [
+                  _c("small", { staticClass: "ml-4 text--secondary" }, [
                     _vm._v(
                       "\n                * indicates required field\n            "
                     )

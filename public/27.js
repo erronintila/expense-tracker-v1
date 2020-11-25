@@ -87,8 +87,6 @@ __webpack_require__.r(__webpack_exports__);
           action: "update",
           name: _this.form.name
         }).then(function (response) {
-          console.log(response);
-
           _this.$dialog.message.success("Department updated successfully.", {
             position: "top-right",
             timeout: 2000

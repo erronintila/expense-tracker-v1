@@ -31,7 +31,7 @@
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
-            <!-- ------------------------------------------------------------------------------------------- -->
+                <!-- ------------------------------------------------------------------------------------------- -->
                 <v-container>
                     <v-card class="mx-auto mb-4" flat>
                         <v-list-item three-line>
@@ -67,7 +67,7 @@
                                         :rules="mixin_validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
-                                        label="Date *"
+                                        label="Date"
                                         readonly
                                         v-bind="attrs"
                                         v-on="on"
@@ -92,7 +92,7 @@
                                 @change="loadExpenseTypes"
                                 item-value="id"
                                 item-text="fullname"
-                                label="Employee *"
+                                label="Employee"
                                 return-object
                                 required
                             >
@@ -106,7 +106,7 @@
                                 item-value="id"
                                 item-text="name"
                                 return-object
-                                label="Vendor *"
+                                label="Vendor"
                             >
                                 <template v-slot:append>
                                     <AddVendor
@@ -161,7 +161,7 @@
                                         @change="loadSubTypes"
                                         item-value="id"
                                         item-text="name"
-                                        label="Expense Type *"
+                                        label="Expense Type"
                                         required
                                     >
                                     </v-autocomplete>
@@ -175,7 +175,7 @@
                                         @input="errors.sub_type = []"
                                         item-value="id"
                                         item-text="name"
-                                        label="Sub Type *"
+                                        label="Sub Type (optional)"
                                         required
                                         return-object
                                     >
@@ -225,7 +225,7 @@
                                         :rules="[]"
                                         :error-messages="errors.receipt_number"
                                         @input="errors.receipt_number = []"
-                                        label="Receipt No. *"
+                                        label="Receipt No."
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -422,7 +422,7 @@
                                 type="number"
                             ></v-text-field>
 
-                            <v-row>
+                            <v-row v-if="form.vendor.is_vat_inclusive">
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.tax_rate"
@@ -456,7 +456,11 @@
                                 <v-spacer></v-spacer>
                                 <v-col class="text-right">
                                     <div class="green--text">
-                                        0.00
+                                        {{
+                                            mixin_formatNumber(
+                                                amount_to_replenish
+                                            )
+                                        }}
                                     </div>
                                 </v-col>
                             </v-row>
@@ -470,7 +474,11 @@
                                 <v-spacer></v-spacer>
                                 <v-col class="text-right">
                                     <div class="green--text">
-                                        0.00
+                                        {{
+                                            mixin_formatNumber(
+                                                amount_to_reimburse
+                                            )
+                                        }}
                                     </div>
                                 </v-col>
                             </v-row>
@@ -486,7 +494,7 @@
                                 <v-spacer></v-spacer>
                                 <v-col class="text-right">
                                     <div class="green--text">
-                                        0.00
+                                        {{ mixin_formatNumber(expense_amount) }}
                                     </div>
                                 </v-col>
                             </v-row>

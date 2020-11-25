@@ -400,7 +400,6 @@ export default {
                     .get("/api/expenses/" + _this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
-                        console.log(data);
 
                         _this.form.code = data.code;
                         _this.form.description = data.description;

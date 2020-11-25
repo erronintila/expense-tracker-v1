@@ -27,11 +27,11 @@
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
-                <v-expansion-panels v-model="panel" multiple>
+                <v-expansion-panels flat v-model="panel" multiple>
                     <v-expansion-panel>
                         <v-expansion-panel-header>
-                            <div class="green--text">
-                                Basic Information
+                            <div class="overline green--text">
+                                Basic Details
                             </div>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
@@ -253,8 +253,8 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-header>
-                            <div class="green--text">
-                                Account Information
+                            <div class="overline green--text">
+                                Account Details
                             </div>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
@@ -312,7 +312,7 @@
                     </v-expansion-panel>
                 </v-expansion-panels>
 
-                <small class="text--secondary">
+                <small class="ml-4 text--secondary">
                     * indicates required field
                 </small>
 

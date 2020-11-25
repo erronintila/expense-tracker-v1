@@ -14,7 +14,7 @@
             <v-form ref="form" v-model="valid">
                 <v-container>
                     <v-row>
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="8">
                             <v-text-field
                                 v-model="form.name"
                                 :rules="[
@@ -79,22 +79,31 @@
                             <v-data-table :headers="headers" :items="items">
                                 <template v-slot:top>
                                     <v-row>
-                                        <v-text-field
-                                            v-model="subtype"
-                                            label="Sub type name"
-                                            class="mx-4"
-                                        >
-                                        </v-text-field>
-                                        <v-text-field
-                                            v-model="subtype_limit"
-                                            label="Default amount limit"
-                                            class="mx-4"
-                                            type="number"
-                                        >
-                                        </v-text-field>
-                                        <v-btn @click="addItem" class="mx-4"
-                                            >Add</v-btn
-                                        >
+                                        <v-col cols="12" md="8">
+                                            <v-text-field
+                                                v-model="subtype"
+                                                label="Sub type name"
+                                                class="mx-4"
+                                            >
+                                            </v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="3">
+                                            <v-text-field
+                                                v-model="subtype_limit"
+                                                label="Default amount limit"
+                                                class="mx-4"
+                                                type="number"
+                                            >
+                                            </v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="1">
+                                            <v-btn
+                                                @click="addItem"
+                                                class="mx-4"
+                                            >
+                                                Add
+                                            </v-btn>
+                                        </v-col>
                                     </v-row>
                                 </template>
                                 <template v-slot:[`item.name`]="props">

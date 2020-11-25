@@ -277,6 +277,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -545,30 +551,70 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "v-form",
-                {
-                  ref: "form",
-                  model: {
-                    value: _vm.valid,
-                    callback: function($$v) {
-                      _vm.valid = $$v
-                    },
-                    expression: "valid"
-                  }
-                },
+                "v-container",
                 [
                   _c(
-                    "v-container",
+                    "v-card",
+                    { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
                     [
-                      _c("v-row", [_c("v-spacer")], 1),
-                      _vm._v(" "),
                       _c(
-                        "v-row",
+                        "v-list-item",
+                        { attrs: { "three-line": "" } },
                         [
                           _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
+                            "v-list-item-content",
                             [
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text mb-4" },
+                                [
+                                  _vm._v(
+                                    "\n                            BASIC DETAILS\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("v-list-item-subtitle", [
+                                _vm._v(
+                                  "\n                            Note: Lorem ipsum dolor sit, amet consectetur\n                            adipisicing elit. Explicabo enim eum similique\n                            nihil a, repellat, fugiat debitis placeat, illo\n                            ipsa molestias quaerat excepturi. Labore\n                            inventore molestiae a rerum, omnis expedita!\n                        "
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-form",
+                        {
+                          ref: "form",
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
+                          }
+                        },
+                        [
+                          _c(
+                            "v-container",
+                            [
+                              _c("DateRangePicker", {
+                                attrs: {
+                                  preset: _vm.preset,
+                                  presets: _vm.presets,
+                                  value: _vm.date_range,
+                                  solo: false,
+                                  buttonType: false,
+                                  buttonColor: "white",
+                                  buttonDark: false
+                                },
+                                on: { updateDates: _vm.updateDates }
+                              }),
+                              _vm._v(" "),
                               _c("v-autocomplete", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required,
@@ -576,7 +622,7 @@ var render = function() {
                                   "error-messages": _vm.errors.employee,
                                   "item-value": "id",
                                   "item-text": "fullname",
-                                  label: "Employee *",
+                                  label: "Employee",
                                   required: "",
                                   "return-object": ""
                                 },
@@ -593,15 +639,8 @@ var render = function() {
                                   },
                                   expression: "form.employee"
                                 }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "8" } },
-                            [
+                              }),
+                              _vm._v(" "),
                               _c("v-combobox", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required.concat(
@@ -610,7 +649,7 @@ var render = function() {
                                   counter: 100,
                                   items: [_vm.default_description],
                                   "error-messages": _vm.errors.description,
-                                  label: "Description *"
+                                  label: "Description"
                                 },
                                 on: {
                                   input: function($event) {
@@ -624,25 +663,21 @@ var render = function() {
                                   },
                                   expression: "form.description"
                                 }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12" } },
-                            [
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text" },
+                                [
+                                  _vm._v(
+                                    "\n                            Expenses\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
                               _c(
                                 "v-data-table",
                                 {
-                                  staticClass: "elevation-0",
                                   attrs: {
                                     elevation: "0",
                                     headers: _vm.headers,
@@ -712,9 +747,6 @@ var render = function() {
                                             _c(
                                               "v-row",
                                               [
-                                                _vm._v(
-                                                  "\n                                    Expenses\n\n                                    "
-                                                ),
                                                 _c("v-spacer"),
                                                 _vm._v(" "),
                                                 _c(
@@ -733,22 +765,7 @@ var render = function() {
                                                       "\n                                        New Item\n                                    "
                                                     )
                                                   ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("DateRangePicker", {
-                                                  attrs: {
-                                                    preset: _vm.preset,
-                                                    presets: _vm.presets,
-                                                    value: _vm.date_range,
-                                                    solo: true,
-                                                    buttonType: true,
-                                                    buttonColor: "white",
-                                                    buttonDark: false
-                                                  },
-                                                  on: {
-                                                    updateDates: _vm.updateDates
-                                                  }
-                                                })
+                                                )
                                               ],
                                               1
                                             )
@@ -974,27 +991,10 @@ var render = function() {
                                     : _vm._e()
                                 ],
                                 2
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "6" } },
-                            [
+                              ),
+                              _vm._v(" "),
                               _c("v-textarea", {
-                                attrs: {
-                                  label: "Remarks",
-                                  rules: [],
-                                  rows: _vm.form.remarks == "" ? 1 : 2
-                                },
+                                attrs: { label: "Remarks", rules: [], rows: 3 },
                                 model: {
                                   value: _vm.form.remarks,
                                   callback: function($$v) {

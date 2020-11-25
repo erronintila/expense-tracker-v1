@@ -610,7 +610,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          console.log(items);
           _this.loading = false;
           resolve({
             items: items,
