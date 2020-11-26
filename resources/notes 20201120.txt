@@ -277,3 +277,65 @@ public function setWeight($kg) {}
      * @return \Spatie\Permission\Contracts\Permission
      */
     public static function findById(int $id, $guardName = null): PermissionContract
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+->with(['' => function($query) {
+            $query->withTrashed();
+        }])
+
+
+
+
+
+expenses too many queries (index, edit, create, show)
+
+
+
+
+expense report too many queries (index, edit, create, show)
+
+
+
+
+$table->foreignId('user_id')->constrained()->onDelete('cascade');
+$table->foreignId('game_id')->constrained()->onDelete('cascade');
+
+
+
+
+pivot
+expense report payment
+empoyee
+
+
+
+
+lag in expenses
+culprit:
+public function getHasExpensesAttribute()
+    {
+        // return $this->expenses->count() > 0;
+
+        return true;
+    }
+
+
+
+lag in expense report
+culprit:
+expenses
+
+
+
+
+lag in dashboard
+culprit:
+expense_stats
+
+
+
+
