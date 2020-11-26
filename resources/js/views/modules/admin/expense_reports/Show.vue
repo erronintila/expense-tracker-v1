@@ -505,6 +505,8 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
+                    console.log(data);
+
                     _this.form.code = data.code;
                     _this.form.reference_no = data.reference_no;
                     _this.form.description = data.description;
