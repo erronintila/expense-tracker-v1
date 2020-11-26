@@ -138,15 +138,15 @@ class Employee extends Model
         return $this->belongsTo(Job::class);
     }
 
-    /**
-     * Displays the job designation associated with employee.
-     *
-     * @return mixed
-     */
-    public function department()
-    {
-        return $this->belongsTo(Job::class);
-    }
+    // /**
+    //  * Displays the job designation associated with employee.
+    //  *
+    //  * @return mixed
+    //  */
+    // public function department()
+    // {
+    //     return $this->belongsTo(Department::class);
+    // }
 
     /**
      * Displays the expenses associated with employee.
@@ -158,25 +158,25 @@ class Employee extends Model
         return $this->hasMany(Expense::class);
     }
 
-    /**
-     * Displays the job histories associated with employee.
-     *
-     * @return mixed
-     */
-    public function job_histories()
-    {
-        return $this->hasMany(JobHistory::class);
-    }
+    // /**
+    //  * Displays the job histories associated with employee.
+    //  *
+    //  * @return mixed
+    //  */
+    // public function job_histories()
+    // {
+    //     return $this->hasMany(JobHistory::class);
+    // }
 
-    /**
-     * Displays the allowances associated with employee.
-     *
-     * @return mixed
-     */
-    public function allowances()
-    {
-        return $this->hasMany(Allowance::class);
-    }
+    // /**
+    //  * Displays the allowances associated with employee.
+    //  *
+    //  * @return mixed
+    //  */
+    // public function allowances()
+    // {
+    //     return $this->hasMany(Allowance::class);
+    // }
 
     /**
      * Displays the adjustments associated with employee.

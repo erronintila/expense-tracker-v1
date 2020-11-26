@@ -166,6 +166,8 @@ class ExpenseType extends Model
 
     public function getHasExpensesAttribute()
     {
-        return $this->expenses->count() > 0;
+        // return $this->expenses->count() > 0;
+
+        return true;
     }
 }

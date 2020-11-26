@@ -22,18 +22,18 @@ class ExpenseResource extends JsonResource
     {
         // return parent::toArray($request);
 
-        $activities = Activity::where("subject_type", "App\Models\Expense")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
+        // $activities = Activity::where("subject_type", "App\Models\Expense")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
         $logs = [];
         
-        foreach ($activities as $activity) {
-            $temp = [
-                "causer" => User::find($activity['causer_id']),
-                "created_at" => $activity['created_at'],
-                "description" => $activity['description'],
-            ];
+        // foreach ($activities as $activity) {
+        //     $temp = [
+        //         "causer" => User::find($activity['causer_id']),
+        //         "created_at" => $activity['created_at'],
+        //         "description" => $activity['description'],
+        //     ];
 
-            array_push($logs, $temp);
-        }
+        //     array_push($logs, $temp);
+        // }
 
         return [
             'id' => $this->id,
@@ -61,13 +61,27 @@ class ExpenseResource extends JsonResource
             'tax_rate' => $this->tax_rate,
             'tax_amount' => $this->tax_amount,
 
-            'sub_type' => $this->sub_type()->withTrashed()->first(),
-            'vendor' => $this->vendor()->withTrashed()->first(),
+            // 'sub_type' => $this->sub_type,
+            'sub_type' => [
+                'id' => null,
+                'name' => "",
+                'limit' => null,
+                'sub_types' => null
+            ],
+            'vendor' => $this->vendor,
+            // 'vendor' => [ 'id' => null, 'name' => "", 'is_vat_inclusive' => true ],
             // 'employee' => new EmployeeResource($this->employee),
+            'employee' => $this->employee,
             // 'expense_type' => new ExpenseTypeResource($this->expense_type),
-            'employee' => $this->employee()->withTrashed()->with('expense_types.sub_types')->first(),
-            'expense_type' => $this->expense_type()->withTrashed()->with('sub_types')->first(),
-            'expense_report' => $this->expense_report()->withTrashed()->first(),
+            'expense_type' => $this->expense_type,
+            // 'expense_type' => [
+            //     'id' => null,
+            //     'name' => "",
+            //     'limit' => null,
+            //     'sub_types' => null
+            // ],
+            'expense_report' => $this->expense_report,
+            // 'expense_report' => null,
 
             'created' => $this->created_info,
             'updated' => $this->updated_info,
@@ -77,7 +91,15 @@ class ExpenseResource extends JsonResource
             'approved' => $this->approved_info,
             'rejected' => $this->rejected_info,
             'cancelled' => $this->cancelled_info,
-
+            // 'created' => [ 'created_at' => null, 'created_by' => [ 'name' => "" ]],
+            // 'updated' => [ 'updated_at' => null, 'updated_by' => [ 'name' => "" ]],
+            // 'deleted' => null,
+            // 'submitted' => [ 'submitted_at' => null, 'submitted_by' => [ 'name' => "" ]],
+            // 'reviewed' => [ 'reviewed_at' => null, 'reviewed_by' => [ 'name' => "" ]],
+            // 'approved' => [ 'approved_at' => null, 'approved_by' => [ 'name' => "" ]],
+            // 'rejected' => null,
+            // 'cancelled' => null,
+            
             'logs' => $logs
         ];
     }

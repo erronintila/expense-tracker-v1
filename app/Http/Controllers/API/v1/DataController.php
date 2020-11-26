@@ -67,7 +67,22 @@ class DataController extends Controller
      */
     public function employees(Request $request)
     {
-        $employee = Employee::orderBy("last_name");
+        $employee = Employee::with(['job' => function ($query) {
+            $query->withTrashed();
+            $query->with(['department' => function ($query2) {
+                $query2->withTrashed();
+            }]);
+        }])
+            ->with(['user' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expense_types' => function ($query) {
+                $query->withTrashed();
+                $query->with(['sub_types' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
+            }])
+            ->orderBy("last_name");
 
         if (request()->has("no_user") && request()->has("user_id")) {
             $employee->where("user_id", null)->orwhere("user_id", $request->user_id);
@@ -113,14 +128,26 @@ class DataController extends Controller
      */
     public function expense_types(Request $request)
     {
-        if(request()->has('id')) {
-
-            $expense_type = ExpenseType::withTrashed()->findOrFail($request->id);
+        if (request()->has('id')) {
+            $expense_type = ExpenseType::withTrashed()
+                ->with(['sub_types' => function ($query) {
+                    $query->withTrashed();
+                }])->with(['expenses' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->findOrFail($request->id);
 
             return new ExpenseTypeResource($expense_type);
         }
 
-        $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->get();
+        $expense_types = ExpenseType::withTrashed()
+            ->with(['sub_types' => function ($query) {
+                $query->withTrashed();
+            }])->with(['expenses' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->where('expense_type_id', null)
+            ->get();
 
         return ExpenseTypeResource::collection($expense_types);
     }
@@ -133,7 +160,9 @@ class DataController extends Controller
      */
     public function jobs(Request $request)
     {
-        $jobs = Job::with('department')->orderBy("name");
+        $jobs = Job::with(['department' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy("name");
 
         if (request()->has("department_id")) {
             if ($request->department_id > 0) {
@@ -305,7 +334,23 @@ class DataController extends Controller
 
         // // $this->validate_remaining_fund();
 
-        $employee = Employee::withTrashed()->findOrFail($request->id);
+        $employee = Employee::withTrashed()
+            ->with(['job' => function ($query) {
+                $query->withTrashed();
+                $query->with(['department' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
+            }])
+            ->with(['user' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expense_types' => function ($query) {
+                $query->withTrashed();
+                $query->with(['sub_types' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
+            }])
+            ->findOrFail($request->id);
 
         $expenses = Expense::where("employee_id", $employee->id)
             ->where("deleted_at", null)

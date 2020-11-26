@@ -582,7 +582,7 @@ export default {
                                 _this.totalItems = data.total;
                             });
 
-                            _this.$store.dispatch("AUTH_USER");
+                            // _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -626,14 +626,14 @@ export default {
             };
         }
     },
-    mounted() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    },
+    // mounted() {
+    //     this.getDataFromApi().then(data => {
+    //         this.items = data.items;
+    //         this.totalItems = data.total;
+    //     });
+    // },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        // this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
     }
 };

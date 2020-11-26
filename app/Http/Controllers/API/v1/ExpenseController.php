@@ -88,7 +88,34 @@ class ExpenseController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $expenses = Expense::orderBy($sortBy, $sortType);
+        $expenses = Expense::with(['employee' => function ($query) {
+            $query->withTrashed();
+            // $query->with(['expense_types' => function ($query2) {
+            //     $query2->withTrashed();
+            //     $query2->with(['sub_types' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            // }]);
+        }])
+            ->with(['expense_type' => function ($query) {
+                $query->withTrashed();
+                // $query->with(['sub_types' => function ($query2) {
+                //     $query2->withTrashed();
+                // }]);
+            }])
+            ->with(['expense_report' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['sub_type' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['vendor' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->orderBy($sortBy, $sortType);
+
+        // $expenses = Expense::with('employee', 'expense_report', 'expense_type.sub_types', 'sub_type', 'vendor')
+        //     ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -325,7 +352,81 @@ class ExpenseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense = Expense::withTrashed()->findOrFail($id);
+        // $expense = Expense::withTrashed()->with(['employee' => function ($query) {
+        //     $query->withTrashed();
+        //     $query->with(['expense_types' => function ($query2) {
+        //         $query2->withTrashed();
+        //         $query2->with(['sub_types' => function ($query) {
+        //             $query->withTrashed();
+        //         }]);
+        //         $query2->with(['employees.user' => function ($query) {
+        //             $query->withTrashed();
+        //         }]);
+        //     }]);
+        //     $query->with(['user' => function ($query2) {
+        //         $query2->withTrashed();
+        //     }]);
+        // }])
+        //     ->with(['expense_type' => function ($query) {
+        //         $query->withTrashed();
+        //         $query->with(['sub_types' => function ($query2) {
+        //             $query2->withTrashed();
+        //         }]);
+        //     }])
+        //     ->with(['expense_report' => function ($query) {
+        //         $query->withTrashed();
+        //         $query->with(['payments.employee.user' => function($query2) {
+        //             $query2->withTrashed();
+        //         }]);
+        //     }])
+        //     ->with(['sub_type' => function ($query) {
+        //         $query->withTrashed();
+        //     }])
+        //     ->with(['vendor' => function ($query) {
+        //         $query->withTrashed();
+        //         $query->with('expense_types', 'expenses');
+        //     }])
+        //     ->findOrFail($id);
+
+        $expense = Expense::withTrashed()->with(['employee' => function ($query) {
+            $query->withTrashed();
+            // $query->with(['expense_types' => function ($query2) {
+            //     $query2->withTrashed();
+            //     $query2->with(['sub_types' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            //     $query2->with(['employees.user' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            // }]);
+            // $query->with(['user' => function ($query2) {
+            //     $query2->withTrashed();
+            // }]);
+        }])
+            ->with(['expense_type' => function ($query) {
+                $query->withTrashed();
+                // $query->with(['sub_types' => function ($query2) {
+                //     $query2->withTrashed();
+                // }]);
+            }])
+            ->with(['expense_report' => function ($query) {
+                $query->withTrashed();
+                // $query->with(['payments.employee.user' => function($query2) {
+                //     $query2->withTrashed();
+                // }]);
+            }])
+            ->with(['sub_type' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['vendor' => function ($query) {
+                $query->withTrashed();
+                // $query->with('expense_types', 'expenses');
+            }])
+            ->findOrFail($id);
+
+        // $expense = Expense::withTrashed()
+        //     ->with('employee', 'expense_report', 'expense_type.sub_types', 'sub_type', 'vendor')
+        //     ->findOrFail($id);
 
         return response(
             [

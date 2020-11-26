@@ -731,9 +731,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            });
+            }); // _this.$store.dispatch("AUTH_USER");
 
-            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -772,9 +771,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            });
+            }); // _this.$store.dispatch("AUTH_USER");
 
-            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -842,16 +840,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return today;
     }
   },
-  mounted: function mounted() {
-    var _this4 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
-    });
-  },
+  // mounted() {
+  //     this.getDataFromApi().then(data => {
+  //         this.items = data.items;
+  //         this.totalItems = data.total;
+  //     });
+  // },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
+    // this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.loadExpenseTypes();
   }

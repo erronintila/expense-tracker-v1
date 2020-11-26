@@ -322,7 +322,7 @@ export default {
             // paid_through_fund: false,
             reimbursable_amount: false,
             // reimbursable: false,
-            openAddVendor: false,
+            // openAddVendor: false,
             dialog: false,
             valid: false,
             menu: false,
@@ -334,10 +334,10 @@ export default {
                 { text: "", value: "actions", sortable: false }
             ],
             items: [],
-            expense_types: [],
-            sub_types: [],
-            employees: [],
-            vendors: [],
+            // expense_types: [],
+            // sub_types: [],
+            // employees: [],
+            // vendors: [],
             form: {
                 code: null,
                 description: null,
@@ -395,7 +395,7 @@ export default {
         getData() {
             let _this = this;
 
-            this.loadEmployees().then(
+            // this.loadEmployees().then(
                 axios
                     .get("/api/expenses/" + _this.$route.params.id)
                     .then(response => {
@@ -418,8 +418,8 @@ export default {
                         _this.form.expense_type = data.expense_type;
                         // _this.form.sub_type = data.sub_type_id;
 
-                        _this.expense_types = data.employee.expense_types;
-                        _this.sub_types = data.expense_type.sub_types;
+                        // _this.expense_types = data.employee.expense_types;
+                        // _this.sub_types = data.expense_type.sub_types;
 
                         _this.form.is_tax_inclusive = data.is_tax_inclusive;
                         _this.form.tax_name = data.tax_name;
@@ -437,11 +437,11 @@ export default {
                             _this.form.amount = data.amount;
                         }
 
-                        _this.sub_types.unshift({
-                            id: null,
-                            name: "None",
-                            limit: null
-                        });
+                        // _this.sub_types.unshift({
+                        //     id: null,
+                        //     name: "None",
+                        //     limit: null
+                        // });
                         _this.form.sub_type =
                             data.sub_type == null
                                 ? { id: null, name: "None", limit: null }
@@ -484,32 +484,32 @@ export default {
 
                         _this.loader = false;
                     })
-            );
+            // );
         },
-        loadEmployees() {
-            let _this = this;
+        // loadEmployees() {
+        //     let _this = this;
 
-            return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/data/employees")
-                    .then(response => {
-                        _this.employees = response.data.data;
+        //     return new Promise((resolve, reject) => {
+        //         axios
+        //             .get("/api/data/employees")
+        //             .then(response => {
+        //                 _this.employees = response.data.data;
 
-                        resolve();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
+        //                 resolve();
+        //             })
+        //             .catch(error => {
+        //                 console.log(error);
+        //                 console.log(error.response);
 
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+        //                 _this.mixin_errorDialog(
+        //                     `Error ${error.response.status}`,
+        //                     error.response.statusText
+        //                 );
 
-                        reject();
-                    });
-            });
-        }
+        //                 reject();
+        //             });
+        //     });
+        // }
     },
     computed: {
         amount_to_replenish() {
@@ -575,7 +575,7 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        // this.$store.dispatch("AUTH_USER");
         this.getData();
     }
 };

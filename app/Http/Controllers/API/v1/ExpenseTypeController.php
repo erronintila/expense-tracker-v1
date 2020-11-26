@@ -51,7 +51,13 @@ class ExpenseTypeController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $expense_types = ExpenseType::where('expense_type_id', null)->orderBy($sortBy, $sortType);
+        $expense_types = ExpenseType::with(['sub_types' => function ($query) {
+            $query->withTrashed();
+        }])->with(['expenses' => function ($query) {
+            $query->withTrashed();
+        }])
+            ->where('expense_type_id', null)
+            ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -128,7 +134,10 @@ class ExpenseTypeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
+        $expense_type = ExpenseType::withTrashed()
+            ->with('sub_types', 'expenses')
+            ->where('expense_type_id', null)
+            ->findOrFail($id);
 
         return response(
             [

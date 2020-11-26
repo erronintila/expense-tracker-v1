@@ -773,9 +773,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            });
+            }); // _this.$store.dispatch("AUTH_USER");
 
-            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -1048,9 +1047,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            });
+            }); // _this.$store.dispatch("AUTH_USER");
 
-            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -1115,9 +1113,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     _this.getDataFromApi().then(function (data) {
                       _this.items = data.items;
                       _this.totalItems = data.total;
-                    });
+                    }); // _this.$store.dispatch("AUTH_USER");
 
-                    _this.$store.dispatch("AUTH_USER");
 
                     _this.selected = [];
                   })["catch"](function (error) {
@@ -1227,16 +1224,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return today;
     }
   },
-  mounted: function mounted() {
-    var _this5 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this5.items = data.items;
-      _this5.totalItems = data.total;
-    });
-  },
+  // mounted() {
+  //     this.getDataFromApi().then(data => {
+  //         this.items = data.items;
+  //         this.totalItems = data.total;
+  //     });
+  // },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
+    // this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
   }
 });

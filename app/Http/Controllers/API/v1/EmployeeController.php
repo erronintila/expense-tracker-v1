@@ -18,7 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
-{    
+{
     public function __construct()
     {
         $this->middleware(['permission:view all employees'], ['only' => ['index']]);
@@ -87,7 +87,15 @@ class EmployeeController extends Controller
 
         // $sortBy = $sortBy == "fullname" ? "last_name" : $sortBy;
 
-        $employees = Employee::with('job.department', 'user', 'expense_types.sub_types');
+        $employees = Employee::with(['job.department' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['user' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expense_types.sub_types' => function ($query) {
+                $query->withTrashed();
+            }]);
 
         switch ($sortBy) {
             case 'fullname':
@@ -118,7 +126,6 @@ class EmployeeController extends Controller
         }
 
         if (request()->has('status')) {
-
             switch ($request->status) {
 
                 case 'Archived':
@@ -135,9 +142,7 @@ class EmployeeController extends Controller
         }
 
         if (request()->has('department_id')) {
-
             if ($request->department_id > 0) {
-
                 $jobs = Job::where('department_id', $request->department_id);
 
                 $employees = $employees->whereIn('job_id', $jobs->pluck('id'));
@@ -145,15 +150,12 @@ class EmployeeController extends Controller
         }
 
         if (request()->has('job_id')) {
-
             if ($request->job_id > 0) {
-
                 $employees = $employees->where("job_id", $request->job_id);
             }
         }
 
         $employees = $employees->where(function ($query) use ($search) {
-
             $query->where('code', "like", "%" . $search . "%");
 
             $query->orWhere("first_name", "like", "%" . $search . "%");
@@ -237,13 +239,10 @@ class EmployeeController extends Controller
         $user->save();
 
         if ($request->role == "Administrator") {
-
             foreach ($request->permissions as $permission) {
-
                 $user->givePermissionTo($permission["name"]);
             }
         } else {
-
             $user->assignRole("Standard User");
         }
 
@@ -252,7 +251,6 @@ class EmployeeController extends Controller
         $employee->save();
 
         if (request()->has("expense_types")) {
-
             $employee->expense_types()->sync($request->expense_types);
         }
 
@@ -302,14 +300,11 @@ class EmployeeController extends Controller
             case 'restore':
 
                 if (!app("auth")->user()->hasPermissionTo('restore employees')) {
-
                     abort(403);
                 }
 
                 if (request()->has("ids")) {
-
                     foreach ($request->ids as $id) {
-
                         $employee = Employee::withTrashed()->findOrFail($id);
 
                         $employee->restore();
@@ -319,7 +314,6 @@ class EmployeeController extends Controller
                         $user->restore();
                     }
                 } else {
-
                     $employee = Employee::withTrashed()->findOrFail($id);
 
                     $employee->restore();
@@ -335,7 +329,6 @@ class EmployeeController extends Controller
                 $employee = Employee::withTrashed()->findOrFail($id);
 
                 if (request()->has("expense_types")) {
-
                     $employee->expense_types()->sync([]);
 
                     $employee->expense_types()->sync($request->expense_types);
@@ -360,7 +353,6 @@ class EmployeeController extends Controller
                 break;
             case 'update fund':
                 if (!app("auth")->user()->hasPermissionTo('edit employees fund')) {
-
                     abort(403);
                 }
 
@@ -376,7 +368,6 @@ class EmployeeController extends Controller
             default:
 
                 if (!app("auth")->user()->hasPermissionTo('edit employees')) {
-
                     abort(403);
                 }
 
@@ -411,7 +402,6 @@ class EmployeeController extends Controller
                 $employee->save();
 
                 if (request()->has("expense_types")) {
-
                     $employee->expense_types()->sync($request->expense_types);
 
                     // foreach ($employee->expense_types as $item) {
@@ -428,7 +418,6 @@ class EmployeeController extends Controller
                 }
 
                 if ($employee->user_id != null) {
-
                     $user = User::withTrashed()->findOrFail($employee->user_id);
 
                     $user->name = $request->last_name . ', ' . $request->first_name . ' ' . $request->middle_name;
@@ -448,13 +437,10 @@ class EmployeeController extends Controller
                     $user->syncRoles();
 
                     if ($request->role == "Administrator") {
-
                         foreach ($request->permissions as $permission) {
-
                             $user->givePermissionTo($permission["name"]);
                         }
                     } else {
-
                         $user->assignRole("Standard User");
                     }
                 }
@@ -480,9 +466,7 @@ class EmployeeController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
-
             foreach ($request->ids as $id) {
-
                 $employee = Employee::withTrashed()->findOrFail($id);
 
                 $employee->delete();
@@ -492,7 +476,6 @@ class EmployeeController extends Controller
                 $user->delete();
             }
         } else {
-
             $employee = Employee::withTrashed()->findOrFail($id);
 
             $employee->delete();

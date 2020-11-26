@@ -63,7 +63,14 @@ class ExpenseReportController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $expense_reports = ExpenseReport::orderBy($sortBy, $sortType);
+        $expense_reports = ExpenseReport::with(['employee' => function ($query) {
+            $query->withTrashed();
+        }])
+            ->with(['expenses' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with('payments')
+            ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -97,7 +104,7 @@ class ExpenseReportController extends Controller
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
                     ])
-                        ->whereHas("payments", function($query) {
+                        ->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
                 
@@ -251,7 +258,15 @@ class ExpenseReportController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
+        $expense_report = ExpenseReport::withTrashed()
+            ->with(['employee' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expenses' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with('payments')
+            ->findOrFail($id);
 
         return response(
             [

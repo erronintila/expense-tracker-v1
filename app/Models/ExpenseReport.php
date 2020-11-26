@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\User;
+use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 
 class ExpenseReport extends Model
 {
@@ -19,6 +20,7 @@ class ExpenseReport extends Model
     */
     
     use SoftDeletes, LogsActivity;
+    use EagerLoadPivotTrait;
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -196,7 +198,8 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = ($this->payments->count() > 0);
+        $paid = false;
+        // $paid = ($this->payments->count() > 0);
 
         if (!$deleted) {
             $arr = [

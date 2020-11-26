@@ -75,7 +75,7 @@ class PaymentController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $payments = Payment::orderBy($sortBy, $sortType);
+        $payments = Payment::with('expense_reports')->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -285,7 +285,7 @@ class PaymentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $payment = Payment::withTrashed()->findOrFail($id);
+        $payment = Payment::withTrashed()->with('expense_reports')->findOrFail($id);
 
         return response(
             [

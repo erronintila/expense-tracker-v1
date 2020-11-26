@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class VendorController extends Controller
-{    
+{
     public function __construct()
     {
         $this->middleware(['permission:view all vendors'], ['only' => ['index']]);
@@ -69,7 +69,9 @@ class VendorController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $vendors = Vendor::orderBy($sortBy, $sortType);
+        $vendors = Vendor::with(['expense_types' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -168,7 +170,9 @@ class VendorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $vendor = Vendor::withTrashed()->findOrFail($id);
+        $vendor = Vendor::withTrashed()->with(['expense_types' => function ($query) {
+            $query->withTrashed();
+        }])->findOrFail($id);
 
         return response(
             [

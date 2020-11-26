@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class JobController extends Controller
-{    
+{
     public function __construct()
     {
         $this->middleware(['permission:view all jobs'], ['only' => ['index']]);
@@ -55,7 +55,9 @@ class JobController extends Controller
         // if($sortBy == "department.name") {
         //     $jobs = Job::with("department")->sortBy("department.name", $sortType);
         // } else {
-        $jobs = Job::orderBy($sortBy, $sortType);
+        $jobs = Job::with(['department' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy($sortBy, $sortType);
         // }
 
         if (request()->has('status')) {

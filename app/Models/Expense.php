@@ -179,15 +179,15 @@ class Expense extends Model
         return $this->belongsTo(ExpenseReport::class);
     }
 
-    /**
-     * Displays the payments associated with expense.
-     *
-     * @return mixed
-     */
-    public function payments()
-    {
-        return $this->belongsToMany(Payment::class);
-    }
+    // /**
+    //  * Displays the payments associated with expense.
+    //  *
+    //  * @return mixed
+    //  */
+    // public function payments()
+    // {
+    //     return $this->belongsToMany(Payment::class);
+    // }
 
     /**
      * Displays the tax associated with expense.
@@ -234,7 +234,8 @@ class Expense extends Model
         $cancelled = is_null($this->getCancelledInfoAttribute());
         $rejected = is_null($this->getRejectedInfoAttribute());
         $deleted = is_null($this->deleted_at);
-        $paid = ($this->expense_report == null ? 0 : $this->expense_report->payments->count() > 0);
+        $paid = false;
+        // $paid = ($this->expense_report == null ? 0 : $this->expense_report->payments->count() > 0);
 
         if (!$deleted) {
             $arr = [
