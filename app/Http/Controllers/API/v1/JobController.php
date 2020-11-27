@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\JobResource;
 use App\Models\Job;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +13,8 @@ use Illuminate\Validation\Rule;
 
 class JobController extends Controller
 {
+    use ApiResponse;
+
     public function __construct()
     {
         $this->middleware(['permission:view all jobs'], ['only' => ['index']]);
@@ -236,6 +239,19 @@ class JobController extends Controller
      */
     public function getJobs(Request $request)
     {
+        if (request()->has('only')) {
+
+            $jobs = Job::orderBy("name");
+
+            if (request()->has("department_id")) {
+                if ($request->department_id > 0) {
+                    $jobs = $jobs->where("department_id", $request->department_id);
+                }
+            }
+
+            return $this->successResponse($jobs->get(), "", 200);
+        }
+
         $jobs = Job::with(['department' => function ($query) {
             $query->withTrashed();
         }])->orderBy("name");

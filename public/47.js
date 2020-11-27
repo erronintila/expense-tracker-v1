@@ -274,7 +274,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadDepartments: function loadDepartments() {
       var _this = this;
 
-      axios.get("/api/data/departments").then(function (response) {
+      axios.get("/api/data/departments?only=true").then(function (response) {
         _this.departments = response.data.data;
 
         _this.departments.unshift({

@@ -51,7 +51,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/data/departments", _this.parameters).then(function (response) {
+      axios.get("/api/data/departments?only=true", _this.parameters).then(function (response) {
         _this.items = response.data.data;
 
         if (_this.showAll) {
@@ -130,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData(department_id) {
       var _this = this;
 
-      axios.get("/api/data/jobs", {
+      axios.get("/api/data/jobs?only=true", {
         params: {
           department_id: department_id
         }

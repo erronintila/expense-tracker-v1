@@ -42,7 +42,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/departments", _this.parameters)
+                .get("/api/data/departments?only=true", _this.parameters)
                 .then(response => {
                     _this.items = response.data.data;
 

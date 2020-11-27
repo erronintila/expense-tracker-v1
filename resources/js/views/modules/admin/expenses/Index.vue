@@ -93,7 +93,7 @@
                                 <v-select
                                     v-model="employee"
                                     :items="employees"
-                                    item-text="fullname"
+                                    item-text="full_name"
                                     item-value="id"
                                     label="Employee"
                                 ></v-select>
@@ -610,7 +610,7 @@ export default {
                     _this.employees = response.data.data;
                     _this.employees.unshift({
                         id: 0,
-                        fullname: "All Employees"
+                        full_name: "All Employees"
                     });
 
                     console.log(_this.employees);
@@ -630,7 +630,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/expense_types")
+                .get("/api/data/expense_types?only=true")
                 .then(response => {
                     _this.expense_types = response.data.data;
                     _this.expense_types.unshift({

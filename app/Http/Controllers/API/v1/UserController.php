@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\User;
 use App\Models\Employee;
 use App\Rules\MatchOldPassword;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +19,8 @@ use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {    
+    use ApiResponse;
+
     public function __construct()
     {
         // $this->middleware(['permission:view all users'], ['only' => ['index']]);
@@ -411,6 +414,10 @@ class UserController extends Controller
      */
     public function getUsers(Request $request)
     {
+        if(request()->has('only')) {
+            return $this->successResponse(User::orderBy("name")->get(), "", 200);
+        }
+
         $users = User::orderBy("name");
 
         return UserResource::collection($users->get());

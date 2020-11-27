@@ -609,7 +609,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this.employees.unshift({
           id: 0,
-          fullname: "All Employees"
+          full_name: "All Employees"
         });
 
         console.log(_this.employees);
@@ -624,7 +624,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
-      axios.get("/api/data/expense_types").then(function (response) {
+      axios.get("/api/data/expense_types?only=true").then(function (response) {
         _this.expense_types = response.data.data;
 
         _this.expense_types.unshift({
@@ -1106,7 +1106,7 @@ var render = function() {
                               _c("v-select", {
                                 attrs: {
                                   items: _vm.employees,
-                                  "item-text": "fullname",
+                                  "item-text": "full_name",
                                   "item-value": "id",
                                   label: "Employee"
                                 },

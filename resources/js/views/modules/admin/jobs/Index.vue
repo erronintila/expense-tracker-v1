@@ -256,7 +256,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/departments")
+                .get("/api/data/departments?only=true")
                 .then(response => {
                     _this.departments = response.data.data;
                     _this.departments.unshift({

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
 use App\Models\Department;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +13,8 @@ use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
+    use ApiResponse;
+    
     public function __construct()
     {
         $this->middleware(['permission:view all departments'], ['only' => ['index']]);
@@ -226,6 +229,10 @@ class DepartmentController extends Controller
      */
     public function getDepartments(Request $request)
     {
+        if (request()->has('only')) {
+            return $this->successResponse(Department::orderBy("name")->get(), "Retrieved successfully", 200);
+        }
+
         $departments = Department::orderBy("name");
 
         if (request()->has("department_id")) {

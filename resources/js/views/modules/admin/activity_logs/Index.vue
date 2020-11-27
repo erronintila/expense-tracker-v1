@@ -346,7 +346,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/users")
+                .get("/api/data/users?only=true")
                 .then(response => {
                     _this.users = response.data.data;
 
@@ -485,12 +485,12 @@ export default {
             };
         }
     },
-    mounted() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    },
+    // mounted() {
+    //     this.getDataFromApi().then(data => {
+    //         this.items = data.items;
+    //         this.totalItems = data.total;
+    //     });
+    // },
     created() {
         this.loadUsers();
     }

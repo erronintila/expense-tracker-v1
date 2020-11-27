@@ -42,7 +42,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/jobs", {
+                .get("/api/data/jobs?only=true", {
                     params: {
                         department_id: department_id
                     }

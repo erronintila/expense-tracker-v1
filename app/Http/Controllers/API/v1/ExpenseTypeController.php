@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Models\ExpenseType;
 use App\Models\SubType;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,8 @@ use Illuminate\Validation\Rule;
 
 class ExpenseTypeController extends Controller
 {
+    use ApiResponse;
+
     public function __construct()
     {
         $this->middleware(['permission:view all expense types'], ['only' => ['index']]);
@@ -326,6 +329,10 @@ class ExpenseTypeController extends Controller
      */
     public function getExpenseTypes(Request $request)
     {
+        if (request()->has('only')) {
+            return $this->successResponse(ExpenseType::all(), "Retrieved successfully", 200);
+        }
+
         if (request()->has('id')) {
             $expense_type = ExpenseType::withTrashed()
                 ->with(['sub_types' => function ($query) {

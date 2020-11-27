@@ -403,7 +403,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/employees")
+                .get("/api/data/employees?only=true")
                 .then(response => {
                     _this.employees = response.data.data;
                     _this.employees.unshift({

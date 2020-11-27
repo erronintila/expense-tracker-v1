@@ -358,7 +358,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadUsers: function loadUsers() {
       var _this = this;
 
-      axios.get("/api/data/users").then(function (response) {
+      axios.get("/api/data/users?only=true").then(function (response) {
         _this.users = response.data.data;
 
         _this.users.unshift({
@@ -482,14 +482,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     }
   },
-  mounted: function mounted() {
-    var _this4 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
-    });
-  },
+  // mounted() {
+  //     this.getDataFromApi().then(data => {
+  //         this.items = data.items;
+  //         this.totalItems = data.total;
+  //     });
+  // },
   created: function created() {
     this.loadUsers();
   }
