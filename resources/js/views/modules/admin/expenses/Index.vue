@@ -605,13 +605,16 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/employees")
+                .get("/api/data/employees?only=true")
                 .then(response => {
                     _this.employees = response.data.data;
                     _this.employees.unshift({
                         id: 0,
                         fullname: "All Employees"
                     });
+
+                    console.log(_this.employees);
+                    console.log(response.data.data);
                 })
                 .catch(error => {
                     console.log(error);

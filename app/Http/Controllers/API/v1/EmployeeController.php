@@ -6,11 +6,14 @@ use App\Exports\EmployeesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Models\Expense;
 use App\Models\ExpenseType;
 use App\Models\Job;
+use App\Traits\ApiResponse;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -19,6 +22,8 @@ use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
+    use ApiResponse;
+
     public function __construct()
     {
         $this->middleware(['permission:view all employees'], ['only' => ['index']]);
@@ -87,14 +92,20 @@ class EmployeeController extends Controller
 
         // $sortBy = $sortBy == "fullname" ? "last_name" : $sortBy;
 
-        $employees = Employee::with(['job.department' => function ($query) {
-                $query->withTrashed();
-            }])
+        $employees = Employee::with(['job' => function ($query) {
+            $query->withTrashed();
+            $query->with(['department' => function ($query2) {
+                $query2->withTrashed();
+            }]);
+        }])
             ->with(['user' => function ($query) {
                 $query->withTrashed();
             }])
-            ->with(['expense_types.sub_types' => function ($query) {
+            ->with(['expense_types' => function ($query) {
                 $query->withTrashed();
+                $query->with(['sub_types' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
             }]);
 
         switch ($sortBy) {
@@ -272,7 +283,33 @@ class EmployeeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $employee = Employee::withTrashed()->findOrFail($id);
+        // $employee = Employee::withTrashed()->findOrFail($id);
+
+        $employee = Employee::with(['job' => function ($query) {
+            $query->withTrashed();
+            $query->with(['department' => function ($query2) {
+                $query2->withTrashed();
+            }]);
+        }])
+        ->with(['user' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->with(['expenses' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->with(['expense_reports' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->with(['expense_types' => function ($query) {
+            $query->withTrashed();
+            $query->with(['sub_types' => function ($query2) {
+                $query2->withTrashed();
+            }]);
+        }])
+        ->with(['sub_types' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->findOrFail($id);
 
         return response(
             [
@@ -493,8 +530,119 @@ class EmployeeController extends Controller
         );
     }
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EMPLOYEE CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
     public function export()
     {
         return Excel::download(new EmployeesExport, 'Employees.csv');
+    }
+
+    public function getEmployees(Request $request)
+    {
+        if (request()->has('only')) {
+            return $this->successResponse(Employee::all(), "Retrieved successfully", 200);
+        }
+
+        $employee = Employee::with(['job' => function ($query) {
+            $query->withTrashed();
+            $query->with(['department' => function ($query2) {
+                $query2->withTrashed();
+            }]);
+        }])
+            ->with(['user' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expense_types' => function ($query) {
+                $query->withTrashed();
+                $query->with(['sub_types' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
+            }])
+            ->orderBy("last_name");
+
+        if (request()->has("no_user") && request()->has("user_id")) {
+            $employee->where("user_id", null)->orwhere("user_id", $request->user_id);
+        }
+
+        return EmployeeResource::collection($employee->get());
+    }
+
+    /**
+     * validateFund
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function validateFund(Request $request)
+    {
+        $employee = Employee::withTrashed()
+            ->with(['job' => function ($query) {
+                $query->withTrashed();
+                $query->with(['department' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
+            }])
+            ->with(['user' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expense_types' => function ($query) {
+                $query->withTrashed();
+                $query->with(['sub_types' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
+            }])
+            ->findOrFail($request->id);
+
+        $expenses = Expense::where("employee_id", $employee->id)
+            ->where("deleted_at", null)
+            ->orWhereHas("expense_report", function ($query) {
+                $query->where([
+
+                    ["cancelled_at", "=", null],
+
+                    ["rejected_at", "=", null],
+
+                    ["deleted_at", "=", null],
+                ]);
+            })
+            ->get();
+
+        $paid_expenses = Expense::where("employee_id", $employee->id)
+                ->where("deleted_at", null)
+                ->whereHas("expense_report", function ($query) {
+                    $query->where([
+
+                        ["cancelled_at", "=", null],
+
+                        ["rejected_at", "=", null],
+
+                        ["deleted_at", "=", null],
+                    ]);
+                    $query->whereHas("payments", function ($query) {
+                        $query->where([
+
+                            ["cancelled_at", "=", null],
+    
+                            ["received_at", "<>", null],
+    
+                            ["deleted_at", "=", null],
+                        ]);
+                    });
+                })
+                ->get();
+
+        $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
+
+        $paid = $paid_expenses->sum("amount") - $paid_expenses->sum("reimbursable_amount");
+
+        $employee->remaining_fund = $employee->fund - $deduct + $paid;
+
+        $employee->save();
+
+        return response("Validated Employee Remaining Fund", 200);
     }
 }

@@ -288,4 +288,20 @@ class VendorController extends Controller
             200
         );
     }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | VENDOR CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    /**
+     * vendors
+     *
+     * @return void
+     */
+    public function getVendors()
+    {
+        return VendorResource::collection(Vendor::orderBy("name")->get());
+    }
 }

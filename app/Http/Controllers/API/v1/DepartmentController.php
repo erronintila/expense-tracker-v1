@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
-{    
+{
     public function __construct()
     {
         $this->middleware(['permission:view all departments'], ['only' => ['index']]);
@@ -49,7 +50,10 @@ class DepartmentController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $departments = Department::orderBy($sortBy, $sortType);
+        $departments = Department::with(['jobs' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -112,7 +116,11 @@ class DepartmentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $department = Department::withTrashed()->findOrFail($id);
+        $department = Department::withTrashed()
+        ->with(['jobs' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->findOrFail($id);
 
         return response(
             [
@@ -202,5 +210,30 @@ class DepartmentController extends Controller
             ],
             200
         );
+    }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EMPLOYEE CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    /**
+     * departments
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getDepartments(Request $request)
+    {
+        $departments = Department::orderBy("name");
+
+        if (request()->has("department_id")) {
+            if ($request->department_id > 0) {
+                $departments = $departments->where("id", $request->department_id);
+            }
+        }
+
+        return DepartmentResource::collection($departments->get());
     }
 }

@@ -653,6 +653,12 @@ class ExpenseReportController extends Controller
         );
     }
 
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EXPENSE REPORT CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
     public function updateReport(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
     {
         $expense_report->submitted_at = $submitted ? now() : $expense_report->submitted_at;
@@ -747,5 +753,65 @@ class ExpenseReportController extends Controller
             ->performedOn($expense_report)
             ->withProperties(['attributes' => ["code" => $expense_report->code, $key => $value]])
             ->log($action . ' expense report');
+    }
+
+    /**
+     * expense_reports
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getExpenseReports(Request $request)
+    {
+        $expense_reports = ExpenseReport::orderBy("created_at");
+
+        if (request()->has("id")) {
+            $expense_reports = $expense_reports->where("id", $request->id);
+        }
+
+        if (request()->has("employee_id")) {
+            $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
+        }
+
+        // if (request()->has("payment_id")) {
+        //     // $expense_reports = $expense_reports->where("payment_id", $request->payment_id);
+        //     $expense_reports = $expense_reports;
+        // }
+
+        if (request()->has("start_date") && request()->has("end_date")) {
+            $start_date = Carbon::parse($request->start_date)->startOfDay();
+
+            $end_date = Carbon::parse($request->end_date)->endOfDay();
+
+            $expense_reports = $expense_reports->whereBetween("created_at", [$start_date, $end_date]);
+        }
+
+        if (request()->has("status")) {
+            switch ($request->status) {
+                case 'Archived':
+                    $expense_reports = $expense_reports->onlyTrashed();
+                    break;
+                default:
+                    $expense_reports = $expense_reports;
+                    break;
+            }
+        }
+
+        if (request()->has("create_payment")) {
+            $expense_reports = $expense_reports
+                ->where("approved_at", "<>", null)
+                ->where("submitted_at", "<>", null)
+                ->where("cancelled_at", null)
+                ->whereDoesntHave("payments")
+                ->get();
+
+            return response()->json([
+                "data" => ExpenseReportResource::collection($expense_reports),
+            ]);
+        }
+
+        return response()->json([
+            "data" => ExpenseReportResource::collection($expense_reports->get()),
+        ]);
     }
 }

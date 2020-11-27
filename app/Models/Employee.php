@@ -218,15 +218,15 @@ class Employee extends Model
         return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
     }
 
-    /**
-     * Displays the payments associated with employee.
-     *
-     * @return mixed
-     */
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
+    // /**
+    //  * Displays the payments associated with employee.
+    //  *
+    //  * @return mixed
+    //  */
+    // public function payments()
+    // {
+    //     return $this->hasMany(Payment::class);
+    // }
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

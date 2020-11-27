@@ -604,13 +604,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadEmployees: function loadEmployees() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
+      axios.get("/api/data/employees?only=true").then(function (response) {
         _this.employees = response.data.data;
 
         _this.employees.unshift({
           id: 0,
           fullname: "All Employees"
         });
+
+        console.log(_this.employees);
+        console.log(response.data.data);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {    
@@ -63,7 +64,7 @@ class UserController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $users = User::orderBy($sortBy, $sortType);
+        $users = User::with('employee')->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -160,7 +161,9 @@ class UserController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::withTrashed()->findOrFail($id);
+        $user = User::withTrashed()->with(['employee' => function($query) {
+            $query->withTrashed();
+        }])->findOrFail($id);
 
         return response(
             [
@@ -373,6 +376,12 @@ class UserController extends Controller
             200
         );
     }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | USER CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
     
     /**
      * export
@@ -382,5 +391,28 @@ class UserController extends Controller
     public function export()
     {
         return Excel::download(new UsersExport, 'Users - Expense Tracker.xlsx');
+    }
+
+    /**
+     * permissions
+     *
+     * @return void
+     */
+    public function getPermissions()
+    {
+        return Permission::all();
+    }
+    
+    /**
+     * users
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getUsers(Request $request)
+    {
+        $users = User::orderBy("name");
+
+        return UserResource::collection($users->get());
     }
 }

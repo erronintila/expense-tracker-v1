@@ -221,4 +221,31 @@ class JobController extends Controller
             200
         );
     }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | JOB CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    /**
+     * jobs
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getJobs(Request $request)
+    {
+        $jobs = Job::with(['department' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy("name");
+
+        if (request()->has("department_id")) {
+            if ($request->department_id > 0) {
+                $jobs = $jobs->where("department_id", $request->department_id);
+            }
+        }
+
+        return JobResource::collection($jobs->get());
+    }
 }

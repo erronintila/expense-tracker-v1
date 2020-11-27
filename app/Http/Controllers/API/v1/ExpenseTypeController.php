@@ -311,4 +311,42 @@ class ExpenseTypeController extends Controller
             200
         );
     }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EXPENSE TYPE CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    /**
+     * expense_types
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getExpenseTypes(Request $request)
+    {
+        if (request()->has('id')) {
+            $expense_type = ExpenseType::withTrashed()
+                ->with(['sub_types' => function ($query) {
+                    $query->withTrashed();
+                }])->with(['expenses' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->findOrFail($request->id);
+
+            return new ExpenseTypeResource($expense_type);
+        }
+
+        $expense_types = ExpenseType::withTrashed()
+            ->with(['sub_types' => function ($query) {
+                $query->withTrashed();
+            }])->with(['expenses' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->where('expense_type_id', null)
+            ->get();
+
+        return ExpenseTypeResource::collection($expense_types);
+    }
 }

@@ -19,32 +19,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
-    | USER INFORMATION ROUTES
-    |------------------------------------------------------------------------------------------------------------------------------------
-    */
-
-    Route::get('/user', function (Request $request) {
-
-        return new UserResource($request->user());
-    });
-
-    Route::get('/permissions', function (Request $request) {
-
-        return $request->user->getAllPermissions();
-    });
-
-    /*
-    |------------------------------------------------------------------------------------------------------------------------------------
-    | LARAVEL LIBRARY/PACKAGE ROUTES
-    |------------------------------------------------------------------------------------------------------------------------------------
-    */
-
-    // Route::get('/users/export', 'API\v1\UserController@export'); // Excel Export Package
-
-    Route::get('/employees/export', 'API\v1\EmployeeController@export'); // Excel Export Package
-
-    /*
-    |------------------------------------------------------------------------------------------------------------------------------------
     | API RESOURCES ROUTES
     |------------------------------------------------------------------------------------------------------------------------------------
     */
@@ -83,32 +57,86 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
-    | DATA CONTROLLER ROUTES
+    | DEPARTMENT CONTROLLER CUSTOM ROUTES
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
-    Route::get('/data/test', 'API\v1\DataController@test');
+    Route::get('/data/departments', 'API\v1\DepartmentController@getDepartments');
 
-    Route::get('/data/users', 'API\v1\DataController@users');
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EMPLOYEE CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
-    Route::get('/data/employees', 'API\v1\DataController@employees');
+    Route::get('/data/employees', 'API\v1\EmployeeController@getEmployees');
 
-    Route::get('/data/vendors', 'API\v1\DataController@vendors');
+    Route::get('/data/validateFund', 'API\v1\EmployeeController@validateFund');
 
-    Route::get('/data/departments', 'API\v1\DataController@departments');
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EXPENSE CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
-    Route::get('/data/expense_types', 'API\v1\DataController@expense_types');
+    Route::get('/data/expenses', 'API\v1\ExpenseController@getExpenses');
 
-    Route::get('/data/jobs', 'API\v1\DataController@jobs');
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EXPENSE REPORT CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
-    Route::get('/data/expenses', 'API\v1\DataController@expenses');
+    Route::get('/data/expense_reports', 'API\v1\ExpenseReportController@getExpenseReports');
 
-    Route::get('/data/expense_reports', 'API\v1\DataController@expense_reports');
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EXPENSE TYPE CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
 
-    Route::get('/data/permissions', 'API\v1\DataController@permissions');
+    Route::get('/data/expense_types', 'API\v1\ExpenseTypeController@getExpenseTypes');
 
-    Route::get('/data/validateFund', 'API\v1\DataController@validateFund');
-    
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | JOB CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    Route::get('/data/jobs', 'API\v1\JobController@getJobs');
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | PAYMENT CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | VENDOR CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    Route::get('/data/vendors', 'API\v1\VendorController@getVendors');
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | USER CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    Route::get('/user', function (Request $request) {
+        return new UserResource($request->user());
+    });
+
+    Route::get('/permissions', function (Request $request) {
+        return $request->user->getAllPermissions();
+    });
+
+    Route::get('/data/users', 'API\v1\UserController@getUsers');
+
+    Route::get('/data/permissions', 'API\v1\UserController@getPermissions');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | DASHBOARD CONTROLLER ROUTES
@@ -134,4 +162,14 @@ Route::middleware('auth:sanctum')->group(function () {
     */
 
     Route::get('/data/print', 'API\v1\PrintController@print');
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LARAVEL LIBRARY/PACKAGE ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    // Route::get('/users/export', 'API\v1\UserController@export'); // Excel Export Package
+
+    Route::get('/employees/export', 'API\v1\EmployeeController@export'); // Excel Export Package
 });
