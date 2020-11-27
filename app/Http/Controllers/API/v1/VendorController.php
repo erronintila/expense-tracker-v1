@@ -302,6 +302,11 @@ class VendorController extends Controller
      */
     public function getVendors()
     {
-        return VendorResource::collection(Vendor::orderBy("name")->get());
+        $vendors = Vendor::with(['expense_types' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->orderBy("name")->get();
+
+        return VendorResource::collection($vendors);
     }
 }

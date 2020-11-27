@@ -445,7 +445,7 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        // _this.$store.dispatch("AUTH_USER");
 
                         _this.$router.push({ name: "admin.payments.index" });
                     })
@@ -479,7 +479,7 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        // this.$store.dispatch("AUTH_USER");
         // this.loadExpenseReports();
         this.loadEmployees();
     }

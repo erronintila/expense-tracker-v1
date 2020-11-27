@@ -366,7 +366,7 @@ export default {
             valid: false,
             menu: false,
             jobs: [],
-            permissions: [],
+            permissions: this.$store.getters.user.permissions,
             expense_types: [],
             selected: [],
             selected_expense_types: [],
@@ -416,7 +416,7 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/jobs")
+                .get("/api/data/jobs?only=true")
                 .then(response => {
                     _this.jobs = response.data.data;
                 })
@@ -424,7 +424,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(
+                _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -433,7 +433,7 @@ export default {
         loadExpenseTypes() {
             let _this = this;
             axios
-                .get("/api/data/expense_types")
+                .get("/api/data/expense_types?only=true")
                 .then(response => {
                     _this.expense_types = response.data.data;
                 })
@@ -518,7 +518,7 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        // _this.$store.dispatch("AUTH_USER");
 
                         _this.$router.push({ name: "admin.employees.index" });
                     })
@@ -548,7 +548,7 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        // this.$store.dispatch("AUTH_USER");
         this.loadJobs();
         this.loadExpenseTypes();
         this.loadPermissions();

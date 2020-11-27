@@ -624,7 +624,7 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        // _this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {
                         console.log(error);
@@ -657,7 +657,7 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        // _this.$store.dispatch("AUTH_USER");
 
                         _this.dialogPassword = false;
                         _this.old_password = "";
@@ -698,7 +698,6 @@ export default {
     created() {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            console.log(response);
             _this.user = response;
         });
     }

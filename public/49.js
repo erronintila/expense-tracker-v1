@@ -448,9 +448,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("Payment created successfully.", {
             position: "top-right",
             timeout: 2000
-          });
+          }); // _this.$store.dispatch("AUTH_USER");
 
-          _this.$store.dispatch("AUTH_USER");
 
           _this.$router.push({
             name: "admin.payments.index"
@@ -480,8 +479,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.$store.dispatch("AUTH_USER"); // this.loadExpenseReports();
-
+    // this.$store.dispatch("AUTH_USER");
+    // this.loadExpenseReports();
     this.loadEmployees();
   }
 });

@@ -623,9 +623,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("User account updated successfully.", {
             position: "top-right",
             timeout: 2000
-          });
+          }); // _this.$store.dispatch("AUTH_USER");
 
-          _this.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -647,9 +646,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("User account password has been updated.", {
             position: "top-right",
             timeout: 2000
-          });
+          }); // _this.$store.dispatch("AUTH_USER");
 
-          _this.$store.dispatch("AUTH_USER");
 
           _this.dialogPassword = false;
           _this.old_password = "";
@@ -686,7 +684,6 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      console.log(response);
       _this.user = response;
     });
   }

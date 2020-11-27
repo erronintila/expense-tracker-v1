@@ -741,7 +741,7 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        // _this.$store.dispatch("AUTH_USER");
 
                         _this.$router.go(-1);
                     })
@@ -970,7 +970,7 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        // this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
         this.loadVendors();
     }

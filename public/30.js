@@ -377,7 +377,7 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       menu: false,
       jobs: [],
-      permissions: [],
+      permissions: this.$store.getters.user.permissions,
       expense_types: [],
       selected: [],
       selected_expense_types: [],
@@ -430,7 +430,7 @@ __webpack_require__.r(__webpack_exports__);
     loadJobs: function loadJobs() {
       var _this = this;
 
-      axios.get("/api/data/jobs").then(function (response) {
+      axios.get("/api/data/jobs?only=true").then(function (response) {
         _this.jobs = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -442,7 +442,7 @@ __webpack_require__.r(__webpack_exports__);
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
-      axios.get("/api/data/expense_types").then(function (response) {
+      axios.get("/api/data/expense_types?only=true").then(function (response) {
         _this.expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -509,9 +509,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("Employee created successfully.", {
             position: "top-right",
             timeout: 2000
-          });
+          }); // _this.$store.dispatch("AUTH_USER");
 
-          _this.$store.dispatch("AUTH_USER");
 
           _this.$router.push({
             name: "admin.employees.index"
@@ -538,7 +537,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
+    // this.$store.dispatch("AUTH_USER");
     this.loadJobs();
     this.loadExpenseTypes();
     this.loadPermissions();
