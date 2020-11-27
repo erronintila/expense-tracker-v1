@@ -510,14 +510,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       loading: true,
       headers: [{
         text: "Name",
-        value: "fullname"
+        value: "full_name"
       }, {
         text: "Job Designation",
         value: "job.name",
         sortable: false
       }, {
         text: "Department",
-        value: "department.name",
+        value: "job.department.name",
         sortable: false
       }, {
         text: "Revolving Fund",
@@ -590,6 +590,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             job_id: job_id
           }
         }).then(function (response) {
+          console.log(response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;

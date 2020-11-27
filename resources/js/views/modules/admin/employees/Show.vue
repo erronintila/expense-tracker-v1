@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
+        <!-- <v-container v-if="loader" style="height: 400px;">
             <v-row class="fill-height" align-content="center" justify="center">
                 <v-col class="subtitle-1 text-center" cols="12">
                     Loading, Please wait...
@@ -15,7 +15,8 @@
                 </v-col>
             </v-row>
         </v-container>
-        <v-card v-else class="elevation-0 pt-0">
+        <v-card v-else class="elevation-0 pt-0"> -->
+        <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -404,12 +405,15 @@ export default {
         validateFund() {
             let _this = this;
 
-            axios.get(`/api/data/validateFund?id=${this.id}`).then(response => {
-                _this.getData();
-            }).catch(error => {
-                console.log(error);
-                console.log(error.response);
-            });
+            axios
+                .get(`/api/data/validateFund?id=${this.id}`)
+                .then(response => {
+                    _this.getData();
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
         },
         getData() {
             let _this = this;
@@ -435,7 +439,7 @@ export default {
                     _this.remaining_fund = data.remaining_fund;
                     _this.job = data.job.name;
                     _this.department = data.department.name;
-                    _this.permissions = data.permissions;
+                    _this.permissions = data.user.permissions;
                     _this.user = data.user;
 
                     _this.loader = false;

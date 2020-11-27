@@ -57,7 +57,9 @@ class Employee extends Model
      *
      * @var array
      */
-    protected $appends = ['full_name'];
+    protected $appends = [
+        'full_name',
+    ];
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

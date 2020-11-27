@@ -333,11 +333,11 @@ export default {
             expanded: [],
             loading: true,
             headers: [
-                { text: "Name", value: "fullname" },
+                { text: "Name", value: "full_name" },
                 { text: "Job Designation", value: "job.name", sortable: false },
                 {
                     text: "Department",
-                    value: "department.name",
+                    value: "job.department.name",
                     sortable: false
                 },
                 { text: "Revolving Fund", value: "revolving_fund" },
@@ -401,6 +401,7 @@ export default {
                         }
                     })
                     .then(response => {
+                        console.log(response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
