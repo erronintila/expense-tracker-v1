@@ -338,4 +338,19 @@ expense_stats
 
 
 
+------------------------------------------------------------------------------------------
+HELPFUL LINKS
+------------------------------------------------------------------------------------------
+
+https://laravel.com/docs/7.x/eloquent-resources
+https://sam-ngu.medium.com/avoiding-infinite-nested-relationship-loop-in-laravel-api-resource-35685898b360
+https://laracasts.com/discuss/channels/eloquent/api-resource-collection-n1-performance?page=0
+https://laracasts.com/discuss/channels/eloquent/api-resource-collection-n1-performance?page=1
+https://stackoverflow.com/questions/48799271/laravel-how-to-avoid-n-1-issue-in-private-chat-api-structure
+https://laravel-news.com/eloquent-eager-loading
+https://github.com/spatie/laravel-query-builder/issues/148
+https://www.digitalocean.com/community/tutorials/how-to-create-laravel-eloquent-api-resources-to-convert-models-into-json
+https://laravel-json-api.readthedocs.io/en/latest/fetching/resources/
+
+
 
