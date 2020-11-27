@@ -307,6 +307,8 @@ class VendorController extends Controller
         }])
         ->orderBy("name")->get();
 
+        // $vendors = Vendor::orderBy("name")->get();
+
         return VendorResource::collection($vendors);
     }
 }

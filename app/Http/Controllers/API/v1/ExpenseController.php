@@ -340,11 +340,21 @@ class ExpenseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $expense = Expense::withTrashed()->with(['employee' => function ($query) {
-            $query->withTrashed();
-        }])
+        $expense = Expense::withTrashed()
+            ->with(['employee' => function ($query) {
+                $query->withTrashed();
+                $query->with(['expense_types' => function ($query2) {
+                    $query2->withTrashed();
+                    $query2->with(['sub_types' => function ($query) {
+                        $query->withTrashed();
+                    }]);
+                }]);
+            }])
             ->with(['expense_type' => function ($query) {
                 $query->withTrashed();
+                $query->with(['sub_types' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
             }])
             ->with(['expense_report' => function ($query) {
                 $query->withTrashed();

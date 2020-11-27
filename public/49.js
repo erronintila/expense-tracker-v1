@@ -406,6 +406,7 @@ __webpack_require__.r(__webpack_exports__);
           employee_id: _this.form.employee.id
         }
       }).then(function (response) {
+        console.log(response);
         _this.items = response.data.data;
       })["catch"](function (error) {
         console.log(error);

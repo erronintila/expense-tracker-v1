@@ -391,6 +391,7 @@ export default {
                     }
                 })
                 .then(response => {
+                    console.log(response);
                     _this.items = response.data.data;
                 })
                 .catch(error => {

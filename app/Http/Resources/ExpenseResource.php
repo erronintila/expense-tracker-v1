@@ -22,18 +22,18 @@ class ExpenseResource extends JsonResource
     {
         // return parent::toArray($request);
 
-        // $activities = Activity::where("subject_type", "App\Models\Expense")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
+        $activities = Activity::where("subject_type", "App\Models\Expense")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
         $logs = [];
         
-        // foreach ($activities as $activity) {
-        //     $temp = [
-        //         "causer" => User::find($activity['causer_id']),
-        //         "created_at" => $activity['created_at'],
-        //         "description" => $activity['description'],
-        //     ];
+        foreach ($activities as $activity) {
+            $temp = [
+                "causer" => User::find($activity['causer_id']),
+                "created_at" => $activity['created_at'],
+                "description" => $activity['description'],
+            ];
 
-        //     array_push($logs, $temp);
-        // }
+            array_push($logs, $temp);
+        }
 
         return [
             'id' => $this->id,
@@ -61,13 +61,13 @@ class ExpenseResource extends JsonResource
             'tax_rate' => $this->tax_rate,
             'tax_amount' => $this->tax_amount,
 
-            // 'sub_type' => $this->sub_type,
-            'sub_type' => [
-                'id' => null,
-                'name' => "",
-                'limit' => null,
-                'sub_types' => null
-            ],
+            'sub_type' => $this->sub_type,
+            // 'sub_type' => [
+            //     'id' => null,
+            //     'name' => "",
+            //     'limit' => null,
+            //     'sub_types' => null
+            // ],
             'vendor' => $this->vendor,
             // 'vendor' => [ 'id' => null, 'name' => "", 'is_vat_inclusive' => true ],
             // 'employee' => new EmployeeResource($this->employee),

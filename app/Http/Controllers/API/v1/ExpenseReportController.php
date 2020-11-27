@@ -264,6 +264,12 @@ class ExpenseReportController extends Controller
             }])
             ->with(['expenses' => function ($query) {
                 $query->withTrashed();
+                $query->with(['vendor' => function ($query) {
+                    $query->withTrashed();
+                }]);
+                $query->with(['expense_type' => function ($query) {
+                    $query->withTrashed();
+                }]);
             }])
             ->with('payments')
             ->findOrFail($id);
@@ -763,7 +769,16 @@ class ExpenseReportController extends Controller
      */
     public function getExpenseReports(Request $request)
     {
-        $expense_reports = ExpenseReport::orderBy("created_at");
+        $expense_reports = ExpenseReport::with(['expenses' => function($query) {
+            $query->withTrashed();
+            $query->with(['expense_types' => function($query) {
+                $query->withTrashed();
+            }]);
+        }])
+        ->with(['employee' => function($query) {
+            $query->withTrashed();
+        }])
+        ->orderBy("created_at");
 
         if (request()->has("id")) {
             $expense_reports = $expense_reports->where("id", $request->id);

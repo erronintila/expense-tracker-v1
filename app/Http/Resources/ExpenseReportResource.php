@@ -69,8 +69,8 @@ class ExpenseReportResource extends JsonResource
 
             'employee' => $this->employee,
             // 'employee' => ['id' => null, 'name' => ""],
-            'expenses' => $this->expenses,
-            // 'expenses' => [],
+            // 'expenses' => $this->expenses,
+            'expenses' => [],
 
             'created' => $this->getCreatedInfoAttribute(),
             'updated' => $this->getUpdatedInfoAttribute(),
