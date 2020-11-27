@@ -75,7 +75,13 @@ class PaymentController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $payments = Payment::with('expense_reports')->orderBy($sortBy, $sortType);
+        $payments = Payment::with(['expense_reports' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->with(['employee' => function ($query) {
+            $query->withTrashed();
+        }])
+        ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {

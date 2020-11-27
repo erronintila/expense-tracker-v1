@@ -59,7 +59,16 @@ class Payment extends Model
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends = [
+        'created_info',
+        'updated_info',
+        'deleted_info',
+        'approved_info',
+        // 'cancelled_info',
+        // 'released_info',
+        // 'received_info',
+        // 'total_amount'
+    ];
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
