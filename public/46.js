@@ -90,8 +90,9 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/jobs/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
+        console.log(data);
         _this.form.name = data.name;
-        _this.form.department = data.department.id;
+        _this.form.department = data.department;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

@@ -58,6 +58,9 @@ class ExpenseTypeController extends Controller
             $query->withTrashed();
         }])->with(['expenses' => function ($query) {
             $query->withTrashed();
+            $query->with(['expense_report' => function($query) {
+                $query->withTrashed();
+            }]);
         }])
             ->where('expense_type_id', null)
             ->orderBy($sortBy, $sortType);
