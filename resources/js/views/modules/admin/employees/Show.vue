@@ -256,7 +256,7 @@
                                                                 <td>Name</td>
                                                                 <td>
                                                                     {{
-                                                                        fullname
+                                                                        full_name
                                                                     }}
                                                                 </td>
                                                             </tr>
@@ -381,7 +381,7 @@ export default {
             selection: 1,
             panel: 0,
             id: "",
-            fullname: "",
+            full_name: "",
             first_name: "",
             middle_name: "",
             last_name: "",
@@ -394,11 +394,11 @@ export default {
             address: "",
             fund: 0,
             remaining_fund: 0,
-            job: "",
-            department: "",
+            job: { id: null, name: "" },
+            department: { id: null, name: "" },
             headers: [{ text: "Permission", value: "name", sortable: false }],
             permissions: [],
-            user: { username: "", is_admin: false }
+            user: { username: "", name: "", is_admin: false }
         };
     },
     methods: {
@@ -421,10 +421,12 @@ export default {
             axios
                 .get(`/api/employees/${_this.$route.params.id}`)
                 .then(function(response) {
+                    console.log(response);
+
                     let data = response.data.data;
 
                     _this.id = data.id;
-                    _this.fullname = data.fullname;
+                    _this.full_name = data.full_name;
                     _this.first_name = data.first_name;
                     _this.middle_name = data.middle_name;
                     _this.last_name = data.last_name;
@@ -438,7 +440,7 @@ export default {
                     _this.fund = data.fund;
                     _this.remaining_fund = data.remaining_fund;
                     _this.job = data.job.name;
-                    _this.department = data.department.name;
+                    _this.department = data.job.department.name;
                     _this.permissions = data.user.permissions;
                     _this.user = data.user;
 
@@ -448,10 +450,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    // _this.mixin_errorDialog(
+                    //     `Error ${error.response.status}`,
+                    //     error.response.statusText
+                    // );
 
                     _this.loader = false;
                 });
@@ -488,10 +490,10 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    // _this.mixin_errorDialog(
+                    //     `Error ${error.response.status}`,
+                    //     error.response.statusText
+                    // );
                 });
         }
     },

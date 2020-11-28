@@ -42,7 +42,7 @@ class UserResource extends JsonResource
             // "employee" => new EmployeeResource($this->whenLoaded('employee')),
             "employee" => $this->employee,
             "role" => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
-            "permissions" => $this->getAllPermissions()->pluck("name"),
+            "permissions" => $this->getAllPermissions(),
         ];
 
         return parent::toArray($request);

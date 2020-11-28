@@ -355,7 +355,7 @@
                         </td>
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated.updated_at)}}
+                        {{ mixin_getHumanDate(item.updated_at)}}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ mixin_formatNumber(item.amount) }}

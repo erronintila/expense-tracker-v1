@@ -55,12 +55,13 @@ class EmployeeResource extends JsonResource
             "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
             // "adjustments" => $this->adjustments,
             "expense_reports" => ExpenseReportResource::collection($this->whenLoaded('expense_reports')),
-            // "sub_types" => $this->sub_types,
+            "expense_types" => ExpenseTypeResource::collection($this->whenLoaded('expense_types')),
+            "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
             // "payments" => $this->payments,
         ];
 
 
-        return parent::toArray($request);
+        // return parent::toArray($request);
 
         // $user = User::withTrashed()->findOrFail($this->user_id);
 

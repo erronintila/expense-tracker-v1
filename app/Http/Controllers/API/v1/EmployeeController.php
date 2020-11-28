@@ -311,6 +311,8 @@ class EmployeeController extends Controller
         }])
         ->findOrFail($id);
 
+        // $employee = $employee->loadMissing(['job', 'user', 'expenses', 'expense_reports', 'expense_types', 'sub_types']);
+
         return response(
             [
                 'data' => new EmployeeResource($employee),
@@ -645,4 +647,6 @@ class EmployeeController extends Controller
 
         return response("Validated Employee Remaining Fund", 200);
     }
+
+    
 }

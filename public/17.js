@@ -390,7 +390,7 @@ __webpack_require__.r(__webpack_exports__);
       selection: 1,
       panel: 0,
       id: "",
-      fullname: "",
+      full_name: "",
       first_name: "",
       middle_name: "",
       last_name: "",
@@ -403,8 +403,14 @@ __webpack_require__.r(__webpack_exports__);
       address: "",
       fund: 0,
       remaining_fund: 0,
-      job: "",
-      department: "",
+      job: {
+        id: null,
+        name: ""
+      },
+      department: {
+        id: null,
+        name: ""
+      },
       headers: [{
         text: "Permission",
         value: "name",
@@ -413,6 +419,7 @@ __webpack_require__.r(__webpack_exports__);
       permissions: [],
       user: {
         username: "",
+        name: "",
         is_admin: false
       }
     };
@@ -432,9 +439,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/employees/".concat(_this.$route.params.id)).then(function (response) {
+        console.log(response);
         var data = response.data.data;
         _this.id = data.id;
-        _this.fullname = data.fullname;
+        _this.full_name = data.full_name;
         _this.first_name = data.first_name;
         _this.middle_name = data.middle_name;
         _this.last_name = data.last_name;
@@ -448,15 +456,16 @@ __webpack_require__.r(__webpack_exports__);
         _this.fund = data.fund;
         _this.remaining_fund = data.remaining_fund;
         _this.job = data.job.name;
-        _this.department = data.department.name;
+        _this.department = data.job.department.name;
         _this.permissions = data.user.permissions;
         _this.user = data.user;
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        console.log(error.response); // _this.mixin_errorDialog(
+        //     `Error ${error.response.status}`,
+        //     error.response.statusText
+        // );
 
         _this.loader = false;
       });
@@ -482,9 +491,10 @@ __webpack_require__.r(__webpack_exports__);
         _this.total_pending_reports = response.data.summary.pending;
       })["catch"](function (error) {
         console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        console.log(error.response); // _this.mixin_errorDialog(
+        //     `Error ${error.response.status}`,
+        //     error.response.statusText
+        // );
       });
     }
   },
@@ -1070,7 +1080,7 @@ var render = function() {
                                                                     _vm._v(
                                                                       "\n                                                                " +
                                                                         _vm._s(
-                                                                          _vm.fullname
+                                                                          _vm.full_name
                                                                         ) +
                                                                         "\n                                                            "
                                                                     )

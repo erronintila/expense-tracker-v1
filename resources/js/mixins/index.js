@@ -90,6 +90,8 @@ export default {
         },
         mixin_can(permissionName) {
             let permissions = this.$store.getters.user.permissions;
+            permissions = permissions.map(item => item.name);
+            
             return permissions.indexOf(permissionName) !== -1;
         },
         mixin_validate_fund() {

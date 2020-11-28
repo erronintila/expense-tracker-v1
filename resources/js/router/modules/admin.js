@@ -38,8 +38,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/settings/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "manage settings"
                         )
                     ) {
@@ -81,8 +84,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/activity_logs/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all activity logs"
                         )
                     ) {
@@ -172,8 +178,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/departments/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all departments"
                         )
                     ) {
@@ -189,8 +198,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/departments/Create.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "add departments"
                         )
                     ) {
@@ -206,8 +218,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/departments/Edit.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "edit departments"
                         )
                     ) {
@@ -223,8 +238,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/departments/Show.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view departments"
                         )
                     ) {
@@ -247,8 +265,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/employees/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all employees"
                         )
                     ) {
@@ -264,8 +285,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/employees/Create.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("add employees")
+                        permissions.includes("add employees")
                     ) {
                         next();
                     } else {
@@ -279,8 +303,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/employees/Edit.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "edit employees"
                         )
                     ) {
@@ -296,8 +323,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/employees/EditFund.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "edit employees fund"
                         )
                     ) {
@@ -313,8 +343,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/employees/Show.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view employees"
                         )
                     ) {
@@ -337,8 +370,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expense_types/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all expense types"
                         )
                     ) {
@@ -356,8 +392,11 @@ const adminRoutes = [
                         "../../views/modules/admin/expense_types/Create.vue"
                     ),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "add expense types"
                         )
                     ) {
@@ -373,8 +412,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expense_types/Edit.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "edit expense types"
                         )
                     ) {
@@ -390,8 +432,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expense_types/Show.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view expense types"
                         )
                     ) {
@@ -414,8 +459,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expenses/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all expenses"
                         )
                     ) {
@@ -431,8 +479,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expenses/Create.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("add expenses")
+                        permissions.includes("add expenses")
                     ) {
                         next();
                     } else {
@@ -461,8 +512,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expenses/Edit.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("edit expenses")
+                        permissions.includes("edit expenses")
                     ) {
                         next();
                     } else {
@@ -476,8 +530,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/expenses/Show.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("view expenses")
+                        permissions.includes("view expenses")
                     ) {
                         next();
                     } else {
@@ -498,8 +555,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/jobs/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("view all jobs")
+                        permissions.includes("view all jobs")
                     ) {
                         next();
                     } else {
@@ -513,7 +573,10 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/jobs/Create.vue"),
                 beforeEnter: (to, from, next) => {
-                    if (store.getters.user.permissions.includes("add jobs")) {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("add jobs")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -526,7 +589,10 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/jobs/Edit.vue"),
                 beforeEnter: (to, from, next) => {
-                    if (store.getters.user.permissions.includes("edit jobs")) {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("edit jobs")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -539,7 +605,10 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/jobs/Show.vue"),
                 beforeEnter: (to, from, next) => {
-                    if (store.getters.user.permissions.includes("view jobs")) {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("view jobs")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -559,8 +628,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/payments/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all payments"
                         )
                     ) {
@@ -576,8 +648,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/payments/Create.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("add payments")
+                        permissions.includes("add payments")
                     ) {
                         next();
                     } else {
@@ -591,8 +666,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/payments/Edit.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("edit payments")
+                        permissions.includes("edit payments")
                     ) {
                         next();
                     } else {
@@ -606,8 +684,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/payments/Show.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("view payments")
+                        permissions.includes("view payments")
                     ) {
                         next();
                     } else {
@@ -630,8 +711,11 @@ const adminRoutes = [
                         "../../views/modules/admin/expense_reports/Index.vue"
                     ),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all expense reports"
                         )
                     ) {
@@ -649,8 +733,11 @@ const adminRoutes = [
                         "../../views/modules/admin/expense_reports/Create.vue"
                     ),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "add expense reports"
                         )
                     ) {
@@ -668,8 +755,11 @@ const adminRoutes = [
                         "../../views/modules/admin/expense_reports/Edit.vue"
                     ),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "edit expense reports"
                         )
                     ) {
@@ -687,8 +777,11 @@ const adminRoutes = [
                         "../../views/modules/admin/expense_reports/Show.vue"
                     ),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view expense reports"
                         )
                     ) {
@@ -900,8 +993,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/vendors/Index.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes(
+                        permissions.includes(
                             "view all vendors"
                         )
                     ) {
@@ -917,8 +1013,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/vendors/Create.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("add vendors")
+                        permissions.includes("add vendors")
                     ) {
                         next();
                     } else {
@@ -932,8 +1031,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/vendors/Edit.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("edit vendors")
+                        permissions.includes("edit vendors")
                     ) {
                         next();
                     } else {
@@ -947,8 +1049,11 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/vendors/Show.vue"),
                 beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
                     if (
-                        store.getters.user.permissions.includes("view vendors")
+                        permissions.includes("view vendors")
                     ) {
                         next();
                     } else {
