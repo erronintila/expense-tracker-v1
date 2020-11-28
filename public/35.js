@@ -453,6 +453,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -570,6 +579,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    // loadExpenses() {
+    //     axios
+    //         .get(
+    //             `/api/data/expenses?expense_report_id${this.$route.params.id}`
+    //         )
+    //         .then(response => {
+    //             console.log(response);
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //             _this.mixin_errorDialog(
+    //                 `Error ${error.response.status}`,
+    //                 error.response.statusText
+    //             );
+    //         });
+    // },
     getData: function getData() {
       var _this = this;
 
@@ -602,7 +628,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.approved = data.approved;
         _this.form.rejected = data.rejected;
         _this.form.cancelled = data.cancelled;
-        _this.form.logs = data.logs;
+        _this.form.logs = data.logs; // _this.loadExpenses();
+
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
@@ -1150,7 +1177,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                        (-) " +
+                                        "\n                                        (-)\n                                        " +
                                           _vm._s(
                                             _vm.mixin_formatNumber(
                                               _vm.form.paid
@@ -1477,11 +1504,13 @@ var render = function() {
                                         _vm._v(" "),
                                         _c("td", [
                                           _vm._v(
-                                            _vm._s(
-                                              item.causer == null
-                                                ? "System"
-                                                : item.causer.name
-                                            )
+                                            "\n                                            " +
+                                              _vm._s(
+                                                item.causer == null
+                                                  ? "System"
+                                                  : item.causer.name
+                                              ) +
+                                              "\n                                        "
                                           )
                                         ]),
                                         _vm._v(" "),

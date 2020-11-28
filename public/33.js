@@ -266,8 +266,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -286,7 +284,7 @@ __webpack_require__.r(__webpack_exports__);
         text: "Date",
         value: "date"
       }, {
-        text: "Description",
+        text: "Type",
         value: "expense_type.name"
       }, {
         text: "Receipt",
@@ -586,7 +584,7 @@ var render = function() {
                                   items: _vm.employees,
                                   "error-messages": _vm.errors.employee,
                                   "item-value": "id",
-                                  "item-text": "fullname",
+                                  "item-text": "full_name",
                                   label: "Employee",
                                   required: "",
                                   "return-object": ""
@@ -842,8 +840,7 @@ var render = function() {
                                                           "\n                                                    " +
                                                             _vm._s(
                                                               _vm.mixin_formatDate(
-                                                                item.created
-                                                                  .created_at,
+                                                                item.created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                               )
                                                             ) +
@@ -871,8 +868,7 @@ var render = function() {
                                                               "\n                                                    " +
                                                                 _vm._s(
                                                                   _vm.mixin_formatDate(
-                                                                    item.deleted
-                                                                      .deleted_at,
+                                                                    item.deleted_at,
                                                                     "YYYY-MM-DD HH:mm:ss"
                                                                   )
                                                                 ) +

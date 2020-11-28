@@ -69,7 +69,16 @@ class ExpenseReport extends Model
      *
      * @var array
      */
-    protected $appends = ['balance', 'status'];
+    protected $appends = [
+        'balance',
+        'status',
+        'expense_start_date',
+        'expense_end_date',
+        "total_expense_amount",
+        "total_reimbursable_amount",
+        "received_payment_amount",
+        "unreceived_payment_amount",
+    ];
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -198,8 +207,8 @@ class ExpenseReport extends Model
         $rejected = is_null($this->rejected_at);
         $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
-        $paid = false;
-        // $paid = ($this->payments->count() > 0);
+        // $paid = false;
+        $paid = ($this->payments->count() > 0);
 
         if (!$deleted) {
             $arr = [
@@ -323,7 +332,7 @@ class ExpenseReport extends Model
      */
     public function getExpenseStartDateAttribute()
     {
-        return date('Y-m-d', min(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
+        return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
     }
 
     /**
@@ -333,7 +342,7 @@ class ExpenseReport extends Model
      */
     public function getExpenseEndDateAttribute()
     {
-        return date('Y-m-d', max(array_map('strtotime', $this->expenses->pluck('date')->toArray())));
+        return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
     }
     
     /**

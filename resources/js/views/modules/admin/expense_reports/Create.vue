@@ -51,7 +51,7 @@
                                 @input="errors.employee = []"
                                 @change="loadExpenses"
                                 item-value="id"
-                                item-text="fullname"
+                                item-text="full_name"
                                 label="Employee"
                                 required
                                 return-object
@@ -200,8 +200,7 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.created
-                                                                    .created_at,
+                                                                item.created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -217,8 +216,7 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.deleted
-                                                                    .deleted_at,
+                                                                item.deleted_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -291,7 +289,7 @@ export default {
             ],
             headers: [
                 { text: "Date", value: "date" },
-                { text: "Description", value: "expense_type.name" },
+                { text: "Type", value: "expense_type.name" },
                 { text: "Receipt", value: "receipt_number" },
                 { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },

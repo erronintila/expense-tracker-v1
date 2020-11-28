@@ -244,6 +244,12 @@ class ExpenseController extends Controller
             }
         }
 
+        if (request()->has('expense_report_id')) {
+            if ($request->expense_report_id > 0) {
+                $expenses = $expenses->where("expense_report_id", $request->expense_report_id);
+            }
+        }
+
         $expenses = $expenses->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
 
@@ -523,7 +529,22 @@ class ExpenseController extends Controller
      */
     public function getExpenses(Request $request)
     {
-        $expenses = Expense::orderBy('date', 'desc');
+        $expenses = Expense::with(['employee' => function ($query) {
+            $query->withTrashed();
+        }])
+            ->with(['expense_type' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expense_report' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['sub_type' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['vendor' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->orderBy('date', 'desc');
 
         if (request()->has("summary")) {
             if ($request->summary) {
@@ -567,7 +588,22 @@ class ExpenseController extends Controller
         }
 
         if (request()->has("update_report")) {
-            $expenses = Expense::orderBy("date")
+            $expenses = Expense::with(['employee' => function ($query) {
+                $query->withTrashed();
+            }])
+                ->with(['expense_type' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['expense_report' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['sub_type' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['vendor' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->orderBy("date")
                 ->where(function ($q) use ($request) {
                     $q->where("expense_report_id", $request->expense_report_id);
                     $q->orWhere("expense_report_id", null);

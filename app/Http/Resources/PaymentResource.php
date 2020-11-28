@@ -37,6 +37,11 @@ class PaymentResource extends JsonResource
             "notes" => $this->notes,
 
             // -------------------------------------------------------------------
+            // Additional Fields
+            // -------------------------------------------------------------------
+            "status" => $this->status,
+
+            // -------------------------------------------------------------------
             // Transaction Logs
             // -------------------------------------------------------------------
             "created_at" => $this->created_at,
@@ -59,7 +64,6 @@ class PaymentResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "expense_reports" => ExpenseReportResource::collection($this->whenLoaded('expense_reports')),
-            // "expenses" => $this->expenses,
             "employee" => new EmployeeResource($this->whenLoaded('employee'))
         ];
 

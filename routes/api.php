@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Resources\UserResource;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -126,7 +128,20 @@ Route::middleware('auth:sanctum')->group(function () {
     */
 
     Route::get('/user', function (Request $request) {
-        return new UserResource($request->user());
+
+        // $user = $request->user();
+        $user = User::with(['employee' => function($query) {
+            $query->withTrashed();
+            $query->with(['job' => function($query) {
+                $query->withTrashed();
+                $query->with(['department' => function($query) {
+                    $query->withTrashed();
+                }]);
+            }]);
+        }])
+        ->findOrFail(Auth::id());
+
+        return new UserResource($user);
     });
 
     Route::get('/permissions', function (Request $request) {

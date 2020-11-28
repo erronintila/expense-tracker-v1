@@ -699,6 +699,7 @@ export default {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
             _this.user = response;
+            console.log(response);
         });
     }
 };

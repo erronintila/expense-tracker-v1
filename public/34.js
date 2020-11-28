@@ -278,8 +278,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
 
 
 
@@ -298,7 +296,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         text: "Date",
         value: "date"
       }, {
-        text: "Description",
+        text: "Type",
         value: "expense_type.name"
       }, {
         text: "Receipt",
@@ -356,6 +354,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         var _this$selected;
 
         var data = response.data.data;
+        console.log(data);
         _this.form.code = data.code;
         _this.form.description = data.description;
         _this.form.remarks = data.remarks;
@@ -636,7 +635,7 @@ var render = function() {
                                   items: _vm.employees,
                                   "error-messages": _vm.errors.employee,
                                   "item-value": "id",
-                                  "item-text": "fullname",
+                                  "item-text": "full_name",
                                   label: "Employee",
                                   required: "",
                                   "return-object": ""
@@ -892,8 +891,7 @@ var render = function() {
                                                           "\n                                                    " +
                                                             _vm._s(
                                                               _vm.mixin_formatDate(
-                                                                item.created
-                                                                  .created_at,
+                                                                item.created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                               )
                                                             ) +
@@ -921,8 +919,7 @@ var render = function() {
                                                               "\n                                                    " +
                                                                 _vm._s(
                                                                   _vm.mixin_formatDate(
-                                                                    item.deleted
-                                                                      .deleted_at,
+                                                                    item.deleted_at,
                                                                     "YYYY-MM-DD HH:mm:ss"
                                                                   )
                                                                 ) +
@@ -991,13 +988,13 @@ var render = function() {
                                             _vm._v(" "),
                                             _c("td"),
                                             _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
                                             _c("td", [
                                               _c("strong", [
                                                 _vm._v(_vm._s(_vm.total))
                                               ])
                                             ]),
+                                            _vm._v(" "),
+                                            _c("td"),
                                             _vm._v(" "),
                                             _c("td")
                                           ]

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
+        <!-- <v-container v-if="loader" style="height: 400px;">
             <v-row class="fill-height" align-content="center" justify="center">
                 <v-col class="subtitle-1 text-center" cols="12">
                     Loading, Please wait...
@@ -15,7 +15,8 @@
                 </v-col>
             </v-row>
         </v-container>
-        <v-card v-else class="elevation-0 pt-0">
+        <v-card v-else class="elevation-0 pt-0"> -->
+        <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -67,11 +68,7 @@
                                 elevation="0"
                                 :headers="headers"
                                 :items="items"
-                                :hide-default-footer="true"
-                                disable-pagination
                                 item-key="id"
-                                single-expand
-                                show-expand
                                 class="elevation-0"
                             >
                                 <!-- <template
@@ -147,100 +144,7 @@
                                             item.employee.suffix
                                     }}
                                 </template>
-                                <template
-                                    v-slot:expanded-item="{ headers, item }"
-                                >
-                                    <td :colspan="headers.length">
-                                        <v-container>
-                                            <div v-if="item"></div>
-                                            <div>
-                                                Expenses
-                                            </div>
-                                            <v-simple-table dense>
-                                                <template v-slot:default>
-                                                    <thead>
-                                                        <tr>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Date
-                                                            </th>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Expense
-                                                            </th>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Amount
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr
-                                                            v-for="item in item.expenses"
-                                                            :key="item.id"
-                                                        >
-                                                            <td>
-                                                                {{ item.date }}
-                                                            </td>
-                                                            <td>
-                                                                {{
-                                                                    item
-                                                                        .expense_type
-                                                                        .name
-                                                                }}
-                                                            </td>
-                                                            <td>
-                                                                {{
-                                                                    mixin_formatNumber(
-                                                                        item.amount
-                                                                    )
-                                                                }}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </template>
-                                            </v-simple-table>
-
-                                            <!-- <table class="table" width="100%" border="1">
-                                                <thead>
-                                                    <tr>
-                                                        <td>Date</td>
-                                                        <td>Expense</td>
-                                                        <td>Amount</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="item in item.expenses" :key="item.id">
-                                                        <td>{{ item.date }}</td>
-                                                        <td>{{ item.expense_type.name }}</td>
-                                                        <td>{{ item.amount }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table> -->
-                                            <!-- <v-card
-                                                class="mx-auto"
-                                                tile
-                                                flat
-                                                :key="item.id"
-                                            >
-                                                <div>
-                                                    <strong>Expenses</strong>
-                                                </div>
-                                                <div
-                                                    v-for="item in item.expenses"
-                                                    :key="item.id"
-                                                >
-                                                    {{
-                                                        `${item.date} (${item.expense_type.name}): ${item.amount}`
-                                                    }}
-                                                </div>
-                                            </v-card> -->
-                                        </v-container>
-                                    </td>
-                                </template>
+                                
                             </v-data-table>
                         </v-col>
                     </v-row>
@@ -262,7 +166,11 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            {{ mixin_formatNumber(totalExpenseBalanceAmount) }}
+                                            {{
+                                                mixin_formatNumber(
+                                                    totalExpenseBalanceAmount
+                                                )
+                                            }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -273,7 +181,10 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            (-) {{ mixin_formatNumber(form.amount) }}
+                                            (-)
+                                            {{
+                                                mixin_formatNumber(form.amount)
+                                            }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -289,19 +200,24 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            {{ mixin_formatNumber(amountToBeReimbursed) }}
+                                            {{
+                                                mixin_formatNumber(
+                                                    amountToBeReimbursed
+                                                )
+                                            }}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            
                         </v-col>
                     </v-row>
 
                     <v-divider class="mb-4"></v-divider>
 
                     <v-row>
-                        <v-col cols="12" md="8"> Notes : {{ form.notes }} </v-col>
+                        <v-col cols="12" md="8">
+                            Notes : {{ form.notes }}
+                        </v-col>
                         <v-col cols="12" md="4">
                             <div class="text-right">
                                 <v-btn
@@ -371,7 +287,7 @@ export default {
                 { text: "Amount", value: "total", sortable: false },
                 { text: "Balance", value: "balance", sortable: false },
                 { text: "Actions", value: "actions", sortable: false },
-                { text: "", value: "data-table-expand", sortable: false }
+                // { text: "", value: "data-table-expand", sortable: false }
             ],
             items: [],
             total: 0,

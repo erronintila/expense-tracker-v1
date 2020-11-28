@@ -19,6 +19,19 @@ class ExpenseReportResource extends JsonResource
      */
     public function toArray($request)
     {
+        $activities = Activity::where("subject_type", "App\Models\ExpenseReport")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
+        $logs = [];
+        
+        foreach ($activities as $activity) {
+            $temp = [
+                "causer" => User::find($activity["causer_id"]),
+                "created_at" => $activity["created_at"],
+                "description" => $activity["description"],
+            ];
+
+            array_push($logs, $temp);
+        }
+
         return [
             // -------------------------------------------------------------------
             // Fields
@@ -31,6 +44,19 @@ class ExpenseReportResource extends JsonResource
             "notes" => $this->notes,
             "submission_period" => $this->submission_period,
             "approval_period" => $this->approval_period,
+
+            // -------------------------------------------------------------------
+            // Additional Fields
+            // -------------------------------------------------------------------
+            "from" => $this->expense_start_date,
+            "to" => $this->expense_end_date,
+            "status" => $this->status,
+            "total" => $this->total_expense_amount,
+            "total_reimbursable" => $this->total_reimbursable_amount,
+            "paid" => $this->total_expense_amount - $this->balance,
+            "balance" => $this->balance,
+            "total_received_payment" => $this->received_payment_amount,
+            "logs" => $logs,
 
             // -------------------------------------------------------------------
             // Transaction Logs
@@ -57,7 +83,7 @@ class ExpenseReportResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
-            "payments" => PaymentResource::collection($this->whenLoaded('payments')),
+            // "payments" => PaymentResource::collection($this->whenLoaded('payments')),
             "employee" => new EmployeeResource($this->whenLoaded('employee'))
         ];
 

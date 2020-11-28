@@ -293,12 +293,9 @@ class PaymentController extends Controller
     {
         $payment = Payment::withTrashed()->with(['expense_reports' => function($query) {
             $query->withTrashed();
-            $query->with(['expenses' => function($query2) {
-                $query2->withTrashed();
-                $query2->with(['expense_type' => function($query) {
-                    $query->withTrashed();
-                }]);
-            }]);
+        }])
+        ->with(['employee' => function($query) {
+            $query->withTrashed();
         }])
         ->findOrFail($id);
 

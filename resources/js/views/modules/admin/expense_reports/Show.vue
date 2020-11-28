@@ -227,7 +227,8 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            (-) {{ mixin_formatNumber(form.paid) }}
+                                            (-)
+                                            {{ mixin_formatNumber(form.paid) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -243,7 +244,9 @@
                                         <td
                                             class="green--text text--darken-4 text-right"
                                         >
-                                            {{ mixin_formatNumber(form.balance) }}
+                                            {{
+                                                mixin_formatNumber(form.balance)
+                                            }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -395,7 +398,13 @@
                                                     )
                                                 }}
                                             </td>
-                                            <td>{{ item.causer == null ? 'System' : item.causer.name }}</td>
+                                            <td>
+                                                {{
+                                                    item.causer == null
+                                                        ? "System"
+                                                        : item.causer.name
+                                                }}
+                                            </td>
                                             <td>{{ item.description }}</td>
                                         </tr>
                                     </tbody>
@@ -480,7 +489,7 @@ export default {
                 payment_id: null,
                 balance: 0,
 
-                employee: {id: null, name: ""},
+                employee: { id: null, name: "" },
                 payment: { id: null },
                 expenses: [],
 
@@ -498,6 +507,24 @@ export default {
         };
     },
     methods: {
+        // loadExpenses() {
+        //     axios
+        //         .get(
+        //             `/api/data/expenses?expense_report_id${this.$route.params.id}`
+        //         )
+        //         .then(response => {
+        //             console.log(response);
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+
+        //             _this.mixin_errorDialog(
+        //                 `Error ${error.response.status}`,
+        //                 error.response.statusText
+        //             );
+        //         });
+        // },
         getData() {
             let _this = this;
             axios
@@ -538,6 +565,8 @@ export default {
                     _this.form.cancelled = data.cancelled;
 
                     _this.form.logs = data.logs;
+
+                    // _this.loadExpenses();
 
                     _this.loader = false;
                 })
