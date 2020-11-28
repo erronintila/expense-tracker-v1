@@ -68,7 +68,7 @@ export const store = new Vuex.Store({
                             })
                             .catch(error => {
                                 console.log(error);
-                                // console.log(error.response);
+                                console.log(error.response);
 
                                 reject(error);
                             });
@@ -115,7 +115,6 @@ export const store = new Vuex.Store({
                 axios
                     .get("/api/user")
                     .then(function(response) {
-                        console.log(response);
                         context.dispatch("AUTH_SETTINGS");
 
                         localStorage.setItem("authenticated", "true");

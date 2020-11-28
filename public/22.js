@@ -295,6 +295,21 @@ __webpack_require__.r(__webpack_exports__);
         iron: "8%"
       }]
     };
+  },
+  methods: {
+    loadStatistics: function loadStatistics(start, end, employee_id) {
+      var _this = this;
+
+      axios.get("/api/data/statistics?start_date=".concat(start, "&end_date=").concat(end, "&employee_id=").concat(employee_id)).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.loadStatistics();
   }
 });
 

@@ -1451,14 +1451,24 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.loader = true;
       });
-    }
+    } // loadStatistics(start, end, employee_id) {
+    //     let _this = this;
+    //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&employee_id=${employee_id}`)
+    //     .then(response => {
+    //         console.log(response);
+    //     }).catch(error => {
+    //         console.log(error);
+    //         console.log(error.response);
+    //     });
+    // }
+
   },
   mounted: function mounted() {
     this.loadEmployees();
     this.load_pie_chart();
     this.load_bar_chart();
     this.load_line_chart();
-    this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
+    this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id); // this.loadStatistics();
   },
   created: function created() {// this.$store.dispatch("AUTH_USER");
   }

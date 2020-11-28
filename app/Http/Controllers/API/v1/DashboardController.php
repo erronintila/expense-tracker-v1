@@ -548,4 +548,48 @@ class DashboardController extends Controller
 
         return $stats;
     }
+
+    public function statistics(Request $request)
+    {
+        $start_date = $request->start_date ?? "2020-01-01";
+        $end_date = $request->end_date ?? "2020-12-31";
+        $employee_id = $request->employee_id ?? 1;
+
+        $expenses = Expense::with('expense_report', 'employee')->get();
+
+        return response()->json([
+            "data" => $expenses,
+            "all" => [
+                "total_amount" => $expenses->sum('amount'),
+                "total_count" => $expenses->count()
+            ],
+            "unsubmitted" => [
+                "total_amount" => 0,
+                "total_count" => 0
+            ],
+            "unreported" => [
+                "total_amount" => 0,
+                "total_count" => 0
+            ],
+            "submitted" => [
+                "total_amount" => 0,
+                "total_count" => 0,
+                "total_report" => 0
+            ],
+            "approved" => [
+                "total_amount" => 0,
+                "total_count" => 0,
+                "total_report" => 0
+            ],
+            "paid" => [
+                "total_amount" => 0,
+                "total_count" => 0,
+                "total_report" => 0
+            ],
+        ]);
+    }
+
+    public function expense_reports()
+    {
+    }
 }

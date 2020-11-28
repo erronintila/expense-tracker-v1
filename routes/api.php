@@ -170,6 +170,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/expenses_summary', 'API\v1\DashboardController@expenses_summary');
 
+    Route::get('/data/statistics', 'API\v1\DashboardController@statistics');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | PRINT CONTROLLER ROUTES

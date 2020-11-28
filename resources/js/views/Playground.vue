@@ -280,6 +280,21 @@ export default {
                 iron: "8%"
             }
         ]
-    })
+    }),
+    methods: {
+        loadStatistics(start, end, employee_id) {
+            let _this = this;
+            axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&employee_id=${employee_id}`)
+            .then(response => {
+                console.log(response);
+            }).catch(error => {
+                console.log(error);
+                console.log(error.response);
+            });
+        }
+    },
+    mounted() {
+        this.loadStatistics();
+    },
 };
 </script>
