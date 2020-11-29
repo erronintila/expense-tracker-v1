@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemadesigner version="6.5">
 <source>
-<database charset="latin1" collation="latin1_swedish_ci">laravel</database>
+<database charset="utf8mb4" collation="utf8mb4_general_ci">laravel</database>
 </source>
 <canvas zoom="100">
 <tables>
@@ -95,7 +95,7 @@
   UNIQUE KEY `expense_types_code_unique` (`code`),
   KEY `expense_types_expense_type_id_foreign` (`expense_type_id`),
   CONSTRAINT `expense_types_expense_type_id_foreign` FOREIGN KEY (`expense_type_id`) REFERENCES `expense_types` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expenses" view="colnames">
 <left>897</left>
@@ -116,7 +116,7 @@
   `tax_amount` double(10,2) NOT NULL DEFAULT 0.00,
   `receipt_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
-  `details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`details`)),
   `remarks` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `encoding_period` int(11) NOT NULL DEFAULT 2,
@@ -146,7 +146,7 @@
   CONSTRAINT `expenses_sub_type_id_foreign` FOREIGN KEY (`sub_type_id`) REFERENCES `expense_types` (`id`),
   CONSTRAINT `expenses_tax_id_foreign` FOREIGN KEY (`tax_id`) REFERENCES `taxes` (`id`),
   CONSTRAINT `expenses_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="users" view="colnames">
 <left>37</left>
@@ -277,7 +277,7 @@
   UNIQUE KEY `payments_reference_no_unique` (`reference_no`),
   KEY `payments_employee_id_foreign` (`employee_id`),
   CONSTRAINT `payments_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="vendors" view="colnames">
 <left>1140</left>
@@ -304,7 +304,7 @@
   UNIQUE KEY `vendors_code_unique` (`code`),
   UNIQUE KEY `vendors_email_unique` (`email`),
   UNIQUE KEY `vendors_tin_unique` (`tin`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="activity_log" view="colnames">
 <left>40</left>
@@ -319,14 +319,14 @@
   `subject_id` bigint(20) unsigned DEFAULT NULL,
   `causer_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `causer_id` bigint(20) unsigned DEFAULT NULL,
-  `properties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `properties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`properties`)),
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `subject` (`subject_type`,`subject_id`),
   KEY `causer` (`causer_type`,`causer_id`),
   KEY `activity_log_log_name_index` (`log_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=552 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="employee_expense_type" view="colnames">
 <left>909</left>
@@ -360,7 +360,7 @@
   KEY `expense_report_payment_payment_id_foreign` (`payment_id`),
   CONSTRAINT `expense_report_payment_expense_report_id_foreign` FOREIGN KEY (`expense_report_id`) REFERENCES `expense_reports` (`id`) ON DELETE CASCADE,
   CONSTRAINT `expense_report_payment_payment_id_foreign` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="settings" view="colnames">
 <left>38</left>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpenseReport\ExpenseReportIndexResource;
 use App\Http\Resources\ExpenseReportResource;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
@@ -16,7 +17,7 @@ use Illuminate\Validation\Rule;
 class ExpenseReportController extends Controller
 {
     use ApiResponse;
-    
+
     public function __construct()
     {
         $this->middleware(['permission:view all expense reports'], ['only' => ['index']]);
@@ -66,10 +67,10 @@ class ExpenseReportController extends Controller
         $expense_reports = ExpenseReport::with(['employee' => function ($query) {
             $query->withTrashed();
         }])
-            ->with(['expenses' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with('payments')
+            // ->with(['expenses' => function ($query) {
+            //     $query->withTrashed();
+            // }])
+            // ->with('payments')
             ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
@@ -107,13 +108,13 @@ class ExpenseReportController extends Controller
                         ->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
-                
+
                                 ["released_at", "<>", null],
-                
+
                                 ["received_at", "<>", null],
-                
+
                                 ["cancelled_at", "=", null],
-                
+
                                 ["deleted_at", "=", null],
                             ]);
                         });
@@ -197,7 +198,7 @@ class ExpenseReportController extends Controller
 
         $expense_reports = $expense_reports->paginate($itemsPerPage);
 
-        return ExpenseReportResource::collection($expense_reports);
+        return ExpenseReportIndexResource::collection($expense_reports);
     }
 
     /**
