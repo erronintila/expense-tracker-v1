@@ -581,6 +581,7 @@ export default {
                         }
                     })
                     .then(response => {
+                        console.log(response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
@@ -612,9 +613,6 @@ export default {
                         id: 0,
                         full_name: "All Employees"
                     });
-
-                    console.log(_this.employees);
-                    console.log(response.data.data);
                 })
                 .catch(error => {
                     console.log(error);
@@ -796,7 +794,7 @@ export default {
                                 position: "top-right",
                                 timeout: 2000
                             });
-                            
+
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;

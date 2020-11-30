@@ -425,7 +425,6 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      console.log(response);
       _this.user = response;
     });
   }

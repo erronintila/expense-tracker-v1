@@ -584,6 +584,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             end_date: range[1]
           }
         }).then(function (response) {
+          console.log(response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
@@ -611,9 +612,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: 0,
           full_name: "All Employees"
         });
-
-        console.log(_this.employees);
-        console.log(response.data.data);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

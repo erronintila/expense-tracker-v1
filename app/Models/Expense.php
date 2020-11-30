@@ -16,7 +16,7 @@ class Expense extends Model
     | INITIALIZATION
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
+
     use SoftDeletes, LogsActivity;
 
     /*
@@ -60,12 +60,12 @@ class Expense extends Model
      * @var array
      */
     protected $appends = [
-        'status', 
-        'reimbursed_info', 
-        'cancelled_info', 
-        'rejected_info', 
-        'approved_info', 
-        'reviewed_info', 
+        'status',
+        'reimbursed_info',
+        'cancelled_info',
+        'rejected_info',
+        'approved_info',
+        'reviewed_info',
         'submitted_info',
         'deleted_info',
         'updated_info',
@@ -73,7 +73,7 @@ class Expense extends Model
         'balance',
         'formatted_date',
         'formatted_amount',
-        'expiry_date'
+        'expiry_date',
     ];
 
     /*
@@ -388,7 +388,7 @@ class Expense extends Model
 
         return $arr;
     }
-    
+
     /**
      * getExpiryDateAttribute
      *
@@ -429,7 +429,7 @@ class Expense extends Model
     {
         return 0;
     }
-    
+
     /**
      * getCreatedInfoAttribute
      *
@@ -446,7 +446,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getUpdatedInfoAttribute
      *
@@ -463,7 +463,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getDeletedInfoAttribute
      *
@@ -480,7 +480,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getSubmittedInfoAttribute
      *
@@ -499,7 +499,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getReviewedInfoAttribute
      *
@@ -518,7 +518,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getApprovedInfoAttribute
      *
@@ -537,7 +537,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getRejectedInfoAttribute
      *
@@ -556,7 +556,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getCancelledInfoAttribute
      *
@@ -575,7 +575,7 @@ class Expense extends Model
 
         return null;
     }
-    
+
     /**
      * getReimbursedInfoAttribute
      *

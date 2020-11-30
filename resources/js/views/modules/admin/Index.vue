@@ -394,7 +394,6 @@ export default {
     created() {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            console.log(response);
             _this.user = response;
         });
     }

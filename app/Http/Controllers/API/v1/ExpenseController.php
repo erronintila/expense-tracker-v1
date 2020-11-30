@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Expense\ExpenseIndexResource;
+use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Employee;
 use App\Models\Expense;
@@ -97,9 +99,9 @@ class ExpenseController extends Controller
             ->with(['expense_report' => function ($query) {
                 $query->withTrashed();
             }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
+            // ->with(['sub_type' => function ($query) {
+            //     $query->withTrashed();
+            // }])
             ->with(['vendor' => function ($query) {
                 $query->withTrashed();
             }])
@@ -130,13 +132,13 @@ class ExpenseController extends Controller
                         $query->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
-                
+
                                 ["released_at", "<>", null],
-                
+
                                 ["received_at", "<>", null],
-                
+
                                 ["cancelled_at", "=", null],
-                
+
                                 ["deleted_at", "=", null],
                             ]);
                         });
@@ -169,7 +171,7 @@ class ExpenseController extends Controller
                             ["submitted_at", "<>", null],
 
                             ["approved_at", "<>", null],
-                            
+
                             ["rejected_at", "=", null],
 
                             ["cancelled_at", "=", null],
@@ -264,7 +266,7 @@ class ExpenseController extends Controller
 
         // $expenses->appends(['sort' => 'votes'])->links();
 
-        return ExpenseResource::collection($expenses);
+        return ExpenseIndexResource::collection($expenses);
     }
 
     /**
@@ -375,7 +377,7 @@ class ExpenseController extends Controller
 
         return response(
             [
-                'data' => new ExpenseResource($expense),
+                'data' => new ExpenseShowResource($expense),
 
                 'message' => 'Retrieved successfully'
             ],

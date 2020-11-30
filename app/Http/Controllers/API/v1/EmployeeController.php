@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Exports\EmployeesExport;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Employee\EmployeeIndexResource;
+use App\Http\Resources\Employee\EmployeeShowResource;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\Expense;
@@ -97,16 +99,16 @@ class EmployeeController extends Controller
             $query->with(['department' => function ($query2) {
                 $query2->withTrashed();
             }]);
-        }])
-            ->with(['user' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_types' => function ($query) {
-                $query->withTrashed();
-                $query->with(['sub_types' => function ($query2) {
-                    $query2->withTrashed();
-                }]);
-            }]);
+        }]);
+            // ->with(['user' => function ($query) {
+            //     $query->withTrashed();
+            // }]);
+            // ->with(['expense_types' => function ($query) {
+            //     $query->withTrashed();
+            //     $query->with(['sub_types' => function ($query2) {
+            //         $query2->withTrashed();
+            //     }]);
+            // }]);
 
         switch ($sortBy) {
             case 'fullname':
@@ -186,7 +188,7 @@ class EmployeeController extends Controller
 
         $employees = $employees->paginate($itemsPerPage);
 
-        return EmployeeResource::collection($employees);
+        return EmployeeIndexResource::collection($employees);
     }
 
     /**
@@ -294,28 +296,28 @@ class EmployeeController extends Controller
         ->with(['user' => function ($query) {
             $query->withTrashed();
         }])
-        ->with(['expenses' => function ($query) {
-            $query->withTrashed();
-        }])
-        ->with(['expense_reports' => function ($query) {
-            $query->withTrashed();
-        }])
+        // ->with(['expenses' => function ($query) {
+        //     $query->withTrashed();
+        // }])
+        // ->with(['expense_reports' => function ($query) {
+        //     $query->withTrashed();
+        // }])
         ->with(['expense_types' => function ($query) {
             $query->withTrashed();
-            $query->with(['sub_types' => function ($query2) {
-                $query2->withTrashed();
-            }]);
+            // $query->with(['sub_types' => function ($query2) {
+            //     $query2->withTrashed();
+            // }]);
         }])
-        ->with(['sub_types' => function ($query) {
-            $query->withTrashed();
-        }])
+        // ->with(['sub_types' => function ($query) {
+        //     $query->withTrashed();
+        // }])
         ->findOrFail($id);
 
         // $employee = $employee->loadMissing(['job', 'user', 'expenses', 'expense_reports', 'expense_types', 'sub_types']);
 
         return response(
             [
-                'data' => new EmployeeResource($employee),
+                'data' => new EmployeeShowResource($employee),
 
                 'message' => 'Retrieved successfully'
             ],
@@ -364,7 +366,7 @@ class EmployeeController extends Controller
 
                 break;
             case 'settings':
-                
+
                 $employee = Employee::withTrashed()->findOrFail($id);
 
                 if (request()->has("expense_types")) {
@@ -373,7 +375,7 @@ class EmployeeController extends Controller
                     $employee->expense_types()->sync($request->expense_types);
 
                     // $employee->expense_types()->sync([]);
-                    
+
                     // $expense_types_id = [];
 
                     // foreach ($request->expense_types as $id) {
@@ -628,9 +630,9 @@ class EmployeeController extends Controller
                         $query->where([
 
                             ["cancelled_at", "=", null],
-    
+
                             ["received_at", "<>", null],
-    
+
                             ["deleted_at", "=", null],
                         ]);
                     });
@@ -648,5 +650,5 @@ class EmployeeController extends Controller
         return response("Validated Employee Remaining Fund", 200);
     }
 
-    
+
 }

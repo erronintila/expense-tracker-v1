@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Http\Resources\ExpenseType;
+namespace App\Http\Resources\SubType;
 
-use App\Http\Resources\EmployeeResource;
-use App\Http\Resources\ExpenseResource;
-use App\Http\Resources\ExpenseTypeResource;
-use App\Http\Resources\VendorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExpenseTypeIndexResource extends JsonResource
+class SubTypeShowResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -37,10 +33,10 @@ class ExpenseTypeIndexResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
-            "vendors" => VendorResource::collection($this->whenLoaded('vendors')),
-            "employees" => EmployeeResource::collection($this->whenLoaded('empployees')),
-            "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
+            // "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
+            // "vendors" => VendorResource::collection($this->whenLoaded('vendors')),
+            // "employees" => EmployeeResource::collection($this->whenLoaded('empployees')),
+            // "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
         ];
     }
 }
