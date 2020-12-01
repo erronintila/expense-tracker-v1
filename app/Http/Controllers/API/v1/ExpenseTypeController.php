@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Models\ExpenseType;
 use App\Models\SubType;
@@ -54,15 +55,7 @@ class ExpenseTypeController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $expense_types = ExpenseType::with(['sub_types' => function ($query) {
-            $query->withTrashed();
-        }])->with(['expenses' => function ($query) {
-            $query->withTrashed();
-            $query->with(['expense_report' => function($query) {
-                $query->withTrashed();
-            }]);
-        }])
-            ->where('expense_type_id', null)
+        $expense_types = ExpenseType::where('expense_type_id', null)
             ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
@@ -85,7 +78,7 @@ class ExpenseTypeController extends Controller
 
         $expense_types = $expense_types->paginate($itemsPerPage);
 
-        return ExpenseTypeResource::collection($expense_types);
+        return ExpenseTypeOnlyResource::collection($expense_types);
     }
 
     /**
@@ -141,7 +134,7 @@ class ExpenseTypeController extends Controller
     public function show(Request $request, $id)
     {
         $expense_type = ExpenseType::withTrashed()
-            ->with('sub_types', 'expenses')
+            ->with('sub_types')
             ->where('expense_type_id', null)
             ->findOrFail($id);
 

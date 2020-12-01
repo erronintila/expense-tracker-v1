@@ -266,7 +266,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.loadExpenseTypes();
+    // this.loadExpenseTypes();
     this.getData();
   }
 });

@@ -32,7 +32,7 @@
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>
-                                {{ form.employee.fullname }}
+                                {{ form.employee.full_name }}
                             </div>
                             <div class="display-1 green--text">
                                 PHP {{ mixin_formatNumber(form.amount) }}
@@ -328,6 +328,8 @@ export default {
                 .get(`/api/payments/${_this.$route.params.id}`)
                 .then(response => {
                     let data = response.data.data;
+
+                    console.log(data);
 
                     _this.code = data.code;
                     _this.reference_no = data.reference_no;

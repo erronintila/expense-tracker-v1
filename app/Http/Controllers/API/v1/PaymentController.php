@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Payment\PaymentIndexResource;
+use App\Http\Resources\Payment\PaymentOnlyResource;
+use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentResource;
 use App\Models\ExpenseReport;
 use App\Models\Payment;
@@ -11,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
-{    
+{
     public function __construct()
     {
         $this->middleware(['permission:view all payments'], ['only' => ['index']]);
@@ -75,12 +78,12 @@ class PaymentController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $payments = Payment::with(['expense_reports' => function ($query) {
+        $payments = Payment::with(['employee' => function ($query) {
             $query->withTrashed();
         }])
-        ->with(['employee' => function ($query) {
-            $query->withTrashed();
-        }])
+        // ->with(['expense_reports' => function ($query) {
+        //     $query->withTrashed();
+        // }])
         ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
@@ -175,7 +178,7 @@ class PaymentController extends Controller
 
         $payments = $payments->paginate($itemsPerPage);
 
-        return PaymentResource::collection($payments);
+        return PaymentIndexResource::collection($payments);
     }
 
     /**
@@ -291,17 +294,18 @@ class PaymentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $payment = Payment::withTrashed()->with(['expense_reports' => function($query) {
-            $query->withTrashed();
-        }])
-        ->with(['employee' => function($query) {
-            $query->withTrashed();
-        }])
-        ->findOrFail($id);
+        $payment = Payment::withTrashed()
+            ->with(['expense_reports' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['employee' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->findOrFail($id);
 
         return response(
             [
-                'data' => new PaymentResource($payment),
+                'data' => new PaymentShowResource($payment),
 
                 'message' => 'Retrieved successfully'
             ],

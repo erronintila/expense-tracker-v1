@@ -4,9 +4,12 @@ namespace App\Http\Resources\Employee;
 
 use App\Http\Resources\ExpenseReportResource;
 use App\Http\Resources\ExpenseResource;
+use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
 use App\Http\Resources\ExpenseTypeResource;
+use App\Http\Resources\Job\JobIndexResource;
 use App\Http\Resources\JobResource;
+use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -54,14 +57,9 @@ class EmployeeShowResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "user" => new UserResource($this->whenLoaded("user")),
-            "job" => new JobResource($this->whenLoaded("job")),
-            // "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
-            // "adjustments" => $this->adjustments,
-            // "expense_reports" => ExpenseReportResource::collection($this->whenLoaded('expense_reports')),
-            "expense_types" => ExpenseTypeShowResource::collection($this->whenLoaded('expense_types')),
-            // "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
-            // "payments" => $this->payments,
+            "user" => new UserOnlyResource($this->whenLoaded("user")),
+            "job" => new JobIndexResource($this->whenLoaded("job")),
+            "expense_types" => ExpenseTypeOnlyResource::collection($this->whenLoaded('expense_types')),
         ];
     }
 }

@@ -10,6 +10,7 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\User;
 use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseReport extends Model
 {
@@ -70,6 +71,7 @@ class ExpenseReport extends Model
      * @var array
      */
     protected $appends = [
+        "report_summary",
         'balance',
         'status',
         'expense_start_date',
@@ -187,6 +189,44 @@ class ExpenseReport extends Model
     | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    public function getReportSummaryAttribute()
+    {
+        $summary = ["min_date" => "", "max_date" => "", "total_expenses" => 0, "total_reimbursable" => 0];
+
+        $summary = DB::table('expense_reports')
+            ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+            ->select(DB::raw("
+                min(expenses.date) as min_date, 
+                max(expenses.date) as max_date, 
+                sum(expenses.amount) as total_expenses, 
+                sum(expenses.reimbursable_amount) as total_reimbursable
+            "))
+            ->where(DB::raw("expense_reports.id"), $this->id)
+            ->first();
+
+        return $summary;
+    }
+
+    public function getPaymentSummaryAttribute()
+    {
+        $summary = [];
+
+//         SELECT 
+// SUM(`expense_report_payment`.`payment`) AS total_payment,
+// IFNULL(
+// (SELECT SUM(`expense_report_payment`.`payment`) 
+// FROM `expense_reports` 
+// JOIN `expense_report_payment` ON `expense_report_payment`.`expense_report_id` = `expense_reports`.`id`
+// JOIN `payments` ON `payments`.`id` = `expense_report_payment`.`payment_id`
+// WHERE `payments`.`received_at` = NULL
+// ), 0) AS total_received
+// FROM `expense_reports` 
+// JOIN `expense_report_payment` ON `expense_report_payment`.`expense_report_id` = `expense_reports`.`id`
+// JOIN `payments` ON `payments`.`id` = `expense_report_payment`.`payment_id`
+
+        return $summary;
+    }
     
     /**
      * Displays the status of Expense Report
@@ -344,6 +384,18 @@ class ExpenseReport extends Model
     {
         return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
     }
+
+    // public function getDateRangeAttribute()
+    // {
+    //     $range = DB::table("expense_reports")
+    //         ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+    //         ->select(DB::raw("min(expenses.date) as min_date, max(expenses.date) as max_date"))
+    //         ->orderBy(DB::raw("expenses.date"))
+    //         ->where(DB::raw("expense_reports.id"), $this->id)
+    //         ->get();
+
+    //     return $range->first();
+    // }
     
     /**
      * getTotalExpenseAmountAttribute
@@ -352,7 +404,15 @@ class ExpenseReport extends Model
      */
     public function getTotalExpenseAmountAttribute()
     {
-        return $this->expenses()->withTrashed()->get()->sum('amount');
+        // return $this->expenses()->withTrashed()->get()->sum('amount');
+
+        $range = DB::table("expense_reports")
+            ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+            ->select(DB::raw("sum(expenses.amount) as total_expenses_amount"))
+            ->where(DB::raw("expense_reports.id"), $this->id)
+            ->get();
+
+        return $range->sum('total_expenses_amount');
     }
     
     /**
@@ -362,9 +422,17 @@ class ExpenseReport extends Model
      */
     public function getTotalReimbursableAmountAttribute()
     {
-        return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
+        // return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
+
+        $range = DB::table("expense_reports")
+            ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+            ->select(DB::raw("sum(expenses.reimbursable_amount) as total_reimbursable_amount"))
+            ->where(DB::raw("expense_reports.id"), $this->id)
+            ->get();
+
+        return $range->sum('total_reimbursable_amount');
     }
-    
+
     /**
      * getBalanceAttribute
      *

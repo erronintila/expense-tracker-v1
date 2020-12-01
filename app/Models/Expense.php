@@ -61,19 +61,19 @@ class Expense extends Model
      */
     protected $appends = [
         'status',
-        'reimbursed_info',
-        'cancelled_info',
-        'rejected_info',
-        'approved_info',
-        'reviewed_info',
-        'submitted_info',
-        'deleted_info',
-        'updated_info',
-        'created_info',
-        'balance',
-        'formatted_date',
-        'formatted_amount',
-        'expiry_date',
+        // 'reimbursed_info',
+        // 'cancelled_info',
+        // 'rejected_info',
+        // 'approved_info',
+        // 'reviewed_info',
+        // 'submitted_info',
+        // 'deleted_info',
+        // 'updated_info',
+        // 'created_info',
+        // 'balance',
+        // 'formatted_date',
+        // 'formatted_amount',
+        // 'expiry_date',
     ];
 
     /*

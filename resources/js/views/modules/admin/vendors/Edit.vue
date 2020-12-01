@@ -273,7 +273,7 @@ export default {
         }
     },
     created() {
-        this.loadExpenseTypes();
+        // this.loadExpenseTypes();
         this.getData();
     }
 };

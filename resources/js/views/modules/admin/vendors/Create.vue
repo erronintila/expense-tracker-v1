@@ -255,7 +255,7 @@ export default {
         }
     },
     created() {
-        this.loadExpenseTypes();
+        // this.loadExpenseTypes();
     }
 };
 </script>

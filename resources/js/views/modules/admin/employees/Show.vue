@@ -119,7 +119,7 @@
                         </v-hover>
                     </v-col>
 
-                    <v-col cols="12" md="6">
+                    <!-- <v-col cols="12" md="6">
                         <v-row>
                             <v-col cols="6" md="6">
                                 <v-hover v-slot:default="{ hover }">
@@ -211,27 +211,8 @@
                                     </v-card>
                                 </v-hover>
                             </v-col>
-
-                            <!-- <v-col cols="6" md="6">
-                                <v-hover v-slot:default="{ hover }">
-                                    <v-card
-                                        outlined
-                                        class="mx-auto"
-                                        :elevation="hover ? 5 : 2"
-                                        to="/admin/reports"
-                                    >
-                                        <v-card-title>Reports</v-card-title>
-                                        <v-card-subtitle>
-                                            Secondary text
-                                        </v-card-subtitle>
-                                        <v-card-text>
-                                            Go to user profile and configure.
-                                        </v-card-text>
-                                    </v-card>
-                                </v-hover>
-                            </v-col> -->
                         </v-row>
-                    </v-col>
+                    </v-col> -->
                 </v-row>
 
                 <v-row>
@@ -500,7 +481,7 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.getData();
-        this.getExpenseStats();
+        // this.getExpenseStats();
     }
 };
 </script>

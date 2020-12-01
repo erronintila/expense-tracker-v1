@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -150,15 +151,15 @@ class Payment extends Model
         return $this->belongsToMany(ExpenseReport::class)->withPivot('payment')->withTimestamps();
     }
     
-    /**
-     * Displays the expenses associated with payment.
-     *
-     * @return mixed
-     */
-    public function expenses()
-    {
-        return $this->belongsToMany(Expense::class);
-    }
+    // /**
+    //  * Displays the expenses associated with payment.
+    //  *
+    //  * @return mixed
+    //  */
+    // public function expenses()
+    // {
+    //     return $this->belongsToMany(Expense::class);
+    // }
     
     /**
      * Displays the employee associated with payment.
@@ -369,6 +370,12 @@ class Payment extends Model
      */
     public function getTotalAmountAttribute()
     {
+        // $payments = DB::table('payments')
+        //     ->join("expense_report_payment", "expense_report_payment.payment_id", "=", "payments.id")
+        //     ->select(DB::raw('SUM(expense_report_payment.payment) as paid'))
+        //     ->where(DB::raw("payments.id"), $this->id)->get();
+        // return $payments->sum('paid');
+
         $expense_reports = $this->expense_reports;
         $sum = 0;
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Vendor\VendorIndexResource;
+use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\VendorResource;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -69,9 +71,7 @@ class VendorController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $vendors = Vendor::with(['expense_types' => function ($query) {
-            $query->withTrashed();
-        }])->orderBy($sortBy, $sortType);
+        $vendors = Vendor::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch ($request->status) {
@@ -105,7 +105,7 @@ class VendorController extends Controller
 
         $vendors = $vendors->paginate($itemsPerPage);
 
-        return VendorResource::collection($vendors);
+        return VendorIndexResource::collection($vendors);
     }
 
     /**
@@ -170,13 +170,11 @@ class VendorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $vendor = Vendor::withTrashed()->with(['expense_types' => function ($query) {
-            $query->withTrashed();
-        }])->findOrFail($id);
+        $vendor = Vendor::withTrashed()->findOrFail($id);
 
         return response(
             [
-                'data' => new VendorResource($vendor),
+                'data' => new VendorShowResource($vendor),
 
                 'message' => 'Retrieved successfully'
             ],
