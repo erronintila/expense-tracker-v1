@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\ExpenseReport;
 
+use App\Http\Resources\Payment\PaymentOnlyResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\Activitylog\Models\Activity;
@@ -32,15 +33,15 @@ class ExpenseReportOnlyResource extends JsonResource
             // -------------------------------------------------------------------
             // Additional Fields
             // -------------------------------------------------------------------
-            "report_summary" => $this->report_summary,
-            // "from" => $this->expense_start_date,
-            // "to" => $this->expense_end_date,
-            // "status" => $this->status,
+            // "report_summary" => $this->report_summary,
+            "from" => $this->expense_start_date,
+            "to" => $this->expense_end_date,
+            "status" => $this->status,
             "total" => $this->total_expense_amount,
             "total_reimbursable" => $this->total_reimbursable_amount,
-            // "paid" => $this->total_expense_amount - $this->balance,
-            // "balance" => $this->balance,
-            // "total_received_payment" => $this->received_payment_amount,
+            "paid" => $this->total_expense_amount - $this->balance,
+            "balance" => $this->balance,
+            "total_received_payment" => $this->received_payment_amount,
 
             // -------------------------------------------------------------------
             // Transaction Logs
@@ -62,6 +63,11 @@ class ExpenseReportOnlyResource extends JsonResource
             "approved_by" => $this->approved_by,
             "rejected_by" => $this->rejected_by,
             "cancelled_by" => $this->cancelled_by,
+
+            // -------------------------------------------------------------------
+            // Relationships
+            // -------------------------------------------------------------------
+            // "payments" => PaymentOnlyResource::collection($this->whenLoaded('payments')),
         ];
     }
 }

@@ -512,453 +512,43 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      _vm.loader
+        ? _c(
+            "v-container",
+            { staticStyle: { height: "400px" } },
             [
               _c(
-                "v-btn",
+                "v-row",
                 {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
+                  staticClass: "fill-height",
+                  attrs: { "align-content": "center", justify: "center" }
                 },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                1
-              ),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Payment Details")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-form",
-            {
-              ref: "form",
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
-              }
-            },
-            [
-              _c(
-                "v-container",
                 [
                   _c(
-                    "v-row",
+                    "v-col",
+                    {
+                      staticClass: "subtitle-1 text-center",
+                      attrs: { cols: "12" }
+                    },
                     [
-                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                        _c("div", [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(_vm.form.employee.full_name) +
-                              "\n                        "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "display-1 green--text" }, [
-                          _vm._v(
-                            "\n                            PHP " +
-                              _vm._s(_vm.mixin_formatNumber(_vm.form.amount)) +
-                              "\n                        "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", [_vm._v("Date: " + _vm._s(_vm.form.date))])
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _c("div", { staticClass: "headline green--text" }, [
-                          _vm._v(
-                            "\n                            #" +
-                              _vm._s(_vm.form.code) +
-                              "\n                        "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", [
-                          _vm._v("Voucher: " + _vm._s(_vm.form.voucher_no))
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          [
-                            _vm._v(
-                              "\n                            Status:\n                            "
-                            ),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: _vm.form.status.color,
-                                  "x-small": "",
-                                  dark: ""
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(_vm.form.status.status) +
-                                    "\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", [
-                        _vm._v(
-                          "Description: " + _vm._s(_vm.form.description) + " "
-                        )
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12" } },
-                        [
-                          _c("v-data-table", {
-                            staticClass: "elevation-0",
-                            attrs: {
-                              elevation: "0",
-                              headers: _vm.headers,
-                              items: _vm.items,
-                              "item-key": "id"
-                            },
-                            scopedSlots: _vm._u(
-                              [
-                                {
-                                  key: "item.period",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(item.from) +
-                                          " ~ " +
-                                          _vm._s(item.to) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  }
-                                },
-                                {
-                                  key: "item.actions",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _c(
-                                        "v-icon",
-                                        {
-                                          staticClass: "mr-2",
-                                          attrs: { small: "" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.$router.push(
-                                                "/admin/expense_reports/" +
-                                                  item.id
-                                              )
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                    mdi-eye\n                                "
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  }
-                                },
-                                {
-                                  key: "item.created_at",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              item.created.created_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          ) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  }
-                                },
-                                {
-                                  key: "item.total",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(item.total)
-                                          ) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  }
-                                },
-                                {
-                                  key: "item.balance",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(item.balance)
-                                          ) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  }
-                                },
-                                {
-                                  key: "top",
-                                  fn: function() {
-                                    return [
-                                      _c(
-                                        "v-row",
-                                        [
-                                          _c("v-col", [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass: "text--secondary"
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                            Expense Reports\n                                        "
-                                                )
-                                              ]
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("v-spacer")
-                                        ],
-                                        1
-                                      )
-                                    ]
-                                  },
-                                  proxy: true
-                                },
-                                {
-                                  key: "item.employee",
-                                  fn: function(ref) {
-                                    var item = ref.item
-                                    return [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(
-                                            item.employee.last_name +
-                                              " " +
-                                              item.employee.first_name +
-                                              " " +
-                                              item.employee.suffix
-                                          ) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  }
-                                }
-                              ],
-                              null,
-                              true
-                            )
-                          })
-                        ],
-                        1
+                      _vm._v(
+                        "\n                Loading, Please wait...\n            "
                       )
-                    ],
-                    1
+                    ]
                   ),
                   _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
                   _c(
-                    "v-row",
+                    "v-col",
+                    { attrs: { cols: "6" } },
                     [
-                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                        _c("div", [
-                          _vm._v("Remarks : " + _vm._s(_vm.form.remarks))
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _c("table", { attrs: { width: "100%" } }, [
-                          _c("tbody", [
-                            _c("tr", [
-                              _c("td", [
-                                _vm._v(
-                                  "\n                                        Total Expense Amount Balance\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(
-                                          _vm.totalExpenseBalanceAmount
-                                        )
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("td", [
-                                _vm._v(
-                                  "\n                                        Paid Amount\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        (-)\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.form.amount)
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c(
-                                "td",
-                                { attrs: { colspan: "3" } },
-                                [_c("v-divider")],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("th", { staticClass: "text-left" }, [
-                                _vm._v(
-                                  "\n                                        Amount to be reimbursed\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(
-                                          _vm.amountToBeReimbursed
-                                        )
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ])
-                          ])
-                        ])
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider", { staticClass: "mb-4" }),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                        _vm._v(
-                          "\n                        Notes : " +
-                            _vm._s(_vm.form.notes) +
-                            "\n                    "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _c(
-                          "div",
-                          { staticClass: "text-right" },
-                          [
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "green", dark: "" },
-                                on: { click: _vm.cancelPayment }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Cancel Payment\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ])
+                      _c("v-progress-linear", {
+                        attrs: {
+                          color: "green accent-4",
+                          indeterminate: "",
+                          rounded: "",
+                          height: "6"
+                        }
+                      })
                     ],
                     1
                   )
@@ -968,9 +558,482 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      )
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Payment Details")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-form",
+                {
+                  ref: "form",
+                  model: {
+                    value: _vm.valid,
+                    callback: function($$v) {
+                      _vm.valid = $$v
+                    },
+                    expression: "valid"
+                  }
+                },
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _c("div", [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(_vm.form.employee.full_name) +
+                                  "\n                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "display-1 green--text" },
+                              [
+                                _vm._v(
+                                  "\n                            PHP " +
+                                    _vm._s(
+                                      _vm.mixin_formatNumber(_vm.form.amount)
+                                    ) +
+                                    "\n                        "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [
+                              _vm._v("Date: " + _vm._s(_vm.form.date))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c("div", { staticClass: "headline green--text" }, [
+                              _vm._v(
+                                "\n                            #" +
+                                  _vm._s(_vm.form.code) +
+                                  "\n                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", [
+                              _vm._v("Voucher: " + _vm._s(_vm.form.voucher_no))
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _vm._v(
+                                  "\n                            Status:\n                            "
+                                ),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      color: _vm.form.status.color,
+                                      "x-small": "",
+                                      dark: ""
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(_vm.form.status.status) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", [
+                            _vm._v(
+                              "Description: " +
+                                _vm._s(_vm.form.description) +
+                                " "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12" } },
+                            [
+                              _c("v-data-table", {
+                                staticClass: "elevation-0",
+                                attrs: {
+                                  elevation: "0",
+                                  headers: _vm.headers,
+                                  items: _vm.items,
+                                  "item-key": "id"
+                                },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "item.period",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(item.from) +
+                                              " ~ " +
+                                              _vm._s(item.to) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.actions",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "v-icon",
+                                            {
+                                              staticClass: "mr-2",
+                                              attrs: { small: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.$router.push(
+                                                    "/admin/expense_reports/" +
+                                                      item.id
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    mdi-eye\n                                "
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.created_at",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  item.created.created_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.total",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  item.total
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.balance",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  item.balance
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "top",
+                                      fn: function() {
+                                        return [
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c("v-col", [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "text--secondary"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                            Expense Reports\n                                        "
+                                                    )
+                                                  ]
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("v-spacer")
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      },
+                                      proxy: true
+                                    },
+                                    {
+                                      key: "item.employee",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                item.employee.last_name +
+                                                  " " +
+                                                  item.employee.first_name +
+                                                  " " +
+                                                  item.employee.suffix
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _c("div", [
+                              _vm._v("Remarks : " + _vm._s(_vm.form.remarks))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c("table", { attrs: { width: "100%" } }, [
+                              _c("tbody", [
+                                _c("tr", [
+                                  _c("td", [
+                                    _vm._v(
+                                      "\n                                        Total Expense Amount Balance\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.totalExpenseBalanceAmount
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("td", [
+                                    _vm._v(
+                                      "\n                                        Paid Amount\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        (-)\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.form.amount
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c(
+                                    "td",
+                                    { attrs: { colspan: "3" } },
+                                    [_c("v-divider")],
+                                    1
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("th", { staticClass: "text-left" }, [
+                                    _vm._v(
+                                      "\n                                        Amount to be reimbursed\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.amountToBeReimbursed
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider", { staticClass: "mb-4" }),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _vm._v(
+                              "\n                        Notes : " +
+                                _vm._s(_vm.form.notes) +
+                                "\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c(
+                              "div",
+                              { staticClass: "text-right" },
+                              [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "green", dark: "" },
+                                    on: { click: _vm.cancelPayment }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Cancel Payment\n                            "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
     ],
     1
   )

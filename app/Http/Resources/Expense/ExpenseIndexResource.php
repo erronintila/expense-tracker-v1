@@ -5,12 +5,14 @@ namespace App\Http\Resources\Expense;
 use App\Http\Resources\Employee\EmployeeOnlyResource;
 use App\Http\Resources\Employee\EmployeeShowResource;
 use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\Http\Resources\ExpenseReportResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Resources\SubType\SubTypeShowResource;
+use App\Http\Resources\Vendor\VendorOnlyResource;
 use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\VendorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,26 +27,26 @@ class ExpenseIndexResource extends JsonResource
      */
     public function toArray($request)
     {
-        $expense_report = null;
+        // $expense_report = null;
 
-        if($this->expense_report) {
-            $expense_report = [
-                "id" => $this->expense_report->id,
-                "code" => $this->expense_report->code,
-                "reference_no" => $this->expense_report->reference_no,
-                "description" => $this->expense_report->description,
-                "submission_period" => $this->expense_report->submission_period,
-                "approval_period" => $this->expense_report->approval_period,
-                "created_at" => $this->expense_report->created_at,
-                "updated_at" => $this->expense_report->updated_at,
-                "deleted_at" => $this->expense_report->deleted_at,
-                "submitted_at" => $this->expense_report->submitted_at,
-                "reviewed_at" => $this->expense_report->reviewed_at,
-                "approved_at" => $this->expense_report->approved_at,
-                "rejected_at" => $this->expense_report->rejected_at,
-                "cancelled_at" => $this->expense_report->cancelled_at,
-            ];
-        }
+        // if($this->expense_report) {
+        //     $expense_report = [
+        //         "id" => $this->expense_report->id,
+        //         "code" => $this->expense_report->code,
+        //         "reference_no" => $this->expense_report->reference_no,
+        //         "description" => $this->expense_report->description,
+        //         "submission_period" => $this->expense_report->submission_period,
+        //         "approval_period" => $this->expense_report->approval_period,
+        //         "created_at" => $this->expense_report->created_at,
+        //         "updated_at" => $this->expense_report->updated_at,
+        //         "deleted_at" => $this->expense_report->deleted_at,
+        //         "submitted_at" => $this->expense_report->submitted_at,
+        //         "reviewed_at" => $this->expense_report->reviewed_at,
+        //         "approved_at" => $this->expense_report->approved_at,
+        //         "rejected_at" => $this->expense_report->rejected_at,
+        //         "cancelled_at" => $this->expense_report->cancelled_at,
+        //     ];
+        // }
 
         return [
             // -------------------------------------------------------------------
@@ -74,6 +76,11 @@ class ExpenseIndexResource extends JsonResource
             // Additional Fields
             // -------------------------------------------------------------------
             "status" => $this->status,
+            // "status" => [
+            //     'color' => 'red',
+            //     'remarks' => 'Status is unindentified',
+            //     'status' => 'Error',
+            // ],
 
             // -------------------------------------------------------------------
             // Transaction Logs
@@ -91,9 +98,9 @@ class ExpenseIndexResource extends JsonResource
             // -------------------------------------------------------------------
             "expense_type" => new ExpenseTypeOnlyResource($this->whenLoaded('expense_type')),
             // "sub_type" => new SubTypeShowResource($this->whenLoaded('sub_type')),
-            "vendor" => new VendorShowResource($this->whenLoaded('vendor')),
+            "vendor" => new VendorOnlyResource($this->whenLoaded('vendor')),
             "employee" => new EmployeeOnlyResource($this->whenLoaded('employee')),
-            "expense_report" => $expense_report,
+            "expense_report" => new ExpenseReportOnlyResource($this->whenLoaded('expense_report')),
             // "expense_report" => $this->whenLoaded('expense_report'),
             // "expense_report" => new ExpenseReportShowResource($this->whenLoaded('expense_report')),
             // "tax" => $this->tax,

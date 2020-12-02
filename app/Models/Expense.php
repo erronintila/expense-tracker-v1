@@ -228,13 +228,14 @@ class Expense extends Model
         // $paid = is_null($this->paid_at);
 
         $reported = is_null($this->expense_report_id);
-        $submitted = is_null($this->getSubmittedInfoAttribute());
-        $reviewed = is_null($this->getReviewedInfoAttribute());
-        $approved = is_null($this->getApprovedInfoAttribute());
-        $cancelled = is_null($this->getCancelledInfoAttribute());
-        $rejected = is_null($this->getRejectedInfoAttribute());
+        $submitted = is_null($this->expense_report->submitted_at ?? null);
+        $reviewed = is_null($this->expense_report->reviewed_at ?? null);
+        $approved = is_null($this->expense_report->approved_at ?? null);
+        $cancelled = is_null($this->expense_report->cancelled_at ?? null);
+        $rejected = is_null($this->expense_report->rejected_at ?? null);
         $deleted = is_null($this->deleted_at);
         // $paid = false;
+        // $paid = is_null($this->expense_report->payments ?? null);
         $paid = ($this->expense_report == null ? 0 : $this->expense_report->payments->count() > 0);
 
         if (!$deleted) {

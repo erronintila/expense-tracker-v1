@@ -345,6 +345,18 @@ class ExpenseReport extends Model
     {
         return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
     }
+
+    // public function getDateRangeAttribute()
+    // {
+    //     $range = DB::table("expense_reports")
+    //         ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+    //         ->select(DB::raw("min(expenses.date) as min_date, max(expenses.date) as max_date"))
+    //         ->orderBy(DB::raw("expenses.date"))
+    //         ->where(DB::raw("expense_reports.id"), $this->id)
+    //         ->get();
+
+    //     return $range->first();
+    // }
     
     /**
      * getTotalExpenseAmountAttribute
@@ -354,6 +366,14 @@ class ExpenseReport extends Model
     public function getTotalExpenseAmountAttribute()
     {
         return $this->expenses()->withTrashed()->get()->sum('amount');
+
+        // $range = DB::table("expense_reports")
+        //     ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+        //     ->select(DB::raw("sum(expenses.amount) as total_expenses_amount"))
+        //     ->where(DB::raw("expense_reports.id"), $this->id)
+        //     ->get();
+
+        // return $range->sum('total_expenses_amount');
     }
     
     /**
@@ -364,6 +384,14 @@ class ExpenseReport extends Model
     public function getTotalReimbursableAmountAttribute()
     {
         return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
+
+        // $range = DB::table("expense_reports")
+        //     ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+        //     ->select(DB::raw("sum(expenses.reimbursable_amount) as total_reimbursable_amount"))
+        //     ->where(DB::raw("expense_reports.id"), $this->id)
+        //     ->get();
+
+        // return $range->sum('total_reimbursable_amount');
     }
 
     /**

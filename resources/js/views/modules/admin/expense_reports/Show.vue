@@ -16,6 +16,7 @@
             </v-row>
         </v-container>
         <v-card v-else class="elevation-0 pt-0">
+        <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -78,7 +79,7 @@
 
                     <v-row>
                         <v-col cols="12">
-                            <v-data-table
+                            <!-- <v-data-table
                                 elevation="0"
                                 :headers="headers"
                                 :items="form.expenses"
@@ -193,6 +194,122 @@
                                             </table>
                                         </v-container>
                                     </td>
+                                </template>
+                            </v-data-table> -->
+
+                            <v-data-table
+                                :headers="headers"
+                                :items="form.expenses"
+                                :loading="loading"
+                                :options.sync="options"
+                                :server-items-length="totalItems"
+                                :footer-props="{
+                                    itemsPerPageOptions: [10, 20, 50, 100],
+                                    showFirstLastPage: true,
+                                    firstIcon: 'mdi-page-first',
+                                    lastIcon: 'mdi-page-last',
+                                    prevIcon: 'mdi-chevron-left',
+                                    nextIcon: 'mdi-chevron-right'
+                                }"
+                                show-expand
+                                single-expand
+                                item-key="id"
+                                class="elevation-0"
+                            >
+                                <template
+                                    v-slot:expanded-item="{ headers, item }"
+                                >
+                                    <td :colspan="headers.length">
+                                        <v-container>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Code</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.code }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Description</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ item.description }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Receipt</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            item.receipt_number
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Vendor</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            item.vendor == null
+                                                                ? ""
+                                                                : item.vendor
+                                                                      .name
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="item.remarks">
+                                                    <td>
+                                                        <strong>Remarks</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.remarks }}</td>
+                                                </tr>
+                                            </table>
+                                        </v-container>
+                                    </td>
+                                </template>
+                                <template v-slot:[`item.updated_at`]="{ item }">
+                                    {{ mixin_getHumanDate(item.updated_at) }}
+                                </template>
+                                <template v-slot:[`item.amount`]="{ item }">
+                                    {{ mixin_formatNumber(item.amount) }}
+                                </template>
+                                <template
+                                    v-slot:[`item.replenishment`]="{ item }"
+                                >
+                                    {{
+                                        mixin_formatNumber(
+                                            item.amount -
+                                                item.reimbursable_amount
+                                        )
+                                    }}
+                                </template>
+                                <template
+                                    v-slot:[`item.status.status`]="{ item }"
+                                >
+                                    <v-chip
+                                        :color="item.status.color"
+                                        dark
+                                        small
+                                        >{{ item.status.status }}</v-chip
+                                    >
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="$router.push(`/admin/expenses/${item.id}`)"
+                                    >
+                                        mdi-eye
+                                    </v-icon>
                                 </template>
                             </v-data-table>
                         </v-col>
@@ -454,6 +571,7 @@ import numeral from "numeral";
 export default {
     data() {
         return {
+            loading: true,
             loader: true,
             headers: [
                 { text: "Date", value: "date", sortable: false },
@@ -469,6 +587,16 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             total: 0,
+            totalItems: 0,
+            date_range: [],
+            expense_report_id: this.$route.params.id,
+            search: "",
+            options: {
+                sortBy: ["created_at"],
+                sortDesc: [true],
+                page: 1,
+                itemsPerPage: 10
+            },
 
             form: {
                 code: "",
@@ -532,8 +660,6 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    console.log(data);
-
                     _this.form.code = data.code;
                     _this.form.reference_no = data.reference_no;
                     _this.form.description = data.description;
@@ -554,7 +680,7 @@ export default {
 
                     _this.form.employee = data.employee;
                     _this.form.payment = data.payment;
-                    _this.form.expenses = data.expenses;
+                    // _this.form.expenses = data.expenses;
 
                     _this.form.created = data.created;
                     _this.form.updated = data.updated;
@@ -568,7 +694,13 @@ export default {
 
                     // _this.loadExpenses();
 
+                    _this.getDataFromApi().then(data => {
+                        _this.form.expenses = data.items;
+                        _this.totalItems = data.total;
+                    });
+
                     _this.loader = false;
+                    
                 })
                 .catch(error => {
                     console.log(error);
@@ -581,6 +713,69 @@ export default {
 
                     _this.loader = false;
                 });
+        },
+        getDataFromApi() {
+            let _this = this;
+
+            _this.loading = true;
+
+            return new Promise((resolve, reject) => {
+                const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+                let range = [_this.form.from, _this.form.to];
+                let expense_report_id = _this.$route.params.id;
+
+                axios
+                    .get("/api/expenses", {
+                        params: {
+                            page: page,
+                            itemsPerPage: itemsPerPage,
+                            start_date: range[0],
+                            end_date: range[1],
+                            expense_report_id: expense_report_id
+                        }
+                    })
+                    .then(response => {
+                        console.log(response);
+                        let items = response.data.data;
+                        let total = response.data.meta.total;
+
+                        _this.loading = false;
+
+                        resolve({ items, total });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+
+                        _this.loading = false;
+                    });
+            });
+        }
+    },
+    watch: {
+        params: {
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.form.expenses = data.items;
+                    this.totalItems = data.total;
+                });
+            },
+            deep: true
+        }
+    },
+    computed: {
+        params(nv) {
+            return {
+                ...this.options,
+                query: this.date_range,
+                query: this.expense_report_id
+            };
         }
     },
     created() {
