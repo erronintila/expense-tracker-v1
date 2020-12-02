@@ -265,6 +265,34 @@ class ExpenseController extends Controller
             $query->orWhere("date", "like", "%" . $search . "%");
         });
 
+        if (request()->has("update_report")) {
+            $expenses = Expense::with(['employee' => function ($query) {
+                $query->withTrashed();
+            }])
+                ->with(['expense_type' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['expense_report' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['sub_type' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['vendor' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->orderBy($sortBy, $sortType)
+                ->where(function ($q) use ($request) {
+                    $q->where("expense_report_id", $request->expense_report_id);
+                    $q->orWhere("expense_report_id", null);
+                })
+                ->where(function ($q) use ($request) {
+                    $q->whereBetween("date", [$request->start_date, $request->end_date]);
+                    $q->orWhere("expense_report_id", $request->expense_report_id);
+                })
+                ->where("employee_id", $request->employee_id);
+        }
+
         $expenses = $expenses->paginate($itemsPerPage);
 
         // $expenses->appends(['sort' => 'votes'])->links();
