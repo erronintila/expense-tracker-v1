@@ -360,8 +360,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this.form.remarks = data.remarks;
         _this.form.notes = data.notes;
         _this.form.employee = data.employee;
-        _this.form.status = data.status;
-        _this.expenses = data.expenses; // _this.submitted_at = data.submitted_at;
+        _this.form.status = data.status; // _this.expenses = data.expenses;
+        // _this.submitted_at = data.submitted_at;
         // _this.reviewed_at = data.reviewed_at;
         // _this.approved_at = data.approved_at;
         // _this.cancelled_at = data.cancelled_at;

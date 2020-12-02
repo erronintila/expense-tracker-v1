@@ -51,7 +51,7 @@ class ExpenseReportShowResource extends JsonResource
             // -------------------------------------------------------------------
             // Additional Fields
             // -------------------------------------------------------------------
-            "range" => $this->date_range,
+            // "range" => $this->date_range,
             "from" => $this->expense_start_date,
             "to" => $this->expense_end_date,
             "status" => $this->status,
@@ -86,7 +86,7 @@ class ExpenseReportShowResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "expenses" => ExpenseShowResource::collection($this->whenLoaded('expenses')),
+            // "expenses" => ExpenseShowResource::collection($this->whenLoaded('expenses')),
             "payments" => PaymentOnlyResource::collection($this->whenLoaded('payments')),
             "employee" => new EmployeeOnlyResource($this->whenLoaded('employee'))
         ];

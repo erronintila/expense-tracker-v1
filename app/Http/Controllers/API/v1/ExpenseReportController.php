@@ -264,15 +264,15 @@ class ExpenseReportController extends Controller
             ->with(['employee' => function ($query) {
                 $query->withTrashed();
             }])
-            ->with(['expenses' => function ($query) {
-                $query->withTrashed();
-                $query->with(['vendor' => function ($query) {
-                    $query->withTrashed();
-                }]);
-                $query->with(['expense_type' => function ($query) {
-                    $query->withTrashed();
-                }]);
-            }])
+            // ->with(['expenses' => function ($query) {
+            //     $query->withTrashed();
+            //     $query->with(['vendor' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            //     $query->with(['expense_type' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            // }])
             ->with(['payments' => function($query) {
                 $query->withTrashed();
             }])

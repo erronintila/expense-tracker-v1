@@ -339,7 +339,7 @@ export default {
                     _this.form.notes = data.notes;
                     _this.form.employee = data.employee;
                     _this.form.status = data.status;
-                    _this.expenses = data.expenses;
+                    // _this.expenses = data.expenses;
                     // _this.submitted_at = data.submitted_at;
                     // _this.reviewed_at = data.reviewed_at;
                     // _this.approved_at = data.approved_at;
