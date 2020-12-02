@@ -942,6 +942,7 @@ __webpack_require__.r(__webpack_exports__);
     // this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.loadVendors();
+    console.log("sample expenses create");
   }
 });
 

@@ -973,6 +973,8 @@ export default {
         // this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
         this.loadVendors();
+
+        console.log("sample expenses create");
     }
 };
 </script>
