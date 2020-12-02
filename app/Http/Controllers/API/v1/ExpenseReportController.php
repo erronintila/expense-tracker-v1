@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReport\ExpenseReportIndexResource;
+use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\Http\Resources\ExpenseReportResource;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
@@ -272,12 +273,14 @@ class ExpenseReportController extends Controller
                     $query->withTrashed();
                 }]);
             }])
-            ->with('payments')
+            ->with(['payments' => function($query) {
+                $query->withTrashed();
+            }])
             ->findOrFail($id);
 
         return response(
             [
-                'data' => new ExpenseReportResource($expense_report),
+                'data' => new ExpenseReportShowResource($expense_report),
 
                 'message' => 'Retrieved successfully'
             ],
@@ -770,6 +773,33 @@ class ExpenseReportController extends Controller
      */
     public function getExpenseReports(Request $request)
     {
+        if(request()->has('edit_report')) {
+            $expense_report = ExpenseReport::withTrashed()
+            ->with(['employee' => function ($query) {
+                $query->withTrashed();
+            }])
+            // ->with(['expenses' => function ($query) {
+            //     $query->withTrashed();
+            //     $query->with(['vendor' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            //     $query->with(['expense_type' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            // }])
+            // ->with('payments')
+            ->findOrFail($request->id);
+
+        return response(
+            [
+                'data' => new ExpenseReportResource($expense_report),
+
+                'message' => 'Retrieved successfully'
+            ],
+            200
+        );
+        }
+
         $expense_reports = ExpenseReport::with(['expenses' => function($query) {
             $query->withTrashed();
             $query->with(['expense_type' => function($query2) {

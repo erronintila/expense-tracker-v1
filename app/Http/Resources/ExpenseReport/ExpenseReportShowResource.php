@@ -2,9 +2,12 @@
 
 namespace App\Http\Resources\ExpenseReport;
 
+use App\Http\Resources\Employee\EmployeeOnlyResource;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\Expense\ExpenseOnlyResource;
+use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\ExpenseResource;
+use App\Http\Resources\Payment\PaymentOnlyResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\Activitylog\Models\Activity;
@@ -83,9 +86,9 @@ class ExpenseReportShowResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "expenses" => ExpenseOnlyResource::collection($this->whenLoaded('expenses')),
-            // "payments" => PaymentResource::collection($this->whenLoaded('payments')),
-            // "employee" => new EmployeeResource($this->whenLoaded('employee'))
+            "expenses" => ExpenseShowResource::collection($this->whenLoaded('expenses')),
+            "payments" => PaymentOnlyResource::collection($this->whenLoaded('payments')),
+            "employee" => new EmployeeOnlyResource($this->whenLoaded('employee'))
         ];
     }
 }

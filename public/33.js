@@ -266,6 +266,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -937,13 +938,13 @@ var render = function() {
                                             _vm._v(" "),
                                             _c("td"),
                                             _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
                                             _c("td", [
                                               _c("strong", [
                                                 _vm._v(_vm._s(_vm.total))
                                               ])
                                             ]),
+                                            _vm._v(" "),
+                                            _c("td"),
                                             _vm._v(" "),
                                             _c("td")
                                           ]

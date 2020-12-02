@@ -61,10 +61,10 @@ class Payment extends Model
      * @var array
      */
     protected $appends = [
-        'created_info',
-        'updated_info',
-        'deleted_info',
-        'approved_info',
+        // 'created_info',
+        // 'updated_info',
+        // 'deleted_info',
+        // 'approved_info',
         // 'cancelled_info',
         // 'released_info',
         // 'received_info',
@@ -370,12 +370,6 @@ class Payment extends Model
      */
     public function getTotalAmountAttribute()
     {
-        // $payments = DB::table('payments')
-        //     ->join("expense_report_payment", "expense_report_payment.payment_id", "=", "payments.id")
-        //     ->select(DB::raw('SUM(expense_report_payment.payment) as paid'))
-        //     ->where(DB::raw("payments.id"), $this->id)->get();
-        // return $payments->sum('paid');
-
         $expense_reports = $this->expense_reports;
         $sum = 0;
 

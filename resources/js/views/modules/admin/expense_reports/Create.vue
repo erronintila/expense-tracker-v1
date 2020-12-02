@@ -101,10 +101,11 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
                                         <td>
                                             <strong>{{ total }}</strong>
                                         </td>
+                                        <td></td>
+                                        
                                         <td></td>
                                     </tr>
                                 </template>

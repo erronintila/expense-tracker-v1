@@ -2,13 +2,17 @@
 
 namespace App\Http\Resources\Expense;
 
+use App\Http\Resources\Employee\EmployeeOnlyResource;
 use App\Http\Resources\Employee\EmployeeShowResource;
 use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\Http\Resources\ExpenseReportResource;
+use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Resources\SubType\SubTypeShowResource;
+use App\Http\Resources\Vendor\VendorOnlyResource;
 use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\VendorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -68,9 +72,9 @@ class ExpenseShowResource extends JsonResource
             // -------------------------------------------------------------------
             "expense_type" => new ExpenseTypeShowResource($this->whenLoaded('expense_type')),
             "sub_type" => new SubTypeShowResource($this->whenLoaded('sub_type')),
-            "vendor" => new VendorShowResource($this->whenLoaded('vendor')),
+            "vendor" => new VendorOnlyResource($this->whenLoaded('vendor')),
             "employee" => new EmployeeShowResource($this->whenLoaded('employee')),
-            "expense_report" => new ExpenseReportShowResource($this->whenLoaded('expense_report')),
+            "expense_report" => new ExpenseReportOnlyResource($this->whenLoaded('expense_report')),
             // "tax" => $this->tax,
         ];
     }

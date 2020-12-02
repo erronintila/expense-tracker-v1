@@ -4,47 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\User;
-use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
-use Illuminate\Support\Facades\DB;
 
-class ExpenseReport extends Model
+class Expense extends Model
 {
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | INITIALIZATION
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
+
     use SoftDeletes, LogsActivity;
-    use EagerLoadPivotTrait;
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LARAVEL MODEL CONFIGURATION
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
+
     protected $dates = ['deleted_at'];
 
-    // protected $softCascade = ['expenses'];
-
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
     protected $guarded = [
-        // 'code', 'description', 'remarks', 'notes', 'employee_id'
+        // 'expense_report_id'
     ];
 
     /**
@@ -71,14 +60,20 @@ class ExpenseReport extends Model
      * @var array
      */
     protected $appends = [
-        'balance',
         'status',
-        'expense_start_date',
-        'expense_end_date',
-        "total_expense_amount",
-        "total_reimbursable_amount",
-        "received_payment_amount",
-        "unreceived_payment_amount",
+        // 'reimbursed_info',
+        // 'cancelled_info',
+        // 'rejected_info',
+        // 'approved_info',
+        // 'reviewed_info',
+        // 'submitted_info',
+        // 'deleted_info',
+        // 'updated_info',
+        // 'created_info',
+        // 'balance',
+        // 'formatted_date',
+        // 'formatted_amount',
+        // 'expiry_date',
     ];
 
     /*
@@ -86,13 +81,12 @@ class ExpenseReport extends Model
     | LIBRARY/PACKAGE CONFIGURATION
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
+
     /**
      * Activity Logs Configuration
      *
      *
      */
-
     // // log changes to all the $fillable/$guarded attributes of the model
     protected static $logUnguarded = true;
     // protected static $logFillable = true;
@@ -113,12 +107,12 @@ class ExpenseReport extends Model
     // protected static $submitEmptyLogs = false;
 
     // // customizong the log name
-    protected static $logName = "expense_report";
+    protected static $logName = "expense";
 
     // // logging description
     public function getDescriptionForEvent(string $eventName): string
     {
-        return "{$eventName} expense report";
+        return "{$eventName} expense";
     }
 
     // // used to fill properties and add custom fields before the activity is saved.
@@ -128,7 +122,7 @@ class ExpenseReport extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'expense_reports',
+                'table' => 'expenses',
                 'causer_role' => $role,
             ],
         ]);
@@ -139,29 +133,19 @@ class ExpenseReport extends Model
     | RELATIONSHIPS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-   
+
     /**
-     * Displays the expenses associated with Expense Report.
+     * Displays the expense type associated with expense.
      *
      * @return mixed
      */
-    public function expenses()
+    public function expense_type()
     {
-        return $this->hasMany(Expense::class);
+        return $this->belongsTo(ExpenseType::class);
     }
 
     /**
-     * Displays the payments associated with expense report.
-     *
-     * @return mixed
-     */
-    public function payments()
-    {
-        return $this->belongsToMany(Payment::class)->withPivot('payment')->withTimestamps();
-    }
-
-    /**
-     * Displays the employee associated with Expense Report.
+     * Displays the employee associated with expense.
      *
      * @return mixed
      */
@@ -170,18 +154,50 @@ class ExpenseReport extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    // public function payment_requests()
+    /**
+     * Displays the vendor associated with expense.
+     *
+     * @return mixed
+     */
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
+
+    public function sub_type()
+    {
+        return $this->belongsTo(ExpenseType::class);
+    }
+
+    /**
+     * Displays the expense report associated with expense.
+     *
+     * @return mixed
+     */
+    public function expense_report()
+    {
+        return $this->belongsTo(ExpenseReport::class);
+    }
+
+    // /**
+    //  * Displays the payments associated with expense.
+    //  *
+    //  * @return mixed
+    //  */
+    // public function payments()
     // {
-    //     // return $this->belongsToMany(PaymentRequest::class);
-    //     return $this->belongsToMany(
-    //         PaymentRequest::class,
-    //         'expense_report_payment_request',
-    //         'expense_report_id',
-    //         'payment_request_id',
-    //     )
-    //         ->withPivot('remarks', 'is_cancelled')
-    //         ->withTimestamps();
+    //     return $this->belongsToMany(Payment::class);
     // }
+
+    /**
+     * Displays the tax associated with expense.
+     *
+     * @return mixed
+     */
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class);
+    }
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -190,7 +206,7 @@ class ExpenseReport extends Model
     */
 
     /**
-     * Displays the status of Expense Report
+     * Displays the current status of expense.
      *
      * @return mixed
      */
@@ -202,48 +218,52 @@ class ExpenseReport extends Model
             'status' => 'Error',
         ];
 
-        $submitted = is_null($this->submitted_at);
-        $reviewed = is_null($this->reviewed_at);
-        $approved = is_null($this->approved_at);
-        $rejected = is_null($this->rejected_at);
-        $cancelled = is_null($this->cancelled_at);
+        // $reported = is_null($this->expense_report_id);
+        // $submitted = is_null($this->submitted_at);
+        // $reviewed = is_null($this->reviewed_at);
+        // $approved = is_null($this->approved_at);
+        // $cancelled = is_null($this->cancelled_at);
+        // $rejected = is_null($this->rejected_at);
+        // $deleted = is_null($this->deleted_at);
+        // $paid = is_null($this->paid_at);
+
+        $reported = is_null($this->expense_report_id);
+        $submitted = is_null($this->getSubmittedInfoAttribute());
+        $reviewed = is_null($this->getReviewedInfoAttribute());
+        $approved = is_null($this->getApprovedInfoAttribute());
+        $cancelled = is_null($this->getCancelledInfoAttribute());
+        $rejected = is_null($this->getRejectedInfoAttribute());
         $deleted = is_null($this->deleted_at);
         // $paid = false;
-        $paid = ($this->payments->count() > 0);
+        $paid = ($this->expense_report == null ? 0 : $this->expense_report->payments->count() > 0);
 
         if (!$deleted) {
             $arr = [
                 'color' => 'red',
-                'remarks' => 'Expense Report was cancelled',
+                'remarks' => 'Expense was cancelled',
                 'status' => 'Cancelled',
             ];
 
-            return $arr;
-        }
-
-        if (!$cancelled) {
-            $arr = [
-                'color' => 'red',
-                'remarks' => 'Expense Report was cancelled',
-                'status' => 'Cancelled',
-            ];
-
-            return $arr;
-        }
-
-        if (!$rejected) {
-            $arr = [
-                'color' => 'red',
-                'remarks' => 'Expense Report was rejected',
-                'status' => 'Rejected',
-            ];
+            // $arr = [
+            //     'color' => 'grey',
+            //     'remarks' => 'Expense was deleted',
+            //     'status' => 'Deleted',
+            // ];
 
             return $arr;
         }
 
         if ($paid) {
-            if ($this->getReceivedPaymentAmountAttribute() > 0) {
-                if ($this->getBalanceAttribute() == 0) {
+            // $arr = [
+            //     'color' => 'green',
+            //     'remarks' => 'Expense was paid/reimbursed',
+            //     'status' => 'Reimbursed',
+            // ];
+
+            $expense_report = $this->expense_report;
+
+            if ($expense_report->getReceivedPaymentAmountAttribute() > 0) {
+                if ($expense_report->getBalanceAttribute() == 0) {
                     $arr = [
                         'color' => 'green',
                         'remarks' => 'Payment transaction was completed',
@@ -266,6 +286,49 @@ class ExpenseReport extends Model
 
             return $arr;
         }
+
+        if (!$cancelled) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Expense was cancelled',
+                'status' => 'Cancelled',
+            ];
+
+            return $arr;
+        }
+
+        if (!$rejected) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Expense was rejected',
+                'status' => 'Rejected',
+            ];
+
+            return $arr;
+        }
+
+        // if (!$paid) {
+
+        //     switch ($this->payment->getStatusAttribute()["status"]) {
+        //         case 'Completed':
+        //             $arr = [
+        //                 'color' => 'green',
+        //                 'remarks' => 'Payment transaction was completed',
+        //                 'status' => 'Paid/Reimbursed',
+        //             ];
+        //             break;
+
+        //         default:
+        //             $arr = [
+        //                 'color' => 'blue',
+        //                 'remarks' => 'Processing Payment',
+        //                 'status' => 'Approved',
+        //             ];
+        //             break;
+        //     }
+
+        //     return $arr;
+        // }
 
         if (!$approved) {
             $arr = [
@@ -290,136 +353,83 @@ class ExpenseReport extends Model
         if (!$submitted) {
             $arr = [
                 'color' => 'blue',
-                'remarks' => 'Submitted expense report for approval',
+                'remarks' => 'Submitted expense for approval',
                 'status' => 'Submitted',
             ];
 
             return $arr;
         }
 
-        $arr = [
-            'color' => 'orange',
-            'remarks' => 'Expense Report is not yet submitted',
-            'status' => 'Unsubmitted',
-        ];
+        if ($reported) {
+            $arr = [
+                'color' => 'grey',
+                'remarks' => 'Expense is not associated with report',
+                'status' => 'Unreported',
+            ];
+
+            return $arr;
+        }
+
+        if (!$reported && $submitted) {
+            $arr = [
+                'color' => 'orange',
+                'remarks' => 'Expense is not yet submitted',
+                'status' => 'Unsubmitted',
+            ];
+
+            return $arr;
+        }
+
+        // $arr = [
+        //     'color' => 'orange',
+        //     'remarks' => 'Expense for submission',
+        //     'status' => 'Unreported',
+        // ];
 
         return $arr;
     }
 
     /**
-     * late_submitted
+     * getExpiryDateAttribute
      *
      * @return mixed
      */
-    public function isLateSubmitted()
+    public function getExpiryDateAttribute()
     {
+        //compare date of submission to expiry date
         return false;
     }
 
     /**
-     * late_approved
+     * Displays the formatted amount of the expense.
      *
      * @return mixed
      */
-    public function isLateApproved()
+    public function getFormattedAmountAttribute()
     {
-        return false;
+        return "₱ " . number_format($this->amount, 2);
     }
 
     /**
-     * Displays the earliest start date covered by the expense report.
+     * Displays the formatted receipt date of the expense.
      *
      * @return mixed
      */
-    public function getExpenseStartDateAttribute()
+    public function getFormattedDateAttribute()
     {
-        return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
+        return date('F d, Y', strtotime($this->date));
     }
 
     /**
-     * Displays the most recent end date covered by the expense report.
-     *
-     * @return mixed
-     */
-    public function getExpenseEndDateAttribute()
-    {
-        return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
-    }
-    
-    /**
-     * getTotalExpenseAmountAttribute
-     *
-     * @return mixed
-     */
-    public function getTotalExpenseAmountAttribute()
-    {
-        return $this->expenses()->withTrashed()->get()->sum('amount');
-    }
-    
-    /**
-     * getTotalReimbursableAmountAttribute
-     *
-     * @return mixed
-     */
-    public function getTotalReimbursableAmountAttribute()
-    {
-        return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
-    }
-
-    /**
-     * getBalanceAttribute
+     * balance
      *
      * @return mixed
      */
     public function getBalanceAttribute()
     {
-        $sum_payment = 0;
-
-        foreach ($this->payments as $payment) {
-            $sum_payment += $payment->pivot->payment;
-        }
-
-        return $this->getTotalExpenseAmountAttribute() - $sum_payment;
-    }
-    
-    /**
-     * getReceivedPaymentAmountAttribute
-     *
-     * @return mixed
-     */
-    public function getReceivedPaymentAmountAttribute()
-    {
-        $payments = $this->payments()->where("received_at", "<>", null)->get();
-        $sum_received_payment = 0;
-
-        // return $payments;
-
-        foreach ($payments as $payment) {
-            $sum_received_payment += $payment->pivot->payment;
-        }
-
-        return $sum_received_payment;
+        return 0;
     }
 
-    /**
-     * getReceivedPaymentAmountAttribute
-     *
-     * @return mixed
-     */
-    public function getUnreceivedPaymentAmountAttribute()
-    {
-        $payments = $this->payments()->where("received_at", null)->get();
-        $sum_unreceived_payment = 0;
-
-        // return $payments;
-
-        foreach ($payments as $payment) {
-            $sum_unreceived_payment += $payment->pivot->payment;
-        }
-
-        return $sum_unreceived_payment;
-    }
-    
     /**
      * getCreatedInfoAttribute
      *
@@ -436,7 +446,7 @@ class ExpenseReport extends Model
 
         return null;
     }
-    
+
     /**
      * getUpdatedInfoAttribute
      *
@@ -453,7 +463,7 @@ class ExpenseReport extends Model
 
         return null;
     }
-    
+
     /**
      * getDeletedInfoAttribute
      *
@@ -470,7 +480,7 @@ class ExpenseReport extends Model
 
         return null;
     }
-    
+
     /**
      * getSubmittedInfoAttribute
      *
@@ -478,16 +488,18 @@ class ExpenseReport extends Model
      */
     public function getSubmittedInfoAttribute()
     {
-        if ($this->submitted_at) {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report && $expense_report->submitted_at) {
             return [
-                "submitted_at" => $this->submitted_at,
-                "submitted_by" => User::withTrashed()->findOrFail($this->submitted_by)
+                "submitted_at" => $expense_report->submitted_at,
+                "submitted_by" => User::withTrashed()->findOrFail($expense_report->submitted_by)
             ];
         }
 
         return null;
     }
-    
+
     /**
      * getReviewedInfoAttribute
      *
@@ -495,16 +507,18 @@ class ExpenseReport extends Model
      */
     public function getReviewedInfoAttribute()
     {
-        if ($this->reviewed_at) {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report && $expense_report->reviewed_at) {
             return [
-                "reviewed_at" => $this->reviewed_at,
-                "reviewed_by" => User::withTrashed()->findOrFail($this->reviewed_by)
+                "reviewed_at" => $expense_report->reviewed_at,
+                "reviewed_by" => User::withTrashed()->findOrFail($expense_report->reviewed_by)
             ];
         }
 
         return null;
     }
-    
+
     /**
      * getApprovedInfoAttribute
      *
@@ -512,16 +526,18 @@ class ExpenseReport extends Model
      */
     public function getApprovedInfoAttribute()
     {
-        if ($this->approved_at) {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report && $expense_report->approved_at) {
             return [
-                "approved_at" => $this->approved_at,
-                "approved_by" => User::withTrashed()->findOrFail($this->approved_by)
+                "approved_at" => $expense_report->approved_at,
+                "approved_by" => User::withTrashed()->findOrFail($expense_report->approved_by)
             ];
         }
 
         return null;
     }
-    
+
     /**
      * getRejectedInfoAttribute
      *
@@ -529,16 +545,18 @@ class ExpenseReport extends Model
      */
     public function getRejectedInfoAttribute()
     {
-        if ($this->rejected_at) {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report && $expense_report->rejected_at) {
             return [
-                "rejected_at" => $this->rejected_at,
-                "rejected_by" => User::withTrashed()->findOrFail($this->rejected_by)
+                "rejected_at" => $expense_report->rejected_at,
+                "rejected_by" => User::withTrashed()->findOrFail($expense_report->rejected_by)
             ];
         }
 
         return null;
     }
-    
+
     /**
      * getCancelledInfoAttribute
      *
@@ -546,16 +564,18 @@ class ExpenseReport extends Model
      */
     public function getCancelledInfoAttribute()
     {
-        if ($this->cancelled_at) {
+        $expense_report = $this->expense_report;
+
+        if ($expense_report && $expense_report->cancelled_at) {
             return [
-                "cancelled_at" => $this->cancelled_at,
-                "cancelled_by" => User::withTrashed()->findOrFail($this->cancelled_by)
+                "cancelled_at" => $expense_report->cancelled_at,
+                "cancelled_by" => User::withTrashed()->findOrFail($expense_report->cancelled_by)
             ];
         }
 
         return null;
     }
-    
+
     /**
      * getReimbursedInfoAttribute
      *
@@ -563,7 +583,16 @@ class ExpenseReport extends Model
      */
     public function getReimbursedInfoAttribute()
     {
-        if ($this->getReceivedPaymentAmountAttribute() > 0) {
+        $expense_report = $this->expense_report;
+
+        // if ($expense_report && $expense_report->getBalanceAttribute() == 0 && $expense_report->getReceivedPaymentAmountAttribute() > 0) {
+        //     // if ($expense_report && $expense_report->getBalanceAttribute() == 0) {
+        //     return [
+        //         "reference" => $expense_report->payments()->pluck("code"),
+        //     ];
+        // }
+
+        if ($expense_report && $this->expense_report->getReceivedPaymentAmountAttribute() > 0) {
             return [
                 "payments" => $this->payments
             ];
