@@ -551,42 +551,149 @@ class DashboardController extends Controller
 
     public function statistics(Request $request)
     {
-        $start_date = $request->start_date ?? "2020-01-01";
-        $end_date = $request->end_date ?? "2020-12-31";
-        $employee_id = $request->employee_id ?? 1;
+        $employee_id = 0;
+        $start_date = "2020-01-01";
+        $end_date = "2020-12-31";
+        $group_by = "";
+        $time_unit = "";
 
-        $expenses = Expense::with('expense_report', 'employee')->get();
+        $expenses = DB::table('expenses')
+            ->join("employees", "employees.id", "=", "expenses.employee_id")
+            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("departments", "departments.id", "=", "jobs.department_id")
+            ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
+            ->leftJoin("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+            ->leftJoin("expense_report_payment", "expense_report_payment.expense_report_id", "=", "expense_reports.id")
+            ->leftJoin("payments", "payments.id", "=", "expense_report_payment.payment_id")
+            ->whereBetween("expenses.date", [$start_date, $end_date])
+            ->where("expenses.deleted_at", "=", null)
+            ->where("expense_reports.rejected_at", "=", null)
+            ->where("expense_reports.cancelled_at", "=", null)
+            ->where("expense_reports.deleted_at", "=", null)
+            ->select(DB::raw("
+                distinct 
+                `expenses`.`id` AS expense_id,
+                `expenses`.`date`,
+                `expenses`.`amount`,
+                `expenses`.`created_at` AS expense_created_at,
+                `employees`.`id` AS employee_id,
+                `employees`.`last_name`,
+                `employees`.`first_name`,
+                `employees`.`middle_name`,
+                `employees`.`suffix`,
+                `departments`.`id` AS department_id,
+                `departments`.`name` AS department_name,
+                `expense_types`.`id` AS expense_type_id,
+                `expense_types`.`name` AS expense_type_name,
+                `expense_reports`.`id` AS expense_report_id,
+                `expense_reports`.`created_at`,
+                `expense_reports`.`submitted_at`,
+                `expense_reports`.`reviewed_at`,
+                `expense_reports`.`approved_at`,
+                (SELECT 
+                    SUM(`expenses`.`amount`) 
+                FROM
+                    `expenses` 
+                    JOIN `expense_reports` 
+                    ON `expense_reports`.`id` = `expenses`.`expense_report_id` 
+                WHERE `expense_reports`.`id` = `expense_reports`.`id`) AS expense_report_amount,
+                (SELECT 
+                    SUM(`expenses`.`amount`) 
+                FROM
+                    `expenses` 
+                    JOIN `expense_reports` er
+                    ON `er`.`id` = `expenses`.`expense_report_id` 
+                WHERE `er`.`id` = `expense_reports`.`id`) - IFNULL(
+                    (SELECT 
+                    SUM(
+                        `expense_report_payment`.`payment`
+                    ) 
+                    FROM
+                    `expense_reports` er
+                    JOIN `expense_report_payment` 
+                        ON `expense_report_payment`.`expense_report_id` = `er`.`id` 
+                    JOIN `payments` 
+                        ON `payments`.`id` = `expense_report_payment`.`payment_id` 
+                    WHERE `er`.`id` = `expense_reports`.`id` 
+                    AND `payments`.`received_at` IS NOT NULL),
+                    0
+                ) AS balance  
+            "))->get();
+
+        $unreported = $expenses->where("expense_report_id", null);
+        $unsubmitted = $expenses->where("submitted_at", null)->where("approved_at", null);
+        $submitted = $expenses->where("submitted_at", "<>", null)->where("approved_at", null);
+        $approved = $expenses->where("submitted_at", "<>", null)->where("approved_at", "<>", null);
+        $unreceived = $expenses->where("submitted_at", "<>", null)->where("approved_at", "<>", null)->where("balance", ">", 0);
 
         return response()->json([
-            "data" => $expenses,
+            // "data" => $expenses,
             "all" => [
-                "total_amount" => $expenses->sum('amount'),
-                "total_count" => $expenses->count()
-            ],
-            "unsubmitted" => [
-                "total_amount" => 0,
-                "total_count" => 0
+                "total_amount" => $approved->sum('amount'),
+                "total_count" => $approved->count()
             ],
             "unreported" => [
-                "total_amount" => 0,
-                "total_count" => 0
+                "total_amount" => $unreported->sum("amount"),
+                "total_count" => $unreported->count(),
+            ],
+            "unsubmitted" => [
+                "total_amount" => $unsubmitted->sum("amount"),
+                "total_count" => $unsubmitted->count(),
+                "total_report" => $unsubmitted->groupBy("expense_report_id")->count()
             ],
             "submitted" => [
-                "total_amount" => 0,
-                "total_count" => 0,
-                "total_report" => 0
+                "total_amount" => $submitted->sum("amount"),
+                "total_count" => $submitted->count(),
+                "total_report" => $submitted->groupBy("expense_report_id")->count()
             ],
             "approved" => [
-                "total_amount" => 0,
-                "total_count" => 0,
-                "total_report" => 0
+                "total_amount" => $approved->sum("amount"),
+                "total_count" => $approved->count(),
+                "total_report" => $approved->groupBy("expense_report_id")->count()
             ],
-            "paid" => [
-                "total_amount" => 0,
-                "total_count" => 0,
-                "total_report" => 0
+            "unreceived" => [
+                "total_amount" => $unreceived->sum("amount"),
+                "total_count" => $unreceived->count(),
+                "total_report" => $unreceived->groupBy("expense_report_id")->count()
             ],
         ]);
+
+        // $start_date = $request->start_date ?? "2020-01-01";
+        // $end_date = $request->end_date ?? "2020-12-31";
+        // $employee_id = $request->employee_id ?? 1;
+
+        // $expenses = Expense::with('expense_report', 'employee')->get();
+
+        // return response()->json([
+        //     "data" => $expenses,
+        //     "all" => [
+        //         "total_amount" => $expenses->sum('amount'),
+        //         "total_count" => $expenses->count()
+        //     ],
+        //     "unsubmitted" => [
+        //         "total_amount" => 0,
+        //         "total_count" => 0
+        //     ],
+        //     "unreported" => [
+        //         "total_amount" => 0,
+        //         "total_count" => 0
+        //     ],
+        //     "submitted" => [
+        //         "total_amount" => 0,
+        //         "total_count" => 0,
+        //         "total_report" => 0
+        //     ],
+        //     "approved" => [
+        //         "total_amount" => 0,
+        //         "total_count" => 0,
+        //         "total_report" => 0
+        //     ],
+        //     "paid" => [
+        //         "total_amount" => 0,
+        //         "total_count" => 0,
+        //         "total_report" => 0
+        //     ],
+        // ]);
     }
 
     public function expense_reports()

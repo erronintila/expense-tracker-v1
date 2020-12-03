@@ -735,6 +735,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
+        console.log(data);
         _this.form.code = data.code;
         _this.form.reference_no = data.reference_no;
         _this.form.description = data.description;
