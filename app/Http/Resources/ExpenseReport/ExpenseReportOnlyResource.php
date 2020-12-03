@@ -34,14 +34,14 @@ class ExpenseReportOnlyResource extends JsonResource
             // Additional Fields
             // -------------------------------------------------------------------
             // "report_summary" => $this->report_summary,
-            "from" => $this->expense_start_date,
-            "to" => $this->expense_end_date,
-            "status" => $this->status,
-            "total" => $this->total_expense_amount,
-            "total_reimbursable" => $this->total_reimbursable_amount,
-            "paid" => $this->total_expense_amount - $this->balance,
-            "balance" => $this->balance,
-            "total_received_payment" => $this->received_payment_amount,
+            // "from" => $this->expense_start_date,
+            // "to" => $this->expense_end_date,
+            // "status" => $this->status,
+            // "total" => $this->total_expense_amount,
+            // "total_reimbursable" => $this->total_reimbursable_amount,
+            // "paid" => $this->total_expense_amount - $this->balance,
+            // "balance" => $this->balance,
+            // "total_received_payment" => $this->received_payment_amount,
 
             // -------------------------------------------------------------------
             // Transaction Logs

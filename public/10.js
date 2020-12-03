@@ -591,17 +591,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         var search = _this.search.trim().toLowerCase();
 
-        var status = _this.status;
         var employee_id = _this.employee;
         var range = _this.date_range;
         axios.get("/api/expense_reports", {
           params: {
-            search: search,
             sortBy: sortBy[0],
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            status: status,
             employee_id: employee_id,
             start_date: range[0],
             end_date: range[1],

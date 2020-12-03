@@ -183,6 +183,14 @@ class ExpenseReportController extends Controller
             }
         }
 
+        if(request()->has("payment_id")) {
+            $payment_id = $request->payment_id;
+
+            $expense_reports = $expense_reports->whereHas("payments", function($query) use ($payment_id){
+                $query->where("payments.id", $payment_id);
+            });
+        }
+
         if (request()->has("start_date") && request()->has("end_date")) {
             $start_date = Carbon::parse($request->start_date)->startOfDay();
 
@@ -196,6 +204,28 @@ class ExpenseReportController extends Controller
 
             $query->orWhere('description', "like", "%" . $search . "%");
         });
+
+        if (request()->has("create_payment")) {
+            $start_date = Carbon::parse($request->start_date)->startOfDay();
+
+            $end_date = Carbon::parse($request->end_date)->endOfDay();
+
+            $expense_reports = ExpenseReport::with(['employee' => function ($query) {
+                $query->withTrashed();
+            }])
+                ->where(function ($query) use ($search) {
+                    $query->where('code', "like", "%" . $search . "%");
+        
+                    $query->orWhere('description', "like", "%" . $search . "%");
+                })
+                ->where("employee_id", $request->employee_id)
+                ->orderBy($sortBy, $sortType)
+                ->whereBetween("created_at", [$start_date, $end_date])
+                ->where("approved_at", "<>", null)
+                ->where("submitted_at", "<>", null)
+                ->where("cancelled_at", null)
+                ->whereDoesntHave("payments");
+        }
 
         $expense_reports = $expense_reports->paginate($itemsPerPage);
 

@@ -66,7 +66,7 @@
                                 :items="employees"
                                 :error-messages="errors.employee"
                                 @input="errors.employee = []"
-                                @change="loadExpenseReports"
+                                @change="updateEmployee"
                                 item-value="id"
                                 item-text="full_name"
                                 label="Employee"
@@ -97,7 +97,7 @@
                                 Expense Reports
                             </div>
 
-                            <v-data-table
+                            <!-- <v-data-table
                                 elevation="0"
                                 v-model="selected"
                                 :headers="headers"
@@ -240,6 +240,173 @@
                                         </v-container>
                                     </td>
                                 </template>
+                            </v-data-table> -->
+
+                            <v-data-table
+                                :headers="headers"
+                                :items="items"
+                                :loading="loading"
+                                :options.sync="options"
+                                :server-items-length="totalItems"
+                                :footer-props="{
+                                    itemsPerPageOptions: [10, 20, 50, 100],
+                                    showFirstLastPage: true,
+                                    firstIcon: 'mdi-page-first',
+                                    lastIcon: 'mdi-page-last',
+                                    prevIcon: 'mdi-chevron-left',
+                                    nextIcon: 'mdi-chevron-right'
+                                }"
+                                v-model="selected"
+                                show-expand
+                                single-expand
+                                show-select
+                                item-key="id"
+                                class="elevation-0"
+                            >
+                                <template v-slot:top>
+                                    <DateRangePicker
+                                        :preset="preset"
+                                        :presets="presets"
+                                        :value="date_range"
+                                        :solo="false"
+                                        :buttonType="false"
+                                        :buttonColor="'white'"
+                                        :buttonDark="false"
+                                        @updateDates="updateDates"
+                                    ></DateRangePicker>
+
+                                    <v-text-field
+                                        v-model="search"
+                                        append-icon="mdi-magnify"
+                                        label="Search"
+                                        single-line
+                                        hide-details
+                                    ></v-text-field>
+                                </template>
+                                <template v-slot:[`item.period`]="{ item }">
+                                    {{ item.from }} ~ {{ item.to }}
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/admin/expense_reports/${item.id}`
+                                            )
+                                        "
+                                    >
+                                        mdi-eye
+                                    </v-icon>
+                                </template>
+                                <template
+                                    v-slot:expanded-item="{ headers, item }"
+                                >
+                                    <td :colspan="headers.length">
+                                        <v-container>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Reimbursable
+                                                            Amount</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                item.total_reimbursable
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Paid</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                item.paid
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="item.balance > 0">
+                                                    <td>
+                                                        <strong>Balance</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                item.balance
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Status</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ item.status.status }}
+                                                        ({{
+                                                            item.status.remarks
+                                                        }})
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="item.remarks">
+                                                    <td>
+                                                        <strong>Remarks</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.remarks }}</td>
+                                                </tr>
+                                            </table>
+                                        </v-container>
+                                    </td>
+                                </template>
+                                <template v-slot:[`item.total`]="{ item }">
+                                    {{ mixin_formatNumber(item.total) }}
+                                </template>
+                                <template v-slot:[`item.employee`]="{ item }">
+                                    {{
+                                        item.employee.last_name +
+                                            ", " +
+                                            item.employee.first_name
+                                    }}
+                                </template>
+                                <template v-slot:[`item.updated_at`]="{ item }">
+                                    {{ mixin_getHumanDate(item.updated_at) }}
+                                </template>
+                                <template
+                                    slot="body.append"
+                                    v-if="items.length > 0"
+                                >
+                                    <tr class="green--text hidden-md-and-up">
+                                        <td class="title">
+                                            Total:
+                                            <strong>{{ totalAmount }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="green--text hidden-sm-and-down">
+                                        <td class="title">Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <strong>{{ totalAmount }}</strong>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </template>
                             </v-data-table>
 
                             <v-textarea
@@ -274,6 +441,7 @@ export default {
     },
     data() {
         return {
+            loading: true,
             loader: false,
             valid: false,
             menu: false,
@@ -316,6 +484,15 @@ export default {
             selected: [],
             employees: [],
             total: 0,
+            totalAmount: 0,
+            totalItems: 0,
+            search: "",
+            options: {
+                sortBy: ["created_at"],
+                sortDesc: [true],
+                page: 1,
+                itemsPerPage: 10
+            },
             form: {
                 code: "",
                 reference_no: "",
@@ -356,7 +533,17 @@ export default {
         },
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenseReports();
+            // this.loadExpenseReports();
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
+        },
+        updateEmployee() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
         },
         loadEmployees() {
             let _this = this;
@@ -376,34 +563,86 @@ export default {
                     );
                 });
         },
-        loadExpenseReports() {
-            let start_date = this.date_range[0];
-            let end_date = this.date_range[1];
+        getDataFromApi() {
             let _this = this;
 
-            axios
-                .get("/api/data/expense_reports", {
-                    params: {
-                        create_payment: true,
-                        start_date: start_date,
-                        end_date: end_date,
-                        employee_id: _this.form.employee.id
-                    }
-                })
-                .then(response => {
-                    console.log(response);
-                    _this.items = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+            _this.loading = true;
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+            return new Promise((resolve, reject) => {
+                const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+                let search = _this.search.trim().toLowerCase();
+                let status = _this.status;
+                let employee_id = _this.form.employee.id;
+                let range = _this.date_range;
+
+                axios
+                    .get("/api/expense_reports", {
+                        params: {
+                            search: search,
+                            sortBy: sortBy[0],
+                            sortType: sortDesc[0] ? "desc" : "asc",
+                            page: page,
+                            itemsPerPage: itemsPerPage,
+                            status: status,
+                            employee_id: employee_id,
+                            start_date: range[0],
+                            end_date: range[1],
+                            admin_page: true,
+                            create_payment: true
+                        }
+                    })
+                    .then(response => {
+                        console.log(response);
+
+                        let items = response.data.data;
+                        let total = response.data.meta.total;
+
+                        _this.loading = false;
+
+                        resolve({ items, total });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+
+                        _this.loading = false;
+                    });
+            });
         },
+        // loadExpenseReports() {
+        //     let start_date = this.date_range[0];
+        //     let end_date = this.date_range[1];
+        //     let _this = this;
+
+        //     axios
+        //         .get("/api/data/expense_reports", {
+        //             params: {
+        //                 create_payment: true,
+        //                 start_date: start_date,
+        //                 end_date: end_date,
+        //                 employee_id: _this.form.employee.id
+        //             }
+        //         })
+        //         .then(response => {
+        //             console.log(response);
+        //             _this.items = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+
+        //             _this.mixin_errorDialog(
+        //                 `Error ${error.response.status}`,
+        //                 error.response.statusText
+        //             );
+        //         });
+        // },
         onSave() {
             let _this = this;
 
@@ -467,21 +706,40 @@ export default {
         }
     },
     computed: {
+        params(nv) {
+            return {
+                ...this.options,
+                query: this.search,
+                query: this.employee,
+                query: this.date_range
+            };
+        },
         maxDate() {
             return moment().format("YYYY-MM-DD");
         }
     },
     watch: {
+        params: {
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+
+                    console.log(data.items);
+                });
+            },
+            deep: true
+        },
         selected() {
-            this.total = this.selected.reduce(
+            this.totalAmount = this.mixin_formatNumber(
+            this.selected.reduce(
                 (total, item) => total + item.total,
                 0
-            );
+            ));
         }
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
-        // this.loadExpenseReports();
         this.loadEmployees();
     }
 };

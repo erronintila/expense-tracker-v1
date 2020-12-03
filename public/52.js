@@ -14,6 +14,131 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -268,10 +393,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      loading: true,
       loader: true,
       valid: false,
       menu: false,
-      search: "",
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
       employee: "",
       code: "",
@@ -311,10 +436,21 @@ __webpack_require__.r(__webpack_exports__);
         text: "Actions",
         value: "actions",
         sortable: false
-      } // { text: "", value: "data-table-expand", sortable: false }
-      ],
+      }, {
+        text: "",
+        value: "data-table-expand",
+        sortable: false
+      }],
       items: [],
       total: 0,
+      totalAmount: 0,
+      totalItems: 0,
+      options: {
+        sortBy: ["created_at"],
+        sortDesc: [true],
+        page: 1,
+        itemsPerPage: 10
+      },
       totalExpenseBalanceAmount: 0,
       amountToBeReimbursed: 0,
       form: {
@@ -325,7 +461,7 @@ __webpack_require__.r(__webpack_exports__);
         date: "",
         description: "",
         employee: {
-          id: null,
+          id: 0,
           name: ""
         },
         expense_reports: [],
@@ -388,6 +524,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
+      var _this2 = this;
+
       var _this = this;
 
       axios.get("/api/payments/".concat(_this.$route.params.id)).then(function (response) {
@@ -416,8 +554,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.code = data.code;
         _this.form.date = data.date;
         _this.form.description = data.description;
-        _this.form.employee = data.employee;
-        _this.form.expense_reports = data.expense_reports;
+        _this.form.employee = data.employee; // _this.form.expense_reports = data.expense_reports;
+
         _this.form.notes = data.notes;
         _this.form.reference_no = data.reference_no;
         _this.form.remarks = data.remarks;
@@ -432,6 +570,12 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.rejected = data.rejected;
         _this.form.cancelled = data.cancelled;
         _this.form.logs = data.logs;
+
+        _this2.getDataFromApi().then(function (data) {
+          _this2.items = data.items;
+          _this2.totalItems = data.total;
+        });
+
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
@@ -440,6 +584,52 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
         _this.loader = false;
+      });
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this3 = this;
+
+      var _this = this;
+
+      _this.loading = true;
+      return new Promise(function (resolve, reject) {
+        var _this3$options = _this3.options,
+            sortBy = _this3$options.sortBy,
+            sortDesc = _this3$options.sortDesc,
+            page = _this3$options.page,
+            itemsPerPage = _this3$options.itemsPerPage;
+        var employee_id = _this.form.employee.id;
+        var range = _this.date_range;
+        var payment_id = _this3.$route.params.id;
+        axios.get("/api/expense_reports", {
+          params: {
+            sortBy: sortBy[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
+            page: page,
+            itemsPerPage: itemsPerPage,
+            employee_id: employee_id,
+            payment_id: payment_id,
+            start_date: range[0],
+            end_date: range[1],
+            admin_page: true
+          }
+        }).then(function (response) {
+          console.log(response);
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this.loading = false;
+          resolve({
+            items: items,
+            total: total
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          _this.loading = false;
+        });
       });
     },
     cancelPayment: function cancelPayment() {
@@ -473,7 +663,25 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
+  computed: {
+    params: function params(nv) {
+      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+        query: this.employee
+      }, "query", this.date_range));
+    }
+  },
   watch: {
+    params: {
+      handler: function handler() {
+        var _this4 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this4.items = data.items;
+          _this4.totalItems = data.total;
+        });
+      },
+      deep: true
+    },
     items: function items() {
       this.total = this.items.reduce(function (total, item) {
         return total + item.total;
@@ -706,165 +914,336 @@ var render = function() {
                             "v-col",
                             { attrs: { cols: "12" } },
                             [
-                              _c("v-data-table", {
-                                staticClass: "elevation-0",
-                                attrs: {
-                                  elevation: "0",
-                                  headers: _vm.headers,
-                                  items: _vm.items,
-                                  "item-key": "id"
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "item.period",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(item.from) +
-                                              " ~ " +
-                                              _vm._s(item.to) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
+                              _c(
+                                "v-data-table",
+                                {
+                                  staticClass: "elevation-0",
+                                  attrs: {
+                                    headers: _vm.headers,
+                                    items: _vm.items,
+                                    loading: _vm.loading,
+                                    options: _vm.options,
+                                    "server-items-length": _vm.totalItems,
+                                    "footer-props": {
+                                      itemsPerPageOptions: [10, 20, 50, 100],
+                                      showFirstLastPage: true,
+                                      firstIcon: "mdi-page-first",
+                                      lastIcon: "mdi-page-last",
+                                      prevIcon: "mdi-chevron-left",
+                                      nextIcon: "mdi-chevron-right"
                                     },
-                                    {
-                                      key: "item.actions",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _c(
-                                            "v-icon",
-                                            {
-                                              staticClass: "mr-2",
-                                              attrs: { small: "" },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.$router.push(
-                                                    "/admin/expense_reports/" +
-                                                      item.id
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                    mdi-eye\n                                "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.created_at",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  item.created.created_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.total",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_formatNumber(
-                                                  item.total
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.balance",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_formatNumber(
-                                                  item.balance
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "top",
-                                      fn: function() {
-                                        return [
-                                          _c(
-                                            "v-row",
-                                            [
-                                              _c("v-col", [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text--secondary"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                            Expense Reports\n                                        "
-                                                    )
-                                                  ]
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("v-spacer")
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      },
-                                      proxy: true
-                                    },
-                                    {
-                                      key: "item.employee",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                item.employee.last_name +
-                                                  " " +
-                                                  item.employee.first_name +
-                                                  " " +
-                                                  item.employee.suffix
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
+                                    "show-expand": "",
+                                    "single-expand": "",
+                                    "item-key": "id"
+                                  },
+                                  on: {
+                                    "update:options": function($event) {
+                                      _vm.options = $event
                                     }
-                                  ],
-                                  null,
-                                  true
-                                )
-                              })
+                                  },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "item.period",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          return [
+                                            _vm._v(
+                                              "\n                                " +
+                                                _vm._s(item.from) +
+                                                " ~ " +
+                                                _vm._s(item.to) +
+                                                "\n                            "
+                                            )
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        key: "item.actions",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          return [
+                                            _c(
+                                              "v-icon",
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: { small: "" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.$router.push(
+                                                      "/admin/expense_reports/" +
+                                                        item.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                    mdi-eye\n                                "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        key: "expanded-item",
+                                        fn: function(ref) {
+                                          var headers = ref.headers
+                                          var item = ref.item
+                                          return [
+                                            _c(
+                                              "td",
+                                              {
+                                                attrs: {
+                                                  colspan: headers.length
+                                                }
+                                              },
+                                              [
+                                                _c("v-container", [
+                                                  _c("table", [
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v(
+                                                            "Reimbursable\n                                                        Amount"
+                                                          )
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          "\n                                                    " +
+                                                            _vm._s(
+                                                              _vm.mixin_formatNumber(
+                                                                item.total_reimbursable
+                                                              )
+                                                            ) +
+                                                            "\n                                                "
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v("Paid")
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          "\n                                                    " +
+                                                            _vm._s(
+                                                              _vm.mixin_formatNumber(
+                                                                item.paid
+                                                              )
+                                                            ) +
+                                                            "\n                                                "
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    item.balance > 0
+                                                      ? _c("tr", [
+                                                          _c("td", [
+                                                            _c("strong", [
+                                                              _vm._v("Balance")
+                                                            ])
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _vm._v(":")
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _vm._v(
+                                                              "\n                                                    " +
+                                                                _vm._s(
+                                                                  _vm.mixin_formatNumber(
+                                                                    item.balance
+                                                                  )
+                                                                ) +
+                                                                "\n                                                "
+                                                            )
+                                                          ])
+                                                        ])
+                                                      : _vm._e(),
+                                                    _vm._v(" "),
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v("Status")
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          "\n                                                    " +
+                                                            _vm._s(
+                                                              item.status.status
+                                                            ) +
+                                                            "\n                                                    (" +
+                                                            _vm._s(
+                                                              item.status
+                                                                .remarks
+                                                            ) +
+                                                            ")\n                                                "
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    item.remarks
+                                                      ? _c("tr", [
+                                                          _c("td", [
+                                                            _c("strong", [
+                                                              _vm._v("Remarks")
+                                                            ])
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _vm._v(":")
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c("td", [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                item.remarks
+                                                              )
+                                                            )
+                                                          ])
+                                                        ])
+                                                      : _vm._e()
+                                                  ])
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        key: "item.total",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          return [
+                                            _vm._v(
+                                              "\n                                " +
+                                                _vm._s(
+                                                  _vm.mixin_formatNumber(
+                                                    item.total
+                                                  )
+                                                ) +
+                                                "\n                            "
+                                            )
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        key: "item.employee",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          return [
+                                            _vm._v(
+                                              "\n                                " +
+                                                _vm._s(
+                                                  item.employee.last_name +
+                                                    ", " +
+                                                    item.employee.first_name
+                                                ) +
+                                                "\n                            "
+                                            )
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        key: "item.updated_at",
+                                        fn: function(ref) {
+                                          var item = ref.item
+                                          return [
+                                            _vm._v(
+                                              "\n                                " +
+                                                _vm._s(
+                                                  _vm.mixin_getHumanDate(
+                                                    item.updated_at
+                                                  )
+                                                ) +
+                                                "\n                            "
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    true
+                                  )
+                                },
+                                [
+                                  _vm._v(" "),
+                                  _vm._v(" "),
+                                  _vm._v(" "),
+                                  _vm._v(" "),
+                                  _vm._v(" "),
+                                  _vm._v(" "),
+                                  _vm.items.length > 0
+                                    ? _c("template", { slot: "body.append" }, [
+                                        _c(
+                                          "tr",
+                                          {
+                                            staticClass:
+                                              "green--text hidden-md-and-up"
+                                          },
+                                          [
+                                            _c("td", { staticClass: "title" }, [
+                                              _vm._v(
+                                                "\n                                        Total:\n                                        "
+                                              ),
+                                              _c("strong", [
+                                                _vm._v(_vm._s(_vm.totalAmount))
+                                              ])
+                                            ])
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "tr",
+                                          {
+                                            staticClass:
+                                              "green--text hidden-sm-and-down"
+                                          },
+                                          [
+                                            _c("td", { staticClass: "title" }, [
+                                              _vm._v("Total")
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _c("strong", [
+                                                _vm._v(_vm._s(_vm.totalAmount))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td")
+                                          ]
+                                        )
+                                      ])
+                                    : _vm._e()
+                                ],
+                                2
+                              )
                             ],
                             1
                           )

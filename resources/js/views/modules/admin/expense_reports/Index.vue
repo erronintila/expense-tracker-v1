@@ -553,19 +553,16 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
                 let employee_id = _this.employee;
                 let range = _this.date_range;
 
                 axios
                     .get("/api/expense_reports", {
                         params: {
-                            search: search,
                             sortBy: sortBy[0],
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            status: status,
                             employee_id: employee_id,
                             start_date: range[0],
                             end_date: range[1],
