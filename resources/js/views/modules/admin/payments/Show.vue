@@ -456,8 +456,6 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    console.log(data);
-
                     _this.code = data.code;
                     _this.reference_no = data.reference_no;
                     _this.voucher_no = data.voucher_no;
@@ -549,8 +547,6 @@ export default {
                         }
                     })
                     .then(response => {
-                        console.log(response);
-
                         let items = response.data.data;
                         let total = response.data.meta.total;
 

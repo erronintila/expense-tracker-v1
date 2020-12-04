@@ -140,7 +140,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/employees").then(function (response) {
-        console.log(response);
         _this.employees = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -163,8 +162,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     onSave: function onSave() {
       var _this = this;
-
-      console.log(_this.allowed_expense_types); // return;
 
       _this.$refs.form.validate();
 

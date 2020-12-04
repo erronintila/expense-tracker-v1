@@ -530,7 +530,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       axios.get("/api/payments/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.code = data.code;
         _this.reference_no = data.reference_no;
         _this.voucher_no = data.voucher_no;
@@ -614,7 +613,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             admin_page: true
           }
         }).then(function (response) {
-          console.log(response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;

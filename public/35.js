@@ -719,7 +719,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //             `/api/data/expenses?expense_report_id${this.$route.params.id}`
     //         )
     //         .then(response => {
-    //             console.log(response);
     //         })
     //         .catch(error => {
     //             console.log(error);
@@ -735,7 +734,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.form.code = data.code;
         _this.form.reference_no = data.reference_no;
         _this.form.description = data.description;
@@ -802,7 +800,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             expense_report_id: expense_report_id
           }
         }).then(function (response) {
-          console.log(response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;

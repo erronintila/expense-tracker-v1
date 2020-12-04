@@ -83,8 +83,6 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    console.log(data);
-
                     _this.form.name = data.name;
 
                     _this.form.department = data.department;

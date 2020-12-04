@@ -593,8 +593,6 @@ export default {
                         }
                     })
                     .then(response => {
-                        console.log(response);
-
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
@@ -630,7 +628,6 @@ export default {
         //             }
         //         })
         //         .then(response => {
-        //             console.log(response);
         //             _this.items = response.data.data;
         //         })
         //         .catch(error => {
@@ -724,8 +721,6 @@ export default {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
-
-                    console.log(data.items);
                 });
             },
             deep: true

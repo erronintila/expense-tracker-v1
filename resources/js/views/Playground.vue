@@ -228,6 +228,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
     data: () => ({
         fab: false,
@@ -284,7 +286,8 @@ export default {
     methods: {
         loadStatistics(start, end, employee_id) {
             let _this = this;
-            axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&employee_id=${employee_id}`)
+
+            axios.get(`/api/data/statistics?start_date=${moment("2020-01-01").format("YYYY-MM-DD")}&end_date=${moment("2020-12-31").format("YYYY-MM-DD")}&employee_id=${employee_id}`)
             .then(response => {
                 console.log(response);
             }).catch(error => {

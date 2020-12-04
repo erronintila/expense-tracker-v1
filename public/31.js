@@ -398,9 +398,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadPermissions().then(axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
-        console.log(data.expense_types.map(function (item) {
-          return item.id;
-        }));
         _this.form.code = data.code;
         _this.form.first_name = data.first_name;
         _this.form.middle_name = data.middle_name;
@@ -508,8 +505,6 @@ __webpack_require__.r(__webpack_exports__);
           permissions: _this.selected,
           expense_types: _this.selected_expense_types
         }).then(function (response) {
-          console.log(response);
-
           _this.$dialog.message.success("Employee updated successfully.", {
             position: "top-right",
             timeout: 2000

@@ -459,7 +459,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             employee_id: employee_id
           }
         }).then(function (response) {
-          console.log(response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;

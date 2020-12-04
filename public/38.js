@@ -202,7 +202,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/expense_types/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response);
         _this.form.name = response.data.data.name;
         _this.form.limit = response.data.data.limit;
         _this.items = response.data.data.sub_types;
@@ -214,8 +213,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onSave: function onSave() {
-      // console.log(this.items);
-      // return;
       var _this = this;
 
       _this.$refs.form.validate();

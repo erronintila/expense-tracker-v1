@@ -312,10 +312,6 @@ export default {
         onDelete() {
             let _this = this;
 
-            // console.log(_this.selected);
-
-            // return;
-
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",

@@ -177,7 +177,6 @@ export default {
             axios
                 .get(`/api/users/${_this.$route.params.id}`)
                 .then(function(response) {
-                    console.log(response);
                     let data = response.data.data;
 
                     _this.name = data.name;

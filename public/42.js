@@ -652,8 +652,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loadEmployees().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
-        var data = response.data.data; // console.log(data);
-
+        var data = response.data.data;
         _this.form.code = data.code;
         _this.form.description = data.description;
         _this.form.receipt_number = data.receipt_number;

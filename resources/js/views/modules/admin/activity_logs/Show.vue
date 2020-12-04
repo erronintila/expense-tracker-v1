@@ -24,7 +24,6 @@ export default {
             axios
                 .get(`/api/activity_logs/${_this.$route.params.id}`)
                 .then(function(response) {
-                    console.log(response.data);
                 })
                 .catch(function(error) {
                     console.log(error);

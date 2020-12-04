@@ -403,6 +403,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -481,12 +495,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.date_range = e;
       this.loadExpenses(this.form.employee.id);
     },
+    updateEmployee: function updateEmployee() {
+      var _this2 = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this2.items = data.items;
+        _this2.totalItems = data.total;
+      });
+    },
     getData: function getData() {
       var _this = this;
 
       axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.form.code = data.code;
         _this.form.description = data.description;
         _this.form.remarks = data.remarks;
@@ -505,8 +526,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         // _this.loadExpenses(data.employee.id);
 
         _this.getDataFromApi().then(function (data) {
+          var _this$selected;
+
           _this.items = data.items;
           _this.totalItems = data.total;
+          var selected = data.items.filter(function (item) {
+            return item.expense_report !== null;
+          });
+
+          (_this$selected = _this.selected).splice.apply(_this$selected, [0, 0].concat(_toConsumableArray(selected)));
         }); // _this.selected.splice(0, 0, ...data.expenses);
 
 
@@ -521,17 +549,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     getDataFromApi: function getDataFromApi() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _this = this;
 
       _this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this2$options = _this2.options,
-            sortBy = _this2$options.sortBy,
-            sortDesc = _this2$options.sortDesc,
-            page = _this2$options.page,
-            itemsPerPage = _this2$options.itemsPerPage;
+        var _this3$options = _this3.options,
+            sortBy = _this3$options.sortBy,
+            sortDesc = _this3$options.sortDesc,
+            page = _this3$options.page,
+            itemsPerPage = _this3$options.itemsPerPage;
         var range = _this.date_range;
         var employee_id = _this.form.employee.id;
         axios.get("/api/expenses", {
@@ -545,18 +573,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             update_report: true
           }
         }).then(function (response) {
-          var _this$selected;
-
-          console.log(response);
+          // _this.selected = [];
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
-          var selected = items.filter(function (item) {
-            return item.expense_report !== null;
-          });
-
-          (_this$selected = _this.selected).splice.apply(_this$selected, [0, 0].concat(_toConsumableArray(selected)));
-
           resolve({
             items: items,
             total: total
@@ -655,11 +675,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this4 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
+          _this4.items = data.items;
+          _this4.totalItems = data.total;
         });
       },
       deep: true
@@ -798,7 +818,7 @@ var render = function() {
                               input: function($event) {
                                 _vm.errors.employee = []
                               },
-                              change: _vm.loadExpenses
+                              change: _vm.updateEmployee
                             },
                             model: {
                               value: _vm.form.employee,
@@ -867,6 +887,51 @@ var render = function() {
                             },
                             scopedSlots: _vm._u(
                               [
+                                {
+                                  key: "top",
+                                  fn: function() {
+                                    return [
+                                      _vm.selected.length > 0
+                                        ? _c(
+                                            "div",
+                                            [
+                                              _c(
+                                                "div",
+                                                { staticClass: "d-inline" },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                        " +
+                                                      _vm._s(
+                                                        _vm.selected.length
+                                                      ) +
+                                                      " Item(s) Selected\n                                    "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.selected = []
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                        Clear All Selected\n                                    "
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        : _vm._e()
+                                    ]
+                                  },
+                                  proxy: true
+                                },
                                 {
                                   key: "expanded-item",
                                   fn: function(ref) {

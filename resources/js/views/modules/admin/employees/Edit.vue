@@ -388,10 +388,6 @@ export default {
                     .then(response => {
                         let data = response.data.data;
 
-                        console.log(data.expense_types.map(
-                            item => item.id
-                        ));
-
                         _this.form.code = data.code;
                         _this.form.first_name = data.first_name;
                         _this.form.middle_name = data.middle_name;
@@ -526,7 +522,6 @@ export default {
                         expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
-                        console.log(response);
                         _this.$dialog.message.success(
                             "Employee updated successfully.",
                             {

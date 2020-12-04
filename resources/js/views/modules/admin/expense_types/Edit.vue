@@ -194,8 +194,6 @@ export default {
             axios
                 .get(`/api/expense_types/${_this.$route.params.id}`)
                 .then(response => {
-                    console.log(response);
-
                     _this.form.name = response.data.data.name;
                     _this.form.limit = response.data.data.limit;
                     _this.items = response.data.data.sub_types;
@@ -211,8 +209,6 @@ export default {
                 });
         },
         onSave() {
-            // console.log(this.items);
-            // return;
             let _this = this;
 
             _this.$refs.form.validate();

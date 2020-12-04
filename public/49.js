@@ -620,7 +620,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             create_payment: true
           }
         }).then(function (response) {
-          console.log(response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
@@ -652,7 +651,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //             }
     //         })
     //         .then(response => {
-    //             console.log(response);
     //             _this.items = response.data.data;
     //         })
     //         .catch(error => {
@@ -736,7 +734,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.getDataFromApi().then(function (data) {
           _this5.items = data.items;
           _this5.totalItems = data.total;
-          console.log(data.items);
         });
       },
       deep: true

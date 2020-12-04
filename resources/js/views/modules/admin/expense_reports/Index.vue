@@ -948,7 +948,6 @@ export default {
 
         //     if (action == "approve") {
         //         let today = moment().format("YYYY-MM-DD");
-        //         // console.log(today);
         //         // return;
         //         let period = this.$store.getters.settings.approval_period;
         //         let submission_period = moment

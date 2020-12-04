@@ -420,7 +420,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/employees/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response);
         var data = response.data.data;
         _this.id = data.id;
         _this.full_name = data.full_name;

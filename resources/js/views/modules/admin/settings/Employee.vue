@@ -122,7 +122,6 @@ export default {
             axios
                 .get("/api/data/employees")
                 .then(response => {
-                    console.log(response);
                     _this.employees = response.data.data;
                 })
                 .catch(error => {
@@ -154,10 +153,6 @@ export default {
         },
         onSave() {
             let _this = this;
-
-            console.log(_this.allowed_expense_types);
-
-            // return;
 
             _this.$refs.form.validate();
 

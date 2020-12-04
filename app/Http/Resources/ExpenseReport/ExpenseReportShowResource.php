@@ -86,7 +86,7 @@ class ExpenseReportShowResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            // "expenses" => ExpenseShowResource::collection($this->whenLoaded('expenses')),
+            // "expenses" => ExpenseOnlyResource::collection($this->whenLoaded('expenses')),
             "payments" => PaymentOnlyResource::collection($this->whenLoaded('payments')),
             "employee" => new EmployeeOnlyResource($this->whenLoaded('employee'))
         ];

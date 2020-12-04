@@ -149,7 +149,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/settings").then(function (response) {
-        // console.log(response);
         _this.settings = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -169,8 +168,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/api/settings", {
         settings: _this.settings
       }).then(function (response) {
-        console.log(response);
-
         _this.mixin_successDialog("Success", "Saved settings successfully");
 
         _this.$store.dispatch("AUTH_USER");

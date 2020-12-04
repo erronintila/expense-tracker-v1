@@ -216,8 +216,6 @@ export default {
             axios
                 .get("/api/data/permissions")
                 .then(response => {
-                    console.log(response);
-
                     _this.permissions = response.data;
                 })
                 .catch(error => {

@@ -581,7 +581,6 @@ export default {
                         }
                     })
                     .then(response => {
-                        console.log(response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 

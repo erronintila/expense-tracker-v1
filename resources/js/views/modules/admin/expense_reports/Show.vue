@@ -641,7 +641,6 @@ export default {
         //             `/api/data/expenses?expense_report_id${this.$route.params.id}`
         //         )
         //         .then(response => {
-        //             console.log(response);
         //         })
         //         .catch(error => {
         //             console.log(error);
@@ -659,8 +658,6 @@ export default {
                 .get(`/api/expense_reports/${_this.$route.params.id}`)
                 .then(response => {
                     let data = response.data.data;
-
-                    console.log(data);
 
                     _this.form.code = data.code;
                     _this.form.reference_no = data.reference_no;
@@ -738,7 +735,6 @@ export default {
                         }
                     })
                     .then(response => {
-                        console.log(response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 

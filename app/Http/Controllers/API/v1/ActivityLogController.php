@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ActivityLogResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
@@ -47,7 +48,11 @@ class ActivityLogController extends Controller
         // }
 
         if (request()->has('start_date') && request()->has('end_date')) {
-            $activity_logs = $activity_logs->whereBetween("created_at", [$request->start_date, $request->end_date]);
+            $start_date = Carbon::parse($request->start_date)->startOfDay();
+
+            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            
+            $activity_logs = $activity_logs->whereBetween("created_at", [$start_date, $end_date]);
         }
 
         if (request()->has('user_id')) {

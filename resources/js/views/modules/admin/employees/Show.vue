@@ -402,8 +402,6 @@ export default {
             axios
                 .get(`/api/employees/${_this.$route.params.id}`)
                 .then(function(response) {
-                    console.log(response);
-
                     let data = response.data.data;
 
                     _this.id = data.id;

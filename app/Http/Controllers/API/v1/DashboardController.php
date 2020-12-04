@@ -551,11 +551,9 @@ class DashboardController extends Controller
 
     public function statistics(Request $request)
     {
-        $employee_id = 0;
-        $start_date = "2020-01-01";
-        $end_date = "2020-12-31";
-        $group_by = "";
-        $time_unit = "";
+        $employee_id = $request->employee_id ?? 0;
+        $start_date = $request->start_date ?? "2020-01-01";
+        $end_date = $request->end_date ?? "2020-12-31";
 
         $expenses = DB::table('expenses')
             ->join("employees", "employees.id", "=", "expenses.employee_id")
@@ -590,44 +588,105 @@ class DashboardController extends Controller
                 `expense_reports`.`submitted_at`,
                 `expense_reports`.`reviewed_at`,
                 `expense_reports`.`approved_at`,
-                (SELECT 
-                    SUM(`expenses`.`amount`) 
-                FROM
-                    `expenses` 
-                    JOIN `expense_reports` 
-                    ON `expense_reports`.`id` = `expenses`.`expense_report_id` 
-                WHERE `expense_reports`.`id` = `expense_reports`.`id`) AS expense_report_amount,
-                (SELECT 
+
+                
+                IFNULL((SELECT 
                     SUM(`expenses`.`amount`) 
                 FROM
                     `expenses` 
                     JOIN `expense_reports` er
                     ON `er`.`id` = `expenses`.`expense_report_id` 
-                WHERE `er`.`id` = `expense_reports`.`id`) - IFNULL(
+                WHERE `er`.`id` = `expense_reports`.`id` AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'
+                    ), 0) AS expense_report_amount,
+
+
+                IFNULL(
+                    (SELECT 
+                        SUM(
+                        `expense_report_payment`.`payment`
+                        ) 
+                    FROM
+                        `expense_reports` er 
+                        JOIN `expenses` 
+                    ON `expenses`.`expense_report_id` = `er`.`id`
+                        JOIN `expense_report_payment` 
+                        ON `expense_report_payment`.`expense_report_id` = `er`.`id` 
+                        JOIN `payments` 
+                        ON `payments`.`id` = `expense_report_payment`.`payment_id` 
+                    WHERE `er`.`id` = `expense_reports`.`id` AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
+                    0
+                    ) AS paid,
+
+
+                IFNULL(
+                    (SELECT 
+                        SUM(
+                        `expense_report_payment`.`payment`
+                        ) 
+                    FROM
+                        `expense_reports` er 
+                        JOIN `expenses` 
+                    ON `expenses`.`expense_report_id` = `er`.`id`
+                        JOIN `expense_report_payment` 
+                        ON `expense_report_payment`.`expense_report_id` = `er`.`id` 
+                        JOIN `payments` 
+                        ON `payments`.`id` = `expense_report_payment`.`payment_id` 
+                    WHERE `er`.`id` = `expense_reports`.`id` 
+                    AND `payments`.`received_at` IS NULL AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
+                    0
+                    ) AS unreceived,
+
+
+                IFNULL((SELECT 
+                    SUM(`expenses`.`amount`) 
+                FROM
+                    `expenses` 
+                    JOIN `expense_reports` er 
+                    ON `er`.`id` = `expenses`.`expense_report_id` 
+                WHERE `er`.`id` = `expense_reports`.`id` AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'), 0) - IFNULL(
                     (SELECT 
                     SUM(
                         `expense_report_payment`.`payment`
                     ) 
                     FROM
-                    `expense_reports` er
+                    `expense_reports` er 
+                    JOIN `expenses` 
+                    ON `expenses`.`expense_report_id` = `er`.`id`
                     JOIN `expense_report_payment` 
                         ON `expense_report_payment`.`expense_report_id` = `er`.`id` 
                     JOIN `payments` 
                         ON `payments`.`id` = `expense_report_payment`.`payment_id` 
                     WHERE `er`.`id` = `expense_reports`.`id` 
-                    AND `payments`.`received_at` IS NOT NULL),
+                    AND `payments`.`received_at` IS NOT NULL AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
                     0
-                ) AS balance  
-            "))->get();
+                ) AS balance 
+            "));
+
+        if ($employee_id) {
+            if ($request->employee_id > 0) {
+                $expenses = $expenses->where("employee_id", $request->employee_id);
+            }
+        }
+
+        $expenses = $expenses->get();
 
         $unreported = $expenses->where("expense_report_id", null);
-        $unsubmitted = $expenses->where("submitted_at", null)->where("approved_at", null);
-        $submitted = $expenses->where("submitted_at", "<>", null)->where("approved_at", null);
-        $approved = $expenses->where("submitted_at", "<>", null)->where("approved_at", "<>", null);
-        $unreceived = $expenses->where("submitted_at", "<>", null)->where("approved_at", "<>", null)->where("balance", ">", 0);
+        $unsubmitted = $expenses->where("expense_report_id", "<>", null)
+            ->where("submitted_at", null)
+            ->where("approved_at", null);
+        $submitted = $expenses->where("expense_report_id", "<>", null)
+            ->where("submitted_at", "<>", null)
+            ->where("approved_at", null);
+        $approved = $expenses->where("expense_report_id", "<>", null)
+            ->where("submitted_at", "<>", null)
+            ->where("approved_at", "<>", null);
+        $unreceived = $expenses->where("expense_report_id", "<>", null)
+            ->where("submitted_at", "<>", null)
+            ->where("approved_at", "<>", null)
+            ->where("balance", ">", 0);
 
         return response()->json([
-            // "data" => $expenses,
+            "data" => $expenses,
             "all" => [
                 "total_amount" => $approved->sum('amount'),
                 "total_count" => $approved->count()

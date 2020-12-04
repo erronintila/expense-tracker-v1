@@ -139,7 +139,6 @@ export default {
             axios
                 .get("/api/settings")
                 .then(response => {
-                    // console.log(response);
                     _this.settings = response.data;
                 })
                 .catch(error => {
@@ -166,8 +165,6 @@ export default {
                     settings: _this.settings
                 })
                 .then(response => {
-                    console.log(response);
-
                     _this.mixin_successDialog(
                         "Success",
                         "Saved settings successfully"

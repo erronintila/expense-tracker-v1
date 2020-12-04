@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -238,6 +240,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -300,7 +303,7 @@ __webpack_require__.r(__webpack_exports__);
     loadStatistics: function loadStatistics(start, end, employee_id) {
       var _this = this;
 
-      axios.get("/api/data/statistics?start_date=".concat(start, "&end_date=").concat(end, "&employee_id=").concat(employee_id)).then(function (response) {
+      axios.get("/api/data/statistics?start_date=".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()("2020-01-01").format("YYYY-MM-DD"), "&end_date=").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()("2020-12-31").format("YYYY-MM-DD"), "&employee_id=").concat(employee_id)).then(function (response) {
         console.log(response);
       })["catch"](function (error) {
         console.log(error);

@@ -795,7 +795,6 @@ __webpack_require__.r(__webpack_exports__);
       confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
     },
     loadSubTypes: function loadSubTypes(e) {
-      console.log(this.form.expense_type);
       this.form.sub_type = {
         id: null,
         name: "",

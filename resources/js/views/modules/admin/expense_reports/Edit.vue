@@ -50,7 +50,7 @@
                                 :items="employees"
                                 :error-messages="errors.employee"
                                 @input="errors.employee = []"
-                                @change="loadExpenses"
+                                @change="updateEmployee"
                                 item-value="id"
                                 item-text="full_name"
                                 label="Employee"
@@ -250,6 +250,16 @@
                                 item-key="id"
                                 class="elevation-0"
                             >
+                                <template v-slot:top>
+                                    <div v-if="selected.length > 0">
+                                        <div class="d-inline">
+                                            {{ selected.length }} Item(s) Selected
+                                        </div>
+                                        <v-btn @click="selected = []">
+                                            Clear All Selected
+                                        </v-btn>
+                                    </div>
+                                </template>
                                 <template
                                     v-slot:expanded-item="{ headers, item }"
                                 >
@@ -340,7 +350,11 @@
                                     <v-icon
                                         small
                                         class="mr-2"
-                                        @click="$router.push(`/admin/expenses/${item.id}`)"
+                                        @click="
+                                            $router.push(
+                                                `/admin/expenses/${item.id}`
+                                            )
+                                        "
                                     >
                                         mdi-eye
                                     </v-icon>
@@ -452,14 +466,18 @@ export default {
             this.date_range = e;
             this.loadExpenses(this.form.employee.id);
         },
+        updateEmployee() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
+        },
         getData() {
             let _this = this;
             axios
                 .get(`/api/expense_reports/${_this.$route.params.id}`)
                 .then(response => {
                     let data = response.data.data;
-
-                    console.log(data);
 
                     _this.form.code = data.code;
                     _this.form.description = data.description;
@@ -483,6 +501,12 @@ export default {
                     _this.getDataFromApi().then(data => {
                         _this.items = data.items;
                         _this.totalItems = data.total;
+
+                        let selected = data.items.filter(function(item) {
+                            return item.expense_report !== null;
+                        });
+
+                        _this.selected.splice(0, 0, ...selected);
                     });
 
                     // _this.selected.splice(0, 0, ...data.expenses);
@@ -521,21 +545,16 @@ export default {
                             end_date: range[1],
                             employee_id: employee_id,
                             expense_report_id: _this.$route.params.id,
-                            update_report: true,
+                            update_report: true
                         }
                     })
                     .then(response => {
-                        console.log(response);
+                        // _this.selected = [];
+
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
                         _this.loading = false;
-
-                        let selected = items.filter(function (item) {
-                            return item.expense_report !== null;
-                        });
-
-                        _this.selected.splice(0, 0, ...selected);
 
                         resolve({ items, total });
                     })

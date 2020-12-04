@@ -24,7 +24,7 @@ export default {
             axios
                 .get(`/api/users/${_this.$route.params.id}`)
                 .then(function(response) {
-                    console.log(response.data);
+                    // console.log(response.data);
                 })
                 .catch(function(error) {
                     console.log(error);

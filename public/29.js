@@ -31,8 +31,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response.data);
+      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {// console.log(response.data);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
