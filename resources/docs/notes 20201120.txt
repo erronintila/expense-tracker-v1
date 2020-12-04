@@ -41,6 +41,12 @@ payment method
 
 fix activity logs format
 
+add # items selected info and button for clearing selection
+
+fix created by, updated by, deleted by
+
+fix standard user modules
+
 
 ------------------------------------------------------------------------------------------
 DONE

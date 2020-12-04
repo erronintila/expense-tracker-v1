@@ -48,7 +48,7 @@
                                     label="Employee"
                                     v-model="employee"
                                     :items="employees"
-                                    item-text="fullname"
+                                    item-text="full_name"
                                     item-value="id"
                                     return-object
                                     @change="updateEmployee"
@@ -1003,7 +1003,7 @@ export default {
             ],
             items: [],
 
-            employee: { id: 0, fullname: "All Employees" },
+            employee: { id: 0, full_name: "All Employees" },
             employees: []
         };
     },
@@ -1018,7 +1018,7 @@ export default {
 
                     _this.employees.unshift({
                         id: 0,
-                        fullname: "All Employees"
+                        full_name: "All Employees"
                     });
                 })
                 .catch(error => {

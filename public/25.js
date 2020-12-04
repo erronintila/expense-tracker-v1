@@ -1012,7 +1012,7 @@ __webpack_require__.r(__webpack_exports__);
       items: [],
       employee: {
         id: 0,
-        fullname: "All Employees"
+        full_name: "All Employees"
       },
       employees: []
     };
@@ -1026,7 +1026,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.employees.unshift({
           id: 0,
-          fullname: "All Employees"
+          full_name: "All Employees"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -1620,7 +1620,7 @@ var render = function() {
                                     attrs: {
                                       label: "Employee",
                                       items: _vm.employees,
-                                      "item-text": "fullname",
+                                      "item-text": "full_name",
                                       "item-value": "id",
                                       "return-object": ""
                                     },
