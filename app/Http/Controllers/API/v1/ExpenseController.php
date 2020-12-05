@@ -436,12 +436,20 @@ class ExpenseController extends Controller
                     foreach ($request->ids as $id) {
                         $expense = Expense::withTrashed()->findOrFail($id);
 
+                        $expense->disableLogging();
+
                         $expense->restore();
+
+                        log_activity("expense", $expense, [ "code" => $expense->code, "restored_at" => $expense->updated_at], "restored expense record");
                     }
                 } else {
                     $expense = Expense::withTrashed()->findOrFail($id);
 
+                    $expense->disableLogging();
+
                     $expense->restore();
+
+                    log_activity("expense", $expense, [ "code" => $expense->code, "restored_at" => $expense->updated_at], "restored expense record");
                 }
 
                 break;
@@ -499,7 +507,11 @@ class ExpenseController extends Controller
 
                 $expense->updated_by = Auth::id();
 
+                $expense->disableLogging();
+
                 $expense->save();
+
+                log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "updated expense record");
 
                 break;
         }

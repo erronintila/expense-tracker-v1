@@ -15,7 +15,9 @@ use App\Http\Resources\SubType\SubTypeShowResource;
 use App\Http\Resources\Vendor\VendorOnlyResource;
 use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\VendorResource;
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\Activitylog\Models\Activity;
 
 class ExpenseShowResource extends JsonResource
 {
@@ -27,6 +29,19 @@ class ExpenseShowResource extends JsonResource
      */
     public function toArray($request)
     {
+        $activities = Activity::where("subject_type", "App\Models\Expense")->where("subject_id", $this->id)->orderBy("created_at", "DESC")->get();
+        $logs = [];
+        
+        foreach ($activities as $activity) {
+            $temp = [
+                "causer" => User::find($activity["causer_id"]),
+                "created_at" => $activity["created_at"],
+                "description" => $activity["description"],
+            ];
+
+            array_push($logs, $temp);
+        }
+
         return [
             // -------------------------------------------------------------------
             // Fields
@@ -55,6 +70,7 @@ class ExpenseShowResource extends JsonResource
             // Additional Fields
             // -------------------------------------------------------------------
             "status" => $this->status,
+            "logs" => $logs,
 
             // -------------------------------------------------------------------
             // Transaction Logs

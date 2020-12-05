@@ -18,6 +18,17 @@ if (!function_exists('generate_code')) {
     }
 }
 
+if (!function_exists('log_activity')) {
+    function log_activity($log_name, $model, $attributes, $action)
+    {
+        activity($log_name)
+            ->performedOn($model)
+            ->withProperties(['attributes' => $attributes])
+            ->log($action);
+    }
+}
+
+
 // if (!function_exists('validate_remaining_fund')) {
 
 //     function validate_remaining_fund()

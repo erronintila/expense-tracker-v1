@@ -304,6 +304,42 @@
                             </table>
                         </v-col>
                     </v-row>
+
+                    <v-row class="text--secondary text-caption">
+                        <v-col cols="12" md="12">
+                            <div>History :</div>
+                            <div>
+                                <table class="table" width="100%">
+                                    <tbody>
+                                        <tr
+                                            v-for="item in form.logs"
+                                            :key="item.id"
+                                        >
+                                            <td>
+                                                {{
+                                                    mixin_formatDate(
+                                                        item.created_at,
+                                                        "YYYY-MM-DD HH:mm:ss"
+                                                    )
+                                                }}
+                                            </td>
+                                            <td> - </td>
+                                            <td>
+                                                {{
+                                                    item.causer == null
+                                                        ? "System"
+                                                        : item.causer.name
+                                                }}
+                                            </td>
+                                            <td> - </td>
+                                            <td>{{ item.description }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </v-col>
+                    </v-row>
+                    
                 </v-container>
             </v-form>
         </v-card>
@@ -378,14 +414,23 @@ export default {
                 tax_amount: 0,
                 status: { color: "", remarks: "", status: "" },
 
-                created: { created_at: null, created_by: { name: "" } },
-                updated: { updated_at: null, updated_by: { name: "" } },
-                deleted: { deleted_at: null, deleted_by: { name: "" } },
-                submitted: { submitted_at: null, submitted_by: { name: "" } },
-                reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
-                approved: { approved_at: null, approved_by: { name: "" } },
-                rejected: { rejected_at: null, rejected_by: { name: "" } },
-                cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+                // created: { created_at: null, created_by: { name: "" } },
+                // updated: { updated_at: null, updated_by: { name: "" } },
+                // deleted: { deleted_at: null, deleted_by: { name: "" } },
+                // submitted: { submitted_at: null, submitted_by: { name: "" } },
+                // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+                // approved: { approved_at: null, approved_by: { name: "" } },
+                // rejected: { rejected_at: null, rejected_by: { name: "" } },
+                // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+
+                created_at: null,
+                updated_at: null,
+                deleted_at: null,
+                submitted_at: null,
+                reviewed_at: null,
+                approved_at: null,
+                rejected_at: null,
+                cancelled_at: null,
 
                 logs: []
             }
@@ -400,6 +445,8 @@ export default {
                     .get("/api/expenses/" + _this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
+
+                        console.log(data);
 
                         _this.form.code = data.code;
                         _this.form.description = data.description;
@@ -461,13 +508,13 @@ export default {
                         _this.form.employee.remaining_fund +=
                             data.amount - data.reimbursable_amount;
 
-                        _this.form.created = data.created;
-                        _this.form.updated = data.updated;
-                        _this.form.deleted = data.deleted;
-                        _this.form.submitted = data.submitted;
-                        _this.form.approved = data.approved;
-                        _this.form.rejected = data.rejected;
-                        _this.form.cancelled = data.cancelled;
+                        _this.form.created_at = data.created_at;
+                        _this.form.updated_at = data.updated_at;
+                        _this.form.deleted_at = data.deleted_at;
+                        _this.form.submitted_at = data.expense_report.submitted_at;
+                        _this.form.approved_at = data.expense_report.approved_at;
+                        _this.form.rejected_at = data.expense_report.rejected_at;
+                        _this.form.cancelled_at = data.expense_report.cancelled_at;
 
                         _this.form.logs = data.logs;
 

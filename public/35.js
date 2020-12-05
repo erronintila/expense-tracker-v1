@@ -13,6 +13,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jspdf */ "./node_modules/jspdf/dist/jspdf.es.min.js");
+/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jspdf-autotable */ "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js");
+/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -384,207 +387,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -660,59 +464,122 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: null
         },
         expenses: [],
-        created: {
-          created_at: null,
-          created_by: {
-            name: ""
-          }
-        },
-        updated: {
-          updated_at: null,
-          updated_by: {
-            name: ""
-          }
-        },
-        deleted: {
-          deleted_at: null,
-          deleted_by: {
-            name: ""
-          }
-        },
-        submitted: {
-          submitted_at: null,
-          submitted_by: {
-            name: ""
-          }
-        },
-        reviewed: {
-          reviewed_at: null,
-          reviewed_by: {
-            name: ""
-          }
-        },
-        approved: {
-          approved_at: null,
-          approved_by: {
-            name: ""
-          }
-        },
-        rejected: {
-          rejected_at: null,
-          rejected_by: {
-            name: ""
-          }
-        },
-        cancelled: {
-          cancelled_at: null,
-          cancelled_by: {
-            name: ""
-          }
-        },
+        // created: { created_at: null, created_by: { name: "" } },
+        // updated: { updated_at: null, updated_by: { name: "" } },
+        // deleted: { deleted_at: null, deleted_by: { name: "" } },
+        // submitted: { submitted_at: null, submitted_by: { name: "" } },
+        // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+        // approved: { approved_at: null, approved_by: { name: "" } },
+        // rejected: { rejected_at: null, rejected_by: { name: "" } },
+        // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+        created_at: null,
+        updated_at: null,
+        deleted_at: null,
+        submitted_at: null,
+        reviewed_at: null,
+        approved_at: null,
+        rejected_at: null,
+        cancelled_at: null,
         logs: []
       }
     };
   },
   methods: {
+    generatePDF: function generatePDF(action) {
+      // var source = this.$refs["myTable"];
+      var pdfName = "Expense Report";
+      var columns = ["Date", "Type", "Receipt", "Vendor", "Amount"];
+      var rows = [];
+      var footer = [];
+      this.form.expenses.forEach(function (element) {
+        var temp = [];
+        temp.push(element.date);
+        temp.push(element.expense_type.name);
+        temp.push(element.receipt_number);
+        temp.push(element.vendor.name);
+        temp.push(element.amount);
+        rows.push(temp);
+      }); // footer = [
+      //     "Total",
+      //     this.column_headers.delivery_expense,
+      //     this.column_headers["gas_&_oil"],
+      //     this.column_headers["meal_&_lodging"],
+      //     this.column_headers.miscellaneous,
+      //     this.column_headers["postage,_telephone_&_fax"],
+      //     this.column_headers["repairs_&_maintenance"],
+      //     this.column_headers.representation,
+      //     this.column_headers.supplies,
+      //     this.column_headers.transportation,
+      //     this.column_headers.total
+      // ];
+      // rows.push(footer);
+      // basic config
+
+      var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
+        orientation: "portrait",
+        unit: "in",
+        format: action == "print" ? "letter" : [13, 8.5]
+      }); // header details
+
+      doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(this.form.employee.full_name), 0.5, 0.7);
+      doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(this.form.code), 0.5, 0.7);
+      doc.setFontSize(20).setTextColor(76, 175, 10).text("PHP ".concat(this.mixin_formatNumber(this.form.total)), 0.5, 1.0);
+      doc.setFontSize(11).setTextColor(0, 0, 0).text("Period: ".concat(this.form.from, " ~ ").concat(this.form.to), 0.5, 1.2);
+      doc.setLineWidth(0.01);
+      doc.line(0.5, 1.35, 8.0, 1.35);
+      doc.setFontSize(11).setTextColor(0, 0, 0).text("Description: ".concat(this.form.description), 0.5, 1.6); // doc.setFontSize(14)
+      //     .setTextColor(76, 175, 10)
+      //     .text("Expense Report", 0.5, 1.0);
+      // doc.setFontSize(14)
+      //     .setTextColor(76, 175, 10)
+      //     .text(
+      //         "",
+      //         doc.internal.pageSize.width - 0.5,
+      //         0.7,
+      //         { align: "right" }
+      //     );
+      // doc.setFontSize(11)
+      //     .setTextColor(0, 0, 0)
+      //     .text(
+      //         this.form.status.status,
+      //         doc.internal.pageSize.width - 0.5,
+      //         1.0,
+      //         { align: "right" }
+      //     );
+      // table config
+      // doc.autoTable({
+      //     columns: columns,
+      //     body: rows,
+      //     margin: { left: 0.5, top: 1.6 },
+      //     showHead: "everyPage",
+      //     headStyles: { halign: "center", fillColor: [76, 175, 10] }
+      // });
+      // let finalY = doc.lastAutoTable.finalY; // The y position on the page
+      // doc.setFontSize(12)
+      //     .setTextColor(76, 175, 10)
+      //     .text("Grand Total", 0.6, finalY + 0.2);
+      // doc.setFontSize(12)
+      //     .setTextColor(76, 175, 10)
+      //     .text(`${0}`, doc.internal.pageSize.width - 0.7, finalY + 0.2, {
+      //         align: "right"
+      //     });
+      // footer
+
+      doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker", 0.5, doc.internal.pageSize.height - 0.5); // doc.setFontSize(8)
+      //     .setTextColor(0, 0, 0)
+      //     .text(
+      //         `Page ${0} / ${doc.internal.getNumberOfPages()}`,
+      //         doc.internal.pageSize.width - 1,
+      //         doc.internal.pageSize.height - 0.5
+      //     );
+
+      if (action == "print") {
+        doc.autoPrint();
+        doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
+      } else {
+        doc.save("".concat(pdfName, ".pdf"));
+      }
+    },
     // loadExpenses() {
     //     axios
     //         .get(
@@ -752,14 +619,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.form.balance = data.balance;
         _this.form.employee = data.employee;
         _this.form.payment = data.payment; // _this.form.expenses = data.expenses;
+        // _this.form.created = data.created;
+        // _this.form.updated = data.updated;
+        // _this.form.deleted = data.deleted;
+        // _this.form.submitted = data.submitted;
+        // _this.form.approved = data.approved;
+        // _this.form.rejected = data.rejected;
+        // _this.form.cancelled = data.cancelled;
 
-        _this.form.created = data.created;
-        _this.form.updated = data.updated;
-        _this.form.deleted = data.deleted;
-        _this.form.submitted = data.submitted;
-        _this.form.approved = data.approved;
-        _this.form.rejected = data.rejected;
-        _this.form.cancelled = data.cancelled;
+        _this.form.created_at = data.created_at;
+        _this.form.updated_at = data.updated_at;
+        _this.form.deleted_at = data.deleted_at;
+        _this.form.submitted_at = data.submitted_at;
+        _this.form.approved_at = data.approved_at;
+        _this.form.rejected_at = data.rejected_at;
+        _this.form.cancelled_at = data.cancelled_at;
         _this.form.logs = data.logs; // _this.loadExpenses();
 
         _this.getDataFromApi().then(function (data) {
@@ -1464,6 +1338,22 @@ var render = function() {
                                 _c(
                                   "v-btn",
                                   {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.generatePDF("print")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Print\n                            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
                                     attrs: {
                                       color: "green",
                                       dark: "",
@@ -1510,181 +1400,7 @@ var render = function() {
                         "v-row",
                         { staticClass: "text--secondary text-caption" },
                         [
-                          _c("v-col", { attrs: { cols: "12", md: "5" } }, [
-                            _c("div", [_vm._v("Other Details :")]),
-                            _vm._v(" "),
-                            _c(
-                              "table",
-                              {
-                                staticClass: "table",
-                                attrs: { width: "100%" }
-                              },
-                              [
-                                _c("tbody", [
-                                  _vm.form.created
-                                    ? _c("tr", [
-                                        _c("td", [_vm._v("Created By")]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v(":")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.form.created.created_by.name
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  _vm.form.created.created_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ])
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.form.submitted
-                                    ? _c("tr", [
-                                        _c("td", [_vm._v("Submitted By")]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v(":")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.form.submitted.submitted_by
-                                                  .name
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  _vm.form.submitted
-                                                    .submitted_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ])
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.form.approved
-                                    ? _c("tr", [
-                                        _c("td", [_vm._v("Approved By")]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v(":")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.form.approved.approved_by
-                                                  .name
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  _vm.form.approved.approved_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ])
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.form.rejected
-                                    ? _c("tr", [
-                                        _c("td", [_vm._v("Rejected By")]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v(":")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.form.rejected.rejected_by
-                                                  .name
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  _vm.form.rejected.rejected_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ])
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.form.deleted
-                                    ? _c("tr", [
-                                        _c("td", [_vm._v("Cancelled By")]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v(":")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.form.deleted.deleted_by.name
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  _vm.form.deleted.deleted_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ])
-                                      ])
-                                    : _vm._e()
-                                ])
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("v-col", { attrs: { cols: "12", md: "7" } }, [
+                          _c("v-col", { attrs: { cols: "12", md: "12" } }, [
                             _c("div", [_vm._v("History :")]),
                             _vm._v(" "),
                             _c("div", [
@@ -1712,6 +1428,8 @@ var render = function() {
                                           )
                                         ]),
                                         _vm._v(" "),
+                                        _c("td", [_vm._v("-")]),
+                                        _vm._v(" "),
                                         _c("td", [
                                           _vm._v(
                                             "\n                                            " +
@@ -1723,6 +1441,8 @@ var render = function() {
                                               "\n                                        "
                                           )
                                         ]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v("-")]),
                                         _vm._v(" "),
                                         _c("td", [
                                           _vm._v(_vm._s(item.description))

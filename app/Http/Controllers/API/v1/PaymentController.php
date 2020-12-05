@@ -271,6 +271,8 @@ class PaymentController extends Controller
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
 
                 $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
+
+                log_activity("expense_report", $expense_report, [ "code" => $expense_report->code, "updated_at" => now()], "expense report associated with payment #{$payment->code}");
             }
             
             $payment->expense_reports()->sync($arr);
@@ -457,6 +459,14 @@ class PaymentController extends Controller
         
                     foreach ($request->expense_reports as $item) {
                         $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
+
+                        $exists = $expense_report->payments->contains($payment->id);
+
+                        if($exists) {
+                            log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "updated expense report association with payment #{$payment->code}");
+                        } else {
+                            log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "expense report associated with payment #{$payment->code}");
+                        }
         
                         $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
                     }
@@ -487,27 +497,25 @@ class PaymentController extends Controller
             foreach ($request->ids as $id) {
                 $payment = Payment::withTrashed()->findOrFail($id);
 
+                foreach ($payment->expense_reports as $expense_report) {
+
+                    log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "removed expense report association with payment #{$payment->code}");
+                }
+
                 $payment->delete();
-
-                // foreach ($payment->expense_reports as $expense_report) {
-                //     $expense_report->payment_id = null;
-
-                //     $expense_report->save();
-                // }
 
                 $payment->expense_reports()->sync([]);
             }
         } else {
             $payment = Payment::withTrashed()->findOrFail($id);
 
+            foreach ($payment->expense_reports as $expense_report) {
+
+                log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "removed expense report association with payment #{$payment->code}");
+            }
+
             $payment->delete();
-
-            // foreach ($payment->expense_reports as $expense_report) {
-            //     $expense_report->payment_id = null;
-
-            //     $expense_report->save();
-            // }
-
+            
             $payment->expense_reports()->sync([]);
         }
 

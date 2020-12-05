@@ -323,6 +323,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -412,54 +448,22 @@ __webpack_require__.r(__webpack_exports__);
           remarks: "",
           status: ""
         },
-        created: {
-          created_at: null,
-          created_by: {
-            name: ""
-          }
-        },
-        updated: {
-          updated_at: null,
-          updated_by: {
-            name: ""
-          }
-        },
-        deleted: {
-          deleted_at: null,
-          deleted_by: {
-            name: ""
-          }
-        },
-        submitted: {
-          submitted_at: null,
-          submitted_by: {
-            name: ""
-          }
-        },
-        reviewed: {
-          reviewed_at: null,
-          reviewed_by: {
-            name: ""
-          }
-        },
-        approved: {
-          approved_at: null,
-          approved_by: {
-            name: ""
-          }
-        },
-        rejected: {
-          rejected_at: null,
-          rejected_by: {
-            name: ""
-          }
-        },
-        cancelled: {
-          cancelled_at: null,
-          cancelled_by: {
-            name: ""
-          }
-        },
+        // created: { created_at: null, created_by: { name: "" } },
+        // updated: { updated_at: null, updated_by: { name: "" } },
+        // deleted: { deleted_at: null, deleted_by: { name: "" } },
+        // submitted: { submitted_at: null, submitted_by: { name: "" } },
+        // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+        // approved: { approved_at: null, approved_by: { name: "" } },
+        // rejected: { rejected_at: null, rejected_by: { name: "" } },
+        // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+        created_at: null,
+        updated_at: null,
+        deleted_at: null,
+        submitted_at: null,
+        reviewed_at: null,
+        approved_at: null,
+        rejected_at: null,
+        cancelled_at: null,
         logs: []
       }
     };
@@ -471,6 +475,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
+        console.log(data);
         _this.form.code = data.code;
         _this.form.description = data.description;
         _this.form.receipt_number = data.receipt_number;
@@ -524,13 +529,13 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
         _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
-        _this.form.created = data.created;
-        _this.form.updated = data.updated;
-        _this.form.deleted = data.deleted;
-        _this.form.submitted = data.submitted;
-        _this.form.approved = data.approved;
-        _this.form.rejected = data.rejected;
-        _this.form.cancelled = data.cancelled;
+        _this.form.created_at = data.created_at;
+        _this.form.updated_at = data.updated_at;
+        _this.form.deleted_at = data.deleted_at;
+        _this.form.submitted_at = data.expense_report.submitted_at;
+        _this.form.approved_at = data.expense_report.approved_at;
+        _this.form.rejected_at = data.expense_report.rejected_at;
+        _this.form.cancelled_at = data.expense_report.cancelled_at;
         _this.form.logs = data.logs;
         _this.loader = false;
       })["catch"](function (error) {
@@ -1290,6 +1295,69 @@ var render = function() {
                                 ])
                               ]
                             )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        { staticClass: "text--secondary text-caption" },
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "12" } }, [
+                            _c("div", [_vm._v("History :")]),
+                            _vm._v(" "),
+                            _c("div", [
+                              _c(
+                                "table",
+                                {
+                                  staticClass: "table",
+                                  attrs: { width: "100%" }
+                                },
+                                [
+                                  _c(
+                                    "tbody",
+                                    _vm._l(_vm.form.logs, function(item) {
+                                      return _c("tr", { key: item.id }, [
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  item.created_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v(" - ")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(
+                                                item.causer == null
+                                                  ? "System"
+                                                  : item.causer.name
+                                              ) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v(" - ")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(item.description))
+                                        ])
+                                      ])
+                                    }),
+                                    0
+                                  )
+                                ]
+                              )
+                            ])
                           ])
                         ],
                         1

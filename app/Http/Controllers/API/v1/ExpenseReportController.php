@@ -183,10 +183,10 @@ class ExpenseReportController extends Controller
             }
         }
 
-        if(request()->has("payment_id")) {
+        if (request()->has("payment_id")) {
             $payment_id = $request->payment_id;
 
-            $expense_reports = $expense_reports->whereHas("payments", function($query) use ($payment_id){
+            $expense_reports = $expense_reports->whereHas("payments", function ($query) use ($payment_id) {
                 $query->where("payments.id", $payment_id);
             });
         }
@@ -269,7 +269,11 @@ class ExpenseReportController extends Controller
 
             $expense->expense_report_id = $expense_report->id;
 
+            $expense->disableLogging();
+
             $expense->save();
+
+            log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "expense associated with expense report #{$expense_report->code}");
         }
 
         return response(
@@ -303,7 +307,7 @@ class ExpenseReportController extends Controller
             //         $query->withTrashed();
             //     }]);
             // }])
-            ->with(['payments' => function($query) {
+            ->with(['payments' => function ($query) {
                 $query->withTrashed();
             }])
             ->findOrFail($id);
@@ -523,7 +527,11 @@ class ExpenseReportController extends Controller
 
                         $new_expense->expense_report_id = $new_report->id;
 
+                        $new_expense->disableLogging();
+
                         $new_expense->save();
+
+                        log_activity("expense", $new_expense, [ "code" => $new_expense->code, "updated_at" => $new_expense->updated_at], "duplicated expense");
                     }
                 }
 
@@ -600,6 +608,8 @@ class ExpenseReportController extends Controller
 
                     $expense->deleted_at = now();
 
+                    $expense->disableLogging();
+
                     $expense->save();
                 }
 
@@ -610,7 +620,11 @@ class ExpenseReportController extends Controller
 
                     $expense->deleted_at = null;
 
+                    $expense->disableLogging();
+
                     $expense->save();
+
+                    log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "updated expense association with expense report #{$expense_report->code}");
                 }
 
                 $message = "Expense Report updated successfully";
@@ -789,7 +803,8 @@ class ExpenseReportController extends Controller
             $value = $expense_report->cancelled_at;
         }
 
-        activity()
+        activity("expense_report")
+            ->causedBy(Auth::user())
             ->performedOn($expense_report)
             ->withProperties(['attributes' => ["code" => $expense_report->code, $key => $value]])
             ->log($action . ' expense report');
@@ -803,7 +818,7 @@ class ExpenseReportController extends Controller
      */
     public function getExpenseReports(Request $request)
     {
-        if(request()->has('edit_report')) {
+        if (request()->has('edit_report')) {
             $expense_report = ExpenseReport::withTrashed()
             ->with(['employee' => function ($query) {
                 $query->withTrashed();
@@ -820,23 +835,23 @@ class ExpenseReportController extends Controller
             // ->with('payments')
             ->findOrFail($request->id);
 
-        return response(
-            [
+            return response(
+                [
                 'data' => new ExpenseReportResource($expense_report),
 
                 'message' => 'Retrieved successfully'
             ],
-            200
-        );
+                200
+            );
         }
 
-        $expense_reports = ExpenseReport::with(['expenses' => function($query) {
+        $expense_reports = ExpenseReport::with(['expenses' => function ($query) {
             $query->withTrashed();
-            $query->with(['expense_type' => function($query2) {
+            $query->with(['expense_type' => function ($query2) {
                 $query2->withTrashed();
             }]);
         }])
-        ->with(['employee' => function($query) {
+        ->with(['employee' => function ($query) {
             $query->withTrashed();
         }])
         ->orderBy("created_at");
