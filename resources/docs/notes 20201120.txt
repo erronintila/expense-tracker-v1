@@ -7,15 +7,15 @@ deleting parent with active child records
 add note when rejecting or cancelling or just add note for admin
 add restore in expenses without report when deleted
 autorefresh remaining fund info on sidebar
-activity log expense  - 17 Oct 2020 11:09 AM		Associated with the report titled 'sample' - erronintila.twincirc
+
 expense cant be cancelled even if no report
-add logging when payment is applied to a report
+
 expense report can be edited
 
 Travel
 From, To
 
-SLOW PERFORMANCE/ SLOW RETRIEVAL OF DATA ON RESOURCE COLLECTION WITH RESOURCE COLLECTION
+
 
 history payments on show
 
@@ -24,6 +24,8 @@ other datails payments on show
 error dashboard on selecting first the category then employee
 
 error dashboard awaiting reimbursement if partial payment
+
+lag in dashboard data retrieval
 
 add summary of statuses on expenses and expense reports
 
@@ -53,9 +55,9 @@ DONE
 ------------------------------------------------------------------------------------------
 change status of approved expense when there is unreceived payment
 activity logs error
-
-
-
+add logging when payment is applied to a report
+activity log expense  - 17 Oct 2020 11:09 AM		Associated with the report titled 'sample' - erronintila.twincirc
+SLOW PERFORMANCE/ SLOW RETRIEVAL OF DATA ON RESOURCE COLLECTION WITH RESOURCE COLLECTION
 
 
 ------------------------------------------------------------------------------------------
