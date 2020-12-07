@@ -266,18 +266,7 @@
 
                         <v-col cols="12" md="4">
                             <div class="text-right">
-                                <v-btn
-                                    @click="generateReport('print')"
-                                    color="green"
-                                    dark
-                                >
-                                    Test
-                                </v-btn>
-                                <v-btn
-                                    @click="generatePDF('print')"
-                                    color="green"
-                                    dark
-                                >
+                                <v-btn @click="generatePDF('print')">
                                     Print
                                 </v-btn>
                                 <!-- <v-btn
@@ -492,7 +481,7 @@ export default {
                 // table_rows.push(table_footer);
 
                 // basic config
-                let doc = new jsPDF({
+                var doc = new jsPDF({
                     orientation: "portrait",
                     unit: "in",
                     format: action == "print" ? "letter" : [13, 8.5]
@@ -553,7 +542,7 @@ export default {
                     startY: 1.8,
                     showHead: "everyPage",
                     headStyles: { halign: "center", fillColor: [76, 175, 10] },
-                    columnStyles: { 4: { halign: "right" } }
+                    columnStyles: { 4: { halign: "right" } },
                     // didParseCell: function(data) {
                     //     var rows = data.table.body;
                     //     if (data.row.index === rows.length - 1) {
@@ -565,22 +554,13 @@ export default {
                 doc.autoTable({
                     body: [
                         ["No. of Expenses", data.items.length],
-                        [
-                            "Total Expenses Amount",
-                            this.mixin_formatNumber(this.form.total)
-                        ],
-                        [
-                            "Paid Amount",
-                            this.mixin_formatNumber(this.form.paid)
-                        ],
-                        [
-                            "Amount to be reimbursed",
-                            this.mixin_formatNumber(this.form.balance)
-                        ]
+                        ["Total Expenses Amount", this.mixin_formatNumber(this.form.total)],
+                        ["Paid Amount", this.mixin_formatNumber(this.form.paid)],
+                        ["Amount to be reimbursed", this.mixin_formatNumber(this.form.balance)],
                     ],
                     margin: { left: 0.5 },
                     columnStyles: { 1: { halign: "right" } },
-                    theme: "plain"
+                    theme: 'plain'
                 });
                 // end of 6th row
 
@@ -588,9 +568,7 @@ export default {
                 doc.setFontSize(8)
                     .setTextColor(0, 0, 0)
                     .text(
-                        `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
-                            "YYYY-MM-DD HH:mm:ss"
-                        )}`,
+                        `Generated from Twin-Circa Marketing Expense Tracker ${moment().format("YYYY-MM-DD HH:mm:ss")}`,
                         0.5,
                         doc.internal.pageSize.height - 0.5
                     );
@@ -601,202 +579,17 @@ export default {
                 const pageWidth = doc.internal.pageSize.width; //Optional
                 const pageHeight = doc.internal.pageSize.height; //Optional
                 doc.setFontSize(8); //Optional
-                for (let j = 1; j < pages + 1; j++) {
-                    let horizontalPos = pageWidth - 0.5; //Can be fixed number
-                    let verticalPos = pageHeight - 0.5; //Can be fixed number
+                for (let j = 1; j < pages + 1 ; j++) {
+                    let horizontalPos = pageWidth - 0.5;  //Can be fixed number
+                    let verticalPos = pageHeight - 0.5;  //Can be fixed number
                     doc.setPage(j);
-                    doc.text(
-                        `Page ${j} of ${pages}`,
-                        horizontalPos,
-                        verticalPos,
-                        { align: "right" }
-                    ); //Optional text styling});
+                    doc.text(`Page ${j} of ${pages}`, horizontalPos, verticalPos, {align: 'right'});  //Optional text styling});
                 }
                 // end of page number
 
                 // print or export record
                 if (action == "print") {
                     doc.autoPrint();
-                    doc.output("dataurlnewwindow");
-                    // doc.autoPrint({ variant: "non-conform" });
-                } else {
-                    doc.save(`${pdfName}.pdf`);
-                }
-                //end of print or export record
-            });
-        },
-        generateReport(action) {
-            this.loadExpenses().then(data => {
-                // var source = this.$refs["myTable"];
-                let pdfName = "Expense Summary Report";
-                let table_columns = [
-                    "Date",
-                    "Particulars",
-                    "Delivery Expense",
-                    "Gas & Oil",
-                    "Meal & Lodging",
-                    "Postage, Telephone, & Fax",
-                    "Repairs & Maintenance",
-                    "Representation",
-                    "Supplies",
-                    "Transportation",
-                    "Miscellaneous",
-                    "Total"
-                ];
-                let table_rows = [];
-                let table_footer = [];
-
-                // data.items.forEach(element => {
-                //     let temp = [];
-
-                //     temp.push(element.date);
-                //     temp.push(element.expense_type.name);
-                //     temp.push(element.receipt_number);
-                //     temp.push(element.vendor.name);
-                //     temp.push(this.mixin_formatNumber(element.amount));
-
-                //     table_rows.push(temp);
-                // });
-
-                // table_footer = [
-                //     "Total",
-                //     "",
-                //     "",
-                //     "",
-                //     this.mixin_formatNumber(this.form.total)
-                // ];
-                // table_rows.push(table_footer);
-
-                // basic config
-                let doc = new jsPDF({
-                    orientation: "landscape",
-                    unit: "in",
-                    format: [13, 8.5]
-                });
-
-                // header details
-
-                // 1st row
-                doc.setFontSize(14)
-                    .setTextColor(0, 0, 0)
-                    .text("Expense Summary Report", 6.75, 0.7, "center");
-
-                // end of 1st row
-
-                doc.autoTable({
-                    styles: { fontSize: 10 },
-                    columns: table_columns,
-                    body: [
-                        [
-                            "Total",
-                            "Polomolok to Davao",
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0
-                        ]
-                    ],
-                    showHead: "everyPage",
-                    headStyles: { halign: "center", fillColor: [76, 175, 10] },
-                    startY: 0.9,
-                    margin: { left: 0.5 },
-                    columnStyles: { 1: { halign: "right" } }
-                });
-                // end of 6th row
-
-                //
-                doc.setFontSize(10)
-                    .setTextColor(0, 0, 0)
-                    .text("Submitted by", 0.5, doc.lastAutoTable.finalY + 0.4);
-
-                doc.setLineWidth(0.01);
-                doc.line(
-                    0.5,
-                    doc.lastAutoTable.finalY + 0.8,
-                    3.0,
-                    doc.lastAutoTable.finalY + 0.8
-                );
-
-                doc.setFontSize(10)
-                    .setTextColor(0, 0, 0)
-                    .text(
-                        "Recommended by",
-                        3.5,
-                        doc.lastAutoTable.finalY + 0.4
-                    );
-
-                doc.setLineWidth(0.01);
-                doc.line(
-                    3.5,
-                    doc.lastAutoTable.finalY + 0.8,
-                    6.0,
-                    doc.lastAutoTable.finalY + 0.8
-                );
-
-                doc.setFontSize(10)
-                    .setTextColor(0, 0, 0)
-                    .text("Checked by", 6.5, doc.lastAutoTable.finalY + 0.4);
-
-                doc.setLineWidth(0.01);
-                doc.line(
-                    6.5,
-                    doc.lastAutoTable.finalY + 0.8,
-                    9.0,
-                    doc.lastAutoTable.finalY + 0.8
-                );
-
-                doc.setFontSize(10)
-                    .setTextColor(0, 0, 0)
-                    .text("Approved by", 9.5, doc.lastAutoTable.finalY + 0.4);
-
-                doc.setLineWidth(0.01);
-                doc.line(
-                    9.5,
-                    doc.lastAutoTable.finalY + 0.8,
-                    12.0,
-                    doc.lastAutoTable.finalY + 0.8
-                );
-                //
-
-                // page footer
-                doc.setFontSize(8)
-                    .setTextColor(0, 0, 0)
-                    .text(
-                        `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
-                            "YYYY-MM-DD HH:mm:ss"
-                        )}`,
-                        0.5,
-                        doc.internal.pageSize.height - 0.5
-                    );
-                // end of page footer
-
-                // page number
-                const pages = doc.internal.getNumberOfPages();
-                const pageWidth = doc.internal.pageSize.width; //Optional
-                const pageHeight = doc.internal.pageSize.height; //Optional
-                doc.setFontSize(8); //Optional
-                for (let j = 1; j < pages + 1; j++) {
-                    let horizontalPos = pageWidth - 0.5; //Can be fixed number
-                    let verticalPos = pageHeight - 0.5; //Can be fixed number
-                    doc.setPage(j);
-                    doc.text(
-                        `Page ${j} of ${pages}`,
-                        horizontalPos,
-                        verticalPos,
-                        { align: "right" }
-                    ); //Optional text styling});
-                }
-                // end of page number
-
-                // print or export record
-                if (action == "print") {
-                    // doc.autoPrint();
                     doc.output("dataurlnewwindow");
                     // doc.autoPrint({ variant: "non-conform" });
                 } else {

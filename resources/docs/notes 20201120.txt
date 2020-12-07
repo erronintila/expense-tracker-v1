@@ -8,6 +8,10 @@ add note when rejecting or cancelling or just add note for admin
 add restore in expenses without report when deleted
 autorefresh remaining fund info on sidebar
 
+LAG IN EMPLOYEE SETTINGS
+
+LAG IN EXPENSE REPORTS
+
 expense cant be cancelled even if no report
 
 expense report can be edited

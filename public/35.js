@@ -387,6 +387,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -571,7 +582,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               halign: "right"
             }
           },
-          theme: 'plain'
+          theme: "plain"
         }); // end of 6th row
         // page footer
 
@@ -592,7 +603,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           doc.setPage(j);
           doc.text("Page ".concat(j, " of ").concat(pages), horizontalPos, verticalPos, {
-            align: 'right'
+            align: "right"
           }); //Optional text styling});
         } // end of page number
         // print or export record
@@ -600,6 +611,109 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         if (action == "print") {
           doc.autoPrint();
+          doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
+        } else {
+          doc.save("".concat(pdfName, ".pdf"));
+        } //end of print or export record
+
+      });
+    },
+    generateReport: function generateReport(action) {
+      this.loadExpenses().then(function (data) {
+        // var source = this.$refs["myTable"];
+        var pdfName = "Expense Summary Report";
+        var table_columns = ["Date", "Particulars", "Delivery Expense", "Gas & Oil", "Meal & Lodging", "Postage, Telephone, & Fax", "Repairs & Maintenance", "Representation", "Supplies", "Transportation", "Miscellaneous", "Total"];
+        var table_rows = [];
+        var table_footer = []; // data.items.forEach(element => {
+        //     let temp = [];
+        //     temp.push(element.date);
+        //     temp.push(element.expense_type.name);
+        //     temp.push(element.receipt_number);
+        //     temp.push(element.vendor.name);
+        //     temp.push(this.mixin_formatNumber(element.amount));
+        //     table_rows.push(temp);
+        // });
+        // table_footer = [
+        //     "Total",
+        //     "",
+        //     "",
+        //     "",
+        //     this.mixin_formatNumber(this.form.total)
+        // ];
+        // table_rows.push(table_footer);
+        // basic config
+
+        var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
+          orientation: "landscape",
+          unit: "in",
+          format: [13, 8.5]
+        }); // header details
+        // 1st row
+
+        doc.setFontSize(14).setTextColor(0, 0, 0).text("Expense Summary Report", 6.75, 0.7, "center"); // end of 1st row
+
+        doc.autoTable({
+          styles: {
+            fontSize: 10
+          },
+          columns: table_columns,
+          body: [["Total", "Polomolok to Davao", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+          showHead: "everyPage",
+          headStyles: {
+            halign: "center",
+            fillColor: [76, 175, 10]
+          },
+          startY: 0.9,
+          margin: {
+            left: 0.5
+          },
+          columnStyles: {
+            1: {
+              halign: "right"
+            }
+          }
+        }); // end of 6th row
+        //
+
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Submitted by", 0.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(0.5, doc.lastAutoTable.finalY + 0.8, 3.0, doc.lastAutoTable.finalY + 0.8);
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Recommended by", 3.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(3.5, doc.lastAutoTable.finalY + 0.8, 6.0, doc.lastAutoTable.finalY + 0.8);
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Checked by", 6.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(6.5, doc.lastAutoTable.finalY + 0.8, 9.0, doc.lastAutoTable.finalY + 0.8);
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Approved by", 9.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(9.5, doc.lastAutoTable.finalY + 0.8, 12.0, doc.lastAutoTable.finalY + 0.8); //
+        // page footer
+
+        doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")), 0.5, doc.internal.pageSize.height - 0.5); // end of page footer
+        // page number
+
+        var pages = doc.internal.getNumberOfPages();
+        var pageWidth = doc.internal.pageSize.width; //Optional
+
+        var pageHeight = doc.internal.pageSize.height; //Optional
+
+        doc.setFontSize(8); //Optional
+
+        for (var j = 1; j < pages + 1; j++) {
+          var horizontalPos = pageWidth - 0.5; //Can be fixed number
+
+          var verticalPos = pageHeight - 0.5; //Can be fixed number
+
+          doc.setPage(j);
+          doc.text("Page ".concat(j, " of ").concat(pages), horizontalPos, verticalPos, {
+            align: "right"
+          }); //Optional text styling});
+        } // end of page number
+        // print or export record
+
+
+        if (action == "print") {
+          // doc.autoPrint();
           doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
         } else {
           doc.save("".concat(pdfName, ".pdf"));
@@ -1368,6 +1482,24 @@ var render = function() {
                                 _c(
                                   "v-btn",
                                   {
+                                    attrs: { color: "green", dark: "" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.generateReport("print")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Test\n                            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "green", dark: "" },
                                     on: {
                                       click: function($event) {
                                         return _vm.generatePDF("print")
