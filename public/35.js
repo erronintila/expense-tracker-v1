@@ -558,7 +558,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           //     if (data.row.index === rows.length - 1) {
           //         data.cell.styles.fillColor = [76, 175, 10];
           //     }
-          // }
+          // },
 
         });
         doc.autoTable({
@@ -1377,42 +1377,6 @@ var render = function() {
                                   [
                                     _vm._v(
                                       "\n                                Print\n                            "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: {
-                                      color: "green",
-                                      dark: "",
-                                      to: {
-                                        name: "admin.expense_reports.detailed"
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                View Detailed\n                            "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: {
-                                      color: "green",
-                                      dark: "",
-                                      to: {
-                                        name: "admin.expense_reports.summary"
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                View Summary\n                            "
                                     )
                                   ]
                                 )

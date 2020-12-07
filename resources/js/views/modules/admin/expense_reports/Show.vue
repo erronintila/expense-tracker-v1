@@ -269,7 +269,7 @@
                                 <v-btn @click="generatePDF('print')">
                                     Print
                                 </v-btn>
-                                <v-btn
+                                <!-- <v-btn
                                     color="green"
                                     dark
                                     :to="{
@@ -287,7 +287,7 @@
                                     }"
                                 >
                                     View Summary
-                                </v-btn>
+                                </v-btn> -->
                             </div>
                         </v-col>
                     </v-row>
@@ -548,7 +548,7 @@ export default {
                     //     if (data.row.index === rows.length - 1) {
                     //         data.cell.styles.fillColor = [76, 175, 10];
                     //     }
-                    // }
+                    // },
                 });
 
                 doc.autoTable({

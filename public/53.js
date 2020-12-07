@@ -139,8 +139,9 @@ __webpack_require__.r(__webpack_exports__);
     loadEmployees: function loadEmployees() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
+      axios.get("/api/data/employees?update_settings=true").then(function (response) {
+        var data = response.data.data;
+        _this.employees = data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -152,6 +153,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/expense_types").then(function (response) {
+        console.log(response);
         _this.all_expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -199,7 +201,7 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     employee: function employee(item) {
       // this.expense_types = item.expense_types;
-      this.allowed_expense_types = item.pivot_expense_types;
+      this.allowed_expense_types = item.expense_types;
       this.pivot_expense_types = item.pivot_expense_types;
     },
     allowed_expense_types: function allowed_expense_types(items) {
@@ -303,7 +305,7 @@ var render = function() {
                               label: "Employee",
                               "return-object": "",
                               items: _vm.employees,
-                              "item-text": "fullname",
+                              "item-text": "full_name",
                               "item-value": "id"
                             },
                             model: {
@@ -432,25 +434,6 @@ var render = function() {
                                         _vm.allowed_expense_types = $$v
                                       },
                                       expression: "allowed_expense_types"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                [
-                                  _c("v-data-table", {
-                                    attrs: {
-                                      headers: _vm.headerExpenseTypes,
-                                      items: _vm.pivot_expense_types
                                     }
                                   })
                                 ],

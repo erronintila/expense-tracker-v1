@@ -22,6 +22,8 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
+use function GuzzleHttp\Promise\all;
+
 class EmployeeController extends Controller
 {
     use ApiResponse;
@@ -201,6 +203,8 @@ class EmployeeController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
+        $expense_types = ExpenseType::all();
+
         $employee = new Employee();
 
         $employee->code = $request->code ?? generate_code(Employee::class, "EMP", 10);
@@ -263,9 +267,11 @@ class EmployeeController extends Controller
 
         $employee->save();
 
-        if (request()->has("expense_types")) {
-            $employee->expense_types()->sync($request->expense_types);
-        }
+        $employee->expense_types()->sync($expense_types);
+
+        // if (request()->has("expense_types")) {
+        //     $employee->expense_types()->sync($request->expense_types);
+        // }
 
         return response(
             [
@@ -370,7 +376,7 @@ class EmployeeController extends Controller
                 $employee = Employee::withTrashed()->findOrFail($id);
 
                 if (request()->has("expense_types")) {
-                    $employee->expense_types()->sync([]);
+                    // $employee->expense_types()->sync([]);
 
                     $employee->expense_types()->sync($request->expense_types);
 
@@ -442,21 +448,21 @@ class EmployeeController extends Controller
 
                 $employee->save();
 
-                if (request()->has("expense_types")) {
-                    $employee->expense_types()->sync($request->expense_types);
+                // if (request()->has("expense_types")) {
+                //     $employee->expense_types()->sync($request->expense_types);
 
-                    // foreach ($employee->expense_types as $item) {
+                //     // foreach ($employee->expense_types as $item) {
 
-                    //     $expense_type = ExpenseType::withTrashed()->findOrFail($item["expense_type_id"]);
+                //     //     $expense_type = ExpenseType::withTrashed()->findOrFail($item["expense_type_id"]);
 
-                    //     foreach ($expense_type->sub_types as $item2) {
+                //     //     foreach ($expense_type->sub_types as $item2) {
 
-                    //         $subtypes = $item2->pluck("id");
-                    //     }
-                    // }
+                //     //         $subtypes = $item2->pluck("id");
+                //     //     }
+                //     // }
 
-                    $employee->sub_types()->sync($employee->expense_types);
-                }
+                //     $employee->sub_types()->sync($employee->expense_types);
+                // }
 
                 if ($employee->user_id != null) {
                     $user = User::withTrashed()->findOrFail($employee->user_id);
@@ -570,6 +576,22 @@ class EmployeeController extends Controller
 
         if (request()->has("no_user") && request()->has("user_id")) {
             $employee->where("user_id", null)->orwhere("user_id", $request->user_id);
+        }
+
+        if(request()->has("update_settings")) {
+            $employee = Employee::with(['job' => function ($query) {
+                $query->withTrashed();
+            }])
+                ->with(['user' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['expense_types' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->orderBy("last_name")
+                ->get();
+                
+            return EmployeeShowResource::collection($employee);
         }
 
         return EmployeeResource::collection($employee->get());

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <v-container v-if="loader" style="height: 400px;">
+        <v-container v-if="loader" style="height: 400px;">
             <v-row class="fill-height" align-content="center" justify="center">
                 <v-col class="subtitle-1 text-center" cols="12">
                     Loading, Please wait...
@@ -15,8 +15,8 @@
                 </v-col>
             </v-row>
         </v-container>
-        <v-card v-else class="elevation-0 pt-0"> -->
-        <v-card class="elevation-0 pt-0">
+        <v-card v-else class="elevation-0 pt-0">
+        <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -67,7 +67,7 @@
                                     ></v-text-field>
                                 </v-col>
 
-                                <v-col cols="12" md="4">
+                                <!-- <v-col cols="12" md="4">
                                     <v-select
                                         v-model="selected_expense_types"
                                         :items="expense_types"
@@ -93,7 +93,7 @@
                                             >
                                         </template>
                                     </v-select>
-                                </v-col>
+                                </v-col> -->
                             </v-row>
 
                             <v-row>
@@ -338,9 +338,9 @@ export default {
             menu: false,
             jobs: [],
             permissions: [],
-            expense_types: [],
+            // expense_types: [],
             selected: [],
-            selected_expense_types: [],
+            // selected_expense_types: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 code: null,
@@ -404,9 +404,9 @@ export default {
                         _this.form.role = data.user.role[0];
                         _this.form.username = data.user.username;
                         _this.form.can_login = data.user.can_login;
-                        _this.selected_expense_types = data.expense_types.map(
-                            item => item.id
-                        );
+                        // _this.selected_expense_types = data.expense_types.map(
+                        //     item => item.id
+                        // );
 
                         _this.loader = false;
                     })
@@ -441,23 +441,23 @@ export default {
                     );
                 });
         },
-        loadExpenseTypes() {
-            let _this = this;
-            axios
-                .get("/api/data/expense_types?only=true")
-                .then(response => {
-                    _this.expense_types = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+        // loadExpenseTypes() {
+        //     let _this = this;
+        //     axios
+        //         .get("/api/data/expense_types?only=true")
+        //         .then(response => {
+        //             _this.expense_types = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
+        //             _this.mixin_errorDialog(
+        //                 `Error ${error.response.status}`,
+        //                 error.response.statusText
+        //             );
+        //         });
+        // },
         loadPermissions() {
             let _this = this;
 
@@ -519,7 +519,7 @@ export default {
                         can_login: _this.form.can_login,
                         role: _this.form.role,
                         permissions: _this.selected,
-                        expense_types: _this.selected_expense_types
+                        // expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(
@@ -557,7 +557,7 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadJobs();
-        this.loadExpenseTypes();
+        // this.loadExpenseTypes();
         this.getData();
     }
 };

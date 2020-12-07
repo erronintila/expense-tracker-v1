@@ -66,7 +66,7 @@
                                     ></v-text-field>
                                 </v-col>
 
-                                <v-col cols="12" md="4">
+                                <!-- <v-col cols="12" md="4">
                                     <v-select
                                         v-model="selected_expense_types"
                                         :items="expense_types"
@@ -92,7 +92,7 @@
                                             >
                                         </template>
                                     </v-select>
-                                </v-col>
+                                </v-col> -->
                             </v-row>
 
                             <v-row>
@@ -367,9 +367,9 @@ export default {
             menu: false,
             jobs: [],
             permissions: this.$store.getters.user.permissions,
-            expense_types: [],
+            // expense_types: [],
             selected: [],
-            selected_expense_types: [],
+            // selected_expense_types: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 code: null,
@@ -430,23 +430,23 @@ export default {
                     );
                 });
         },
-        loadExpenseTypes() {
-            let _this = this;
-            axios
-                .get("/api/data/expense_types?only=true")
-                .then(response => {
-                    _this.expense_types = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+        // loadExpenseTypes() {
+        //     let _this = this;
+        //     axios
+        //         .get("/api/data/expense_types?only=true")
+        //         .then(response => {
+        //             _this.expense_types = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
+        //             _this.mixin_errorDialog(
+        //                 `Error ${error.response.status}`,
+        //                 error.response.statusText
+        //             );
+        //         });
+        // },
         loadPermissions() {
             let _this = this;
 
@@ -506,7 +506,7 @@ export default {
                         can_login: _this.form.can_login,
                         role: _this.form.role,
                         permissions: _this.selected,
-                        expense_types: _this.selected_expense_types,
+                        // expense_types: _this.selected_expense_types,
                         fund: fund
                     })
                     .then(function(response) {
@@ -550,7 +550,7 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadJobs();
-        this.loadExpenseTypes();
+        // this.loadExpenseTypes();
         this.loadPermissions();
     }
 };

@@ -20,7 +20,7 @@
                                 label="Employee"
                                 return-object
                                 :items="employees"
-                                item-text="fullname"
+                                item-text="full_name"
                                 item-value="id"
                             ></v-autocomplete>
                         </v-col>
@@ -67,14 +67,14 @@
                                     </v-select>
                                 </v-col>
                             </v-row>
-                            <v-row>
+                            <!-- <v-row>
                                 <v-col>
                                     <v-data-table
                                         :headers="headerExpenseTypes"
                                         :items="pivot_expense_types"
                                     ></v-data-table>
                                 </v-col>
-                            </v-row>
+                            </v-row> -->
                             <v-row>
                                 <v-col cols="12" md="4">
                                     <v-btn @click="onSave" color="green">
@@ -120,9 +120,11 @@ export default {
         loadEmployees() {
             let _this = this;
             axios
-                .get("/api/data/employees")
+                .get("/api/data/employees?update_settings=true")
                 .then(response => {
-                    _this.employees = response.data.data;
+                    let data = response.data.data;
+
+                    _this.employees = data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -139,6 +141,7 @@ export default {
             axios
                 .get("/api/data/expense_types")
                 .then(response => {
+                    console.log(response);
                     _this.all_expense_types = response.data.data;
                 })
                 .catch(error => {
@@ -202,7 +205,7 @@ export default {
     watch: {
         employee(item) {
             // this.expense_types = item.expense_types;
-            this.allowed_expense_types = item.pivot_expense_types;
+            this.allowed_expense_types = item.expense_types;
 
             this.pivot_expense_types = item.pivot_expense_types;
         },
