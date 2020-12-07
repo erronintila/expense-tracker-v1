@@ -486,116 +486,146 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     generatePDF: function generatePDF(action) {
-      // var source = this.$refs["myTable"];
-      var pdfName = "Expense Report";
-      var columns = ["Date", "Type", "Receipt", "Vendor", "Amount"];
-      var rows = [];
-      var footer = [];
-      this.form.expenses.forEach(function (element) {
-        var temp = [];
-        temp.push(element.date);
-        temp.push(element.expense_type.name);
-        temp.push(element.receipt_number);
-        temp.push(element.vendor.name);
-        temp.push(element.amount);
-        rows.push(temp);
-      }); // footer = [
-      //     "Total",
-      //     this.column_headers.delivery_expense,
-      //     this.column_headers["gas_&_oil"],
-      //     this.column_headers["meal_&_lodging"],
-      //     this.column_headers.miscellaneous,
-      //     this.column_headers["postage,_telephone_&_fax"],
-      //     this.column_headers["repairs_&_maintenance"],
-      //     this.column_headers.representation,
-      //     this.column_headers.supplies,
-      //     this.column_headers.transportation,
-      //     this.column_headers.total
-      // ];
-      // rows.push(footer);
-      // basic config
+      var _this2 = this;
 
-      var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
-        orientation: "portrait",
-        unit: "in",
-        format: action == "print" ? "letter" : [13, 8.5]
-      }); // header details
+      this.loadExpenses().then(function (data) {
+        // var source = this.$refs["myTable"];
+        var pdfName = "Expense Report";
+        var table_columns = ["Date", "Type", "Receipt", "Vendor", "Amount"];
+        var table_rows = [];
+        var table_footer = [];
+        data.items.forEach(function (element) {
+          var temp = [];
+          temp.push(element.date);
+          temp.push(element.expense_type.name);
+          temp.push(element.receipt_number);
+          temp.push(element.vendor.name);
+          temp.push(_this2.mixin_formatNumber(element.amount));
+          table_rows.push(temp);
+        }); // table_footer = [
+        //     "Total",
+        //     "",
+        //     "",
+        //     "",
+        //     this.mixin_formatNumber(this.form.total)
+        // ];
+        // table_rows.push(table_footer);
+        // basic config
 
-      doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(this.form.employee.full_name), 0.5, 0.7);
-      doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(this.form.code), 0.5, 0.7);
-      doc.setFontSize(20).setTextColor(76, 175, 10).text("PHP ".concat(this.mixin_formatNumber(this.form.total)), 0.5, 1.0);
-      doc.setFontSize(11).setTextColor(0, 0, 0).text("Period: ".concat(this.form.from, " ~ ").concat(this.form.to), 0.5, 1.2);
-      doc.setLineWidth(0.01);
-      doc.line(0.5, 1.35, 8.0, 1.35);
-      doc.setFontSize(11).setTextColor(0, 0, 0).text("Description: ".concat(this.form.description), 0.5, 1.6); // doc.setFontSize(14)
-      //     .setTextColor(76, 175, 10)
-      //     .text("Expense Report", 0.5, 1.0);
-      // doc.setFontSize(14)
-      //     .setTextColor(76, 175, 10)
-      //     .text(
-      //         "",
-      //         doc.internal.pageSize.width - 0.5,
-      //         0.7,
-      //         { align: "right" }
-      //     );
-      // doc.setFontSize(11)
-      //     .setTextColor(0, 0, 0)
-      //     .text(
-      //         this.form.status.status,
-      //         doc.internal.pageSize.width - 0.5,
-      //         1.0,
-      //         { align: "right" }
-      //     );
-      // table config
-      // doc.autoTable({
-      //     columns: columns,
-      //     body: rows,
-      //     margin: { left: 0.5, top: 1.6 },
-      //     showHead: "everyPage",
-      //     headStyles: { halign: "center", fillColor: [76, 175, 10] }
-      // });
-      // let finalY = doc.lastAutoTable.finalY; // The y position on the page
-      // doc.setFontSize(12)
-      //     .setTextColor(76, 175, 10)
-      //     .text("Grand Total", 0.6, finalY + 0.2);
-      // doc.setFontSize(12)
-      //     .setTextColor(76, 175, 10)
-      //     .text(`${0}`, doc.internal.pageSize.width - 0.7, finalY + 0.2, {
-      //         align: "right"
-      //     });
-      // footer
+        var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
+          orientation: "portrait",
+          unit: "in",
+          format: action == "print" ? "letter" : [13, 8.5]
+        }); // header details
+        // 1st row
 
-      doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker", 0.5, doc.internal.pageSize.height - 0.5); // doc.setFontSize(8)
-      //     .setTextColor(0, 0, 0)
-      //     .text(
-      //         `Page ${0} / ${doc.internal.getNumberOfPages()}`,
-      //         doc.internal.pageSize.width - 1,
-      //         doc.internal.pageSize.height - 0.5
-      //     );
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this2.form.employee.full_name), 0.5, 0.7);
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this2.form.code), 6.0, 0.7); // end of 1st row
+        // 2nd row
 
-      if (action == "print") {
-        doc.autoPrint();
-        doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
-      } else {
-        doc.save("".concat(pdfName, ".pdf"));
-      }
+        doc.setFontSize(20).setTextColor(76, 175, 10).text("PHP ".concat(_this2.mixin_formatNumber(_this2.form.total)), 0.5, 1.0);
+        doc.setFontSize(11).setTextColor(76, 175, 10).text(_this2.form.status.status, 6.0, 1.0); // end of 2nd row
+        // 3rd row
+
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("Period: ".concat(_this2.form.from, " ~ ").concat(_this2.form.to), 0.5, 1.2); // end of 3rd row
+        // 4th row
+
+        doc.setLineWidth(0.01);
+        doc.line(0.5, 1.35, 8.0, 1.35); //end of 4th row
+        // 5th row
+
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("Description: ".concat(_this2.form.description), 0.5, 1.6); // end of 5th row
+        // 6th row
+
+        doc.autoTable({
+          columns: table_columns,
+          body: table_rows,
+          margin: {
+            left: 0.5
+          },
+          startY: 1.8,
+          showHead: "everyPage",
+          headStyles: {
+            halign: "center",
+            fillColor: [76, 175, 10]
+          },
+          columnStyles: {
+            4: {
+              halign: "right"
+            }
+          } // didParseCell: function(data) {
+          //     var rows = data.table.body;
+          //     if (data.row.index === rows.length - 1) {
+          //         data.cell.styles.fillColor = [76, 175, 10];
+          //     }
+          // }
+
+        });
+        doc.autoTable({
+          body: [["No. of Expenses", data.items.length], ["Total Expenses Amount", _this2.mixin_formatNumber(_this2.form.total)], ["Paid Amount", _this2.mixin_formatNumber(_this2.form.paid)], ["Amount to be reimbursed", _this2.mixin_formatNumber(_this2.form.balance)]],
+          margin: {
+            left: 0.5
+          },
+          columnStyles: {
+            1: {
+              halign: "right"
+            }
+          },
+          theme: 'plain'
+        }); // end of 6th row
+        // page footer
+
+        doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")), 0.5, doc.internal.pageSize.height - 0.5); // end of page footer
+        // page number
+
+        var pages = doc.internal.getNumberOfPages();
+        var pageWidth = doc.internal.pageSize.width; //Optional
+
+        var pageHeight = doc.internal.pageSize.height; //Optional
+
+        doc.setFontSize(8); //Optional
+
+        for (var j = 1; j < pages + 1; j++) {
+          var horizontalPos = pageWidth - 0.5; //Can be fixed number
+
+          var verticalPos = pageHeight - 0.5; //Can be fixed number
+
+          doc.setPage(j);
+          doc.text("Page ".concat(j, " of ").concat(pages), horizontalPos, verticalPos, {
+            align: 'right'
+          }); //Optional text styling});
+        } // end of page number
+        // print or export record
+
+
+        if (action == "print") {
+          doc.autoPrint();
+          doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
+        } else {
+          doc.save("".concat(pdfName, ".pdf"));
+        } //end of print or export record
+
+      });
     },
-    // loadExpenses() {
-    //     axios
-    //         .get(
-    //             `/api/data/expenses?expense_report_id${this.$route.params.id}`
-    //         )
-    //         .then(response => {
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
+    loadExpenses: function loadExpenses() {
+      var _this3 = this;
+
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/data/expenses?expense_report_id=".concat(_this3.$route.params.id, "&only=true")).then(function (response) {
+          var items = response.data.data;
+          console.log(response);
+          resolve({
+            items: items
+          });
+        })["catch"](function (error) {
+          reject();
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        });
+      });
+    },
     getData: function getData() {
       var _this = this;
 
@@ -652,17 +682,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     getDataFromApi: function getDataFromApi() {
-      var _this2 = this;
+      var _this4 = this;
 
       var _this = this;
 
       _this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this2$options = _this2.options,
-            sortBy = _this2$options.sortBy,
-            sortDesc = _this2$options.sortDesc,
-            page = _this2$options.page,
-            itemsPerPage = _this2$options.itemsPerPage;
+        var _this4$options = _this4.options,
+            sortBy = _this4$options.sortBy,
+            sortDesc = _this4$options.sortDesc,
+            page = _this4$options.page,
+            itemsPerPage = _this4$options.itemsPerPage;
         var range = [_this.form.from, _this.form.to];
         var expense_report_id = _this.$route.params.id;
         axios.get("/api/expenses", {
@@ -695,11 +725,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this5 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.form.expenses = data.items;
-          _this3.totalItems = data.total;
+          _this5.form.expenses = data.items;
+          _this5.totalItems = data.total;
         });
       },
       deep: true

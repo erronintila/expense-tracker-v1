@@ -101,7 +101,7 @@
             </v-list>
 
             <template v-slot:append>
-                <div
+                <!-- <div
                     class="text-center mt-5 mb-5"
                     v-if="$store.getters.user.employee.fund > 0"
                 >
@@ -130,7 +130,7 @@
                             )
                         }}
                     </div>
-                </div>
+                </div> -->
 
                 <div class="pa-2">
                     <v-btn block color="green" dark outlined @click="onLogout">

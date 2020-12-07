@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Expense\ExpenseIndexResource;
+use App\Http\Resources\Expense\ExpenseOnlyResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Employee;
@@ -577,6 +578,20 @@ class ExpenseController extends Controller
      */
     public function getExpenses(Request $request)
     {
+        if (request()->has("only")) {
+            if (request()->has("expense_report_id")) {
+                $expenses = Expense::with(["expense_type" => function($query) {
+                    $query->withTrashed();
+                }])
+                ->with(["vendor" => function($query) {
+                    $query->withTrashed();
+                }])
+                ->where("expense_report_id", $request->expense_report_id)->get();
+
+                return ExpenseIndexResource::collection($expenses);
+            }
+        }
+        
         $expenses = Expense::with(['employee' => function ($query) {
             $query->withTrashed();
         }])
