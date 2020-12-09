@@ -93,7 +93,7 @@
                                 <v-select
                                     v-model="employee"
                                     :items="employees"
-                                    item-text="fullname"
+                                    item-text="full_name"
                                     item-value="id"
                                     label="Employee"
                                 ></v-select>
@@ -599,7 +599,7 @@ export default {
                     _this.employees = response.data.data;
                     _this.employees.unshift({
                         id: 0,
-                        fullname: "All Employees"
+                        full_name: "All Employees"
                     });
                 })
                 .catch(error => {

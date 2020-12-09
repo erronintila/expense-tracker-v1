@@ -747,8 +747,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRestore: function onRestore() {
       var _this = this;
 
+      var arr = this.selected.map(function (item) {
+        return item.expense_report === null;
+      });
+
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (arr.includes(false)) {
+        this.$dialog.message.error("Expense(s) with report(s) can't be restored", {
           position: "top-right",
           timeout: 2000
         });
@@ -1228,6 +1240,19 @@ var render = function() {
                   _c(
                     "v-list",
                     [
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onRestore } },
+                        [
+                          _c("v-list-item-title", [
+                            _vm._v(
+                              "\n                            Restore\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-list-item",
                         { on: { click: _vm.onDelete } },

@@ -134,11 +134,11 @@
                     </template>
 
                     <v-list>
-                        <!-- <v-list-item @click="onRestore">
+                        <v-list-item @click="onRestore">
                             <v-list-item-title>
                                 Restore
                             </v-list-item-title>
-                        </v-list-item> -->
+                        </v-list-item>
                         <!-- <v-list-item>
                             <v-list-item-icon>
                                 <v-icon>mdi-plus</v-icon>
@@ -770,9 +770,20 @@ export default {
         },
         onRestore() {
             let _this = this;
+            let arr = this.selected.map(
+                item => item.expense_report === null
+            );
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
+
+            if (arr.includes(false)) {
+                this.$dialog.message.error("Expense(s) with report(s) can't be restored", {
                     position: "top-right",
                     timeout: 2000
                 });

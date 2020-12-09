@@ -350,6 +350,43 @@
                         </v-col>
                     </v-row>
 
+                    <v-divider class="mb-4"></v-divider>
+
+                    <v-row class="text--secondary text-caption">
+                        <v-col cols="12" md="12">
+                            <div>History :</div>
+                            <div>
+                                <table class="table" width="100%">
+                                    <tbody>
+                                        <tr
+                                            v-for="item in form.logs"
+                                            :key="item.id"
+                                        >
+                                            <td>
+                                                {{
+                                                    mixin_formatDate(
+                                                        item.created_at,
+                                                        "YYYY-MM-DD HH:mm:ss"
+                                                    )
+                                                }}
+                                            </td>
+                                            <td>-</td>
+                                            <td>
+                                                {{
+                                                    item.causer == null
+                                                        ? "System"
+                                                        : item.causer.name
+                                                }}
+                                            </td>
+                                            <td>-</td>
+                                            <td>{{ item.description }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </v-col>
+                    </v-row>
+
                     <!-- <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="cancelPayment">

@@ -275,6 +275,16 @@
                                         @updateDates="updateDates"
                                     ></DateRangePicker>
 
+                                    <div v-if="selected.length > 0">
+                                        <div class="d-inline">
+                                            {{ selected.length }} Item(s)
+                                            Selected
+                                        </div>
+                                        <v-btn @click="selected = []">
+                                            Clear All Selected
+                                        </v-btn>
+                                    </div>
+
                                     <v-text-field
                                         v-model="search"
                                         append-icon="mdi-magnify"
@@ -727,10 +737,8 @@ export default {
         },
         selected() {
             this.totalAmount = this.mixin_formatNumber(
-            this.selected.reduce(
-                (total, item) => total + item.total,
-                0
-            ));
+                this.selected.reduce((total, item) => total + item.total, 0)
+            );
         }
     },
     created() {

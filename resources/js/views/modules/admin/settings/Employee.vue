@@ -139,7 +139,7 @@ export default {
         loadExpenseTypes() {
             let _this = this;
             axios
-                .get("/api/data/expense_types")
+                .get("/api/data/expense_types?only=true")
                 .then(response => {
                     console.log(response);
                     _this.all_expense_types = response.data.data;

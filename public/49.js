@@ -451,6 +451,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1087,6 +1097,49 @@ var render = function() {
                                                 updateDates: _vm.updateDates
                                               }
                                             }),
+                                            _vm._v(" "),
+                                            _vm.selected.length > 0
+                                              ? _c(
+                                                  "div",
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass: "d-inline"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                        " +
+                                                            _vm._s(
+                                                              _vm.selected
+                                                                .length
+                                                            ) +
+                                                            " Item(s)\n                                        Selected\n                                    "
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-btn",
+                                                      {
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            _vm.selected = []
+                                                          }
+                                                        }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                        Clear All Selected\n                                    "
+                                                        )
+                                                      ]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              : _vm._e(),
                                             _vm._v(" "),
                                             _c("v-text-field", {
                                               attrs: {

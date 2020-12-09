@@ -4,11 +4,10 @@ new bugs/updates
 user can still edit expense even if approved
 update expense and expense report settings once approved to finalize settings history of each transaction
 deleting parent with active child records
-add note when rejecting or cancelling or just add note for admin
-add restore in expenses without report when deleted
-autorefresh remaining fund info on sidebar
+add note when cancelling
+add note for admin
 
-LAG IN EMPLOYEE SETTINGS
+autorefresh remaining fund info on sidebar
 
 LAG IN EXPENSE REPORTS
 
@@ -16,12 +15,7 @@ expense cant be cancelled even if no report
 
 expense report can be edited
 
-Travel
-From, To
-
-
-
-history payments on show
+Travel From, To
 
 other datails payments on show
 
@@ -33,25 +27,17 @@ lag in dashboard data retrieval
 
 add summary of statuses on expenses and expense reports
 
-eager loading to prevent n+1 problem
-
-error format when printing more than 1 page
-
-error when directly printing, jspdf
-
 expense limit
 
 expense type custom field like transpo, place of origin and destination
 
-payment method
-
 fix activity logs format
-
-add # items selected info and button for clearing selection
 
 fix created by, updated by, deleted by
 
 fix standard user modules
+
+300+ queries executed when printing report
 
 
 ------------------------------------------------------------------------------------------
@@ -62,6 +48,14 @@ activity logs error
 add logging when payment is applied to a report
 activity log expense  - 17 Oct 2020 11:09 AM		Associated with the report titled 'sample' - erronintila.twincirc
 SLOW PERFORMANCE/ SLOW RETRIEVAL OF DATA ON RESOURCE COLLECTION WITH RESOURCE COLLECTION
+error format when printing more than 1 page
+LAG IN EMPLOYEE SETTINGS
+add note when rejecting
+history payments on show
+eager loading to prevent n+1 problem
+error when directly printing, jspdf
+add # items selected info and button for clearing selection
+add restore in expenses without report when deleted
 
 
 ------------------------------------------------------------------------------------------
@@ -73,7 +67,7 @@ no note on editing expenses
 sql query excel data on expenses
 use eloquent model on querying data with relationships
 allowed times to resubmit report
-
+payment method
 
 
 ------------------------------------------------------------------------------------------

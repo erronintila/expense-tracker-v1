@@ -152,7 +152,7 @@ __webpack_require__.r(__webpack_exports__);
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
-      axios.get("/api/data/expense_types").then(function (response) {
+      axios.get("/api/data/expense_types?only=true").then(function (response) {
         console.log(response);
         _this.all_expense_types = response.data.data;
       })["catch"](function (error) {

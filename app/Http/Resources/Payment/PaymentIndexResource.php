@@ -17,6 +17,8 @@ class PaymentIndexResource extends JsonResource
      */
     public function toArray($request)
     {
+        
+
         return [
             // -------------------------------------------------------------------
             // Fields

@@ -71,7 +71,9 @@ class ExpenseReportController extends Controller
             // ->with(['expenses' => function ($query) {
             //     $query->withTrashed();
             // }])
-            // ->with('payments')
+            ->with(['payments' => function ($query) {
+                $query->withTrashed();
+            }])
             ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
@@ -278,7 +280,7 @@ class ExpenseReportController extends Controller
 
         return response(
             [
-                'data' => new ExpenseReportResource($expense_report),
+                // 'data' => new ExpenseReportResource($expense_report),
 
                 'message' => 'Created successfully'
             ],

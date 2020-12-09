@@ -630,7 +630,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         _this.employees.unshift({
           id: 0,
-          fullname: "All Employees"
+          full_name: "All Employees"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -1484,7 +1484,7 @@ var render = function() {
                               _c("v-select", {
                                 attrs: {
                                   items: _vm.employees,
-                                  "item-text": "fullname",
+                                  "item-text": "full_name",
                                   "item-value": "id",
                                   label: "Employee"
                                 },

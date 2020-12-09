@@ -500,7 +500,7 @@ class PaymentController extends Controller
                 foreach ($payment->expense_reports as $expense_report) {
 
                     log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "removed expense report association with payment #{$payment->code}");
-                }
+                }   
 
                 $payment->delete();
 
