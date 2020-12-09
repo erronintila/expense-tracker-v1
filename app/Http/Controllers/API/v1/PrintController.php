@@ -8,6 +8,7 @@ use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PrintController extends Controller
 {
@@ -140,6 +141,102 @@ class PrintController extends Controller
                 "expense_report" => $expense_report,
                 "min_date" => collect($main)->min("date"),
                 "max_date" => collect($main)->max("date")
+            ]);
+        }
+    }
+
+    public function print_expense_reports()
+    {
+        if (request()->has('by_expense_id')) {
+            $expenses = DB::table('expenses')
+            ->join("employees", "employees.id", "=", "expenses.employee_id")
+            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("departments", "departments.id", "=", "jobs.department_id")
+            ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
+            ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+            ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`id`"))
+            ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
+            ->select(DB::raw("
+                `employees`.`id` AS employee_id,
+                `employees`.`last_name`,
+                `employees`.`first_name`,
+                `employees`.`middle_name`,
+                `employees`.`suffix`,
+                `jobs`.`id` AS job_id,
+                `jobs`.`name` job_name,
+                `departments`.`id` AS department_id,
+                `departments`.`name` department_name,
+                `expense_types`.`id` expense_type_id,
+                `expense_types`.`name` expense_type_name,
+                `expense_reports`.`id` AS expense_report_id,
+                `expenses`.`id` AS expense_id,
+                `expenses`.`date` AS expense_date
+            "))->get();
+
+            return response()->json([
+                "data" => $expenses
+            ]);
+        }
+
+        if (request()->has('by_employee_id')) {
+            $expenses = DB::table('expenses')
+            ->join("employees", "employees.id", "=", "expenses.employee_id")
+            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("departments", "departments.id", "=", "jobs.department_id")
+            ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
+            ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+            ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`"))
+            ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
+            ->select(DB::raw("
+                `employees`.`id` AS employee_id,
+                `employees`.`last_name`,
+                `employees`.`first_name`,
+                `employees`.`middle_name`,
+                `employees`.`suffix`,
+                `jobs`.`id` AS job_id,
+                `jobs`.`name` job_name,
+                `departments`.`id` AS department_id,
+                `departments`.`name` department_name,
+                `expense_types`.`id` expense_type_id,
+                `expense_types`.`name` expense_type_name,
+                `expense_reports`.`id` AS expense_report_id,
+                `expenses`.`id` AS expense_id,
+                `expenses`.`date` AS expense_date
+            "))->get();
+
+            return response()->json([
+                "data" => $expenses
+            ]);
+        }
+
+        if (request()->has('by_date')) {
+            $expenses = DB::table('expenses')
+            ->join("employees", "employees.id", "=", "expenses.employee_id")
+            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("departments", "departments.id", "=", "jobs.department_id")
+            ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
+            ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+            ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`date`"))
+            ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
+            ->select(DB::raw("
+                `employees`.`id` AS employee_id,
+                `employees`.`last_name`,
+                `employees`.`first_name`,
+                `employees`.`middle_name`,
+                `employees`.`suffix`,
+                `jobs`.`id` AS job_id,
+                `jobs`.`name` job_name,
+                `departments`.`id` AS department_id,
+                `departments`.`name` department_name,
+                `expense_types`.`id` expense_type_id,
+                `expense_types`.`name` expense_type_name,
+                `expense_reports`.`id` AS expense_report_id,
+                `expenses`.`id` AS expense_id,
+                `expenses`.`date` AS expense_date
+            "))->get();
+
+            return response()->json([
+                "data" => $expenses
             ]);
         }
     }

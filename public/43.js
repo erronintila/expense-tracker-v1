@@ -586,6 +586,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          console.log(items);
           _this.loading = false;
           resolve({
             items: items,
@@ -795,6 +796,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
+    },
+    show_edit: function show_edit(item) {
+      if (!this.mixin_can("edit expenses")) {
+        return false;
+      }
+
+      if (item) {
+        if (item.expense_report_id) {
+          if (!item.expense_report.approved_at) {
+            return false;
+          } else if (!item.expense_report.rejected_at) {
+            return false;
+          } else if (!item.expense_report.cancelled_at) {
+            return false;
+          } else if (!item.expense_report.deleted_at) {
+            return false;
+          }
+        }
+      }
+
+      return true;
     }
   },
   watch: {
@@ -1613,7 +1635,7 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _vm.mixin_can("edit expenses")
+                            _vm.show_edit(item)
                               ? _c(
                                   "v-icon",
                                   {

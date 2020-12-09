@@ -536,8 +536,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -665,6 +663,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/data/employees").then(function (response) {
+        var data = response.data.data;
+        console.log(data);
         _this.employees = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -1862,10 +1862,9 @@ var render = function() {
                                                                                 _vm._v(
                                                                                   "\n                                                                Limit:\n                                                                " +
                                                                                     _vm._s(
-                                                                                      _vm
-                                                                                        .form
-                                                                                        .expense_type
-                                                                                        .limit
+                                                                                      _vm.mixin_formatNumber(
+                                                                                        _vm.expense_amount_limit
+                                                                                      )
                                                                                     ) +
                                                                                     "\n                                                                / quantity\n                                                            "
                                                                                 )

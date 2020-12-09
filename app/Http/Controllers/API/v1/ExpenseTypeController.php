@@ -327,7 +327,7 @@ class ExpenseTypeController extends Controller
     public function getExpenseTypes(Request $request)
     {
         if (request()->has('only')) {
-            return $this->successResponse(ExpenseType::all(), "Retrieved successfully", 200);
+            return $this->successResponse(ExpenseType::orderBy("name")->where("expense_type_id", null)->get(), "Retrieved successfully", 200);
         }
 
         if (request()->has('id')) {

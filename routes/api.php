@@ -180,6 +180,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/print', 'API\v1\PrintController@print');
 
+    Route::get('/data/print_report', 'API\v1\PrintController@print_expense_reports');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LARAVEL LIBRARY/PACKAGE ROUTES

@@ -7,6 +7,8 @@ deleting parent with active child records
 add note when cancelling
 add note for admin
 
+add settings paper sizes for printing and exporting
+
 autorefresh remaining fund info on sidebar
 
 LAG IN EXPENSE REPORTS

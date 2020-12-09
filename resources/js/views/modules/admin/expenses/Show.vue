@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
+        <!-- <v-container v-if="loader" style="height: 400px;">
             <v-row class="fill-height" align-content="center" justify="center">
                 <v-col class="subtitle-1 text-center" cols="12">
                     Loading, Please wait...
@@ -15,7 +15,8 @@
                 </v-col>
             </v-row>
         </v-container>
-        <v-card v-else class="elevation-0 pt-0">
+        <v-card v-else class="elevation-0 pt-0"> -->
+            <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -217,84 +218,84 @@
 
                             <table class="table" width="100%">
                                 <tbody>
-                                    <tr v-if="form.created">
-                                        <td>Created By</td>
+                                    <tr v-if="form.created_at">
+                                        <td>Created</td>
                                         <td>:</td>
-                                        <td>
-                                            {{ form.created.created_by.name }}
-                                        </td>
+                                        <!-- <td>
+                                            {{ form.created_by }}
+                                        </td> -->
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.created.created_at,
+                                                    form.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr v-if="form.submitted">
-                                        <td>Submitted By</td>
+                                    <tr v-if="form.submitted_at">
+                                        <td>Submitted</td>
                                         <td>:</td>
-                                        <td>
+                                        <!-- <td>
                                             {{
-                                                form.submitted.submitted_by.name
+                                                form.submitted_by
                                             }}
-                                        </td>
+                                        </td> -->
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.submitted.submitted_at,
+                                                    form.submitted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
                                     <!-- <tr v-if="created.created_at">
-                                        <td>Reviewed By</td>
+                                        <td>Reviewed</td>
                                         <td>: </td>
                                         <td>{{ form.reviewed.reviewed_by.name }}</td>
                                         <td>{{ mixin_formatDate(form.reviewed.reviewed_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr> -->
-                                    <tr v-if="form.approved">
-                                        <td>Approved By</td>
+                                    <tr v-if="form.approved_at">
+                                        <td>Approved</td>
                                         <td>:</td>
-                                        <td>
-                                            {{ form.approved.approved_by.name }}
-                                        </td>
+                                        <!-- <td>
+                                            {{ form.approved_by }}
+                                        </td> -->
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.approved.approved_at,
+                                                    form.approved_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr v-if="form.rejected">
-                                        <td>Rejected By</td>
+                                    <tr v-if="form.rejected_at">
+                                        <td>Rejected</td>
                                         <td>:</td>
-                                        <td>
-                                            {{ form.rejected.rejected_by.name }}
-                                        </td>
+                                        <!-- <td>
+                                            {{ form.rejected_by }}
+                                        </td> -->
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.rejected.rejected_at,
+                                                    form.rejected_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr v-if="form.deleted">
-                                        <td>Cancelled By</td>
+                                    <tr v-if="form.deleted_at">
+                                        <td>Cancelled</td>
                                         <td>:</td>
-                                        <td>
-                                            {{ form.deleted.deleted_by.name }}
-                                        </td>
+                                        <!-- <td>
+                                            {{ form.deleted_by }}
+                                        </td> -->
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.deleted.deleted_at,
+                                                    form.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
@@ -511,10 +512,10 @@ export default {
                         _this.form.created_at = data.created_at;
                         _this.form.updated_at = data.updated_at;
                         _this.form.deleted_at = data.deleted_at;
-                        _this.form.submitted_at = data.expense_report.submitted_at;
-                        _this.form.approved_at = data.expense_report.approved_at;
-                        _this.form.rejected_at = data.expense_report.rejected_at;
-                        _this.form.cancelled_at = data.expense_report.cancelled_at;
+                        _this.form.submitted_at = data.expense_report ? data.expense_report.submitted_at : null;
+                        _this.form.approved_at = data.expense_report ? data.expense_report.approved_at : null;
+                        _this.form.rejected_at = data.expense_report ? data.expense_report.rejected_at : null;
+                        _this.form.cancelled_at = data.expense_report ? data.expense_report.cancelled_at : null;
 
                         _this.form.logs = data.logs;
 

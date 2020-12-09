@@ -355,7 +355,7 @@
                         </td>
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated_at)}}
+                        {{ mixin_getHumanDate(item.updated_at) }}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ mixin_formatNumber(item.amount) }}
@@ -387,7 +387,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit expenses')"
+                            v-if="show_edit(item)"
                         >
                             mdi-pencil
                         </v-icon>
@@ -583,6 +583,8 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+
+                        console.log(items);
 
                         _this.loading = false;
 
@@ -825,6 +827,27 @@ export default {
                         });
                 }
             });
+        },
+        show_edit(item) {
+            if(!this.mixin_can("edit expenses")) {
+                return false;
+            }
+
+            if(item) {
+                if(item.expense_report_id) {
+                    if(!item.expense_report.approved_at) {
+                        return false;
+                    } else if(!item.expense_report.rejected_at) {
+                        return false;
+                    } else if(!item.expense_report.cancelled_at) {
+                        return false;
+                    } else if(!item.expense_report.deleted_at) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     },
     watch: {

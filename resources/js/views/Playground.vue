@@ -54,6 +54,16 @@
         <v-main>
             <v-form ref="form">
                 <v-container>
+                    <v-btn color="green" @click="printByExpense('print')"
+                        >Group By Expense</v-btn
+                    >
+                    <v-btn color="red" @click="printByEmployee('print')"
+                        >Group By Employee</v-btn
+                    >
+                    <v-btn color="blue" @click="printByDate('print')"
+                        >Group By Date</v-btn
+                    >
+
                     <v-card class="mx-auto mb-4" flat>
                         <v-list-item three-line>
                             <v-list-item-content>
@@ -229,6 +239,9 @@
 
 <script>
 import moment from "moment";
+import numeral from "numeral";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 export default {
     data: () => ({
@@ -281,23 +294,569 @@ export default {
                 protein: 4.3,
                 iron: "8%"
             }
-        ]
+        ],
+        expense_types: [],
+        reports_by_employee: [],
+        reports_by_expense: [],
+        reports_by_date: []
     }),
     methods: {
         loadStatistics(start, end, employee_id) {
             let _this = this;
 
-            axios.get(`/api/data/statistics?start_date=${moment("2020-01-01").format("YYYY-MM-DD")}&end_date=${moment("2020-12-31").format("YYYY-MM-DD")}&employee_id=${employee_id}`)
-            .then(response => {
-                console.log(response);
-            }).catch(error => {
-                console.log(error);
-                console.log(error.response);
+            axios
+                .get(
+                    `/api/data/statistics?start_date=${moment(
+                        "2020-01-01"
+                    ).format("YYYY-MM-DD")}&end_date=${moment(
+                        "2020-12-31"
+                    ).format("YYYY-MM-DD")}&employee_id=${employee_id}`
+                )
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        loadExpenseTypes() {
+            let _this = this;
+
+            axios
+                .get(`/api/data/expense_types?only=true`)
+                .then(response => {
+                    console.log("expense types", response);
+
+                    _this.expense_types = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        loadReportByExpense() {
+            let _this = this;
+
+            axios
+                .get(`/api/data/print_report?by_expense_id=true`)
+                .then(response => {
+                    console.log("report by expense", response);
+                    _this.reports_by_expense = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        loadReportByEmployee() {
+            let _this = this;
+
+            axios
+                .get(`/api/data/print_report?by_employee_id=true`)
+                .then(response => {
+                    console.log("report by employee", response);
+                    _this.reports_by_employee = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        loadReportByDate() {
+            let _this = this;
+
+            axios
+                .get(`/api/data/print_report?by_date=true`)
+                .then(response => {
+                    console.log("report by date", response);
+                    _this.reports_by_date = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        printByExpense(action) {
+            // -------------------------------------------------------------------------------------
+            // Initialize variables
+            // -------------------------------------------------------------------------------------
+
+            let pdfName = "Expense Summary Report";
+            let table_columns = [];
+            let table_rows = [];
+            let table_footer = [];
+
+            // -------------------------------------------------------------------------------------
+            // JSPDF Basic Configuration
+            // -------------------------------------------------------------------------------------
+
+            let doc = new jsPDF({
+                orientation: "landscape",
+                unit: "in",
+                format: [13, 8.5]
             });
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Header Data
+            // -------------------------------------------------------------------------------------
+
+            table_columns.push("Date");
+            table_columns.push("Particulars");
+            this.expense_types.forEach(element => {
+                table_columns.push(element.name);
+            });
+            table_columns.push("Total");
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Body Data
+            // -------------------------------------------------------------------------------------
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Footer Data
+            // -------------------------------------------------------------------------------------
+
+            // -------------------------------------------------------------------------------------
+            // Page Header
+            // -------------------------------------------------------------------------------------
+
+            doc.setFontSize(14)
+                .setTextColor(0, 0, 0)
+                .text("Expense Summary Report", 6.75, 0.7, "center");
+
+            // -------------------------------------------------------------------------------------
+            // Page Body
+            // -------------------------------------------------------------------------------------
+
+            doc.autoTable({
+                styles: { fontSize: 10 },
+                columns: table_columns,
+                body: table_rows,
+                showHead: "everyPage",
+                headStyles: { halign: "center", fillColor: [76, 175, 10] },
+                startY: 0.9,
+                margin: { left: 0.5 },
+                columnStyles: { 1: { halign: "right" } }
+            });
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Prepared by", 0.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                0.5,
+                doc.lastAutoTable.finalY + 0.8,
+                3.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Recommended by", 3.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                3.5,
+                doc.lastAutoTable.finalY + 0.8,
+                6.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Checked by", 6.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                6.5,
+                doc.lastAutoTable.finalY + 0.8,
+                9.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Approved by", 9.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                9.5,
+                doc.lastAutoTable.finalY + 0.8,
+                12.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            // -------------------------------------------------------------------------------------
+            // Page Footer
+            // -------------------------------------------------------------------------------------
+
+            doc.setFontSize(8)
+                .setTextColor(0, 0, 0)
+                .text(
+                    `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                        "YYYY-MM-DD HH:mm:ss"
+                    )}`,
+                    0.5,
+                    doc.internal.pageSize.height - 0.5
+                );
+
+            // page number
+            let pages = doc.internal.getNumberOfPages();
+            let pageWidth = doc.internal.pageSize.width; //Optional
+            let pageHeight = doc.internal.pageSize.height; //Optional
+            doc.setFontSize(8); //Optional
+            for (let j = 1; j < pages + 1; j++) {
+                let horizontalPos = pageWidth - 0.5; //Can be fixed number
+                let verticalPos = pageHeight - 0.5; //Can be fixed number
+                doc.setPage(j);
+                doc.text(`Page ${j} of ${pages}`, horizontalPos, verticalPos, {
+                    align: "right"
+                }); //Optional text styling});
+            }
+            // end of page number
+
+            // -------------------------------------------------------------------------------------
+            // Print / Export Report
+            // -------------------------------------------------------------------------------------
+
+            if (action == "print") {
+                // doc.autoPrint();
+                doc.output("dataurlnewwindow");
+                // doc.autoPrint({ variant: "non-conform" });
+            } else {
+                doc.save(`${pdfName}.pdf`);
+            }
+        },
+        printByEmployee(action) {
+            // -------------------------------------------------------------------------------------
+            // Initialize variables
+            // -------------------------------------------------------------------------------------
+
+            let pdfName = "Expense Summary Report";
+            let table_columns = [];
+            let table_rows = [];
+            let table_footer = [];
+            let paper_size = [];
+
+            // -------------------------------------------------------------------------------------
+            // JSPDF Basic Configuration
+            // -------------------------------------------------------------------------------------
+
+            let doc = new jsPDF({
+                orientation: "landscape",
+                unit: "in",
+                format: [13, 8.5]
+            });
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Header Data
+            // -------------------------------------------------------------------------------------
+
+            table_columns.push("Employee");
+            this.expense_types.forEach(element => {
+                table_columns.push(element.name);
+            });
+            table_columns.push("Total");
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Body Data
+            // -------------------------------------------------------------------------------------
+
+            let temp_table_body = [];
+            let employee_id = null;
+            let expense_type = null;
+
+            this.reports_by_employee.forEach(element => {
+                if (employee_id !== element.employee_id) {
+                    employee_id = element.employee_id;
+                    temp_table_body.push(
+                        `${element.last_name}, ${element.first_name} ${element.middle_name} ${element.suffix}`
+                    );
+
+                    this.expense_types.forEach(expense_type => {
+                        temp_table_body.push(expense_type.name);
+                    });
+                }
+
+                
+            });
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Footer Data
+            // -------------------------------------------------------------------------------------
+
+            // -------------------------------------------------------------------------------------
+            // Page Header
+            // -------------------------------------------------------------------------------------
+
+            doc.setFontSize(14)
+                .setTextColor(0, 0, 0)
+                .text("Expense Summary Report", 6.75, 0.7, "center");
+
+            // -------------------------------------------------------------------------------------
+            // Page Body
+            // -------------------------------------------------------------------------------------
+
+            doc.autoTable({
+                styles: { fontSize: 10 },
+                columns: table_columns,
+                body: table_rows,
+                showHead: "everyPage",
+                headStyles: { halign: "center", fillColor: [76, 175, 10] },
+                startY: 0.9,
+                margin: { left: 0.5 },
+                columnStyles: { 1: { halign: "right" } }
+            });
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Prepared by", 0.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                0.5,
+                doc.lastAutoTable.finalY + 0.8,
+                3.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Checked by", 3.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                3.5,
+                doc.lastAutoTable.finalY + 0.8,
+                6.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Approved by", 6.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                6.5,
+                doc.lastAutoTable.finalY + 0.8,
+                9.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Voucher No.", 9.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                9.5,
+                doc.lastAutoTable.finalY + 0.8,
+                12.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            // -------------------------------------------------------------------------------------
+            // Page Footer
+            // -------------------------------------------------------------------------------------
+
+            doc.setFontSize(8)
+                .setTextColor(0, 0, 0)
+                .text(
+                    `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                        "YYYY-MM-DD HH:mm:ss"
+                    )}`,
+                    0.5,
+                    doc.internal.pageSize.height - 0.5
+                );
+
+            // page number
+            let pages = doc.internal.getNumberOfPages();
+            let pageWidth = doc.internal.pageSize.width; //Optional
+            let pageHeight = doc.internal.pageSize.height; //Optional
+            doc.setFontSize(8); //Optional
+            for (let j = 1; j < pages + 1; j++) {
+                let horizontalPos = pageWidth - 0.5; //Can be fixed number
+                let verticalPos = pageHeight - 0.5; //Can be fixed number
+                doc.setPage(j);
+                doc.text(`Page ${j} of ${pages}`, horizontalPos, verticalPos, {
+                    align: "right"
+                }); //Optional text styling});
+            }
+            // end of page number
+
+            // -------------------------------------------------------------------------------------
+            // Print / Export Report
+            // -------------------------------------------------------------------------------------
+
+            if (action == "print") {
+                // doc.autoPrint();
+                doc.output("dataurlnewwindow");
+                // doc.autoPrint({ variant: "non-conform" });
+            } else {
+                doc.save(`${pdfName}.pdf`);
+            }
+        },
+        printByDate(action) {
+            // -------------------------------------------------------------------------------------
+            // Initialize variables
+            // -------------------------------------------------------------------------------------
+
+            let pdfName = "Expense Summary Report";
+            let table_columns = [];
+            let table_rows = [];
+            let table_footer = [];
+            let paper_size = [];
+
+            // -------------------------------------------------------------------------------------
+            // JSPDF Basic Configuration
+            // -------------------------------------------------------------------------------------
+
+            let doc = new jsPDF({
+                orientation: "landscape",
+                unit: "in",
+                format: [13, 8.5]
+            });
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Header Data
+            // -------------------------------------------------------------------------------------
+
+            table_columns.push("Date");
+            this.expense_types.forEach(element => {
+                table_columns.push(element.name);
+            });
+            table_columns.push("Total");
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Body Data
+            // -------------------------------------------------------------------------------------
+
+            // -------------------------------------------------------------------------------------
+            // Set Table Footer Data
+            // -------------------------------------------------------------------------------------
+
+            // -------------------------------------------------------------------------------------
+            // Page Header
+            // -------------------------------------------------------------------------------------
+
+            doc.setFontSize(14)
+                .setTextColor(0, 0, 0)
+                .text("Expense Summary Report", 6.75, 0.7, "center");
+
+            // -------------------------------------------------------------------------------------
+            // Page Body
+            // -------------------------------------------------------------------------------------
+
+            doc.autoTable({
+                styles: { fontSize: 10 },
+                columns: table_columns,
+                body: table_rows,
+                showHead: "everyPage",
+                headStyles: { halign: "center", fillColor: [76, 175, 10] },
+                startY: 0.9,
+                margin: { left: 0.5 },
+                columnStyles: { 1: { halign: "right" } }
+            });
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Prepared by", 0.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                0.5,
+                doc.lastAutoTable.finalY + 0.8,
+                3.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Checked by", 3.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                3.5,
+                doc.lastAutoTable.finalY + 0.8,
+                6.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Approved by", 6.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                6.5,
+                doc.lastAutoTable.finalY + 0.8,
+                9.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            doc.setFontSize(10)
+                .setTextColor(0, 0, 0)
+                .text("Voucher No.", 9.5, doc.lastAutoTable.finalY + 0.4);
+
+            doc.setLineWidth(0.01);
+            doc.line(
+                9.5,
+                doc.lastAutoTable.finalY + 0.8,
+                12.0,
+                doc.lastAutoTable.finalY + 0.8
+            );
+
+            // -------------------------------------------------------------------------------------
+            // Page Footer
+            // -------------------------------------------------------------------------------------
+
+            doc.setFontSize(8)
+                .setTextColor(0, 0, 0)
+                .text(
+                    `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                        "YYYY-MM-DD HH:mm:ss"
+                    )}`,
+                    0.5,
+                    doc.internal.pageSize.height - 0.5
+                );
+
+            // page number
+            let pages = doc.internal.getNumberOfPages();
+            let pageWidth = doc.internal.pageSize.width; //Optional
+            let pageHeight = doc.internal.pageSize.height; //Optional
+            doc.setFontSize(8); //Optional
+            for (let j = 1; j < pages + 1; j++) {
+                let horizontalPos = pageWidth - 0.5; //Can be fixed number
+                let verticalPos = pageHeight - 0.5; //Can be fixed number
+                doc.setPage(j);
+                doc.text(`Page ${j} of ${pages}`, horizontalPos, verticalPos, {
+                    align: "right"
+                }); //Optional text styling});
+            }
+            // end of page number
+
+            // -------------------------------------------------------------------------------------
+            // Print / Export Report
+            // -------------------------------------------------------------------------------------
+
+            if (action == "print") {
+                // doc.autoPrint();
+                doc.output("dataurlnewwindow");
+                // doc.autoPrint({ variant: "non-conform" });
+            } else {
+                doc.save(`${pdfName}.pdf`);
+            }
         }
     },
     mounted() {
         this.loadStatistics();
-    },
+
+        this.loadExpenseTypes();
+        this.loadReportByExpense();
+        this.loadReportByEmployee();
+        this.loadReportByDate();
+    }
 };
 </script>

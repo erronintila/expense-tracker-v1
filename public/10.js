@@ -607,6 +607,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          console.log(items);
           _this.loading = false;
           resolve({
             items: items,
@@ -1131,6 +1132,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     onDuplicate: function onDuplicate() {
       this.onUpdate("duplicate", "put");
+    },
+    show_edit: function show_edit(item) {
+      // let item = null;
+      if (!this.mixin_can('edit expense reports')) {
+        return false;
+      }
+
+      if (item) {
+        if (!item.approved_at) {
+          return false;
+        } else if (!item.cancelled_at) {
+          return false;
+        } else if (!item.deleted_at) {
+          return false;
+        }
+      }
+
+      return true;
     }
   },
   watch: {
@@ -1961,7 +1980,7 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _vm.mixin_can("edit expense reports")
+                            _vm.show_edit(item)
                               ? _c(
                                   "v-icon",
                                   {

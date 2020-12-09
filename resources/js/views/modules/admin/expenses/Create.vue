@@ -366,9 +366,7 @@
                                                                 <div>
                                                                     Limit:
                                                                     {{
-                                                                        form
-                                                                            .expense_type
-                                                                            .limit
+                                                                        mixin_formatNumber(expense_amount_limit)
                                                                     }}
                                                                     / quantity
                                                                 </div>
@@ -633,6 +631,10 @@ export default {
             axios
                 .get("/api/data/employees")
                 .then(response => {
+                    let data = response.data.data;
+
+                    console.log(data);
+
                     _this.employees = response.data.data;
                 })
                 .catch(error => {

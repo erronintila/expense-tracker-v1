@@ -414,7 +414,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit expense reports')"
+                            v-if="show_edit(item)"
                         >
                             mdi-pencil
                         </v-icon>
@@ -572,6 +572,8 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+
+                        console.log(items);
 
                         _this.loading = false;
 
@@ -1156,7 +1158,26 @@ export default {
         },
         onDuplicate() {
             this.onUpdate("duplicate", "put");
-        }
+        },
+        show_edit(item) {
+            // let item = null;
+
+            if(!this.mixin_can('edit expense reports')) {
+                return false
+            }
+
+            if(item) {
+                if(!item.approved_at) {
+                    return false;
+                } else if(!item.cancelled_at) {
+                    return false;
+                } else if(!item.deleted_at) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
     },
     watch: {
         params: {
@@ -1191,7 +1212,8 @@ export default {
             } else if (this.selected.length == 0) {
                 this.warning = null;
             }
-        }
+        },
+        
     },
     computed: {
         params(nv) {
