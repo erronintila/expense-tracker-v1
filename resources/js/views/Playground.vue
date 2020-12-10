@@ -63,6 +63,9 @@
                     <v-btn color="blue" @click="printByDate('print')"
                         >Group By Date</v-btn
                     >
+                    <v-btn color="orange" @click="printPDFMAKE('print')"
+                        >PDFMAKE</v-btn
+                    >
 
                     <v-card class="mx-auto mb-4" flat>
                         <v-list-item three-line>
@@ -301,6 +304,102 @@ export default {
         reports_by_date: []
     }),
     methods: {
+        printPDFMAKE(action) {
+            let pdfMake = require("pdfmake/build/pdfmake.js");
+            if (pdfMake.vfs == undefined) {
+                var pdfFonts = require("pdfmake/build/vfs_fonts.js");
+                pdfMake.vfs = pdfFonts.pdfMake.vfs;
+            }
+
+            pdfMake.fonts = {
+                Roboto: {
+                    normal: "Roboto-Regular.ttf",
+                    bold: "Roboto-Medium.ttf",
+                    italics: "Roboto-Italic.ttf",
+                    bolditalics: "Roboto-MediumItalic.ttf"
+                },
+            };
+
+            let docDefinition = {
+                pageSize: { width: 13 * 72, height: 8.5 * 72 },
+                // pageSize: 'legal',
+                pageOrientation: "landscape",
+                pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+                defaultStyle: {
+                    font: "Roboto"
+                },
+                content: [
+                    {
+                        text: ["Expense Summary Report"],
+                        style: "header"
+                    },
+                    {
+                        style: "tableExample",
+                        table: {
+                            headerRows: 1,
+                            widths: ["*", "*", "*"],
+                            body: [
+                                [
+                                    {
+                                        text: "Header 1",
+                                        style: "tableHeader"
+                                    },
+                                    { text: "Header 2", style: "tableHeader" },
+                                    { text: "Header 3", style: "tableHeader" }
+                                ],
+                                [
+                                    {
+                                        text: "One value goes here",
+                                        style: "tableBody"
+                                    },
+                                    {
+                                        text: "One value goes here"
+                                    },
+                                    {
+                                        text: "One value goes here"
+                                    }
+                                ]
+                            ]
+                        },
+                        layout: {
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
+                            }
+                        }
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 14,
+                        bold: false,
+                        alignment: "center"
+                        // margin: [0, 190, 0, 80]
+                    },
+                    subheader: {
+                        fontSize: 14
+                    },
+                    superMargin: {
+                        margin: [20, 0, 40, 0],
+                        fontSize: 15
+                    },
+                    tableExample: {
+                        margin: [0, 5, 0, 15]
+                    },
+                    tableHeader: {
+                        bold: true,
+                        fontSize: 13,
+                        color: "white",
+                        fillColor: "#4caf50"
+                    },
+                    tableBody: {
+                        fontSize: 11
+                    }
+                }
+            };
+            // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
+            // pdfMake.createPdf(docDefinition).print();
+            pdfMake.createPdf(docDefinition).open();
+        },
         loadStatistics(start, end, employee_id) {
             let _this = this;
 
@@ -570,10 +669,8 @@ export default {
 
             // loop through retrieved records
             this.reports_by_employee.forEach(element => {
-
                 // create new object if current employee does not match with previous record
                 if (employee_id !== element.employee_id) {
-
                     temp_table_body = {};
                     employee_id = element.employee_id;
 
@@ -591,7 +688,7 @@ export default {
                     table_rows.push(temp_table_body);
                 }
 
-                // set expense type amount 
+                // set expense type amount
                 temp_table_body[element.expense_type_name] =
                     element.expense_amount;
 
@@ -609,20 +706,21 @@ export default {
 
             // sum total amount per expense type
             this.expense_types.forEach(expense_type => {
-                temp_expense_types[expense_type.name] = this.mixin_formatNumber(table_rows.reduce(
-                    (total, item) => total + item[expense_type.name],
-                    0
-                ));
+                temp_expense_types[expense_type.name] = this.mixin_formatNumber(
+                    table_rows.reduce(
+                        (total, item) => total + item[expense_type.name],
+                        0
+                    )
+                );
             });
 
             // add row for total amounts
             table_rows.push({
                 Total: "Total",
                 ...temp_expense_types,
-                TotalAmount: this.mixin_formatNumber(table_rows.reduce(
-                    (total, item) => total + item["Total"],
-                    0
-                ))
+                TotalAmount: this.mixin_formatNumber(
+                    table_rows.reduce((total, item) => total + item["Total"], 0)
+                )
             });
 
             console.log(table_rows);
@@ -651,7 +749,7 @@ export default {
                 headStyles: { halign: "center", fillColor: [76, 175, 10] },
                 startY: 0.9,
                 margin: { left: 0.5 },
-                columnStyles: { 0: { halign: "left" } },
+                columnStyles: { 0: { halign: "left" } }
             });
 
             doc.setFontSize(10)
