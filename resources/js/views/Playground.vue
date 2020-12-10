@@ -563,24 +563,69 @@ export default {
             // Set Table Body Data
             // -------------------------------------------------------------------------------------
 
-            let temp_table_body = [];
+            let temp_table_body = {};
+            let temp_expense_types = {};
             let employee_id = null;
             let expense_type = null;
 
+            // loop through retrieved records
             this.reports_by_employee.forEach(element => {
-                if (employee_id !== element.employee_id) {
-                    employee_id = element.employee_id;
-                    temp_table_body.push(
-                        `${element.last_name}, ${element.first_name} ${element.middle_name} ${element.suffix}`
-                    );
 
+                // create new object if current employee does not match with previous record
+                if (employee_id !== element.employee_id) {
+
+                    temp_table_body = {};
+                    employee_id = element.employee_id;
+
+                    // set default values for current row
                     this.expense_types.forEach(expense_type => {
-                        temp_table_body.push(expense_type.name);
+                        temp_expense_types[expense_type.name] = 0;
                     });
+
+                    temp_table_body = {
+                        Employee: `${element.last_name}, ${element.first_name} ${element.middle_name} ${element.suffix}`,
+                        ...temp_expense_types,
+                        Total: 0
+                    };
+
+                    table_rows.push(temp_table_body);
                 }
 
-                
+                // set expense type amount 
+                temp_table_body[element.expense_type_name] =
+                    element.expense_amount;
+
+                // sum of all expense types
+                if ("Total" in temp_table_body) {
+                    let total = 0;
+
+                    this.expense_types.forEach(item => {
+                        total += temp_table_body[item.name];
+                    });
+
+                    temp_table_body["Total"] = total;
+                }
             });
+
+            // sum total amount per expense type
+            this.expense_types.forEach(expense_type => {
+                temp_expense_types[expense_type.name] = this.mixin_formatNumber(table_rows.reduce(
+                    (total, item) => total + item[expense_type.name],
+                    0
+                ));
+            });
+
+            // add row for total amounts
+            table_rows.push({
+                Total: "Total",
+                ...temp_expense_types,
+                TotalAmount: this.mixin_formatNumber(table_rows.reduce(
+                    (total, item) => total + item["Total"],
+                    0
+                ))
+            });
+
+            console.log(table_rows);
 
             // -------------------------------------------------------------------------------------
             // Set Table Footer Data
@@ -599,14 +644,14 @@ export default {
             // -------------------------------------------------------------------------------------
 
             doc.autoTable({
-                styles: { fontSize: 10 },
+                styles: { fontSize: 10, halign: "right" },
                 columns: table_columns,
-                body: table_rows,
+                body: table_rows.map(item => Object.values(item)),
                 showHead: "everyPage",
                 headStyles: { halign: "center", fillColor: [76, 175, 10] },
                 startY: 0.9,
                 margin: { left: 0.5 },
-                columnStyles: { 1: { halign: "right" } }
+                columnStyles: { 0: { halign: "left" } },
             });
 
             doc.setFontSize(10)
