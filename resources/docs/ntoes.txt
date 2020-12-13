@@ -1,0 +1,115 @@
+Expense management is one of the biggest challenges of managing a business. It is the system a business uses to process, pay and audit their business spend. These costs normally include employee travel, accommodation, etc., while done on an official visit. 
+Hence, the company or any organization needs to improve the efficiency of processes, to promote conventional digitized records system, to increase response time and to improve customer service.
+Travel-related expenses are often 
+
+
+one of the biggest challenge of running your own business can be keeping on top of your accounts, but don't fret - the best expense tracker apps can simplify how you record your income and spending.
+
+Even with the use of accounting software, it's one thing to keep up with your billing and invoicing, but another to manage irregular expenses such as store receipts and travel tickets.
+
+Worse still is that those small expense receipts can become easily misplaced, not least by getting mixed up with your files of normal invoices and end up in the wrong date range, or even thrown away in the trash. 
+
+Luckily, there are a number of software and apps available for managing your expenses, and we've picked the best expense tracker apps here.
+This system documentation has been created to outline the system design, architecture, and __ for the new employee expense management process.
+
+What are expenses in accounting?
+What are expenses for the company, of the company, or in businesses?
+How to handle these expenses?
+Current state of technology.
+What are the problems encountered?
+What are the main benefits of having a system?
+State all the reasons above why these resulted to having an expense tracking software.
+What is the system all about? (note: indicate that it is a web app not desktop or mobile app)
+
+Include accounting terms like revolving fund, reimbursement, replenishments
+easy expense tracking, approval, and reimbursement
+According to a study by XRSP, organizations spend an average of 45 minutes per expense report when the process is manual. With an expense tracking solution, businesses can reduce their expense processing costs by 60% (which saves about $7 per expense report), and shorten their expense reporting process to a few minutes. With streamlined expense tracking software for web and mobile, Zoho Expense can do a lot for your business.
+
+Expense reporting at your fingertips
+A smartphone with an internet connection is your new office. Report expenses from anywhere and in any currency.
+Manage branch expenses
+Expense policies bring forth better foreplanning. With smart expense tracking software, you can create expense policies, specify maximum reimbursement limits for each expense category, and track expenses that don't fall under your policy guidelines.
+Customize your approval flow
+Each expense report is unique and requires a specific approval flow. Zoho's expense tracking software allows you customize expense approvals based on criteria, so that expense reports are sent to the right approver, eliminating the need for manual tracking.
+Rectify policy-violated expenses
+Violated expense claims that don't fall under company guidelines requires effective communication for employees to justify their spending. Leave a comment right below the report in question within Zoho Expense, and follow-up on unclear expense claims with clear explanations.
+Analyze your spending
+Good analysis leads to better expense tracking. With 25+ analytic reports, you'll be able to view detailed statistics of how much your company is spending, who is spending the most, and generate reports based on each expense category to optimize spending behaviour.
+Small Business Expense Tracking Challenges
+Manual data entry
+53%
+Lengthy reimbursement time
+13%
+Frequent travel policy non-compliance
+30%
+Poor visibility into spending patterns
+33%
+Need to reduce expense-processing costs
+Time Saving with Approval Flows
+Save a great deal of time through setting up automated approval flows, enabling the right approvers to see the right reports, enforcing faster response time.
+Visiblity with Analytics
+Explore your Travel and Entertainment spending data with more than twenty different analytical reports and find out where each cent of your money is going. Strategize your spending patterns the smart way.
+Reduction in Expense-Processing Cost
+When your employees make an expense reimbursement request, respond to their claims swiftly, through paperless automated services.	
+Tax Calculations
+Zoho Expense lets you set up tax percentages and automatically applies the tax to your expenses saving you precious time and effort in expense calculation.
+Customized Workflow
+Clear communication between small business owners and employees is the key to business growth. Set up personalized workflows and establish transparency in communication between you and your employees.
+Customer & Project Management
+Managing customers and their associated projects within a single system keeps your workflow organized. Also, you'll also be able to track expenses spent for your customers and bill them, if necessary.
+FEATURES
+Expenses
+Mileage Tracking
+Expense Reporting Automation
+Corporate Card Reconciliation
+Direct Feeds
+Expense Report Approval
+Expense Policies
+Zoho Books Integration
+Zoho CRM Integration
+Zoho People Integration
+QuickBooks Integration
+One of the biggest challenge of running your own business can be keeping on top of your accounts, but don't fret - the best expense tracker apps can simplify how you record your income and spending.
+
+Even with the use of accounting software, it's one thing to keep up with your billing and invoicing, but another to manage irregular expenses such as store receipts and travel tickets.
+
+Worse still is that those small expense receipts can become easily misplaced, not least by getting mixed up with your files of normal invoices and end up in the wrong date range, or even thrown away in the trash. 
+
+Luckily, there are a number of software and apps available for managing your expenses, and we've picked the best expense tracker apps here.
+
+Some of these are cloud-based, and allow you to use an app on your smartphone or other mobile device to  not only enter the amount but also scan the receipt to create a digital image. This makes it much easier to keep a copy and file it away in case it's needed by your accountant or even someone from your tax office, plus in just using your phone you can do this on the move.
+
+Additionally, the ease by which document scanning can now be done by an app means that you can keep on top of deductible expenses, helping ensure you bank the profit due to you and pay less on taxes.
+
+This becomes an essential concern the more employees a business has, as lost receipts are literally money thrown away. Software that allows businesses to keep a proper record of expenses isn't just more efficient, it's also more profitable.
+---
+QuickBooks is one of the most popular and effective accounting applications for businesses of all sizes. Available on a variety of platforms, the app aims to keep all aspects of your accounting process running smoothly. There’s a big emphasis on expense tracking here.
+
+There are real-time dashboards so you can keep up-to-date with all your financial transactions as they happen, and you can download bank account data automatically. That way, you won’t have to waste time typing information into spreadsheets.
+
+You can also track invoices to ensure you get paid on time and chase them up when a client’s payment is overdue. The app even provides sales tax tracking compliant with tax standards, and you can capture all your receipts on your mobile device. Perhaps best of all for smaller firms, this is one solution that won’t break the bank.
+
+And it's getting better all the time. You can also get QuickBooks Self-Employed, QuickBooks Online Accountant (QBOA) and QuickBooks Assistant.
+Formerly known as Xpenditure, Rydoo positions itself as paperless expense reporting app for growing business and enterprises. It aims to streamline the way you track expenses, and allow you to do so without having to spend money on an accountant. 
+
+The app saves you lots of time in this respect, avoiding manual input and paper-based expense reporting. In terms of capabilities, you can upload receipts via the app or email. Once you’ve done that, it’ll extract the most important data and order all this based on projects and categories.
+
+Within the app, there’s the option to log cash advances and mileages, and you can set up offices, branches and groups to organise how you use the software and to improve your financial policy. For your records, you can generate reports in the form of XML, PDF, CSV and XLS files.
+Zoho Expense comes from business software specialist Zoho and is an expense tracking app aimed at small to medium sized businesses (SMB).
+
+The application can automatically turn receipts into expense entries and several can be grouped together into a single report. There’s also the possibility to import card transactions and forward expenses from your inbox.
+
+Receipts are stored in the cloud, so you don’t have to worry about receipts fading or getting lost.
+
+For organisations, it’s possible to set policies about spending limits and to monitor an employee’s expenditure or any policy violation. The addition of instant approval makes life easier for both the business and employee.
+
+Finally, there are UK specific features. VAT is automatically calculated and mileage expenses are calculated at HMRC rates.
+Say goodbye to manual expense reporting and lost receipts
+When you automate and integrate expense management, you can capture spend from multiple sources, make intelligent business decisions based on accurate data, and simplify the process for everyone.
+
+See all of your expense data in one place
+Easily enforce spending policies
+Automatically capture receipts and process reports
+Reimburse employees more quickly
+See all of your spending in one place
+By combining our travel, expense, and invoice solutions, you can see detailed data across three major areas of employee spend. With this visibility, you can better manage budgets, forecast more accurately, and drive policy compliance.
