@@ -533,7 +533,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -669,6 +668,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
 
         _this.expense_types = data.employee.expense_types;
+        console.log(data.employee.expense_types);
         _this.sub_types = data.expense_type.sub_types;
         _this.form.is_tax_inclusive = data.is_tax_inclusive;
         _this.form.tax_name = data.tax_name;
@@ -770,6 +770,33 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this = this;
 
+      var expense_type_limit = this.form.expense_type.limit;
+      var sub_type_limit = this.form.sub_type.limit;
+      var expense_limit = sub_type_limit == null ? expense_type_limit : sub_type_limit;
+      var expense_amount = this.form.amount;
+
+      if (!this.mixin_can("add expenses beyond limit")) {
+        if (!this.itemize) {
+          if (expense_limit !== null && expense_limit < expense_amount) {
+            _this.$dialog.message.error("Amount can't be greater than expense limit.", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            return;
+          }
+        } else {
+          if (expense_limit !== null && expense_limit < this.form.details_amount) {
+            _this.$dialog.message.error("Itemized Expenses Amount can't be greater than expense limit", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            return;
+          }
+        }
+      }
+
       if (_this.form.employee.id == null) {
         _this.$dialog.message.error("No Employee Selected", {
           position: "top-right",
@@ -825,8 +852,7 @@ __webpack_require__.r(__webpack_exports__);
           tax_amount: _this.form.tax_amount,
           is_tax_inclusive: _this.form.is_tax_inclusive
         }).then(function (response) {
-          _this.onRefresh();
-
+          // _this.onRefresh();
           _this.$dialog.message.success("Expense updated successfully.", {
             position: "top-right",
             timeout: 2000
@@ -852,9 +878,18 @@ __webpack_require__.r(__webpack_exports__);
       var quantity = this.mixin_convertToNumber(this.form.details.quantity);
       var amount = this.mixin_convertToNumber(this.form.details.amount);
       var total = this.mixin_convertToNumber(this.form.details.total);
+      var limit = this.expense_amount_limit;
 
       if (description == "" || total <= 0) {
         return;
+      }
+
+      if (!this.mixin_can("add expenses beyond limit")) {
+        if (limit !== null) {
+          if (limit * quantity < amount) {
+            return;
+          }
+        }
       }
 
       this.items.push({
@@ -987,6 +1022,9 @@ __webpack_require__.r(__webpack_exports__);
       var total = (this.mixin_convertToNumber(this.form.details.quantity) * this.mixin_convertToNumber(this.form.details.amount)).toFixed(2);
       this.form.details.total = total;
       return total;
+    },
+    expense_amount_limit: function expense_amount_limit() {
+      return this.form.sub_type.limit == null ? this.form.expense_type.limit : this.form.sub_type.limit;
     }
   },
   watch: {
@@ -1005,6 +1043,24 @@ __webpack_require__.r(__webpack_exports__);
       this.form.amount = this.items.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.total);
       }, 0);
+
+      if (this.form.employee.id == null) {
+        this.itemize = false;
+        this.$dialog.message.error("No Employee Selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (this.form.expense_type.id == null) {
+        this.itemize = false;
+        this.$dialog.message.error("No Expense Type Selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
     } // "form.vendor": function() {
     //     this.form.tax_rate = 0;
     //     this.form.tax_amount = 0;
@@ -1497,7 +1553,7 @@ var render = function() {
                                     "v-list-item-subtitle",
                                     [
                                       _vm._v(
-                                        "\n                                Remaining Fund:\n                                \n                                "
+                                        "\n                                Remaining Fund:\n\n                                "
                                       ),
                                       _c(
                                         "v-btn",
@@ -1520,7 +1576,7 @@ var render = function() {
                                         ]
                                       ),
                                       _vm._v(
-                                        "\n                                ~ Expense Limit: "
+                                        "\n                                ~ Expense Limit:\n                                "
                                       ),
                                       _c(
                                         "v-btn",
@@ -1534,7 +1590,11 @@ var render = function() {
                                         },
                                         [
                                           _vm._v(
-                                            _vm._s(_vm.mixin_formatNumber(0))
+                                            _vm._s(
+                                              _vm.mixin_formatNumber(
+                                                _vm.expense_amount_limit
+                                              )
+                                            )
                                           )
                                         ]
                                       )
@@ -1933,10 +1993,9 @@ var render = function() {
                                                                                 _vm._v(
                                                                                   "\n                                                                Limit:\n                                                                " +
                                                                                     _vm._s(
-                                                                                      _vm
-                                                                                        .form
-                                                                                        .expense_type
-                                                                                        .limit
+                                                                                      _vm.mixin_formatNumber(
+                                                                                        _vm.expense_amount_limit
+                                                                                      )
                                                                                     ) +
                                                                                     "\n                                                                / quantity\n                                                            "
                                                                                 )

@@ -84,6 +84,7 @@ class UserSeeder extends Seeder
 
             if ($model == "expenses") {
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
+                Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 

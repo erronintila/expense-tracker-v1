@@ -193,16 +193,15 @@
                             </v-list-item-title> -->
                                 <v-list-item-subtitle>
                                     Remaining Fund:
-                                    
+
                                     <v-btn color="green" dark small outlined>{{
                                         mixin_formatNumber(
                                             form.employee.remaining_fund
                                         )
                                     }}</v-btn>
-                                    ~ Expense Limit: <v-btn color="green" dark small outlined>{{
-                                        mixin_formatNumber(
-                                            0
-                                        )
+                                    ~ Expense Limit:
+                                    <v-btn color="green" dark small outlined>{{
+                                        mixin_formatNumber(expense_amount_limit)
                                     }}</v-btn>
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle>
@@ -362,9 +361,9 @@
                                                                 <div>
                                                                     Limit:
                                                                     {{
-                                                                        form
-                                                                            .expense_type
-                                                                            .limit
+                                                                        mixin_formatNumber(
+                                                                            expense_amount_limit
+                                                                        )
                                                                     }}
                                                                     / quantity
                                                                 </div>
@@ -650,6 +649,7 @@ export default {
                         // _this.form.sub_type = data.sub_type_id;
 
                         _this.expense_types = data.employee.expense_types;
+                        console.log(data.employee.expense_types);
                         _this.sub_types = data.expense_type.sub_types;
 
                         _this.form.is_tax_inclusive = data.is_tax_inclusive;
@@ -777,6 +777,43 @@ export default {
         },
         onSave() {
             let _this = this;
+            let expense_type_limit = this.form.expense_type.limit;
+            let sub_type_limit = this.form.sub_type.limit;
+            let expense_limit =
+                sub_type_limit == null ? expense_type_limit : sub_type_limit;
+            let expense_amount = this.form.amount;
+
+            if (!this.mixin_can("add expenses beyond limit")) {
+                if (!this.itemize) {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < expense_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Amount can't be greater than expense limit.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
+                    }
+                } else {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < this.form.details_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Itemized Expenses Amount can't be greater than expense limit",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
+                    }
+                }
+            }
 
             if (_this.form.employee.id == null) {
                 _this.$dialog.message.error("No Employee Selected", {
@@ -838,7 +875,7 @@ export default {
                         is_tax_inclusive: _this.form.is_tax_inclusive
                     })
                     .then(function(response) {
-                        _this.onRefresh();
+                        // _this.onRefresh();
 
                         _this.$dialog.message.success(
                             "Expense updated successfully.",
@@ -874,9 +911,18 @@ export default {
             );
             let amount = this.mixin_convertToNumber(this.form.details.amount);
             let total = this.mixin_convertToNumber(this.form.details.total);
+            let limit = this.expense_amount_limit;
 
             if (description == "" || total <= 0) {
                 return;
+            }
+
+            if (!this.mixin_can("add expenses beyond limit")) {
+                if (limit !== null) {
+                    if (limit * quantity < amount) {
+                        return;
+                    }
+                }
             }
 
             this.items.push({
@@ -1037,6 +1083,11 @@ export default {
             this.form.details.total = total;
 
             return total;
+        },
+        expense_amount_limit() {
+            return this.form.sub_type.limit == null
+                ? this.form.expense_type.limit
+                : this.form.sub_type.limit;
         }
     },
     watch: {
@@ -1061,6 +1112,28 @@ export default {
                 (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
+
+            if (this.form.employee.id == null) {
+                this.itemize = false;
+
+                this.$dialog.message.error("No Employee Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+
+                return;
+            }
+
+            if (this.form.expense_type.id == null) {
+                this.itemize = false;
+
+                this.$dialog.message.error("No Expense Type Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+
+                return;
+            }
         }
         // "form.vendor": function() {
         //     this.form.tax_rate = 0;

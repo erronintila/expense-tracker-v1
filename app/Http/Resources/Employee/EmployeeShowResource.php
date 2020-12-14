@@ -59,7 +59,7 @@ class EmployeeShowResource extends JsonResource
             // -------------------------------------------------------------------
             "user" => new UserOnlyResource($this->whenLoaded("user")),
             "job" => new JobIndexResource($this->whenLoaded("job")),
-            "expense_types" => ExpenseTypeOnlyResource::collection($this->whenLoaded('expense_types')),
+            "expense_types" => ExpenseTypeShowResource::collection($this->whenLoaded('expense_types')),
         ];
     }
 }
