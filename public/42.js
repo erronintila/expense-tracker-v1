@@ -533,6 +533,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2221,7 +2225,11 @@ var render = function() {
                                           _c("v-text-field", {
                                             attrs: {
                                               label: "Tax Rate",
-                                              suffix: "%"
+                                              suffix: "%",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
                                             },
                                             model: {
                                               value: _vm.form.tax_rate,
@@ -2244,7 +2252,13 @@ var render = function() {
                                         { attrs: { cols: "12", md: "8" } },
                                         [
                                           _c("v-text-field", {
-                                            attrs: { label: "Tax Amount" },
+                                            attrs: {
+                                              label: "Tax Amount",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
+                                            },
                                             model: {
                                               value: _vm.taxable_amount,
                                               callback: function($$v) {

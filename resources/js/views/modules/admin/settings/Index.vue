@@ -111,6 +111,34 @@
                         </v-container>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
+
+                <v-expansion-panel>
+                    <v-expansion-panel-header>
+                        <div class="green--text">
+                            Taxes
+                        </div>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <v-container>
+                            <v-form ref="formTaxes">
+                                <v-row>
+                                    <v-col cols="12" md="4">
+                                        <v-text-field
+                                            v-model="settings.tax_rate"
+                                            label="Tax Rate"
+                                            suffix="%"
+                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(0)]"
+                                            :hint="
+                                                'Tax rate to be imposed on expenses.'
+                                            "
+                                            persistent-hint
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-container>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
             </v-expansion-panels>
         </v-card>
     </div>
@@ -128,7 +156,8 @@ export default {
                 expiry_period: 1,
                 expense_encoding_period: 1,
                 submission_period: "Weekly",
-                approval_period: 1
+                approval_period: 1,
+                tax_rate: 0,
             },
             panel: [0, 1, 2, 3]
         };

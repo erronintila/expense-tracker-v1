@@ -129,6 +129,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -139,7 +167,8 @@ __webpack_require__.r(__webpack_exports__);
         expiry_period: 1,
         expense_encoding_period: 1,
         submission_period: "Weekly",
-        approval_period: 1
+        approval_period: 1,
+        tax_rate: 0
       },
       panel: [0, 1, 2, 3]
     };
@@ -414,6 +443,78 @@ var render = function() {
                                             )
                                           },
                                           expression: "settings.approval_period"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-expansion-panel",
+                [
+                  _c("v-expansion-panel-header", [
+                    _c("div", { staticClass: "green--text" }, [
+                      _vm._v(
+                        "\n                        Taxes\n                    "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel-content",
+                    [
+                      _c(
+                        "v-container",
+                        [
+                          _c(
+                            "v-form",
+                            { ref: "formTaxes" },
+                            [
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Tax Rate",
+                                          suffix: "%",
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              0
+                                            )
+                                          ),
+                                          hint:
+                                            "Tax rate to be imposed on expenses.",
+                                          "persistent-hint": ""
+                                        },
+                                        model: {
+                                          value: _vm.settings.tax_rate,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings,
+                                              "tax_rate",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "settings.tax_rate"
                                         }
                                       })
                                     ],

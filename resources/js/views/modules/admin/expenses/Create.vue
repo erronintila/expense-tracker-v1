@@ -432,6 +432,8 @@
                                         v-model="form.tax_rate"
                                         label="Tax Rate"
                                         suffix="%"
+                                        type="number"
+                                        :readonly="!mixin_can('modify taxes on expense')"
                                     ></v-text-field>
                                 </v-col>
 
@@ -439,6 +441,8 @@
                                     <v-text-field
                                         v-model="taxable_amount"
                                         label="Tax Amount"
+                                        type="number"
+                                        :readonly="!mixin_can('modify taxes on expense')"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -1033,7 +1037,7 @@ export default {
             }
         },
         "form.vendor": function() {
-            this.form.tax_rate = 0;
+            this.form.tax_rate = this.$store.getters.settings.tax_rate;
             this.form.tax_amount = 0;
             this.form.is_tax_inclusive = true;
         }
@@ -1043,6 +1047,8 @@ export default {
         this.loadEmployees();
         this.loadVendors();
         //
+
+        console.log(this.mixin_can('modify taxes on expense'));
     }
 };
 </script>

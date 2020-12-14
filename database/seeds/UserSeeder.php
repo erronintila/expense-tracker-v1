@@ -39,17 +39,24 @@ class UserSeeder extends Seeder
             "expenses",
             // "adjustments",
             "activity logs",
+            "taxes",
             "settings",
-            "authentication"
+            "authentication",
         ];
 
         // create permissions
 
         foreach ($models as $model) {
+            
             if ($model == "activity logs") {
                 Permission::create(['name' => 'export ' . $model, 'category' => $model]);
                 Permission::create(['name' => 'delete ' . $model, 'category' => $model]);
                 Permission::create(['name' => 'view all ' . $model, 'category' => $model]);
+                continue;
+            }
+
+            if ($model == "taxes") {
+                Permission::create(['name' => 'modify taxes on expense', 'category' => $model]);
                 continue;
             }
 
@@ -192,6 +199,7 @@ class UserSeeder extends Seeder
         Setting::set("expense_encoding_period", 2);
         Setting::set("submission_period", "Weekly");
         Setting::set("approval_period", 3);
+        Setting::set("tax_rate", 12);
         Setting::save();
     }
 }

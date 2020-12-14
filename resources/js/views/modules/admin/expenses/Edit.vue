@@ -429,6 +429,8 @@
                                         v-model="form.tax_rate"
                                         label="Tax Rate"
                                         suffix="%"
+                                        type="number"
+                                        :readonly="!mixin_can('modify taxes on expense')"
                                     ></v-text-field>
                                 </v-col>
 
@@ -436,6 +438,8 @@
                                     <v-text-field
                                         v-model="taxable_amount"
                                         label="Tax Amount"
+                                        type="number"
+                                        :readonly="!mixin_can('modify taxes on expense')"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>

@@ -536,6 +536,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -985,7 +989,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "form.vendor": function formVendor() {
-      this.form.tax_rate = 0;
+      this.form.tax_rate = this.$store.getters.settings.tax_rate;
       this.form.tax_amount = 0;
       this.form.is_tax_inclusive = true;
     }
@@ -994,6 +998,8 @@ __webpack_require__.r(__webpack_exports__);
     // this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.loadVendors(); //
+
+    console.log(this.mixin_can('modify taxes on expense'));
   }
 });
 
@@ -2143,7 +2149,11 @@ var render = function() {
                                           _c("v-text-field", {
                                             attrs: {
                                               label: "Tax Rate",
-                                              suffix: "%"
+                                              suffix: "%",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
                                             },
                                             model: {
                                               value: _vm.form.tax_rate,
@@ -2166,7 +2176,13 @@ var render = function() {
                                         { attrs: { cols: "12", md: "8" } },
                                         [
                                           _c("v-text-field", {
-                                            attrs: { label: "Tax Amount" },
+                                            attrs: {
+                                              label: "Tax Amount",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
+                                            },
                                             model: {
                                               value: _vm.taxable_amount,
                                               callback: function($$v) {
