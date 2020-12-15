@@ -22,8 +22,6 @@ autorefresh remaining fund info on sidebar
 
 LAG IN EXPENSE REPORTS
 
-expense cant be cancelled even if no report
-
 expense report can be edited
 
 Travel From, To
@@ -37,8 +35,6 @@ error dashboard awaiting reimbursement if partial payment
 lag in dashboard data retrieval
 
 add summary of statuses on expenses and expense reports
-
-expense limit
 
 expense type custom field like transpo, place of origin and destination
 
@@ -67,6 +63,8 @@ eager loading to prevent n+1 problem
 error when directly printing, jspdf
 add # items selected info and button for clearing selection
 add restore in expenses without report when deleted
+expense cant be cancelled even if no report
+expense limit
 
 
 ------------------------------------------------------------------------------------------

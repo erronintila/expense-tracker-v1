@@ -332,6 +332,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     printPDFMAKE: function printPDFMAKE(action) {
+      var headers = [];
+      var items = [];
+
       var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
 
       if (pdfMake.vfs == undefined) {
@@ -349,73 +352,166 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       };
       var docDefinition = {
+        // pageSize: 'legal',
         pageSize: {
           width: 13 * 72,
           height: 8.5 * 72
         },
-        // pageSize: 'legal',
         pageOrientation: "landscape",
         pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
         defaultStyle: {
           font: "Roboto"
         },
+        footer: function footer(currentPage, pageCount) {
+          return {
+            columns: [{
+              text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")),
+              width: 500,
+              margin: [0.5 * 72, 0, 0.5 * 72, 0],
+              style: "pageFooter"
+            }, {
+              text: "Page " + currentPage.toString() + " of " + pageCount,
+              alignment: "right",
+              style: "pageFooter",
+              margin: [0, 0, 0.5 * 72, 0]
+            }]
+          };
+        },
         content: [{
           text: ["Expense Summary Report"],
           style: "header"
         }, {
-          style: "tableExample",
+          style: "tableOfExpenses",
           table: {
             headerRows: 1,
             widths: ["*", "*", "*"],
             body: [[{
               text: "Header 1",
-              style: "tableHeader"
+              style: "tableOfExpensesHeader"
             }, {
               text: "Header 2",
-              style: "tableHeader"
+              style: "tableOfExpensesHeader"
             }, {
               text: "Header 3",
-              style: "tableHeader"
+              style: "tableOfExpensesHeader"
             }], [{
               text: "One value goes here",
-              style: "tableBody"
+              style: "tableOfExpensesBody"
             }, {
-              text: "One value goes here"
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
             }, {
-              text: "One value goes here"
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }], [{
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }, {
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }, {
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }], [{
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }, {
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }, {
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }], [{
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }, {
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
+            }, {
+              text: "One value goes here",
+              style: "tableOfExpensesBody"
             }]]
           },
           layout: {
+            hLineWidth: function hLineWidth(i, node) {
+              return i === 0 || i === node.table.body.length ? 0.5 : 0.5;
+            },
+            vLineWidth: function vLineWidth(i, node) {
+              return i === 0 || i === node.table.widths.length ? 0.5 : 0.5;
+            },
+            hLineColor: function hLineColor(i, node) {
+              return i === 0 || i === node.table.body.length ? "gray" : "gray";
+            },
+            vLineColor: function vLineColor(i, node) {
+              return i === 0 || i === node.table.widths.length ? "gray" : "gray";
+            },
             fillColor: function fillColor(rowIndex, node, columnIndex) {
               return rowIndex % 2 === 0 ? "#dbdbdb" : null;
             }
           }
+        }, {
+          style: "tableSignatures",
+          table: {
+            widths: ["*", "*", "*", "*"],
+            body: [[{
+              text: "Prepared By",
+              style: "tableSignaturesBody"
+            }, {
+              text: "Prepared By",
+              style: "tableSignaturesBody"
+            }, {
+              text: "Prepared By",
+              style: "tableSignaturesBody"
+            }, {
+              text: "Prepared By",
+              style: "tableSignaturesBody"
+            }], [{
+              text: "___________________________________",
+              style: "tableSignaturesBody"
+            }, {
+              text: "___________________________________",
+              style: "tableSignaturesBody"
+            }, {
+              text: "___________________________________",
+              style: "tableSignaturesBody"
+            }, {
+              text: "___________________________________",
+              style: "tableSignaturesBody"
+            }]]
+          },
+          layout: 'noBorders'
         }],
         styles: {
           header: {
-            fontSize: 14,
+            fontSize: 13,
             bold: false,
-            alignment: "center" // margin: [0, 190, 0, 80]
-
+            alignment: "center"
           },
-          subheader: {
-            fontSize: 14
-          },
-          superMargin: {
-            margin: [20, 0, 40, 0],
-            fontSize: 15
-          },
-          tableExample: {
+          tableSignatures: {
             margin: [0, 5, 0, 15]
           },
-          tableHeader: {
-            bold: true,
-            fontSize: 13,
-            color: "white",
-            fillColor: "#4caf50"
+          tableSignaturesBody: {
+            fontSize: 10
           },
-          tableBody: {
-            fontSize: 11
+          tableOfExpenses: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOfExpensesHeader: {
+            bold: true,
+            fontSize: 11,
+            color: "white",
+            fillColor: "#4caf50",
+            alignment: "center"
+          },
+          tableOfExpensesBody: {
+            fontSize: 10
+          },
+          signatures: {
+            margin: [0, 5, 0, 15],
+            fontSize: 10
+          },
+          pageFooter: {
+            fontSize: 8
           }
         }
       }; // pdfMake.createPdf(docDefinition).download('optionalName.pdf');

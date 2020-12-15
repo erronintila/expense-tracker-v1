@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <v-container v-if="loader" style="height: 400px;">
+        <v-container v-if="loader" style="height: 400px;">
             <v-row class="fill-height" align-content="center" justify="center">
                 <v-col class="subtitle-1 text-center" cols="12">
                     Loading, Please wait...
@@ -15,8 +15,8 @@
                 </v-col>
             </v-row>
         </v-container>
-        <v-card v-else class="elevation-0 pt-0"> -->
-            <v-card class="elevation-0 pt-0">
+        <v-card v-else class="elevation-0 pt-0">
+            <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -324,7 +324,7 @@
                                                     )
                                                 }}
                                             </td>
-                                            <td> - </td>
+                                            <td>-</td>
                                             <td>
                                                 {{
                                                     item.causer == null
@@ -332,7 +332,7 @@
                                                         : item.causer.name
                                                 }}
                                             </td>
-                                            <td> - </td>
+                                            <td>-</td>
                                             <td>{{ item.description }}</td>
                                         </tr>
                                     </tbody>
@@ -340,7 +340,6 @@
                             </div>
                         </v-col>
                     </v-row>
-                    
                 </v-container>
             </v-form>
         </v-card>
@@ -442,98 +441,105 @@ export default {
             let _this = this;
 
             // this.loadEmployees().then(
-                axios
-                    .get("/api/expenses/" + _this.$route.params.id)
-                    .then(response => {
-                        let data = response.data.data;
+            axios
+                .get("/api/expenses/" + _this.$route.params.id)
+                .then(response => {
+                    let data = response.data.data;
 
-                        console.log(data);
+                    console.log(data);
 
-                        _this.form.code = data.code;
-                        _this.form.description = data.description;
+                    _this.form.code = data.code;
+                    _this.form.description = data.description;
 
-                        _this.form.receipt_number = data.receipt_number;
-                        _this.form.date = data.date;
-                        _this.form.remarks = data.remarks;
-                        _this.form.notes = data.notes;
-                        _this.form.is_active = data.is_active;
-                        _this.form.employee = data.employee;
-                        _this.form.vendor =
-                            data.vendor == null
-                                ? { id: null, name: "", is_vat_inclusive: true }
-                                : data.vendor;
+                    _this.form.receipt_number = data.receipt_number;
+                    _this.form.date = data.date;
+                    _this.form.remarks = data.remarks;
+                    _this.form.notes = data.notes;
+                    _this.form.is_active = data.is_active;
+                    _this.form.employee = data.employee;
+                    _this.form.vendor =
+                        data.vendor == null
+                            ? { id: null, name: "", is_vat_inclusive: true }
+                            : data.vendor;
 
-                        _this.form.expense_type = data.expense_type;
-                        // _this.form.sub_type = data.sub_type_id;
+                    _this.form.expense_type = data.expense_type;
+                    // _this.form.sub_type = data.sub_type_id;
 
-                        // _this.expense_types = data.employee.expense_types;
-                        // _this.sub_types = data.expense_type.sub_types;
+                    // _this.expense_types = data.employee.expense_types;
+                    // _this.sub_types = data.expense_type.sub_types;
 
-                        _this.form.is_tax_inclusive = data.is_tax_inclusive;
-                        _this.form.tax_name = data.tax_name;
-                        _this.form.tax_rate = data.tax_rate;
-                        _this.form.tax_amount = data.tax_amount;
+                    _this.form.is_tax_inclusive = data.is_tax_inclusive;
+                    _this.form.tax_name = data.tax_name;
+                    _this.form.tax_rate = data.tax_rate;
+                    _this.form.tax_amount = data.tax_amount;
 
-                        _this.form.status = data.status;
+                    _this.form.status = data.status;
 
-                        if (data.details !== null) {
-                            _this.itemize = true;
-                            _this.items = data.details;
-                        } else {
-                            // _this.itemize = false;
-                            // _this.items = [];
-                            _this.form.amount = data.amount;
-                        }
+                    if (data.details !== null) {
+                        _this.itemize = true;
+                        _this.items = data.details;
+                    } else {
+                        // _this.itemize = false;
+                        // _this.items = [];
+                        _this.form.amount = data.amount;
+                    }
 
-                        // _this.sub_types.unshift({
-                        //     id: null,
-                        //     name: "None",
-                        //     limit: null
-                        // });
-                        _this.form.sub_type =
-                            data.sub_type == null
-                                ? { id: null, name: "None", limit: null }
-                                : data.sub_type;
+                    // _this.sub_types.unshift({
+                    //     id: null,
+                    //     name: "None",
+                    //     limit: null
+                    // });
+                    _this.form.sub_type =
+                        data.sub_type == null
+                            ? { id: null, name: "None", limit: null }
+                            : data.sub_type;
 
-                        if (data.revolving_fund > 0) {
-                            _this.paid_through_fund = true;
-                            _this.form.revolving_fund = data.revolving_fund;
-                        } else {
-                            _this.paid_through_fund = false;
-                            _this.form.revolving_fund = 0;
-                        }
+                    if (data.revolving_fund > 0) {
+                        _this.paid_through_fund = true;
+                        _this.form.revolving_fund = data.revolving_fund;
+                    } else {
+                        _this.paid_through_fund = false;
+                        _this.form.revolving_fund = 0;
+                    }
 
-                        _this.form.reimbursable_amount =
-                            data.reimbursable_amount;
+                    _this.form.reimbursable_amount = data.reimbursable_amount;
 
-                        _this.form.employee.remaining_fund +=
-                            data.amount - data.reimbursable_amount;
+                    _this.form.employee.remaining_fund +=
+                        data.amount - data.reimbursable_amount;
 
-                        _this.form.created_at = data.created_at;
-                        _this.form.updated_at = data.updated_at;
-                        _this.form.deleted_at = data.deleted_at;
-                        _this.form.submitted_at = data.expense_report ? data.expense_report.submitted_at : null;
-                        _this.form.approved_at = data.expense_report ? data.expense_report.approved_at : null;
-                        _this.form.rejected_at = data.expense_report ? data.expense_report.rejected_at : null;
-                        _this.form.cancelled_at = data.expense_report ? data.expense_report.cancelled_at : null;
+                    _this.form.created_at = data.created_at;
+                    _this.form.updated_at = data.updated_at;
+                    _this.form.deleted_at = data.deleted_at;
+                    _this.form.submitted_at = data.expense_report
+                        ? data.expense_report.submitted_at
+                        : null;
+                    _this.form.approved_at = data.expense_report
+                        ? data.expense_report.approved_at
+                        : null;
+                    _this.form.rejected_at = data.expense_report
+                        ? data.expense_report.rejected_at
+                        : null;
+                    _this.form.cancelled_at = data.expense_report
+                        ? data.expense_report.cancelled_at
+                        : null;
 
-                        _this.form.logs = data.logs;
+                    _this.form.logs = data.logs;
 
-                        _this.loader = false;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
+                    _this.loader = false;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
 
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
 
-                        _this.loader = false;
-                    })
+                    _this.loader = false;
+                });
             // );
-        },
+        }
         // loadEmployees() {
         //     let _this = this;
 
