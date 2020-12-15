@@ -653,7 +653,6 @@ export default {
                         // _this.form.sub_type = data.sub_type_id;
 
                         _this.expense_types = data.employee.expense_types;
-                        console.log(data.employee.expense_types);
                         _this.sub_types = data.expense_type.sub_types;
 
                         _this.form.is_tax_inclusive = data.is_tax_inclusive;

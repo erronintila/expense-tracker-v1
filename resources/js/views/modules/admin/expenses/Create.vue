@@ -637,8 +637,6 @@ export default {
                 .then(response => {
                     let data = response.data.data;
 
-                    console.log(data);
-
                     _this.employees = response.data.data;
                 })
                 .catch(error => {
@@ -1047,8 +1045,6 @@ export default {
         this.loadEmployees();
         this.loadVendors();
         //
-
-        console.log(this.mixin_can('modify taxes on expense'));
     }
 };
 </script>

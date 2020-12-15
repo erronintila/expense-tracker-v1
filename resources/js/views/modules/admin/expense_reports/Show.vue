@@ -813,7 +813,6 @@ export default {
                     )
                     .then(response => {
                         let items = response.data.data;
-                        console.log(response);
                         resolve({ items });
                     })
                     .catch(error => {

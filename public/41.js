@@ -668,7 +668,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/data/employees").then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.employees = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -998,8 +997,6 @@ __webpack_require__.r(__webpack_exports__);
     // this.$store.dispatch("AUTH_USER");
     this.loadEmployees();
     this.loadVendors(); //
-
-    console.log(this.mixin_can('modify taxes on expense'));
   }
 });
 

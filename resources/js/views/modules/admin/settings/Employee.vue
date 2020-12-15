@@ -141,7 +141,6 @@ export default {
             axios
                 .get("/api/data/expense_types?only=true")
                 .then(response => {
-                    console.log(response);
                     _this.all_expense_types = response.data.data;
                 })
                 .catch(error => {
