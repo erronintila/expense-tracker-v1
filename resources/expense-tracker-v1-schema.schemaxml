@@ -146,7 +146,7 @@
   CONSTRAINT `expenses_sub_type_id_foreign` FOREIGN KEY (`sub_type_id`) REFERENCES `expense_types` (`id`),
   CONSTRAINT `expenses_tax_id_foreign` FOREIGN KEY (`tax_id`) REFERENCES `taxes` (`id`),
   CONSTRAINT `expenses_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="users" view="colnames">
 <left>37</left>
@@ -235,7 +235,7 @@
   UNIQUE KEY `expense_reports_code_unique` (`code`),
   KEY `expense_reports_employee_id_foreign` (`employee_id`),
   CONSTRAINT `expense_reports_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="payments" view="colnames">
 <left>221</left>
@@ -277,7 +277,7 @@
   UNIQUE KEY `payments_reference_no_unique` (`reference_no`),
   KEY `payments_employee_id_foreign` (`employee_id`),
   CONSTRAINT `payments_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="vendors" view="colnames">
 <left>1140</left>
@@ -304,7 +304,7 @@
   UNIQUE KEY `vendors_code_unique` (`code`),
   UNIQUE KEY `vendors_email_unique` (`email`),
   UNIQUE KEY `vendors_tin_unique` (`tin`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="activity_log" view="colnames">
 <left>40</left>
@@ -326,7 +326,7 @@
   KEY `subject` (`subject_type`,`subject_id`),
   KEY `causer` (`causer_type`,`causer_id`),
   KEY `activity_log_log_name_index` (`log_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=270 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=1292 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="employee_expense_type" view="colnames">
 <left>895</left>
@@ -341,7 +341,7 @@
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_report_payment" view="colnames">
 <left>459</left>
@@ -360,7 +360,7 @@
   KEY `expense_report_payment_payment_id_foreign` (`payment_id`),
   CONSTRAINT `expense_report_payment_expense_report_id_foreign` FOREIGN KEY (`expense_report_id`) REFERENCES `expense_reports` (`id`) ON DELETE CASCADE,
   CONSTRAINT `expense_report_payment_payment_id_foreign` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="settings" view="colnames">
 <left>38</left>
@@ -373,7 +373,7 @@
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `settings_key_index` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="taxes" view="colnames">
 <left>678</left>
