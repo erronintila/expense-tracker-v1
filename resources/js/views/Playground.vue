@@ -67,15 +67,17 @@
                         >PDFMAKE</v-btn
                     >
 
+                    <v-btn color="orange" @click="printReportByExpense('print')"
+                        >TEST EXPENSE</v-btn
+                    >
+
                     <v-btn
                         color="orange"
                         @click="printReportByEmployee('print')"
                         >TEST EMPLOYEE</v-btn
                     >
 
-                    <v-btn
-                        color="orange"
-                        @click="printReportByDate('print')"
+                    <v-btn color="orange" @click="printReportByDate('print')"
                         >TEST DATE</v-btn
                     >
 
@@ -419,7 +421,6 @@ export default {
                 body.push(element);
             });
 
-
             let pdfMake = require("pdfmake/build/pdfmake.js");
             if (pdfMake.vfs == undefined) {
                 let pdfFonts = require("pdfmake/build/vfs_fonts.js");
@@ -599,7 +600,6 @@ export default {
             pdfMake.createPdf(docDefinition).open();
         },
         printReportByDate() {
-            
             let table_columns = [];
             let table_rows = [];
             let table_footer = [];
@@ -701,7 +701,6 @@ export default {
             itemss.forEach(element => {
                 body.push(element);
             });
-
 
             let pdfMake = require("pdfmake/build/pdfmake.js");
             if (pdfMake.vfs == undefined) {
@@ -812,6 +811,300 @@ export default {
                                     },
                                     {
                                         text: "Voucher No.",
+                                        style: "tableSignaturesBody"
+                                    }
+                                ],
+                                [
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    }
+                                ]
+                            ]
+                        },
+                        layout: "noBorders"
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 13,
+                        bold: false,
+                        alignment: "center"
+                    },
+                    tableSignatures: {
+                        margin: [0, 5, 0, 15]
+                    },
+                    tableSignaturesBody: {
+                        fontSize: 10
+                    },
+                    tableOfExpenses: {
+                        margin: [0, 5, 0, 15]
+                    },
+                    tableOfExpensesHeader: {
+                        bold: true,
+                        fontSize: 9,
+                        color: "white",
+                        fillColor: "#4caf50",
+                        alignment: "center"
+                    },
+                    tableOfExpensesBody: {
+                        fontSize: 9
+                    },
+                    signatures: {
+                        margin: [0, 5, 0, 15],
+                        fontSize: 10
+                    },
+                    pageFooter: {
+                        fontSize: 8
+                    }
+                }
+            };
+
+            // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
+            // pdfMake.createPdf(docDefinition).print();
+            pdfMake.createPdf(docDefinition).open();
+        },
+        printReportByExpense() {
+            let table_columns = [];
+            let table_rows = [];
+            let table_footer = [];
+
+            table_columns.push({
+                text: "Date",
+                style: "tableOfExpensesHeader"
+            });
+            table_columns.push({
+                text: "Particulars",
+                style: "tableOfExpensesHeader"
+            });
+            this.expense_types.forEach(element => {
+                table_columns.push({
+                    text: element.name,
+                    style: "tableOfExpensesHeader"
+                });
+            });
+            table_columns.push({
+                text: "Total",
+                style: "tableOfExpensesHeader"
+            });
+
+            let temp_table_body = {};
+            let temp_expense_types = {};
+            let expense_id = null;
+            let expense_type = null;
+
+            // loop through retrieved records
+            this.reports_by_expense.forEach(element => {
+                // create new object if current employee does not match with previous record
+                if (expense_id !== element.expense_id) {
+                    temp_table_body = {};
+                    expense_id = element.expense_id;
+
+                    // set default values for current row
+                    this.expense_types.forEach(expense_type => {
+                        temp_expense_types[expense_type.name] = 0;
+                    });
+
+                    let details =
+                        element.expense_details == null
+                            ? []
+                            : JSON.parse(element.expense_details).map(item => {
+                                  return `${item.description}: ${item.total}` + '\n';
+                              }).join('');
+
+                    temp_table_body = {
+                        Date: element.expense_date,
+                        Particulars: element.expense_description + '\n' + details,
+                        ...temp_expense_types,
+                        Total: 0
+                    };
+
+                    table_rows.push(temp_table_body);
+                }
+
+                // set expense type amount
+                temp_table_body[element.expense_type_name] =
+                    element.expense_amount;
+
+                // sum of all expense types
+                if ("Total" in temp_table_body) {
+                    let total = 0;
+
+                    this.expense_types.forEach(item => {
+                        total += temp_table_body[item.name];
+                    });
+
+                    temp_table_body["Total"] = total;
+                }
+            });
+
+            // sum total amount per expense type
+            this.expense_types.forEach(expense_type => {
+                temp_expense_types[expense_type.name] = this.mixin_formatNumber(
+                    table_rows.reduce(
+                        (total, item) => total + item[expense_type.name],
+                        0
+                    )
+                );
+            });
+
+            // add row for total amounts
+            table_rows.push({
+                Total: "Total",
+                Particulars: "",
+                ...temp_expense_types,
+                TotalAmount: this.mixin_formatNumber(
+                    table_rows.reduce((total, item) => total + item["Total"], 0)
+                )
+            });
+
+            console.log(table_rows.map(item => Object.values(item)));
+
+            let temp = table_rows.map(item => Object.values(item));
+
+            let itemss = temp.map(item => {
+                let val = [];
+
+                for (let i = 0; i < item.length; i++) {
+                    val.push({ text: item[i], style: "tableOfExpensesBody" });
+                }
+
+                return val;
+            });
+            console.log("items", itemss);
+            // return;
+
+            let body = [];
+            body.push(table_columns);
+            itemss.forEach(element => {
+                body.push(element);
+            });
+
+            let pdfMake = require("pdfmake/build/pdfmake.js");
+            if (pdfMake.vfs == undefined) {
+                let pdfFonts = require("pdfmake/build/vfs_fonts.js");
+                pdfMake.vfs = pdfFonts.pdfMake.vfs;
+            }
+
+            pdfMake.fonts = {
+                Roboto: {
+                    normal: "Roboto-Regular.ttf",
+                    bold: "Roboto-Medium.ttf",
+                    italics: "Roboto-Italic.ttf",
+                    bolditalics: "Roboto-MediumItalic.ttf"
+                }
+            };
+
+            // console.log(table_columns);
+            // console.log(table_columns.map(item => "*"));
+            // return;
+
+            let docDefinition = {
+                // pageSize: 'legal',
+                pageSize: { width: 13 * 72, height: 8.5 * 72 },
+                pageOrientation: "landscape",
+                pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+                defaultStyle: {
+                    font: "Roboto"
+                },
+                footer: function(currentPage, pageCount) {
+                    return {
+                        columns: [
+                            {
+                                text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                )}`,
+                                width: 500,
+                                margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                                style: "pageFooter"
+                            },
+                            {
+                                text:
+                                    "Page " +
+                                    currentPage.toString() +
+                                    " of " +
+                                    pageCount,
+                                alignment: "right",
+                                style: "pageFooter",
+                                margin: [0, 0, 0.5 * 72, 0]
+                            }
+                        ]
+                    };
+                },
+                content: [
+                    {
+                        text: ["Expense Summary Report"],
+                        style: "header"
+                    },
+                    {
+                        style: "tableOfExpenses",
+                        table: {
+                            headerRows: 1,
+                            widths: table_columns.map(item => "*"),
+                            body: body
+                        },
+                        layout: {
+                            hLineWidth: function(i, node) {
+                                return i === 0 || i === node.table.body.length
+                                    ? 0.5
+                                    : 0.5;
+                            },
+                            vLineWidth: function(i, node) {
+                                return i === 0 || i === node.table.widths.length
+                                    ? 0.5
+                                    : 0.5;
+                            },
+                            hLineColor: function(i, node) {
+                                return i === 0 || i === node.table.body.length
+                                    ? "gray"
+                                    : "gray";
+                            },
+                            vLineColor: function(i, node) {
+                                return i === 0 || i === node.table.widths.length
+                                    ? "gray"
+                                    : "gray";
+                            },
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
+                            }
+                        }
+                    },
+                    {
+                        style: "tableSignatures",
+                        table: {
+                            widths: ["*", "*", "*", "*"],
+                            body: [
+                                [
+                                    {
+                                        text: "Prepared By",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text: "Recommended By",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text: "Checked By",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text: "Approved By",
                                         style: "tableSignaturesBody"
                                     }
                                 ],

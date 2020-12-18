@@ -187,6 +187,8 @@ class PrintController extends Controller
                 `expense_types`.`name` expense_type_name,
                 `expense_reports`.`id` AS expense_report_id,
                 `expenses`.`id` AS expense_id,
+                `expenses`.`description` AS expense_description,
+                `expenses`.`details` AS expense_details,
                 `expenses`.`date` AS expense_date,
                 SUM(`expenses`.`amount`) AS expense_amount
             "))
