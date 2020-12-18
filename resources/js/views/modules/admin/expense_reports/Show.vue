@@ -267,7 +267,7 @@
                         <v-col cols="12" md="4">
                             <div class="text-right">
                                 <v-btn
-                                    @click="generateReport('print')"
+                                    @click="generateExpenseReport('print')"
                                     color="green"
                                     dark
                                 >
@@ -803,6 +803,308 @@ export default {
                     doc.save(`${pdfName}.pdf`);
                 }
                 //end of print or export record
+            });
+        },
+        generateExpenseReport(action) {
+            this.loadExpenses().then(data => {
+                let table_columns = [];
+                let table_footer = [];
+
+                let table_rows = [];
+
+                table_rows.push([
+                    {
+                        text: "Date",
+                        style: "tableOfExpensesHeader"
+                    },
+                    {
+                        text: "Type",
+                        style: "tableOfExpensesHeader"
+                    },
+                    {
+                        text: "Receipt",
+                        style: "tableOfExpensesHeader"
+                    },
+                    {
+                        text: "Vendor",
+                        style: "tableOfExpensesHeader"
+                    },
+                    {
+                        text: "Amount",
+                        style: "tableOfExpensesHeader"
+                    },
+                ]);
+                data.items.forEach(element => {
+                    let temp = [];
+
+                    temp.push({text: element.date, style: "tableOfExpensesBody"});
+                    temp.push({text: element.expense_type.name, style: "tableOfExpensesBody"});
+                    temp.push({text: element.receipt_number, style: "tableOfExpensesBody"});
+                    temp.push({text: element.vendor.name, style: "tableOfExpensesBody"});
+                    temp.push({text: this.mixin_formatNumber(element.amount), style: {fontSize: 9, alignment: 'right'}});
+
+                    table_rows.push(temp);
+                });
+
+                let pdfMake = require("pdfmake/build/pdfmake.js");
+                if (pdfMake.vfs == undefined) {
+                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+
+                pdfMake.fonts = {
+                    Roboto: {
+                        normal: "Roboto-Regular.ttf",
+                        bold: "Roboto-Medium.ttf",
+                        italics: "Roboto-Italic.ttf",
+                        bolditalics: "Roboto-MediumItalic.ttf"
+                    }
+                };
+
+                // console.log(table_columns);
+                // console.log(table_columns.map(item => "*"));
+                // return;
+
+                let docDefinition = {
+                    // pageSize: 'legal',
+                    pageSize: { width: 8.5 * 72, height: 13 * 72 },
+                    pageOrientation: "portrait",
+                    pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+                    defaultStyle: {
+                        font: "Roboto"
+                    },
+                    footer: function(currentPage, pageCount) {
+                        return {
+                            columns: [
+                                {
+                                    text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                                        "YYYY-MM-DD HH:mm:ss"
+                                    )}`,
+                                    width: 500,
+                                    margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                                    style: "pageFooter"
+                                },
+                                {
+                                    text:
+                                        "Page " +
+                                        currentPage.toString() +
+                                        " of " +
+                                        pageCount,
+                                    alignment: "right",
+                                    style: "pageFooter",
+                                    margin: [0, 0, 0.5 * 72, 0]
+                                }
+                            ]
+                        };
+                    },
+                    content: [
+                        {
+                            columns: [
+                                {
+                                    text: this.form.employee.full_name,
+                                    style: "pageStyle"
+                                },
+                                {
+                                    text: this.form.code,
+                                    alignment: "right",
+                                    style: "pageStyle"
+                                }
+                            ]
+                        },
+                        {
+                            columns: [
+                                {
+                                    text: `PHP ${this.mixin_formatNumber(this.form.total)}`,
+                                    style: {
+                                        fontSize: 18,
+                                        color: "#4caf50",
+                                    }
+                                },
+                                {
+                                    text: this.form.status.status,
+                                    alignment: "right",
+                                    style: {
+                                        fontSize: 11,
+                                        color: "#4caf50",
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            text: `Period: ${this.form.from} ~ ${this.form.to}`,
+                            style: "pageStyle"
+                        },
+                        {
+                            canvas: [
+                                {
+                                    type: "line",
+                                    x1: 0,
+                                    y1: 0,
+                                    x2: 7.5 * 72,
+                                    y2: 0,
+                                    lineWidth: 1
+                                }
+                            ],
+                            margin: [0, 0.1 * 72, 0, 0.1 * 72]
+                        },
+                        {
+                            text: this.form.description,
+                            style: "pageStyle"
+                        },
+                        {
+                            canvas: [
+                                {
+                                    type: "line",
+                                    x1: 0,
+                                    y1: 0,
+                                    x2: 7.5 * 72,
+                                    y2: 0,
+                                    lineWidth: 1
+                                }
+                            ],
+                            margin: [0, 0.1 * 72, 0, 0.1 * 72]
+                        },
+                        {
+                            style: "tableOfExpenses",
+                            table: {
+                                headerRows: 1,
+                                widths: ["*", "*", "*", "*", "*"],
+                                body: table_rows
+                            },
+                            layout: {
+                                hLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                vLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                hLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                vLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                fillColor: function(
+                                    rowIndex,
+                                    node,
+                                    columnIndex
+                                ) {
+                                    return rowIndex % 2 === 0
+                                        ? "#dbdbdb"
+                                        : null;
+                                }
+                            }
+                        },
+                        {
+                            columns: [
+                                {
+                                    text: "No. of Expenses",
+                                    style: "pageStyle",
+                                },
+                                {
+                                    text: data.items.length,
+                                    alignment: "right",
+                                    style: "pageStyle",
+                                }
+                            ],
+                            margin: [0, 0, 0, 0.1*72]
+                        },
+                        {
+                            columns: [
+                                {
+                                    text: "Total Expenses Amount",
+                                    style: "pageStyle",
+                                },
+                                {
+                                    text: this.mixin_formatNumber(this.form.total),
+                                    alignment: "right",
+                                    style: "pageStyle",
+                                }
+                            ],
+                            margin: [0, 0, 0, 0.1*72]
+                        },
+                        {
+                            columns: [
+                                {
+                                    text: "Paid Amount",
+                                    style: "pageStyle",
+                                },
+                                {
+                                    text: this.mixin_formatNumber(this.form.paid),
+                                    alignment: "right",
+                                    style: "pageStyle",
+                                }
+                            ],
+                            margin: [0, 0, 0, 0.1*72]
+                        },
+                        {
+                            columns: [
+                                {
+                                    text: "Amount to be reimbursed",
+                                    style: "pageStyle"
+                                },
+                                {
+                                    text: this.mixin_formatNumber(this.form.balance),
+                                    alignment: "right",
+                                    style: "pageStyle"
+                                }
+                            ],
+                            margin: [0, 0, 0, 0.1*72]
+                        }
+                    ],
+                    styles: {
+                        pageStyle: {
+                            fontSize: 11,
+                        },
+                        header: {
+                            fontSize: 13,
+                            bold: false,
+                            alignment: "center"
+                        },
+                        tableSignatures: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableSignaturesBody: {
+                            fontSize: 10
+                        },
+                        tableOfExpenses: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableOfExpensesHeader: {
+                            bold: true,
+                            fontSize: 9,
+                            color: "white",
+                            fillColor: "#4caf50",
+                            alignment: "center"
+                        },
+                        tableOfExpensesBody: {
+                            fontSize: 9
+                        },
+                        signatures: {
+                            margin: [0, 5, 0, 15],
+                            fontSize: 10
+                        },
+                        pageFooter: {
+                            fontSize: 8
+                        }
+                    }
+                };
+
+                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
+                // pdfMake.createPdf(docDefinition).print();
+                pdfMake.createPdf(docDefinition).open();
             });
         },
         loadExpenses() {

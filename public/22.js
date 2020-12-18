@@ -381,7 +381,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
 
           temp_table_body = _objectSpread(_objectSpread({
-            Employee: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name, " ").concat(element.suffix)
+            Employee: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? '' : element.middle_name, " ").concat(element.suffix == null ? '' : element.suffix)
           }, temp_expense_types), {}, {
             Total: 0
           });
@@ -414,10 +414,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         TotalAmount: this.mixin_formatNumber(table_rows.reduce(function (total, item) {
           return total + item["Total"];
         }, 0))
-      }));
-      console.log(table_rows.map(function (item) {
-        return Object.values(item);
-      }));
+      })); // console.log(table_rows.map(item => Object.values(item)));
+
       var temp = table_rows.map(function (item) {
         return Object.values(item);
       });
@@ -432,8 +430,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         return val;
-      });
-      console.log("items", itemss); // return;
+      }); // console.log("items", itemss);
+      // return;
 
       var body = [];
       body.push(table_columns);
@@ -654,10 +652,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         TotalAmount: this.mixin_formatNumber(table_rows.reduce(function (total, item) {
           return total + item["Total"];
         }, 0))
-      }));
-      console.log(table_rows.map(function (item) {
-        return Object.values(item);
-      }));
+      })); // console.log(table_rows.map(item => Object.values(item)));
+
       var temp = table_rows.map(function (item) {
         return Object.values(item);
       });
@@ -672,8 +668,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         return val;
-      });
-      console.log("items", itemss); // return;
+      }); // console.log("items", itemss);
+      // return;
 
       var body = [];
       body.push(table_columns);
@@ -903,10 +899,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         TotalAmount: this.mixin_formatNumber(table_rows.reduce(function (total, item) {
           return total + item["Total"];
         }, 0))
-      }));
-      console.log(table_rows.map(function (item) {
-        return Object.values(item);
-      }));
+      })); // console.log(table_rows.map(item => Object.values(item)));
+
       var temp = table_rows.map(function (item) {
         return Object.values(item);
       });
@@ -921,8 +915,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         return val;
-      });
-      console.log("items", itemss); // return;
+      }); // console.log("items", itemss);
+      // return;
 
       var body = [];
       body.push(table_columns);
@@ -1265,8 +1259,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadStatistics: function loadStatistics(start, end, employee_id) {
       var _this = this;
 
-      axios.get("/api/data/statistics?start_date=".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()("2020-01-01").format("YYYY-MM-DD"), "&end_date=").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()("2020-12-31").format("YYYY-MM-DD"), "&employee_id=").concat(employee_id)).then(function (response) {
-        console.log(response);
+      axios.get("/api/data/statistics?start_date=".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()("2020-01-01").format("YYYY-MM-DD"), "&end_date=").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()("2020-12-31").format("YYYY-MM-DD"), "&employee_id=").concat(employee_id)).then(function (response) {// console.log(response);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -1276,7 +1269,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/data/expense_types?only=true").then(function (response) {
-        console.log("expense types", response);
+        // console.log("expense types", response);
         _this.expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -1287,7 +1280,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/data/print_report?by_expense_id=true").then(function (response) {
-        console.log("report by expense", response);
+        // console.log("report by expense", response);
         _this.reports_by_expense = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -1298,7 +1291,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/data/print_report?by_employee_id=true").then(function (response) {
-        console.log("report by employee", response);
+        // console.log("report by employee", response);
         _this.reports_by_employee = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -1309,7 +1302,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/data/print_report?by_date=true").then(function (response) {
-        console.log("report by date", response);
+        // console.log("report by date", response);
         _this.reports_by_date = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -1467,7 +1460,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
 
           temp_table_body = _objectSpread(_objectSpread({
-            Employee: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name, " ").concat(element.suffix)
+            Employee: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? '' : element.middle_name, " ").concat(element.suffix == null ? '' : element.suffix)
           }, temp_expense_types), {}, {
             Total: 0
           });
@@ -1500,8 +1493,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         TotalAmount: this.mixin_formatNumber(table_rows.reduce(function (total, item) {
           return total + item["Total"];
         }, 0))
-      }));
-      console.log(table_rows); // -------------------------------------------------------------------------------------
+      })); // console.log(table_rows);
+      // -------------------------------------------------------------------------------------
       // Set Table Footer Data
       // -------------------------------------------------------------------------------------
       // -------------------------------------------------------------------------------------
