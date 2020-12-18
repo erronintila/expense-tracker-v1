@@ -925,7 +925,7 @@ export default {
                         element.expense_details == null
                             ? []
                             : JSON.parse(element.expense_details).map(item => {
-                                  return `${item.description}: ${item.total}` + '\n';
+                                  return `${item.sub_type_name == null ? "" : item.sub_type_name + '/ '}${item.description}: ${item.total}` + '\n';
                               }).join('');
 
                     temp_table_body = {

@@ -861,7 +861,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
 
           var details = element.expense_details == null ? [] : JSON.parse(element.expense_details).map(function (item) {
-            return "".concat(item.description, ": ").concat(item.total) + '\n';
+            return "".concat(item.sub_type_name == null ? "" : item.sub_type_name + '/ ').concat(item.description, ": ").concat(item.total) + '\n';
           }).join('');
           temp_table_body = _objectSpread(_objectSpread({
             Date: element.expense_date,

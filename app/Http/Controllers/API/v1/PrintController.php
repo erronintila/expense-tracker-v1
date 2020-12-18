@@ -154,6 +154,7 @@ class PrintController extends Controller
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+            ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id") , "=", "expenses.sub_type_id")
             ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`id`"))
             ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
             // ->select(DB::raw("
@@ -189,7 +190,9 @@ class PrintController extends Controller
                 `expenses`.`id` AS expense_id,
                 `expenses`.`description` AS expense_description,
                 `expenses`.`details` AS expense_details,
+                `sub`.`name` sub_type_name,
                 `expenses`.`date` AS expense_date,
+                `sub`.`name` AS sub_type_name,
                 SUM(`expenses`.`amount`) AS expense_amount
             "))
             ->get();
