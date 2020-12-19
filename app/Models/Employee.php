@@ -160,26 +160,6 @@ class Employee extends Model
         return $this->hasMany(Expense::class);
     }
 
-    // /**
-    //  * Displays the job histories associated with employee.
-    //  *
-    //  * @return mixed
-    //  */
-    // public function job_histories()
-    // {
-    //     return $this->hasMany(JobHistory::class);
-    // }
-
-    // /**
-    //  * Displays the allowances associated with employee.
-    //  *
-    //  * @return mixed
-    //  */
-    // public function allowances()
-    // {
-    //     return $this->hasMany(Allowance::class);
-    // }
-
     /**
      * Displays the adjustments associated with employee.
      *
@@ -219,16 +199,6 @@ class Employee extends Model
     {
         return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
     }
-
-    // /**
-    //  * Displays the payments associated with employee.
-    //  *
-    //  * @return mixed
-    //  */
-    // public function payments()
-    // {
-    //     return $this->hasMany(Payment::class);
-    // }
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

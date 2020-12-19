@@ -154,12 +154,6 @@ class PrintController extends Controller
     public function print_expense_reports(Request $request)
     {
         $ids = $request->ids ?? [];
-
-        // if (request()->has("ids")) {
-        //     foreach ($request->ids as $id) {
-        //         array_push($id, $ids);
-        //     }
-        // }
         
         if (request()->has('by_expense_id')) {
             $expenses = DB::table('expenses')
@@ -169,27 +163,9 @@ class PrintController extends Controller
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
             ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id") , "=", "expenses.sub_type_id")
-            // ->where(DB::raw("expense_reports.id IN ({$request->ids})"))
             ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`id`"))
             ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
-            // ->select(DB::raw("
-            //     `employees`.`id` AS employee_id,
-            //     `employees`.`last_name`,
-            //     `employees`.`first_name`,
-            //     `employees`.`middle_name`,
-            //     `employees`.`suffix`,
-            //     `jobs`.`id` AS job_id,
-            //     `jobs`.`name` job_name,
-            //     `departments`.`id` AS department_id,
-            //     `departments`.`name` department_name,
-            //     `expense_types`.`id` expense_type_id,
-            //     `expense_types`.`name` expense_type_name,
-            //     `expense_reports`.`id` AS expense_report_id,
-            //     `expenses`.`id` AS expense_id,
-            //     `expenses`.`date` AS expense_date,
-            //     SUM(`expenses`.`amount`) AS expense_amount
-            // "))
             ->select(DB::raw("
                 `employees`.`id` AS employee_id,
                 `employees`.`last_name`,
@@ -228,23 +204,6 @@ class PrintController extends Controller
             ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`"))
             ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
-            // ->select(DB::raw("
-            //     `employees`.`id` AS employee_id,
-            //     `employees`.`last_name`,
-            //     `employees`.`first_name`,
-            //     `employees`.`middle_name`,
-            //     `employees`.`suffix`,
-            //     `jobs`.`id` AS job_id,
-            //     `jobs`.`name` job_name,
-            //     `departments`.`id` AS department_id,
-            //     `departments`.`name` department_name,
-            //     `expense_types`.`id` expense_type_id,
-            //     `expense_types`.`name` expense_type_name,
-            //     `expense_reports`.`id` AS expense_report_id,
-            //     `expenses`.`id` AS expense_id,
-            //     `expenses`.`date` AS expense_date,
-            //     SUM(`expenses`.`amount`) AS expense_amount
-            // "))
             ->select(DB::raw("
                 `employees`.`id` AS employee_id,
                 `employees`.`last_name`,
@@ -273,23 +232,6 @@ class PrintController extends Controller
             ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`date`"))
             ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
-            // ->select(DB::raw("
-            //     `employees`.`id` AS employee_id,
-            //     `employees`.`last_name`,
-            //     `employees`.`first_name`,
-            //     `employees`.`middle_name`,
-            //     `employees`.`suffix`,
-            //     `jobs`.`id` AS job_id,
-            //     `jobs`.`name` job_name,
-            //     `departments`.`id` AS department_id,
-            //     `departments`.`name` department_name,
-            //     `expense_types`.`id` expense_type_id,
-            //     `expense_types`.`name` expense_type_name,
-            //     `expense_reports`.`id` AS expense_report_id,
-            //     `expenses`.`id` AS expense_id,
-            //     `expenses`.`date` AS expense_date,
-            //     SUM(`expenses`.`amount`) AS expense_amount
-            // "))->get();
             ->select(DB::raw("
                 `employees`.`id` AS employee_id,
                 `employees`.`last_name`,

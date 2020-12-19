@@ -235,35 +235,6 @@ class PaymentController extends Controller
 
         $payment->save();
 
-        // foreach ($request->expense_reports as $expense_report) {
-        //     $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
-
-        //     $expense_report->payment_id = $payment->id;
-
-        //     $expense_report->save();
-
-        //     // foreach ($expense_report->expenses as $expense) {
-
-        //     //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
-
-        //     //     $expense->employee->remaining_fund += $expense_amount;
-
-        //     //     $expense->employee->save();
-        //     // }
-        // }
-
-        // activity()
-        //     ->withProperties([
-        //         'attributes' => [
-        //             ["text" => "Description", "value" => $payment->description],
-        //             ["text" => "Date", "value" => $payment->date],
-        //             ["text" => "Amount", "value" => $payment->amount],
-        //         ],
-        //         'link' => "/admin/payments/{$payment->id}",
-        //         'details' => "{$payment->description} with amount of {$payment->amount}"
-        //     ])
-        //     ->log("Created Payment");
-
         if (request()->has("expense_reports")) {
             $arr = [];
 

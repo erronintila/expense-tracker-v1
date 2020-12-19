@@ -252,8 +252,6 @@ class DashboardController extends Controller
      */
     public function expense_stats(Request $request)
     {
-        // $expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
-
         $expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])
             ->with(['employee' => function ($query) {
                 $query->withTrashed();
@@ -482,8 +480,6 @@ class DashboardController extends Controller
                 $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
                 $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
                 //
-                //
-                //
                 $all_expenses = $all_expenses->where("employee_id", $request->employee_id);
                 $employees = $employees->where("id", $request->employee_id);
                 $expenses_by_date =  $expenses_by_date->where('employee_id', $request->employee_id);
@@ -493,13 +489,6 @@ class DashboardController extends Controller
                 $payment_to_receive = $payment_to_receive->where('employee_id', $request->employee_id);
             }
         }
-        // elseif (request()->has('employee_id')) {
-        //     $total_expenses_by_date = $total_expenses_by_date->where('employee_id', $request->employee_id);
-        //     $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
-        //     $reimbursements = $reimbursements->where('employee_id', $request->employee_id);
-        //     $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
-        // }
-        // $unsubmitted_reports = $unsubmitted_reports->where('employee_id', 2);
 
         $total_count = [
             "expenses" => count($total_expenses_by_date),
@@ -540,11 +529,6 @@ class DashboardController extends Controller
                 "awaiting_for_reimbursement_reports" => $approved_reports->groupBy('expense_report_id')->count(),
                 "payment_to_receive" => $payment_to_receive->groupBy('expense_report_id')->count(),
             ],
-            // "data" => [
-            //     "expenses" => $total_expenses,
-            //     "pending_expenses" => $pending_expenses,
-            //     "reimbursements" => $reimbursements
-            // ]
         ];
 
         return $stats;
@@ -723,43 +707,6 @@ class DashboardController extends Controller
                 "total_report" => $unreceived->groupBy("expense_report_id")->count()
             ],
         ]);
-
-        // $start_date = $request->start_date ?? "2020-01-01";
-        // $end_date = $request->end_date ?? "2020-12-31";
-        // $employee_id = $request->employee_id ?? 1;
-
-        // $expenses = Expense::with('expense_report', 'employee')->get();
-
-        // return response()->json([
-        //     "data" => $expenses,
-        //     "all" => [
-        //         "total_amount" => $expenses->sum('amount'),
-        //         "total_count" => $expenses->count()
-        //     ],
-        //     "unsubmitted" => [
-        //         "total_amount" => 0,
-        //         "total_count" => 0
-        //     ],
-        //     "unreported" => [
-        //         "total_amount" => 0,
-        //         "total_count" => 0
-        //     ],
-        //     "submitted" => [
-        //         "total_amount" => 0,
-        //         "total_count" => 0,
-        //         "total_report" => 0
-        //     ],
-        //     "approved" => [
-        //         "total_amount" => 0,
-        //         "total_count" => 0,
-        //         "total_report" => 0
-        //     ],
-        //     "paid" => [
-        //         "total_amount" => 0,
-        //         "total_count" => 0,
-        //         "total_report" => 0
-        //     ],
-        // ]);
     }
 
     public function expense_reports()

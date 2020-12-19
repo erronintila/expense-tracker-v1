@@ -99,13 +99,7 @@ class ExpenseController extends Controller
             }])
             ->with(['expense_report' => function ($query) {
                 $query->withTrashed();
-                // $query->with(['payments' => function ($query) {
-                //     $query->withTrashed();
-                // }]);
             }])
-            // ->with(['sub_type' => function ($query) {
-            //     $query->withTrashed();
-            // }])
             ->with(['vendor' => function ($query) {
                 $query->withTrashed();
             }])
@@ -295,8 +289,6 @@ class ExpenseController extends Controller
         }
 
         $expenses = $expenses->paginate($itemsPerPage);
-
-        // $expenses->appends(['sort' => 'votes'])->links();
 
         return ExpenseIndexResource::collection($expenses);
     }

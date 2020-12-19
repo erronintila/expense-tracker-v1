@@ -16,8 +16,6 @@ class AdjustmentController extends Controller
         $this->middleware(['permission:view all adjustments'], ['only' => ['index']]);
         $this->middleware(['permission:view adjustments'], ['only' => ['show']]);
         $this->middleware(['permission:add adjustments'], ['only' => ['create', 'store']]);
-        // $this->middleware(['permission:edit adjustments'], ['only' => ['edit', 'update']]);
-        // $this->middleware(['permission:delete adjustments'], ['only' => ['destroy']]);
     }
 
 
@@ -134,10 +132,6 @@ class AdjustmentController extends Controller
                         return response("Error", 500);
                     }
 
-                    // $amount = $request->amount;
-
-                    // $fund = $employee->fund;
-
                     $adjustment->description = ($request->add_amount < $request->subtract_amount) ?
                         "Decreased Revolving Fund for {$employee->last_name}, {$employee->first_name}" :
                         "Added Revolving Fund for {$employee->last_name}, {$employee->first_name}";
@@ -145,10 +139,6 @@ class AdjustmentController extends Controller
                     $adjustment->add_amount = $request->add_amount;
 
                     $adjustment->subtract_amount = $request->subtract_amount;
-
-                    // $adjustment->add_amount = ($employee->fund >= $request->amount) ? 0 : ($amount - $fund);
-
-                    // $adjustment->subtract_amount = ($employee->fund >= $request->amount) ? ($fund - $amount) : 0;
 
                     $adjustment->type = $request->type;
 
@@ -163,18 +153,6 @@ class AdjustmentController extends Controller
                     break;
             }
         }
-
-        // activity()
-        //     ->withProperties([
-        //         'attributes' => [
-        //             ["text" => "Description", "value" => $adjustment->description],
-        //             ["text" => "Added Amount", "value" => $adjustment->add_amount],
-        //             ["text" => "Subtracted Amount", "value" => $adjustment->subtract_amount],
-        //         ],
-        //         'link' => "/admin/adjustments",
-        //         'details' => "{$adjustment->description}"
-        //     ])
-        //     ->log("Managed Revolving Fund");
 
         return response(
             [

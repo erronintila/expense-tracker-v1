@@ -14,9 +14,6 @@ class ActivityLogController extends Controller
     public function __construct()
     {
         $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
-        // $this->middleware(['permission:view activity logs'], ['only' => ['show']]);
-        // $this->middleware(['permission:add activity logs'], ['only' => ['create', 'store']]);
-        // $this->middleware(['permission:edit activity logs'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete activity logs'], ['only' => ['destroy']]);
     }
 
@@ -38,15 +35,6 @@ class ActivityLogController extends Controller
 
         $activity_logs = Activity::orderBy($sortBy, $sortType);
 
-        // if (request()->has('start_date') && request()->has('end_date')) {
-
-        //     $start_date = Carbon::parse($request->start_date)->startOfDay();
-
-        //     $end_date = Carbon::parse($request->end_date)->endOfDay();
-
-        //     $activity_logs = $activity_logs->whereBetween("created_at", [$start_date, $end_date]);
-        // }
-
         if (request()->has('start_date') && request()->has('end_date')) {
             $start_date = Carbon::parse($request->start_date)->startOfDay();
 
@@ -62,15 +50,6 @@ class ActivityLogController extends Controller
                 $activity_logs = $activity_logs->where("causer_id", $request->user_id);
             }
         }
-
-        $activity_logs = $activity_logs->where(function ($query) use ($search) {
-
-            // $query->where("description", "like", "%" . $search . "%");
-
-            // $query->orWhere("receipt_number", "like", "%" . $search . "%");
-
-            // $query->orWhere("date", "like", "%" . $search . "%");
-        });
 
         $activity_logs = $activity_logs->paginate($itemsPerPage);
 

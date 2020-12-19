@@ -192,23 +192,6 @@ class ExpenseTypeController extends Controller
                 $expense_type->save();
 
                 ///////
-                
-                // foreach ($expense_type->sub_types as $sub_type) {
-                //     if ($sub_type->expenses) {
-                //         foreach ($expense_type->sub_types as $sub_type) {
-                //             $sub_type->restore();
-                //         }
-
-                //         return response(
-                //             [
-                //                 'message' => 'Expense type/s has been associated with expenses'
-                //             ],
-                //             422
-                //         );
-                //     }
-
-                //     $sub_type->delete();
-                // }
 
                 foreach ($expense_type->sub_types as $sub_type) {
                     $sub_type->delete();
@@ -228,39 +211,6 @@ class ExpenseTypeController extends Controller
                         ]
                     );
                 }
-
-                // if (request()->has("sub_types")) {
-
-                //     foreach ($request->sub_types as $item) {
-
-                //         $sub_type = SubType::updateOrCreate(
-
-                //             ['name' =>   $item['name'], 'expense_type_id' => $expense_type->id],
-
-                //             ['deleted_at' => null]
-                //         );
-
-                //         // $sub_type = SubType::firstOrNew(
-
-                //         //     ['name' => $item['name']],
-
-                //         //     ['expense_type_id' => $expense_type->id],
-                //         // );
-
-                //         // $sub_type->save();
-
-                //         // $sub_type = SubType::updateOrCreate(
-
-                //         //     // ['id' => $item['id']],
-
-                //         //     ['name' => $item['name']],
-
-                //         //     ['expense_type_id' => $expense_type->id],
-                //         // );
-
-                //         // // $sub_type->restore();
-                //     }
-                // }
 
                 break;
         }
@@ -301,8 +251,6 @@ class ExpenseTypeController extends Controller
 
             $expense_type->delete();
         }
-
-        // $expense_type = ExpenseType::whereIn('id', $request->ids)->delete();
 
         return response(
             [

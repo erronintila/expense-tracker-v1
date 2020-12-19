@@ -33,7 +33,6 @@ class EmployeeController extends Controller
         $this->middleware(['permission:view all employees'], ['only' => ['index']]);
         $this->middleware(['permission:view employees'], ['only' => ['show']]);
         $this->middleware(['permission:add employees'], ['only' => ['create', 'store']]);
-        // $this->middleware(['permission:edit employees'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete employees'], ['only' => ['destroy']]);
     }
 
@@ -102,15 +101,6 @@ class EmployeeController extends Controller
                 $query2->withTrashed();
             }]);
         }]);
-            // ->with(['user' => function ($query) {
-            //     $query->withTrashed();
-            // }]);
-            // ->with(['expense_types' => function ($query) {
-            //     $query->withTrashed();
-            //     $query->with(['sub_types' => function ($query2) {
-            //         $query2->withTrashed();
-            //     }]);
-            // }]);
 
         switch ($sortBy) {
             case 'fullname':
@@ -269,10 +259,6 @@ class EmployeeController extends Controller
 
         $employee->expense_types()->sync($expense_types);
 
-        // if (request()->has("expense_types")) {
-        //     $employee->expense_types()->sync($request->expense_types);
-        // }
-
         return response(
             [
                 'data' => new EmployeeResource($employee),
@@ -291,8 +277,6 @@ class EmployeeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // $employee = Employee::withTrashed()->findOrFail($id);
-
         $employee = Employee::with(['job' => function ($query) {
             $query->withTrashed();
             $query->with(['department' => function ($query2) {
@@ -302,24 +286,10 @@ class EmployeeController extends Controller
         ->with(['user' => function ($query) {
             $query->withTrashed();
         }])
-        // ->with(['expenses' => function ($query) {
-        //     $query->withTrashed();
-        // }])
-        // ->with(['expense_reports' => function ($query) {
-        //     $query->withTrashed();
-        // }])
         ->with(['expense_types' => function ($query) {
             $query->withTrashed();
-            // $query->with(['sub_types' => function ($query2) {
-            //     $query2->withTrashed();
-            // }]);
         }])
-        // ->with(['sub_types' => function ($query) {
-        //     $query->withTrashed();
-        // }])
         ->findOrFail($id);
-
-        // $employee = $employee->loadMissing(['job', 'user', 'expenses', 'expense_reports', 'expense_types', 'sub_types']);
 
         return response(
             [
@@ -376,25 +346,7 @@ class EmployeeController extends Controller
                 $employee = Employee::withTrashed()->findOrFail($id);
 
                 if (request()->has("expense_types")) {
-                    // $employee->expense_types()->sync([]);
-
                     $employee->expense_types()->sync($request->expense_types);
-
-                    // $employee->expense_types()->sync([]);
-
-                    // $expense_types_id = [];
-
-                    // foreach ($request->expense_types as $id) {
-                    //     $expense_type = ExpenseType::withTrashed()->findOrFail($id);
-
-                    //     array_push($expense_types_id, $expense_type->id);
-
-                    //     foreach ($expense_type->sub_types()->withTrashed()->get() as $sub_type) {
-                    //         array_push($expense_types_id, $sub_type->id);
-                    //     }
-                    // }
-
-                    // $employee->expense_types()->sync($expense_types_id);
                 }
 
                 break;
@@ -447,22 +399,6 @@ class EmployeeController extends Controller
                 $employee->address = $request->address;
 
                 $employee->save();
-
-                // if (request()->has("expense_types")) {
-                //     $employee->expense_types()->sync($request->expense_types);
-
-                //     // foreach ($employee->expense_types as $item) {
-
-                //     //     $expense_type = ExpenseType::withTrashed()->findOrFail($item["expense_type_id"]);
-
-                //     //     foreach ($expense_type->sub_types as $item2) {
-
-                //     //         $subtypes = $item2->pluck("id");
-                //     //     }
-                //     // }
-
-                //     $employee->sub_types()->sync($employee->expense_types);
-                // }
 
                 if ($employee->user_id != null) {
                     $user = User::withTrashed()->findOrFail($employee->user_id);
@@ -682,6 +618,4 @@ class EmployeeController extends Controller
 
         return response("Validated Employee Remaining Fund", 200);
     }
-
-
 }
