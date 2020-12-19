@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class PrintController extends Controller
 {
     /**
-     * print
+     * Display a listing of the resource
      *
      * @param  mixed $request
      * @return void
@@ -144,7 +144,13 @@ class PrintController extends Controller
             ]);
         }
     }
-
+    
+    /**
+     * Display a listing of the resource
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function print_expense_reports(Request $request)
     {
         $ids = $request->ids ?? [];

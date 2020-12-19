@@ -294,7 +294,7 @@ class VendorController extends Controller
     */
 
     /**
-     * vendors
+     * Display a listing of the resource
      *
      * @return void
      */

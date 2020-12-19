@@ -222,7 +222,7 @@ class DepartmentController extends Controller
     */
 
     /**
-     * departments
+     * Display a listing of the resource.
      *
      * @param  mixed $request
      * @return void

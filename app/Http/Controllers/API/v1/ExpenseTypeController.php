@@ -319,7 +319,7 @@ class ExpenseTypeController extends Controller
     */
 
     /**
-     * expense_types
+     * Display a listing of the resource
      *
      * @param  mixed $request
      * @return void

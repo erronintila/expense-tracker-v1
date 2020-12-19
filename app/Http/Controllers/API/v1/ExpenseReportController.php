@@ -714,7 +714,18 @@ class ExpenseReportController extends Controller
     | EXPENSE REPORT CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-
+    
+    /**
+     * Update Expense Report status
+     *
+     * @param  mixed $expense_report
+     * @param  mixed $submitted
+     * @param  mixed $reviewed
+     * @param  mixed $approved
+     * @param  mixed $rejected
+     * @param  mixed $cancelled
+     * @return void
+     */
     public function updateReport(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
     {
         $expense_report->submitted_at = $submitted ? now() : $expense_report->submitted_at;
@@ -741,7 +752,18 @@ class ExpenseReportController extends Controller
 
         $this->logUpdateActivity($expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled);
     }
-
+    
+    /**
+     * Update Expense status
+     *
+     * @param  mixed $expense
+     * @param  mixed $submitted
+     * @param  mixed $reviewed
+     * @param  mixed $approved
+     * @param  mixed $rejected
+     * @param  mixed $cancelled
+     * @return void
+     */
     public function updateExpense(Expense $expense, $submitted, $reviewed, $approved, $rejected, $cancelled)
     {
         $expense->submitted_at = $submitted ? now() : $expense->submitted_at;
@@ -766,7 +788,18 @@ class ExpenseReportController extends Controller
 
         $expense->save();
     }
-
+    
+    /**
+     * Logs activity
+     *
+     * @param  mixed $expense_report
+     * @param  mixed $submitted
+     * @param  mixed $reviewed
+     * @param  mixed $approved
+     * @param  mixed $rejected
+     * @param  mixed $cancelled
+     * @return void
+     */
     public function logUpdateActivity(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
     {
         $action = "";
@@ -813,7 +846,7 @@ class ExpenseReportController extends Controller
     }
 
     /**
-     * expense_reports
+     * Display a listing of the resource
      *
      * @param  mixed $request
      * @return void

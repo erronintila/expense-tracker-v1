@@ -235,7 +235,7 @@ class JobController extends Controller
     */
 
     /**
-     * jobs
+     * Display a listing of the resource
      *
      * @param  mixed $request
      * @return void

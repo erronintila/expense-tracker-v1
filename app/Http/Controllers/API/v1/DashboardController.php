@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
     /**
-     * expense_types_expenses_summary
+     * Displays total expenses amount on each expense type
      *
      * @param  mixed $request
      * @return void
@@ -66,7 +66,7 @@ class DashboardController extends Controller
     }
     
     /**
-     * employees_expenses_summary
+     * Displays total expenses amount on each employee
      *
      * @param  mixed $request
      * @return void
@@ -108,7 +108,7 @@ class DashboardController extends Controller
     }
     
     /**
-     * departments_expenses_summary
+     * Displays total expenses amount on each department
      *
      * @param  mixed $request
      * @return void
@@ -158,7 +158,7 @@ class DashboardController extends Controller
     }
     
     /**
-     * total_expenses
+     * Displays total expenses amount
      *
      * @param  mixed $request
      * @return void
@@ -177,7 +177,8 @@ class DashboardController extends Controller
     }
     
     /**
-     * expenses_summary
+     * Displays total expense amount based on time unit
+     * i.e. per day, per week, per month, per quarter, per year
      *
      * @param  mixed $request
      * @return void
@@ -244,7 +245,7 @@ class DashboardController extends Controller
     }
     
     /**
-     * expense_stats
+     * Displays total expenses and expenses per report status
      *
      * @param  mixed $request
      * @return void
@@ -548,7 +549,13 @@ class DashboardController extends Controller
 
         return $stats;
     }
-
+    
+    /**
+     * Displays expense statistics
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function statistics(Request $request)
     {
         $employee_id = $request->employee_id ?? 0;

@@ -545,12 +545,23 @@ class EmployeeController extends Controller
     | EMPLOYEE CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-
+    
+    /**
+     * Export data to excel
+     *
+     * @return void
+     */
     public function export()
     {
         return Excel::download(new EmployeesExport, 'Employees.csv');
     }
-
+    
+    /**
+     * Display a listing of the resource
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function getEmployees(Request $request)
     {
         if (request()->has('only')) {
@@ -598,7 +609,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * validateFund
+     * Recompute remaining fund of employee
      *
      * @param  mixed $request
      * @return void
