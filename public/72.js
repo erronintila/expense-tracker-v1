@@ -526,9 +526,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 
 
@@ -596,12 +593,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
-    test: function test() {
-      var ids = this.selected == null ? [] : this.selected.map(function (item) {
-        return item.id;
-      });
-      console.log(ids);
-    },
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
@@ -640,6 +631,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var ids = _this.selected == null ? [] : _this.selected.map(function (item) {
           return item.id;
         });
+        console.log(ids);
         axios.get("/api/data/print_report?by_employee_id=true&ids=".concat(ids)).then(function (response) {
           // console.log("report by employee", response);
           _this.reports_by_employee = response.data.data;
@@ -2974,22 +2966,6 @@ var render = function() {
                   _c(
                     "v-col",
                     [
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.test()
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Test\n                    "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {

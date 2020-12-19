@@ -468,9 +468,6 @@
                         </div>
                     </v-col>
                     <v-col>
-                        <v-btn @click="test()">
-                            Test
-                        </v-btn>
                         <v-btn @click="onPrint('print', 'expense')">
                             Print By Expense
                         </v-btn>
@@ -564,10 +561,6 @@ export default {
         };
     },
     methods: {
-        test() {
-            let ids = this.selected == null ? [] :  this.selected.map(item => item.id);
-                console.log(ids);
-        },
         loadExpenseTypes() {
             let _this = this;
 
@@ -608,6 +601,7 @@ export default {
             return new Promise((resolve, reject) => {
                 let _this = this;
                 let ids = _this.selected == null ? [] :  _this.selected.map(item => item.id);
+                console.log(ids);
 
                 axios
                     .get(`/api/data/print_report?by_employee_id=true&ids=${ids}`)

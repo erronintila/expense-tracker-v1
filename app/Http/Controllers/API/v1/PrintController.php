@@ -149,6 +149,12 @@ class PrintController extends Controller
     {
         $ids = $request->ids ?? [];
 
+        // if (request()->has("ids")) {
+        //     foreach ($request->ids as $id) {
+        //         array_push($id, $ids);
+        //     }
+        // }
+        
         if (request()->has('by_expense_id')) {
             $expenses = DB::table('expenses')
             ->join("employees", "employees.id", "=", "expenses.employee_id")
@@ -157,7 +163,8 @@ class PrintController extends Controller
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
             ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id") , "=", "expenses.sub_type_id")
-            ->whereIn('expense_reports.id', [$ids])
+            // ->where(DB::raw("expense_reports.id IN ({$request->ids})"))
+            ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`id`"))
             ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
             // ->select(DB::raw("
@@ -212,7 +219,7 @@ class PrintController extends Controller
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
-            ->whereIn('expense_reports.id', [$ids])
+            ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`"))
             ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
             // ->select(DB::raw("
@@ -257,7 +264,7 @@ class PrintController extends Controller
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
-            ->whereIn('expense_reports.id', [$ids])
+            ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`date`"))
             ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
             // ->select(DB::raw("
