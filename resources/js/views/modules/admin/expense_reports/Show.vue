@@ -271,15 +271,22 @@
                                     color="green"
                                     dark
                                 >
-                                    Test
+                                    Print
                                 </v-btn>
                                 <v-btn
+                                    @click="generateExpenseReport('pdf')"
+                                    color="green"
+                                    dark
+                                >
+                                    Export to PDF
+                                </v-btn>
+                                <!-- <v-btn
                                     @click="generatePDF('print')"
                                     color="green"
                                     dark
                                 >
                                     Print
-                                </v-btn>
+                                </v-btn> -->
                                 <!-- <v-btn
                                     color="green"
                                     dark
@@ -1102,9 +1109,12 @@ export default {
                     }
                 };
 
-                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-                // pdfMake.createPdf(docDefinition).print();
-                pdfMake.createPdf(docDefinition).open();
+                if(action == "print") {
+                    // pdfMake.createPdf(docDefinition).print();
+                    pdfMake.createPdf(docDefinition).open();
+                } else {
+                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                }
             });
         },
         loadExpenses() {

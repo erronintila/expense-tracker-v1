@@ -565,6 +565,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -933,13 +969,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               fontSize: 8
             }
           }
-        }; // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-        // pdfMake.createPdf(docDefinition).print();
+        };
 
-        pdfMake.createPdf(docDefinition).open();
+        if (action == "print") {
+          // pdfMake.createPdf(docDefinition).print();
+          pdfMake.createPdf(docDefinition).open();
+        } else {
+          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+        }
       });
     },
-    printReportByDate: function printReportByDate() {
+    printReportByDate: function printReportByDate(action) {
       var _this6 = this;
 
       console.log("date print");
@@ -1179,13 +1219,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               fontSize: 8
             }
           }
-        }; // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-        // pdfMake.createPdf(docDefinition).print();
+        };
 
-        pdfMake.createPdf(docDefinition).open();
+        if (action == "print") {
+          // pdfMake.createPdf(docDefinition).print();
+          pdfMake.createPdf(docDefinition).open();
+        } else {
+          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+        }
       });
     },
-    printReportByExpense: function printReportByExpense() {
+    printReportByExpense: function printReportByExpense(action) {
       var _this7 = this;
 
       this.loadReportByExpense().then(function () {
@@ -1432,10 +1476,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               fontSize: 8
             }
           }
-        }; // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-        // pdfMake.createPdf(docDefinition).print();
+        };
 
-        pdfMake.createPdf(docDefinition).open();
+        if (action == "print") {
+          // pdfMake.createPdf(docDefinition).print();
+          pdfMake.createPdf(docDefinition).open();
+        } else {
+          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+        }
       });
     },
     onPrint: function onPrint(action, group_by) {
@@ -1446,15 +1494,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       switch (group_by) {
         case "employee":
-          this.printReportByEmployee();
+          this.printReportByEmployee(action);
           break;
 
         case "date":
-          this.printReportByDate();
+          this.printReportByDate(action);
           break;
 
         default:
-          this.printReportByExpense();
+          this.printReportByExpense(action);
           break;
       }
     },
@@ -3089,6 +3137,105 @@ var render = function() {
                                     on: {
                                       click: function($event) {
                                         return _vm.onPrint("print", "date")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("Group by date")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-menu",
+                          {
+                            attrs: { "offset-y": "" },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var attrs = ref.attrs
+                                  var on = ref.on
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          {
+                                            attrs: { color: "green", dark: "" }
+                                          },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [
+                                        _vm._v(
+                                          "\n                                    Export to PDF\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                }
+                              }
+                            ])
+                          },
+                          [
+                            _vm._v(" "),
+                            _c(
+                              "v-list",
+                              [
+                                _c(
+                                  "v-list-item",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onPrint("pdf", "expense")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("Group by expense")
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onPrint("pdf", "employee")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v(
+                                        "Group by\n                                        employee"
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onPrint("pdf", "date")
                                       }
                                     }
                                   },

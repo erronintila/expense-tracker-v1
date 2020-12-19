@@ -515,6 +515,42 @@
                                     </v-list-item>
                                 </v-list>
                             </v-menu>
+                            <v-menu offset-y>
+                                <template v-slot:activator="{ attrs, on }">
+                                    <v-btn
+                                        color="green"
+                                        dark
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    >
+                                        Export to PDF
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <v-list-item
+                                        @click="onPrint('pdf', 'expense')"
+                                    >
+                                        <v-list-item-title
+                                            >Group by expense</v-list-item-title
+                                        >
+                                    </v-list-item>
+                                    <v-list-item
+                                        @click="onPrint('pdf', 'employee')"
+                                    >
+                                        <v-list-item-title
+                                            >Group by
+                                            employee</v-list-item-title
+                                        >
+                                    </v-list-item>
+                                    <v-list-item
+                                        @click="onPrint('pdf', 'date')"
+                                    >
+                                        <v-list-item-title
+                                            >Group by date</v-list-item-title
+                                        >
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
                         </div>
                     </v-col>
                 </v-row>
@@ -979,12 +1015,15 @@ export default {
                     }
                 };
 
-                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-                // pdfMake.createPdf(docDefinition).print();
-                pdfMake.createPdf(docDefinition).open();
+                if(action == "print") {
+                    // pdfMake.createPdf(docDefinition).print();
+                    pdfMake.createPdf(docDefinition).open();
+                } else {
+                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                }
             });
         },
-        printReportByDate() {
+        printReportByDate(action) {
             console.log("date print");
             this.loadReportByDate().then(() => {
                 console.log("date print2");
@@ -1282,12 +1321,15 @@ export default {
                     }
                 };
 
-                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-                // pdfMake.createPdf(docDefinition).print();
-                pdfMake.createPdf(docDefinition).open();
+                if(action == "print") {
+                    // pdfMake.createPdf(docDefinition).print();
+                    pdfMake.createPdf(docDefinition).open();
+                } else {
+                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                }
             });
         },
-        printReportByExpense() {
+        printReportByExpense(action) {
             this.loadReportByExpense().then(() => {
                 let table_columns = [];
                 let table_rows = [];
@@ -1608,9 +1650,12 @@ export default {
                     }
                 };
 
-                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-                // pdfMake.createPdf(docDefinition).print();
-                pdfMake.createPdf(docDefinition).open();
+                if(action == "print") {
+                    // pdfMake.createPdf(docDefinition).print();
+                    pdfMake.createPdf(docDefinition).open();
+                } else {
+                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                }
             });
         },
         onPrint(action, group_by) {
@@ -1621,13 +1666,13 @@ export default {
 
             switch (group_by) {
                 case "employee":
-                    this.printReportByEmployee();
+                    this.printReportByEmployee(action);
                     break;
                 case "date":
-                    this.printReportByDate();
+                    this.printReportByDate(action);
                     break;
                 default:
-                    this.printReportByExpense();
+                    this.printReportByExpense(action);
                     break;
             }
         },

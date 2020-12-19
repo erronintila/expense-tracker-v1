@@ -398,6 +398,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -968,10 +975,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               fontSize: 8
             }
           }
-        }; // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
-        // pdfMake.createPdf(docDefinition).print();
+        };
 
-        pdfMake.createPdf(docDefinition).open();
+        if (action == "print") {
+          // pdfMake.createPdf(docDefinition).print();
+          pdfMake.createPdf(docDefinition).open();
+        } else {
+          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+        }
       });
     },
     loadExpenses: function loadExpenses() {
@@ -1745,7 +1756,7 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                Test\n                            "
+                                      "\n                                Print\n                            "
                                     )
                                   ]
                                 ),
@@ -1756,13 +1767,13 @@ var render = function() {
                                     attrs: { color: "green", dark: "" },
                                     on: {
                                       click: function($event) {
-                                        return _vm.generatePDF("print")
+                                        return _vm.generateExpenseReport("pdf")
                                       }
                                     }
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                Print\n                            "
+                                      "\n                                Export to PDF\n                            "
                                     )
                                   ]
                                 )
