@@ -102,7 +102,12 @@
                     </v-card>
                 </v-menu>
 
-                <v-menu offset-y transition="scale-transition" left>
+                <v-menu
+                    offset-y
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    left
+                >
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on: tooltip }">
@@ -124,7 +129,7 @@
                         </v-tooltip>
                     </template>
 
-                    <v-list>
+                    <v-list max-width="250">
                         <v-list-item @click="onSubmit">
                             <v-list-item-icon>
                                 <v-icon>mdi-file-send-outline</v-icon>
@@ -177,6 +182,20 @@
                             <v-list-item-subtitle>
                                 Duplicate Report(s)
                             </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <v-list-item-icon>
+                                <v-icon>mdi-content-copy</v-icon>
+                            </v-list-item-icon>
+                            
+                            <!-- <v-select
+                                v-model="status"
+                                :items="['Print', 'By Expense', 'By Employee']"
+                            ></v-select> -->
+                            <!-- <v-list-item-subtitle>
+                                Print Report(s)
+                            </v-list-item-subtitle> -->
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -553,6 +572,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
+                let status = _this.status;
                 let employee_id = _this.employee;
                 let range = _this.date_range;
 
@@ -564,6 +584,7 @@ export default {
                             page: page,
                             itemsPerPage: itemsPerPage,
                             employee_id: employee_id,
+                            status: status,
                             start_date: range[0],
                             end_date: range[1],
                             admin_page: true
@@ -1160,22 +1181,22 @@ export default {
         show_edit(item) {
             // let item = null;
 
-            if(!this.mixin_can('edit expense reports')) {
-                return false
+            if (!this.mixin_can("edit expense reports")) {
+                return false;
             }
 
-            if(item) {
-                if(!item.approved_at) {
+            if (item) {
+                if (!item.approved_at) {
                     return false;
-                } else if(!item.cancelled_at) {
+                } else if (!item.cancelled_at) {
                     return false;
-                } else if(!item.deleted_at) {
+                } else if (!item.deleted_at) {
                     return false;
                 }
             }
 
             return true;
-        },
+        }
     },
     watch: {
         params: {
@@ -1210,8 +1231,7 @@ export default {
             } else if (this.selected.length == 0) {
                 this.warning = null;
             }
-        },
-        
+        }
     },
     computed: {
         params(nv) {

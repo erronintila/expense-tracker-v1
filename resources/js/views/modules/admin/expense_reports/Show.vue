@@ -942,7 +942,7 @@ export default {
                                     y1: 0,
                                     x2: 7.5 * 72,
                                     y2: 0,
-                                    lineWidth: 1
+                                    lineWidth: 0.5
                                 }
                             ],
                             margin: [0, 0.1 * 72, 0, 0.1 * 72]
@@ -959,7 +959,7 @@ export default {
                                     y1: 0,
                                     x2: 7.5 * 72,
                                     y2: 0,
-                                    lineWidth: 1
+                                    lineWidth: 0.5
                                 }
                             ],
                             margin: [0, 0.1 * 72, 0, 0.1 * 72]
