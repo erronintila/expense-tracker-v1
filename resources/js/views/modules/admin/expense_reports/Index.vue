@@ -447,7 +447,7 @@
                 </v-data-table>
 
                 <v-row>
-                    <v-col>
+                    <v-col cols="12" md="8">
                         <div>
                             <h4 class="green--text">
                                 Note:
@@ -467,8 +467,9 @@
                             </h4>
                         </div>
                     </v-col>
-                    <v-col>
-                        <v-btn @click="onPrint('print', 'expense')">
+                    <v-col cols="12" md="4">
+                        <div class="text-right">
+                            <!-- <v-btn @click="onPrint('print', 'expense')">
                             Print By Expense
                         </v-btn>
                         <v-btn @click="onPrint('print', 'employee')">
@@ -476,7 +477,45 @@
                         </v-btn>
                         <v-btn @click="onPrint('print', 'date')">
                             Print By Date
-                        </v-btn>
+                        </v-btn> -->
+
+                            <v-menu offset-y>
+                                <template v-slot:activator="{ attrs, on }">
+                                    <v-btn
+                                        color="green"
+                                        dark
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    >
+                                        Print
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <v-list-item
+                                        @click="onPrint('print', 'expense')"
+                                    >
+                                        <v-list-item-title
+                                            >Group by expense</v-list-item-title
+                                        >
+                                    </v-list-item>
+                                    <v-list-item
+                                        @click="onPrint('print', 'employee')"
+                                    >
+                                        <v-list-item-title
+                                            >Group by
+                                            employee</v-list-item-title
+                                        >
+                                    </v-list-item>
+                                    <v-list-item
+                                        @click="onPrint('print', 'date')"
+                                    >
+                                        <v-list-item-title
+                                            >Group by date</v-list-item-title
+                                        >
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </div>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -579,9 +618,10 @@ export default {
         loadReportByExpense() {
             return new Promise((resolve, reject) => {
                 let _this = this;
-                let ids = _this.selected == null ? [] :  _this.selected.map(item => item.id);
-
-
+                let ids =
+                    _this.selected == null
+                        ? []
+                        : _this.selected.map(item => item.id);
 
                 axios
                     .get(`/api/data/print_report?by_expense_id=true&ids=${ids}`)
@@ -600,11 +640,16 @@ export default {
         loadReportByEmployee() {
             return new Promise((resolve, reject) => {
                 let _this = this;
-                let ids = _this.selected == null ? [] :  _this.selected.map(item => item.id);
+                let ids =
+                    _this.selected == null
+                        ? []
+                        : _this.selected.map(item => item.id);
                 console.log(ids);
 
                 axios
-                    .get(`/api/data/print_report?by_employee_id=true&ids=${ids}`)
+                    .get(
+                        `/api/data/print_report?by_employee_id=true&ids=${ids}`
+                    )
                     .then(response => {
                         // console.log("report by employee", response);
                         _this.reports_by_employee = response.data.data;
@@ -621,7 +666,10 @@ export default {
         loadReportByDate() {
             return new Promise((resolve, reject) => {
                 let _this = this;
-                let ids = _this.selected == null ? [] : _this.selected.map(item => item.id);
+                let ids =
+                    _this.selected == null
+                        ? []
+                        : _this.selected.map(item => item.id);
 
                 axios
                     .get(`/api/data/print_report?by_date=true&ids=${ids}`)
@@ -1566,7 +1614,7 @@ export default {
             });
         },
         onPrint(action, group_by) {
-            if(this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No items selected");
                 return;
             }

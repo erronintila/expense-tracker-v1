@@ -526,6 +526,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2921,7 +2960,7 @@ var render = function() {
               _c(
                 "v-row",
                 [
-                  _c("v-col", [
+                  _c("v-col", { attrs: { cols: "12", md: "8" } }, [
                     _c("div", [
                       _c("h4", { staticClass: "green--text" }, [
                         _vm._v(
@@ -2963,59 +3002,113 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "v-col",
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onPrint("print", "expense")
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Print By Expense\n                    "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onPrint("print", "employee")
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Print By Employee\n                    "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.onPrint("print", "date")
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Print By Date\n                    "
-                          )
-                        ]
-                      )
-                    ],
-                    1
-                  )
+                  _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                    _c(
+                      "div",
+                      { staticClass: "text-right" },
+                      [
+                        _c(
+                          "v-menu",
+                          {
+                            attrs: { "offset-y": "" },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var attrs = ref.attrs
+                                  var on = ref.on
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          {
+                                            attrs: { color: "green", dark: "" }
+                                          },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [
+                                        _vm._v(
+                                          "\n                                    Print\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                }
+                              }
+                            ])
+                          },
+                          [
+                            _vm._v(" "),
+                            _c(
+                              "v-list",
+                              [
+                                _c(
+                                  "v-list-item",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onPrint("print", "expense")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("Group by expense")
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onPrint("print", "employee")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v(
+                                        "Group by\n                                        employee"
+                                      )
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onPrint("print", "date")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v("Group by date")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
                 ],
                 1
               )
