@@ -183,20 +183,6 @@
                                 Duplicate Report(s)
                             </v-list-item-subtitle>
                         </v-list-item>
-
-                        <v-list-item>
-                            <v-list-item-icon>
-                                <v-icon>mdi-content-copy</v-icon>
-                            </v-list-item-icon>
-                            
-                            <!-- <v-select
-                                v-model="status"
-                                :items="['Print', 'By Expense', 'By Employee']"
-                            ></v-select> -->
-                            <!-- <v-list-item-subtitle>
-                                Print Report(s)
-                            </v-list-item-subtitle> -->
-                        </v-list-item>
                     </v-list>
                 </v-menu>
             </v-card-title>
@@ -481,6 +467,20 @@
                             </h4>
                         </div>
                     </v-col>
+                    <v-col>
+                        <v-btn @click="test()">
+                            Test
+                        </v-btn>
+                        <v-btn @click="onPrint('print', 'expense')">
+                            Print By Expense
+                        </v-btn>
+                        <v-btn @click="onPrint('print', 'employee')">
+                            Print By Employee
+                        </v-btn>
+                        <v-btn @click="onPrint('print', 'date')">
+                            Print By Date
+                        </v-btn>
+                    </v-col>
                 </v-row>
             </v-card-text>
         </v-card>
@@ -556,10 +556,1039 @@ export default {
                 sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
-            }
+            },
+            expense_types: [],
+            reports_by_employee: [],
+            reports_by_expense: [],
+            reports_by_date: []
         };
     },
     methods: {
+        test() {
+            let ids = this.selected == null ? [] :  this.selected.map(item => item.id);
+                console.log(ids);
+        },
+        loadExpenseTypes() {
+            let _this = this;
+
+            axios
+                .get(`/api/data/expense_types?only=true`)
+                .then(response => {
+                    // console.log("expense types", response);
+
+                    _this.expense_types = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        loadReportByExpense() {
+            return new Promise((resolve, reject) => {
+                let _this = this;
+                let ids = _this.selected == null ? [] :  _this.selected.map(item => item.id);
+
+
+
+                axios
+                    .get(`/api/data/print_report?by_expense_id=true&ids=${ids}`)
+                    .then(response => {
+                        // console.log("report by expense", response);
+                        _this.reports_by_expense = response.data.data;
+                        resolve();
+                    })
+                    .catch(error => {
+                        reject();
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
+        },
+        loadReportByEmployee() {
+            return new Promise((resolve, reject) => {
+                let _this = this;
+                let ids = _this.selected == null ? [] :  _this.selected.map(item => item.id);
+
+                axios
+                    .get(`/api/data/print_report?by_employee_id=true&ids=${ids}`)
+                    .then(response => {
+                        // console.log("report by employee", response);
+                        _this.reports_by_employee = response.data.data;
+
+                        resolve();
+                    })
+                    .catch(error => {
+                        reject();
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
+        },
+        loadReportByDate() {
+            return new Promise((resolve, reject) => {
+                let _this = this;
+                let ids = _this.selected == null ? [] : _this.selected.map(item => item.id);
+
+                axios
+                    .get(`/api/data/print_report?by_date=true&ids=${ids}`)
+                    .then(response => {
+                        // console.log("report by date", response);
+                        _this.reports_by_date = response.data.data;
+                        resolve();
+                    })
+                    .catch(error => {
+                        reject();
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
+        },
+        printReportByEmployee(action) {
+            this.loadReportByEmployee().then(() => {
+                let table_columns = [];
+                let table_rows = [];
+                let table_footer = [];
+
+                table_columns.push({
+                    text: "Employee",
+                    style: "tableOfExpensesHeader"
+                });
+                this.expense_types.forEach(element => {
+                    table_columns.push({
+                        text: element.name,
+                        style: "tableOfExpensesHeader"
+                    });
+                });
+                table_columns.push({
+                    text: "Total",
+                    style: "tableOfExpensesHeader"
+                });
+
+                let temp_table_body = {};
+                let temp_expense_types = {};
+                let employee_id = null;
+                let expense_type = null;
+
+                // loop through retrieved records
+                this.reports_by_employee.forEach(element => {
+                    // create new object if current employee does not match with previous record
+                    if (employee_id !== element.employee_id) {
+                        temp_table_body = {};
+                        employee_id = element.employee_id;
+
+                        // set default values for current row
+                        this.expense_types.forEach(expense_type => {
+                            temp_expense_types[expense_type.name] = 0;
+                        });
+
+                        temp_table_body = {
+                            Employee: `${element.last_name}, ${
+                                element.first_name
+                            } ${
+                                element.middle_name == null
+                                    ? ""
+                                    : element.middle_name
+                            } ${element.suffix == null ? "" : element.suffix}`,
+                            ...temp_expense_types,
+                            Total: 0
+                        };
+
+                        table_rows.push(temp_table_body);
+                    }
+
+                    // set expense type amount
+                    temp_table_body[element.expense_type_name] =
+                        element.expense_amount;
+
+                    // sum of all expense types
+                    if ("Total" in temp_table_body) {
+                        let total = 0;
+
+                        this.expense_types.forEach(item => {
+                            total += temp_table_body[item.name];
+                        });
+
+                        temp_table_body["Total"] = total;
+                    }
+                });
+
+                // sum total amount per expense type
+                this.expense_types.forEach(expense_type => {
+                    temp_expense_types[
+                        expense_type.name
+                    ] = this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item[expense_type.name],
+                            0
+                        )
+                    );
+                });
+
+                // add row for total amounts
+                table_rows.push({
+                    Total: "Total",
+                    ...temp_expense_types,
+                    TotalAmount: this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item["Total"],
+                            0
+                        )
+                    )
+                });
+
+                let temp = table_rows.map(item => Object.values(item));
+
+                let itemss = temp.map(item => {
+                    let val = [];
+
+                    for (let i = 0; i < item.length; i++) {
+                        val.push({
+                            text: item[i],
+                            style: "tableOfExpensesBody"
+                        });
+                    }
+
+                    return val;
+                });
+
+                let body = [];
+                body.push(table_columns);
+                itemss.forEach(element => {
+                    body.push(element);
+                });
+
+                let pdfMake = require("pdfmake/build/pdfmake.js");
+                if (pdfMake.vfs == undefined) {
+                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+
+                pdfMake.fonts = {
+                    Roboto: {
+                        normal: "Roboto-Regular.ttf",
+                        bold: "Roboto-Medium.ttf",
+                        italics: "Roboto-Italic.ttf",
+                        bolditalics: "Roboto-MediumItalic.ttf"
+                    }
+                };
+
+                let docDefinition = {
+                    // pageSize: 'legal',
+                    pageSize: { width: 13 * 72, height: 8.5 * 72 },
+                    pageOrientation: "landscape",
+                    pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+                    defaultStyle: {
+                        font: "Roboto"
+                    },
+                    footer: function(currentPage, pageCount) {
+                        return {
+                            columns: [
+                                {
+                                    text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                                        "YYYY-MM-DD HH:mm:ss"
+                                    )}`,
+                                    width: 500,
+                                    margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                                    style: "pageFooter"
+                                },
+                                {
+                                    text:
+                                        "Page " +
+                                        currentPage.toString() +
+                                        " of " +
+                                        pageCount,
+                                    alignment: "right",
+                                    style: "pageFooter",
+                                    margin: [0, 0, 0.5 * 72, 0]
+                                }
+                            ]
+                        };
+                    },
+                    content: [
+                        {
+                            text: ["Expense Summary Report"],
+                            style: "header"
+                        },
+                        {
+                            style: "tableOfExpenses",
+                            table: {
+                                headerRows: 1,
+                                widths: table_columns.map(item => "*"),
+                                body: body
+                            },
+                            layout: {
+                                hLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                vLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                hLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                vLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                fillColor: function(
+                                    rowIndex,
+                                    node,
+                                    columnIndex
+                                ) {
+                                    return rowIndex % 2 === 0
+                                        ? "#dbdbdb"
+                                        : null;
+                                }
+                            }
+                        },
+                        {
+                            style: "tableSignatures",
+                            table: {
+                                widths: ["*", "*", "*", "*"],
+                                body: [
+                                    [
+                                        {
+                                            text: "Prepared By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Checked By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Approved By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Voucher No.",
+                                            style: "tableSignaturesBody"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        }
+                                    ]
+                                ]
+                            },
+                            layout: "noBorders"
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 13,
+                            bold: false,
+                            alignment: "center"
+                        },
+                        tableSignatures: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableSignaturesBody: {
+                            fontSize: 10
+                        },
+                        tableOfExpenses: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableOfExpensesHeader: {
+                            bold: true,
+                            fontSize: 9,
+                            color: "white",
+                            fillColor: "#4caf50",
+                            alignment: "center"
+                        },
+                        tableOfExpensesBody: {
+                            fontSize: 9
+                        },
+                        signatures: {
+                            margin: [0, 5, 0, 15],
+                            fontSize: 10
+                        },
+                        pageFooter: {
+                            fontSize: 8
+                        }
+                    }
+                };
+
+                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
+                // pdfMake.createPdf(docDefinition).print();
+                pdfMake.createPdf(docDefinition).open();
+            });
+        },
+        printReportByDate() {
+            console.log("date print");
+            this.loadReportByDate().then(() => {
+                console.log("date print2");
+                let table_columns = [];
+                let table_rows = [];
+                let table_footer = [];
+
+                table_columns.push({
+                    text: "Date",
+                    style: "tableOfExpensesHeader"
+                });
+                this.expense_types.forEach(element => {
+                    table_columns.push({
+                        text: element.name,
+                        style: "tableOfExpensesHeader"
+                    });
+                });
+                table_columns.push({
+                    text: "Total",
+                    style: "tableOfExpensesHeader"
+                });
+
+                let temp_table_body = {};
+                let temp_expense_types = {};
+                let expense_date = null;
+                let expense_type = null;
+
+                // loop through retrieved records
+                this.reports_by_date.forEach(element => {
+                    // create new object if current employee does not match with previous record
+                    if (expense_date !== element.expense_date) {
+                        temp_table_body = {};
+                        expense_date = element.expense_date;
+
+                        // set default values for current row
+                        this.expense_types.forEach(expense_type => {
+                            temp_expense_types[expense_type.name] = 0;
+                        });
+
+                        temp_table_body = {
+                            Date: element.expense_date,
+                            ...temp_expense_types,
+                            Total: 0
+                        };
+
+                        table_rows.push(temp_table_body);
+                    }
+
+                    // set expense type amount
+                    temp_table_body[element.expense_type_name] =
+                        element.expense_amount;
+
+                    // sum of all expense types
+                    if ("Total" in temp_table_body) {
+                        let total = 0;
+
+                        this.expense_types.forEach(item => {
+                            total += temp_table_body[item.name];
+                        });
+
+                        temp_table_body["Total"] = total;
+                    }
+                });
+
+                // sum total amount per expense type
+                this.expense_types.forEach(expense_type => {
+                    temp_expense_types[
+                        expense_type.name
+                    ] = this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item[expense_type.name],
+                            0
+                        )
+                    );
+                });
+
+                // add row for total amounts
+                table_rows.push({
+                    Total: "Total",
+                    ...temp_expense_types,
+                    TotalAmount: this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item["Total"],
+                            0
+                        )
+                    )
+                });
+
+                // console.log(table_rows.map(item => Object.values(item)));
+
+                let temp = table_rows.map(item => Object.values(item));
+
+                let itemss = temp.map(item => {
+                    let val = [];
+
+                    for (let i = 0; i < item.length; i++) {
+                        val.push({
+                            text: item[i],
+                            style: "tableOfExpensesBody"
+                        });
+                    }
+
+                    return val;
+                });
+                // console.log("items", itemss);
+                // return;
+
+                let body = [];
+                body.push(table_columns);
+                itemss.forEach(element => {
+                    body.push(element);
+                });
+
+                let pdfMake = require("pdfmake/build/pdfmake.js");
+                if (pdfMake.vfs == undefined) {
+                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+
+                pdfMake.fonts = {
+                    Roboto: {
+                        normal: "Roboto-Regular.ttf",
+                        bold: "Roboto-Medium.ttf",
+                        italics: "Roboto-Italic.ttf",
+                        bolditalics: "Roboto-MediumItalic.ttf"
+                    }
+                };
+
+                // console.log(table_columns);
+                // console.log(table_columns.map(item => "*"));
+                // return;
+
+                let docDefinition = {
+                    // pageSize: 'legal',
+                    pageSize: { width: 13 * 72, height: 8.5 * 72 },
+                    pageOrientation: "landscape",
+                    pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+                    defaultStyle: {
+                        font: "Roboto"
+                    },
+                    footer: function(currentPage, pageCount) {
+                        return {
+                            columns: [
+                                {
+                                    text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                                        "YYYY-MM-DD HH:mm:ss"
+                                    )}`,
+                                    width: 500,
+                                    margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                                    style: "pageFooter"
+                                },
+                                {
+                                    text:
+                                        "Page " +
+                                        currentPage.toString() +
+                                        " of " +
+                                        pageCount,
+                                    alignment: "right",
+                                    style: "pageFooter",
+                                    margin: [0, 0, 0.5 * 72, 0]
+                                }
+                            ]
+                        };
+                    },
+                    content: [
+                        {
+                            text: ["Expense Summary Report"],
+                            style: "header"
+                        },
+                        {
+                            style: "tableOfExpenses",
+                            table: {
+                                headerRows: 1,
+                                widths: table_columns.map(item => "*"),
+                                body: body
+                            },
+                            layout: {
+                                hLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                vLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                hLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                vLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                fillColor: function(
+                                    rowIndex,
+                                    node,
+                                    columnIndex
+                                ) {
+                                    return rowIndex % 2 === 0
+                                        ? "#dbdbdb"
+                                        : null;
+                                }
+                            }
+                        },
+                        {
+                            style: "tableSignatures",
+                            table: {
+                                widths: ["*", "*", "*", "*"],
+                                body: [
+                                    [
+                                        {
+                                            text: "Prepared By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Checked By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Approved By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Voucher No.",
+                                            style: "tableSignaturesBody"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        }
+                                    ]
+                                ]
+                            },
+                            layout: "noBorders"
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 13,
+                            bold: false,
+                            alignment: "center"
+                        },
+                        tableSignatures: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableSignaturesBody: {
+                            fontSize: 10
+                        },
+                        tableOfExpenses: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableOfExpensesHeader: {
+                            bold: true,
+                            fontSize: 9,
+                            color: "white",
+                            fillColor: "#4caf50",
+                            alignment: "center"
+                        },
+                        tableOfExpensesBody: {
+                            fontSize: 9
+                        },
+                        signatures: {
+                            margin: [0, 5, 0, 15],
+                            fontSize: 10
+                        },
+                        pageFooter: {
+                            fontSize: 8
+                        }
+                    }
+                };
+
+                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
+                // pdfMake.createPdf(docDefinition).print();
+                pdfMake.createPdf(docDefinition).open();
+            });
+        },
+        printReportByExpense() {
+            this.loadReportByExpense().then(() => {
+                let table_columns = [];
+                let table_rows = [];
+                let table_footer = [];
+
+                table_columns.push({
+                    text: "Date",
+                    style: "tableOfExpensesHeader"
+                });
+                table_columns.push({
+                    text: "Particulars",
+                    style: "tableOfExpensesHeader"
+                });
+                this.expense_types.forEach(element => {
+                    table_columns.push({
+                        text: element.name,
+                        style: "tableOfExpensesHeader"
+                    });
+                });
+                table_columns.push({
+                    text: "Total",
+                    style: "tableOfExpensesHeader"
+                });
+
+                let temp_table_body = {};
+                let temp_expense_types = {};
+                let expense_id = null;
+                let expense_type = null;
+
+                // loop through retrieved records
+                this.reports_by_expense.forEach(element => {
+                    // create new object if current employee does not match with previous record
+                    if (expense_id !== element.expense_id) {
+                        temp_table_body = {};
+                        expense_id = element.expense_id;
+
+                        // set default values for current row
+                        this.expense_types.forEach(expense_type => {
+                            temp_expense_types[expense_type.name] = 0;
+                        });
+
+                        let details =
+                            element.expense_details == null
+                                ? []
+                                : JSON.parse(element.expense_details)
+                                      .map(item => {
+                                          return (
+                                              `${
+                                                  item.sub_type_name == null
+                                                      ? ""
+                                                      : item.sub_type_name +
+                                                        "/ "
+                                              }${item.description}: ${
+                                                  item.total
+                                              }` + "\n"
+                                          );
+                                      })
+                                      .join("");
+
+                        temp_table_body = {
+                            Date: element.expense_date,
+                            Particulars:
+                                element.expense_description + "\n" + details,
+                            ...temp_expense_types,
+                            Total: 0
+                        };
+
+                        table_rows.push(temp_table_body);
+                    }
+
+                    // set expense type amount
+                    temp_table_body[element.expense_type_name] =
+                        element.expense_amount;
+
+                    // sum of all expense types
+                    if ("Total" in temp_table_body) {
+                        let total = 0;
+
+                        this.expense_types.forEach(item => {
+                            total += temp_table_body[item.name];
+                        });
+
+                        temp_table_body["Total"] = total;
+                    }
+                });
+
+                // sum total amount per expense type
+                this.expense_types.forEach(expense_type => {
+                    temp_expense_types[
+                        expense_type.name
+                    ] = this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item[expense_type.name],
+                            0
+                        )
+                    );
+                });
+
+                // add row for total amounts
+                table_rows.push({
+                    Total: "Total",
+                    Particulars: "",
+                    ...temp_expense_types,
+                    TotalAmount: this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item["Total"],
+                            0
+                        )
+                    )
+                });
+
+                // console.log(table_rows.map(item => Object.values(item)));
+
+                let temp = table_rows.map(item => Object.values(item));
+
+                let itemss = temp.map(item => {
+                    let val = [];
+
+                    for (let i = 0; i < item.length; i++) {
+                        val.push({
+                            text: item[i],
+                            style: "tableOfExpensesBody"
+                        });
+                    }
+
+                    return val;
+                });
+                // console.log("items", itemss);
+                // return;
+
+                let body = [];
+                body.push(table_columns);
+                itemss.forEach(element => {
+                    body.push(element);
+                });
+
+                let pdfMake = require("pdfmake/build/pdfmake.js");
+                if (pdfMake.vfs == undefined) {
+                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+
+                pdfMake.fonts = {
+                    Roboto: {
+                        normal: "Roboto-Regular.ttf",
+                        bold: "Roboto-Medium.ttf",
+                        italics: "Roboto-Italic.ttf",
+                        bolditalics: "Roboto-MediumItalic.ttf"
+                    }
+                };
+
+                // console.log(table_columns);
+                // console.log(table_columns.map(item => "*"));
+                // return;
+
+                let docDefinition = {
+                    // pageSize: 'legal',
+                    pageSize: { width: 13 * 72, height: 8.5 * 72 },
+                    pageOrientation: "landscape",
+                    pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+                    defaultStyle: {
+                        font: "Roboto"
+                    },
+                    footer: function(currentPage, pageCount) {
+                        return {
+                            columns: [
+                                {
+                                    text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                                        "YYYY-MM-DD HH:mm:ss"
+                                    )}`,
+                                    width: 500,
+                                    margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                                    style: "pageFooter"
+                                },
+                                {
+                                    text:
+                                        "Page " +
+                                        currentPage.toString() +
+                                        " of " +
+                                        pageCount,
+                                    alignment: "right",
+                                    style: "pageFooter",
+                                    margin: [0, 0, 0.5 * 72, 0]
+                                }
+                            ]
+                        };
+                    },
+                    content: [
+                        {
+                            text: ["Expense Summary Report"],
+                            style: "header"
+                        },
+                        {
+                            style: "tableOfExpenses",
+                            table: {
+                                headerRows: 1,
+                                widths: table_columns.map(item => "*"),
+                                body: body
+                            },
+                            layout: {
+                                hLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                vLineWidth: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? 0.5
+                                        : 0.5;
+                                },
+                                hLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.body.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                vLineColor: function(i, node) {
+                                    return i === 0 ||
+                                        i === node.table.widths.length
+                                        ? "gray"
+                                        : "gray";
+                                },
+                                fillColor: function(
+                                    rowIndex,
+                                    node,
+                                    columnIndex
+                                ) {
+                                    return rowIndex % 2 === 0
+                                        ? "#dbdbdb"
+                                        : null;
+                                }
+                            }
+                        },
+                        {
+                            style: "tableSignatures",
+                            table: {
+                                widths: ["*", "*", "*", "*"],
+                                body: [
+                                    [
+                                        {
+                                            text: "Prepared By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Recommended By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Checked By",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text: "Approved By",
+                                            style: "tableSignaturesBody"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        },
+                                        {
+                                            text:
+                                                "___________________________________",
+                                            style: "tableSignaturesBody"
+                                        }
+                                    ]
+                                ]
+                            },
+                            layout: "noBorders"
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 13,
+                            bold: false,
+                            alignment: "center"
+                        },
+                        tableSignatures: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableSignaturesBody: {
+                            fontSize: 10
+                        },
+                        tableOfExpenses: {
+                            margin: [0, 5, 0, 15]
+                        },
+                        tableOfExpensesHeader: {
+                            bold: true,
+                            fontSize: 9,
+                            color: "white",
+                            fillColor: "#4caf50",
+                            alignment: "center"
+                        },
+                        tableOfExpensesBody: {
+                            fontSize: 9
+                        },
+                        signatures: {
+                            margin: [0, 5, 0, 15],
+                            fontSize: 10
+                        },
+                        pageFooter: {
+                            fontSize: 8
+                        }
+                    }
+                };
+
+                // pdfMake.createPdf(docDefinition).download('optionalName.pdf');
+                // pdfMake.createPdf(docDefinition).print();
+                pdfMake.createPdf(docDefinition).open();
+            });
+        },
+        onPrint(action, group_by) {
+            if(this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No items selected");
+                return;
+            }
+
+            switch (group_by) {
+                case "employee":
+                    this.printReportByEmployee();
+                    break;
+                case "date":
+                    this.printReportByDate();
+                    break;
+                default:
+                    this.printReportByExpense();
+                    break;
+            }
+        },
         updateDates(e) {
             this.date_range = e;
         },
@@ -1311,6 +2340,7 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadEmployees();
+        this.loadExpenseTypes();
     }
 };
 </script>
