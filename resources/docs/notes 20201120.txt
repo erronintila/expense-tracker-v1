@@ -1,7 +1,5 @@
 URGENT
 
-Print
-Expense Limit
 Expense Type Custom Fields
 Standard User Modules
 
@@ -18,7 +16,7 @@ add note for admin
 
 add settings paper sizes for printing and exporting
 
-autorefresh remaining fund info on sidebar
+Label for late encoded expenses and late approved reports
 
 LAG IN EXPENSE REPORTS
 
@@ -77,6 +75,7 @@ sql query excel data on expenses
 use eloquent model on querying data with relationships
 allowed times to resubmit report
 payment method
+autorefresh remaining fund info on sidebar
 
 
 ------------------------------------------------------------------------------------------
@@ -92,8 +91,8 @@ Add Bulk Expenses
 Limit expense per expense type and sub type
 
 Submission of Expense Report with no expenses
-Print Detailed Report
-Print Batch Reports
+------Print Detailed Report
+------Print Batch Reports
 Mark late approved expense reports
 Multiple Payments
 ------Add Notes when rejecting
@@ -103,10 +102,10 @@ Allow resubmission
 Advance Payment
 Link payment with employee
 Advance Payment Monitoring
-Add Notes when rejecting
+------Add Notes when rejecting
 Return Advance Payment Amount
-Add JSON Notes/Comments (required when rejecting)
-Display History
+------Add JSON Notes/Comments (required when rejecting)
+------Display History
 
 Notifications
 Currency
@@ -114,11 +113,11 @@ Currency
 Reload page automatically
 Export to Excel on all models
 Reset Date Range
-Format Numbers (0,0.00)
+------Format Numbers (0,0.00)
 Backend Validation
-Permissions
+------Permissions
 User Validations
-Remove Allowed Expense types setting on Employee module and transfer to Settings module
+------Remove Allowed Expense types setting on Employee module and transfer to Settings module
 Laravel Export to Excel
 Frontend Validation and Refactoring
 Backend Validation and Refactoring
