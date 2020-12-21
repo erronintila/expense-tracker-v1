@@ -34,6 +34,7 @@
                             <div>
                                 {{ form.employee.full_name }}
                                 <v-btn
+                                    v-if="canEdit"
                                     text
                                     color="green"
                                     :to="
@@ -432,6 +433,8 @@ export default {
                 rejected_at: null,
                 cancelled_at: null,
 
+                expense_report: null,
+
                 logs: []
             }
         };
@@ -505,6 +508,8 @@ export default {
                     _this.form.employee.remaining_fund +=
                         data.amount - data.reimbursable_amount;
 
+                    _this.form.expense_report = data.expense_report;
+
                     _this.form.created_at = data.created_at;
                     _this.form.updated_at = data.updated_at;
                     _this.form.deleted_at = data.deleted_at;
@@ -564,6 +569,29 @@ export default {
         // }
     },
     computed: {
+        canEdit() {
+            if (
+                this.form.deleted_at !== null ||
+                this.form.approved_at !== null ||
+                this.form.rejected_at !== null ||
+                this.form.cancelled_at !== null
+            ) {
+                return false;
+            }
+
+            if(this.form.expense_report !== null) {
+                if (
+                this.form.expense_report.approved_at !== null ||
+                this.form.expense_report.cancelled_at !== null ||
+                this.form.expense_report.deleted_at !== null ||
+                this.form.expense_report.rejected_at !== null
+            ) {
+                return false;
+            }
+            }
+
+            return true;
+        },
         amount_to_replenish() {
             let remaining_fund = this.mixin_convertToNumber(
                 this.form.employee.remaining_fund

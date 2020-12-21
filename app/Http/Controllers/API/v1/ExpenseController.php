@@ -9,7 +9,9 @@ use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Employee;
 use App\Models\Expense;
+use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -17,6 +19,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
+    use ApiResponse;
+
     public function __construct()
     {
         $this->middleware(['permission:view all expenses'], ['only' => ['index']]);
@@ -466,6 +470,22 @@ class ExpenseController extends Controller
                 //     abort(403);
                 // }
 
+                // // Prevent update if expense has an approve expense report and user is not admin
+                if ($expense->expense_report) {
+                    $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
+                    ->where([
+                        ["approved_at", "<>", null],
+                        ["cancelled_at", "<>", null],
+                        ["rejected_at", "<>", null],
+                        ["cancelled_at", "<>", null]
+                    ])
+                    ->count();
+
+                    if ($expense_report > 0) {
+                        return $this->errorResponse("Expense Report has already been submitted.", 422);
+                    }
+                }
+
                 $expense->description = $request->description ?? $expense_type->name;
 
                 $expense->receipt_number = $request->receipt_number;
@@ -572,10 +592,10 @@ class ExpenseController extends Controller
     {
         if (request()->has("only")) {
             if (request()->has("expense_report_id")) {
-                $expenses = Expense::with(["expense_type" => function($query) {
+                $expenses = Expense::with(["expense_type" => function ($query) {
                     $query->withTrashed();
                 }])
-                ->with(["vendor" => function($query) {
+                ->with(["vendor" => function ($query) {
                     $query->withTrashed();
                 }])
                 ->where("expense_report_id", $request->expense_report_id)->get();

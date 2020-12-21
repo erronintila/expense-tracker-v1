@@ -359,6 +359,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -464,6 +465,7 @@ __webpack_require__.r(__webpack_exports__);
         approved_at: null,
         rejected_at: null,
         cancelled_at: null,
+        expense_report: null,
         logs: []
       }
     };
@@ -528,6 +530,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
         _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
+        _this.form.expense_report = data.expense_report;
         _this.form.created_at = data.created_at;
         _this.form.updated_at = data.updated_at;
         _this.form.deleted_at = data.deleted_at;
@@ -568,6 +571,19 @@ __webpack_require__.r(__webpack_exports__);
 
   },
   computed: {
+    canEdit: function canEdit() {
+      if (this.form.deleted_at !== null || this.form.approved_at !== null || this.form.rejected_at !== null || this.form.cancelled_at !== null) {
+        return false;
+      }
+
+      if (this.form.expense_report !== null) {
+        if (this.form.expense_report.approved_at !== null || this.form.expense_report.cancelled_at !== null || this.form.expense_report.deleted_at !== null || this.form.expense_report.rejected_at !== null) {
+          return false;
+        }
+      }
+
+      return true;
+    },
     amount_to_replenish: function amount_to_replenish() {
       var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
@@ -747,24 +763,26 @@ var render = function() {
                                     _vm._s(_vm.form.employee.full_name) +
                                     "\n                            "
                                 ),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: {
-                                      text: "",
-                                      color: "green",
-                                      to:
-                                        "/admin/expenses/" +
-                                        _vm.$route.params.id +
-                                        "/edit"
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                Edit\n                            "
+                                _vm.canEdit
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          text: "",
+                                          color: "green",
+                                          to:
+                                            "/admin/expenses/" +
+                                            _vm.$route.params.id +
+                                            "/edit"
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Edit\n                            "
+                                        )
+                                      ]
                                     )
-                                  ]
-                                )
+                                  : _vm._e()
                               ],
                               1
                             ),

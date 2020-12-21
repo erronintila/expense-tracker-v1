@@ -135,9 +135,12 @@
 
                     <v-list>
                         <v-list-item @click="onRestore">
-                            <v-list-item-title>
+                            <v-list-item-icon>
+                                <v-icon>mdi-restore</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
                                 Restore
-                            </v-list-item-title>
+                            </v-list-item-subtitle>
                         </v-list-item>
                         <!-- <v-list-item>
                             <v-list-item-icon>

@@ -480,6 +480,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1265,7 +1268,13 @@ var render = function() {
                         "v-list-item",
                         { on: { click: _vm.onRestore } },
                         [
-                          _c("v-list-item-title", [
+                          _c(
+                            "v-list-item-icon",
+                            [_c("v-icon", [_vm._v("mdi-restore")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
                             _vm._v(
                               "\n                            Restore\n                        "
                             )

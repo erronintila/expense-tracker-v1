@@ -430,7 +430,11 @@
                                         label="Tax Rate"
                                         suffix="%"
                                         type="number"
-                                        :readonly="!mixin_can('modify taxes on expense')"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
                                     ></v-text-field>
                                 </v-col>
 
@@ -439,7 +443,11 @@
                                         v-model="taxable_amount"
                                         label="Tax Amount"
                                         type="number"
-                                        :readonly="!mixin_can('modify taxes on expense')"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -893,6 +901,9 @@ export default {
                         _this.$router.push({ name: "admin.expenses.index" });
                     })
                     .catch(function(error) {
+                        // _this.getData();
+                        _this.loader = false;
+
                         console.log(error);
                         console.log(error.response);
 
@@ -901,7 +912,9 @@ export default {
                             error.response.statusText
                         );
 
-                        _this.errors = error.response.data.errors;
+                        if(error.response.data.data !== null) {
+                            _this.errors = error.response.data.errors;
+                        }
                     });
 
                 return;

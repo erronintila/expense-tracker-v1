@@ -405,6 +405,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -766,14 +767,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpensesBody"
           });
           temp.push({
-            text: element.vendor.name,
+            text: element.vendor == null ? "" : element.vendor.name,
             style: "tableOfExpensesBody"
           });
           temp.push({
             text: _this3.mixin_formatNumber(element.amount),
             style: {
               fontSize: 9,
-              alignment: 'right'
+              alignment: "right"
             }
           });
           table_rows.push(temp);
@@ -981,7 +982,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // pdfMake.createPdf(docDefinition).print();
           pdfMake.createPdf(docDefinition).open();
         } else {
-          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
         }
       });
     },
@@ -1117,6 +1118,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
         query: this.date_range
       }, "query", this.expense_report_id));
+    },
+    canEdit: function canEdit() {
+      if (this.form.approved_at !== null || this.form.cancelled_at !== null || this.form.deleted_at !== null || this.form.rejected_at !== null) {
+        return false;
+      }
+
+      return true;
     }
   },
   created: function created() {
@@ -1242,24 +1250,26 @@ var render = function() {
                                     _vm._s(_vm.form.employee.full_name) +
                                     "\n                            "
                                 ),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: {
-                                      text: "",
-                                      color: "green",
-                                      to:
-                                        "/admin/expense_reports/" +
-                                        _vm.$route.params.id +
-                                        "/edit"
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                Edit\n                            "
+                                _vm.canEdit
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          text: "",
+                                          color: "green",
+                                          to:
+                                            "/admin/expense_reports/" +
+                                            _vm.$route.params.id +
+                                            "/edit"
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Edit\n                            "
+                                        )
+                                      ]
                                     )
-                                  ]
-                                )
+                                  : _vm._e()
                               ],
                               1
                             ),

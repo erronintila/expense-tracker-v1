@@ -34,6 +34,7 @@
                             <div>
                                 {{ form.employee.full_name }}
                                 <v-btn
+                                    v-if="canEdit"
                                     text
                                     color="green"
                                     :to="
@@ -839,16 +840,31 @@ export default {
                     {
                         text: "Amount",
                         style: "tableOfExpensesHeader"
-                    },
+                    }
                 ]);
                 data.items.forEach(element => {
                     let temp = [];
 
-                    temp.push({text: element.date, style: "tableOfExpensesBody"});
-                    temp.push({text: element.expense_type.name, style: "tableOfExpensesBody"});
-                    temp.push({text: element.receipt_number, style: "tableOfExpensesBody"});
-                    temp.push({text: element.vendor.name, style: "tableOfExpensesBody"});
-                    temp.push({text: this.mixin_formatNumber(element.amount), style: {fontSize: 9, alignment: 'right'}});
+                    temp.push({
+                        text: element.date,
+                        style: "tableOfExpensesBody"
+                    });
+                    temp.push({
+                        text: element.expense_type.name,
+                        style: "tableOfExpensesBody"
+                    });
+                    temp.push({
+                        text: element.receipt_number,
+                        style: "tableOfExpensesBody"
+                    });
+                    temp.push({
+                        text: element.vendor == null ? "" : element.vendor.name,
+                        style: "tableOfExpensesBody"
+                    });
+                    temp.push({
+                        text: this.mixin_formatNumber(element.amount),
+                        style: { fontSize: 9, alignment: "right" }
+                    });
 
                     table_rows.push(temp);
                 });
@@ -921,10 +937,12 @@ export default {
                         {
                             columns: [
                                 {
-                                    text: `PHP ${this.mixin_formatNumber(this.form.total)}`,
+                                    text: `PHP ${this.mixin_formatNumber(
+                                        this.form.total
+                                    )}`,
                                     style: {
                                         fontSize: 18,
-                                        color: "#4caf50",
+                                        color: "#4caf50"
                                     }
                                 },
                                 {
@@ -932,7 +950,7 @@ export default {
                                     alignment: "right",
                                     style: {
                                         fontSize: 11,
-                                        color: "#4caf50",
+                                        color: "#4caf50"
                                     }
                                 }
                             ]
@@ -1018,43 +1036,47 @@ export default {
                             columns: [
                                 {
                                     text: "No. of Expenses",
-                                    style: "pageStyle",
+                                    style: "pageStyle"
                                 },
                                 {
                                     text: data.items.length,
                                     alignment: "right",
-                                    style: "pageStyle",
+                                    style: "pageStyle"
                                 }
                             ],
-                            margin: [0, 0, 0, 0.1*72]
+                            margin: [0, 0, 0, 0.1 * 72]
                         },
                         {
                             columns: [
                                 {
                                     text: "Total Expenses Amount",
-                                    style: "pageStyle",
+                                    style: "pageStyle"
                                 },
                                 {
-                                    text: this.mixin_formatNumber(this.form.total),
+                                    text: this.mixin_formatNumber(
+                                        this.form.total
+                                    ),
                                     alignment: "right",
-                                    style: "pageStyle",
+                                    style: "pageStyle"
                                 }
                             ],
-                            margin: [0, 0, 0, 0.1*72]
+                            margin: [0, 0, 0, 0.1 * 72]
                         },
                         {
                             columns: [
                                 {
                                     text: "Paid Amount",
-                                    style: "pageStyle",
+                                    style: "pageStyle"
                                 },
                                 {
-                                    text: this.mixin_formatNumber(this.form.paid),
+                                    text: this.mixin_formatNumber(
+                                        this.form.paid
+                                    ),
                                     alignment: "right",
-                                    style: "pageStyle",
+                                    style: "pageStyle"
                                 }
                             ],
-                            margin: [0, 0, 0, 0.1*72]
+                            margin: [0, 0, 0, 0.1 * 72]
                         },
                         {
                             columns: [
@@ -1063,17 +1085,19 @@ export default {
                                     style: "pageStyle"
                                 },
                                 {
-                                    text: this.mixin_formatNumber(this.form.balance),
+                                    text: this.mixin_formatNumber(
+                                        this.form.balance
+                                    ),
                                     alignment: "right",
                                     style: "pageStyle"
                                 }
                             ],
-                            margin: [0, 0, 0, 0.1*72]
+                            margin: [0, 0, 0, 0.1 * 72]
                         }
                     ],
                     styles: {
                         pageStyle: {
-                            fontSize: 11,
+                            fontSize: 11
                         },
                         header: {
                             fontSize: 13,
@@ -1109,11 +1133,13 @@ export default {
                     }
                 };
 
-                if(action == "print") {
+                if (action == "print") {
                     // pdfMake.createPdf(docDefinition).print();
                     pdfMake.createPdf(docDefinition).open();
                 } else {
-                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                    pdfMake
+                        .createPdf(docDefinition)
+                        .download("expense_report.pdf");
                 }
             });
         },
@@ -1269,6 +1295,18 @@ export default {
                 query: this.date_range,
                 query: this.expense_report_id
             };
+        },
+        canEdit() {
+            if (
+                this.form.approved_at !== null ||
+                this.form.cancelled_at !== null ||
+                this.form.deleted_at !== null ||
+                this.form.rejected_at !== null
+            ) {
+                return false;
+            }
+
+            return true;
         }
     },
     created() {
