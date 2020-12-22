@@ -201,7 +201,11 @@
                                     }}</v-btn>
                                     ~ Expense Limit:
                                     <v-btn color="green" dark small outlined>{{
-                                        mixin_formatNumber(expense_amount_limit)
+                                        expense_amount_limit == null
+                                            ? "No Limit"
+                                            : mixin_formatNumber(
+                                                  expense_amount_limit
+                                              )
                                     }}</v-btn>
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle>
@@ -359,13 +363,14 @@
                                                         <v-row>
                                                             <v-col>
                                                                 <div>
-                                                                    Limit:
                                                                     {{
-                                                                        mixin_formatNumber(
-                                                                            expense_amount_limit
-                                                                        )
+                                                                        expense_amount_limit ==
+                                                                        null
+                                                                            ? "No Limit"
+                                                                            : `Limit: ${mixin_formatNumber(
+                                                                                  expense_amount_limit
+                                                                              )} / qunatity`
                                                                     }}
-                                                                    / quantity
                                                                 </div>
                                                             </v-col>
                                                         </v-row>
@@ -912,7 +917,7 @@ export default {
                             error.response.statusText
                         );
 
-                        if(error.response.data.data !== null) {
+                        if (error.response.data.data !== null) {
                             _this.errors = error.response.data.errors;
                         }
                     });

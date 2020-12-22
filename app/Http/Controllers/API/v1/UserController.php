@@ -18,7 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
-{    
+{
     use ApiResponse;
 
     public function __construct()
@@ -164,7 +164,7 @@ class UserController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = User::withTrashed()->with(['employee' => function($query) {
+        $user = User::withTrashed()->with(['employee' => function ($query) {
             $query->withTrashed();
         }])->findOrFail($id);
 
@@ -263,7 +263,18 @@ class UserController extends Controller
                     'password' => ['required', 'confirmed', 'string', 'max:255'],
                 ]);
 
-                User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make($request->password)]);
+                $user = User::withTrashed()->findOrFail(auth()->user()->id);
+
+                $user->disableLogging();
+
+                $user->update(['password' => Hash::make($request->password)]);
+
+                activity('user')
+                    ->performedOn($user)
+                    ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->name], 'custom' => ['link' => null]])
+                    ->log("updated user password");
+
+                // User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make($request->password)]);
 
                 break;
             default:
@@ -414,7 +425,7 @@ class UserController extends Controller
      */
     public function getUsers(Request $request)
     {
-        if(request()->has('only')) {
+        if (request()->has('only')) {
             return $this->successResponse(User::orderBy("name")->get(), "", 200);
         }
 

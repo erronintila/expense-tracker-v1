@@ -119,8 +119,10 @@ class Department extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'departments',
+                'section' => 'departments',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => null
             ],
         ]);
     }

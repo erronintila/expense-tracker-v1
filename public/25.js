@@ -245,6 +245,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -331,6 +338,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          console.log(items);
           _this.loading = false;
           var export_data = items.map(function (item) {
             return {
@@ -378,6 +386,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
       this.loadUsers();
       this.selected = [];
+    },
+    hasLink: function hasLink(item) {
+      // .properties.custom.link
+      if (item.properties) {
+        if (item.properties.custom) {
+          if (item.properties.custom.link) {
+            return true;
+          }
+
+          return false;
+        }
+
+        return false;
+      }
+
+      return false;
     } // onDeleteAll() {
     //     let _this = this;
     //     this.$confirm(
@@ -788,24 +812,30 @@ var render = function() {
                   fn: function(ref) {
                     var item = ref.item
                     return [
-                      _c(
-                        "v-icon",
-                        {
-                          key: item.id,
-                          staticClass: "mr-2",
-                          attrs: { small: "" },
-                          on: {
-                            click: function($event) {
-                              return _vm.$router.push("/admin/departments")
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    mdi-open-in-new\n                "
+                      _vm.hasLink(item)
+                        ? _c(
+                            "v-icon",
+                            {
+                              key: item.id,
+                              staticClass: "mr-2",
+                              attrs: { small: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.$router.push(
+                                    _vm.hasLink(item)
+                                      ? "/admin/" + item.properties.custom.link
+                                      : null
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                    mdi-open-in-new\n                "
+                              )
+                            ]
                           )
-                        ]
-                      )
+                        : _vm._e()
                     ]
                   }
                 },
@@ -838,38 +868,44 @@ var render = function() {
                             "v-container",
                             { key: item.id },
                             _vm._l(item.properties, function(items, key) {
-                              return _c(
-                                "table",
-                                { key: items.id },
-                                [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "green--text text-capitalize"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(key) +
-                                          "\n                            "
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm._l(items, function(item, key) {
-                                    return _c("tr", { key: key }, [
-                                      _c("td", [
-                                        _c("strong", [_vm._v(_vm._s(key))])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(item))])
-                                    ])
-                                  })
-                                ],
-                                2
-                              )
+                              return _c("table", { key: items.id }, [
+                                key == "attributes"
+                                  ? _c(
+                                      "div",
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "green--text text-capitalize"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(key) +
+                                                "\n                                "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm._l(items, function(item, key) {
+                                          return _c("tr", { key: key }, [
+                                            _c("td", [
+                                              _c("strong", [
+                                                _vm._v(_vm._s(key))
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [_vm._v(":")]),
+                                            _vm._v(" "),
+                                            _c("td", [_vm._v(_vm._s(item))])
+                                          ])
+                                        })
+                                      ],
+                                      2
+                                    )
+                                  : _vm._e()
+                              ])
                             }),
                             0
                           )

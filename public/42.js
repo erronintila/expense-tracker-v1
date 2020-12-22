@@ -540,6 +540,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1516,9 +1529,11 @@ var render = function() {
                                         [
                                           _vm._v(
                                             _vm._s(
-                                              _vm.mixin_formatNumber(
-                                                _vm.expense_amount_limit
-                                              )
+                                              _vm.expense_amount_limit == null
+                                                ? "No Limit"
+                                                : _vm.mixin_formatNumber(
+                                                    _vm.expense_amount_limit
+                                                  )
                                             )
                                           )
                                         ]
@@ -1916,13 +1931,18 @@ var render = function() {
                                                                               "div",
                                                                               [
                                                                                 _vm._v(
-                                                                                  "\n                                                                Limit:\n                                                                " +
+                                                                                  "\n                                                                " +
                                                                                     _vm._s(
-                                                                                      _vm.mixin_formatNumber(
-                                                                                        _vm.expense_amount_limit
-                                                                                      )
+                                                                                      _vm.expense_amount_limit ==
+                                                                                        null
+                                                                                        ? "No Limit"
+                                                                                        : "Limit: " +
+                                                                                            _vm.mixin_formatNumber(
+                                                                                              _vm.expense_amount_limit
+                                                                                            ) +
+                                                                                            " / qunatity"
                                                                                     ) +
-                                                                                    "\n                                                                / quantity\n                                                            "
+                                                                                    "\n                                                            "
                                                                                 )
                                                                               ]
                                                                             )

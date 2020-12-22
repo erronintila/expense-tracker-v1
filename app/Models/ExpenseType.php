@@ -105,8 +105,10 @@ class ExpenseType extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'expense_types',
+                'section' => 'expense_types',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => null
             ],
         ]);
     }

@@ -437,7 +437,12 @@ class ExpenseController extends Controller
 
                         $expense->restore();
 
-                        log_activity("expense", $expense, [ "code" => $expense->code, "restored_at" => $expense->updated_at], "restored expense record");
+                        log_activity("expense", $expense, 
+                        [ 
+                            "attributes" => ["code" => $expense->code, "restored_at" => $expense->updated_at], 
+                            "custom" => ["link" => "expenses/{$expense->id}"]
+                        ], 
+                        "restored expense record");
                     }
                 } else {
                     $expense = Expense::withTrashed()->findOrFail($id);
@@ -446,7 +451,12 @@ class ExpenseController extends Controller
 
                     $expense->restore();
 
-                    log_activity("expense", $expense, [ "code" => $expense->code, "restored_at" => $expense->updated_at], "restored expense record");
+                    log_activity("expense", $expense, 
+                    [ 
+                        "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at], 
+                        "custom" => ["link" => "expenses/{$expense->id}"]
+                    ], 
+                    "restored expense record");
                 }
 
                 break;
@@ -535,7 +545,12 @@ class ExpenseController extends Controller
 
                 $expense->save();
 
-                log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "updated expense record");
+                log_activity("expense", $expense, 
+                [ 
+                    "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at], 
+                    "custom" => ["link" => "expenses/{$expense->id}"]
+                ], 
+                "updated expense record");
 
                 break;
         }

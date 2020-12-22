@@ -122,8 +122,10 @@ class Expense extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'expenses',
+                'section' => 'expenses',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => "expenses/{$this->id}"
             ],
         ]);
     }

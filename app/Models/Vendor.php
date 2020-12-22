@@ -98,8 +98,10 @@ class Vendor extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'vendors',
+                'section' => 'vendors',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => "vendors/{$this->id}"
             ],
         ]);
     }

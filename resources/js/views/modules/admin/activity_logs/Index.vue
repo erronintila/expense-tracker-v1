@@ -76,13 +76,13 @@
                 <v-card>
                     <v-list>
                         <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
+                            <DateRangePicker
+                                :preset="preset"
+                                :presets="presets"
+                                :value="date_range"
+                                @updateDates="updateDates"
+                            ></DateRangePicker>
+                        </v-list-item>
                         <v-list-item>
                             <v-select
                                 v-model="user"
@@ -188,10 +188,15 @@
             >
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon
+                        v-if="hasLink(item)"
                         :key="item.id"
                         small
                         class="mr-2"
-                        @click="$router.push(`/admin/departments`)"
+                        @click="
+                            $router.push(hasLink(item) ? 
+                                `/admin/${item.properties.custom.link}` : null
+                            )
+                        "
                     >
                         mdi-open-in-new
                     </v-icon>
@@ -206,16 +211,18 @@
                                 v-for="(items, key) in item.properties"
                                 :key="items.id"
                             >
-                                <div class="green--text text-capitalize">
-                                    {{ key }}
+                                <div v-if="key == 'attributes'">
+                                    <div class="green--text text-capitalize">
+                                        {{ key }}
+                                    </div>
+                                    <tr v-for="(item, key) in items" :key="key">
+                                        <td>
+                                            <strong>{{ key }}</strong>
+                                        </td>
+                                        <td>:</td>
+                                        <td>{{ item }}</td>
+                                    </tr>
                                 </div>
-                                <tr v-for="(item, key) in items" :key="key">
-                                    <td>
-                                        <strong>{{ key }}</strong>
-                                    </td>
-                                    <td>:</td>
-                                    <td>{{ item }}</td>
-                                </tr>
                             </table>
                         </v-container>
                     </td>
@@ -315,6 +322,8 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
+                        console.log(items);
+
                         _this.loading = false;
 
                         let export_data = items.map(item => ({
@@ -373,6 +382,22 @@ export default {
             this.loadUsers();
 
             this.selected = [];
+        },
+        hasLink(item) {
+            // .properties.custom.link
+            if (item.properties) {
+                if (item.properties.custom) {
+                    if (item.properties.custom.link) {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                return false;
+            }
+
+            return false;
         },
         // onDeleteAll() {
         //     let _this = this;
@@ -473,7 +498,7 @@ export default {
                 });
             },
             deep: true
-        },
+        }
     },
     computed: {
         params(nv) {

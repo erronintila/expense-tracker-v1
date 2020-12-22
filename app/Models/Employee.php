@@ -108,8 +108,10 @@ class Employee extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'employees',
+                'section' => 'employees',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => "employees/{$this->id}"
             ],
         ]);
     }

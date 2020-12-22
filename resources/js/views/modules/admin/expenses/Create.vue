@@ -204,7 +204,11 @@
                                     }}</v-btn>
                                     ~ Expense Limit:
                                     <v-btn color="green" dark small outlined>{{
-                                        mixin_formatNumber(expense_amount_limit)
+                                        expense_amount_limit == null
+                                            ? "No Limit"
+                                            : mixin_formatNumber(
+                                                  expense_amount_limit
+                                              )
                                     }}</v-btn>
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle>
@@ -362,13 +366,14 @@
                                                         <v-row>
                                                             <v-col>
                                                                 <div>
-                                                                    Limit:
                                                                     {{
-                                                                        mixin_formatNumber(
-                                                                            expense_amount_limit
-                                                                        )
+                                                                        expense_amount_limit ==
+                                                                        null
+                                                                            ? "No Limit"
+                                                                            : `Limit: ${mixin_formatNumber(
+                                                                                  expense_amount_limit
+                                                                              )} / qunatity`
                                                                     }}
-                                                                    / quantity
                                                                 </div>
                                                             </v-col>
                                                         </v-row>
@@ -433,7 +438,11 @@
                                         label="Tax Rate"
                                         suffix="%"
                                         type="number"
-                                        :readonly="!mixin_can('modify taxes on expense')"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
                                     ></v-text-field>
                                 </v-col>
 
@@ -442,7 +451,11 @@
                                         v-model="taxable_amount"
                                         label="Tax Amount"
                                         type="number"
-                                        :readonly="!mixin_can('modify taxes on expense')"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
                                     ></v-text-field>
                                 </v-col>
                             </v-row>

@@ -15,11 +15,11 @@ if (!function_exists('generate_code')) {
 }
 
 if (!function_exists('log_activity')) {
-    function log_activity($log_name, $model, $attributes, $action)
+    function log_activity($log_name, $model, $properties, $action)
     {
         activity($log_name)
             ->performedOn($model)
-            ->withProperties(['attributes' => $attributes])
+            ->withProperties($properties)
             ->log($action);
     }
 }

@@ -69,7 +69,7 @@ class User extends Authenticatable
     protected static $logAttributes = ['*'];
 
     // // Ignoring attributes from logging
-    protected static $logAttributesToIgnore = ['remember_token', 'updated_at'];
+    protected static $logAttributesToIgnore = ['password', 'remember_token', 'updated_at'];
 
     // // only created and updated event will be logged
     // protected static $recordEvents = ['created', 'updated']
@@ -96,8 +96,10 @@ class User extends Authenticatable
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'users',
+                'section' => 'users',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => null
             ],
         ]);
     }

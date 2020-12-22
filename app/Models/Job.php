@@ -96,8 +96,10 @@ class Job extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'jobs',
+                'section' => 'jobs',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => null
             ],
         ]);
     }

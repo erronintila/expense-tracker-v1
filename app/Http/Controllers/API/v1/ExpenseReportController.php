@@ -275,7 +275,17 @@ class ExpenseReportController extends Controller
 
             $expense->save();
 
-            log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "expense associated with expense report #{$expense_report->code}");
+            // log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "expense associated with expense report #{$expense_report->code}");
+            
+            log_activity("expense", $expense, [ 
+                "attributes" => [
+                    "code" => $expense->code, 
+                    "updated_at" => $expense->updated_at
+                ], 
+                "custom" => [
+                    "link" => "expenses/{$expense->id}"
+                ]], 
+                "expense associated with expense report #{$expense_report->code}");
         }
 
         return response(
@@ -533,7 +543,15 @@ class ExpenseReportController extends Controller
 
                         $new_expense->save();
 
-                        log_activity("expense", $new_expense, [ "code" => $new_expense->code, "updated_at" => $new_expense->updated_at], "duplicated expense");
+                        log_activity("expense", $new_expense, [ 
+                        "attributes" => [
+                            "code" => $new_expense->code, 
+                            "updated_at" => $new_expense->updated_at
+                        ], 
+                        "custom" => [
+                            "link" => "expenses/{$new_expense->id}"
+                        ]], 
+                        "duplicated expense");
                     }
                 }
 
@@ -647,7 +665,17 @@ class ExpenseReportController extends Controller
 
                     $expense->save();
 
-                    log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "updated expense association with expense report #{$expense_report->code}");
+                    // log_activity("expense", $expense, [ "code" => $expense->code, "updated_at" => $expense->updated_at], "updated expense association with expense report #{$expense_report->code}");
+                
+                    log_activity("expense", $expense, [ 
+                        "attributes" => [
+                            "code" => $expense->code, 
+                            "updated_at" => $expense->updated_at
+                        ], 
+                        "custom" => [
+                            "link" => "expenses/{$expense->id}"
+                        ]], 
+                        "updated expense association with expense report #{$expense_report->code}");
                 }
 
                 $message = "Expense Report updated successfully";
@@ -862,7 +890,7 @@ class ExpenseReportController extends Controller
         activity("expense_report")
             ->causedBy(Auth::user())
             ->performedOn($expense_report)
-            ->withProperties(['attributes' => ["code" => $expense_report->code, $key => $value]])
+            ->withProperties(['attributes' => ["code" => $expense_report->code, $key => $value], 'custom' => ["link" => "expense_reports/{$expense_report->id}"]])
             ->log($action . ' expense report');
     }
 

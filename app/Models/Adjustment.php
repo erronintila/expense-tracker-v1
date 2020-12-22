@@ -73,8 +73,10 @@ class Adjustment extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'adjustments',
+                'section' => 'adjustments',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => "adjustments/{$this->id}"
             ],
         ]);
     }

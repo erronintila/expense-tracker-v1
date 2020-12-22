@@ -124,8 +124,10 @@ class Payment extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'payments',
+                'section' => 'payments',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => "payments/{$this->id}"
             ],
         ]);
     }

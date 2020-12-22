@@ -73,8 +73,10 @@ class SubType extends Model
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
-                'table' => 'sub_types',
+                'section' => 'sub_types',
+                'section_id' => $this->id,
                 'causer_role' => $role,
+                'link' => null
             ],
         ]);
     }
