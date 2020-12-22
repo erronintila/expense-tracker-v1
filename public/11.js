@@ -975,7 +975,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // pdfMake.createPdf(docDefinition).print();
           pdfMake.createPdf(docDefinition).open();
         } else {
-          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
         }
       });
     },
@@ -1225,7 +1225,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // pdfMake.createPdf(docDefinition).print();
           pdfMake.createPdf(docDefinition).open();
         } else {
-          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
         }
       });
     },
@@ -1271,7 +1271,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               temp_expense_types[expense_type.name] = 0;
             });
 
-            var details = element.expense_details == null ? [] : JSON.parse(element.expense_details).map(function (item) {
+            var details = !element.expense_details || element.expense_details == "null" ? [] : JSON.parse(element.expense_details).map(function (item) {
               return "".concat(item.sub_type_name == null ? "" : item.sub_type_name + "/ ").concat(item.description, ": ").concat(item.total) + "\n";
             }).join("");
             temp_table_body = _objectSpread(_objectSpread({
@@ -1482,7 +1482,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // pdfMake.createPdf(docDefinition).print();
           pdfMake.createPdf(docDefinition).open();
         } else {
-          pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
         }
       });
     },

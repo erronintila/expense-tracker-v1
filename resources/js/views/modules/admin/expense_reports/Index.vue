@@ -1015,11 +1015,13 @@ export default {
                     }
                 };
 
-                if(action == "print") {
+                if (action == "print") {
                     // pdfMake.createPdf(docDefinition).print();
                     pdfMake.createPdf(docDefinition).open();
                 } else {
-                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                    pdfMake
+                        .createPdf(docDefinition)
+                        .download("expense_report.pdf");
                 }
             });
         },
@@ -1321,11 +1323,13 @@ export default {
                     }
                 };
 
-                if(action == "print") {
+                if (action == "print") {
                     // pdfMake.createPdf(docDefinition).print();
                     pdfMake.createPdf(docDefinition).open();
                 } else {
-                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                    pdfMake
+                        .createPdf(docDefinition)
+                        .download("expense_report.pdf");
                 }
             });
         },
@@ -1371,23 +1375,20 @@ export default {
                             temp_expense_types[expense_type.name] = 0;
                         });
 
-                        let details =
-                            element.expense_details == null
-                                ? []
-                                : JSON.parse(element.expense_details)
-                                      .map(item => {
-                                          return (
-                                              `${
-                                                  item.sub_type_name == null
-                                                      ? ""
-                                                      : item.sub_type_name +
-                                                        "/ "
-                                              }${item.description}: ${
-                                                  item.total
-                                              }` + "\n"
-                                          );
-                                      })
-                                      .join("");
+                        let details = (!element.expense_details || element.expense_details == "null")
+                            ? []
+                            : JSON.parse(element.expense_details)
+                                  .map(item => {
+                                      return (
+                                          `${
+                                              item.sub_type_name == null
+                                                  ? ""
+                                                  : item.sub_type_name + "/ "
+                                          }${item.description}: ${item.total}` +
+                                          "\n"
+                                      );
+                                  })
+                                  .join("");
 
                         temp_table_body = {
                             Date: element.expense_date,
@@ -1650,11 +1651,13 @@ export default {
                     }
                 };
 
-                if(action == "print") {
+                if (action == "print") {
                     // pdfMake.createPdf(docDefinition).print();
                     pdfMake.createPdf(docDefinition).open();
                 } else {
-                    pdfMake.createPdf(docDefinition).download('expense_report.pdf');
+                    pdfMake
+                        .createPdf(docDefinition)
+                        .download("expense_report.pdf");
                 }
             });
         },

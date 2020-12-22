@@ -663,6 +663,8 @@ export default {
                         });
                     })
                     .catch(function(error) {
+                        _this.loader =  false;
+
                         console.log(error);
                         console.log(error.response);
 

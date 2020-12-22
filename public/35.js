@@ -663,6 +663,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             name: "admin.expense_reports.index"
           });
         })["catch"](function (error) {
+          _this.loader = false;
           console.log(error);
           console.log(error.response);
 

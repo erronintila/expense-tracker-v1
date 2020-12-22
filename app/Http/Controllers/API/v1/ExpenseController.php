@@ -472,14 +472,25 @@ class ExpenseController extends Controller
 
                 // // Prevent update if expense has an approve expense report and user is not admin
                 if ($expense->expense_report) {
-                    $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
-                    ->where([
-                        ["approved_at", "<>", null],
-                        ["cancelled_at", "<>", null],
-                        ["rejected_at", "<>", null],
-                        ["cancelled_at", "<>", null]
-                    ])
-                    ->count();
+                    if (Auth::user()->is_admin) {
+                        $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
+                        ->where(function ($query) {
+                            $query->whereHas('payments');
+                            $query->orWhere("cancelled_at", "<>", null);
+                            $query->orWhere("rejected_at", "<>", null);
+                            $query->orWhere("deleted_at", "<>", null);
+                        })
+                        ->count();
+                    } else {    
+                        $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
+                        ->where(function ($query) {
+                            $query->where("approved_at", "<>", null);
+                            $query->orWhere("cancelled_at", "<>", null);
+                            $query->orWhere("rejected_at", "<>", null);
+                            $query->orWhere("deleted_at", "<>", null);
+                        })
+                        ->count();
+                    }
 
                     if ($expense_report > 0) {
                         return $this->errorResponse("Expense Report has already been submitted.", 422);

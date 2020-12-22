@@ -569,17 +569,38 @@ class ExpenseReportController extends Controller
 
                 // // Prevent update if expense report has been cancelled
                 if (Auth::user()->is_admin) {
-                    // if ($expense_report->payment_id > 0) {
-                    //     return response("Expense Report already has payment", 422);
-                    // }
+                    $count = 0;
 
-                    if ($expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
-                        return response("Action can't be performed", 422);
+                    $count = ExpenseReport::withTrashed()->where("id", $id)
+                    ->where(function ($query) {
+                        $query->whereHas('payments');
+                        $query->orWhere("cancelled_at", "<>", null);
+                        $query->orWhere("rejected_at", "<>", null);
+                        $query->orWhere("deleted_at", "<>", null);
+                    })
+                    ->count();
+                    
+                    if ($count > 0) {
+                        return $this->errorResponse("Expense Report can't be edited.", 422);
                     }
                 } else {
-                    if ($expense_report->approved_at !== null || $expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
-                        return response("Action can't be performed", 422);
+                    $count = 0;
+
+                    $count = ExpenseReport::withTrashed()->where("id", $id)
+                    ->where(function ($query) {
+                        $query->where("approved_at", "<>", null);
+                        $query->orWhere("cancelled_at", "<>", null);
+                        $query->orWhere("rejected_at", "<>", null);
+                        $query->orWhere("deleted_at", "<>", null);
+                    })
+                    ->count();
+                    
+                    if ($count > 0) {
+                        return $this->errorResponse("Expense Report can't be edited.", 422);
                     }
+                    // if ($expense_report->approved_at !== null || $expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
+                    //     return response("Action can't be performed", 422);
+                    // }
 
                     // if ($expense_report->payment_id > 0) {
                     //     return response("Expense Report already has payment", 422);
