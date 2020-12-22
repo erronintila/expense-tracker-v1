@@ -680,7 +680,6 @@ export default {
                     _this.selected == null
                         ? []
                         : _this.selected.map(item => item.id);
-                console.log(ids);
 
                 axios
                     .get(
@@ -1026,9 +1025,7 @@ export default {
             });
         },
         printReportByDate(action) {
-            console.log("date print");
             this.loadReportByDate().then(() => {
-                console.log("date print2");
                 let table_columns = [];
                 let table_rows = [];
                 let table_footer = [];

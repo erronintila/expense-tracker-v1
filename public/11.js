@@ -706,7 +706,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var ids = _this.selected == null ? [] : _this.selected.map(function (item) {
           return item.id;
         });
-        console.log(ids);
         axios.get("/api/data/print_report?by_employee_id=true&ids=".concat(ids)).then(function (response) {
           // console.log("report by employee", response);
           _this.reports_by_employee = response.data.data;
@@ -982,9 +981,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     printReportByDate: function printReportByDate(action) {
       var _this6 = this;
 
-      console.log("date print");
       this.loadReportByDate().then(function () {
-        console.log("date print2");
         var table_columns = [];
         var table_rows = [];
         var table_footer = [];
