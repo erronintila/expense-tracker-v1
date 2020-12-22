@@ -245,12 +245,15 @@ class PaymentController extends Controller
 
                 // log_activity("expense_report", $expense_report, [ "code" => $expense_report->code, "updated_at" => now()], "expense report associated with payment #{$payment->code}");
                 
-                log_activity("expense_report", $expense_report, 
-                [ 
-                    "attributes" => ["code" => $expense_report->code, "updated_at" => now()], 
+                log_activity(
+                    "expense_report",
+                    $expense_report,
+                    [
+                    "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                     "custom" => ["link" => "expense_reports/{$expense_report->id}"]
-                ], 
-                "expense report associated with payment #{$payment->code}");
+                ],
+                    "expense report associated with payment #{$payment->code}"
+                );
             }
             
             $payment->expense_reports()->sync($arr);
@@ -353,7 +356,10 @@ class PaymentController extends Controller
 
                     activity()
                         ->performedOn($payment)
-                        ->withProperties(['attributes' => ["code" => $payment->code, "received_at" => $payment->received_at]])
+                        ->withProperties([
+                            'attributes' => ["code" => $payment->code, "received_at" => $payment->received_at],
+                            "custom" => ["link" => "payments/{$payment->id}"
+                        ]])
                         ->log('received payment');
                 }
 
@@ -440,24 +446,30 @@ class PaymentController extends Controller
 
                         $exists = $expense_report->payments->contains($payment->id);
 
-                        if($exists) {
+                        if ($exists) {
                             // log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "updated expense report association with payment #{$payment->code}");
                         
-                            log_activity("expense_report", $expense_report, 
-                            [ 
-                                "attributes" => ["code" => $expense_report->code, "updated_at" => now()], 
+                            log_activity(
+                                "expense_report",
+                                $expense_report,
+                                [
+                                "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                                 "custom" => ["link" => "expense_reports/{$expense_report->id}"]
-                            ], 
-                            "updated expense report association with payment #{$payment->code}");
+                            ],
+                                "updated expense report association with payment #{$payment->code}"
+                            );
                         } else {
                             // log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "expense report associated with payment #{$payment->code}");
                         
-                            log_activity("expense_report", $expense_report, 
-                            [ 
-                                "attributes" => ["code" => $expense_report->code, "updated_at" => now()], 
+                            log_activity(
+                                "expense_report",
+                                $expense_report,
+                                [
+                                "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                                 "custom" => ["link" => "expense_reports/{$expense_report->id}"]
-                            ], 
-                            "expense report associated with payment #{$payment->code}");
+                            ],
+                                "expense report associated with payment #{$payment->code}"
+                            );
                         }
         
                         $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
@@ -493,13 +505,16 @@ class PaymentController extends Controller
 
                     // log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "removed expense report association with payment #{$payment->code}");
                     
-                    log_activity("expense_report", $expense_report, 
-                    [ 
-                        "attributes" => ["code" => $expense_report->code, "updated_at" => now()], 
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                        "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                         "custom" => ["link" => "expense_reports/{$expense_report->id}"]
-                    ], 
-                    "removed expense report association with payment #{$payment->code}");
-                }   
+                    ],
+                        "removed expense report association with payment #{$payment->code}"
+                    );
+                }
 
                 $payment->delete();
 
@@ -512,12 +527,15 @@ class PaymentController extends Controller
 
                 // log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "removed expense report association with payment #{$payment->code}");
             
-                log_activity("expense_report", $expense_report, 
-                [ 
-                    "attributes" => ["code" => $expense_report->code, "updated_at" => now()], 
+                log_activity(
+                    "expense_report",
+                    $expense_report,
+                    [
+                    "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                     "custom" => ["link" => "expense_reports/{$expense_report->id}"]
-                ], 
-                "removed expense report association with payment #{$payment->code}");
+                ],
+                    "removed expense report association with payment #{$payment->code}"
+                );
             }
 
             $payment->delete();
