@@ -70,6 +70,7 @@ class ExpenseShowResource extends JsonResource
             // Additional Fields
             // -------------------------------------------------------------------
             "status" => $this->status,
+            "is_late_encoded" => $this->is_late_encoded,
             "logs" => $logs,
 
             // -------------------------------------------------------------------

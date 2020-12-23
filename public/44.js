@@ -590,6 +590,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
+          console.log(items);
           resolve({
             items: items,
             total: total

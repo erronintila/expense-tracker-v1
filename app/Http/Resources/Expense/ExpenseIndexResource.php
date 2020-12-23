@@ -76,6 +76,7 @@ class ExpenseIndexResource extends JsonResource
             // Additional Fields
             // -------------------------------------------------------------------
             "status" => $this->status,
+            "is_late_encoded" => $this->is_late_encoded,
             // "status" => [
             //     'color' => 'red',
             //     'remarks' => 'Status is unindentified',

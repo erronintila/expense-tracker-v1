@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\User;
+use Illuminate\Support\Carbon;
 
 class Expense extends Model
 {
@@ -61,6 +62,7 @@ class Expense extends Model
      */
     protected $appends = [
         'status',
+        'is_late_encoded',
         // 'reimbursed_info',
         // 'cancelled_info',
         // 'rejected_info',
@@ -602,5 +604,18 @@ class Expense extends Model
         }
 
         return null;
+    }
+
+    public function getIsLateEncodedAttribute() {
+
+        $is_late_encoded = false;
+        $due_date = Carbon::createFromFormat('Y-m-d', $this->date)->addDays($this->encoding_period ?? 0)->format("Y-m-d");
+        $encoded_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format("Y-m-d");
+
+        if($due_date < $encoded_date) {
+            $is_late_encoded = true;
+        }
+
+        return $is_late_encoded;
     }
 }
