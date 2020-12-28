@@ -616,6 +616,8 @@ class Expense extends Model
             $is_late_encoded = true;
         }
 
+        // return $due_date;
+
         return $is_late_encoded;
     }
 }

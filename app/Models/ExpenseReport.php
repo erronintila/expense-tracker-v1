@@ -10,6 +10,7 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\User;
 use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ExpenseReport extends Model
@@ -73,6 +74,8 @@ class ExpenseReport extends Model
     protected $appends = [
         'balance',
         'status',
+        'is_late_submitted',
+        'is_late_approved',
         'expense_start_date',
         'expense_end_date',
         "total_expense_amount",
@@ -306,6 +309,63 @@ class ExpenseReport extends Model
         ];
 
         return $arr;
+    }
+
+    public function getIsLateSubmittedAttribute()
+    {
+        return true;
+
+        $is_late_submitted = false;
+        $submission_period = $this->submission_period;
+        $expense_date = "";
+
+        switch ($submission_period) {
+            case 'Weekly':
+                # code...
+                break;
+            case 'Monthly':
+                # code...
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        if ($this->submitted_at) {
+            $due_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->addDays($this->encoding_period ?? 0)->format("Y-m-d");
+            $submitted_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->submitted_at)->format("Y-m-d");
+
+            if ($due_date < $submitted_date) {
+                $is_late_submitted = true;
+            }
+        }
+        
+
+        return $is_late_submitted;
+    }
+
+    public function getIsLateApprovedAttribute()
+    {
+        $is_late_approved = false;
+
+        if ($this->approved_at) {
+            $due_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->submitted_at)->addDays($this->approval_period ?? 0)->format("Y-m-d");
+            $approved_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->approved_at)->format("Y-m-d");
+
+            if ($due_date < $approved_date) {
+                $is_late_approved = true;
+            }
+        }
+
+        // return $due_date < $approved_date;
+
+        // return response()->json([
+        //     "due_date" => $due_date,
+        //     "approved_date" => $approved_date,
+        //     "late approved" => $due_date < $approved_date
+        // ]);
+        
+        return $is_late_approved;
     }
 
     /**

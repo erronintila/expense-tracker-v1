@@ -272,6 +272,52 @@
                                         <td>:</td>
                                         <td>{{ item.remarks }}</td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>Created</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Submitted</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.submitted_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Approved</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.approved_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Late Submitted</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.is_late_submitted }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Late Approved</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.is_late_approved }}</td>
+                                    </tr>
                                     <!-- <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
@@ -423,6 +469,29 @@
                         >
                             mdi-pencil
                         </v-icon>
+                        <v-tooltip
+                            bottom
+                            v-if="
+                                item.is_late_submitted || item.is_late_approved
+                            "
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    color="red"
+                                    dark
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    mdi-alert-circle-outline
+                                </v-icon>
+                            </template>
+                            <div v-if="item.is_late_submitted">
+                                Late Submitted
+                            </div>
+                            <div v-if="item.is_late_approved">
+                                Late Approved
+                            </div>
+                        </v-tooltip>
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -1372,20 +1441,24 @@ export default {
                             temp_expense_types[expense_type.name] = 0;
                         });
 
-                        let details = (!element.expense_details || element.expense_details == "null")
-                            ? []
-                            : JSON.parse(element.expense_details)
-                                  .map(item => {
-                                      return (
-                                          `${
-                                              item.sub_type_name == null
-                                                  ? ""
-                                                  : item.sub_type_name + "/ "
-                                          }${item.description}: ${item.total}` +
-                                          "\n"
-                                      );
-                                  })
-                                  .join("");
+                        let details =
+                            !element.expense_details ||
+                            element.expense_details == "null"
+                                ? []
+                                : JSON.parse(element.expense_details)
+                                      .map(item => {
+                                          return (
+                                              `${
+                                                  item.sub_type_name == null
+                                                      ? ""
+                                                      : item.sub_type_name +
+                                                        "/ "
+                                              }${item.description}: ${
+                                                  item.total
+                                              }` + "\n"
+                                          );
+                                      })
+                                      .join("");
 
                         temp_table_body = {
                             Date: element.expense_date,
@@ -1711,6 +1784,8 @@ export default {
                         let total = response.data.meta.total;
 
                         _this.loading = false;
+
+                        console.log(items);
 
                         resolve({ items, total });
                     })
@@ -2412,7 +2487,9 @@ export default {
                         break;
                 }
 
-                return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+                return maxDate;
+
+                // return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
             }
 
             return today;

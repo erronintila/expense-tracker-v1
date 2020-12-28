@@ -67,6 +67,11 @@
                                     {{ form.status.status }}
                                 </v-btn>
                             </div>
+                            <div v-if="form.is_late_encoded">
+                                <v-btn color="red" x-small dark>
+                                    Late Encoded
+                                </v-btn>
+                            </div>
                         </v-col>
                     </v-row>
 
@@ -414,6 +419,7 @@ export default {
                 tax_rate: 0,
                 tax_amount: 0,
                 status: { color: "", remarks: "", status: "" },
+                is_late_encoded: false,
 
                 // created: { created_at: null, created_by: { name: "" } },
                 // updated: { updated_at: null, updated_by: { name: "" } },
@@ -475,6 +481,7 @@ export default {
                     _this.form.tax_amount = data.tax_amount;
 
                     _this.form.status = data.status;
+                    _this.form.is_late_encoded = data.is_late_encoded;
 
                     if (data.details !== null) {
                         _this.itemize = true;

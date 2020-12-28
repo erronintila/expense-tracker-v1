@@ -67,6 +67,14 @@
                                     {{ form.status.status }}
                                 </v-btn>
                             </div>
+                            <div>
+                                <v-btn v-if="form.is_late_submitted" color="red" x-small dark>
+                                    Late Submitted
+                                </v-btn>
+                                <v-btn v-if="form.is_late_approved" color="red" x-small dark>
+                                    Late Approved
+                                </v-btn>
+                            </div>
                         </v-col>
                     </v-row>
 
@@ -429,6 +437,8 @@ export default {
                 from: "",
                 to: "",
                 status: { color: "", status: "", remarks: "" },
+                is_late_submitted: false,
+                is_late_approved: false,
 
                 total: 0,
                 total_reimbursable: 0,
@@ -1183,6 +1193,8 @@ export default {
                     _this.form.from = data.from;
                     _this.form.to = data.to;
                     _this.form.status = data.status;
+                    _this.form.is_late_submitted = data.is_late_submitted;
+                    _this.form.is_late_approved = data.is_late_approved;
 
                     _this.form.total = data.total;
                     _this.form.total_reimbursable = data.total_reimbursable;

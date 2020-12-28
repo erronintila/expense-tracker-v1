@@ -53,6 +53,8 @@ class ExpenseReportIndexResource extends JsonResource
             "from" => $this->expense_start_date,
             "to" => $this->expense_end_date,
             "status" => $this->status,
+            'is_late_submitted' => $this->is_late_submitted,
+            'is_late_approved' => $this->is_late_approved,
             "total" => $this->total_expense_amount,
             "total_reimbursable" => $this->total_reimbursable_amount,
             "paid" => $this->total_expense_amount - $this->balance,

@@ -406,6 +406,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -469,6 +477,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           status: "",
           remarks: ""
         },
+        is_late_submitted: false,
+        is_late_approved: false,
         total: 0,
         total_reimbursable: 0,
         paid: 0,
@@ -1019,6 +1029,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.form.from = data.from;
         _this.form.to = data.to;
         _this.form.status = data.status;
+        _this.form.is_late_submitted = data.is_late_submitted;
+        _this.form.is_late_approved = data.is_late_approved;
         _this.form.total = data.total;
         _this.form.total_reimbursable = data.total_reimbursable;
         _this.form.paid = data.paid;
@@ -1333,6 +1345,48 @@ var render = function() {
                                     )
                                   ]
                                 )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _vm.form.is_late_submitted
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "red",
+                                          "x-small": "",
+                                          dark: ""
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Late Submitted\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.form.is_late_approved
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "red",
+                                          "x-small": "",
+                                          dark: ""
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Late Approved\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
                               ],
                               1
                             )

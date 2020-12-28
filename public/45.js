@@ -360,6 +360,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -449,6 +454,7 @@ __webpack_require__.r(__webpack_exports__);
           remarks: "",
           status: ""
         },
+        is_late_encoded: false,
         // created: { created_at: null, created_by: { name: "" } },
         // updated: { updated_at: null, updated_by: { name: "" } },
         // deleted: { deleted_at: null, deleted_by: { name: "" } },
@@ -499,6 +505,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.tax_rate = data.tax_rate;
         _this.form.tax_amount = data.tax_amount;
         _this.form.status = data.status;
+        _this.form.is_late_encoded = data.is_late_encoded;
 
         if (data.details !== null) {
           _this.itemize = true;
@@ -857,7 +864,31 @@ var render = function() {
                                 )
                               ],
                               1
-                            )
+                            ),
+                            _vm._v(" "),
+                            _vm.form.is_late_encoded
+                              ? _c(
+                                  "div",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "red",
+                                          "x-small": "",
+                                          dark: ""
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Late Encoded\n                            "
+                                        )
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
                           ])
                         ],
                         1

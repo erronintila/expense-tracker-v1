@@ -291,18 +291,24 @@
                                             }}
                                         </td>
                                     </tr>
-                                    <!-- <tr>
+                                    <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.created.created_at,
+                                                    item.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>Late Encoded</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.is_late_encoded }}</td>
+                                    </tr>
+                                    <!-- 
                                     <tr>
                                         <td><strong>Created By</strong></td>
                                         <td>:</td>
@@ -394,6 +400,19 @@
                         >
                             mdi-pencil
                         </v-icon>
+                        <v-tooltip bottom v-if="item.is_late_encoded">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    color="red"
+                                    dark
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    mdi-alert-circle-outline
+                                </v-icon>
+                            </template>
+                            <span>Late Encoded</span>
+                        </v-tooltip>
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -427,9 +446,9 @@
                                 Note:
                             </h4>
                             <h4 class="grey--text">
-                                Due of encoding and submission of expenses :
-                                {{ $store.getters.settings.submission_period }}
-                                ({{ maxDate }})
+                                Due of encoding expenses :
+                                <!-- {{ $store.getters.settings.submission_period }} -->
+                                {{ maxDate }}
                             </h4>
                         </div>
                     </v-col>
@@ -703,9 +722,7 @@ export default {
         },
         onDelete() {
             let _this = this;
-            let arr = this.selected.map(
-                item => item.expense_report === null
-            );
+            let arr = this.selected.map(item => item.expense_report === null);
 
             // this.mixin_is_empty(
             //     _this.selected.length,
@@ -775,9 +792,7 @@ export default {
         },
         onRestore() {
             let _this = this;
-            let arr = this.selected.map(
-                item => item.expense_report === null
-            );
+            let arr = this.selected.map(item => item.expense_report === null);
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -788,10 +803,13 @@ export default {
             }
 
             if (arr.includes(false)) {
-                this.$dialog.message.error("Expense(s) with report(s) can't be restored", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.$dialog.message.error(
+                    "Expense(s) with report(s) can't be restored",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
                 return;
             }
 
@@ -832,19 +850,19 @@ export default {
             });
         },
         show_edit(item) {
-            if(!this.mixin_can("edit expenses")) {
+            if (!this.mixin_can("edit expenses")) {
                 return false;
             }
 
-            if(item) {
-                if(item.expense_report_id) {
-                    if(!item.expense_report.approved_at) {
+            if (item) {
+                if (item.expense_report_id) {
+                    if (!item.expense_report.approved_at) {
                         return false;
-                    } else if(!item.expense_report.rejected_at) {
+                    } else if (!item.expense_report.rejected_at) {
                         return false;
-                    } else if(!item.expense_report.cancelled_at) {
+                    } else if (!item.expense_report.cancelled_at) {
                         return false;
-                    } else if(!item.expense_report.deleted_at) {
+                    } else if (!item.expense_report.deleted_at) {
                         return false;
                     }
                 }

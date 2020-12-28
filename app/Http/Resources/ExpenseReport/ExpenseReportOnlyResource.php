@@ -33,6 +33,8 @@ class ExpenseReportOnlyResource extends JsonResource
             // -------------------------------------------------------------------
             // Additional Fields
             // -------------------------------------------------------------------
+            'is_late_submitted' => $this->is_late_submitted,
+            'is_late_approved' => $this->is_late_approved,
             // "report_summary" => $this->report_summary,
             // "from" => $this->expense_start_date,
             // "to" => $this->expense_end_date,

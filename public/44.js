@@ -483,6 +483,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1536,6 +1555,39 @@ var render = function() {
                                       ])
                                     ]),
                                     _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Created")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.mixin_formatDate(
+                                                item.created_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _c("strong", [_vm._v("Late Encoded")])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(":")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(_vm._s(item.is_late_encoded))
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
                                     item.remarks
                                       ? _c("tr", [
                                           _c("td", [
@@ -1662,6 +1714,56 @@ var render = function() {
                                     )
                                   ]
                                 )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            item.is_late_encoded
+                              ? _c(
+                                  "v-tooltip",
+                                  {
+                                    attrs: { bottom: "" },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "activator",
+                                          fn: function(ref) {
+                                            var on = ref.on
+                                            var attrs = ref.attrs
+                                            return [
+                                              _c(
+                                                "v-icon",
+                                                _vm._g(
+                                                  _vm._b(
+                                                    {
+                                                      attrs: {
+                                                        color: "red",
+                                                        dark: ""
+                                                      }
+                                                    },
+                                                    "v-icon",
+                                                    attrs,
+                                                    false
+                                                  ),
+                                                  on
+                                                ),
+                                                [
+                                                  _vm._v(
+                                                    "\n                                mdi-alert-circle-outline\n                            "
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      true
+                                    )
+                                  },
+                                  [
+                                    _vm._v(" "),
+                                    _c("span", [_vm._v("Late Encoded")])
+                                  ]
+                                )
                               : _vm._e()
                           ]
                         }
@@ -1750,13 +1852,12 @@ var render = function() {
                       _vm._v(" "),
                       _c("h4", { staticClass: "grey--text" }, [
                         _vm._v(
-                          "\n                            Due of encoding and submission of expenses :\n                            " +
-                            _vm._s(
-                              _vm.$store.getters.settings.submission_period
-                            ) +
-                            "\n                            (" +
+                          "\n                            Due of encoding expenses :\n                            "
+                        ),
+                        _vm._v(
+                          "\n                            " +
                             _vm._s(_vm.maxDate) +
-                            ")\n                        "
+                            "\n                        "
                         )
                       ])
                     ])
