@@ -62,7 +62,7 @@ class Expense extends Model
      */
     protected $appends = [
         'status',
-        'is_late_encoded',
+        // 'is_late_encoded',
         // 'reimbursed_info',
         // 'cancelled_info',
         // 'rejected_info',
@@ -615,8 +615,6 @@ class Expense extends Model
         if($due_date < $encoded_date) {
             $is_late_encoded = true;
         }
-
-        // return $due_date;
 
         return $is_late_encoded;
     }

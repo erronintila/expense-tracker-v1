@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use anlutro\LaravelSettings\Facade as Setting;
+use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
 {
@@ -34,6 +35,9 @@ class SettingController extends Controller
         }
 
         Setting::save();
+
+        // DB::table('expenses')->update(['votes' => 1]);
+        DB::table('expense_reports')->where("approved_at", null)->update(['submission_period' => setting("submission_period"), 'approval_period' => setting("approval_period")]);
     }
 
     /**

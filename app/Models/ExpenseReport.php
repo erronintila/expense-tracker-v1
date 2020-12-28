@@ -313,33 +313,50 @@ class ExpenseReport extends Model
 
     public function getIsLateSubmittedAttribute()
     {
-        return true;
-
         $is_late_submitted = false;
         $submission_period = $this->submission_period;
-        $expense_date = "";
+        $due_date = Carbon::now()->format("Y-m-d");
+
+        $min_date = DB::table('expense_reports')
+            ->where("expense_reports.id", $this->id)
+            ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
+            ->select(DB::raw("
+                MIN(expenses.date) as min_date, 
+                DATE_ADD(
+                    MIN(`expenses`.`date`),
+                    INTERVAL (1- DAYOFWEEK(MIN(`expenses`.`date`))) DAY
+                ) as start_date,
+                DATE_ADD(
+                    MIN(`expenses`.`date`),
+                    INTERVAL (7- DAYOFWEEK(MIN(`expenses`.`date`))) DAY
+                ) as end_date
+            "))
+            ->first();
+
+        // return Carbon::yesterday("Asia/Manila");
 
         switch ($submission_period) {
             case 'Weekly':
-                # code...
+                $due_date = Carbon::createFromFormat('Y-m-d', $min_date->min_date)->endOfWeek()->format("Y-m-d");
                 break;
             case 'Monthly':
-                # code...
+                $due_date = Carbon::createFromFormat('Y-m-d', $min_date->min_date)->endOfMonth()->format("Y-m-d");
                 break;
             default:
-                # code...
+                // $due_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->endOfDay()->format("Y-m-d");
                 break;
         }
 
+        // return $due_date;
+
         if ($this->submitted_at) {
-            $due_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->addDays($this->encoding_period ?? 0)->format("Y-m-d");
+            // $due_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->addDays($this->encoding_period ?? 0)->format("Y-m-d");
             $submitted_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->submitted_at)->format("Y-m-d");
 
             if ($due_date < $submitted_date) {
                 $is_late_submitted = true;
             }
         }
-        
 
         return $is_late_submitted;
     }
@@ -356,14 +373,6 @@ class ExpenseReport extends Model
                 $is_late_approved = true;
             }
         }
-
-        // return $due_date < $approved_date;
-
-        // return response()->json([
-        //     "due_date" => $due_date,
-        //     "approved_date" => $approved_date,
-        //     "late approved" => $due_date < $approved_date
-        // ]);
         
         return $is_late_approved;
     }

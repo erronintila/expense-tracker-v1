@@ -48,6 +48,7 @@ class ExpenseResource extends JsonResource
             // Additional Fields
             // -------------------------------------------------------------------
             "status" => $this->status,
+            "is_late_encoded" => $this->getIsLateEncodedAttribute(),
 
             // -------------------------------------------------------------------
             // Transaction Logs
