@@ -36,8 +36,13 @@ class SettingController extends Controller
 
         Setting::save();
 
-        // DB::table('expenses')->update(['votes' => 1]);
-        DB::table('expense_reports')->where("approved_at", null)->update(['submission_period' => setting("submission_period"), 'approval_period' => setting("approval_period")]);
+        // DB::table('expenses')->where(function($query) {
+            // $query->whereDoesntHave("expense_report");
+            // $query->orWhereHas("expense_report", function() {
+            //     $query->where("approved_at", null);
+            // })
+        //})->update(['encoding_period' => setting("encoding_period")]);
+        DB::table('expense_reports')->where("approved_at", null)->where("cancelled_at", null)->where("rejected_at", null)->where("deleted_at", null)->update(['submission_period' => setting("submission_period"), 'approval_period' => setting("approval_period")]);
     }
 
     /**
