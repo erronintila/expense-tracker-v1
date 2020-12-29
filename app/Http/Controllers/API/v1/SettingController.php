@@ -30,19 +30,31 @@ class SettingController extends Controller
         $settings = request()->has("settings") ? $request->settings : [];
 
         foreach ($settings as $key => $value) {
-
             Setting::set($key, $value);
         }
 
         Setting::save();
 
-        // DB::table('expenses')->where(function($query) {
-            // $query->whereDoesntHave("expense_report");
-            // $query->orWhereHas("expense_report", function() {
-            //     $query->where("approved_at", null);
-            // })
-        //})->update(['encoding_period' => setting("encoding_period")]);
-        DB::table('expense_reports')->where("approved_at", null)->where("cancelled_at", null)->where("rejected_at", null)->where("deleted_at", null)->update(['submission_period' => setting("submission_period"), 'approval_period' => setting("approval_period")]);
+        // Update Expenses Settings
+        DB::table('expenses')
+        ->leftJoin("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+        ->where("expenses.deleted_at", null)
+        ->where("expense_reports.approved_at", null)
+        ->where("expense_reports.cancelled_at", null)
+        ->where("expense_reports.rejected_at", null)
+        ->where("expense_reports.deleted_at", null)
+        ->update(['expenses.encoding_period' => setting("expense_encoding_period")]);
+
+        // Update Expense Reports Settings
+        DB::table('expense_reports')
+        ->where("approved_at", null)
+        ->where("cancelled_at", null)
+        ->where("rejected_at", null)
+        ->where("deleted_at", null)
+        ->update([
+            'submission_period' => setting("submission_period"),
+            'approval_period' => setting("approval_period")
+        ]);
     }
 
     /**
