@@ -288,6 +288,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -301,6 +331,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       headers: [{
         text: "Date",
         value: "date"
+      }, {
+        text: "Employee",
+        value: "employee"
       }, {
         text: "Description",
         value: "description"
@@ -323,17 +356,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       totalAmount: 0,
       items: [],
-      employee: this.$store.getters.user.employee.id,
+      employee: this.$store.getters.user.employee,
       status: "All Payments",
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
       // "Unreported Advance Payments",
-      "Released Payments", "Completed Payments", "Cancelled Payments" // "Approved",
-      // "Released",
-      // "Received",
-      // "Cancelled"
-      // "Completed"
-      ],
+      "Released Payments", "Completed Payments", "Cancelled Payments"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -352,6 +380,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
+    // loadEmployees() {
+    //     let _this = this;
+    //     axios
+    //         .get("/api/data/employees?only=true")
+    //         .then(response => {
+    //             _this.employees = response.data.data;
+    //             _this.employees.unshift({
+    //                 id: 0,
+    //                 full_name: "All Employees"
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //             _this.mixin_errorDialog(
+    //                 `Error ${error.response.status}`,
+    //                 error.response.statusText
+    //             );
+    //         });
+    // },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -369,7 +417,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var status = _this.status;
         var range = _this.date_range;
-        var employee_id = _this.employee;
+        var employee_id = _this.employee.id;
         axios.get("/api/payments", {
           params: {
             search: search,
@@ -402,11 +450,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.selected = [];
+      this.selected = []; // this.loadEmployees();
     },
     onShow: function onShow(item) {
       this.$router.push({
-        name: "admin.payments.show",
+        name: "user.payments.show",
         params: {
           id: item.id
         }
@@ -414,7 +462,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onEdit: function onEdit(item) {
       this.$router.push({
-        name: "admin.payments.edit",
+        name: "user.payments.edit",
         params: {
           id: item.id
         }
@@ -478,14 +526,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           timeout: 2000
         });
         return;
-      } // if (_this.selected.length == 0 && ) {
-      //     this.$dialog.message.error("No item(s) selected", {
-      //         position: "top-right",
-      //         timeout: 2000
-      //     });
-      //     return;
-      // }
-
+      }
 
       this.$confirm("Do you want to ".concat(action, " payment(s)?")).then(function (res) {
         if (res) {
@@ -509,9 +550,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            });
+            }); // _this.$store.dispatch("AUTH_USER");
 
-            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -551,16 +591,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.employee), _objectSpread2));
     }
   },
-  mounted: function mounted() {
-    var _this4 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
-    });
-  },
+  // mounted() {
+  //     this.getDataFromApi().then(data => {
+  //         this.items = data.items;
+  //         this.totalItems = data.total;
+  //     });
+  // },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_USER"); // this.loadEmployees();
   }
 });
 
@@ -984,64 +1022,12 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Payee")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(item.payee))])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
                                         _c("strong", [_vm._v("Remarks")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(_vm._s(item.remarks))])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Created at")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm.mixin_formatDate(
-                                                item.created_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Cancelled")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm.mixin_formatDate(
-                                                item.deleted_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
                                     ])
                                   ])
                                 ])
@@ -1066,6 +1052,25 @@ var render = function() {
                                 }
                               },
                               [_vm._v(_vm._s(item.status.status))]
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.employee",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(
+                                  item.employee.last_name +
+                                    ", " +
+                                    item.employee.first_name +
+                                    " " +
+                                    item.employee.middle_name
+                                ) +
+                                "\n                "
                             )
                           ]
                         }
@@ -1165,6 +1170,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
+                  _vm._v(" "),
                   _vm.items.length > 0
                     ? _c("template", { slot: "body.append" }, [
                         _c(
@@ -1185,6 +1191,8 @@ var render = function() {
                             _c("td", { staticClass: "title" }, [
                               _vm._v("Total")
                             ]),
+                            _vm._v(" "),
+                            _c("td"),
                             _vm._v(" "),
                             _c("td"),
                             _vm._v(" "),
