@@ -845,7 +845,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
           _this.$router.push({
-            name: "admin.expenses.index"
+            name: "user.expenses.index"
           });
         })["catch"](function (error) {
           // _this.getData();

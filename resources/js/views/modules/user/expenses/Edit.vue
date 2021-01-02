@@ -864,7 +864,7 @@ export default {
 
                         // _this.$store.dispatch("AUTH_USER");
 
-                        _this.$router.push({ name: "admin.expenses.index" });
+                        _this.$router.push({ name: "user.expenses.index" });
                     })
                     .catch(function(error) {
                         // _this.getData();

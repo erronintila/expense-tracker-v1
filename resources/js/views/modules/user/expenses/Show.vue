@@ -38,7 +38,7 @@
                                     text
                                     color="green"
                                     :to="
-                                        `/admin/expenses/${$route.params.id}/edit`
+                                        `/expenses/${$route.params.id}/edit`
                                     "
                                 >
                                     Edit

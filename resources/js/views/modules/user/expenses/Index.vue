@@ -142,7 +142,7 @@
                             </v-list-item-subtitle>
                         </v-list-item> -->
 
-                        <!-- <v-list-item @click="$router.push('/admin/expenses/create/bulk')">
+                        <!-- <v-list-item @click="$router.push('/expenses/create/bulk')">
                             <v-list-item-icon>
                                 <v-icon>mdi-plus</v-icon>
                             </v-list-item-icon>

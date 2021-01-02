@@ -1,6 +1,22 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <v-container v-if="loader" style="height: 400px;">
+            <v-row class="fill-height" align-content="center" justify="center">
+                <v-col class="subtitle-1 text-center" cols="12">
+                    Loading, Please wait...
+                </v-col>
+                <v-col cols="6">
+                    <v-progress-linear
+                        color="green accent-4"
+                        indeterminate
+                        rounded
+                        height="6"
+                    ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </v-container>
+        <v-card v-else class="elevation-0 pt-0">
+        <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -11,14 +27,24 @@
                 <h4 class="title green--text">Edit Expense Report</h4>
             </v-card-title>
 
-            <v-form ref="form" v-model="valid">
-                <v-container>
-                    <v-row>
-                        <v-spacer></v-spacer>
-                    </v-row>
+            <v-container>
+                <v-card class="mx-auto mb-4" flat>
+                    <v-form ref="form" v-model="valid">
+                        <v-container>
+                            <div class="overline green--text">
+                                BASIC DETAILS
+                            </div>
+                            <DateRangePicker
+                                :preset="preset"
+                                :presets="presets"
+                                :value="date_range"
+                                :solo="false"
+                                :buttonType="false"
+                                :buttonColor="'white'"
+                                :buttonDark="false"
+                                @updateDates="updateDates"
+                            ></DateRangePicker>
 
-                    <v-row>
-                        <v-col cols="12" md="8">
                             <v-combobox
                                 v-model="form.description"
                                 :rules="[
@@ -29,14 +55,14 @@
                                 :items="[default_description]"
                                 :error-messages="errors.description"
                                 @input="errors.description = []"
-                                label="Description *"
+                                label="Description"
                             ></v-combobox>
-                        </v-col>
-                    </v-row>
 
-                    <v-row>
-                        <v-col cols="12">
-                            <v-data-table
+                            <div class="overline green--text">
+                                Expenses
+                            </div>
+
+                            <!-- <v-data-table
                                 elevation="0"
                                 v-model="selected"
                                 :headers="headers"
@@ -46,7 +72,6 @@
                                 show-select
                                 show-expand
                                 single-expand
-                                class="elevation-0"
                             >
                                 <template
                                     slot="body.append"
@@ -97,8 +122,6 @@
                                 </template>
                                 <template v-slot:top>
                                     <v-row>
-                                        Expenses
-
                                         <v-spacer></v-spacer>
 
                                         <v-btn
@@ -109,16 +132,6 @@
                                         >
                                             New Item
                                         </v-btn>
-                                        <DateRangePicker
-                                            :preset="preset"
-                                            :presets="presets"
-                                            :value="date_range"
-                                            :solo="true"
-                                            :buttonType="true"
-                                            :buttonColor="'white'"
-                                            :buttonDark="false"
-                                            @updateDates="updateDates"
-                                        ></DateRangePicker>
                                     </v-row>
                                 </template>
                                 <template
@@ -175,7 +188,7 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.created.created_at,
+                                                                item.created_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -191,7 +204,7 @@
                                                     <td>
                                                         {{
                                                             mixin_formatDate(
-                                                                item.deleted.deleted_at,
+                                                                item.deleted_at,
                                                                 "YYYY-MM-DD HH:mm:ss"
                                                             )
                                                         }}
@@ -201,22 +214,149 @@
                                         </v-container>
                                     </td>
                                 </template>
-                            </v-data-table>
-                        </v-col>
-                    </v-row>
+                            </v-data-table> -->
 
-                    <v-row>
-                        <v-col cols="12" md="6">
+                            <v-data-table
+                                v-model="selected"
+                                :headers="headers"
+                                :items="items"
+                                :loading="loading"
+                                :options.sync="options"
+                                :server-items-length="totalItems"
+                                :footer-props="{
+                                    itemsPerPageOptions: [10, 20, 50, 100],
+                                    showFirstLastPage: true,
+                                    firstIcon: 'mdi-page-first',
+                                    lastIcon: 'mdi-page-last',
+                                    prevIcon: 'mdi-chevron-left',
+                                    nextIcon: 'mdi-chevron-right'
+                                }"
+                                show-select
+                                show-expand
+                                single-expand
+                                item-key="id"
+                                class="elevation-0"
+                            >
+                                <template v-slot:top>
+                                    <div v-if="selected.length > 0">
+                                        <div class="d-inline">
+                                            {{ selected.length }} Item(s) Selected
+                                        </div>
+                                        <v-btn @click="selected = []">
+                                            Clear All Selected
+                                        </v-btn>
+                                    </div>
+                                </template>
+                                <template
+                                    v-slot:expanded-item="{ headers, item }"
+                                >
+                                    <td :colspan="headers.length">
+                                        <v-container>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Code</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.code }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong
+                                                            >Description</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{ item.description }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Receipt</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            item.receipt_number
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Vendor</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            item.vendor == null
+                                                                ? ""
+                                                                : item.vendor
+                                                                      .name
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="item.remarks">
+                                                    <td>
+                                                        <strong>Remarks</strong>
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>{{ item.remarks }}</td>
+                                                </tr>
+                                            </table>
+                                        </v-container>
+                                    </td>
+                                </template>
+                                <template v-slot:[`item.updated_at`]="{ item }">
+                                    {{ mixin_getHumanDate(item.updated_at) }}
+                                </template>
+                                <template v-slot:[`item.amount`]="{ item }">
+                                    {{ mixin_formatNumber(item.amount) }}
+                                </template>
+                                <template
+                                    v-slot:[`item.replenishment`]="{ item }"
+                                >
+                                    {{
+                                        mixin_formatNumber(
+                                            item.amount -
+                                                item.reimbursable_amount
+                                        )
+                                    }}
+                                </template>
+                                <template
+                                    v-slot:[`item.status.status`]="{ item }"
+                                >
+                                    <v-chip
+                                        :color="item.status.color"
+                                        dark
+                                        small
+                                        >{{ item.status.status }}</v-chip
+                                    >
+                                </template>
+                                <template v-slot:[`item.actions`]="{ item }">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            $router.push(
+                                                `/expenses/${item.id}`
+                                            )
+                                        "
+                                    >
+                                        mdi-eye
+                                    </v-icon>
+                                </template>
+                            </v-data-table>
+
                             <v-textarea
                                 v-model="form.remarks"
                                 label="Remarks"
                                 :rules="[]"
-                                :rows="form.remarks == '' ? 1 : 2"
+                                :rows="3"
                             >
                             </v-textarea>
-                        </v-col>
-                    </v-row>
-
+                        </v-container>
+                    </v-form>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
@@ -224,8 +364,8 @@
                             Cancel
                         </v-btn>
                     </v-card-actions>
-                </v-container>
-            </v-form>
+                </v-card>
+            </v-container>
         </v-card>
     </div>
 </template>
@@ -241,6 +381,8 @@ export default {
     },
     data() {
         return {
+            loading: true,
+            loader: true,
             valid: false,
             date_range: [
                 moment()
@@ -268,7 +410,7 @@ export default {
             ],
             headers: [
                 { text: "Date", value: "date" },
-                { text: "Description", value: "expense_type.name" },
+                { text: "Type", value: "expense_type.name" },
                 { text: "Receipt", value: "receipt_number" },
                 { text: "Vendor", value: "vendor.name" },
                 { text: "Amount", value: "amount" },
@@ -279,12 +421,20 @@ export default {
             selected: [],
             expenses: [],
             total: 0,
+            totalItems: 0,
+            expense_report_id: this.$route.params.id,
+            options: {
+                sortBy: ["created_at"],
+                sortDesc: [true],
+                page: 1,
+                itemsPerPage: 10
+            },
             form: {
                 code: "",
                 description: "",
                 remarks: "",
                 notes: "",
-                employee: this.$store.getters.user.employee
+                employee: { id: 0, remaining_fund: 0, fund: 0 }
             },
             errors: {
                 date_range: [],
@@ -292,6 +442,7 @@ export default {
                 description: [],
                 remarks: [],
                 notes: [],
+                employee: [],
                 expenses: []
             }
         };
@@ -301,6 +452,12 @@ export default {
             this.date_range = e;
             this.loadExpenses(this.form.employee.id);
         },
+        // updateEmployee() {
+        //     this.getDataFromApi().then(data => {
+        //         this.items = data.items;
+        //         this.totalItems = data.total;
+        //     });
+        // },
         getData() {
             let _this = this;
             axios
@@ -314,7 +471,7 @@ export default {
                     _this.form.notes = data.notes;
                     _this.form.employee = data.employee;
                     _this.form.status = data.status;
-                    _this.expenses = data.expenses;
+                    // _this.expenses = data.expenses;
                     // _this.submitted_at = data.submitted_at;
                     // _this.reviewed_at = data.reviewed_at;
                     // _this.approved_at = data.approved_at;
@@ -326,9 +483,21 @@ export default {
 
                     // _this.date_range = [_this.from, _this.to];
 
-                    _this.selected.splice(0, 0, ...data.expenses);
+                    // _this.loadExpenses(data.employee.id);
+                    _this.getDataFromApi().then(data => {
+                        _this.items = data.items;
+                        _this.totalItems = data.total;
 
-                    _this.loadExpenses(data.employee.id);
+                        let selected = data.items.filter(function(item) {
+                            return item.expense_report !== null;
+                        });
+
+                        _this.selected.splice(0, 0, ...selected);
+                    });
+
+                    // _this.selected.splice(0, 0, ...data.expenses);
+
+                    _this.loader = false;
                 })
                 .catch(error => {
                     console.log(error);
@@ -338,7 +507,55 @@ export default {
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
+
+                    _this.loader = false;
                 });
+        },
+        getDataFromApi() {
+            let _this = this;
+
+            _this.loading = true;
+
+            return new Promise((resolve, reject) => {
+                const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+                let range = _this.date_range;
+                let employee_id = _this.form.employee.id;
+
+                axios
+                    .get("/api/expenses", {
+                        params: {
+                            page: page,
+                            itemsPerPage: itemsPerPage,
+                            start_date: range[0],
+                            end_date: range[1],
+                            employee_id: employee_id,
+                            expense_report_id: _this.$route.params.id,
+                            update_report: true
+                        }
+                    })
+                    .then(response => {
+                        // _this.selected = [];
+
+                        let items = response.data.data;
+                        let total = response.data.meta.total;
+
+                        _this.loading = false;
+
+                        resolve({ items, total });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+
+                        _this.loading = false;
+                    });
+            });
         },
         loadExpenses(emp_id) {
             let start_date = this.date_range[0];
@@ -369,6 +586,24 @@ export default {
                     );
                 });
         },
+        // loadEmployees() {
+        //     let _this = this;
+
+        //     axios
+        //         .get("/api/data/employees")
+        //         .then(response => {
+        //             _this.employees = response.data.data;
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //             console.log(error.response);
+
+        //             _this.mixin_errorDialog(
+        //                 `Error ${error.response.status}`,
+        //                 error.response.statusText
+        //             );
+        //         });
+        // },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
@@ -387,6 +622,8 @@ export default {
             }
 
             if (_this.$refs.form.validate()) {
+                _this.loader = true;
+
                 axios
                     .put("/api/expense_reports/" + _this.$route.params.id, {
                         code: _this.form.code,
@@ -405,13 +642,15 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        // _this.$store.dispatch("AUTH_USER");
 
                         _this.$router.push({
                             name: "user.expense_reports.index"
                         });
                     })
                     .catch(function(error) {
+                        _this.loader =  false;
+
                         console.log(error);
                         console.log(error.response);
 
@@ -426,6 +665,15 @@ export default {
         }
     },
     watch: {
+        params: {
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            },
+            deep: true
+        },
         selected() {
             this.total = this.selected.reduce(
                 (total, item) => total + item.amount,
@@ -434,6 +682,14 @@ export default {
         }
     },
     computed: {
+        params(nv) {
+            return {
+                ...this.options,
+                query: this.date_range,
+                query: this.expense_report_id,
+                query: this.form.employee.id
+            };
+        },
         default_description() {
             return `Expense Report Summary (${moment(this.date_range[0]).format(
                 "LL"
@@ -441,7 +697,9 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        // this.$store.dispatch("AUTH_USER");
+        // this.loadEmployees();
+
         this.getData();
     }
 };
