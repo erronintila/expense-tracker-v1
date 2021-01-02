@@ -451,6 +451,47 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -553,6 +594,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
+          console.log(items);
           resolve({
             items: items,
             total: total
@@ -567,10 +609,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+    loadEmployees: function loadEmployees() {
+      var _this = this;
+
+      axios.get("/api/data/employees?only=true").then(function (response) {
+        _this.employees = response.data.data;
+
+        _this.employees.unshift({
+          id: 0,
+          full_name: "All Employees"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      });
+    },
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
-      axios.get("/api/data/expense_types").then(function (response) {
+      axios.get("/api/data/expense_types?only=true").then(function (response) {
         _this.expense_types = response.data.data;
 
         _this.expense_types.unshift({
@@ -587,6 +646,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.status = "All Expenses";
+      this.loadEmployees();
       this.loadExpenseTypes();
       this.selected = [];
     },
@@ -637,7 +697,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var arr = this.selected.map(function (item) {
         return item.expense_report === null;
-      });
+      }); // this.mixin_is_empty(
+      //     _this.selected.length,
+      //     "No item(s) selected bitch"
+      // );
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -645,7 +708,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           timeout: 2000
         });
         return;
-      }
+      } // this.mixin_check_if_error(
+      //     arr.includes(false),
+      //     "Expense(s) can't be cancelled bitch"
+      // );
+
 
       if (arr.includes(false)) {
         this.$dialog.message.error("Expense(s) can't be cancelled", {
@@ -672,9 +739,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            });
+            }); // _this.$store.dispatch("AUTH_USER");
 
-            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -689,8 +755,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRestore: function onRestore() {
       var _this = this;
 
+      var arr = this.selected.map(function (item) {
+        return item.expense_report === null;
+      });
+
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (arr.includes(false)) {
+        this.$dialog.message.error("Expense(s) with report(s) can't be restored", {
           position: "top-right",
           timeout: 2000
         });
@@ -713,9 +791,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            });
+            }); // _this.$store.dispatch("AUTH_USER");
 
-            _this.$store.dispatch("AUTH_USER");
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -726,6 +803,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
+    },
+    show_edit: function show_edit(item) {
+      if (!this.mixin_can("edit expenses")) {
+        return false;
+      }
+
+      if (item) {
+        if (item.expense_report_id) {
+          if (!item.expense_report.approved_at) {
+            return false;
+          } else if (!item.expense_report.rejected_at) {
+            return false;
+          } else if (!item.expense_report.cancelled_at) {
+            return false;
+          } else if (!item.expense_report.deleted_at) {
+            return false;
+          }
+        }
+      }
+
+      return true;
     }
   },
   watch: {
@@ -792,7 +890,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_USER"); // this.loadEmployees();
+
     this.loadExpenseTypes();
   }
 });
@@ -835,44 +934,50 @@ var render = function() {
                 "v-tooltip",
                 {
                   attrs: { bottom: "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                {
-                                  staticClass: "elevation-3 mr-2",
-                                  attrs: {
-                                    color: "green",
-                                    to: { name: "user.expenses.create" },
-                                    dark: "",
-                                    fab: "",
-                                    "x-small": ""
-                                  }
-                                },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-plus")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
+                  scopedSlots: _vm._u(
+                    [
+                      _vm.mixin_can("add expenses")
+                        ? {
+                            key: "activator",
+                            fn: function(ref) {
+                              var on = ref.on
+                              var attrs = ref.attrs
+                              return [
+                                _c(
+                                  "v-btn",
+                                  _vm._g(
+                                    _vm._b(
+                                      {
+                                        staticClass: "elevation-3 mr-2",
+                                        attrs: {
+                                          color: "green",
+                                          to: { name: "user.expenses.create" },
+                                          dark: "",
+                                          fab: "",
+                                          "x-small": ""
+                                        }
+                                      },
+                                      "v-btn",
+                                      attrs,
+                                      false
+                                    ),
+                                    on
+                                  ),
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-plus")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        : null
+                    ],
+                    null,
+                    true
+                  )
                 },
                 [_vm._v(" "), _c("span", [_vm._v("Add New")])]
               ),
@@ -1146,6 +1251,25 @@ var render = function() {
                     [
                       _c(
                         "v-list-item",
+                        { on: { click: _vm.onRestore } },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            [_c("v-icon", [_vm._v("mdi-restore")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "\n                            Restore\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
                         { on: { click: _vm.onDelete } },
                         [
                           _c(
@@ -1408,7 +1532,7 @@ var render = function() {
                                           "\n                                        " +
                                             _vm._s(
                                               _vm.mixin_formatDate(
-                                                item.created.created_at,
+                                                item.created_at,
                                                 "YYYY-MM-DD HH:mm:ss"
                                               )
                                             ) +
@@ -1419,113 +1543,15 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("tr", [
                                       _c("td", [
-                                        _c("strong", [_vm._v("Created By")])
+                                        _c("strong", [_vm._v("Late Encoded")])
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [_vm._v(":")]),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              item.created.created_by == null
-                                                ? ""
-                                                : item.created.created_by.name
-                                            ) +
-                                            "\n                                    "
-                                        )
+                                        _vm._v(_vm._s(item.is_late_encoded))
                                       ])
                                     ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Updated")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm.mixin_formatDate(
-                                                item.updated.updated_at,
-                                                "YYYY-MM-DD HH:mm:ss"
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td", [
-                                        _c("strong", [_vm._v("Updated By")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v(":")]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              item.updated.updated_by == null
-                                                ? ""
-                                                : item.updated.updated_by.name
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
-                                    item.deleted
-                                      ? _c("tr", [
-                                          _c("td", [
-                                            _c("strong", [_vm._v("Cancelled")])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                        " +
-                                                _vm._s(
-                                                  _vm.mixin_formatDate(
-                                                    item.deleted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                  )
-                                                ) +
-                                                "\n                                    "
-                                            )
-                                          ])
-                                        ])
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    item.deleted
-                                      ? _c("tr", [
-                                          _c("td", [
-                                            _c("strong", [
-                                              _vm._v("Cancelled By")
-                                            ])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(
-                                              "\n                                        " +
-                                                _vm._s(
-                                                  item.deleted.deleted_by ==
-                                                    null
-                                                    ? ""
-                                                    : item.deleted.deleted_by
-                                                        .name
-                                                ) +
-                                                "\n                                    "
-                                            )
-                                          ])
-                                        ])
-                                      : _vm._e(),
                                     _vm._v(" "),
                                     item.remarks
                                       ? _c("tr", [
@@ -1556,9 +1582,7 @@ var render = function() {
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  _vm.mixin_getHumanDate(
-                                    item.updated.updated_at
-                                  )
+                                  _vm.mixin_getHumanDate(item.updated_at)
                                 ) +
                                 "\n                "
                             )
@@ -1637,23 +1661,75 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c(
-                              "v-icon",
-                              {
-                                staticClass: "mr-2",
-                                attrs: { small: "" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.onEdit(item)
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                        mdi-pencil\n                    "
+                            _vm.show_edit(item)
+                              ? _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: { small: "" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onEdit(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                        mdi-pencil\n                    "
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            item.is_late_encoded
+                              ? _c(
+                                  "v-tooltip",
+                                  {
+                                    attrs: { bottom: "" },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "activator",
+                                          fn: function(ref) {
+                                            var on = ref.on
+                                            var attrs = ref.attrs
+                                            return [
+                                              _c(
+                                                "v-icon",
+                                                _vm._g(
+                                                  _vm._b(
+                                                    {
+                                                      attrs: {
+                                                        color: "red",
+                                                        dark: ""
+                                                      }
+                                                    },
+                                                    "v-icon",
+                                                    attrs,
+                                                    false
+                                                  ),
+                                                  on
+                                                ),
+                                                [
+                                                  _vm._v(
+                                                    "\n                                mdi-alert-circle-outline\n                            "
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      true
+                                    )
+                                  },
+                                  [
+                                    _vm._v(" "),
+                                    _c("span", [_vm._v("Late Encoded")])
+                                  ]
+                                )
+                              : _vm._e()
                           ]
                         }
                       }
@@ -1739,13 +1815,12 @@ var render = function() {
                       _vm._v(" "),
                       _c("h4", { staticClass: "grey--text" }, [
                         _vm._v(
-                          "\n                            Due of encoding and submission of expenses : " +
-                            _vm._s(
-                              _vm.$store.getters.settings.submission_period
-                            ) +
-                            " (" +
+                          "\n                            Due of encoding expenses :\n                            "
+                        ),
+                        _vm._v(
+                          "\n                            " +
                             _vm._s(_vm.maxDate) +
-                            ")\n                        "
+                            "\n                        "
                         )
                       ])
                     ])

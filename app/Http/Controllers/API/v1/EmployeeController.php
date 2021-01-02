@@ -288,6 +288,9 @@ class EmployeeController extends Controller
         }])
         ->with(['expense_types' => function ($query) {
             $query->withTrashed();
+            $query->with(['sub_types' => function ($query) {
+                $query->withTrashed();
+            }]);
         }])
         ->findOrFail($id);
 
@@ -481,7 +484,7 @@ class EmployeeController extends Controller
     | EMPLOYEE CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
+
     /**
      * Export data to excel
      *
@@ -491,7 +494,7 @@ class EmployeeController extends Controller
     {
         return Excel::download(new EmployeesExport, 'Employees.csv');
     }
-    
+
     /**
      * Display a listing of the resource
      *
@@ -537,7 +540,7 @@ class EmployeeController extends Controller
                 }])
                 ->orderBy("last_name")
                 ->get();
-                
+
             return EmployeeShowResource::collection($employee);
         }
 

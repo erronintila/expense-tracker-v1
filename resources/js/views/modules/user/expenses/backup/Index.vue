@@ -7,10 +7,7 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template
-                        v-slot:activator="{ on, attrs }"
-                        v-if="mixin_can('add expenses')"
-                    >
+                    <template v-slot:activator="{ on, attrs }">
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -125,29 +122,17 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="onRestore">
-                            <v-list-item-icon>
-                                <v-icon>mdi-restore</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
+                        <!-- <v-list-item @click="onRestore">
+                            <v-list-item-title>
                                 Restore
-                            </v-list-item-subtitle>
-                        </v-list-item>
+                            </v-list-item-title>
+                        </v-list-item> -->
                         <!-- <v-list-item>
                             <v-list-item-icon>
                                 <v-icon>mdi-plus</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
                                 Add Expense Report
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <!-- <v-list-item @click="$router.push('/admin/expenses/create/bulk')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Bulk Expense(s)
                             </v-list-item-subtitle>
                         </v-list-item> -->
 
@@ -288,18 +273,12 @@
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.created_at,
+                                                    item.created.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td><strong>Late Encoded</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.is_late_encoded }}</td>
-                                    </tr>
-                                    <!--
                                     <tr>
                                         <td><strong>Created By</strong></td>
                                         <td>:</td>
@@ -332,7 +311,7 @@
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    item.deleted.deleted_at,
+                                                    item.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
@@ -344,7 +323,7 @@
                                         <td>
                                             {{ item.deleted.deleted_by == null ? "" : item.deleted.deleted_by.name }}
                                         </td>
-                                    </tr> -->
+                                    </tr>
                                     <tr v-if="item.remarks">
                                         <td><strong>Remarks</strong></td>
                                         <td>:</td>
@@ -355,7 +334,7 @@
                         </td>
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated_at) }}
+                        {{ mixin_getHumanDate(item.updated.updated_at) }}
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ mixin_formatNumber(item.amount) }}
@@ -383,27 +362,9 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon
-                            small
-                            class="mr-2"
-                            @click="onEdit(item)"
-                            v-if="show_edit(item)"
-                        >
+                        <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
                         </v-icon>
-                        <v-tooltip bottom v-if="item.is_late_encoded">
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                    color="red"
-                                    dark
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    mdi-alert-circle-outline
-                                </v-icon>
-                            </template>
-                            <span>Late Encoded</span>
-                        </v-tooltip>
                     </template>
                     <template slot="body.append" v-if="items.length > 0">
                         <tr class="green--text hidden-md-and-up">
@@ -436,9 +397,7 @@
                                 Note:
                             </h4>
                             <h4 class="grey--text">
-                                Due of encoding expenses :
-                                <!-- {{ $store.getters.settings.submission_period }} -->
-                                {{ maxDate }}
+                                Due of encoding and submission of expenses : {{ $store.getters.settings.submission_period}} ({{ maxDate }})
                             </h4>
                         </div>
                     </v-col>
@@ -592,8 +551,6 @@ export default {
 
                         _this.loading = false;
 
-                        console.log(items);
-
                         resolve({ items, total });
                     })
                     .catch(error => {
@@ -609,33 +566,11 @@ export default {
                     });
             });
         },
-        loadEmployees() {
-            let _this = this;
-
-            axios
-                .get("/api/data/employees?only=true")
-                .then(response => {
-                    _this.employees = response.data.data;
-                    _this.employees.unshift({
-                        id: 0,
-                        full_name: "All Employees"
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
         loadExpenseTypes() {
             let _this = this;
 
             axios
-                .get("/api/data/expense_types?only=true")
+                .get("/api/data/expense_types")
                 .then(response => {
                     _this.expense_types = response.data.data;
                     _this.expense_types.unshift({
@@ -656,7 +591,6 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.status = "All Expenses";
-            this.loadEmployees();
             this.loadExpenseTypes();
             this.selected = [];
         },
@@ -706,12 +640,9 @@ export default {
         },
         onDelete() {
             let _this = this;
-            let arr = this.selected.map(item => item.expense_report === null);
-
-            // this.mixin_is_empty(
-            //     _this.selected.length,
-            //     "No item(s) selected bitch"
-            // );
+            let arr = this.selected.map(
+                item => item.expense_report === null
+            );
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -720,11 +651,6 @@ export default {
                 });
                 return;
             }
-
-            // this.mixin_check_if_error(
-            //     arr.includes(false),
-            //     "Expense(s) can't be cancelled bitch"
-            // );
 
             if (arr.includes(false)) {
                 this.$dialog.message.error("Expense(s) can't be cancelled", {
@@ -752,13 +678,12 @@ export default {
                                     timeout: 2000
                                 }
                             );
-
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
 
-                            // _this.$store.dispatch("AUTH_USER");
+                            _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -776,24 +701,12 @@ export default {
         },
         onRestore() {
             let _this = this;
-            let arr = this.selected.map(item => item.expense_report === null);
 
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
                 });
-                return;
-            }
-
-            if (arr.includes(false)) {
-                this.$dialog.message.error(
-                    "Expense(s) with report(s) can't be restored",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
                 return;
             }
 
@@ -811,13 +724,12 @@ export default {
                                 position: "top-right",
                                 timeout: 2000
                             });
-
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
 
-                            // _this.$store.dispatch("AUTH_USER");
+                            _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -832,27 +744,6 @@ export default {
                         });
                 }
             });
-        },
-        show_edit(item) {
-            if (!this.mixin_can("edit expenses")) {
-                return false;
-            }
-
-            if (item) {
-                if (item.expense_report_id) {
-                    if (!item.expense_report.approved_at) {
-                        return false;
-                    } else if (!item.expense_report.rejected_at) {
-                        return false;
-                    } else if (!item.expense_report.cancelled_at) {
-                        return false;
-                    } else if (!item.expense_report.deleted_at) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
     },
     watch: {
@@ -930,7 +821,6 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-        // this.loadEmployees();
         this.loadExpenseTypes();
     }
 };

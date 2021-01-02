@@ -1,6 +1,22 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <v-container v-if="loader" style="height: 400px;">
+            <v-row class="fill-height" align-content="center" justify="center">
+                <v-col class="subtitle-1 text-center" cols="12">
+                    Loading, Please wait...
+                </v-col>
+                <v-col cols="6">
+                    <v-progress-linear
+                        color="green accent-4"
+                        indeterminate
+                        rounded
+                        height="6"
+                    ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </v-container>
+
+        <v-card v-else class="elevation-0 pt-0">
             <!-- **************************************************************
                 Card Title
             *************************************************************** -->
@@ -14,597 +30,495 @@
                 <h4 class="title green--text">New Expense</h4>
             </v-card-title>
 
-            <!-- **************************************************************
-                Form
-            *************************************************************** -->
             <v-form ref="form" v-model="valid">
+                <!-- ------------------------------------------------------------------------------------------- -->
                 <v-container>
-                    <v-expansion-panels v-model="panel" multiple class="mt-4">
-                        <!-- **************************************************************
-                            Basic Information
-                        *************************************************************** -->
-                        <v-expansion-panel>
-                            <v-expansion-panel-header>
-                                <div class="green--text">Basic Information</div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-menu
-                                            ref="menu"
-                                            v-model="menu"
-                                            :close-on-content-click="false"
-                                            transition="scale-transition"
-                                            offset-y
-                                            min-width="290px"
-                                        >
-                                            <template
-                                                v-slot:activator="{ on, attrs }"
-                                            >
-                                                <v-text-field
-                                                    v-model="form.date"
-                                                    :rules="
-                                                        mixin_validation.required
-                                                    "
-                                                    :error-messages="
-                                                        errors.date
-                                                    "
-                                                    @input="errors.date = []"
-                                                    label="Date *"
-                                                    readonly
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                ></v-text-field>
-                                            </template>
-                                            <v-date-picker
-                                                v-model="form.date"
-                                                no-title
-                                                scrollable
-                                                color="success"
-                                                :min="minDate"
-                                                :max="maxDate"
-                                            >
-                                            </v-date-picker>
-                                        </v-menu>
-                                    </v-col>
-                                    <v-col cols="12" md="4">
-                                        <v-autocomplete
-                                            v-model="form.vendor"
-                                            :rules="[]"
-                                            :items="vendors"
-                                            :error-messages="errors.vendor_id"
-                                            @input="errors.vendor_id = []"
-                                            item-value="id"
-                                            item-text="name"
-                                            return-object
-                                            label="Vendor *"
-                                        >
-                                            <template v-slot:append>
-                                                <AddVendor
-                                                    :openDialog="false"
-                                                    @createdVendor="loadVendors"
-                                                >
-                                                </AddVendor>
-                                            </template>
-                                            <template v-slot:item="data">
-                                                <template>
-                                                    <v-list max-width="300">
-                                                        <v-list-item-content>
-                                                            <v-list-item-title
-                                                                v-html="
-                                                                    data.item
-                                                                        .name
-                                                                "
-                                                            ></v-list-item-title>
-                                                            <v-list-item-subtitle
-                                                                v-html="
-                                                                    `TIN: ${
-                                                                        data
-                                                                            .item
-                                                                            .tin ==
-                                                                        null
-                                                                            ? 'N/A'
-                                                                            : data
-                                                                                  .item
-                                                                                  .tin
-                                                                    }`
-                                                                "
-                                                            ></v-list-item-subtitle>
-                                                            <v-list-item-subtitle
-                                                                v-html="
-                                                                    data.item
-                                                                        .address
-                                                                "
-                                                            ></v-list-item-subtitle>
-                                                            <v-list-item-subtitle
-                                                                v-html="
-                                                                    data.item
-                                                                        .is_vat_inclusive
-                                                                        ? 'VAT'
-                                                                        : 'Non-VAT'
-                                                                "
-                                                            >
-                                                            </v-list-item-subtitle>
-                                                        </v-list-item-content>
-                                                    </v-list>
-                                                </template>
-                                            </template>
-                                        </v-autocomplete>
-                                    </v-col>
-
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.receipt_number"
-                                            :rules="[]"
-                                            :error-messages="
-                                                errors.receipt_number
-                                            "
-                                            @input="errors.receipt_number = []"
-                                            label="Receipt No. *"
-                                            required
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col>
-                                        <div class="ml-4">
-                                            <small class="green--text">
-                                                ** Note:
-                                            </small>
-                                            <small class="grey--text">
-                                                Due of encoding of expenses : {{ $store.getters.settings.submission_period }}
-                                            </small>
-                                        </div>
-                                    </v-col>
-                                </v-row>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-
-                        <!-- **************************************************************
-                            Expense Details
-                        *************************************************************** -->
-                        <v-expansion-panel>
-                            <v-expansion-panel-header>
-                                <div class="green--text">
-                                    Expense Details ({{
-                                        `Remaining Fund: ${mixin_formatNumber(
-                                            form.employee.remaining_fund
-                                        )}`
-                                    }})
+                    <v-card class="mx-auto mb-4" flat>
+                        <v-list-item three-line>
+                            <v-list-item-content>
+                                <div class="overline mb-4 green--text">
+                                    Basic Details
                                 </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-autocomplete
-                                            return-object
-                                            v-model="form.expense_type"
-                                            :rules="mixin_validation.required"
-                                            :items="expense_types"
-                                            :error-messages="
-                                                errors.expense_type_id
-                                            "
-                                            @input="errors.expense_type_id = []"
-                                            @change="loadSubTypes"
-                                            item-value="id"
-                                            item-text="name"
-                                            label="Expense Type *"
-                                            required
-                                        >
-                                        </v-autocomplete>
-                                    </v-col>
+                                <!-- <v-list-item-title class="headline mb-1">
+                                Basic Details
+                            </v-list-item-title> -->
+                                <v-list-item-subtitle>
+                                    Note: Due of encoding of expenses :
+                                    {{
+                                        $store.getters.settings
+                                            .submission_period
+                                    }}
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
 
-                                    <v-col cols="12" md="4">
-                                        <v-autocomplete
-                                            v-model="form.sub_type"
-                                            :rules="mixin_validation.required"
-                                            :items="sub_types"
-                                            :error-messages="errors.sub_type"
-                                            @input="errors.sub_type = []"
-                                            item-value="id"
-                                            item-text="name"
-                                            label="Sub Type *"
-                                            required
-                                            return-object
-                                        >
-                                        </v-autocomplete>
-                                    </v-col>
+                        <v-container>
+                            <v-menu
+                                ref="menu"
+                                v-model="menu"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="form.date"
+                                        :rules="mixin_validation.required"
+                                        :error-messages="errors.date"
+                                        @input="errors.date = []"
+                                        label="Date"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                    v-model="form.date"
+                                    no-title
+                                    scrollable
+                                    color="success"
+                                    :min="minDate"
+                                    :max="maxDate"
+                                >
+                                </v-date-picker>
+                            </v-menu>
 
-                                    <!-- <v-col cols="12" md="4">
-                                        <div>
-                                            Expense Limit: 0
-                                        </div>
-                                    </v-col> -->
-                                </v-row>
-
-                                <v-row>
-                                    <v-col>
-                                        <div class="ml-4">
-                                            <small class="green--text">
-                                                ** Note:
-                                            </small>
-                                            <small class="grey--text">
-                                                Expense amount exceeding the
-                                                remaining fund/expense limit
-                                                will be considered as
-                                                reimbursable.
-                                            </small>
-                                        </div>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.description"
-                                            label="Description"
-                                        ></v-text-field>
-                                    </v-col>
-
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="form.amount"
-                                            label="Amount"
-                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
-                                            :readonly="itemize"
-                                            type="number"
-                                        ></v-text-field>
-                                    </v-col>
-
-                                    <v-col cols="12" md="4">
-                                        <v-checkbox
-                                            v-model="itemize"
-                                            label="Itemize"
-                                            @change="
-                                                form.amount = 0;
-                                                form.revolving_fund = 0;
-                                            "
-                                        ></v-checkbox>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row v-if="itemize">
-                                    <v-col cols="12">
-                                        <v-data-table
-                                            :headers="headers"
-                                            :items="items"
-                                            :items-per-page="5"
-                                            :footer-props="{
-                                                itemsPerPageOptions: [5, 10, 20]
-                                            }"
-                                        >
-                                            <template
-                                                slot="body.append"
-                                                v-if="items.length > 0"
-                                            >
-                                                <tr
-                                                    class="green--text hidden-md-and-up"
-                                                >
-                                                    <td class="title">
-                                                        Total:
-                                                        <strong>{{
-                                                            form.amount
-                                                        }}</strong>
-                                                    </td>
-                                                </tr>
-                                                <tr
-                                                    class="green--text hidden-sm-and-down"
-                                                >
-                                                    <td class="title">Total</td>
-                                                    <td>
-                                                        <strong>{{
-                                                            form.details_quantity
-                                                        }}</strong>
-                                                    </td>
-                                                    <td>
-                                                        <strong>{{
-                                                            form.details_amount
-                                                        }}</strong>
-                                                    </td>
-                                                    <td>
-                                                        <strong>{{
-                                                            form.amount
-                                                        }}</strong>
-                                                    </td>
-                                                    <td></td>
-                                                </tr>
-                                            </template>
-                                            <template v-slot:top>
-                                                <v-toolbar flat color="white">
-                                                    <!-- Expense Details -->
-                                                    <v-spacer></v-spacer>
-                                                    <v-dialog
-                                                        v-model="dialog"
-                                                        max-width="500px"
-                                                    >
-                                                        <template
-                                                            v-slot:activator="{
-                                                                on,
-                                                                attrs
-                                                            }"
-                                                        >
-                                                            <v-btn
-                                                                color="primary"
-                                                                dark
-                                                                class="mb-2"
-                                                                v-bind="attrs"
-                                                                v-on="on"
-                                                                >New Item</v-btn
-                                                            >
-                                                        </template>
-                                                        <v-card>
-                                                            <v-card-text>
-                                                                <v-container>
-                                                                    <v-row>
-                                                                        <v-col
-                                                                            cols="12"
-                                                                        >
-                                                                            <v-text-field
-                                                                                v-model="
-                                                                                    form
-                                                                                        .details
-                                                                                        .description
-                                                                                "
-                                                                                label="Particular"
-                                                                            ></v-text-field>
-                                                                        </v-col>
-                                                                        <v-col
-                                                                            cols="12"
-                                                                            md="3"
-                                                                        >
-                                                                            <v-text-field
-                                                                                v-model="
-                                                                                    form
-                                                                                        .details
-                                                                                        .quantity
-                                                                                "
-                                                                                label="Quantity"
-                                                                                type="number"
-                                                                            ></v-text-field>
-                                                                        </v-col>
-                                                                        <v-col
-                                                                            cols="12"
-                                                                            md="9"
-                                                                        >
-                                                                            <v-text-field
-                                                                                v-model="
-                                                                                    form
-                                                                                        .details
-                                                                                        .amount
-                                                                                "
-                                                                                label="Amount"
-                                                                                type="number"
-                                                                            ></v-text-field>
-                                                                        </v-col>
-                                                                    </v-row>
-                                                                    <v-row>
-                                                                        <v-col
-                                                                            cols="12"
-                                                                        >
-                                                                            <v-text-field
-                                                                                v-model="
-                                                                                    total_details_amount
-                                                                                "
-                                                                                label="Total Amount"
-                                                                                readonly
-                                                                            >
-                                                                            </v-text-field>
-                                                                        </v-col>
-                                                                    </v-row>
-                                                                </v-container>
-                                                            </v-card-text>
-
-                                                            <v-card-actions>
-                                                                <v-spacer></v-spacer>
-                                                                <v-btn
-                                                                    color="primary"
-                                                                    text
-                                                                    @click="
-                                                                        dialog = false
-                                                                    "
-                                                                >
-                                                                    Cancel
-                                                                </v-btn>
-                                                                <v-btn
-                                                                    color="primary"
-                                                                    text
-                                                                    @click="
-                                                                        addItem
-                                                                    "
-                                                                    >Add</v-btn
-                                                                >
-                                                            </v-card-actions>
-                                                        </v-card>
-                                                    </v-dialog>
-                                                </v-toolbar>
-                                            </template>
-                                            <template
-                                                v-slot:[`item.actions`]="{
-                                                    item
-                                                }"
-                                            >
-                                                <v-icon
-                                                    small
-                                                    class="mr-2"
-                                                    @click="
-                                                        () => {
-                                                            onRemove(item);
-                                                        }
+                            <v-autocomplete
+                                v-model="form.vendor"
+                                :rules="[]"
+                                :items="vendors"
+                                :error-messages="errors.vendor_id"
+                                @input="errors.vendor_id = []"
+                                item-value="id"
+                                item-text="name"
+                                return-object
+                                label="Vendor"
+                            >
+                                <template v-slot:append>
+                                    <AddVendor
+                                        :openDialog="false"
+                                        @createdVendor="loadVendors"
+                                    >
+                                    </AddVendor>
+                                </template>
+                                <template v-slot:item="data">
+                                    <template>
+                                        <v-list max-width="300">
+                                            <v-list-item-content>
+                                                <v-list-item-title
+                                                    v-html="data.item.name"
+                                                ></v-list-item-title>
+                                                <v-list-item-subtitle
+                                                    v-html="
+                                                        `TIN: ${
+                                                            data.item.tin ==
+                                                            null
+                                                                ? 'N/A'
+                                                                : data.item.tin
+                                                        }`
+                                                    "
+                                                ></v-list-item-subtitle>
+                                                <v-list-item-subtitle
+                                                    v-html="data.item.address"
+                                                ></v-list-item-subtitle>
+                                                <v-list-item-subtitle
+                                                    v-html="
+                                                        data.item
+                                                            .is_vat_inclusive
+                                                            ? 'VAT'
+                                                            : 'Non-VAT'
                                                     "
                                                 >
-                                                    mdi-delete
-                                                </v-icon>
-                                            </template>
-                                        </v-data-table>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col
-                                        cols="12"
-                                        md="4"
-                                        v-if="display_reimbursable_amount"
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list>
+                                    </template>
+                                </template>
+                            </v-autocomplete>
+                            <v-row>
+                                <v-col cols="12" md="">
+                                    <v-autocomplete
+                                        return-object
+                                        v-model="form.expense_type"
+                                        :rules="mixin_validation.required"
+                                        :items="expense_types"
+                                        :error-messages="errors.expense_type_id"
+                                        @input="errors.expense_type_id = []"
+                                        @change="loadSubTypes"
+                                        item-value="id"
+                                        item-text="name"
+                                        label="Expense Type"
+                                        required
                                     >
-                                        <v-text-field
-                                            v-model="amount_to_reimburse"
-                                            :rules="rules.reimbursable_amount"
-                                            label="Reimbursable Amount"
-                                            type="number"
-                                            readonly
-                                            :hint="
-                                                `The amount involves spending from your own pocket`
-                                            "
-                                            persistent-hint
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row v-if="form.vendor.is_vat_inclusive">
-                                    <v-col cols="12" md="2">
-                                        <v-text-field
-                                            v-model="form.tax_rate"
-                                            label="Tax Rate"
-                                            suffix="%"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field
-                                            v-model="taxable_amount"
-                                            label="Tax Amount"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <!-- <v-col cols="12" md="4">
-                                        <v-radio-group
-                                            v-model="form.is_tax_inclusive"
-                                            row
-                                        >
-                                            <v-radio
-                                                label="Inclusive"
-                                                :value="true"
-                                            ></v-radio>
-                                            <v-radio
-                                                label="Exclusive"
-                                                :value="false"
-                                            ></v-radio>
-                                        </v-radio-group>
-                                    </v-col> -->
-                                </v-row>
-
-                                <v-row>
-                                    <v-col>
-                                        <div class="green--text">
-                                            Expense Summary
-                                        </div>
-                                        <table class="ml-4">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        Remaining Fund
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                form.employee
-                                                                    .remaining_fund
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Amount to reimburse
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                amount_to_reimburse
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Amount to replenish
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                amount_to_replenish
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="3"><hr /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Total
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td
-                                                        class="green--text text--darken-4 text-right"
-                                                    >
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                expense_amount
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </v-col>
-                                </v-row>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-
-                    <v-card class="mt-4">
-                        <v-card-text>
-                            <v-container>
-                                <v-row>
-                                    <v-col cols="12" md="6">
-                                        <v-textarea
-                                            rows="1"
-                                            v-model="form.remarks"
-                                            :error-messages="errors.remarks"
-                                            @input="errors.remarks = []"
-                                            label="Remarks"
-                                        ></v-textarea>
-                                    </v-col>
-                                    <!-- <v-col cols="12" md="6">
-                                        <v-textarea
-                                            rows="1"
-                                            label="Notes"
-                                            readonly
-                                        ></v-textarea>
-                                    </v-col> -->
-                                </v-row>
-
-                                <small class="text--secondary">
-                                    * indicates required field
-                                </small>
-                            </v-container>
-                        </v-card-text>
+                                    </v-autocomplete>
+                                </v-col>
+                                <v-col cols="12" md="">
+                                    <v-autocomplete
+                                        v-model="form.sub_type"
+                                        :rules="mixin_validation.required"
+                                        :items="sub_types"
+                                        :error-messages="errors.sub_type"
+                                        @input="errors.sub_type = []"
+                                        item-value="id"
+                                        item-text="name"
+                                        label="Sub Type (optional)"
+                                        required
+                                        return-object
+                                    >
+                                    </v-autocomplete>
+                                </v-col>
+                            </v-row>
+                        </v-container>
                     </v-card>
 
-                    <v-card-actions class="mt-3">
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn @click="$router.go(-1)">Cancel</v-btn>
-                    </v-card-actions>
+                    <v-card class="mx-auto mb-4" flat>
+                        <v-list-item three-line>
+                            <v-list-item-content>
+                                <div class="overline mb-4 green--text">
+                                    Expense Details
+                                </div>
+                                <!-- <v-list-item-title class="headline mb-1">
+                                Basic Details
+                            </v-list-item-title> -->
+                                <v-list-item-subtitle>
+                                    Remaining Fund:
+
+                                    <v-btn color="green" dark small outlined>{{
+                                        mixin_formatNumber(
+                                            form.employee.remaining_fund
+                                        )
+                                    }}</v-btn>
+                                    ~ Expense Limit:
+                                    <v-btn color="green" dark small outlined>{{
+                                        expense_amount_limit == null
+                                            ? "No Limit"
+                                            : mixin_formatNumber(
+                                                  expense_amount_limit
+                                              )
+                                    }}</v-btn>
+                                </v-list-item-subtitle>
+                                <v-list-item-subtitle>
+                                    Note: Expense amount exceeding the remaining
+                                    fund/expense limit will be considered as
+                                    reimbursable.
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" md="8">
+                                    <v-text-field
+                                        v-model="form.description"
+                                        label="Description"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.receipt_number"
+                                        :rules="[]"
+                                        :error-messages="errors.receipt_number"
+                                        @input="errors.receipt_number = []"
+                                        label="Receipt No."
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+
+                            <v-checkbox
+                                v-model="itemize"
+                                label="Itemize Expenses"
+                                @change="
+                                    form.amount = 0;
+                                    form.revolving_fund = 0;
+                                "
+                            ></v-checkbox>
+
+                            <v-data-table
+                                v-if="itemize"
+                                :headers="headers"
+                                :items="items"
+                                :items-per-page="5"
+                                :footer-props="{
+                                    itemsPerPageOptions: [5, 10, 20]
+                                }"
+                            >
+                                <template
+                                    slot="body.append"
+                                    v-if="items.length > 0"
+                                >
+                                    <tr class="green--text hidden-md-and-up">
+                                        <td class="title">
+                                            Total:
+                                            <strong>{{ form.amount }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="green--text hidden-sm-and-down">
+                                        <td class="title">Total</td>
+                                        <td>
+                                            <strong>{{
+                                                form.details_quantity
+                                            }}</strong>
+                                        </td>
+                                        <td>
+                                            <strong>{{
+                                                form.details_amount
+                                            }}</strong>
+                                        </td>
+                                        <td>
+                                            <strong>{{ form.amount }}</strong>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </template>
+                                <template v-slot:top>
+                                    <v-toolbar flat color="white">
+                                        <!-- Expense Details -->
+                                        <v-spacer></v-spacer>
+                                        <v-dialog
+                                            v-model="dialog"
+                                            max-width="500px"
+                                        >
+                                            <template
+                                                v-slot:activator="{
+                                                    on,
+                                                    attrs
+                                                }"
+                                            >
+                                                <v-btn
+                                                    color="primary"
+                                                    dark
+                                                    class="mb-2"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >New Item</v-btn
+                                                >
+                                            </template>
+                                            <v-card>
+                                                <v-card-text>
+                                                    <v-container>
+                                                        <v-row>
+                                                            <v-col cols="12">
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        form
+                                                                            .details
+                                                                            .description
+                                                                    "
+                                                                    label="Particular"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col
+                                                                cols="12"
+                                                                md="3"
+                                                            >
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        form
+                                                                            .details
+                                                                            .quantity
+                                                                    "
+                                                                    label="Quantity"
+                                                                    type="number"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col
+                                                                cols="12"
+                                                                md="9"
+                                                            >
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        form
+                                                                            .details
+                                                                            .amount
+                                                                    "
+                                                                    label="Amount"
+                                                                    type="number"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12">
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        total_details_amount
+                                                                    "
+                                                                    label="Total Amount"
+                                                                    readonly
+                                                                >
+                                                                </v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col>
+                                                                <div>
+                                                                    {{
+                                                                        expense_amount_limit ==
+                                                                        null
+                                                                            ? "No Limit"
+                                                                            : `Limit: ${mixin_formatNumber(
+                                                                                  expense_amount_limit
+                                                                              )} / qunatity`
+                                                                    }}
+                                                                </div>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-container>
+                                                </v-card-text>
+
+                                                <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn
+                                                        color="primary"
+                                                        text
+                                                        @click="dialog = false"
+                                                    >
+                                                        Cancel
+                                                    </v-btn>
+                                                    <v-btn
+                                                        color="primary"
+                                                        text
+                                                        @click="addItem"
+                                                    >
+                                                        Add
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-card>
+                                        </v-dialog>
+                                    </v-toolbar>
+                                </template>
+                                <template
+                                    v-slot:[`item.actions`]="{
+                                        item
+                                    }"
+                                >
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="
+                                            () => {
+                                                onRemove(item);
+                                            }
+                                        "
+                                    >
+                                        mdi-delete
+                                    </v-icon>
+                                </template>
+                            </v-data-table>
+
+                            <v-text-field
+                                v-model="form.amount"
+                                label="Amount"
+                                :rules="[
+                                    ...mixin_validation.required,
+                                    ...mixin_validation.minNumberValue(1)
+                                ]"
+                                :readonly="itemize"
+                                type="number"
+                            ></v-text-field>
+
+                            <v-row v-if="form.vendor.is_vat_inclusive">
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.tax_rate"
+                                        label="Tax Rate"
+                                        suffix="%"
+                                        type="number"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" md="8">
+                                    <v-text-field
+                                        v-model="taxable_amount"
+                                        label="Tax Amount"
+                                        type="number"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+
+                            <v-textarea
+                                rows="3"
+                                v-model="form.remarks"
+                                :error-messages="errors.remarks"
+                                @input="errors.remarks = []"
+                                label="Remarks"
+                            ></v-textarea>
+
+                            <v-row>
+                                <v-col>
+                                    <div class="green--text">
+                                        Amount to replenish
+                                    </div>
+                                </v-col>
+                                <v-spacer></v-spacer>
+                                <v-col class="text-right">
+                                    <div class="green--text">
+                                        {{
+                                            mixin_formatNumber(
+                                                amount_to_replenish
+                                            )
+                                        }}
+                                    </div>
+                                </v-col>
+                            </v-row>
+
+                            <v-row>
+                                <v-col>
+                                    <div class="green--text">
+                                        Amount to reimburse
+                                    </div>
+                                </v-col>
+                                <v-spacer></v-spacer>
+                                <v-col class="text-right">
+                                    <div class="green--text">
+                                        {{
+                                            mixin_formatNumber(
+                                                amount_to_reimburse
+                                            )
+                                        }}
+                                    </div>
+                                </v-col>
+                            </v-row>
+
+                            <v-divider></v-divider>
+
+                            <v-row>
+                                <v-col>
+                                    <div class="font-weight-bold green--text">
+                                        Total Expenses
+                                    </div>
+                                </v-col>
+                                <v-spacer></v-spacer>
+                                <v-col class="text-right">
+                                    <div class="green--text">
+                                        {{ mixin_formatNumber(expense_amount) }}
+                                    </div>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+
+                        <v-card-actions class="mt-3 mb-4">
+                            <v-spacer></v-spacer>
+                            <v-btn color="green" dark @click="onSave"
+                                >Save</v-btn
+                            >
+                            <v-btn @click="$router.go(-1)">Cancel</v-btn>
+                        </v-card-actions>
+                    </v-card>
                 </v-container>
+
+                <!-- ---------------------------------------------------------------------------------------------- -->
             </v-form>
         </v-card>
     </div>
@@ -621,6 +535,7 @@ export default {
     },
     data() {
         return {
+            loader: false,
             panel: [0, 1],
             itemize: false,
             // paid_through_fund: false,
@@ -656,7 +571,7 @@ export default {
                     id: null,
                     name: "",
                     limit: null,
-                    sub_types: null
+                    sub_types: { id: null, name: "None", limit: null }
                 },
                 sub_type: { id: null, name: "", limit: null },
                 employee: this.$store.getters.user.employee,
@@ -699,6 +614,7 @@ export default {
                 remarks: [],
                 is_active: [],
                 expense_type_id: [],
+                employee_id: [],
                 vendor_id: []
             }
         };
@@ -706,6 +622,27 @@ export default {
     methods: {
         loadExpenseTypes() {
             this.expense_types = this.form.employee.expense_types;
+        },
+        loadEmployees() {
+            let _this = this;
+
+            axios
+                .get(`/api/employees/${this.form.employee.id}`)
+                .then(response => {
+                    let data = response.data.data;
+                    this.expense_types = data.expense_types;
+
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+
+                    _this.mixin_errorDialog(
+                        `Error ${error.response.status}`,
+                        error.response.statusText
+                    );
+                });
         },
         loadVendors() {
             let _this = this;
@@ -737,32 +674,57 @@ export default {
         },
         onSave() {
             let _this = this;
+            let expense_type_limit = this.form.expense_type.limit;
+            let sub_type_limit = this.form.sub_type.limit;
+            let expense_limit =
+                sub_type_limit == null ? expense_type_limit : sub_type_limit;
+            let expense_amount = this.form.amount;
 
-            _this.$refs.form.validate();
-
-            if (
-                _this.form.employee.id == null
-            ) {
-                _this.$dialog.message.error(
-                    "No Employee Selected",
-                    {
-                        position: "top-right",
-                        timeout: 2000
+            if (!this.mixin_can("add expenses beyond limit")) {
+                if (!this.itemize) {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < expense_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Amount can't be greater than expense limit.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
                     }
-                );
+                } else {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < this.form.details_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Itemized Expenses Amount can't be greater than expense limit",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
+                    }
+                }
+            }
+
+            if (_this.form.employee.id == null) {
+                _this.$dialog.message.error("No Employee Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
                 return;
             }
 
-            if (
-                _this.form.expense_type.id == null
-            ) {
-                _this.$dialog.message.error(
-                    "No Expense Type Selected",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
+            if (_this.form.expense_type.id == null) {
+                _this.$dialog.message.error("No Expense Type Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
                 return;
             }
 
@@ -779,7 +741,11 @@ export default {
                 return;
             }
 
+            _this.$refs.form.validate();
+
             if (_this.$refs.form.validate()) {
+                _this.loader = true;
+
                 axios
                     .post("/api/expenses", {
                         code: _this.form.code,
@@ -801,7 +767,7 @@ export default {
                         is_tax_inclusive: _this.form.is_tax_inclusive
                     })
                     .then(function(response) {
-                        _this.onRefresh();
+                        // _this.onRefresh();
 
                         _this.$dialog.message.success(
                             "Expense created successfully.",
@@ -811,7 +777,7 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        // _this.$store.dispatch("AUTH_USER");
 
                         _this.$router.go(-1);
                     })
@@ -837,9 +803,18 @@ export default {
             );
             let amount = this.mixin_convertToNumber(this.form.details.amount);
             let total = this.mixin_convertToNumber(this.form.details.total);
+            let limit = this.expense_amount_limit;
 
             if (description == "" || total <= 0) {
                 return;
+            }
+
+            if (!this.mixin_can("add expenses beyond limit")) {
+                if (limit !== null) {
+                    if (limit * quantity < amount) {
+                        return;
+                    }
+                }
             }
 
             this.items.push({
@@ -861,6 +836,7 @@ export default {
                 this.items.splice(index, 1);
         },
         loadSubTypes(e) {
+            console.log(e);
             this.form.sub_type = { id: null, name: "", limit: null };
             this.sub_types = e.sub_types;
             this.sub_types.unshift({ id: null, name: "None", limit: null });
@@ -871,10 +847,12 @@ export default {
             if (this.mixin_can("add expenses beyond encoding period")) {
                 return null;
             }
-            
+
             let settings = this.$store.getters.settings;
             let submissionMinDate = moment().endOf("day");
-            let encodingMinDate =  moment().subtract(settings.expense_encoding_period - 1, 'days').format("YYYY-MM-DD");
+            let encodingMinDate = moment()
+                .subtract(settings.expense_encoding_period - 1, "days")
+                .format("YYYY-MM-DD");
 
             switch (settings.submission_period) {
                 case "Weekly":
@@ -894,7 +872,9 @@ export default {
                     break;
             }
 
-            return moment(encodingMinDate).isSameOrAfter(submissionMinDate) ? encodingMinDate : submissionMinDate;
+            return moment(encodingMinDate).isSameOrAfter(submissionMinDate)
+                ? encodingMinDate
+                : submissionMinDate;
         },
         maxDate() {
             let settings = this.$store.getters.settings;
@@ -998,6 +978,11 @@ export default {
             this.form.details.total = total;
 
             return total;
+        },
+        expense_amount_limit() {
+            return this.form.sub_type.limit == null
+                ? this.form.expense_type.limit
+                : this.form.sub_type.limit;
         }
     },
     watch: {
@@ -1022,17 +1007,40 @@ export default {
                 (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
+
+            if (this.form.employee.id == null) {
+                this.itemize = false;
+
+                this.$dialog.message.error("No Employee Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+
+                return;
+            }
+
+            if (this.form.expense_type.id == null) {
+                this.itemize = false;
+
+                this.$dialog.message.error("No Expense Type Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+
+                return;
+            }
         },
         "form.vendor": function() {
-            this.form.tax_rate = 0;
+            this.form.tax_rate = this.$store.getters.settings.tax_rate;
             this.form.tax_amount = 0;
             this.form.is_tax_inclusive = true;
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_USER").then((response) => {
+            this.loadEmployees();
+        });
         this.loadVendors();
-        this.loadExpenseTypes();
     }
 };
 </script>

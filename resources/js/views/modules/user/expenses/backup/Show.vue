@@ -1,22 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-card v-else class="elevation-0 pt-0">
-            <!-- <v-card class="elevation-0 pt-0"> -->
+        <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -32,9 +16,8 @@
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>
-                                {{ form.employee.full_name }}
+                                {{ form.employee.fullname }}
                                 <v-btn
-                                    v-if="canEdit"
                                     text
                                     color="green"
                                     :to="
@@ -44,6 +27,7 @@
                                     Edit
                                 </v-btn>
                             </div>
+
                             <div class="display-1 green--text">
                                 PHP {{ mixin_formatNumber(form.amount) }}
                             </div>
@@ -56,7 +40,9 @@
                                         : `(${form.sub_type.name})`
                                 }}
                             </div>
-                            <div>Date: {{ form.date }}</div>
+                            <div>
+                                Date: {{ form.date }}
+                            </div>
                         </v-col>
                         <v-col cols="12" md="4">
                             <div>Receipt: #{{ form.receipt_number }}</div>
@@ -67,35 +53,16 @@
                                     {{ form.status.status }}
                                 </v-btn>
                             </div>
-                            <div v-if="form.is_late_encoded">
-                                <v-btn color="red" x-small dark>
-                                    Late Encoded
-                                </v-btn>
-                            </div>
                         </v-col>
                     </v-row>
-
-                    <v-divider></v-divider>
-
-                    <v-row>
-                        <v-col>
-                            <div>Description: {{ form.description }}</div>
-                            <div>
-                                Tax ({{ form.tax_rate }}%):
-                                {{ form.tax_amount }}
-                                {{
-                                    form.is_tax_inclusive
-                                        ? `- Inclusive`
-                                        : `- Exclusive`
-                                }}
-                            </div>
-                        </v-col>
-                    </v-row>
-
-                    <v-divider></v-divider>
 
                     <v-row>
                         <v-col cols="12">
+                            <div>Description: {{ form.description }}</div>
+                            <div>
+                                Tax ({{ form.tax_rate }}% inclusive):
+                                {{ form.tax_amount }} {{ form.is_tax_inclusive ? `- Inclusive` : `- Exclusive` }}
+                            </div>
                             <div>
                                 <v-data-table
                                     :headers="headers"
@@ -144,11 +111,7 @@
                                 </v-data-table>
                             </div>
                         </v-col>
-                    </v-row>
 
-                    <v-divider></v-divider>
-
-                    <v-row>
                         <v-col cols="12" md="8">
                             <div>Remarks : {{ form.remarks }}</div>
                         </v-col>
@@ -224,84 +187,84 @@
 
                             <table class="table" width="100%">
                                 <tbody>
-                                    <tr v-if="form.created_at">
-                                        <td>Created</td>
+                                    <tr v-if="form.created">
+                                        <td>Created By</td>
                                         <td>:</td>
-                                        <!-- <td>
-                                            {{ form.created_by }}
-                                        </td> -->
+                                        <td>
+                                            {{ form.created.created_by.name }}
+                                        </td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.created_at,
+                                                    form.created.created_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr v-if="form.submitted_at">
-                                        <td>Submitted</td>
+                                    <tr v-if="form.submitted">
+                                        <td>Submitted By</td>
                                         <td>:</td>
-                                        <!-- <td>
+                                        <td>
                                             {{
-                                                form.submitted_by
+                                                form.submitted.submitted_by.name
                                             }}
-                                        </td> -->
+                                        </td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.submitted_at,
+                                                    form.submitted.submitted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
                                     <!-- <tr v-if="created.created_at">
-                                        <td>Reviewed</td>
+                                        <td>Reviewed By</td>
                                         <td>: </td>
                                         <td>{{ form.reviewed.reviewed_by.name }}</td>
                                         <td>{{ mixin_formatDate(form.reviewed.reviewed_at, "YYYY-MM-DD HH:mm:ss") }}</td>
                                     </tr> -->
-                                    <tr v-if="form.approved_at">
-                                        <td>Approved</td>
+                                    <tr v-if="form.approved">
+                                        <td>Approved By</td>
                                         <td>:</td>
-                                        <!-- <td>
-                                            {{ form.approved_by }}
-                                        </td> -->
+                                        <td>
+                                            {{ form.approved.approved_by.name }}
+                                        </td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.approved_at,
+                                                    form.approved.approved_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr v-if="form.rejected_at">
-                                        <td>Rejected</td>
+                                    <tr v-if="form.rejected">
+                                        <td>Rejected By</td>
                                         <td>:</td>
-                                        <!-- <td>
-                                            {{ form.rejected_by }}
-                                        </td> -->
+                                        <td>
+                                            {{ form.rejected.rejected_by.name }}
+                                        </td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.rejected_at,
+                                                    form.rejected.rejected_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
                                         </td>
                                     </tr>
-                                    <tr v-if="form.deleted_at">
-                                        <td>Cancelled</td>
+                                    <tr v-if="form.deleted">
+                                        <td>Cancelled By</td>
                                         <td>:</td>
-                                        <!-- <td>
-                                            {{ form.deleted_by }}
-                                        </td> -->
+                                        <td>
+                                            {{ form.deleted.deleted_by.name }}
+                                        </td>
                                         <td>
                                             {{
                                                 mixin_formatDate(
-                                                    form.deleted_at,
+                                                    form.deleted.deleted_at,
                                                     "YYYY-MM-DD HH:mm:ss"
                                                 )
                                             }}
@@ -309,41 +272,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </v-col>
-                    </v-row>
-
-                    <v-row class="text--secondary text-caption">
-                        <v-col cols="12" md="12">
-                            <div>History :</div>
-                            <div>
-                                <table class="table" width="100%">
-                                    <tbody>
-                                        <tr
-                                            v-for="item in form.logs"
-                                            :key="item.id"
-                                        >
-                                            <td>
-                                                {{
-                                                    mixin_formatDate(
-                                                        item.created_at,
-                                                        "YYYY-MM-DD HH:mm:ss"
-                                                    )
-                                                }}
-                                            </td>
-                                            <td>-</td>
-                                            <td>
-                                                {{
-                                                    item.causer == null
-                                                        ? "System"
-                                                        : item.causer.name
-                                                }}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{ item.description }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -358,13 +286,12 @@ import numeral from "numeral";
 export default {
     data() {
         return {
-            loader: true,
             panel: [0, 1],
             itemize: false,
             // paid_through_fund: false,
             reimbursable_amount: false,
             // reimbursable: false,
-            // openAddVendor: false,
+            openAddVendor: false,
             dialog: false,
             valid: false,
             menu: false,
@@ -376,10 +303,10 @@ export default {
                 { text: "", value: "actions", sortable: false }
             ],
             items: [],
-            // expense_types: [],
-            // sub_types: [],
-            // employees: [],
-            // vendors: [],
+            expense_types: [],
+            sub_types: [],
+            employees: [],
+            vendors: [],
             form: {
                 code: null,
                 description: null,
@@ -419,27 +346,15 @@ export default {
                 tax_rate: 0,
                 tax_amount: 0,
                 status: { color: "", remarks: "", status: "" },
-                is_late_encoded: false,
 
-                // created: { created_at: null, created_by: { name: "" } },
-                // updated: { updated_at: null, updated_by: { name: "" } },
-                // deleted: { deleted_at: null, deleted_by: { name: "" } },
-                // submitted: { submitted_at: null, submitted_by: { name: "" } },
-                // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
-                // approved: { approved_at: null, approved_by: { name: "" } },
-                // rejected: { rejected_at: null, rejected_by: { name: "" } },
-                // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
-
-                created_at: null,
-                updated_at: null,
-                deleted_at: null,
-                submitted_at: null,
-                reviewed_at: null,
-                approved_at: null,
-                rejected_at: null,
-                cancelled_at: null,
-
-                expense_report: null,
+                created: { created_at: null, created_by: { name: "" } },
+                updated: { updated_at: null, updated_by: { name: "" } },
+                deleted: { deleted_at: null, deleted_by: { name: "" } },
+                submitted: { submitted_at: null, submitted_by: { name: "" } },
+                reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+                approved: { approved_at: null, approved_by: { name: "" } },
+                rejected: { rejected_at: null, rejected_by: { name: "" } },
+                cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
 
                 logs: []
             }
@@ -449,156 +364,119 @@ export default {
         getData() {
             let _this = this;
 
-            // this.loadEmployees().then(
-            axios
-                .get("/api/expenses/" + _this.$route.params.id)
-                .then(response => {
-                    let data = response.data.data;
+            this.loadEmployees().then(
+                axios
+                    .get("/api/expenses/" + _this.$route.params.id)
+                    .then(response => {
+                        let data = response.data.data;
 
-                    _this.form.code = data.code;
-                    _this.form.description = data.description;
+                        _this.form.code = data.code;
+                        _this.form.description = data.description;
 
-                    _this.form.receipt_number = data.receipt_number;
-                    _this.form.date = data.date;
-                    _this.form.remarks = data.remarks;
-                    _this.form.notes = data.notes;
-                    _this.form.is_active = data.is_active;
-                    _this.form.employee = data.employee;
-                    _this.form.vendor =
-                        data.vendor == null
-                            ? { id: null, name: "", is_vat_inclusive: true }
-                            : data.vendor;
+                        _this.form.receipt_number = data.receipt_number;
+                        _this.form.date = data.date;
+                        _this.form.remarks = data.remarks;
+                        _this.form.notes = data.notes;
+                        _this.form.is_active = data.is_active;
+                        _this.form.employee = data.employee;
+                        _this.form.vendor =
+                            data.vendor == null
+                                ? { id: null, name: "", is_vat_inclusive: true }
+                                : data.vendor;
 
-                    _this.form.expense_type = data.expense_type;
-                    // _this.form.sub_type = data.sub_type_id;
+                        _this.form.expense_type = data.expense_type;
+                        // _this.form.sub_type = data.sub_type_id;
 
-                    // _this.expense_types = data.employee.expense_types;
-                    // _this.sub_types = data.expense_type.sub_types;
+                        _this.expense_types = data.employee.expense_types;
+                        _this.sub_types = data.expense_type.sub_types;
 
-                    _this.form.is_tax_inclusive = data.is_tax_inclusive;
-                    _this.form.tax_name = data.tax_name;
-                    _this.form.tax_rate = data.tax_rate;
-                    _this.form.tax_amount = data.tax_amount;
+                        _this.form.is_tax_inclusive = data.is_tax_inclusive;
+                        _this.form.tax_name = data.tax_name;
+                        _this.form.tax_rate = data.tax_rate;
+                        _this.form.tax_amount = data.tax_amount;
 
-                    _this.form.status = data.status;
-                    _this.form.is_late_encoded = data.is_late_encoded;
+                        _this.form.status = data.status;
 
-                    if (data.details !== null) {
-                        _this.itemize = true;
-                        _this.items = data.details;
-                    } else {
-                        // _this.itemize = false;
-                        // _this.items = [];
-                        _this.form.amount = data.amount;
-                    }
+                        if (data.details !== null) {
+                            _this.itemize = true;
+                            _this.items = data.details;
+                        } else {
+                            // _this.itemize = false;
+                            // _this.items = [];
+                            _this.form.amount = data.amount;
+                        }
 
-                    // _this.sub_types.unshift({
-                    //     id: null,
-                    //     name: "None",
-                    //     limit: null
-                    // });
-                    _this.form.sub_type =
-                        data.sub_type == null
-                            ? { id: null, name: "None", limit: null }
-                            : data.sub_type;
+                        _this.sub_types.unshift({
+                            id: null,
+                            name: "None",
+                            limit: null
+                        });
+                        _this.form.sub_type =
+                            data.sub_type == null
+                                ? { id: null, name: "None", limit: null }
+                                : data.sub_type;
 
-                    if (data.revolving_fund > 0) {
-                        _this.paid_through_fund = true;
-                        _this.form.revolving_fund = data.revolving_fund;
-                    } else {
-                        _this.paid_through_fund = false;
-                        _this.form.revolving_fund = 0;
-                    }
+                        if (data.revolving_fund > 0) {
+                            _this.paid_through_fund = true;
+                            _this.form.revolving_fund = data.revolving_fund;
+                        } else {
+                            _this.paid_through_fund = false;
+                            _this.form.revolving_fund = 0;
+                        }
 
-                    _this.form.reimbursable_amount = data.reimbursable_amount;
+                        _this.form.reimbursable_amount =
+                            data.reimbursable_amount;
 
-                    _this.form.employee.remaining_fund +=
-                        data.amount - data.reimbursable_amount;
+                        _this.form.employee.remaining_fund +=
+                            data.amount - data.reimbursable_amount;
 
-                    _this.form.expense_report = data.expense_report;
+                        _this.form.created = data.created;
+                        _this.form.updated = data.updated;
+                        _this.form.deleted = data.deleted;
+                        _this.form.submitted = data.submitted;
+                        _this.form.approved = data.approved;
+                        _this.form.rejected = data.rejected;
+                        _this.form.cancelled = data.cancelled;
 
-                    _this.form.created_at = data.created_at;
-                    _this.form.updated_at = data.updated_at;
-                    _this.form.deleted_at = data.deleted_at;
-                    _this.form.submitted_at = data.expense_report
-                        ? data.expense_report.submitted_at
-                        : null;
-                    _this.form.approved_at = data.expense_report
-                        ? data.expense_report.approved_at
-                        : null;
-                    _this.form.rejected_at = data.expense_report
-                        ? data.expense_report.rejected_at
-                        : null;
-                    _this.form.cancelled_at = data.expense_report
-                        ? data.expense_report.cancelled_at
-                        : null;
+                        _this.form.logs = data.logs;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
 
-                    _this.form.logs = data.logs;
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+                    })
+            );
+        },
+        loadEmployees() {
+            let _this = this;
 
-                    _this.loader = false;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/data/employees")
+                    .then(response => {
+                        _this.employees = response.data.data;
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
 
-                    _this.loader = false;
-                });
-            // );
-        }
-        // loadEmployees() {
-        //     let _this = this;
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
-        //     return new Promise((resolve, reject) => {
-        //         axios
-        //             .get("/api/data/employees")
-        //             .then(response => {
-        //                 _this.employees = response.data.data;
-
-        //                 resolve();
-        //             })
-        //             .catch(error => {
-        //                 console.log(error);
-        //                 console.log(error.response);
-
-        //                 _this.mixin_errorDialog(
-        //                     `Error ${error.response.status}`,
-        //                     error.response.statusText
-        //                 );
-
-        //                 reject();
-        //             });
-        //     });
-        // }
+                        reject();
+                    });
+            });
+        },
     },
     computed: {
-        canEdit() {
-            if (
-                this.form.deleted_at !== null ||
-                this.form.approved_at !== null ||
-                this.form.rejected_at !== null ||
-                this.form.cancelled_at !== null
-            ) {
-                return false;
-            }
-
-            if(this.form.expense_report !== null) {
-                if (
-                this.form.expense_report.approved_at !== null ||
-                this.form.expense_report.cancelled_at !== null ||
-                this.form.expense_report.deleted_at !== null ||
-                this.form.expense_report.rejected_at !== null
-            ) {
-                return false;
-            }
-            }
-
-            return true;
-        },
         amount_to_replenish() {
             let remaining_fund = this.mixin_convertToNumber(
                 this.form.employee.remaining_fund
@@ -662,7 +540,7 @@ export default {
         }
     },
     created() {
-        // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_USER");
         this.getData();
     }
 };
