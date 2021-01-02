@@ -389,96 +389,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -727,11 +637,7 @@ var render = function() {
                       staticClass: "subtitle-1 text-center",
                       attrs: { cols: "12" }
                     },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
+                    [_vm._v("\n        Loading, Please wait...\n      ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -773,11 +679,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("v-card-subtitle", [
-                _vm._v(
-                  "\n            Last updated: " +
-                    _vm._s(_vm.user.updated_at) +
-                    "\n        "
-                )
+                _vm._v(" Last updated: " + _vm._s(_vm.user.updated_at) + " ")
               ]),
               _vm._v(" "),
               _c(
@@ -874,7 +776,7 @@ var render = function() {
                                                           [
                                                             _c("div", [
                                                               _vm._v(
-                                                                "\n                                                " +
+                                                                "\n                        " +
                                                                   _vm._s(
                                                                     _vm.user
                                                                       .employee
@@ -882,7 +784,7 @@ var render = function() {
                                                                       .department
                                                                       .name
                                                                   ) +
-                                                                  "\n                                            "
+                                                                  "\n                      "
                                                               )
                                                             ]),
                                                             _vm._v(" "),
@@ -894,7 +796,7 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
-                                                                  "\n                                                " +
+                                                                  "\n                        " +
                                                                     _vm._s(
                                                                       _vm.user
                                                                         .employee
@@ -912,20 +814,20 @@ var render = function() {
                                                                           .suffix ||
                                                                           "")
                                                                     ) +
-                                                                    "\n                                            "
+                                                                    "\n                      "
                                                                 )
                                                               ]
                                                             ),
                                                             _vm._v(" "),
                                                             _c("p", [
                                                               _vm._v(
-                                                                "\n                                                " +
+                                                                "\n                        " +
                                                                   _vm._s(
                                                                     _vm.user
                                                                       .employee
                                                                       .job.name
                                                                   ) +
-                                                                  "\n                                            "
+                                                                  "\n                      "
                                                               )
                                                             ]),
                                                             _vm._v(" "),
@@ -937,7 +839,7 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
-                                                                  "\n                                                " +
+                                                                  "\n                        " +
                                                                     _vm._s(
                                                                       _vm.user
                                                                         .employee
@@ -946,13 +848,13 @@ var render = function() {
                                                                 ),
                                                                 _c("br"),
                                                                 _vm._v(
-                                                                  "\n                                                " +
+                                                                  "\n                        " +
                                                                     _vm._s(
                                                                       _vm.user
                                                                         .employee
                                                                         .email
                                                                     ) +
-                                                                    "\n                                            "
+                                                                    "\n                      "
                                                                 )
                                                               ]
                                                             )
@@ -976,12 +878,12 @@ var render = function() {
                                                           [
                                                             _c("div", [
                                                               _vm._v(
-                                                                "\n                                                " +
+                                                                "\n                        " +
                                                                   _vm._s(
                                                                     _vm.user
                                                                       .username
                                                                   ) +
-                                                                  "\n                                            "
+                                                                  "\n                      "
                                                               )
                                                             ]),
                                                             _vm._v(" "),
@@ -993,12 +895,12 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
-                                                                  "\n                                                " +
+                                                                  "\n                        " +
                                                                     _vm._s(
                                                                       _vm.user
                                                                         .name
                                                                     ) +
-                                                                    "\n                                            "
+                                                                    "\n                      "
                                                                 )
                                                               ]
                                                             ),
@@ -1011,12 +913,12 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
-                                                                  "\n                                                " +
+                                                                  "\n                        " +
                                                                     _vm._s(
                                                                       _vm.user
                                                                         .email
                                                                     ) +
-                                                                    "\n                                            "
+                                                                    "\n                      "
                                                                 )
                                                               ]
                                                             )
@@ -1063,7 +965,7 @@ var render = function() {
                                                             ),
                                                             [
                                                               _vm._v(
-                                                                "\n                                            Change Password\n                                        "
+                                                                "\n                      Change Password\n                    "
                                                               )
                                                             ]
                                                           )
@@ -1094,7 +996,7 @@ var render = function() {
                                                       },
                                                       [
                                                         _vm._v(
-                                                          "\n                                            Change Password\n                                        "
+                                                          "\n                      Change Password\n                    "
                                                         )
                                                       ]
                                                     ),
@@ -1156,7 +1058,7 @@ var render = function() {
                                                                                 _vm.old_password = $$v
                                                                               },
                                                                               expression:
-                                                                                "\n                                                                    old_password\n                                                                "
+                                                                                "old_password"
                                                                             }
                                                                           }
                                                                         )
@@ -1209,7 +1111,7 @@ var render = function() {
                                                                                 _vm.password = $$v
                                                                               },
                                                                               expression:
-                                                                                "\n                                                                    password\n                                                                "
+                                                                                "password"
                                                                             }
                                                                           }
                                                                         )
@@ -1261,7 +1163,7 @@ var render = function() {
                                                                                 _vm.password_confirmation = $$v
                                                                               },
                                                                               expression:
-                                                                                "\n                                                                    password_confirmation\n                                                                "
+                                                                                "password_confirmation"
                                                                             }
                                                                           }
                                                                         )
@@ -1298,7 +1200,7 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
-                                                                  "\n                                                    Cancel\n                                                "
+                                                                  "\n                          Cancel\n                        "
                                                                 )
                                                               ]
                                                             ),
@@ -1318,7 +1220,7 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
-                                                                  "\n                                                    Save\n                                                "
+                                                                  "\n                          Save\n                        "
                                                                 )
                                                               ]
                                                             )
@@ -1748,7 +1650,7 @@ var render = function() {
                                                                       )
                                                                     },
                                                                     expression:
-                                                                      "\n                                                    user.employee.birthdate\n                                                "
+                                                                      "user.employee.birthdate"
                                                                   }
                                                                 },
                                                                 "v-text-field",
@@ -1791,7 +1693,7 @@ var render = function() {
                                                         )
                                                       },
                                                       expression:
-                                                        "\n                                                user.employee.birthdate\n                                            "
+                                                        "user.employee.birthdate"
                                                     }
                                                   })
                                                 ],
@@ -1832,7 +1734,7 @@ var render = function() {
                                                     )
                                                   },
                                                   expression:
-                                                    "\n                                            user.employee.mobile_number\n                                        "
+                                                    "user.employee.mobile_number"
                                                 }
                                               })
                                             ],
@@ -1870,7 +1772,7 @@ var render = function() {
                                                     )
                                                   },
                                                   expression:
-                                                    "\n                                            user.employee.telephone_number\n                                        "
+                                                    "user.employee.telephone_number"
                                                 }
                                               })
                                             ],

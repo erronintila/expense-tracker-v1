@@ -389,72 +389,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -484,8 +418,9 @@ __webpack_require__.r(__webpack_exports__);
           telephone_number: "",
           email: "",
           address: "",
-          job: "",
-          department: ""
+          job: {
+            department: {}
+          }
         }
       },
       old_password: "",
@@ -563,8 +498,6 @@ __webpack_require__.r(__webpack_exports__);
             position: "top-right",
             timeout: 2000
           });
-
-          _this.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -600,9 +533,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("User account updated successfully.", {
             position: "top-right",
             timeout: 2000
-          });
+          }); // _this.$store.dispatch("AUTH_USER");
 
-          _this.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -624,9 +556,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("User account password has been updated.", {
             position: "top-right",
             timeout: 2000
-          });
+          }); // _this.$store.dispatch("AUTH_USER");
 
-          _this.$store.dispatch("AUTH_USER");
 
           _this.dialogPassword = false;
           _this.old_password = "";
@@ -688,503 +619,556 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
-            [
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Profile")
-              ]),
-              _vm._v(" "),
-              _c("v-spacer")
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("v-card-subtitle", [
-            _vm._v(
-              "\n            Last updated: " +
-                _vm._s(_vm.user.updated_at) +
-                "\n        "
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
+      _vm.user.id == ""
+        ? _c(
+            "v-container",
+            { staticStyle: { height: "400px" } },
             [
               _c(
-                "v-container",
+                "v-row",
+                {
+                  staticClass: "fill-height",
+                  attrs: { "align-content": "center", justify: "center" }
+                },
                 [
                   _c(
-                    "v-row",
+                    "v-col",
+                    {
+                      staticClass: "subtitle-1 text-center",
+                      attrs: { cols: "12" }
+                    },
+                    [_vm._v("\n        Loading, Please wait...\n      ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "6" } },
+                    [
+                      _c("v-progress-linear", {
+                        attrs: {
+                          color: "green accent-4",
+                          indeterminate: "",
+                          rounded: "",
+                          height: "6"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Profile")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer")
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-card-subtitle", [
+                _vm._v(" Last updated: " + _vm._s(_vm.user.updated_at) + " ")
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-container",
                     [
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        "v-row",
                         [
-                          _c("v-hover", {
-                            scopedSlots: _vm._u([
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var hover = ref.hover
-                                  return [
-                                    _c(
-                                      "v-card",
-                                      {
-                                        staticClass: "mx-auto mt-3",
-                                        attrs: {
-                                          outlined: "",
-                                          elevation: hover ? 5 : 2
-                                        }
-                                      },
-                                      [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-hover", {
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var hover = ref.hover
+                                      return [
                                         _c(
-                                          "v-card-text",
+                                          "v-card",
+                                          {
+                                            staticClass: "mx-auto mt-3",
+                                            attrs: {
+                                              outlined: "",
+                                              elevation: hover ? 5 : 2
+                                            }
+                                          },
                                           [
                                             _c(
-                                              "v-row",
-                                              {
-                                                attrs: {
-                                                  align: "center",
-                                                  justify: "center"
-                                                }
-                                              },
+                                              "v-card-text",
                                               [
                                                 _c(
-                                                  "v-col",
+                                                  "v-row",
                                                   {
                                                     attrs: {
-                                                      cols: "12",
                                                       align: "center",
                                                       justify: "center"
                                                     }
                                                   },
                                                   [
                                                     _c(
-                                                      "v-avatar",
+                                                      "v-col",
                                                       {
-                                                        staticClass: "profile",
                                                         attrs: {
-                                                          color: "grey",
-                                                          size: "200"
+                                                          cols: "12",
+                                                          align: "center",
+                                                          justify: "center"
                                                         }
                                                       },
                                                       [
-                                                        _c("v-img", {
-                                                          attrs: {
-                                                            src: __webpack_require__(/*! ../../../../assets/img/user.png */ "./resources/js/assets/img/user.png")
-                                                          }
-                                                        })
+                                                        _c(
+                                                          "v-avatar",
+                                                          {
+                                                            staticClass:
+                                                              "profile",
+                                                            attrs: {
+                                                              color: "grey",
+                                                              size: "200"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("v-img", {
+                                                              attrs: {
+                                                                src: __webpack_require__(/*! ../../../../assets/img/user.png */ "./resources/js/assets/img/user.png")
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        )
                                                       ],
                                                       1
                                                     )
                                                   ],
                                                   1
-                                                )
+                                                ),
+                                                _vm._v(" "),
+                                                _vm.user.employee !== null
+                                                  ? _c(
+                                                      "v-row",
+                                                      [
+                                                        _c(
+                                                          "v-col",
+                                                          {
+                                                            attrs: {
+                                                              cols: "12",
+                                                              align: "center",
+                                                              justify: "center"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("div", [
+                                                              _vm._v(
+                                                                "\n                        " +
+                                                                  _vm._s(
+                                                                    _vm.user
+                                                                      .employee
+                                                                      .job
+                                                                      .department
+                                                                      .name
+                                                                  ) +
+                                                                  "\n                      "
+                                                              )
+                                                            ]),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "h3",
+                                                              {
+                                                                staticClass:
+                                                                  "display-1 green--text"
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                        " +
+                                                                    _vm._s(
+                                                                      _vm.user
+                                                                        .employee
+                                                                        .last_name +
+                                                                        ", " +
+                                                                        (_vm
+                                                                          .user
+                                                                          .employee
+                                                                          .first_name ||
+                                                                          "") +
+                                                                        " " +
+                                                                        (_vm
+                                                                          .user
+                                                                          .employee
+                                                                          .suffix ||
+                                                                          "")
+                                                                    ) +
+                                                                    "\n                      "
+                                                                )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c("p", [
+                                                              _vm._v(
+                                                                "\n                        " +
+                                                                  _vm._s(
+                                                                    _vm.user
+                                                                      .employee
+                                                                      .job.name
+                                                                  ) +
+                                                                  "\n                      "
+                                                              )
+                                                            ]),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "div",
+                                                              {
+                                                                staticClass:
+                                                                  "text--primary"
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                        " +
+                                                                    _vm._s(
+                                                                      _vm.user
+                                                                        .employee
+                                                                        .mobile_number
+                                                                    )
+                                                                ),
+                                                                _c("br"),
+                                                                _vm._v(
+                                                                  "\n                        " +
+                                                                    _vm._s(
+                                                                      _vm.user
+                                                                        .employee
+                                                                        .email
+                                                                    ) +
+                                                                    "\n                      "
+                                                                )
+                                                              ]
+                                                            )
+                                                          ]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  : _c(
+                                                      "v-row",
+                                                      [
+                                                        _c(
+                                                          "v-col",
+                                                          {
+                                                            attrs: {
+                                                              cols: "12",
+                                                              align: "center",
+                                                              justify: "center"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("div", [
+                                                              _vm._v(
+                                                                "\n                        " +
+                                                                  _vm._s(
+                                                                    _vm.user
+                                                                      .username
+                                                                  ) +
+                                                                  "\n                      "
+                                                              )
+                                                            ]),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "p",
+                                                              {
+                                                                staticClass:
+                                                                  "display-1 text--primary"
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                        " +
+                                                                    _vm._s(
+                                                                      _vm.user
+                                                                        .name
+                                                                    ) +
+                                                                    "\n                      "
+                                                                )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "div",
+                                                              {
+                                                                staticClass:
+                                                                  "text--primary"
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                        " +
+                                                                    _vm._s(
+                                                                      _vm.user
+                                                                        .email
+                                                                    ) +
+                                                                    "\n                      "
+                                                                )
+                                                              ]
+                                                            )
+                                                          ]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
                                               ],
                                               1
                                             ),
                                             _vm._v(" "),
-                                            _vm.user.employee !== null
-                                              ? _c(
-                                                  "v-row",
+                                            _c(
+                                              "v-dialog",
+                                              {
+                                                attrs: {
+                                                  persistent: "",
+                                                  width: "500"
+                                                },
+                                                scopedSlots: _vm._u(
                                                   [
-                                                    _c(
-                                                      "v-col",
-                                                      {
-                                                        attrs: {
-                                                          cols: "12",
-                                                          align: "center",
-                                                          justify: "center"
-                                                        }
-                                                      },
-                                                      [
-                                                        _c("div", [
-                                                          _vm._v(
-                                                            "\n                                                " +
-                                                              _vm._s(
-                                                                _vm.user
-                                                                  .employee
-                                                                  .department
-                                                                  .name
-                                                              ) +
-                                                              "\n                                            "
-                                                          )
-                                                        ]),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "h3",
-                                                          {
-                                                            staticClass:
-                                                              "display-1 green--text"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                " +
-                                                                _vm._s(
-                                                                  _vm.user
-                                                                    .employee
-                                                                    .last_name +
-                                                                    ", " +
-                                                                    (_vm.user
-                                                                      .employee
-                                                                      .first_name ||
-                                                                      "") +
-                                                                    " " +
-                                                                    (_vm.user
-                                                                      .employee
-                                                                      .suffix ||
-                                                                      "")
-                                                                ) +
-                                                                "\n                                            "
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c("p", [
-                                                          _vm._v(
-                                                            "\n                                                " +
-                                                              _vm._s(
-                                                                _vm.user
-                                                                  .employee.job
-                                                                  .name
-                                                              ) +
-                                                              "\n                                            "
-                                                          )
-                                                        ]),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "text--primary"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                " +
-                                                                _vm._s(
-                                                                  _vm.user
-                                                                    .employee
-                                                                    .mobile_number
-                                                                )
-                                                            ),
-                                                            _c("br"),
-                                                            _vm._v(
-                                                              "\n                                                " +
-                                                                _vm._s(
-                                                                  _vm.user
-                                                                    .employee
-                                                                    .email
-                                                                ) +
-                                                                "\n                                            "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              : _c(
-                                                  "v-row",
-                                                  [
-                                                    _c(
-                                                      "v-col",
-                                                      {
-                                                        attrs: {
-                                                          cols: "12",
-                                                          align: "center",
-                                                          justify: "center"
-                                                        }
-                                                      },
-                                                      [
-                                                        _c("div", [
-                                                          _vm._v(
-                                                            "\n                                                " +
-                                                              _vm._s(
-                                                                _vm.user
-                                                                  .username
-                                                              ) +
-                                                              "\n                                            "
-                                                          )
-                                                        ]),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "p",
-                                                          {
-                                                            staticClass:
-                                                              "display-1 text--primary"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                " +
-                                                                _vm._s(
-                                                                  _vm.user.name
-                                                                ) +
-                                                                "\n                                            "
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "text--primary"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                " +
-                                                                _vm._s(
-                                                                  _vm.user.email
-                                                                ) +
-                                                                "\n                                            "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-dialog",
-                                          {
-                                            attrs: {
-                                              persistent: "",
-                                              width: "500"
-                                            },
-                                            scopedSlots: _vm._u(
-                                              [
-                                                {
-                                                  key: "activator",
-                                                  fn: function(ref) {
-                                                    var on = ref.on
-                                                    var attrs = ref.attrs
-                                                    return [
-                                                      _c(
-                                                        "v-btn",
-                                                        _vm._g(
-                                                          _vm._b(
-                                                            {
-                                                              attrs: {
-                                                                text: "",
-                                                                color: "primary"
-                                                              }
-                                                            },
+                                                    {
+                                                      key: "activator",
+                                                      fn: function(ref) {
+                                                        var on = ref.on
+                                                        var attrs = ref.attrs
+                                                        return [
+                                                          _c(
                                                             "v-btn",
-                                                            attrs,
-                                                            false
-                                                          ),
-                                                          on
-                                                        ),
-                                                        [
-                                                          _vm._v(
-                                                            "\n                                            Change Password\n                                        "
+                                                            _vm._g(
+                                                              _vm._b(
+                                                                {
+                                                                  attrs: {
+                                                                    text: "",
+                                                                    color:
+                                                                      "primary"
+                                                                  }
+                                                                },
+                                                                "v-btn",
+                                                                attrs,
+                                                                false
+                                                              ),
+                                                              on
+                                                            ),
+                                                            [
+                                                              _vm._v(
+                                                                "\n                      Change Password\n                    "
+                                                              )
+                                                            ]
                                                           )
                                                         ]
-                                                      )
-                                                    ]
-                                                  }
-                                                }
-                                              ],
-                                              null,
-                                              true
-                                            ),
-                                            model: {
-                                              value: _vm.dialogPassword,
-                                              callback: function($$v) {
-                                                _vm.dialogPassword = $$v
-                                              },
-                                              expression: "dialogPassword"
-                                            }
-                                          },
-                                          [
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-card",
-                                              [
-                                                _c(
-                                                  "v-card-title",
-                                                  { staticClass: "headline" },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                            Change Password\n                                        "
-                                                    )
-                                                  ]
+                                                      }
+                                                    }
+                                                  ],
+                                                  null,
+                                                  true
                                                 ),
+                                                model: {
+                                                  value: _vm.dialogPassword,
+                                                  callback: function($$v) {
+                                                    _vm.dialogPassword = $$v
+                                                  },
+                                                  expression: "dialogPassword"
+                                                }
+                                              },
+                                              [
                                                 _vm._v(" "),
                                                 _c(
-                                                  "v-form",
-                                                  { ref: "form_password" },
+                                                  "v-card",
                                                   [
                                                     _c(
-                                                      "v-card-text",
+                                                      "v-card-title",
+                                                      {
+                                                        staticClass: "headline"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                      Change Password\n                    "
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-form",
+                                                      { ref: "form_password" },
                                                       [
                                                         _c(
-                                                          "v-container",
+                                                          "v-card-text",
                                                           [
                                                             _c(
-                                                              "v-row",
+                                                              "v-container",
                                                               [
                                                                 _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols: "12"
-                                                                    }
-                                                                  },
+                                                                  "v-row",
                                                                   [
                                                                     _c(
-                                                                      "v-text-field",
+                                                                      "v-col",
                                                                       {
                                                                         attrs: {
-                                                                          rules:
-                                                                            _vm
-                                                                              .mixin_validation
-                                                                              .required,
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .password_errors
-                                                                              .old_password,
-                                                                          color:
-                                                                            "success",
-                                                                          label:
-                                                                            "Old Password",
-                                                                          name:
-                                                                            "password",
-                                                                          type:
-                                                                            "password"
-                                                                        },
-                                                                        on: {
-                                                                          input: function() {
-                                                                            _vm.password_errors.old_password = []
-                                                                          }
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm.old_password,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.old_password = $$v
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                    old_password\n                                                                "
+                                                                          cols:
+                                                                            "12"
                                                                         }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols: "12"
-                                                                    }
-                                                                  },
-                                                                  [
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            attrs: {
+                                                                              rules:
+                                                                                _vm
+                                                                                  .mixin_validation
+                                                                                  .required,
+                                                                              "error-messages":
+                                                                                _vm
+                                                                                  .password_errors
+                                                                                  .old_password,
+                                                                              color:
+                                                                                "success",
+                                                                              label:
+                                                                                "Old Password",
+                                                                              name:
+                                                                                "password",
+                                                                              type:
+                                                                                "password"
+                                                                            },
+                                                                            on: {
+                                                                              input: function() {
+                                                                                _vm.password_errors.old_password = []
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm.old_password,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.old_password = $$v
+                                                                              },
+                                                                              expression:
+                                                                                "old_password"
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    ),
+                                                                    _vm._v(" "),
                                                                     _c(
-                                                                      "v-text-field",
+                                                                      "v-col",
                                                                       {
                                                                         attrs: {
-                                                                          rules: _vm.mixin_validation.required.concat(
-                                                                            _vm.mixin_validation.minimumLength(
-                                                                              8
-                                                                            )
-                                                                          ),
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .password_errors
-                                                                              .password,
-                                                                          color:
-                                                                            "success",
-                                                                          label:
-                                                                            "New Password",
-                                                                          name:
-                                                                            "password",
-                                                                          type:
-                                                                            "password"
-                                                                        },
-                                                                        on: {
-                                                                          input: function() {
-                                                                            _vm.password_errors.password = []
-                                                                          }
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm.password,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.password = $$v
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                    password\n                                                                "
+                                                                          cols:
+                                                                            "12"
                                                                         }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-col",
-                                                                  {
-                                                                    attrs: {
-                                                                      cols: "12"
-                                                                    }
-                                                                  },
-                                                                  [
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            attrs: {
+                                                                              rules: _vm.mixin_validation.required.concat(
+                                                                                _vm.mixin_validation.minimumLength(
+                                                                                  8
+                                                                                )
+                                                                              ),
+                                                                              "error-messages":
+                                                                                _vm
+                                                                                  .password_errors
+                                                                                  .password,
+                                                                              color:
+                                                                                "success",
+                                                                              label:
+                                                                                "New Password",
+                                                                              name:
+                                                                                "password",
+                                                                              type:
+                                                                                "password"
+                                                                            },
+                                                                            on: {
+                                                                              input: function() {
+                                                                                _vm.password_errors.password = []
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm.password,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.password = $$v
+                                                                              },
+                                                                              expression:
+                                                                                "password"
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    ),
+                                                                    _vm._v(" "),
                                                                     _c(
-                                                                      "v-text-field",
+                                                                      "v-col",
                                                                       {
                                                                         attrs: {
-                                                                          rules:
-                                                                            _vm
-                                                                              .password_rules
-                                                                              .password_confirmation,
-                                                                          "error-messages":
-                                                                            _vm
-                                                                              .password_errors
-                                                                              .password_confirmation,
-                                                                          color:
-                                                                            "success",
-                                                                          label:
-                                                                            "Re-type Password",
-                                                                          name:
-                                                                            "confirm_password",
-                                                                          type:
-                                                                            "password"
-                                                                        },
-                                                                        on: {
-                                                                          input: function() {
-                                                                            _vm.password_errors.password_confirmation = []
-                                                                          }
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm.password_confirmation,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.password_confirmation = $$v
-                                                                          },
-                                                                          expression:
-                                                                            "\n                                                                    password_confirmation\n                                                                "
+                                                                          cols:
+                                                                            "12"
                                                                         }
-                                                                      }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            attrs: {
+                                                                              rules:
+                                                                                _vm
+                                                                                  .password_rules
+                                                                                  .password_confirmation,
+                                                                              "error-messages":
+                                                                                _vm
+                                                                                  .password_errors
+                                                                                  .password_confirmation,
+                                                                              color:
+                                                                                "success",
+                                                                              label:
+                                                                                "Re-type Password",
+                                                                              name:
+                                                                                "confirm_password",
+                                                                              type:
+                                                                                "password"
+                                                                            },
+                                                                            on: {
+                                                                              input: function() {
+                                                                                _vm.password_errors.password_confirmation = []
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm.password_confirmation,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.password_confirmation = $$v
+                                                                              },
+                                                                              expression:
+                                                                                "password_confirmation"
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
                                                                     )
                                                                   ],
                                                                   1
@@ -1194,52 +1178,54 @@ var render = function() {
                                                             )
                                                           ],
                                                           1
-                                                        )
-                                                      ],
-                                                      1
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "v-card-actions",
-                                                      [
-                                                        _c("v-spacer"),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "v-btn",
-                                                          {
-                                                            attrs: {
-                                                              color: "primary",
-                                                              text: ""
-                                                            },
-                                                            on: {
-                                                              click:
-                                                                _vm.closePasswordDialog
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                    Cancel\n                                                "
-                                                            )
-                                                          ]
                                                         ),
                                                         _vm._v(" "),
                                                         _c(
-                                                          "v-btn",
-                                                          {
-                                                            attrs: {
-                                                              color: "primary",
-                                                              text: ""
-                                                            },
-                                                            on: {
-                                                              click:
-                                                                _vm.onUpdatePassword
-                                                            }
-                                                          },
+                                                          "v-card-actions",
                                                           [
-                                                            _vm._v(
-                                                              "\n                                                    Save\n                                                "
+                                                            _c("v-spacer"),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "v-btn",
+                                                              {
+                                                                attrs: {
+                                                                  color:
+                                                                    "primary",
+                                                                  text: ""
+                                                                },
+                                                                on: {
+                                                                  click:
+                                                                    _vm.closePasswordDialog
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                          Cancel\n                        "
+                                                                )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "v-btn",
+                                                              {
+                                                                attrs: {
+                                                                  color:
+                                                                    "primary",
+                                                                  text: ""
+                                                                },
+                                                                on: {
+                                                                  click:
+                                                                    _vm.onUpdatePassword
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                          Save\n                        "
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
+                                                          ],
+                                                          1
                                                         )
                                                       ],
                                                       1
@@ -1249,447 +1235,613 @@ var render = function() {
                                                 )
                                               ],
                                               1
-                                            )
+                                            ),
+                                            _vm._v(" "),
+                                            _c("v-row", { staticClass: "mt-4" })
                                           ],
                                           1
-                                        ),
-                                        _vm._v(" "),
-                                        _c("v-row", { staticClass: "mt-4" })
-                                      ],
-                                      1
-                                    )
-                                  ]
-                                }
-                              }
-                            ])
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "8" } },
-                        [
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ])
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
                           _c(
-                            "v-form",
-                            { ref: "form" },
+                            "v-col",
+                            { attrs: { cols: "12", md: "8" } },
                             [
-                              _vm.user.employee === null
-                                ? _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
+                              _c(
+                                "v-form",
+                                { ref: "form" },
+                                [
+                                  _vm.user.employee === null
+                                    ? _c(
+                                        "v-row",
                                         [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.first_name,
-                                              counter: 100,
-                                              "error-messages":
-                                                _vm.errors.first_name,
-                                              label: "Name ",
-                                              required: ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.first_name = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.name,
-                                              callback: function($$v) {
-                                                _vm.$set(_vm.user, "name", $$v)
-                                              },
-                                              expression: "user.name"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.first_name,
-                                              counter: 100,
-                                              "error-messages":
-                                                _vm.errors.first_name,
-                                              label: "Username",
-                                              required: ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.first_name = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.username,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user,
-                                                  "username",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "user.username"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.email,
-                                              counter: 100,
-                                              "error-messages":
-                                                _vm.errors.email,
-                                              label: "Email Address",
-                                              required: ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.email = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.email,
-                                              callback: function($$v) {
-                                                _vm.$set(_vm.user, "email", $$v)
-                                              },
-                                              expression: "user.email"
-                                            }
-                                          })
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules: _vm.rules.first_name,
+                                                  counter: 100,
+                                                  "error-messages":
+                                                    _vm.errors.first_name,
+                                                  label: "Name ",
+                                                  required: ""
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.first_name = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value: _vm.user.name,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user,
+                                                      "name",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "user.name"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules: _vm.rules.first_name,
+                                                  counter: 100,
+                                                  "error-messages":
+                                                    _vm.errors.first_name,
+                                                  label: "Username",
+                                                  required: ""
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.first_name = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value: _vm.user.username,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user,
+                                                      "username",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "user.username"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules: _vm.rules.email,
+                                                  counter: 100,
+                                                  "error-messages":
+                                                    _vm.errors.email,
+                                                  label: "Email Address",
+                                                  required: ""
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.email = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value: _vm.user.email,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user,
+                                                      "email",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "user.email"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
                                         ],
                                         1
                                       )
-                                    ],
-                                    1
-                                  )
-                                : _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "12" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.first_name,
-                                              counter: 100,
-                                              "error-messages":
-                                                _vm.errors.first_name,
-                                              label: "Username",
-                                              required: ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.first_name = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.username,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user,
-                                                  "username",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "user.username"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.first_name,
-                                              counter: 100,
-                                              "error-messages":
-                                                _vm.errors.first_name,
-                                              label: "First Name",
-                                              required: ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.first_name = []
-                                              }
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.user.employee.first_name,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "first_name",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "user.employee.first_name"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.middle_name,
-                                              counter: 100,
-                                              "error-messages":
-                                                _vm.errors.middle_name,
-                                              label: "Middle Name"
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.middle_name = []
-                                              }
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.user.employee.middle_name,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "middle_name",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "user.employee.middle_name"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.last_name,
-                                              counter: 100,
-                                              "error-messages":
-                                                _vm.errors.last_name,
-                                              label: "Last Name",
-                                              required: ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.last_name = []
-                                              }
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.user.employee.last_name,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "last_name",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "user.employee.last_name"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-combobox", {
-                                            attrs: {
-                                              rules: _vm.rules.suffix,
-                                              counter: 30,
-                                              items: ["Jr", "Sr", "II", "III"],
-                                              "error-messages":
-                                                _vm.errors.suffix,
-                                              label: "Suffix"
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.suffix = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.employee.suffix,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "suffix",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "user.employee.suffix"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-select", {
-                                            attrs: {
-                                              rules: _vm.rules.gender,
-                                              items: ["Male", "Female"],
-                                              "error-messages":
-                                                _vm.errors.gender,
-                                              label: "Gender",
-                                              required: ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.gender = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.employee.gender,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "gender",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "user.employee.gender"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
+                                    : _c(
+                                        "v-row",
                                         [
                                           _c(
-                                            "v-menu",
-                                            {
-                                              ref: "menu",
-                                              attrs: {
-                                                transition: "scale-transition",
-                                                "offset-y": "",
-                                                "min-width": "290px",
-                                                "close-on-content-click": false
-                                              },
-                                              scopedSlots: _vm._u([
-                                                {
-                                                  key: "activator",
-                                                  fn: function(ref) {
-                                                    var on = ref.on
-                                                    var attrs = ref.attrs
-                                                    return [
-                                                      _c(
-                                                        "v-text-field",
-                                                        _vm._g(
-                                                          _vm._b(
-                                                            {
-                                                              attrs: {
-                                                                rules:
-                                                                  _vm.rules
-                                                                    .birthdate,
-                                                                "error-messages":
-                                                                  _vm.errors
-                                                                    .birthdate,
-                                                                label:
-                                                                  "Birthdate ",
-                                                                readonly: ""
-                                                              },
-                                                              on: {
-                                                                input: function(
-                                                                  $event
-                                                                ) {
-                                                                  _vm.errors.birthdate = []
-                                                                }
-                                                              },
-                                                              model: {
-                                                                value:
-                                                                  _vm.user
-                                                                    .employee
-                                                                    .birthdate,
-                                                                callback: function(
-                                                                  $$v
-                                                                ) {
-                                                                  _vm.$set(
-                                                                    _vm.user
-                                                                      .employee,
-                                                                    "birthdate",
-                                                                    $$v
-                                                                  )
-                                                                },
-                                                                expression:
-                                                                  "\n                                                    user.employee.birthdate\n                                                "
-                                                              }
-                                                            },
-                                                            "v-text-field",
-                                                            attrs,
-                                                            false
-                                                          ),
-                                                          on
-                                                        )
-                                                      )
-                                                    ]
-                                                  }
-                                                }
-                                              ]),
-                                              model: {
-                                                value: _vm.menu,
-                                                callback: function($$v) {
-                                                  _vm.menu = $$v
-                                                },
-                                                expression: "menu"
-                                              }
-                                            },
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "12" } },
                                             [
-                                              _vm._v(" "),
-                                              _c("v-date-picker", {
+                                              _c("v-text-field", {
                                                 attrs: {
-                                                  "no-title": "",
-                                                  scrollable: "",
-                                                  color: "success",
-                                                  max: _vm.maxDate
+                                                  rules: _vm.rules.first_name,
+                                                  counter: 100,
+                                                  "error-messages":
+                                                    _vm.errors.first_name,
+                                                  label: "Username",
+                                                  required: ""
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.first_name = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value: _vm.user.username,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user,
+                                                      "username",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "user.username"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules: _vm.rules.first_name,
+                                                  counter: 100,
+                                                  "error-messages":
+                                                    _vm.errors.first_name,
+                                                  label: "First Name",
+                                                  required: ""
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.first_name = []
+                                                  }
                                                 },
                                                 model: {
                                                   value:
-                                                    _vm.user.employee.birthdate,
+                                                    _vm.user.employee
+                                                      .first_name,
                                                   callback: function($$v) {
                                                     _vm.$set(
                                                       _vm.user.employee,
-                                                      "birthdate",
+                                                      "first_name",
                                                       $$v
                                                     )
                                                   },
                                                   expression:
-                                                    "\n                                                user.employee.birthdate\n                                            "
+                                                    "user.employee.first_name"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules: _vm.rules.middle_name,
+                                                  counter: 100,
+                                                  "error-messages":
+                                                    _vm.errors.middle_name,
+                                                  label: "Middle Name"
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.middle_name = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee
+                                                      .middle_name,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "middle_name",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.middle_name"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules: _vm.rules.last_name,
+                                                  counter: 100,
+                                                  "error-messages":
+                                                    _vm.errors.last_name,
+                                                  label: "Last Name",
+                                                  required: ""
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.last_name = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee.last_name,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "last_name",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.last_name"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-combobox", {
+                                                attrs: {
+                                                  rules: _vm.rules.suffix,
+                                                  counter: 30,
+                                                  items: [
+                                                    "Jr",
+                                                    "Sr",
+                                                    "II",
+                                                    "III"
+                                                  ],
+                                                  "error-messages":
+                                                    _vm.errors.suffix,
+                                                  label: "Suffix"
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.suffix = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee.suffix,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "suffix",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.suffix"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-select", {
+                                                attrs: {
+                                                  rules: _vm.rules.gender,
+                                                  items: ["Male", "Female"],
+                                                  "error-messages":
+                                                    _vm.errors.gender,
+                                                  label: "Gender",
+                                                  required: ""
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.gender = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee.gender,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "gender",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.gender"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c(
+                                                "v-menu",
+                                                {
+                                                  ref: "menu",
+                                                  attrs: {
+                                                    transition:
+                                                      "scale-transition",
+                                                    "offset-y": "",
+                                                    "min-width": "290px",
+                                                    "close-on-content-click": false
+                                                  },
+                                                  scopedSlots: _vm._u([
+                                                    {
+                                                      key: "activator",
+                                                      fn: function(ref) {
+                                                        var on = ref.on
+                                                        var attrs = ref.attrs
+                                                        return [
+                                                          _c(
+                                                            "v-text-field",
+                                                            _vm._g(
+                                                              _vm._b(
+                                                                {
+                                                                  attrs: {
+                                                                    rules:
+                                                                      _vm.rules
+                                                                        .birthdate,
+                                                                    "error-messages":
+                                                                      _vm.errors
+                                                                        .birthdate,
+                                                                    label:
+                                                                      "Birthdate ",
+                                                                    readonly: ""
+                                                                  },
+                                                                  on: {
+                                                                    input: function(
+                                                                      $event
+                                                                    ) {
+                                                                      _vm.errors.birthdate = []
+                                                                    }
+                                                                  },
+                                                                  model: {
+                                                                    value:
+                                                                      _vm.user
+                                                                        .employee
+                                                                        .birthdate,
+                                                                    callback: function(
+                                                                      $$v
+                                                                    ) {
+                                                                      _vm.$set(
+                                                                        _vm.user
+                                                                          .employee,
+                                                                        "birthdate",
+                                                                        $$v
+                                                                      )
+                                                                    },
+                                                                    expression:
+                                                                      "user.employee.birthdate"
+                                                                  }
+                                                                },
+                                                                "v-text-field",
+                                                                attrs,
+                                                                false
+                                                              ),
+                                                              on
+                                                            )
+                                                          )
+                                                        ]
+                                                      }
+                                                    }
+                                                  ]),
+                                                  model: {
+                                                    value: _vm.menu,
+                                                    callback: function($$v) {
+                                                      _vm.menu = $$v
+                                                    },
+                                                    expression: "menu"
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(" "),
+                                                  _c("v-date-picker", {
+                                                    attrs: {
+                                                      "no-title": "",
+                                                      scrollable: "",
+                                                      color: "success",
+                                                      max: _vm.maxDate
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.user.employee
+                                                          .birthdate,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.user.employee,
+                                                          "birthdate",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "user.employee.birthdate"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules:
+                                                    _vm.rules.mobile_number,
+                                                  counter: 30,
+                                                  "error-messages":
+                                                    _vm.errors.mobile_number,
+                                                  label: "Mobile Number",
+                                                  type: "number"
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.mobile_number = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee
+                                                      .mobile_number,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "mobile_number",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.mobile_number"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules:
+                                                    _vm.rules.telephone_number,
+                                                  counter: 30,
+                                                  "error-messages":
+                                                    _vm.errors.telephone_number,
+                                                  label: "Telephone Number",
+                                                  type: "number"
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.telephone_number = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee
+                                                      .telephone_number,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "telephone_number",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.telephone_number"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "4" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  rules: _vm.rules.email,
+                                                  "error-messages":
+                                                    _vm.errors.email,
+                                                  label: "Email Address"
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.email = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee.email,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "email",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.email"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12" } },
+                                            [
+                                              _c("v-textarea", {
+                                                attrs: {
+                                                  rules: _vm.rules.address,
+                                                  "error-messages":
+                                                    _vm.errors.address,
+                                                  label: "Address",
+                                                  rows: "1"
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.errors.address = []
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.user.employee.address,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.user.employee,
+                                                      "address",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "user.employee.address"
                                                 }
                                               })
                                             ],
@@ -1698,161 +1850,22 @@ var render = function() {
                                         ],
                                         1
                                       ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c("v-spacer"),
                                       _vm._v(" "),
                                       _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.mobile_number,
-                                              counter: 30,
-                                              "error-messages":
-                                                _vm.errors.mobile_number,
-                                              label: "Mobile Number",
-                                              type: "number"
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.mobile_number = []
-                                              }
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.user.employee.mobile_number,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "mobile_number",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            user.employee.mobile_number\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.telephone_number,
-                                              counter: 30,
-                                              "error-messages":
-                                                _vm.errors.telephone_number,
-                                              label: "Telephone Number",
-                                              type: "number"
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.telephone_number = []
-                                              }
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.user.employee
-                                                  .telephone_number,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "telephone_number",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            user.employee.telephone_number\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: _vm.rules.email,
-                                              "error-messages":
-                                                _vm.errors.email,
-                                              label: "Email Address"
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.email = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.employee.email,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "email",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "user.employee.email"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12" } },
-                                        [
-                                          _c("v-textarea", {
-                                            attrs: {
-                                              rules: _vm.rules.address,
-                                              "error-messages":
-                                                _vm.errors.address,
-                                              label: "Address",
-                                              rows: "1"
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.address = []
-                                              }
-                                            },
-                                            model: {
-                                              value: _vm.user.employee.address,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.user.employee,
-                                                  "address",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "user.employee.address"
-                                            }
-                                          })
-                                        ],
-                                        1
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "primary" },
+                                          on: { click: _vm.onUpdateData }
+                                        },
+                                        [_vm._v("Update Profile")]
                                       )
                                     ],
                                     1
-                                  ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c("v-spacer"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-btn",
-                                    {
-                                      attrs: { color: "primary" },
-                                      on: { click: _vm.onUpdateData }
-                                    },
-                                    [_vm._v("Update Profile")]
                                   )
                                 ],
                                 1
@@ -1872,9 +1885,6 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

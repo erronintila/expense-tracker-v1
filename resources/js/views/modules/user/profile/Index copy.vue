@@ -16,7 +16,7 @@
       </v-row>
     </v-container>
 
-    <v-card v-else class="elevation-0 pt-0">
+    <v-card class="elevation-0 pt-0">
       <v-card-title class="pt-0">
         <h4 class="title green--text">Profile</h4>
         <v-spacer></v-spacer>
@@ -46,7 +46,7 @@
                     <v-row v-if="user.employee !== null">
                       <v-col cols="12" align="center" justify="center">
                         <div>
-                          {{ user.employee.job.department.name }}
+                          {{ user.employee.department.name }}
                         </div>
                         <h3 class="display-1 green--text">
                           {{
@@ -405,7 +405,8 @@ export default {
           telephone_number: "",
           email: "",
           address: "",
-          job: { department: {} },
+          job: "",
+          department: "",
         },
       },
       old_password: "",
@@ -484,6 +485,8 @@ export default {
                 timeout: 2000,
               }
             );
+
+            _this.$store.dispatch("AUTH_USER");
           })
           .catch(function (error) {
             console.log(error);
@@ -531,7 +534,7 @@ export default {
               }
             );
 
-            // _this.$store.dispatch("AUTH_USER");
+            _this.$store.dispatch("AUTH_USER");
           })
           .catch((error) => {
             console.log(error);
@@ -564,7 +567,7 @@ export default {
               }
             );
 
-            // _this.$store.dispatch("AUTH_USER");
+            _this.$store.dispatch("AUTH_USER");
 
             _this.dialogPassword = false;
             _this.old_password = "";
