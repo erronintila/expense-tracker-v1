@@ -555,67 +555,81 @@ class EmployeeController extends Controller
      */
     public function validateFund(Request $request)
     {
-        $employee = Employee::withTrashed()
-            ->with(['job' => function ($query) {
-                $query->withTrashed();
-                $query->with(['department' => function ($query2) {
-                    $query2->withTrashed();
-                }]);
-            }])
-            ->with(['user' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_types' => function ($query) {
-                $query->withTrashed();
-                $query->with(['sub_types' => function ($query2) {
-                    $query2->withTrashed();
-                }]);
-            }])
-            ->findOrFail($request->id);
+        // $employee = Employee::withTrashed()
+        //     ->with(['job' => function ($query) {
+        //         $query->withTrashed();
+        //         $query->with(['department' => function ($query2) {
+        //             $query2->withTrashed();
+        //         }]);
+        //     }])
+        //     ->with(['user' => function ($query) {
+        //         $query->withTrashed();
+        //     }])
+        //     ->with(['expense_types' => function ($query) {
+        //         $query->withTrashed();
+        //         $query->with(['sub_types' => function ($query2) {
+        //             $query2->withTrashed();
+        //         }]);
+        //     }])
+        //     ->findOrFail($request->id);
 
-        $expenses = Expense::where("employee_id", $employee->id)
-            ->where("deleted_at", null)
-            ->orWhereHas("expense_report", function ($query) {
-                $query->where([
+        $deduction = DB::table('expenses')
+            ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) - SUM(expense_report_payment.payment) AS deduction'))
+            ->leftJoin('expense_reports','expense_reports.id','=','expenses.expense_report_id')
+            ->leftJoin('expense_report_payment','expense_report_payment.expense_report_id','=','expense_reports.id')
+            ->leftJoin('payments','payments.id','=','expense_report_payment.payment_id')
+            ->where(DB::raw('expenses.employee_id'), $request->id)
+            ->where(DB::raw('expenses.deleted_at'), null)
+            ->where(DB::raw('expense_reports.rejected_at'), null)
+            ->where(DB::raw('expense_reports.cancelled_at'), null)
+            ->where(DB::raw('expense_reports.deleted_at'), null)
+            ->first();
 
-                    ["cancelled_at", "=", null],
+        // $expenses = Expense::where("employee_id", $employee->id)
+        //     ->where("deleted_at", null)
+        //     ->orWhereHas("expense_report", function ($query) {
+        //         $query->where([
 
-                    ["rejected_at", "=", null],
+        //             ["cancelled_at", "=", null],
 
-                    ["deleted_at", "=", null],
-                ]);
-            })
-            ->get();
+        //             ["rejected_at", "=", null],
 
-        $paid_expenses = Expense::where("employee_id", $employee->id)
-                ->where("deleted_at", null)
-                ->whereHas("expense_report", function ($query) {
-                    $query->where([
+        //             ["deleted_at", "=", null],
+        //         ]);
+        //     })
+        //     ->get();
 
-                        ["cancelled_at", "=", null],
+        // $paid_expenses = Expense::where("employee_id", $employee->id)
+        //         ->where("deleted_at", null)
+        //         ->whereHas("expense_report", function ($query) {
+        //             $query->where([
 
-                        ["rejected_at", "=", null],
+        //                 ["cancelled_at", "=", null],
 
-                        ["deleted_at", "=", null],
-                    ]);
-                    $query->whereHas("payments", function ($query) {
-                        $query->where([
+        //                 ["rejected_at", "=", null],
 
-                            ["cancelled_at", "=", null],
+        //                 ["deleted_at", "=", null],
+        //             ]);
+        //             $query->whereHas("payments", function ($query) {
+        //                 $query->where([
 
-                            ["received_at", "<>", null],
+        //                     ["cancelled_at", "=", null],
 
-                            ["deleted_at", "=", null],
-                        ]);
-                    });
-                })
-                ->get();
+        //                     ["received_at", "<>", null],
 
-        $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
+        //                     ["deleted_at", "=", null],
+        //                 ]);
+        //             });
+        //         })
+        //         ->get();
 
-        $paid = $paid_expenses->sum("amount") - $paid_expenses->sum("reimbursable_amount");
+        // $deduct = $expenses->sum("amount") - $expenses->sum("reimbursable_amount");
 
-        $employee->remaining_fund = $employee->fund - $deduct + $paid;
+        // $paid = $paid_expenses->sum("amount") - $paid_expenses->sum("reimbursable_amount");
+
+        $employee = Employee::findOrFail($request->id);
+
+        $employee->remaining_fund = $employee->fund - $deduction->deduction;
 
         $employee->save();
 

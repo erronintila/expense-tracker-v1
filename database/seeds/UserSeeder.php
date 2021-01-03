@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
         // create permissions
 
         foreach ($models as $model) {
-            
+
             if ($model == "activity logs") {
                 Permission::create(['name' => 'export ' . $model, 'category' => $model]);
                 Permission::create(['name' => 'delete ' . $model, 'category' => $model]);
@@ -102,7 +102,7 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'approve expense reports beyond due date', 'category' => $model]);
                 Permission::create(['name' => 'reject expense reports', 'category' => $model]);
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
-                
+
                 // Permission::create(['name' => 'add expense report notes', 'category' => $model]);
             }
 
@@ -114,7 +114,7 @@ class UserSeeder extends Seeder
         }
 
         // create roles and assign existing permissions
-        
+
         $roleUser = Role::create(['name' => 'Standard User']);
         $roleUser->givePermissionTo("add expenses");
         $roleUser->givePermissionTo("edit expenses");
@@ -156,45 +156,46 @@ class UserSeeder extends Seeder
 
         $user->assignRole($roleSuperAdmin);
 
-        $user = User::create([
-            'code' => generate_code(User::class, "USR", 10),
-            'name' => 'Intila, Erron Cerdania',
-            'username' => 'erronintila',
-            'email' => 'erronintila@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-            'is_admin' => true,
-            'can_login' => true,
-        ]);
+        //
+        // $user = User::create([
+        //     'code' => generate_code(User::class, "USR", 10),
+        //     'name' => 'Intila, Erron Cerdania',
+        //     'username' => 'erronintila',
+        //     'email' => 'erronintila@gmail.com',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('password'),
+        //     'remember_token' => Str::random(10),
+        //     'is_admin' => true,
+        //     'can_login' => true,
+        // ]);
 
-        foreach (Permission::all() as $permission) {
-            $user->givePermissionTo($permission->pluck("name"));
-        }
-
-        // $user->assignRole('Standard User');
-
-        $employee = Employee::create([
-            'code' => generate_code(Employee::class, "EMP", 10),
-            'first_name' => "Erron",
-            'middle_name' => "Cerdania",
-            'last_name' => "Intila",
-            'suffix' => null,
-            'gender' => "Male",
-            'birthdate' => "1996-08-19",
-            'mobile_number' => "09567653221",
-            'telephone_number' => null,
-            'email' => 'erronintila@gmail.com',
-            'address' => "Polomolok, South Cotabato",
-            "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
-            "user_id" => $user->id,
-            "fund" => 1000,
-            "remaining_fund" => 1000,
-        ]);
-
-        // foreach (ExpenseType::all() as $expense_types) {
-            $employee->expense_types()->sync(ExpenseType::all());
+        // foreach (Permission::all() as $permission) {
+        //     $user->givePermissionTo($permission->pluck("name"));
         // }
+
+        // // $user->assignRole('Standard User');
+
+        // $employee = Employee::create([
+        //     'code' => generate_code(Employee::class, "EMP", 10),
+        //     'first_name' => "Erron",
+        //     'middle_name' => "Cerdania",
+        //     'last_name' => "Intila",
+        //     'suffix' => null,
+        //     'gender' => "Male",
+        //     'birthdate' => "1996-08-19",
+        //     'mobile_number' => "09567653221",
+        //     'telephone_number' => null,
+        //     'email' => 'erronintila@gmail.com',
+        //     'address' => "Polomolok, South Cotabato",
+        //     "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
+        //     "user_id" => $user->id,
+        //     "fund" => 1000,
+        //     "remaining_fund" => 1000,
+        // ]);
+
+        // //foreach (ExpenseType::all() as $expense_types) {
+        //    $employee->expense_types()->sync(ExpenseType::all());
+        // //}
 
         Setting::set("expense_encoding_period", 2);
         Setting::set("submission_period", "Weekly");
