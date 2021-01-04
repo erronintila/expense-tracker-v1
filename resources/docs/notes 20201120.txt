@@ -1,26 +1,18 @@
 URGENT
 
 Expense Type Custom Fields
-Standard User Modules
-
-
 
 ------------------------------------------------------------------------------------------
 new bugs/updates
 ------------------------------------------------------------------------------------------
-user can still edit expense even if approved
-update expense and expense report settings once approved to finalize settings history of each transaction
+
 deleting parent with active child records
+
 add note when cancelling
+
 add note for admin
 
 add settings paper sizes for printing and exporting
-
-Label for late encoded expenses and late approved reports
-
-LAG IN EXPENSE REPORTS
-
-expense report can be edited
 
 Travel From, To
 
@@ -36,13 +28,8 @@ add summary of statuses on expenses and expense reports
 
 expense type custom field like transpo, place of origin and destination
 
-fix activity logs format
-
 fix created by, updated by, deleted by
 
-fix standard user modules
-
-300+ queries executed when printing report
 
 
 ------------------------------------------------------------------------------------------
@@ -63,7 +50,15 @@ add # items selected info and button for clearing selection
 add restore in expenses without report when deleted
 expense cant be cancelled even if no report
 expense limit
-
+Standard User Modules
+user can still edit expense even if approved
+update expense and expense report settings once approved to finalize settings history of each transaction
+Label for late encoded expenses and late approved reports
+LAG IN EXPENSE REPORTS
+expense report can be edited
+fix activity logs format
+fix standard user modules
+300+ queries executed when printing report
 
 ------------------------------------------------------------------------------------------
 OPTIONAL
@@ -85,15 +80,15 @@ From the doc (bugs/updates)
 ------Limit expense per expense type and sub type
 Remove Reset Password
 
-Label for late encoded expenses
-Add JSON Notes/Comments
+------Label for late encoded expenses
+------Add JSON Notes/Comments
 Add Bulk Expenses
 ------Limit expense per expense type and sub type
 
 Submission of Expense Report with no expenses
 ------Print Detailed Report
 ------Print Batch Reports
-Mark late approved expense reports
+------Mark late approved expense reports
 Multiple Payments
 ------Add Notes when rejecting
 Allow resubmission
