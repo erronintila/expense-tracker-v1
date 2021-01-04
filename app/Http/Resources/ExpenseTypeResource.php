@@ -39,17 +39,5 @@ class ExpenseTypeResource extends JsonResource
             "employees" => EmployeeResource::collection($this->whenLoaded('empployees')),
             "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
         ];
-
-        return parent::toArray($request);
-
-        // return [
-        //     "id" => $this->id,
-        //     "name" => $this->name,
-        //     "limit" => $this->limit,
-        //     "sub_types" => $this->sub_types,
-        //     "has_expenses" => $this->has_expenses,
-        //     "created_at" => Carbon::parse($this->created_at)->toDateTimeString(),
-        //     "updated_at" => Carbon::parse($this->updated_at)->toDateTimeString(),
-        // ];
     }
 }

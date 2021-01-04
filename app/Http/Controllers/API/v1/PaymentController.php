@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Payment\PaymentIndexResource;
-use App\Http\Resources\Payment\PaymentOnlyResource;
 use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentResource;
 use App\Models\ExpenseReport;
@@ -103,8 +102,6 @@ class PaymentController extends Controller
                         ["received_at", "<>", null],
                     ]);
 
-                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
-
                     break;
                 case 'Received Payments':
 
@@ -114,8 +111,6 @@ class PaymentController extends Controller
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
                     ]);
-
-                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", "<>", null);
 
                     break;
                 case 'Released Payments':
@@ -127,8 +122,6 @@ class PaymentController extends Controller
                         ["received_at", "=", null],
                     ]);
 
-                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", "<>", null)->where("received_at", null);
-
                     break;
                 case 'Approved Payments':
 
@@ -138,8 +131,6 @@ class PaymentController extends Controller
                         ["released_at", "=", null],
                         ["received_at", "=", null],
                     ]);
-
-                    // $payments = $payments->where("approved_at", "<>", null)->where("released_at", null)->where("received_at", null);
 
                     break;
                 default:
@@ -243,8 +234,6 @@ class PaymentController extends Controller
 
                 $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
 
-                // log_activity("expense_report", $expense_report, [ "code" => $expense_report->code, "updated_at" => now()], "expense report associated with payment #{$payment->code}");
-                
                 log_activity(
                     "expense_report",
                     $expense_report,
@@ -459,8 +448,6 @@ class PaymentController extends Controller
                                 "updated expense report association with payment #{$payment->code}"
                             );
                         } else {
-                            // log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "expense report associated with payment #{$payment->code}");
-                        
                             log_activity(
                                 "expense_report",
                                 $expense_report,
@@ -503,8 +490,6 @@ class PaymentController extends Controller
 
                 foreach ($payment->expense_reports as $expense_report) {
 
-                    // log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "removed expense report association with payment #{$payment->code}");
-                    
                     log_activity(
                         "expense_report",
                         $expense_report,
@@ -524,9 +509,6 @@ class PaymentController extends Controller
             $payment = Payment::withTrashed()->findOrFail($id);
 
             foreach ($payment->expense_reports as $expense_report) {
-
-                // log_activity("expense_report", $expense_report, ["code" => $expense_report->code, "updated_at" => now()], "removed expense report association with payment #{$payment->code}");
-            
                 log_activity(
                     "expense_report",
                     $expense_report,

@@ -61,13 +61,10 @@ class SubTypeController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
-
             foreach ($request->sub_types as $key => $value) {
-
                 $sub_type = SubType::withTrashed()->findOrFail($value["id"]);
 
                 if (count($sub_type->expenses)) {
-
                     return response(
                         [
                             'message' => 'Sub-type contains parent data'
@@ -79,11 +76,9 @@ class SubTypeController extends Controller
                 $sub_type->delete();
             }
         } else {
-
             $sub_type = SubType::withTrashed()->findOrFail($id);
 
             if (count($sub_type->expenses)) {
-
                 return response(
                     [
                         'message' => 'Sub-type contains parent data'

@@ -7,7 +7,6 @@ use App\Http\Resources\JobResource;
 use App\Models\Job;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -130,7 +129,7 @@ class JobController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $job = Job::withTrashed()->with(['department' => function($query) {
+        $job = Job::withTrashed()->with(['department' => function ($query) {
             $query->withTrashed();
         }])
         ->findOrFail($id);
@@ -243,7 +242,6 @@ class JobController extends Controller
     public function getJobs(Request $request)
     {
         if (request()->has('only')) {
-
             $jobs = Job::orderBy("name");
 
             if (request()->has("department_id")) {

@@ -2,10 +2,6 @@
 
 namespace App\Http\Resources\ExpenseType;
 
-use App\Http\Resources\EmployeeResource;
-use App\Http\Resources\ExpenseResource;
-use App\Http\Resources\ExpenseTypeResource;
-use App\Http\Resources\VendorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpenseTypeIndexResource extends JsonResource

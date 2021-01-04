@@ -10,7 +10,6 @@ use App\Models\Employee;
 use App\Rules\MatchOldPassword;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -398,7 +397,7 @@ class UserController extends Controller
     */
     
     /**
-     * export
+     * Export User data to Excel
      *
      * @return void
      */
@@ -408,7 +407,7 @@ class UserController extends Controller
     }
 
     /**
-     * permissions
+     * Get User Permissions
      *
      * @return void
      */
@@ -418,7 +417,7 @@ class UserController extends Controller
     }
     
     /**
-     * users
+     * Get Users data
      *
      * @param  mixed $request
      * @return void

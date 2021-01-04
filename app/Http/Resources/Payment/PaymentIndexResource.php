@@ -3,8 +3,6 @@
 namespace App\Http\Resources\Payment;
 
 use App\Http\Resources\Employee\EmployeeOnlyResource;
-use App\Http\Resources\EmployeeResource;
-use App\Http\Resources\ExpenseReportResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentIndexResource extends JsonResource

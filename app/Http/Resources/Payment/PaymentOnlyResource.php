@@ -2,9 +2,6 @@
 
 namespace App\Http\Resources\Payment;
 
-use App\Http\Resources\Employee\EmployeeOnlyResource;
-use App\Http\Resources\Employee\EmployeeShowResource;
-use App\Http\Resources\EmployeeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentOnlyResource extends JsonResource

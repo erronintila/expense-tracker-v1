@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Department;
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DepartmentResource extends JsonResource
@@ -36,15 +34,5 @@ class DepartmentResource extends JsonResource
             // -------------------------------------------------------------------
             "jobs" => JobResource::collection($this->whenLoaded('jobs')),
         ];
-
-        return parent::toArray($request);
-
-        // return [
-        //     "id" => $this->id,
-        //     "name" => $this->name,
-        //     "jobs" => $this->jobs,
-        //     "created_at" => Carbon::parse($this->created_at)->toDateTimeString(),
-        //     "updated_at" => Carbon::parse($this->updated_at)->toDateTimeString(),
-        // ];
     }
 }

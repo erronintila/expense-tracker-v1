@@ -4,7 +4,6 @@ namespace App\Http\Resources\Payment;
 
 use App\Http\Resources\Employee\EmployeeOnlyResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
-use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\Activitylog\Models\Activity;

@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources\Employee;
 
-use App\Http\Resources\JobResource;
-use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EmployeeOnlyResource extends JsonResource

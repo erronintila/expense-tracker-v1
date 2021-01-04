@@ -7,7 +7,6 @@ use App\Http\Resources\DepartmentResource;
 use App\Models\Department;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 

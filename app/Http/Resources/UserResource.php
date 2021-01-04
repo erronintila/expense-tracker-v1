@@ -43,25 +43,5 @@ class UserResource extends JsonResource
             "role" => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
             "permissions" => $this->getAllPermissions(),
         ];
-
-        return parent::toArray($request);
-        
-        // $employee = $this->employee()->withTrashed()->first();
-        // $employee = Employee::withTrashed()->where("id", $employee->id ?? 0)->with("job.department")->first();
-
-        // return [
-        //     "id" => $this->id,
-        //     "name" => $this->name,
-        //     "username" => $this->username,
-        //     "email" => $this->email,
-        //     "is_admin" => $this->is_admin,
-        //     "can_login" => $this->can_login,
-        //     "created_at" => Carbon::parse($this->created_at)->toDateTimeString(),
-        //     "updated_at" => Carbon::parse($this->updated_at)->toDateTimeString(),
-        //     // "employee" => new EmployeeResource($this->employee),
-        //     "employee" => $employee,
-        //     "role" => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
-        //     "permissions" => $this->getAllPermissions()->pluck("name"),
-        // ];
     }
 }

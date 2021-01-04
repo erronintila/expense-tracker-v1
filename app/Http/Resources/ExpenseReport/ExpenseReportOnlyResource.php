@@ -2,10 +2,7 @@
 
 namespace App\Http\Resources\ExpenseReport;
 
-use App\Http\Resources\Payment\PaymentOnlyResource;
-use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Spatie\Activitylog\Models\Activity;
 
 class ExpenseReportOnlyResource extends JsonResource
 {

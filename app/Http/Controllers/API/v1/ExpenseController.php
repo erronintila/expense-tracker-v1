@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Expense\ExpenseIndexResource;
-use App\Http\Resources\Expense\ExpenseOnlyResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Employee;
@@ -437,12 +436,15 @@ class ExpenseController extends Controller
 
                         $expense->restore();
 
-                        log_activity("expense", $expense, 
-                        [ 
-                            "attributes" => ["code" => $expense->code, "restored_at" => $expense->updated_at], 
+                        log_activity(
+                            "expense",
+                            $expense,
+                            [
+                            "attributes" => ["code" => $expense->code, "restored_at" => $expense->updated_at],
                             "custom" => ["link" => "expenses/{$expense->id}"]
-                        ], 
-                        "restored expense record");
+                        ],
+                            "restored expense record"
+                        );
                     }
                 } else {
                     $expense = Expense::withTrashed()->findOrFail($id);
@@ -451,12 +453,15 @@ class ExpenseController extends Controller
 
                     $expense->restore();
 
-                    log_activity("expense", $expense, 
-                    [ 
-                        "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at], 
+                    log_activity(
+                        "expense",
+                        $expense,
+                        [
+                        "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at],
                         "custom" => ["link" => "expenses/{$expense->id}"]
-                    ], 
-                    "restored expense record");
+                    ],
+                        "restored expense record"
+                    );
                 }
 
                 break;
@@ -491,7 +496,7 @@ class ExpenseController extends Controller
                             $query->orWhere("deleted_at", "<>", null);
                         })
                         ->count();
-                    } else {    
+                    } else {
                         $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
                         ->where(function ($query) {
                             $query->where("approved_at", "<>", null);
@@ -545,12 +550,15 @@ class ExpenseController extends Controller
 
                 $expense->save();
 
-                log_activity("expense", $expense, 
-                [ 
-                    "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at], 
+                log_activity(
+                    "expense",
+                    $expense,
+                    [
+                    "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at],
                     "custom" => ["link" => "expenses/{$expense->id}"]
-                ], 
-                "updated expense record");
+                ],
+                    "updated expense record"
+                );
 
                 break;
         }
@@ -609,7 +617,7 @@ class ExpenseController extends Controller
     */
 
     /**
-     * expenses
+     * Get Expenses data
      *
      * @param  mixed $request
      * @return void

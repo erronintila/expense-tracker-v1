@@ -3,9 +3,6 @@
 namespace App\Http\Resources\ExpenseReport;
 
 use App\Http\Resources\Employee\EmployeeOnlyResource;
-use App\Http\Resources\EmployeeResource;
-use App\Http\Resources\Expense\ExpenseOnlyResource;
-use App\Http\Resources\ExpenseResource;
 use App\Http\Resources\Payment\PaymentOnlyResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;

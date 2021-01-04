@@ -80,6 +80,7 @@ class DashboardController extends Controller
                 $q->where("deleted_at", null);
                 $q->where("cancelled_at", null);
             });
+
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
@@ -122,6 +123,7 @@ class DashboardController extends Controller
                 $q->where("deleted_at", null);
                 $q->where("cancelled_at", null);
             });
+
             if (request()->has("employee_id")) {
                 if ($request->employee_id > 0) {
                     $q->where('employee_id', $request->employee_id);
@@ -134,6 +136,7 @@ class DashboardController extends Controller
 
         foreach ($departments as $key => $value) {
             $name = $value["name"];
+
             $total_expenses = 0;
 
             foreach ($value["jobs"] as $key => $value) {

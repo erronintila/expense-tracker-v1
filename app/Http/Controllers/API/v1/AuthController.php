@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
-{    
+{
     /**
-     * register
+     * Register new user
      *
      * @param  mixed $request
      * @return void
@@ -51,7 +51,7 @@ class AuthController extends Controller
     }
     
     /**
-     * login
+     * Login User
      *
      * @param  mixed $request
      * @return void
@@ -66,16 +66,13 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-
             $authenticated_user = Auth::user();
 
             if ($authenticated_user->email_verified_at == null) {
-
                 return response()->json($validator->errors(), 422);
             }
 
             if (!$authenticated_user->can_login) {
-
                 return response()->json($validator->errors(), 422);
             }
 
@@ -99,7 +96,7 @@ class AuthController extends Controller
     }
     
     /**
-     * logout
+     * Logout User
      *
      * @param  mixed $request
      * @return void
@@ -107,7 +104,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->tokens->each(function ($token, $key) {
-
             $token->delete();
         });
 
@@ -118,7 +114,7 @@ class AuthController extends Controller
     }
     
     /**
-     * user
+     * Get Logged in User
      *
      * @param  mixed $request
      * @return void
@@ -129,7 +125,7 @@ class AuthController extends Controller
     }
     
     /**
-     * userPermissions
+     * Get Logged in User Permissions
      *
      * @param  mixed $request
      * @return void

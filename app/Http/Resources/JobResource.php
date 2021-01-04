@@ -36,15 +36,5 @@ class JobResource extends JsonResource
             "department" => new DepartmentResource($this->whenLoaded('department')),
             "employees" => EmployeeResource::collection($this->whenLoaded('employees')),
         ];
-
-        return parent::toArray($request);
-
-        // return [
-        //     "id" => $this->id,
-        //     "name" => $this->name,
-        //     "created_at" => Carbon::parse($this->created_at)->toDateTimeString(),
-        //     "updated_at" => Carbon::parse($this->updated_at)->toDateTimeString(),
-        //     "department" => $this->department,
-        // ];
     }
 }

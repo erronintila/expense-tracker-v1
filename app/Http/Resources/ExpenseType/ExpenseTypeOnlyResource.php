@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources\ExpenseType;
 
-use App\Http\Resources\ExpenseTypeResource;
-use App\Http\Resources\SubType\SubTypeShowResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpenseTypeOnlyResource extends JsonResource

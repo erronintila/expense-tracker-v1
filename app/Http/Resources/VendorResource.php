@@ -46,25 +46,5 @@ class VendorResource extends JsonResource
             "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
             "expense_types" => ExpenseTypeResource::collection($this->whenLoaded('expense_types'))
         ];
-
-        return parent::toArray($request);
-
-        // return [
-        //     "id" => $this->id,
-        //     "code" => $this->code,
-        //     "name" => $this->name,
-        //     "email" => $this->email,
-        //     "tin" => $this->tin,
-        //     "contact_person" => $this->contact_person,
-        //     "mobile_number" => $this->mobile_number,
-        //     "telephone_number" => $this->telephone_number,
-        //     "website" => $this->website,
-        //     "remarks" => $this->remarks,
-        //     "is_vat_inclusive" => $this->is_vat_inclusive,
-        //     "address" => $this->address,
-        //     "created_at" => Carbon::parse($this->created_at)->toDateTimeString(),
-        //     "updated_at" => Carbon::parse($this->updated_at)->toDateTimeString(),
-        //     "expense_types" => $this->expense_types
-        // ];
     }
 }
