@@ -627,7 +627,7 @@ export default {
             let _this = this;
 
             axios
-                .get(`/api/employees/${this.form.employee.id}`)
+                .get(`/api/data/employees?expense_ref=true&employee_id=${this.form.employee.id}`)
                 .then(response => {
                     let data = response.data.data;
                     this.expense_types = data.expense_types;

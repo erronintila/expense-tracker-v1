@@ -662,7 +662,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var _this = this;
 
-      axios.get("/api/employees/".concat(this.form.employee.id)).then(function (response) {
+      axios.get("/api/data/employees?expense_ref=true&employee_id=".concat(this.form.employee.id)).then(function (response) {
         var data = response.data.data;
         _this2.expense_types = data.expense_types;
         console.log(data);

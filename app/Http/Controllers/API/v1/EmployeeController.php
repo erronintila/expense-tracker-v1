@@ -507,6 +507,34 @@ class EmployeeController extends Controller
             return $this->successResponse(Employee::all(), "Retrieved successfully", 200);
         }
 
+        if(request()->has('expense_ref')) {
+            $employee = Employee::with(['job' => function ($query) {
+                $query->withTrashed();
+                $query->with(['department' => function ($query2) {
+                    $query2->withTrashed();
+                }]);
+            }])
+            ->with(['user' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['expense_types' => function ($query) {
+                $query->withTrashed();
+                $query->with(['sub_types' => function ($query) {
+                    $query->withTrashed();
+                }]);
+            }])
+            ->findOrFail($request->employee_id);
+    
+            return response(
+                [
+                    'data' => new EmployeeShowResource($employee),
+    
+                    'message' => 'Retrieved successfully'
+                ],
+                200
+            );
+        }
+
         $employee = Employee::with(['job' => function ($query) {
             $query->withTrashed();
             $query->with(['department' => function ($query2) {

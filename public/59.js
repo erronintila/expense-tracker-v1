@@ -903,9 +903,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -1623,7 +1620,7 @@ var render = function() {
                                     staticClass: "mx-auto",
                                     attrs: {
                                       elevation: hover ? 5 : 2,
-                                      to: { name: "admin.expenses.index" }
+                                      to: { name: "user.expenses.index" }
                                     }
                                   },
                                   [
@@ -1707,12 +1704,7 @@ var render = function() {
                                           "v-btn",
                                           {
                                             staticClass: "ml-0 pl-0",
-                                            attrs: {
-                                              text: "",
-                                              to: {
-                                                name: "admin.employees.index"
-                                              }
-                                            }
+                                            attrs: { text: "" }
                                           },
                                           [
                                             _c("span", [
@@ -1806,7 +1798,7 @@ var render = function() {
                                             attrs: {
                                               text: "",
                                               to: {
-                                                name: "admin.expenses.index"
+                                                name: "user.expenses.index"
                                               }
                                             }
                                           },
@@ -2010,7 +2002,7 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "admin.expense_reports.index"
+                                                          "user.expense_reports.index"
                                                       }
                                                     }
                                                   },
@@ -2092,7 +2084,7 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "admin.expense_reports.index"
+                                                          "user.expense_reports.index"
                                                       }
                                                     }
                                                   },
@@ -2184,7 +2176,7 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "admin.expense_reports.index"
+                                                          "user.expense_reports.index"
                                                       }
                                                     }
                                                   },
@@ -2266,7 +2258,7 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "admin.payments.index"
+                                                          "user.payments.index"
                                                       }
                                                     }
                                                   },
