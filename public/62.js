@@ -468,179 +468,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -707,7 +534,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/data/expense_types?only=true").then(function (response) {
-        // console.log("expense types", response);
         _this.expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -723,7 +549,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return item.id;
         });
         axios.get("/api/data/print_report?by_expense_id=true&ids=".concat(ids)).then(function (response) {
-          // console.log("report by expense", response);
           _this.reports_by_expense = response.data.data;
           resolve();
         })["catch"](function (error) {
@@ -742,7 +567,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return item.id;
         });
         axios.get("/api/data/print_report?by_employee_id=true&ids=".concat(ids)).then(function (response) {
-          // console.log("report by employee", response);
           _this.reports_by_employee = response.data.data;
           resolve();
         })["catch"](function (error) {
@@ -761,7 +585,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return item.id;
         });
         axios.get("/api/data/print_report?by_date=true&ids=".concat(ids)).then(function (response) {
-          // console.log("report by date", response);
           _this.reports_by_date = response.data.data;
           resolve();
         })["catch"](function (error) {
@@ -1087,8 +910,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           TotalAmount: _this6.mixin_formatNumber(table_rows.reduce(function (total, item) {
             return total + item["Total"];
           }, 0))
-        })); // console.log(table_rows.map(item => Object.values(item)));
-
+        }));
         var temp = table_rows.map(function (item) {
           return Object.values(item);
         });
@@ -1103,9 +925,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
 
           return val;
-        }); // console.log("items", itemss);
-        // return;
-
+        });
         var body = [];
         body.push(table_columns);
         itemss.forEach(function (element) {
@@ -1127,10 +947,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             italics: "Roboto-Italic.ttf",
             bolditalics: "Roboto-MediumItalic.ttf"
           }
-        }; // console.log(table_columns);
-        // console.log(table_columns.map(item => "*"));
-        // return;
-
+        };
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: {
@@ -1344,8 +1161,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           TotalAmount: _this7.mixin_formatNumber(table_rows.reduce(function (total, item) {
             return total + item["Total"];
           }, 0))
-        })); // console.log(table_rows.map(item => Object.values(item)));
-
+        }));
         var temp = table_rows.map(function (item) {
           return Object.values(item);
         });
@@ -1360,9 +1176,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
 
           return val;
-        }); // console.log("items", itemss);
-        // return;
-
+        });
         var body = [];
         body.push(table_columns);
         itemss.forEach(function (element) {
@@ -1384,10 +1198,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             italics: "Roboto-Italic.ttf",
             bolditalics: "Roboto-MediumItalic.ttf"
           }
-        }; // console.log(table_columns);
-        // console.log(table_columns.map(item => "*"));
-        // return;
-
+        };
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: {
@@ -1575,7 +1386,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
-          console.log(items);
           resolve({
             items: items,
             total: total
@@ -1590,26 +1400,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    // loadEmployees() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/employees")
-    //         .then(response => {
-    //             _this.employees = response.data.data;
-    //             _this.employees.unshift({
-    //                 id: 0,
-    //                 full_name: "All Employees"
-    //             });
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.selected = [];
@@ -2146,12 +1936,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return today;
     }
   },
-  // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
   created: function created() {
     this.$store.dispatch("AUTH_USER"); // this.loadEmployees();
 

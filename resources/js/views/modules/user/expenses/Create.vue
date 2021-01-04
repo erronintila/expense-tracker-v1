@@ -631,8 +631,6 @@ export default {
                 .then(response => {
                     let data = response.data.data;
                     this.expense_types = data.expense_types;
-
-                    console.log(data);
                 })
                 .catch(error => {
                     console.log(error);
@@ -836,7 +834,6 @@ export default {
                 this.items.splice(index, 1);
         },
         loadSubTypes(e) {
-            console.log(e);
             this.form.sub_type = { id: null, name: "", limit: null };
             this.sub_types = e.sub_types;
             this.sub_types.unshift({ id: null, name: "None", limit: null });

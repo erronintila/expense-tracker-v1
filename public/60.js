@@ -231,133 +231,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -430,14 +303,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.date_range = e;
       this.loadExpenses();
     },
-    // updateEmployee() {
-    //   this.getDataFromApi().then((data) => {
-    //     this.items = data.items;
-    //     this.totalItems = data.total;
-    //   });
-    // },
     loadExpenses: function loadExpenses() {
-      console.log(this.form.employee);
       var start_date = this.date_range[0];
       var end_date = this.date_range[1];
 
@@ -451,8 +317,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           end_date: end_date
         }
       }).then(function (response) {
-        _this.items = response.data.data;
-        console.log("expenses", response.data.data); // _this.total = response.data.total;
+        _this.items = response.data.data; // _this.total = response.data.total;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -460,22 +325,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    // loadEmployees() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/employees")
-    //         .then(response => {
-    //             _this.employees = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -596,18 +445,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
     }
   },
-  //   mounted() {
-  //     this.getDataFromApi().then((data) => {
-  //       this.items = data.items;
-  //       this.totalItems = data.total;
-  //     });
-  //   },
   created: function created() {
     var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this4.loadExpenses();
-    }); // this.loadEmployees();
+    });
   }
 });
 
@@ -649,7 +492,11 @@ var render = function() {
                       staticClass: "subtitle-1 text-center",
                       attrs: { cols: "12" }
                     },
-                    [_vm._v("\n        Loading, Please wait...\n      ")]
+                    [
+                      _vm._v(
+                        "\n                Loading, Please wait...\n            "
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _c(
@@ -731,7 +578,11 @@ var render = function() {
                               _c(
                                 "div",
                                 { staticClass: "overline green--text" },
-                                [_vm._v("BASIC DETAILS")]
+                                [
+                                  _vm._v(
+                                    "\n                            BASIC DETAILS\n                        "
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
                               _c("DateRangePicker", {
@@ -818,11 +669,11 @@ var render = function() {
                                                     { staticClass: "d-inline" },
                                                     [
                                                       _vm._v(
-                                                        "\n                    " +
+                                                        "\n                                        " +
                                                           _vm._s(
                                                             _vm.selected.length
                                                           ) +
-                                                          " Item(s) Selected\n                  "
+                                                          " Item(s)\n                                        Selected\n                                    "
                                                       )
                                                     ]
                                                   ),
@@ -840,7 +691,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        " Clear All Selected "
+                                                        "\n                                        Clear All Selected\n                                    "
                                                       )
                                                     ]
                                                   )
@@ -891,11 +742,11 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("td", [
                                                       _vm._v(
-                                                        "\n                          " +
+                                                        "\n                                                    " +
                                                           _vm._s(
                                                             item.description
                                                           ) +
-                                                          "\n                        "
+                                                          "\n                                                "
                                                       )
                                                     ])
                                                   ]),
@@ -911,11 +762,11 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("td", [
                                                       _vm._v(
-                                                        "\n                          " +
+                                                        "\n                                                    " +
                                                           _vm._s(
                                                             item.receipt_number
                                                           ) +
-                                                          "\n                        "
+                                                          "\n                                                "
                                                       )
                                                     ])
                                                   ]),
@@ -931,13 +782,13 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("td", [
                                                       _vm._v(
-                                                        "\n                          " +
+                                                        "\n                                                    " +
                                                           _vm._s(
                                                             item.vendor == null
                                                               ? ""
                                                               : item.vendor.name
                                                           ) +
-                                                          "\n                        "
+                                                          "\n                                                "
                                                       )
                                                     ])
                                                   ]),
@@ -973,13 +824,13 @@ var render = function() {
                                         var item = ref.item
                                         return [
                                           _vm._v(
-                                            "\n                " +
+                                            "\n                                " +
                                               _vm._s(
                                                 _vm.mixin_getHumanDate(
                                                   item.updated_at
                                                 )
                                               ) +
-                                              "\n              "
+                                              "\n                            "
                                           )
                                         ]
                                       }
@@ -990,13 +841,13 @@ var render = function() {
                                         var item = ref.item
                                         return [
                                           _vm._v(
-                                            "\n                " +
+                                            "\n                                " +
                                               _vm._s(
                                                 _vm.mixin_formatNumber(
                                                   item.amount
                                                 )
                                               ) +
-                                              "\n              "
+                                              "\n                            "
                                           )
                                         ]
                                       }
@@ -1007,14 +858,14 @@ var render = function() {
                                         var item = ref.item
                                         return [
                                           _vm._v(
-                                            "\n                " +
+                                            "\n                                " +
                                               _vm._s(
                                                 _vm.mixin_formatNumber(
                                                   item.amount -
                                                     item.reimbursable_amount
                                                 )
                                               ) +
-                                              "\n              "
+                                              "\n                            "
                                           )
                                         ]
                                       }
@@ -1058,7 +909,7 @@ var render = function() {
                                             },
                                             [
                                               _vm._v(
-                                                "\n                  mdi-eye\n                "
+                                                "\n                                    mdi-eye\n                                "
                                               )
                                             ]
                                           )

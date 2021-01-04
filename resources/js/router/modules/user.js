@@ -131,15 +131,15 @@ const userRoutes = [
                     //     keepAlive: false
                     // }
             },
-            {
-                path: "/expense_reports/print/:id",
-                name: "user.expense_reports.print",
-                component: () =>
-                    import("../../views/modules/user/expense_reports/Print.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
-            },
+            // {
+            //     path: "/expense_reports/print/:id",
+            //     name: "user.expense_reports.print",
+            //     component: () =>
+            //         import("../../views/modules/user/expense_reports/Print.vue"),
+            //         // meta: {
+            //         //     keepAlive: false
+            //         // }
+            // },
             /**
              *
              *

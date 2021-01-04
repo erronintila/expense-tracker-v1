@@ -390,8 +390,6 @@ export default {
                 .get(`/api/data/validateFund?id=${this.id}`)
                 .then(response => {
                     _this.getData();
-
-                    console.log("hello", response);
                 })
                 .catch(error => {
                     console.log(error);

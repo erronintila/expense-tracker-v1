@@ -299,52 +299,7 @@
                                         <td>:</td>
                                         <td>{{ item.is_late_encoded }}</td>
                                     </tr>
-                                    <!--
-                                    <tr>
-                                        <td><strong>Created By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{ item.created.created_by == null ? "" : item.created.created_by.name }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Updated</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.updated.updated_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Updated By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{ item.updated.updated_by == null ? "" : item.updated.updated_by.name }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.deleted">
-                                        <td><strong>Cancelled</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.deleted.deleted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.deleted">
-                                        <td><strong>Cancelled By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{ item.deleted.deleted_by == null ? "" : item.deleted.deleted_by.name }}
-                                        </td>
-                                    </tr> -->
+                                    
                                     <tr v-if="item.remarks">
                                         <td><strong>Remarks</strong></td>
                                         <td>:</td>
@@ -446,27 +401,6 @@
             </v-card-text>
         </v-card>
 
-        <!-- <v-row>
-            <v-col cols="12" md="4">
-                <v-card elevation="0">
-                    <v-card-subtitle>
-                        <div class="green--text">Total Expenses: 0</div>
-                        <div class="green--text">Unreported Expenses: 0</div>
-                        <div class="green--text">Approved Expenses: 0</div>
-                    </v-card-subtitle>
-                </v-card>
-            </v-col>
-            <v-col cols="12" md="4">
-                <v-card elevation="0">
-                    <v-card-title> </v-card-title>
-                    <v-card-subtitle>
-                        <div class="green--text">Total Expenses: 0</div>
-                        <div class="green--text">Unreported Expenses: 0</div>
-                        <div class="green--text">Approved Expenses: 0</div>
-                    </v-card-subtitle>
-                </v-card>
-            </v-col>
-        </v-row> -->
     </div>
 </template>
 
@@ -591,8 +525,6 @@ export default {
                         let total = response.data.meta.total;
 
                         _this.loading = false;
-
-                        console.log(items);
 
                         resolve({ items, total });
                     })

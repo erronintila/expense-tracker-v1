@@ -62,160 +62,6 @@
                                 Expenses
                             </div>
 
-                            <!-- <v-data-table
-                                elevation="0"
-                                v-model="selected"
-                                :headers="headers"
-                                :items="items"
-                                :items-per-page="5"
-                                item-key="id"
-                                show-select
-                                show-expand
-                                single-expand
-                            >
-                                <template
-                                    slot="body.append"
-                                    v-if="items.length > 0"
-                                >
-                                    <tr class="green--text hidden-md-and-up">
-                                        <td class="title">
-                                            Total:
-                                            <strong>{{ total }}</strong>
-                                        </td>
-                                    </tr>
-                                    <tr class="green--text hidden-sm-and-down">
-                                        <td class="title">Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <strong>{{ total }}</strong>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </template>
-                                <template v-slot:[`item.actions`]="{ item }">
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/expenses/${item.id}`
-                                            )
-                                        "
-                                    >
-                                        mdi-eye
-                                    </v-icon>
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/expenses/${item.id}/edit`
-                                            )
-                                        "
-                                    >
-                                        mdi-pencil
-                                    </v-icon>
-                                </template>
-                                <template v-slot:top>
-                                    <v-row>
-                                        <v-spacer></v-spacer>
-
-                                        <v-btn
-                                            class="mr-2"
-                                            :to="{
-                                                name: 'user.expenses.create'
-                                            }"
-                                        >
-                                            New Item
-                                        </v-btn>
-                                    </v-row>
-                                </template>
-                                <template
-                                    v-slot:expanded-item="{ headers, item }"
-                                >
-                                    <td :colspan="headers.length">
-                                        <v-container>
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        <strong
-                                                            >Reimbursable</strong
-                                                        >
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                item.reimbursable_amount
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Code</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>{{ item.code }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong
-                                                            >Description</strong
-                                                        >
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{ item.description }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Remarks</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>{{ item.remarks }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Created</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            mixin_formatDate(
-                                                                item.created_at,
-                                                                "YYYY-MM-DD HH:mm:ss"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr v-if="item.deleted">
-                                                    <td>
-                                                        <strong
-                                                            >Cancelled</strong
-                                                        >
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            mixin_formatDate(
-                                                                item.deleted_at,
-                                                                "YYYY-MM-DD HH:mm:ss"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </v-container>
-                                    </td>
-                                </template>
-                            </v-data-table> -->
-
                             <v-data-table
                                 v-model="selected"
                                 :headers="headers"
@@ -452,12 +298,6 @@ export default {
             this.date_range = e;
             this.loadExpenses(this.form.employee.id);
         },
-        // updateEmployee() {
-        //     this.getDataFromApi().then(data => {
-        //         this.items = data.items;
-        //         this.totalItems = data.total;
-        //     });
-        // },
         getData() {
             let _this = this;
             axios
@@ -586,24 +426,6 @@ export default {
                     );
                 });
         },
-        // loadEmployees() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/employees")
-        //         .then(response => {
-        //             _this.employees = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
@@ -698,8 +520,6 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
-        // this.loadEmployees();
-
         this.getData();
     }
 };

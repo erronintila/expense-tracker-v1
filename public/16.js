@@ -71,8 +71,6 @@ __webpack_require__.r(__webpack_exports__);
     isAdmin: function isAdmin() {
       return this.$store.getters.admin;
     }
-  },
-  mounted: function mounted() {// console.log(this.$store.getters.admin);
   }
 });
 

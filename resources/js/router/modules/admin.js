@@ -799,22 +799,22 @@ const adminRoutes = [
             //             "../../views/modules/admin/expense_reports/Print.vue"
             //         )
             // },
-            {
-                path: "/admin/expense_reports/:id/summary",
-                name: "admin.expense_reports.summary",
-                component: () =>
-                    import(
-                        "../../views/modules/admin/expense_reports/ShowSummary.vue"
-                    )
-            },
-            {
-                path: "/admin/expense_reports/:id/detailed",
-                name: "admin.expense_reports.detailed",
-                component: () =>
-                    import(
-                        "../../views/modules/admin/expense_reports/ShowDetailed.vue"
-                    )
-            },
+            // {
+            //     path: "/admin/expense_reports/:id/summary",
+            //     name: "admin.expense_reports.summary",
+            //     component: () =>
+            //         import(
+            //             "../../views/modules/admin/expense_reports/ShowSummary.vue"
+            //         )
+            // },
+            // {
+            //     path: "/admin/expense_reports/:id/detailed",
+            //     name: "admin.expense_reports.detailed",
+            //     component: () =>
+            //         import(
+            //             "../../views/modules/admin/expense_reports/ShowDetailed.vue"
+            //         )
+            // },
             /**
              *
              *

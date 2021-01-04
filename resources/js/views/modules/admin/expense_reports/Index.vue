@@ -711,8 +711,6 @@ export default {
             axios
                 .get(`/api/data/expense_types?only=true`)
                 .then(response => {
-                    // console.log("expense types", response);
-
                     _this.expense_types = response.data.data;
                 })
                 .catch(error => {
@@ -731,7 +729,6 @@ export default {
                 axios
                     .get(`/api/data/print_report?by_expense_id=true&ids=${ids}`)
                     .then(response => {
-                        // console.log("report by expense", response);
                         _this.reports_by_expense = response.data.data;
                         resolve();
                     })
@@ -755,7 +752,6 @@ export default {
                         `/api/data/print_report?by_employee_id=true&ids=${ids}`
                     )
                     .then(response => {
-                        // console.log("report by employee", response);
                         _this.reports_by_employee = response.data.data;
 
                         resolve();
@@ -778,7 +774,6 @@ export default {
                 axios
                     .get(`/api/data/print_report?by_date=true&ids=${ids}`)
                     .then(response => {
-                        // console.log("report by date", response);
                         _this.reports_by_date = response.data.data;
                         resolve();
                     })
@@ -1180,8 +1175,6 @@ export default {
                     )
                 });
 
-                // console.log(table_rows.map(item => Object.values(item)));
-
                 let temp = table_rows.map(item => Object.values(item));
 
                 let itemss = temp.map(item => {
@@ -1196,8 +1189,6 @@ export default {
 
                     return val;
                 });
-                // console.log("items", itemss);
-                // return;
 
                 let body = [];
                 body.push(table_columns);
@@ -1219,10 +1210,6 @@ export default {
                         bolditalics: "Roboto-MediumItalic.ttf"
                     }
                 };
-
-                // console.log(table_columns);
-                // console.log(table_columns.map(item => "*"));
-                // return;
 
                 let docDefinition = {
                     // pageSize: 'legal',
@@ -1512,8 +1499,6 @@ export default {
                     )
                 });
 
-                // console.log(table_rows.map(item => Object.values(item)));
-
                 let temp = table_rows.map(item => Object.values(item));
 
                 let itemss = temp.map(item => {
@@ -1528,8 +1513,6 @@ export default {
 
                     return val;
                 });
-                // console.log("items", itemss);
-                // return;
 
                 let body = [];
                 body.push(table_columns);
@@ -1551,10 +1534,6 @@ export default {
                         bolditalics: "Roboto-MediumItalic.ttf"
                     }
                 };
-
-                // console.log(table_columns);
-                // console.log(table_columns.map(item => "*"));
-                // return;
 
                 let docDefinition = {
                     // pageSize: 'legal',
@@ -1784,8 +1763,6 @@ export default {
                         let total = response.data.meta.total;
 
                         _this.loading = false;
-
-                        console.log(items);
 
                         resolve({ items, total });
                     })

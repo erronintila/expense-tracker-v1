@@ -64,65 +64,6 @@
 
                     <v-row>
                         <v-col cols="12">
-                            <!-- <v-data-table
-                                elevation="0"
-                                :headers="headers"
-                                :items="items"
-                                item-key="id"
-                                class="elevation-0"
-                            >
-                                <template v-slot:[`item.period`]="{ item }">
-                                    {{ item.from }} ~ {{ item.to }}
-                                </template>
-                                <template v-slot:[`item.actions`]="{ item }">
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/expense_reports/${item.id}`
-                                            )
-                                        "
-                                    >
-                                        mdi-eye
-                                    </v-icon>
-                                </template>
-                                <template v-slot:[`item.created_at`]="{ item }">
-                                    {{
-                                        mixin_formatDate(
-                                            item.created.created_at,
-                                            "YYYY-MM-DD HH:mm:ss"
-                                        )
-                                    }}
-                                </template>
-                                <template v-slot:[`item.total`]="{ item }">
-                                    {{ mixin_formatNumber(item.total) }}
-                                </template>
-                                <template v-slot:[`item.balance`]="{ item }">
-                                    {{ mixin_formatNumber(item.balance) }}
-                                </template>
-                                <template v-slot:top>
-                                    <v-row>
-                                        <v-col>
-                                            <div class="text--secondary">
-                                                Expense Reports
-                                            </div>
-                                        </v-col>
-                                        <v-spacer></v-spacer>
-                                    </v-row>
-                                </template>
-                                <template v-slot:[`item.employee`]="{ item }">
-                                    {{
-                                        item.employee.last_name +
-                                            " " +
-                                            item.employee.first_name +
-                                            " " +
-                                            item.employee.suffix
-                                    }}
-                                </template>
-
-                            </v-data-table> -->
-
                             <v-data-table
                                 :headers="headers"
                                 :items="items"
@@ -337,17 +278,6 @@
                         <v-col cols="12" md="8">
                             Notes : {{ form.notes }}
                         </v-col>
-                        <!-- <v-col cols="12" md="4">
-                            <div class="text-right">
-                                <v-btn
-                                    color="green"
-                                    dark
-                                    @click="cancelPayment"
-                                >
-                                    Cancel Payment
-                                </v-btn>
-                            </div>
-                        </v-col> -->
                     </v-row>
 
                     <v-divider class="mb-4"></v-divider>
@@ -386,13 +316,6 @@
                             </div>
                         </v-col>
                     </v-row>
-
-                    <!-- <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="cancelPayment">
-                            Cancel Payment
-                        </v-btn>
-                    </v-card-actions> -->
                 </v-container>
             </v-form>
         </v-card>

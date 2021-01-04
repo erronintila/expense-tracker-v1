@@ -62,8 +62,5 @@ export default {
             return this.$store.getters.admin;
         }
     },
-    mounted() {
-        // console.log(this.$store.getters.admin);
-    },
 };
 </script>

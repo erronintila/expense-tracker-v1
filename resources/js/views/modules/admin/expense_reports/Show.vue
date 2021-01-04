@@ -894,10 +894,6 @@ export default {
                     }
                 };
 
-                // console.log(table_columns);
-                // console.log(table_columns.map(item => "*"));
-                // return;
-
                 let docDefinition = {
                     // pageSize: 'legal',
                     pageSize: { width: 8.5 * 72, height: 13 * 72 },

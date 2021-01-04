@@ -805,10 +805,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             italics: "Roboto-Italic.ttf",
             bolditalics: "Roboto-MediumItalic.ttf"
           }
-        }; // console.log(table_columns);
-        // console.log(table_columns.map(item => "*"));
-        // return;
-
+        };
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: {

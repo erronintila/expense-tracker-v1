@@ -608,8 +608,6 @@ export default {
 
                         _this.loading = false;
 
-                        console.log(items);
-
                         resolve({ items, total });
                     })
                     .catch(error => {

@@ -95,20 +95,6 @@
                     </template>
 
                     <v-list>
-                        <!-- <v-list-item @click="onUpdate('approve', 'put')">
-                            <v-list-item-title>
-                                Approve Payment(s)
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="onUpdate('release', 'put')">
-                            <v-list-item-title>
-                                Release Payment(s)
-                            </v-list-item-title>
-                        </v-list-item>
-
-                         -->
-
                         <v-list-item @click="onUpdate('receive', 'put')">
                             <v-list-item-icon>
                                 <v-icon>mdi-credit-card-check-outline</v-icon>
@@ -117,30 +103,6 @@
                                 Mark as Received
                             </v-list-item-subtitle>
                         </v-list-item>
-
-                        <!-- <v-list-item @click="onUpdate('cancel', 'delete')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Advance Payment
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <!-- <v-list-item @click="onUpdate('cancel', 'delete')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Cancel Payment Record(s)
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <!-- <v-list-item  @click="onUpdate('complete', 'put')">
-                            <v-list-item-title>
-                                Complete Transaction(s)
-                            </v-list-item-title>
-                        </v-list-item> -->
                     </v-list>
                 </v-menu>
             </v-card-title>
@@ -205,35 +167,6 @@
                                         <td>:</td>
                                         <td>{{ item.remarks }}</td>
                                     </tr>
-                                    <!-- <tr>
-                                        <td><strong>Created at</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.created.created_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.deleted">
-                                        <td><strong>Cancelled</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.deleted.deleted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr> -->
-                                    <!-- <tr>
-                                        <td><strong>Status</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.status.remarks }}</td>
-                                    </tr> -->
                                 </table>
                             </v-container>
                         </td>
@@ -368,28 +301,6 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
-        // loadEmployees() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/employees?only=true")
-        //         .then(response => {
-        //             _this.employees = response.data.data;
-        //             _this.employees.unshift({
-        //                 id: 0,
-        //                 full_name: "All Employees"
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         getDataFromApi() {
             let _this = this;
 
@@ -595,12 +506,6 @@ export default {
             };
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
     created() {
         this.$store.dispatch("AUTH_USER");
         // this.loadEmployees();

@@ -665,7 +665,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/data/employees?expense_ref=true&employee_id=".concat(this.form.employee.id)).then(function (response) {
         var data = response.data.data;
         _this2.expense_types = data.expense_types;
-        console.log(data);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -830,7 +829,6 @@ __webpack_require__.r(__webpack_exports__);
       confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
     },
     loadSubTypes: function loadSubTypes(e) {
-      console.log(e);
       this.form.sub_type = {
         id: null,
         name: "",

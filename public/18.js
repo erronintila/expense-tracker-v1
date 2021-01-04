@@ -411,8 +411,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/data/validateFund?id=".concat(this.id)).then(function (response) {
         _this.getData();
-
-        console.log("hello", response);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

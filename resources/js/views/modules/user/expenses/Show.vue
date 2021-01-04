@@ -550,30 +550,6 @@ export default {
                 });
             // );
         }
-        // loadEmployees() {
-        //     let _this = this;
-
-        //     return new Promise((resolve, reject) => {
-        //         axios
-        //             .get("/api/data/employees")
-        //             .then(response => {
-        //                 _this.employees = response.data.data;
-
-        //                 resolve();
-        //             })
-        //             .catch(error => {
-        //                 console.log(error);
-        //                 console.log(error.response);
-
-        //                 _this.mixin_errorDialog(
-        //                     `Error ${error.response.status}`,
-        //                     error.response.statusText
-        //                 );
-
-        //                 reject();
-        //             });
-        //     });
-        // }
     },
     computed: {
         canEdit() {

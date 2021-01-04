@@ -131,24 +131,6 @@
                             </v-list-item-subtitle>
                         </v-list-item>
 
-                        <!-- <v-list-item @click="onApprove">
-                            <v-list-item-icon>
-                                <v-icon>mdi-file-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Approve Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <!-- <v-list-item @click="onReject">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Reject Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
                         <v-list-item @click="onDelete">
                             <v-list-item-icon>
                                 <v-icon>mdi-close</v-icon>
@@ -157,15 +139,6 @@
                                 Cancel Report(s)
                             </v-list-item-subtitle>
                         </v-list-item>
-
-                        <!-- <v-list-item>
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Payment
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
 
                         <v-list-item @click="onDuplicate">
                             <v-list-item-icon>
@@ -310,128 +283,6 @@
                                         <td>:</td>
                                         <td>{{ item.is_late_approved }}</td>
                                     </tr>
-                                    <!-- <tr>
-                                        <td><strong>Created</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.created.created_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Created By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.created.created_by == null
-                                                    ? ""
-                                                    : item.created.created_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Updated</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.updated.updated_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Updated By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.updated.updated_by == null
-                                                    ? ""
-                                                    : item.updated.updated_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.submitted">
-                                        <td><strong>Submitted</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.submitted.submitted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.submitted">
-                                        <td><strong>Submitted By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.submitted.submitted_by ==
-                                                null
-                                                    ? ""
-                                                    : item.submitted
-                                                          .submitted_by.name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.approved">
-                                        <td><strong>Approved</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.approved.approved_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.approved">
-                                        <td><strong>Approved By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.approved.approved_by ==
-                                                null
-                                                    ? ""
-                                                    : item.approved.approved_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.deleted">
-                                        <td><strong>Cancelled</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.deleted.deleted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.deleted">
-                                        <td><strong>Cancelled By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.deleted.deleted_by == null
-                                                    ? ""
-                                                    : item.deleted.deleted_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr> -->
                                 </table>
                             </v-container>
                         </td>
@@ -529,16 +380,6 @@
                     </v-col>
                     <v-col cols="12" md="4">
                         <div class="text-right">
-                            <!-- <v-btn @click="onPrint('print', 'expense')">
-                            Print By Expense
-                        </v-btn>
-                        <v-btn @click="onPrint('print', 'employee')">
-                            Print By Employee
-                        </v-btn>
-                        <v-btn @click="onPrint('print', 'date')">
-                            Print By Date
-                        </v-btn> -->
-
                             <v-menu offset-y>
                                 <template v-slot:activator="{ attrs, on }">
                                     <v-btn
@@ -558,14 +399,7 @@
                                             >Group by expense</v-list-item-title
                                         >
                                     </v-list-item>
-                                    <!-- <v-list-item
-                                        @click="onPrint('print', 'employee')"
-                                    >
-                                        <v-list-item-title
-                                            >Group by
-                                            employee</v-list-item-title
-                                        >
-                                    </v-list-item> -->
+                                   
                                     <v-list-item
                                         @click="onPrint('print', 'date')"
                                     >
@@ -594,14 +428,7 @@
                                             >Group by expense</v-list-item-title
                                         >
                                     </v-list-item>
-                                    <!-- <v-list-item
-                                        @click="onPrint('pdf', 'employee')"
-                                    >
-                                        <v-list-item-title
-                                            >Group by
-                                            employee</v-list-item-title
-                                        >
-                                    </v-list-item> -->
+                                    
                                     <v-list-item
                                         @click="onPrint('pdf', 'date')"
                                     >
@@ -700,7 +527,6 @@ export default {
             axios
                 .get(`/api/data/expense_types?only=true`)
                 .then(response => {
-                    // console.log("expense types", response);
 
                     _this.expense_types = response.data.data;
                 })
@@ -720,7 +546,6 @@ export default {
                 axios
                     .get(`/api/data/print_report?by_expense_id=true&ids=${ids}`)
                     .then(response => {
-                        // console.log("report by expense", response);
                         _this.reports_by_expense = response.data.data;
                         resolve();
                     })
@@ -744,7 +569,6 @@ export default {
                         `/api/data/print_report?by_employee_id=true&ids=${ids}`
                     )
                     .then(response => {
-                        // console.log("report by employee", response);
                         _this.reports_by_employee = response.data.data;
 
                         resolve();
@@ -767,7 +591,6 @@ export default {
                 axios
                     .get(`/api/data/print_report?by_date=true&ids=${ids}`)
                     .then(response => {
-                        // console.log("report by date", response);
                         _this.reports_by_date = response.data.data;
                         resolve();
                     })
@@ -1169,8 +992,6 @@ export default {
                     )
                 });
 
-                // console.log(table_rows.map(item => Object.values(item)));
-
                 let temp = table_rows.map(item => Object.values(item));
 
                 let itemss = temp.map(item => {
@@ -1185,8 +1006,6 @@ export default {
 
                     return val;
                 });
-                // console.log("items", itemss);
-                // return;
 
                 let body = [];
                 body.push(table_columns);
@@ -1208,10 +1027,6 @@ export default {
                         bolditalics: "Roboto-MediumItalic.ttf"
                     }
                 };
-
-                // console.log(table_columns);
-                // console.log(table_columns.map(item => "*"));
-                // return;
 
                 let docDefinition = {
                     // pageSize: 'legal',
@@ -1501,8 +1316,6 @@ export default {
                     )
                 });
 
-                // console.log(table_rows.map(item => Object.values(item)));
-
                 let temp = table_rows.map(item => Object.values(item));
 
                 let itemss = temp.map(item => {
@@ -1517,8 +1330,6 @@ export default {
 
                     return val;
                 });
-                // console.log("items", itemss);
-                // return;
 
                 let body = [];
                 body.push(table_columns);
@@ -1540,10 +1351,6 @@ export default {
                         bolditalics: "Roboto-MediumItalic.ttf"
                     }
                 };
-
-                // console.log(table_columns);
-                // console.log(table_columns.map(item => "*"));
-                // return;
 
                 let docDefinition = {
                     // pageSize: 'legal',
@@ -1774,8 +1581,6 @@ export default {
 
                         _this.loading = false;
 
-                        console.log(items);
-
                         resolve({ items, total });
                     })
                     .catch(error => {
@@ -1791,28 +1596,6 @@ export default {
                     });
             });
         },
-        // loadEmployees() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/employees")
-        //         .then(response => {
-        //             _this.employees = response.data.data;
-        //             _this.employees.unshift({
-        //                 id: 0,
-        //                 full_name: "All Employees"
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
 
@@ -2430,12 +2213,6 @@ export default {
             return today;
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
     created() {
         this.$store.dispatch("AUTH_USER");
         // this.loadEmployees();
