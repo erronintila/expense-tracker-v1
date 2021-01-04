@@ -40,6 +40,5 @@ export default {
     created() {
         this.getData();
     },
-    mounted() {}
 };
 </script>

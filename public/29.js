@@ -370,13 +370,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         query: this.search
       }, "query", this.status));
     }
-  } // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
-
+  }
 });
 
 /***/ }),

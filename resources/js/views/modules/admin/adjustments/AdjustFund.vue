@@ -29,17 +29,6 @@
                             </v-autocomplete>
                         </v-col>
 
-                        <!-- <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="amount"
-                                label="Amount"
-                                :hint="
-                                    `Fund: ${employee.fund} ~ Remaining : ${employee.remaining_fund}`
-                                "
-                                persistent-hint
-                            >
-                            </v-text-field>
-                        </v-col> -->
                     </v-row>
 
                     <v-row>
