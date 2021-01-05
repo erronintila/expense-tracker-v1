@@ -394,7 +394,7 @@ class ExpenseReportController extends Controller
                     ->whereHas("payments")->count();
 
                 if ($paid > 0) {
-                    return response("Expense Report has payment records", 422);
+                    return $this->errorResponse("Expense Report has payment records", 422);
                 }
 
                 // // Prevent submit if expense report has been submitted or approved or cancelled
@@ -451,7 +451,7 @@ class ExpenseReportController extends Controller
                     ->whereHas("payments")->count();
 
                 if ($paid > 0) {
-                    return response("Expense Report has payment records", 422);
+                    return $this->errorResponse("Expense Report has payment records", 422);
                 }
 
                 // // Prevent approve if expense report has been approved or cancelled
@@ -492,7 +492,7 @@ class ExpenseReportController extends Controller
                     ->whereHas("payments")->count();
 
                 if ($paid > 0) {
-                    return response("Expense Report has payment records", 422);
+                    return $this->errorResponse("Expense Report has payment records", 422);
                 }
 
                 // // Prevent approve if expense report has been approved or cancelled
@@ -537,7 +537,7 @@ class ExpenseReportController extends Controller
                     ->whereHas("payments")->count();
 
                 if ($paid > 0) {
-                    return response("Expense Report has payment records", 422);
+                    return $this->errorResponse("Expense Report has payment records", 422);
                 }
 
                 // // Prevent approve if expense report has been approved or cancelled
@@ -723,11 +723,11 @@ class ExpenseReportController extends Controller
                         return $this->errorResponse("Expense Report can't be edited.", 422);
                     }
                     // if ($expense_report->approved_at !== null || $expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
-                    //     return response("Action can't be performed", 422);
+                    //     return $this->errorResponse("Action can't be performed", 422);
                     // }
 
                     // if ($expense_report->payment_id > 0) {
-                    //     return response("Expense Report already has payment", 422);
+                    //     return $this->errorResponse("Expense Report already has payment", 422);
                     // }
                 }
 
@@ -812,7 +812,7 @@ class ExpenseReportController extends Controller
             ->where("deleted_at", "<>", null)->count();
 
         if ($deleted > 0) {
-            return response("Expense Report has already been cancelled", 422);
+            return $this->errorResponse("Expense Report has already been cancelled", 422);
         }
 
         //check if has payment
@@ -820,7 +820,7 @@ class ExpenseReportController extends Controller
             ->whereHas("payments")->count();
 
         if ($paid > 0) {
-            return response("Expense Report has payment records", 422);
+            return $this->errorResponse("Expense Report has payment records", 422);
         }
 
         if (request()->has("ids")) {
