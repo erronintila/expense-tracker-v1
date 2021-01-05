@@ -351,17 +351,58 @@ class ExpenseReportController extends Controller
 
             case 'submit':
 
+                // check if user is allowed to submit
                 if (!app("auth")->user()->hasPermissionTo('submit expense reports')) {
                     abort(403);
                 }
+                
+                // check if deleted/cancelled
+                $deleted = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("deleted_at", "<>", null)->count();
 
-                // // Prevent submit if expense report has been submitted or approved or cancelled
+                if ($deleted > 0) {
+                    return $this->errorResponse("Expense Report has already been cancelled.", 422);
+                }
+
+                // check if rejected
+                $rejected = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("rejected_at", "<>", null)->count();
+
+                if ($rejected > 0) {
+                    return $this->errorResponse("Expense Report has already been rejected.", 422);
+                }
+
+                // check if approved
+                $approved = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("rejected_at", "<>", null)->count();
+
+                if ($approved > 0) {
+                    return $this->errorResponse("Expense Report has already been approved.", 422);
+                }
+
+                // check if submitted
                 $submitted = ExpenseReport::whereIn("id", $request->ids)
                     ->where("submitted_at", "<>", null)->count();
 
                 if ($submitted > 0) {
                     return $this->errorResponse("Expense Report has already been submitted.", 422);
                 }
+
+                // check if has payment
+                $paid = ExpenseReport::whereIn("id", $request->ids)
+                    ->whereHas("payments")->count();
+
+                if ($paid > 0) {
+                    return response("Expense Report has payment records", 422);
+                }
+
+                // // Prevent submit if expense report has been submitted or approved or cancelled
+                // $submitted = ExpenseReport::whereIn("id", $request->ids)
+                //     ->where("submitted_at", "<>", null)->count();
+
+                // if ($submitted > 0) {
+                //     return $this->errorResponse("Expense Report has already been submitted.", 422);
+                // }
 
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
@@ -375,17 +416,50 @@ class ExpenseReportController extends Controller
 
             case 'approve':
 
+                // check if user is allowed to approve
                 if (!app("auth")->user()->hasPermissionTo('approve expense reports')) {
                     abort(403);
                 }
 
-                // // Prevent approve if expense report has been approved or cancelled
+                // check if deleted/cancelled
+                $deleted = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("deleted_at", "<>", null)->count();
+
+                if ($deleted > 0) {
+                    return $this->errorResponse("Expense Report has already been cancelled.", 422);
+                }
+
+                // check if rejected
+                $rejected = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("rejected_at", "<>", null)->count();
+
+                if ($rejected > 0) {
+                    return $this->errorResponse("Expense Report has already been rejected.", 422);
+                }
+
+                // check if approved
                 $approved = ExpenseReport::whereIn("id", $request->ids)
-                    ->where("approved_at", "<>", null)->count();
+                    ->where("rejected_at", "<>", null)->count();
 
                 if ($approved > 0) {
                     return $this->errorResponse("Expense Report has already been approved.", 422);
                 }
+
+                // check if has payment
+                $paid = ExpenseReport::whereIn("id", $request->ids)
+                    ->whereHas("payments")->count();
+
+                if ($paid > 0) {
+                    return response("Expense Report has payment records", 422);
+                }
+
+                // // Prevent approve if expense report has been approved or cancelled
+                // $approved = ExpenseReport::whereIn("id", $request->ids)
+                //     ->where("approved_at", "<>", null)->count();
+
+                // if ($approved > 0) {
+                //     return $this->errorResponse("Expense Report has already been approved.", 422);
+                // }
 
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
@@ -399,17 +473,34 @@ class ExpenseReportController extends Controller
 
             case 'cancel':
 
+                // check if user is allowed to cancel
                 if (!app("auth")->user()->hasPermissionTo('cancel expense reports')) {
                     abort(403);
                 }
 
-                // // Prevent approve if expense report has been approved or cancelled
-                $cancelled = ExpenseReport::whereIn("id", $request->ids)
-                    ->where("cancelled_at", "<>", null)->count();
+                // check if deleted/cancelled
+                $deleted = ExpenseReport::whereIn("id", $request->ids)
+                    ->where("deleted_at", "<>", null)->count();
 
-                if ($cancelled > 0) {
+                if ($deleted > 0) {
                     return $this->errorResponse("Expense Report has already been cancelled.", 422);
                 }
+
+                // check if has payment
+                $paid = ExpenseReport::whereIn("id", $request->ids)
+                    ->whereHas("payments")->count();
+
+                if ($paid > 0) {
+                    return response("Expense Report has payment records", 422);
+                }
+
+                // // Prevent approve if expense report has been approved or cancelled
+                // $cancelled = ExpenseReport::whereIn("id", $request->ids)
+                //     ->where("cancelled_at", "<>", null)->count();
+
+                // if ($cancelled > 0) {
+                //     return $this->errorResponse("Expense Report has already been cancelled.", 422);
+                // }
 
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
@@ -427,17 +518,34 @@ class ExpenseReportController extends Controller
 
             case 'reject':
 
+                // check if user is allowed to reject
                 if (!app("auth")->user()->hasPermissionTo('reject expense reports')) {
                     abort(403);
                 }
 
-                // // Prevent approve if expense report has been approved or cancelled
+                // check if rejected
                 $rejected = ExpenseReport::whereIn("id", $request->ids)
                     ->where("rejected_at", "<>", null)->count();
 
                 if ($rejected > 0) {
                     return $this->errorResponse("Expense Report has already been rejected.", 422);
                 }
+
+                // check if has payment
+                $paid = ExpenseReport::whereIn("id", $request->ids)
+                    ->whereHas("payments")->count();
+
+                if ($paid > 0) {
+                    return response("Expense Report has payment records", 422);
+                }
+
+                // // Prevent approve if expense report has been approved or cancelled
+                // $rejected = ExpenseReport::whereIn("id", $request->ids)
+                //     ->where("rejected_at", "<>", null)->count();
+
+                // if ($rejected > 0) {
+                //     return $this->errorResponse("Expense Report has already been rejected.", 422);
+                // }
 
                 foreach ($request->ids as $id) {
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
@@ -467,6 +575,7 @@ class ExpenseReportController extends Controller
 
             case 'duplicate':
 
+                // check if user is allowed to duplicate
                 if (!app("auth")->user()->hasPermissionTo('duplicate expense reports')) {
                     abort(403);
                 }
@@ -515,27 +624,7 @@ class ExpenseReportController extends Controller
 
                         $new_expense->code = generate_code(ExpenseReport::class, "EXP", 10);
 
-                        $new_expense->submitted_at = null;
-
-                        $new_expense->reviewed_at = null;
-
-                        $new_expense->approved_at = null;
-
-                        $new_expense->rejected_at = null;
-
-                        $new_expense->cancelled_at = null;
-
                         $new_expense->deleted_at = null;
-
-                        $new_expense->submitted_by = null;
-
-                        $new_expense->reviewed_by = null;
-
-                        $new_expense->approved_by = null;
-
-                        $new_expense->rejected_by = null;
-
-                        $new_expense->cancelled_by = null;
 
                         $new_expense->deleted_by = null;
 
@@ -583,6 +672,7 @@ class ExpenseReportController extends Controller
 
             default:
 
+                // check if user is allowed to edit
                 if (!app("auth")->user()->hasPermissionTo('edit expense reports')) {
                     abort(403);
                 }
@@ -707,11 +797,20 @@ class ExpenseReportController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        // check if deleted/cancelled
         $deleted = ExpenseReport::whereIn("id", $request->ids)
             ->where("deleted_at", "<>", null)->count();
 
         if ($deleted > 0) {
             return response("Expense Report has already been cancelled", 422);
+        }
+
+        //check if has payment
+        $paid = ExpenseReport::whereIn("id", $request->ids)
+            ->whereHas("payments")->count();
+
+        if ($paid > 0) {
+            return response("Expense Report has payment records", 422);
         }
 
         if (request()->has("ids")) {

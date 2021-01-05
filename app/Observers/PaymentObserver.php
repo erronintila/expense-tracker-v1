@@ -90,24 +90,24 @@ class PaymentObserver
      */
     public function deleting(Payment $payment)
     {
-        if ($payment->received_at !== null) {
+        // if ($payment->received_at !== null) {
 
-            foreach ($payment->expense_reports as $expense_report) {
+        //     foreach ($payment->expense_reports as $expense_report) {
 
-                foreach ($expense_report->expenses as $expense) {
+        //         foreach ($expense_report->expenses as $expense) {
 
-                    $expense_amount = $expense->amount - $expense->reimbursable_amount;
+        //             $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                    $expense->employee->remaining_fund -= $expense_amount;
+        //             $expense->employee->remaining_fund -= $expense_amount;
 
-                    $expense->employee->save();
-                }
-            }
-        }
+        //             $expense->employee->save();
+        //         }
+        //     }
+        // }
 
-        $payment->deleted_by = Auth::id();
+        // $payment->deleted_by = Auth::id();
 
-        $payment->save();
+        // $payment->save();
     }
 
     /**

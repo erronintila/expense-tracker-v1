@@ -489,6 +489,19 @@ class PaymentController extends Controller
                 $payment = Payment::withTrashed()->findOrFail($id);
 
                 foreach ($payment->expense_reports as $expense_report) {
+                    if ($payment->received_at !== null) {
+                        foreach ($payment->expense_reports as $expense_report) {
+                            foreach ($expense_report->expenses as $expense) {
+                                $expense_amount = $expense->amount - $expense->reimbursable_amount;
+
+                                $expense->employee->remaining_fund -= $expense_amount;
+
+                                $expense->employee->save();
+                            }
+                        }
+                    }
+
+                    $payment->deleted_by = Auth::id();
 
                     log_activity(
                         "expense_report",
@@ -509,6 +522,21 @@ class PaymentController extends Controller
             $payment = Payment::withTrashed()->findOrFail($id);
 
             foreach ($payment->expense_reports as $expense_report) {
+
+                if ($payment->received_at !== null) {
+                    foreach ($payment->expense_reports as $expense_report) {
+                        foreach ($expense_report->expenses as $expense) {
+                            $expense_amount = $expense->amount - $expense->reimbursable_amount;
+
+                            $expense->employee->remaining_fund -= $expense_amount;
+
+                            $expense->employee->save();
+                        }
+                    }
+                }
+
+                $payment->deleted_by = Auth::id();
+                
                 log_activity(
                     "expense_report",
                     $expense_report,

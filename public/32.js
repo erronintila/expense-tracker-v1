@@ -1,14 +1,25 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[32],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -339,99 +350,160 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
   data: function data() {
     return {
-      loader: true,
-      panel: [0, 1],
+      loading: true,
+      loader: false,
       valid: false,
-      menu: false,
-      jobs: [],
-      permissions: [],
-      // expense_types: [],
-      selected: [],
-      // selected_expense_types: [],
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
+      preset: "",
+      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       headers: [{
-        text: "Permission",
-        value: "name",
+        text: "Date",
+        value: "date"
+      }, {
+        text: "Type",
+        value: "expense_type.name"
+      }, {
+        text: "Receipt",
+        value: "receipt_number"
+      }, {
+        text: "Vendor",
+        value: "vendor.name"
+      }, {
+        text: "Amount",
+        value: "amount"
+      }, {
+        text: "Actions",
+        value: "actions",
         sortable: false
+      }, {
+        text: "",
+        value: "data-table-expand"
       }],
+      items: [],
+      selected: [],
+      employees: [],
+      expenses: [],
+      total: 0,
+      totalItems: 0,
+      options: {
+        sortBy: ["created_at"],
+        sortDesc: [true],
+        page: 1,
+        itemsPerPage: 10
+      },
       form: {
-        code: null,
-        first_name: null,
-        middle_name: "",
-        last_name: null,
-        suffix: "",
-        gender: null,
-        birthdate: null,
-        job: null,
-        mobile_number: null,
-        telephone_number: "",
-        email: null,
-        address: null,
-        role: "Standard User",
-        username: "",
-        can_login: true
+        code: "",
+        description: "",
+        remarks: "",
+        notes: "",
+        employee: {
+          id: 0,
+          remaining_fund: 0,
+          fund: 0
+        }
       },
       errors: {
+        date_range: [],
         code: [],
-        first_name: [],
-        middle_name: [],
-        last_name: [],
-        suffix: [],
-        gender: [],
-        birthdate: [],
-        job: [],
-        mobile_number: [],
-        telephone_number: [],
-        email: [],
-        address: [],
-        username: [],
-        role: [],
-        can_login: []
+        description: [],
+        remarks: [],
+        notes: [],
+        employee: [],
+        expenses: []
       }
     };
   },
   methods: {
-    getData: function getData() {
-      var _this = this;
-
-      this.loadPermissions().then(axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.first_name = data.first_name;
-        _this.form.middle_name = data.middle_name;
-        _this.form.last_name = data.last_name;
-        _this.form.suffix = data.suffix;
-        _this.form.gender = data.gender;
-        _this.form.birthdate = data.birthdate;
-        _this.form.job = data.job.id;
-        _this.form.mobile_number = data.mobile_number;
-        _this.form.telephone_number = data.telephone_number;
-        _this.form.email = data.email;
-        _this.form.address = data.address;
-        _this.selected = data.user.permissions;
-        _this.form.role = data.user.role[0];
-        _this.form.username = data.user.username;
-        _this.form.can_login = data.user.can_login; // _this.selected_expense_types = data.expense_types.map(
-        //     item => item.id
-        // );
-
-        _this.loader = false;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-        _this.loader = false;
-      }));
+    updateDates: function updateDates(e) {
+      this.date_range = e; // this.loadExpenses();
     },
-    loadJobs: function loadJobs() {
+    updateEmployee: function updateEmployee() {
+      var _this2 = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this2.items = data.items;
+        _this2.totalItems = data.total;
+      });
+    },
+    loadExpenses: function loadExpenses() {
+      var start_date = this.date_range[0];
+      var end_date = this.date_range[1];
+
       var _this = this;
 
-      axios.get("/api/data/jobs?only=true").then(function (response) {
-        _this.jobs = response.data.data;
+      axios.get("/api/data/expenses", {
+        params: {
+          create_report: true,
+          employee_id: _this.form.employee.id,
+          start_date: start_date,
+          end_date: end_date
+        }
+      }).then(function (response) {
+        _this.items = response.data.data; // _this.total = response.data.total;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -439,84 +511,53 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    // loadExpenseTypes() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/expense_types?only=true")
-    //         .then(response => {
-    //             _this.expense_types = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
-    loadPermissions: function loadPermissions() {
+    loadEmployees: function loadEmployees() {
       var _this = this;
 
+      axios.get("/api/data/employees").then(function (response) {
+        _this.employees = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      });
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this3 = this;
+
+      var _this = this;
+
+      _this.loading = true;
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/permissions").then(function (response) {
-          _this.permissions = response.data;
-          resolve();
-        })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          reject();
-        });
-      });
-    },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
-    changeRole: function changeRole() {
-      if (this.form.role == "Administrator") {
-        this.selected = this.permissions;
-      } else {
-        this.selected = [];
-      }
-    },
-    onSave: function onSave() {
-      var _this = this;
-
-      _this.$refs.form.validate();
-
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
-        axios.put("/api/employees/" + _this.$route.params.id, {
-          action: "update",
-          code: _this.form.code,
-          first_name: _this.form.first_name,
-          middle_name: _this.form.middle_name,
-          last_name: _this.form.last_name,
-          suffix: _this.form.suffix,
-          gender: _this.form.gender,
-          birthdate: _this.form.birthdate,
-          job_id: _this.form.job,
-          mobile_number: _this.form.mobile_number,
-          telephone_number: _this.form.telephone_number,
-          email: _this.form.email,
-          address: _this.form.address,
-          username: _this.form.username,
-          can_login: _this.form.can_login,
-          role: _this.form.role,
-          permissions: _this.selected // expense_types: _this.selected_expense_types
-
+        var _this3$options = _this3.options,
+            sortBy = _this3$options.sortBy,
+            sortDesc = _this3$options.sortDesc,
+            page = _this3$options.page,
+            itemsPerPage = _this3$options.itemsPerPage;
+        var range = _this.date_range;
+        var employee_id = _this.form.employee.id;
+        axios.get("/api/expenses", {
+          params: {
+            page: page,
+            itemsPerPage: itemsPerPage,
+            start_date: range[0],
+            end_date: range[1],
+            employee_id: employee_id,
+            expense_report_id: null,
+            update_report: true
+          }
         }).then(function (response) {
-          _this.$dialog.message.success("Employee updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          }); // _this.$store.dispatch("AUTH_USER");
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this.loading = false; // let selected = items.filter(function(item) {
+          //     return item.expense_report !== null;
+          // });
+          // _this.selected.splice(0, 0, ...selected);
 
-
-          _this.$router.push({
-            name: "admin.employees.index"
+          resolve({
+            items: items,
+            total: total
           });
         })["catch"](function (error) {
           console.log(error);
@@ -524,30 +565,96 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
-          if (error.response) {
-            if (error.response.data) {
-              _this.errors = error.response.data.errors;
-            }
-          }
+          _this.loading = false;
+        });
+      });
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
+    onSave: function onSave() {
+      var _this = this;
+
+      _this.$refs.form.validate();
+
+      if (_this.selected.length == 0) {
+        _this.$dialog.message.error("No Expenses selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+
+        return;
+      }
+
+      if (_this.$refs.form.validate()) {
+        _this.loader = true;
+        axios.post("/api/expense_reports", {
+          code: _this.form.code,
+          description: _this.form.description,
+          remarks: _this.form.remarks,
+          notes: _this.form.notes,
+          employee_id: _this.form.employee.id,
+          expenses: _this.selected
+        }).then(function (response) {
+          _this.$dialog.message.success("Expense Report created successfully.", {
+            position: "top-right",
+            timeout: 2000
+          }); // _this.$store.dispatch("AUTH_USER");
+
+
+          _this.$router.push({
+            name: "admin.expense_reports.index"
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
         });
         return;
       }
     }
   },
+  watch: {
+    params: {
+      handler: function handler() {
+        var _this4 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this4.items = data.items;
+          _this4.totalItems = data.total;
+        });
+      },
+      deep: true
+    },
+    selected: function selected() {
+      this.total = this.selected.reduce(function (total, item) {
+        return total + item.amount;
+      }, 0);
+    }
+  },
+  computed: {
+    params: function params(nv) {
+      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+        query: this.date_range
+      }, "query", this.form.employee.id));
+    },
+    default_description: function default_description() {
+      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
+    }
+  },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-    this.loadJobs(); // this.loadExpenseTypes();
-
-    this.getData();
+    this.loadEmployees(); // this.loadExpenses();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&":
-/*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b& ***!
-  \**************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=template&id=6558507a&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=template&id=6558507a& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -633,699 +740,468 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
-                  _c("h4", { staticClass: "title success--text" }, [
-                    _vm._v("Edit Employee")
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("New Expense Report")
                   ])
                 ],
                 1
               ),
               _vm._v(" "),
               _c(
-                "v-form",
-                {
-                  ref: "form",
-                  model: {
-                    value: _vm.valid,
-                    callback: function($$v) {
-                      _vm.valid = $$v
-                    },
-                    expression: "valid"
-                  }
-                },
+                "v-container",
                 [
                   _c(
-                    "v-expansion-panels",
-                    {
-                      attrs: { flat: "", multiple: "" },
-                      model: {
-                        value: _vm.panel,
-                        callback: function($$v) {
-                          _vm.panel = $$v
-                        },
-                        expression: "panel"
-                      }
-                    },
+                    "v-card",
+                    { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
                     [
                       _c(
-                        "v-expansion-panel",
-                        [
-                          _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "overline green--text" }, [
-                              _vm._v(
-                                "\n                            Basic Details\n                        "
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-expansion-panel-content",
-                            [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-autocomplete", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required,
-                                          items: _vm.jobs,
-                                          "error-messages": _vm.errors.job_id,
-                                          "item-text": "name",
-                                          "item-value": "id",
-                                          label: "Job Designation *",
-                                          required: ""
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.job_id = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.job,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "job", $$v)
-                                          },
-                                          expression: "form.job"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(100)
-                                          ),
-                                          counter: 100,
-                                          "error-messages": _vm.errors.code,
-                                          label: "Code *",
-                                          required: ""
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.code = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.code,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "code", $$v)
-                                          },
-                                          expression: "form.code"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(100)
-                                          ),
-                                          counter: 100,
-                                          "error-messages":
-                                            _vm.errors.first_name,
-                                          label: "First Name *",
-                                          required: ""
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.first_name = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.first_name,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "first_name",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.first_name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: [],
-                                          counter: 100,
-                                          "error-messages":
-                                            _vm.errors.middle_name,
-                                          label: "Middle Name"
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.middle_name = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.middle_name,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "middle_name",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.middle_name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(100)
-                                          ),
-                                          counter: 100,
-                                          "error-messages":
-                                            _vm.errors.last_name,
-                                          label: "Last Name *",
-                                          required: ""
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.last_name = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.last_name,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "last_name", $$v)
-                                          },
-                                          expression: "form.last_name"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-combobox", {
-                                        attrs: {
-                                          rules: [],
-                                          counter: 30,
-                                          items: ["Jr", "Sr", "II", "III"],
-                                          "error-messages": _vm.errors.suffix,
-                                          label: "Suffix"
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.suffix = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.suffix,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "suffix", $$v)
-                                          },
-                                          expression: "form.suffix"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-select", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required,
-                                          items: ["Male", "Female"],
-                                          "error-messages": _vm.errors.gender,
-                                          label: "Gender *",
-                                          required: ""
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.gender = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.gender,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "gender", $$v)
-                                          },
-                                          expression: "form.gender"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c(
-                                        "v-menu",
-                                        {
-                                          ref: "menu",
-                                          attrs: {
-                                            "close-on-content-click": false,
-                                            transition: "scale-transition",
-                                            "offset-y": "",
-                                            "min-width": "290px"
-                                          },
-                                          scopedSlots: _vm._u([
-                                            {
-                                              key: "activator",
-                                              fn: function(ref) {
-                                                var on = ref.on
-                                                var attrs = ref.attrs
-                                                return [
-                                                  _c(
-                                                    "v-text-field",
-                                                    _vm._g(
-                                                      _vm._b(
-                                                        {
-                                                          attrs: {
-                                                            rules:
-                                                              _vm
-                                                                .mixin_validation
-                                                                .required,
-                                                            "error-messages":
-                                                              _vm.errors
-                                                                .birthdate,
-                                                            label:
-                                                              "Birthdate *",
-                                                            readonly: ""
-                                                          },
-                                                          on: {
-                                                            input: function(
-                                                              $event
-                                                            ) {
-                                                              _vm.errors.birthdate = []
-                                                            }
-                                                          },
-                                                          model: {
-                                                            value:
-                                                              _vm.form
-                                                                .birthdate,
-                                                            callback: function(
-                                                              $$v
-                                                            ) {
-                                                              _vm.$set(
-                                                                _vm.form,
-                                                                "birthdate",
-                                                                $$v
-                                                              )
-                                                            },
-                                                            expression:
-                                                              "form.birthdate"
-                                                          }
-                                                        },
-                                                        "v-text-field",
-                                                        attrs,
-                                                        false
-                                                      ),
-                                                      on
-                                                    )
-                                                  )
-                                                ]
-                                              }
-                                            }
-                                          ]),
-                                          model: {
-                                            value: _vm.menu,
-                                            callback: function($$v) {
-                                              _vm.menu = $$v
-                                            },
-                                            expression: "menu"
-                                          }
-                                        },
-                                        [
-                                          _vm._v(" "),
-                                          _c("v-date-picker", {
-                                            attrs: {
-                                              "no-title": "",
-                                              scrollable: "",
-                                              color: "success"
-                                            },
-                                            model: {
-                                              value: _vm.form.birthdate,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.form,
-                                                  "birthdate",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "form.birthdate"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required,
-                                          counter: 30,
-                                          "error-messages":
-                                            _vm.errors.mobile_number,
-                                          label: "Mobile Number *",
-                                          type: "number"
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.mobile_number = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.mobile_number,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "mobile_number",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.mobile_number"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: [],
-                                          counter: 30,
-                                          "error-messages":
-                                            _vm.errors.telephone_number,
-                                          label: "Telephone Number",
-                                          type: "number"
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.telephone_number = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.telephone_number,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "telephone_number",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.telephone_number"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.email
-                                          ),
-                                          "error-messages": _vm.errors.email,
-                                          label: "Email Address *"
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.email = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.email,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "email", $$v)
-                                          },
-                                          expression: "form.email"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required,
-                                          "error-messages": _vm.errors.address,
-                                          label: "Address *",
-                                          rows: "1"
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.address = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.address,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "address", $$v)
-                                          },
-                                          expression: "form.address"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-expansion-panel",
-                        [
-                          _c("v-expansion-panel-header", [
-                            _c("div", { staticClass: "overline green--text" }, [
-                              _vm._v(
-                                "\n                            Account Details\n                        "
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-expansion-panel-content",
-                            [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(50)
-                                          ),
-                                          counter: 50,
-                                          "error-messages": _vm.errors.username,
-                                          label: "Username *",
-                                          required: ""
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.username = []
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.form.username,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "username", $$v)
-                                          },
-                                          expression: "form.username"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-select", {
-                                        attrs: {
-                                          label: "Role *",
-                                          items: [
-                                            "Standard User",
-                                            "Administrator"
-                                          ],
-                                          "error-messages": _vm.errors.role
-                                        },
-                                        on: { change: _vm.changeRole },
-                                        model: {
-                                          value: _vm.form.role,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "role", $$v)
-                                          },
-                                          expression: "form.role"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-checkbox", {
-                                        attrs: {
-                                          label: "Allow Login",
-                                          "error-messages": _vm.errors.can_login
-                                        },
-                                        model: {
-                                          value: _vm.form.can_login,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "can_login", $$v)
-                                          },
-                                          expression: "form.can_login"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    [
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("small", { staticClass: "ml-4 text--secondary" }, [
-                    _vm._v(
-                      "\n                * indicates required field\n            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
+                        "v-form",
                         {
-                          attrs: { color: "success", dark: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [_vm._v("Save")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.$router.go(-1)
-                            }
+                          ref: "form",
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
                           }
                         },
-                        [_vm._v("Cancel")]
+                        [
+                          _c(
+                            "v-container",
+                            [
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text" },
+                                [
+                                  _vm._v(
+                                    "\n                            BASIC DETAILS\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("DateRangePicker", {
+                                attrs: {
+                                  preset: _vm.preset,
+                                  presets: _vm.presets,
+                                  value: _vm.date_range,
+                                  solo: false,
+                                  buttonType: false,
+                                  buttonColor: "white",
+                                  buttonDark: false
+                                },
+                                on: { updateDates: _vm.updateDates }
+                              }),
+                              _vm._v(" "),
+                              _c("v-autocomplete", {
+                                attrs: {
+                                  rules: _vm.mixin_validation.required,
+                                  items: _vm.employees,
+                                  "error-messages": _vm.errors.employee,
+                                  "item-value": "id",
+                                  "item-text": "full_name",
+                                  label: "Employee",
+                                  required: "",
+                                  "return-object": ""
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.employee = []
+                                  },
+                                  change: _vm.updateEmployee
+                                },
+                                model: {
+                                  value: _vm.form.employee,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "employee", $$v)
+                                  },
+                                  expression: "form.employee"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-combobox", {
+                                attrs: {
+                                  rules: _vm.mixin_validation.required.concat(
+                                    _vm.mixin_validation.minLength(100)
+                                  ),
+                                  counter: 100,
+                                  items: [_vm.default_description],
+                                  "error-messages": _vm.errors.description,
+                                  label: "Description"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.description = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.description,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "description", $$v)
+                                  },
+                                  expression: "form.description"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "overline green--text" },
+                                [
+                                  _vm._v(
+                                    "\n                            Expenses\n                        "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("v-data-table", {
+                                staticClass: "elevation-0",
+                                attrs: {
+                                  headers: _vm.headers,
+                                  items: _vm.items,
+                                  loading: _vm.loading,
+                                  options: _vm.options,
+                                  "server-items-length": _vm.totalItems,
+                                  "footer-props": {
+                                    itemsPerPageOptions: [10, 20, 50, 100],
+                                    showFirstLastPage: true,
+                                    firstIcon: "mdi-page-first",
+                                    lastIcon: "mdi-page-last",
+                                    prevIcon: "mdi-chevron-left",
+                                    nextIcon: "mdi-chevron-right"
+                                  },
+                                  "show-select": "",
+                                  "show-expand": "",
+                                  "single-expand": "",
+                                  "item-key": "id"
+                                },
+                                on: {
+                                  "update:options": function($event) {
+                                    _vm.options = $event
+                                  }
+                                },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "top",
+                                      fn: function() {
+                                        return [
+                                          _vm.selected.length > 0
+                                            ? _c(
+                                                "div",
+                                                [
+                                                  _c(
+                                                    "div",
+                                                    { staticClass: "d-inline" },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                        " +
+                                                          _vm._s(
+                                                            _vm.selected.length
+                                                          ) +
+                                                          " Item(s) Selected\n                                    "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-btn",
+                                                    {
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          _vm.selected = []
+                                                        }
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                        Clear All Selected\n                                    "
+                                                      )
+                                                    ]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      },
+                                      proxy: true
+                                    },
+                                    {
+                                      key: "expanded-item",
+                                      fn: function(ref) {
+                                        var headers = ref.headers
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "td",
+                                            {
+                                              attrs: { colspan: headers.length }
+                                            },
+                                            [
+                                              _c("v-container", [
+                                                _c("table", [
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Code")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(_vm._s(item.code))
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Description")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            item.description
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Receipt")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            item.receipt_number
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Vendor")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            item.vendor == null
+                                                              ? ""
+                                                              : item.vendor.name
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  item.remarks
+                                                    ? _c("tr", [
+                                                        _c("td", [
+                                                          _c("strong", [
+                                                            _vm._v("Remarks")
+                                                          ])
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [_vm._v(":")]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            _vm._s(item.remarks)
+                                                          )
+                                                        ])
+                                                      ])
+                                                    : _vm._e()
+                                                ])
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.updated_at",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_getHumanDate(
+                                                  item.updated_at
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.amount",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  item.amount
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.replenishment",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  item.amount -
+                                                    item.reimbursable_amount
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.status.status",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "v-chip",
+                                            {
+                                              attrs: {
+                                                color: item.status.color,
+                                                dark: "",
+                                                small: ""
+                                              }
+                                            },
+                                            [_vm._v(_vm._s(item.status.status))]
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.actions",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "v-icon",
+                                            {
+                                              staticClass: "mr-2",
+                                              attrs: { small: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.$router.push(
+                                                    "/admin/expenses/" + item.id
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    mdi-eye\n                                "
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                ),
+                                model: {
+                                  value: _vm.selected,
+                                  callback: function($$v) {
+                                    _vm.selected = $$v
+                                  },
+                                  expression: "selected"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-textarea", {
+                                attrs: { label: "Remarks", rules: [], rows: 3 },
+                                model: {
+                                  value: _vm.form.remarks,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "remarks", $$v)
+                                  },
+                                  expression: "form.remarks"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "green", dark: "" },
+                              on: { click: _vm.onSave }
+                            },
+                            [_vm._v("Save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.$router.go(-1)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Cancel\n                    "
+                              )
+                            ]
+                          )
+                        ],
+                        1
                       )
                     ],
                     1
@@ -1347,17 +1223,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Edit.vue":
-/*!*************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Edit.vue ***!
-  \*************************************************************/
+/***/ "./resources/js/views/modules/admin/expense_reports/Create.vue":
+/*!*********************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expense_reports/Create.vue ***!
+  \*********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=2b19b33b& */ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&");
-/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Create_vue_vue_type_template_id_6558507a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=6558507a& */ "./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=template&id=6558507a&");
+/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1367,9 +1243,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Create_vue_vue_type_template_id_6558507a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Create_vue_vue_type_template_id_6558507a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1379,38 +1255,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/employees/Edit.vue"
+component.options.__file = "resources/js/views/modules/admin/expense_reports/Create.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&":
-/*!********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b& ***!
-  \********************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=template&id=6558507a&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=template&id=6558507a& ***!
+  \****************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=2b19b33b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Edit.vue?vue&type=template&id=2b19b33b&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_6558507a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=6558507a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Create.vue?vue&type=template&id=6558507a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_6558507a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2b19b33b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_6558507a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
