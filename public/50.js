@@ -421,6 +421,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1037,6 +1049,29 @@ var render = function() {
                                               [
                                                 _c("v-container", [
                                                   _c("table", [
+                                                    _c("tr", [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v("Created")
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(
+                                                          "\n                                                    " +
+                                                            _vm._s(
+                                                              _vm.mixin_formatDate(
+                                                                item.created_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                              )
+                                                            ) +
+                                                            "\n                                                "
+                                                        )
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
                                                     _c("tr", [
                                                       _c("td", [
                                                         _c("strong", [

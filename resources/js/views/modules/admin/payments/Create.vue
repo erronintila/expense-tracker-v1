@@ -317,6 +317,18 @@
                                             <table>
                                                 <tr>
                                                     <td>
+                                                        <strong>Created</strong
+                                                        >
+                                                    </td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        {{
+                                                            mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss")
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                                         <strong
                                                             >Reimbursable
                                                             Amount</strong

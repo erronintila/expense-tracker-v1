@@ -439,7 +439,7 @@ class ExpenseReportController extends Controller
 
                 // check if approved
                 $approved = ExpenseReport::whereIn("id", $request->ids)
-                    ->where("rejected_at", "<>", null)->count();
+                    ->where("approved_at", "<>", null)->count();
 
                 if ($approved > 0) {
                     return $this->errorResponse("Expense Report has already been approved.", 422);

@@ -439,6 +439,9 @@ __webpack_require__.r(__webpack_exports__);
         password_confirmation: []
       },
       rules: {
+        username: [function (v) {
+          return !!v || "Username is required";
+        }],
         first_name: [function (v) {
           return !!v || "First name is required";
         }, function (v) {
@@ -466,6 +469,7 @@ __webpack_require__.r(__webpack_exports__);
         address: []
       },
       errors: {
+        username: [],
         first_name: [],
         middle_name: [],
         last_name: [],
@@ -481,7 +485,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onUpdateData: function onUpdateData() {
+    onSave: function onSave() {
       var _this = this; // _this.$refs.form.validate();
 
 
@@ -540,6 +544,9 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error.response);
 
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          _this.errors = error.response.data.errors;
+          console.log("hello", error.response.data.errors);
         });
       }
     },
@@ -1302,16 +1309,16 @@ var render = function() {
                                             [
                                               _c("v-text-field", {
                                                 attrs: {
-                                                  rules: _vm.rules.first_name,
+                                                  rules: _vm.rules.username,
                                                   counter: 100,
                                                   "error-messages":
-                                                    _vm.errors.first_name,
+                                                    _vm.errors.username,
                                                   label: "Username",
                                                   required: ""
                                                 },
                                                 on: {
                                                   input: function($event) {
-                                                    _vm.errors.first_name = []
+                                                    _vm.errors.username = []
                                                   }
                                                 },
                                                 model: {
@@ -1375,16 +1382,16 @@ var render = function() {
                                             [
                                               _c("v-text-field", {
                                                 attrs: {
-                                                  rules: _vm.rules.first_name,
+                                                  rules: _vm.rules.username,
                                                   counter: 100,
                                                   "error-messages":
-                                                    _vm.errors.first_name,
+                                                    _vm.errors.username,
                                                   label: "Username",
                                                   required: ""
                                                 },
                                                 on: {
                                                   input: function($event) {
-                                                    _vm.errors.first_name = []
+                                                    _vm.errors.username = []
                                                   }
                                                 },
                                                 model: {
@@ -1860,7 +1867,7 @@ var render = function() {
                                         "v-btn",
                                         {
                                           attrs: { color: "primary" },
-                                          on: { click: _vm.onUpdateData }
+                                          on: { click: _vm.onSave }
                                         },
                                         [_vm._v("Update Profile")]
                                       )

@@ -211,6 +211,11 @@
                             <v-container>
                                 <table>
                                     <tr>
+                                        <td><strong>Created</strong></td>
+                                        <td>:</td>
+                                        <td>{{ mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Code</strong></td>
                                         <td>:</td>
                                         <td>{{ item.code }}</td>

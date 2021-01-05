@@ -289,6 +289,10 @@ class ExpenseController extends Controller
                     $q->orWhere("expense_report_id", $request->expense_report_id);
                 })
                 ->where("employee_id", $request->employee_id);
+                
+            if (request()->has('start_date') && request()->has('end_date')) {
+                $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
+            }
         }
 
         $expenses = $expenses->paginate($itemsPerPage);
@@ -427,6 +431,27 @@ class ExpenseController extends Controller
         switch ($request->action) {
 
             case 'restore':
+
+                // // check if user is allowed to restore
+                // if (!app("auth")->user()->hasPermissionTo('restore expenses')) {
+                //     abort(403);
+                // }
+
+                // check if deleted
+                $deleted = Expense::whereIn("id", $request->ids)
+                    ->where("deleted_at", null)->count();
+
+                if ($deleted > 0) {
+                    return $this->errorResponse("Expense(s) has not been deleted.", 422);
+                }
+
+                // check if deleted
+                $reported = Expense::whereIn("id", $request->ids)
+                    ->where("expense_report_id", "<>", null)->count();
+
+                if ($reported > 0) {
+                    return $this->errorResponse("Expense(s) has been reported.", 422);
+                }
 
                 if (request()->has("ids")) {
                     foreach ($request->ids as $id) {

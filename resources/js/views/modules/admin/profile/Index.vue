@@ -190,10 +190,10 @@
                   <v-col cols="12" md="4">
                     <v-text-field
                       v-model="user.username"
-                      :rules="rules.first_name"
+                      :rules="rules.username"
                       :counter="100"
-                      :error-messages="errors.first_name"
-                      @input="errors.first_name = []"
+                      :error-messages="errors.username"
+                      @input="errors.username = []"
                       label="Username"
                       required
                     ></v-text-field>
@@ -215,10 +215,10 @@
                   <v-col cols="12" md="12">
                     <v-text-field
                       v-model="user.username"
-                      :rules="rules.first_name"
+                      :rules="rules.username"
                       :counter="100"
-                      :error-messages="errors.first_name"
-                      @input="errors.first_name = []"
+                      :error-messages="errors.username"
+                      @input="errors.username = []"
                       label="Username"
                       required
                     ></v-text-field>
@@ -363,7 +363,7 @@
 
                 <v-row>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" @click="onUpdateData"
+                  <v-btn color="primary" @click="onSave"
                     >Update Profile</v-btn
                   >
                 </v-row>
@@ -425,6 +425,7 @@ export default {
         password_confirmation: [],
       },
       rules: {
+        username: [(v) => !!v || "Username is required",],
         first_name: [
           (v) => !!v || "First name is required",
           (v) =>
@@ -446,6 +447,7 @@ export default {
         address: [],
       },
       errors: {
+        username: [],
         first_name: [],
         middle_name: [],
         last_name: [],
@@ -461,7 +463,7 @@ export default {
     };
   },
   methods: {
-    onUpdateData() {
+    onSave() {
       let _this = this;
 
       // _this.$refs.form.validate();
@@ -541,6 +543,10 @@ export default {
               `Error ${error.response.status}`,
               error.response.statusText
             );
+
+            _this.errors = error.response.data.errors;
+
+            console.log("hello",error.response.data.errors);
           });
       }
     },
