@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReport\ExpenseReportIndexResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\Http\Resources\ExpenseReportResource;
+use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
 use App\Traits\ApiResponse;
@@ -582,6 +583,15 @@ class ExpenseReportController extends Controller
 
                 foreach ($request->ids as $value) {
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($value);
+
+                    // check if remaining fund will be less than zero when duplicated
+                    $report_amount = $expense_report->expenses()->withTrashed()->sum("amount") - $expense_report->expenses()->withTrashed()->sum("reimbursable_amount");
+
+                    $employee = Employee::withTrashed()->findOrFail($expense_report->employee_id);
+
+                    if (($employee->remaining_fund - $report_amount) < 0) {
+                        return $this->errorResponse("Employee revolving fund can't be less than zero.", 422);
+                    }
 
                     $new_report = $expense_report->replicate();
 
