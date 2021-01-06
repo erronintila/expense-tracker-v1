@@ -49,6 +49,18 @@ class Job extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::deleting(function ($job) {
+    //         if ($job->employees()->count() > 0) {
+
+    //             abort(422, "Item has child records");
+    //         }
+    //     });
+    // }
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LIBRARY/PACKAGE CONFIGURATION

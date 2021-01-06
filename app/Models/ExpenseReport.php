@@ -43,9 +43,7 @@ class ExpenseReport extends Model
      *
      * @var array
      */
-    protected $guarded = [
-        // 'code', 'description', 'remarks', 'notes', 'employee_id'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -173,19 +171,6 @@ class ExpenseReport extends Model
     {
         return $this->belongsTo(Employee::class);
     }
-
-    // public function payment_requests()
-    // {
-    //     // return $this->belongsToMany(PaymentRequest::class);
-    //     return $this->belongsToMany(
-    //         PaymentRequest::class,
-    //         'expense_report_payment_request',
-    //         'expense_report_id',
-    //         'payment_request_id',
-    //     )
-    //         ->withPivot('remarks', 'is_cancelled')
-    //         ->withTimestamps();
-    // }
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

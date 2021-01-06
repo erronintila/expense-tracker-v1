@@ -6,7 +6,10 @@
             <v-spacer></v-spacer>
 
             <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add departments')">
+                <template
+                    v-slot:activator="{ on, attrs }"
+                    v-if="mixin_can('add departments')"
+                >
                     <v-btn
                         class="elevation-3 mr-2"
                         color="green"
@@ -155,7 +158,12 @@
                     <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon> -->
-                    <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit departments')">
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="onEdit(item)"
+                        v-if="mixin_can('edit departments')"
+                    >
                         mdi-pencil
                     </v-icon>
                 </template>
@@ -288,9 +296,15 @@ export default {
                             console.log(error);
                             console.log(error.response);
 
+                            let statusText = error.response.data
+                                ? error.response.data.message
+                                    ? error.response.data.message
+                                    : ""
+                                : error.response.statusText;
+
                             _this.mixin_errorDialog(
                                 `Error ${error.response.status}`,
-                                error.response.statusText
+                                statusText
                             );
                         });
                 }
@@ -361,6 +375,6 @@ export default {
                 query: this.status
             };
         }
-    },
+    }
 };
 </script>

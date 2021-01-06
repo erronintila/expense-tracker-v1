@@ -58,6 +58,18 @@ class ExpenseType extends Model
         'has_expenses'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($expenseType) {
+            if ($expenseType->expenses()->count() > 0) {
+
+                abort(422, "Item has active child records");
+            }
+        });
+    }
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LIBRARY/PACKAGE CONFIGURATION

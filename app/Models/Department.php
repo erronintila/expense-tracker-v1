@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiResponse;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,6 +20,7 @@ class Department extends Model
     */
 
     use SoftDeletes, LogsActivity;
+    use ApiResponse;
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -58,7 +60,9 @@ class Department extends Model
         static::deleting(function ($department) {
             if ($department->jobs()->count() > 0) {
 
-                throw new JsonException("Model has child records");
+                abort(422, "Item has active child records");
+
+                // throw new JsonException("Model has child records", 422);
 
                 // abort("Model has child records", 401);
 

@@ -61,6 +61,18 @@ class Employee extends Model
         'full_name',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($employee) {
+            if ($employee->expenses()->count() > 0) {
+
+                abort(422, "Item has active child records");
+            }
+        });
+    }
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LIBRARY/PACKAGE CONFIGURATION

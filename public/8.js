@@ -749,8 +749,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
+            var statusText = error.response.data ? error.response.data.message ? error.response.data.message : "" : error.response.statusText;
 
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_errorDialog("Error ".concat(error.response.status), statusText);
           });
         }
       });
