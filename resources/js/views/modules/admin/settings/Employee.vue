@@ -156,6 +156,11 @@ export default {
         onSave() {
             let _this = this;
 
+            if(_this.employee.id == null) {
+                _this.mixin_errorDialog("Error", "No employee selected");
+                return;
+            }
+
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {

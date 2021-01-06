@@ -164,6 +164,12 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this = this;
 
+      if (_this.employee.id == null) {
+        _this.mixin_errorDialog("Error", "No employee selected");
+
+        return;
+      }
+
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
