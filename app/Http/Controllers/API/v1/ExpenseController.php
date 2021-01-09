@@ -347,9 +347,9 @@ class ExpenseController extends Controller
 
         $expense->tax_name = $request->tax_name;
 
-        $expense->tax_rate = $request->tax_rate;
+        $expense->tax_rate = $request->is_tax_inclusive ? $request->tax_rate : 0;
 
-        $expense->tax_amount = $request->tax_amount;
+        $expense->tax_amount = $request->is_tax_inclusive ? $request->tax_amount : 0;
 
         $expense->is_tax_inclusive = $request->is_tax_inclusive;
 
@@ -561,9 +561,9 @@ class ExpenseController extends Controller
 
                 $expense->tax_name = $request->tax_name;
 
-                $expense->tax_rate = $request->tax_rate;
+                $expense->tax_rate = $request->is_tax_inclusive ? $request->tax_rate : 0;
 
-                $expense->tax_amount = $request->tax_amount;
+                $expense->tax_amount = $request->is_tax_inclusive ? $request->tax_amount : 0;
 
                 $expense->is_tax_inclusive = $request->is_tax_inclusive;
 
