@@ -29,7 +29,7 @@ class CreateExpensesTable extends Migration
 
             $table->string('receipt_number')->nullable();
             $table->date('date');
-            $table->json('details')->nullable();
+            $table->longText('details')->nullable();
             $table->text('remarks')->nullable();
             // $table->json('notes')->nullable()->default(json_encode([
             //     "comment" => [],

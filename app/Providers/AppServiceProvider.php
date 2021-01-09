@@ -10,6 +10,7 @@ use App\Observers\AdjustmentObserver;
 use App\Observers\ExpenseReportObserver;
 use App\Observers\ExpenseObserver;
 use App\Observers\PaymentObserver;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
+        
         Expense::observe(ExpenseObserver::class);
 
         ExpenseReport::observe(ExpenseReportObserver::class);

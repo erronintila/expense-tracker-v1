@@ -579,7 +579,9 @@ class EmployeeController extends Controller
     public function validateFund(Request $request)
     {
         $deduction = DB::table('expenses')
-            ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) - SUM(expense_report_payment.payment) AS deduction'))
+            ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) - 
+                CASE WHEN ((SUM(`expenses`.`amount`) - SUM(`expenses`.`reimbursable_amount`)) = 0) 
+                    THEN 0 ELSE SUM(`expense_report_payment`.`payment`) END AS deduction'))
             ->leftJoin('expense_reports', 'expense_reports.id', '=', 'expenses.expense_report_id')
             ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
             ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
