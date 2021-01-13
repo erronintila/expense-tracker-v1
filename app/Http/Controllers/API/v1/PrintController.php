@@ -155,6 +155,7 @@ class PrintController extends Controller
     {
         $ids = $request->ids ?? [];
         
+        // query for retrieving all expenses
         if (request()->has('by_expense_id')) {
             $expenses = DB::table('expenses')
             ->join("employees", "employees.id", "=", "expenses.employee_id")
@@ -194,6 +195,7 @@ class PrintController extends Controller
             ]);
         }
 
+        // query for retrieving expenses grouped by employee
         if (request()->has('by_employee_id')) {
             $expenses = DB::table('expenses')
             ->join("employees", "employees.id", "=", "expenses.employee_id")
@@ -222,6 +224,7 @@ class PrintController extends Controller
             ]);
         }
 
+        // query for retrieving expenses grouped by expense date
         if (request()->has('by_date')) {
             $expenses = DB::table('expenses')
             ->join("employees", "employees.id", "=", "expenses.employee_id")
