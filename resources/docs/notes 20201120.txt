@@ -6,8 +6,6 @@ Expense Type Custom Fields
 new bugs/updates
 ------------------------------------------------------------------------------------------
 
-deleting parent with active child records
-
 add note when cancelling
 
 add note for admin
@@ -59,6 +57,7 @@ expense report can be edited
 fix activity logs format
 fix standard user modules
 300+ queries executed when printing report
+deleting parent with active child records
 
 ------------------------------------------------------------------------------------------
 OPTIONAL
