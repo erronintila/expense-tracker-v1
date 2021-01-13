@@ -79,8 +79,8 @@ class User extends Authenticatable
     // // prevents the package from storing empty logs
     // protected static $submitEmptyLogs = false;
 
-    // // customizong the log name
-    protected static $logName = "vendor";
+    // // customizing the log name
+    protected static $logName = "user";
 
     // // logging description
     public function getDescriptionForEvent(string $eventName): string
