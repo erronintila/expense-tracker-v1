@@ -679,6 +679,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -726,6 +737,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       totalAmount: 0,
+      totalUnsubmitted: 0,
+      totalUnapproved: 0,
       status: "All Expense Reports",
       statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", // "Overdue Expense Reports",
       "Cancelled Expense Reports" // "Archived Expense Reports"
@@ -749,6 +762,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     showAllUnsubmitted: function showAllUnsubmitted() {
       this.status = "Unsubmitted Expense Reports";
       this.updateDates([moment__WEBPACK_IMPORTED_MODULE_1___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD")]);
+    },
+    showAllUnapproved: function showAllUnapproved() {
+      this.status = "Submitted Expense Reports";
+      this.updateDates([moment__WEBPACK_IMPORTED_MODULE_1___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD")]);
+    },
+    loadTotalCountReportStatus: function loadTotalCountReportStatus() {
+      var _this = this;
+
+      axios.get("/api/data/expense_reports?total_count=true").then(function (response) {
+        var _response$data, _total$data$total_uns, _total$data$total_una;
+
+        var total = (_response$data = response.data) !== null && _response$data !== void 0 ? _response$data : 0;
+        _this.totalUnsubmitted = (_total$data$total_uns = total.data.total_unsubmitted) !== null && _total$data$total_uns !== void 0 ? _total$data$total_uns : 0;
+        _this.totalUnapproved = (_total$data$total_una = total.data.total_unapproved) !== null && _total$data$total_una !== void 0 ? _total$data$total_una : 0;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
     },
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
@@ -1640,6 +1671,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.loadTotalCountReportStatus();
       this.loadEmployees();
       this.selected = [];
     },
@@ -2046,6 +2078,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
             _this.selected = [];
+
+            _this.loadTotalCountReportStatus();
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -2245,6 +2279,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+    this.loadTotalCountReportStatus();
     this.loadEmployees();
     this.loadExpenseTypes();
   }
@@ -3228,14 +3263,39 @@ var render = function() {
                       "div",
                       { staticClass: "mb-4" },
                       [
-                        _c(
-                          "v-btn",
-                          {
-                            attrs: { color: "red", dark: "", small: "" },
-                            on: { click: _vm.showAllUnsubmitted }
-                          },
-                          [_vm._v("Show All Unsubmitted")]
-                        )
+                        _vm.totalUnsubmitted > 0
+                          ? _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "red", dark: "", small: "" },
+                                on: { click: _vm.showAllUnsubmitted }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                            Unsubmitted (" +
+                                    _vm._s(_vm.totalUnsubmitted) +
+                                    ")\n                        "
+                                )
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.totalUnapproved > 0
+                          ? _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "red", dark: "", small: "" },
+                                on: { click: _vm.showAllUnapproved }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                            For Approval (" +
+                                    _vm._s(_vm.totalUnapproved) +
+                                    ")\n                        "
+                                )
+                              ]
+                            )
+                          : _vm._e()
                       ],
                       1
                     ),

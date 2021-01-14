@@ -13,6 +13,7 @@ use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -1089,6 +1090,33 @@ class ExpenseReportController extends Controller
                     $expense_reports = $expense_reports;
                     break;
             }
+        }
+
+        if(request()->has("total_count")) {
+            $total_unsubmitted = DB::table('expense_reports')->where([
+                ["submitted_at", "=", null],
+                ["approved_at", "=", null],
+                ["rejected_at", "=", null],
+                ["cancelled_at", "=", null],
+                ["deleted_at", "=", null],
+            ])
+            ->count();
+
+            $total_unapproved = DB::table('expense_reports')->where([
+                ["submitted_at", "<>", null],
+                ["approved_at", "=", null],
+                ["rejected_at", "=", null],
+                ["cancelled_at", "=", null],
+                ["deleted_at", "=", null],
+            ])
+            ->count();
+
+            return $this->successResponse([
+                "total_unsubmitted" => $total_unsubmitted,
+                "total_unapproved" => $total_unapproved
+            ], 
+            "Success",
+            200);
         }
 
         if (request()->has("create_payment")) {

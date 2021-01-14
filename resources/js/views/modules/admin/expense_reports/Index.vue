@@ -523,8 +523,19 @@
                                 dark
                                 small
                                 @click="showAllUnsubmitted"
-                                >Show All Unsubmitted</v-btn
+                                v-if="totalUnsubmitted > 0"
                             >
+                                Unsubmitted ({{ totalUnsubmitted }})
+                            </v-btn>
+                            <v-btn
+                                color="red"
+                                dark
+                                small
+                                @click="showAllUnapproved"
+                                v-if="totalUnapproved > 0"
+                            >
+                                For Approval ({{ totalUnapproved }})
+                            </v-btn>
                         </div>
                         <div>
                             <h4 class="green--text">
@@ -686,6 +697,8 @@ export default {
                 "Last 5 Years"
             ],
             totalAmount: 0,
+            totalUnsubmitted: 0,
+            totalUnapproved: 0,
             status: "All Expense Reports",
             statuses: [
                 "All Expense Reports",
@@ -720,6 +733,31 @@ export default {
                 moment("0000-01-01").format("YYYY-MM-DD"),
                 moment().format("YYYY-MM-DD")
             ]);
+        },
+        showAllUnapproved() {
+            this.status = "Submitted Expense Reports";
+            this.updateDates([
+                moment("0000-01-01").format("YYYY-MM-DD"),
+                moment().format("YYYY-MM-DD")
+            ]);
+        },
+        loadTotalCountReportStatus() {
+            let _this = this;
+
+            axios
+                .get("/api/data/expense_reports?total_count=true")
+                .then(response => {
+                    let total = response.data ?? 0;
+
+                    _this.totalUnsubmitted =
+                        total.data.total_unsubmitted ?? 0;
+                    _this.totalUnapproved =
+                        total.data.total_unapproved ?? 0;
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
         },
         loadExpenseTypes() {
             let _this = this;
@@ -1821,6 +1859,8 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
 
+            this.loadTotalCountReportStatus();
+
             this.loadEmployees();
 
             this.selected = [];
@@ -2283,6 +2323,8 @@ export default {
                                 // _this.$store.dispatch("AUTH_USER");
 
                                 _this.selected = [];
+
+                                _this.loadTotalCountReportStatus();
                             })
                             .catch(function(error) {
                                 console.log(error);
@@ -2497,6 +2539,7 @@ export default {
     // },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.loadTotalCountReportStatus();
         this.loadEmployees();
         this.loadExpenseTypes();
     }
