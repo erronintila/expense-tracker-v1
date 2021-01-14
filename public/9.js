@@ -1579,6 +1579,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var range = _this.date_range;
         axios.get("/api/expense_reports", {
           params: {
+            search: search,
             sortBy: sortBy[0],
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,

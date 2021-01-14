@@ -2019,9 +2019,9 @@ export default {
         this.loadStatistics();
 
         this.loadExpenseTypes();
-        this.loadReportByExpense();
-        this.loadReportByEmployee();
-        this.loadReportByDate();
+        // this.loadReportByExpense();
+        // this.loadReportByEmployee();
+        // this.loadReportByDate();
     }
 };
 </script>

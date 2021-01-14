@@ -1747,6 +1747,7 @@ export default {
                 axios
                     .get("/api/expense_reports", {
                         params: {
+                            search: search,
                             sortBy: sortBy[0],
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,

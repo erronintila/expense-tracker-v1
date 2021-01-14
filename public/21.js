@@ -1683,10 +1683,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {
     this.loadStatistics();
-    this.loadExpenseTypes();
-    this.loadReportByExpense();
-    this.loadReportByEmployee();
-    this.loadReportByDate();
+    this.loadExpenseTypes(); // this.loadReportByExpense();
+    // this.loadReportByEmployee();
+    // this.loadReportByDate();
   }
 });
 
