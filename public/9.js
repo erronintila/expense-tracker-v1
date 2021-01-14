@@ -670,6 +670,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -737,6 +746,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    showAllUnsubmitted: function showAllUnsubmitted() {
+      this.status = "Unsubmitted Expense Reports";
+      this.updateDates([moment__WEBPACK_IMPORTED_MODULE_1___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD")]);
+    },
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
@@ -1587,7 +1600,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             employee_id: employee_id,
             status: status,
             start_date: range[0],
-            end_date: range[1],
+            end_date: range[1] ? range[1] : range[0],
             admin_page: true
           }
         }).then(function (response) {
@@ -3211,6 +3224,22 @@ var render = function() {
                 "v-row",
                 [
                   _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                    _c(
+                      "div",
+                      { staticClass: "mb-4" },
+                      [
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "red", dark: "", small: "" },
+                            on: { click: _vm.showAllUnsubmitted }
+                          },
+                          [_vm._v("Show All Unsubmitted")]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
                     _c("div", [
                       _c("h4", { staticClass: "green--text" }, [
                         _vm._v(

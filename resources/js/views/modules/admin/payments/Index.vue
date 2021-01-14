@@ -449,7 +449,7 @@ export default {
                             itemsPerPage: itemsPerPage,
                             status: status,
                             start_date: range[0],
-                            end_date: range[1],
+                            end_date: range[1] ? range[1] : range[0],
                             employee_id: employee_id
                         }
                     })

@@ -637,7 +637,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             status: status,
             employee_id: employee_id,
             start_date: range[0],
-            end_date: range[1],
+            end_date: range[1] ? range[1] : range[0],
             admin_page: true,
             create_payment: true
           }

@@ -1379,7 +1379,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             employee_id: employee_id,
             status: status,
             start_date: range[0],
-            end_date: range[1],
+            end_date: range[1] ? range[1] : range[0],
             admin_page: false
           }
         }).then(function (response) {

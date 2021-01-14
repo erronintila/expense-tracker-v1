@@ -517,6 +517,15 @@
 
                 <v-row>
                     <v-col cols="12" md="8">
+                        <div class="mb-4">
+                            <v-btn
+                                color="red"
+                                dark
+                                small
+                                @click="showAllUnsubmitted"
+                                >Show All Unsubmitted</v-btn
+                            >
+                        </div>
                         <div>
                             <h4 class="green--text">
                                 Note:
@@ -705,6 +714,13 @@ export default {
         };
     },
     methods: {
+        showAllUnsubmitted() {
+            this.status = "Unsubmitted Expense Reports";
+            this.updateDates([
+                moment("0000-01-01").format("YYYY-MM-DD"),
+                moment().format("YYYY-MM-DD")
+            ]);
+        },
         loadExpenseTypes() {
             let _this = this;
 
@@ -1755,7 +1771,7 @@ export default {
                             employee_id: employee_id,
                             status: status,
                             start_date: range[0],
-                            end_date: range[1],
+                            end_date: range[1] ? range[1] : range[0],
                             admin_page: true
                         }
                     })

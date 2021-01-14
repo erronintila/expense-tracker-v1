@@ -542,7 +542,7 @@ export default {
                             page: page,
                             itemsPerPage: itemsPerPage,
                             start_date: range[0],
-                            end_date: range[1],
+                            end_date: range[1] ? range[1] : range[0],
                             employee_id: employee_id,
                             expense_report_id: _this.$route.params.id,
                             update_report: true

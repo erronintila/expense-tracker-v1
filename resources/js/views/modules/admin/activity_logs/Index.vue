@@ -315,7 +315,7 @@ export default {
                             itemsPerPage: itemsPerPage,
                             user_id: user_id,
                             start_date: range[0],
-                            end_date: range[1]
+                            end_date: range[1] ? range[1] : range[0],
                         }
                     })
                     .then(response => {

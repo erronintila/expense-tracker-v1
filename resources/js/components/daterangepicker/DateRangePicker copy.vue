@@ -42,15 +42,17 @@
                 @change="updatePreset"
             ></v-select>
             <v-date-picker
-                v-model="selected"
+                v-model="dates"
+                :value="dates"
                 range
                 no-title
                 scrollable
                 color="success"
+                @change="customChange"
             >
                 <v-spacer></v-spacer>
                 <v-btn text color="success" @click="resetDates">Reset</v-btn>
-                <v-btn text color="success" @click="$refs.menu.save(selected)">
+                <v-btn text color="success" @click="$refs.menu.save(dates)">
                     OK
                 </v-btn>
                 <!-- <v-btn text color="success" @click="menu = false">Close</v-btn> -->
@@ -107,38 +109,38 @@ export default {
     data() {
         return {
             menu: false,
+            dates: this.value,
             presetValue: this.preset,
             presetsList: this.presets
         };
     },
     methods: {
-        // customChange() {
-        //     this.$emit("updateDates", this.value);
-        // },
+        customChange() {
+            this.$emit("updateDates", this.dates);
+        },
         resetDates() {
             this.menu = false;
-            let value = [
-                moment().startOf("month").format("YYYY-MM-DD"),
-                moment().endOf("month").format("YYYY-MM-DD")
+            this.dates = [
+                moment().format("YYYY-MM-DD"),
+                moment().format("YYYY-MM-DD")
             ];
             this.presetValue = "";
 
-            this.$emit("updateDates", value);
+            this.$emit("updateDates", this.dates);
         },
         updatePreset() {
             this.menu = false;
-            let value = [];
             switch (this.presetValue) {
                 case "Today":
-                    value = [
+                    this.dates = [
                         moment().format("YYYY-MM-DD"),
                         moment().format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Yesterday":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(1, "days")
                             .format("YYYY-MM-DD"),
@@ -146,11 +148,11 @@ export default {
                             .subtract(1, "days")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Last 7 Days":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(7, "days")
                             .format("YYYY-MM-DD"),
@@ -158,11 +160,11 @@ export default {
                             .subtract(1, "days")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Last 30 Days":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(30, "days")
                             .format("YYYY-MM-DD"),
@@ -170,11 +172,11 @@ export default {
                             .subtract(1, "days")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "This Week":
-                    value = [
+                    this.dates = [
                         moment()
                             .startOf("week")
                             .format("YYYY-MM-DD"),
@@ -182,11 +184,11 @@ export default {
                             .endOf("week")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Last Week":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(1, "weeks")
                             .startOf("week")
@@ -196,11 +198,11 @@ export default {
                             .endOf("week")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "This Month":
-                    value = [
+                    this.dates = [
                         moment()
                             .startOf("month")
                             .format("YYYY-MM-DD"),
@@ -208,11 +210,11 @@ export default {
                             .endOf("month")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Last Month":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(1, "months")
                             .startOf("month")
@@ -222,11 +224,11 @@ export default {
                             .endOf("month")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "This Quarter":
-                    value = [
+                    this.dates = [
                         moment()
                             .startOf("quarter")
                             .format("YYYY-MM-DD"),
@@ -234,11 +236,11 @@ export default {
                             .endOf("quarter")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Last Quarter":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(1, "quarters")
                             .startOf("quarter")
@@ -248,11 +250,11 @@ export default {
                             .endOf("quarter")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "This Year":
-                    value = [
+                    this.dates = [
                         moment()
                             .startOf("year")
                             .format("YYYY-MM-DD"),
@@ -260,11 +262,11 @@ export default {
                             .endOf("year")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Last Year":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(1, "years")
                             .startOf("year")
@@ -274,11 +276,11 @@ export default {
                             .endOf("year")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 case "Last 5 Years":
-                    value = [
+                    this.dates = [
                         moment()
                             .subtract(5, "years")
                             .startOf("year")
@@ -288,32 +290,24 @@ export default {
                             .endOf("year")
                             .format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
                 default:
-                    value = [
+                    this.dates = [
                         moment().format("YYYY-MM-DD"),
                         moment().format("YYYY-MM-DD")
                     ];
-                    this.$emit("updateDates", value);
+                    this.$emit("updateDates", this.dates);
 
                     break;
             }
         }
     },
     computed: {
-        selected: {
-            get() {
-                return this.value;
-            },
-            set(value) {
-                this.$emit("updateDates", value);
-            }
-        },
         dateRangeText() {
-            this.value.sort();
-            return this.value.join(" ~ ");
+            this.dates.sort();
+            return this.dates.join(" ~ ");
         }
     }
 };
