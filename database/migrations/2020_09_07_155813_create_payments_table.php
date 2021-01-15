@@ -38,6 +38,7 @@ class CreatePaymentsTable extends Migration
             $table->timestamp('cancelled_at')->nullable();
             $table->timestamp('released_at')->nullable();
             $table->timestamp('received_at')->nullable();
+            $table->timestamp('returned_at')->nullable();
 
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
