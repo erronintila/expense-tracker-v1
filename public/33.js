@@ -417,6 +417,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -959,7 +960,7 @@ var render = function() {
                                                           _vm._s(
                                                             _vm.selected.length
                                                           ) +
-                                                          " Item(s) Selected\n                                    "
+                                                          " Item(s)\n                                        Selected\n                                    "
                                                       )
                                                     ]
                                                   ),
