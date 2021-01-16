@@ -278,8 +278,10 @@ class UserController extends Controller
                 break;
             default:
 
-                if (!app("auth")->user()->hasPermissionTo('edit employees')) {
-                    abort(403);
+                if (!request()->has("profile_update")) {
+                    if (!app("auth")->user()->hasPermissionTo('edit employees')) {
+                        abort(403);
+                    }
                 }
 
                 $request->validate([
