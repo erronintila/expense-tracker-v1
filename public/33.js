@@ -20,52 +20,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -493,74 +447,84 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: {
     updateDates: function updateDates(e) {
-      this.date_range = e;
-      this.loadExpenses(this.form.employee.id);
-    },
-    updateEmployee: function updateEmployee() {
       var _this2 = this;
 
-      this.getDataFromApi().then(function (data) {
-        _this2.items = data.items;
-        _this2.totalItems = data.total;
+      this.date_range = e;
+      this.loadExpenses(this.form.employee.id).then(function () {
+        _this2.getDataFromApi().then(function (data) {
+          _this2.items = data.items;
+          _this2.totalItems = data.total;
+        });
+      });
+    },
+    updateEmployee: function updateEmployee() {
+      var _this3 = this;
+
+      this.loadExpenses(this.form.employee.id).then(function () {
+        _this3.getDataFromApi().then(function (data) {
+          _this3.items = data.items;
+          _this3.totalItems = data.total;
+        });
       });
     },
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
-        var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.description = data.description;
-        _this.form.remarks = data.remarks;
-        _this.form.notes = data.notes;
-        _this.form.employee = data.employee;
-        _this.form.status = data.status; // _this.expenses = data.expenses;
-        // _this.submitted_at = data.submitted_at;
-        // _this.reviewed_at = data.reviewed_at;
-        // _this.approved_at = data.approved_at;
-        // _this.cancelled_at = data.cancelled_at;
-        // _this.created_at = data.created_at;
-        // _this.updated_at = data.updated_at;
-        // _this.deleted_at = data.deleted_at;
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
+          var data = response.data.data;
+          _this.form.code = data.code;
+          _this.form.description = data.description;
+          _this.form.remarks = data.remarks;
+          _this.form.notes = data.notes;
+          _this.form.employee = data.employee;
+          _this.form.status = data.status; // _this.expenses = data.expenses;
+          // _this.submitted_at = data.submitted_at;
+          // _this.reviewed_at = data.reviewed_at;
+          // _this.approved_at = data.approved_at;
+          // _this.cancelled_at = data.cancelled_at;
+          // _this.created_at = data.created_at;
+          // _this.updated_at = data.updated_at;
+          // _this.deleted_at = data.deleted_at;
 
-        _this.total = data.total; // _this.date_range = [_this.from, _this.to];
-        // _this.loadExpenses(data.employee.id);
+          _this.total = data.total; // _this.date_range = [_this.from, _this.to];
+          // _this.loadExpenses(data.employee.id);
+          // _this.getDataFromApi().then((data) => {
+          //     _this.items = data.items;
+          //     _this.totalItems = data.total;
+          //     let selected = data.items.filter(function (item) {
+          //     return item.expense_report !== null;
+          //     });
+          //     _this.selected = _.union(_this.selected, selected);
+          //     // _this.selected.splice(0, 0, ...selected);
+          // });
+          // _this.selected.splice(0, 0, ...data.expenses);
 
-        _this.getDataFromApi().then(function (data) {
-          var _this$selected;
+          _this.loader = false;
+          return resolve();
+        })["catch"](function (error) {
+          return reject();
+          console.log(error);
+          console.log(error.response);
 
-          _this.items = data.items;
-          _this.totalItems = data.total;
-          var selected = data.items.filter(function (item) {
-            return item.expense_report !== null;
-          });
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
-          (_this$selected = _this.selected).splice.apply(_this$selected, [0, 0].concat(_toConsumableArray(selected)));
-        }); // _this.selected.splice(0, 0, ...data.expenses);
-
-
-        _this.loader = false;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-        _this.loader = false;
+          _this.loader = false;
+        });
       });
     },
     getDataFromApi: function getDataFromApi() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _this = this;
 
       _this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this3$options = _this3.options,
-            sortBy = _this3$options.sortBy,
-            sortDesc = _this3$options.sortDesc,
-            page = _this3$options.page,
-            itemsPerPage = _this3$options.itemsPerPage;
+        var _this4$options = _this4.options,
+            sortBy = _this4$options.sortBy,
+            sortDesc = _this4$options.sortDesc,
+            page = _this4$options.page,
+            itemsPerPage = _this4$options.itemsPerPage;
         var range = _this.date_range;
         var employee_id = _this.form.employee.id;
         axios.get("/api/expenses", {
@@ -598,33 +562,41 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       var _this = this;
 
-      axios.get("/api/data/expenses", {
-        params: {
-          update_report: true,
-          employee_id: emp_id,
-          start_date: start_date,
-          end_date: end_date,
-          expense_report_id: _this.$route.params.id
-        }
-      }).then(function (response) {
-        _this.items = response.data.data; // _this.total = response.data.total;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/data/expenses", {
+          params: {
+            update_report: true,
+            employee_id: emp_id,
+            start_date: start_date,
+            end_date: end_date,
+            expense_report_id: _this.$route.params.id
+          }
+        }).then(function (response) {
+          _this.selected = response.data.data;
+          return resolve();
+        })["catch"](function (error) {
+          return reject();
+          console.log(error);
+          console.log(error.response);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        });
       });
     },
     loadEmployees: function loadEmployees() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/data/employees").then(function (response) {
+          _this.employees = response.data.data;
+          return resolve();
+        })["catch"](function (error) {
+          return reject();
+          console.log(error);
+          console.log(error.response);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        });
       });
     },
     onRefresh: function onRefresh() {
@@ -677,11 +649,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   watch: {
     params: {
       handler: function handler() {
-        var _this4 = this;
+        var _this5 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this4.items = data.items;
-          _this4.totalItems = data.total;
+          _this5.items = data.items;
+          _this5.totalItems = data.total;
         });
       },
       deep: true
@@ -705,9 +677,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   created: function created() {
+    var _this6 = this;
+
     // this.$store.dispatch("AUTH_USER");
-    this.loadEmployees();
-    this.getData();
+    var _this = this;
+
+    this.loadEmployees().then(function () {
+      _this6.getData().then(function () {
+        _this6.loadExpenses(_this6.form.employee.id).then(function () {
+          _this6.getDataFromApi().then(function (data) {
+            _this.items = data.items;
+            _this.totalItems = data.total;
+          });
+        });
+      });
+    });
   }
 });
 
@@ -749,11 +733,7 @@ var render = function() {
                       staticClass: "subtitle-1 text-center",
                       attrs: { cols: "12" }
                     },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
+                    [_vm._v("\n        Loading, Please wait...\n      ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -835,11 +815,7 @@ var render = function() {
                               _c(
                                 "div",
                                 { staticClass: "overline green--text" },
-                                [
-                                  _vm._v(
-                                    "\n                            BASIC DETAILS\n                        "
-                                  )
-                                ]
+                                [_vm._v("BASIC DETAILS")]
                               ),
                               _vm._v(" "),
                               _c("DateRangePicker", {
@@ -908,11 +884,7 @@ var render = function() {
                               _c(
                                 "div",
                                 { staticClass: "overline green--text" },
-                                [
-                                  _vm._v(
-                                    "\n                            Expenses\n                        "
-                                  )
-                                ]
+                                [_vm._v("Expenses")]
                               ),
                               _vm._v(" "),
                               _c("v-data-table", {
@@ -956,11 +928,11 @@ var render = function() {
                                                     { staticClass: "d-inline" },
                                                     [
                                                       _vm._v(
-                                                        "\n                                        " +
+                                                        "\n                    " +
                                                           _vm._s(
                                                             _vm.selected.length
                                                           ) +
-                                                          " Item(s)\n                                        Selected\n                                    "
+                                                          " Item(s) Selected\n                  "
                                                       )
                                                     ]
                                                   ),
@@ -978,7 +950,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                                        Clear All Selected\n                                    "
+                                                        " Clear All Selected "
                                                       )
                                                     ]
                                                   )
@@ -1029,11 +1001,11 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("td", [
                                                       _vm._v(
-                                                        "\n                                                    " +
+                                                        "\n                          " +
                                                           _vm._s(
                                                             item.description
                                                           ) +
-                                                          "\n                                                "
+                                                          "\n                        "
                                                       )
                                                     ])
                                                   ]),
@@ -1049,11 +1021,11 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("td", [
                                                       _vm._v(
-                                                        "\n                                                    " +
+                                                        "\n                          " +
                                                           _vm._s(
                                                             item.receipt_number
                                                           ) +
-                                                          "\n                                                "
+                                                          "\n                        "
                                                       )
                                                     ])
                                                   ]),
@@ -1069,13 +1041,13 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _c("td", [
                                                       _vm._v(
-                                                        "\n                                                    " +
+                                                        "\n                          " +
                                                           _vm._s(
                                                             item.vendor == null
                                                               ? ""
                                                               : item.vendor.name
                                                           ) +
-                                                          "\n                                                "
+                                                          "\n                        "
                                                       )
                                                     ])
                                                   ]),
@@ -1111,13 +1083,13 @@ var render = function() {
                                         var item = ref.item
                                         return [
                                           _vm._v(
-                                            "\n                                " +
+                                            "\n                " +
                                               _vm._s(
                                                 _vm.mixin_getHumanDate(
                                                   item.updated_at
                                                 )
                                               ) +
-                                              "\n                            "
+                                              "\n              "
                                           )
                                         ]
                                       }
@@ -1128,13 +1100,13 @@ var render = function() {
                                         var item = ref.item
                                         return [
                                           _vm._v(
-                                            "\n                                " +
+                                            "\n                " +
                                               _vm._s(
                                                 _vm.mixin_formatNumber(
                                                   item.amount
                                                 )
                                               ) +
-                                              "\n                            "
+                                              "\n              "
                                           )
                                         ]
                                       }
@@ -1145,14 +1117,14 @@ var render = function() {
                                         var item = ref.item
                                         return [
                                           _vm._v(
-                                            "\n                                " +
+                                            "\n                " +
                                               _vm._s(
                                                 _vm.mixin_formatNumber(
                                                   item.amount -
                                                     item.reimbursable_amount
                                                 )
                                               ) +
-                                              "\n                            "
+                                              "\n              "
                                           )
                                         ]
                                       }
@@ -1196,7 +1168,7 @@ var render = function() {
                                             },
                                             [
                                               _vm._v(
-                                                "\n                                    mdi-eye\n                                "
+                                                "\n                  mdi-eye\n                "
                                               )
                                             ]
                                           )
@@ -1256,11 +1228,7 @@ var render = function() {
                                 }
                               }
                             },
-                            [
-                              _vm._v(
-                                "\n                        Cancel\n                    "
-                              )
-                            ]
+                            [_vm._v(" Cancel ")]
                           )
                         ],
                         1
