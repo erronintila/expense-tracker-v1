@@ -405,6 +405,69 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -448,6 +511,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       employees: [],
       expenses: [],
       total: 0,
+      paid: 0,
       totalItems: 0,
       options: {
         sortBy: ["created_at"],
@@ -641,6 +705,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     default_description: function default_description() {
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
+    },
+    balance: function balance() {
+      return this.total - this.paid;
     }
   },
   created: function created() {
@@ -898,7 +965,7 @@ var render = function() {
                                                           _vm._s(
                                                             _vm.selected.length
                                                           ) +
-                                                          " Item(s) Selected\n                                    "
+                                                          " Item(s)\n                                        Selected\n                                    "
                                                       )
                                                     ]
                                                   ),
@@ -1154,16 +1221,150 @@ var render = function() {
                                 }
                               }),
                               _vm._v(" "),
-                              _c("v-textarea", {
-                                attrs: { label: "Remarks", rules: [], rows: 3 },
-                                model: {
-                                  value: _vm.form.remarks,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "remarks", $$v)
-                                  },
-                                  expression: "form.remarks"
-                                }
-                              })
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "6" } },
+                                    [
+                                      _c("v-textarea", {
+                                        attrs: {
+                                          label: "Remarks",
+                                          rules: [],
+                                          rows: 3
+                                        },
+                                        model: {
+                                          value: _vm.form.remarks,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "remarks", $$v)
+                                          },
+                                          expression: "form.remarks"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "6" } },
+                                    [
+                                      _c(
+                                        "table",
+                                        {
+                                          staticClass: "mt-4",
+                                          attrs: { width: "100%" }
+                                        },
+                                        [
+                                          _c("tbody", [
+                                            _c("tr", [
+                                              _c("td", [
+                                                _vm._v(
+                                                  "\n                                                Total Expense Amount\n                                            "
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [_vm._v(":")]),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "green--text text--darken-4 text-right"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.total
+                                                        )
+                                                      ) +
+                                                      "\n                                            "
+                                                  )
+                                                ]
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [
+                                                _vm._v(
+                                                  "\n                                                Paid Amount\n                                            "
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [_vm._v(":")]),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "green--text text--darken-4 text-right"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                (-)\n                                                " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.paid
+                                                        )
+                                                      ) +
+                                                      "\n                                            "
+                                                  )
+                                                ]
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c(
+                                                "td",
+                                                { attrs: { colspan: "3" } },
+                                                [_c("v-divider")],
+                                                1
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c(
+                                                "th",
+                                                { staticClass: "text-left" },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                Amount to be reimbursed\n                                            "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c("td", [_vm._v(":")]),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "green--text text--darken-4 text-right"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.balance
+                                                        )
+                                                      ) +
+                                                      "\n                                            "
+                                                  )
+                                                ]
+                                              )
+                                            ])
+                                          ])
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
                             ],
                             1
                           )
