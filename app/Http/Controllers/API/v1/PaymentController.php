@@ -100,7 +100,8 @@ class PaymentController extends Controller
                         ["cancelled_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
-                    ]);
+                    ])
+                    ->whereHas("expense_reports");
 
                     break;
                 case 'Received Payments':
@@ -110,7 +111,8 @@ class PaymentController extends Controller
                         ["cancelled_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
-                    ]);
+                    ])
+                    ->whereHas("expense_reports");
 
                     break;
                 case 'Released Payments':
@@ -120,7 +122,8 @@ class PaymentController extends Controller
                         ["cancelled_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "=", null],
-                    ]);
+                    ])
+                    ->whereHas("expense_reports");
 
                     break;
                 case 'Approved Payments':
@@ -130,7 +133,8 @@ class PaymentController extends Controller
                         ["cancelled_at", "=", null],
                         ["released_at", "=", null],
                         ["received_at", "=", null],
-                    ]);
+                    ])
+                    ->whereHas("expense_reports");
 
                     break;
                 default:
