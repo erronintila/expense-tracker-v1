@@ -253,7 +253,8 @@
                                 <template v-slot:top>
                                     <div v-if="selected.length > 0">
                                         <div class="d-inline">
-                                            {{ selected.length }} Item(s) Selected
+                                            {{ selected.length }} Item(s)
+                                            Selected
                                         </div>
                                         <v-btn @click="selected = []">
                                             Clear All Selected
@@ -361,13 +362,75 @@
                                 </template>
                             </v-data-table>
 
-                            <v-textarea
-                                v-model="form.remarks"
-                                label="Remarks"
-                                :rules="[]"
-                                :rows="3"
-                            >
-                            </v-textarea>
+                            <v-row>
+                                <v-col cols="12" md="6">
+                                    <v-textarea
+                                        v-model="form.remarks"
+                                        label="Remarks"
+                                        :rules="[]"
+                                        :rows="3"
+                                    >
+                                    </v-textarea>
+                                </v-col>
+
+                                <v-col cols="12" md="6">
+                                    <table width="100%" class="mt-4">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    Total Expense Amount
+                                                </td>
+                                                <td>:</td>
+                                                <td
+                                                    class="green--text text--darken-4 text-right"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            total
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Paid Amount
+                                                </td>
+                                                <td>:</td>
+                                                <td
+                                                    class="green--text text--darken-4 text-right"
+                                                >
+                                                    (-)
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            paid
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <v-divider></v-divider>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-left">
+                                                    Amount to be reimbursed
+                                                </th>
+                                                <td>:</td>
+                                                <td
+                                                    class="green--text text--darken-4 text-right"
+                                                >
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            balance
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </v-col>
+                            </v-row>
                         </v-container>
                     </v-form>
                     <v-card-actions>
@@ -435,6 +498,7 @@ export default {
             employees: [],
             expenses: [],
             total: 0,
+            paid: 0,
             totalItems: 0,
             options: {
                 sortBy: ["created_at"],
@@ -654,6 +718,9 @@ export default {
             return `Expense Report Summary (${moment(this.date_range[0]).format(
                 "LL"
             )} - ${moment(this.date_range[1]).format("LL")})`;
+        },
+        balance() {
+            return this.total - this.paid;
         }
     },
     created() {
