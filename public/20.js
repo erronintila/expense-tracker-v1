@@ -404,6 +404,7 @@ __webpack_require__.r(__webpack_exports__);
         email: "",
         username: "",
         is_admin: "",
+        can_login: 0,
         updated_at: "",
         employee: {
           id: 0,
@@ -492,10 +493,12 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.$refs.form.validate() && this.user.employee == null) {
         axios.put("/api/users/" + _this.user.id, {
           action: "update",
+          profile_update: true,
           name: _this.user.name,
           username: _this.user.username,
           email: _this.user.email,
           is_admin: _this.user.is_admin,
+          can_login: _this.user.can_login,
           employee_id: 0
         }).then(function (response) {
           _this.$dialog.message.success("User account updated successfully.", {
@@ -516,10 +519,12 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.$refs.form.validate()) {
         axios.put("/api/users/" + _this.user.id, {
           action: "update",
+          profile_update: true,
           name: "".concat(_this.user.employee.last_name, ", ").concat(_this.user.employee.first_name, " ").concat(_this.user.employee.middle_name),
           email: _this.user.employee.email,
           username: _this.user.username,
           is_admin: _this.user.is_admin,
+          can_login: _this.user.can_login,
           employee: {
             first_name: _this.user.employee.first_name,
             middle_name: _this.user.employee.middle_name,

@@ -289,7 +289,7 @@ class ExpenseController extends Controller
                     $q->orWhere("expense_report_id", $request->expense_report_id);
                 })
                 ->where("employee_id", $request->employee_id);
-                
+
             if (request()->has('start_date') && request()->has('end_date')) {
                 $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
             }
@@ -662,7 +662,7 @@ class ExpenseController extends Controller
                 return ExpenseIndexResource::collection($expenses);
             }
         }
-        
+
         $expenses = Expense::with(['employee' => function ($query) {
             $query->withTrashed();
         }])
@@ -740,11 +740,11 @@ class ExpenseController extends Controller
                 ->orderBy("date")
                 ->where(function ($q) use ($request) {
                     $q->where("expense_report_id", $request->expense_report_id);
-                    $q->orWhere("expense_report_id", null);
+                    // $q->orWhere("expense_report_id", null);
                 })
                 ->where(function ($q) use ($request) {
                     $q->whereBetween("date", [$request->start_date, $request->end_date]);
-                    $q->orWhere("expense_report_id", $request->expense_report_id);
+                    // $q->orWhere("expense_report_id", $request->expense_report_id);
                 })
                 ->where("employee_id", $request->employee_id)
                 ->get();

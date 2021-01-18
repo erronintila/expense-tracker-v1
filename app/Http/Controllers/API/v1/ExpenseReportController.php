@@ -754,7 +754,7 @@ class ExpenseReportController extends Controller
 
                     $expense->expense_report_id = null;
 
-                    $expense->deleted_at = now();
+                    // $expense->deleted_at = now();
 
                     $expense->disableLogging();
 

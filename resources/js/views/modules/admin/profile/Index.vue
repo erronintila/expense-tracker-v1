@@ -392,6 +392,7 @@ export default {
         username: "",
         is_admin: "",
         updated_at: "",
+        can_login: 1,
         employee: {
           id: 0,
           full_name: "",
@@ -472,10 +473,12 @@ export default {
         axios
           .put("/api/users/" + _this.user.id, {
             action: "update",
+            profile_update: true,
             name: _this.user.name,
             username: _this.user.username,
             email: _this.user.email,
             is_admin: _this.user.is_admin,
+            can_login: _this.user.can_login,
             employee_id: 0,
           })
           .then(function (response) {
@@ -506,10 +509,12 @@ export default {
         axios
           .put("/api/users/" + _this.user.id, {
             action: "update",
+            profile_update: true,
             name: `${_this.user.employee.last_name}, ${_this.user.employee.first_name} ${_this.user.employee.middle_name}`,
             email: _this.user.employee.email,
             username: _this.user.username,
             is_admin: _this.user.is_admin,
+            can_login: _this.user.can_login,
             employee: {
               first_name: _this.user.employee.first_name,
               middle_name: _this.user.employee.middle_name,
