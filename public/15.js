@@ -264,6 +264,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -399,7 +427,35 @@ __webpack_require__.r(__webpack_exports__);
       //         },
       //     ]
       // }
-      ]
+      ],
+      notifications: [{
+        id: 1,
+        action: '15 min',
+        headline: 'Brunch this weekend?',
+        subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
+        title: 'Ali Connors',
+        link: {
+          name: "admin.notifications.index"
+        }
+      }, {
+        id: 2,
+        action: '15 min',
+        headline: 'Brunch this weekend?',
+        subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
+        title: 'Ali Connoraasds',
+        link: {
+          name: "admin.notifications.index"
+        }
+      }, {
+        id: 3,
+        action: '15 min',
+        headline: 'Brunch this weekend?',
+        subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
+        title: 'Ali Connorsasd',
+        link: {
+          name: "admin.notifications.index"
+        }
+      }]
     };
   },
   methods: {
@@ -799,6 +855,66 @@ var render = function() {
                                 _vm._b(
                                   {
                                     attrs: { icon: "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation()
+                                        _vm.notificationDrawer = !_vm.notificationDrawer
+                                      }
+                                    }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _c(
+                                  "v-badge",
+                                  {
+                                    attrs: {
+                                      content: "2",
+                                      value: "2",
+                                      color: "red",
+                                      overlap: ""
+                                    }
+                                  },
+                                  [_c("v-icon", [_vm._v("mdi-bell")])],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ],
+                    null,
+                    false,
+                    685925669
+                  )
+                },
+                [_vm._v(" "), _c("span", [_vm._v("Notifications")])]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tooltip",
+                {
+                  attrs: { bottom: "" },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    attrs: { icon: "" },
                                     on: { click: _vm.onLogout }
                                   },
                                   "v-btn",
@@ -890,7 +1006,29 @@ var render = function() {
                         [
                           _c("v-list-item-title", [_vm._v("Notifications")]),
                           _vm._v(" "),
-                          _c("v-list-item-subtitle", [_vm._v("5 Unread")])
+                          _c("v-list-item-subtitle", [_vm._v("5 Unread")]),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-title",
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticClass: "text-decoration-none",
+                                  staticStyle: { color: "#4caf50" },
+                                  attrs: {
+                                    to: { name: "admin.notifications.index" }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            View all\n                        "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
@@ -916,24 +1054,53 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-list",
-            { attrs: { dense: "" } },
+            { attrs: { "two-line": "" } },
             [
               _c(
-                "v-list-item",
+                "v-list-item-group",
+                { attrs: { "active-class": "" } },
                 [
-                  _c(
-                    "v-list-item-icon",
-                    [_c("v-icon", [_vm._v("mdi-bell")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v("Title")])],
-                    1
-                  )
+                  _vm._l(_vm.notifications, function(item, index) {
+                    return [
+                      _c(
+                        "v-list-item",
+                        { key: item.title, attrs: { to: item.link } },
+                        [
+                          [
+                            _c(
+                              "v-list-item-content",
+                              [
+                                _c("v-list-item-title", {
+                                  domProps: { textContent: _vm._s(item.title) }
+                                }),
+                                _vm._v(" "),
+                                _c("v-list-item-subtitle", {
+                                  staticClass: "text--primary",
+                                  domProps: {
+                                    textContent: _vm._s(item.headline)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("v-list-item-subtitle", {
+                                  domProps: {
+                                    textContent: _vm._s(item.subtitle)
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          ]
+                        ],
+                        2
+                      ),
+                      _vm._v(" "),
+                      index < _vm.items.length - 1
+                        ? _c("v-divider", { key: index })
+                        : _vm._e()
+                    ]
+                  })
                 ],
-                1
+                2
               )
             ],
             1

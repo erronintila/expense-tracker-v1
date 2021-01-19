@@ -164,7 +164,7 @@
 
             <v-spacer></v-spacer>
 
-            <!-- <v-tooltip bottom>
+            <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         icon
@@ -178,7 +178,7 @@
                     </v-btn>
                 </template>
                 <span>Notifications</span>
-            </v-tooltip> -->
+            </v-tooltip>
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -231,23 +231,51 @@
                     <v-list-item-content>
                         <v-list-item-title>Notifications</v-list-item-title>
                         <v-list-item-subtitle>5 Unread</v-list-item-subtitle>
+                        <v-list-item-title>
+                            <router-link
+                                :to="{ name: 'admin.notifications.index' }"
+                                class="text-decoration-none"
+                                style="color: #4caf50"
+                            >
+                                View all
+                            </router-link>
+                        </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </template>
 
             <v-divider></v-divider>
 
-            <v-list dense>
-                <v-list-item>
-                    <v-list-item-icon>
-                        <v-icon>mdi-bell</v-icon>
-                    </v-list-item-icon>
+            <v-list two-line>
+                <v-list-item-group active-class="">
+                    <template v-for="(item, index) in notifications">
+                        <v-list-item :key="item.title" :to="item.link">
+                            <template>
+                                <v-list-item-content>
+                                    <v-list-item-title
+                                        v-text="item.title"
+                                    ></v-list-item-title>
 
-                    <v-list-item-content>
-                        <v-list-item-title>Title</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                                    <v-list-item-subtitle
+                                        class="text--primary"
+                                        v-text="item.headline"
+                                    ></v-list-item-subtitle>
+
+                                    <v-list-item-subtitle
+                                        v-text="item.subtitle"
+                                    ></v-list-item-subtitle>
+                                </v-list-item-content>
+                            </template>
+                        </v-list-item>
+
+                        <v-divider
+                            v-if="index < items.length - 1"
+                            :key="index"
+                        ></v-divider>
+                    </template>
+                </v-list-item-group>
             </v-list>
+
         </v-navigation-drawer>
         <!-- End of Notifications Drawer -->
     </div>
@@ -376,6 +404,32 @@ export default {
             //         },
             //     ]
             // }
+        ],
+        notifications: [
+            {
+                id: 1,
+                action: '15 min',
+                headline: 'Brunch this weekend?',
+                subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+                title: 'Ali Connors',
+                link: { name: "admin.notifications.index" }
+            },
+            {
+                id: 2,
+                action: '15 min',
+                headline: 'Brunch this weekend?',
+                subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+                title: 'Ali Connoraasds',
+                link: { name: "admin.notifications.index" }
+            },
+            {
+                id: 3,
+                action: '15 min',
+                headline: 'Brunch this weekend?',
+                subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+                title: 'Ali Connorsasd',
+                link: { name: "admin.notifications.index" }
+            },
         ]
     }),
     methods: {

@@ -54,6 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'taxes' => 'API\v1\TaxController',
 
             'settings' => 'API\v1\SettingController',
+
+            'notifications' => 'API\v1\NotificationController'
         ]
     );
 
