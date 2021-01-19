@@ -150,7 +150,7 @@
                         </td>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onRead(item)">
+                        <v-icon v-if="!item.read_at" small class="mr-2" @click="onRead(item)">
                             mdi-check
                         </v-icon>
                     </template>
@@ -164,7 +164,7 @@
                     </template>
                     <template v-slot:[`item.status`]="{ item }">
                         <v-chip color="green" v-if="item.read_at" dark small>
-                            {{ Read }}
+                            Read    
                         </v-chip>
                         <v-chip color="red" v-else dark small>
                             Unread
