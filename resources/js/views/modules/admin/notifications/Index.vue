@@ -142,16 +142,50 @@
                         <td :colspan="headers.length">
                             <v-container>
                                 <table>
-                                    {{
-                                        item
-                                    }}
+                                    <tr>
+                                        <td><strong>Last Updated</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.updated_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Read at</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.read_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
                                 </table>
                             </v-container>
                         </td>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon v-if="!item.read_at" small class="mr-2" @click="onRead(item)">
+                        <v-icon
+                            v-if="!item.read_at"
+                            small
+                            class="mr-2"
+                            @click="onRead(item.id)"
+                        >
                             mdi-check
+                        </v-icon>
+                        <v-icon
+                            v-else
+                            small
+                            class="mr-2"
+                            @click="onUnread(item.id)"
+                        >
+                            mdi-close
                         </v-icon>
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">
@@ -162,9 +196,12 @@
                             )
                         }}
                     </template>
+                    <template v-slot:[`item.description`]="{ item }">
+                        {{ item.data.data.description }} - {{ item.data.data.expense_report.code }}
+                    </template>
                     <template v-slot:[`item.status`]="{ item }">
                         <v-chip color="green" v-if="item.read_at" dark small>
-                            Read    
+                            Read
                         </v-chip>
                         <v-chip color="red" v-else dark small>
                             Unread
@@ -225,7 +262,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "created_at" },
-                { text: "Employee", value: "employee" },
+                { text: "Employee", value: "data.data.employee.full_name" },
                 { text: "Description", value: "description" },
                 { text: "Status", value: "status" },
                 { text: "Actions", value: "actions", sortable: false },
@@ -235,8 +272,8 @@ export default {
             items: [],
             employee: 0,
             employees: [],
-            status: "All Notifications",
-            statuses: ["All Notifications", "All Read", "All Unread"],
+            status: "All Unread",
+            statuses: ["All Unread", "All Read", "All Notifications"],
             selected: [],
             search: "",
             totalItems: 0,
@@ -366,48 +403,52 @@ export default {
                 params: { id: item.id }
             });
         },
-        onRead(item) {},
-        // onDelete() {
-        //     let _this = this;
+        onRead(item) {
+            let _this = this;
 
-        //     if (_this.selected.length == 0) {
-        //         this.$dialog.message.error("No item(s) selected", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
+            console.log("read");
 
-        //     this.$confirm("do you want to cancel payment?").then(res => {
-        //         if (res) {
-        //             axios
-        //                 .delete(`/api/payments/${_this.selected[0].id}`, {
-        //                     params: {
-        //                         ids: _this.selected.map(item => {
-        //                             return item.id;
-        //                         })
-        //                     }
-        //                 })
-        //                 .then(function(response) {
-        //                     _this.$dialog.message.success(
-        //                         "Item(s) moved to archive.",
-        //                         {
-        //                             position: "top-right",
-        //                             timeout: 2000
-        //                         }
-        //                     );
-        //                     _this.getDataFromApi().then(data => {
-        //                         _this.items = data.items;
-        //                         _this.totalItems = data.total;
-        //                     });
-        //                 })
-        //                 .catch(function(error) {
-        //                     console.log(error);
-        //                      console.log(error.response);
-        //                 });
-        //         }
-        //     });
-        // },
+            axios
+                .patch(`/api/notifications/${item}`, {
+                    action: "read"
+                })
+                .then(response => {
+                    console.log(response);
+                    _this.getDataFromApi().then(data => {
+                        _this.items = data.items;
+                        _this.totalItems = data.total;
+                    });
+
+                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
+        onUnread(item) {
+            let _this = this;
+
+            console.log("read");
+
+            axios
+                .patch(`/api/notifications/${item}`, {
+                    action: "unread"
+                })
+                .then(response => {
+                    console.log(response);
+                    _this.getDataFromApi().then(data => {
+                        _this.items = data.items;
+                        _this.totalItems = data.total;
+                    });
+
+                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         onUpdate(action, method) {
             let _this = this;
 
@@ -509,6 +550,7 @@ export default {
     mounted() {},
     created() {
         this.loadEmployees();
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
     }
 };
 </script>

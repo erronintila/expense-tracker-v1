@@ -172,7 +172,7 @@
                         v-on="on"
                         @click.stop="notificationDrawer = !notificationDrawer"
                     >
-                        <v-badge content="2" value="2" color="red" overlap>
+                        <v-badge :content="$store.getters.notifications.data.length" :value="$store.getters.notifications.data.length" color="red" overlap>
                             <v-icon>mdi-bell</v-icon>
                         </v-badge>
                     </v-btn>
@@ -230,7 +230,8 @@
 
                     <v-list-item-content>
                         <v-list-item-title>Notifications</v-list-item-title>
-                        <v-list-item-subtitle>5 Unread</v-list-item-subtitle>
+                        <v-list-item-subtitle v-if="$store.getters.notifications.data.length > 0">{{$store.getters.notifications.data.length}} Unread</v-list-item-subtitle>
+                        <v-list-item-subtitle v-else>No notifications</v-list-item-subtitle>
                         <v-list-item-title>
                             <router-link
                                 :to="{ name: 'admin.notifications.index' }"
@@ -248,22 +249,22 @@
 
             <v-list two-line>
                 <v-list-item-group active-class="">
-                    <template v-for="(item, index) in notifications">
+                    <template v-for="(item, index) in $store.getters.notifications.data">
                         <v-list-item :key="item.title" :to="item.link">
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
-                                        v-text="item.title"
+                                        v-text="item.data.data.employee.full_name"
                                     ></v-list-item-title>
 
                                     <v-list-item-subtitle
                                         class="text--primary"
-                                        v-text="item.headline"
+                                        v-text="item.data.data.description"
                                     ></v-list-item-subtitle>
 
-                                    <v-list-item-subtitle
+                                    <!-- <v-list-item-subtitle
                                         v-text="item.subtitle"
-                                    ></v-list-item-subtitle>
+                                    ></v-list-item-subtitle> -->
                                 </v-list-item-content>
                             </template>
                         </v-list-item>
@@ -405,32 +406,32 @@ export default {
             //     ]
             // }
         ],
-        notifications: [
-            {
-                id: 1,
-                action: '15 min',
-                headline: 'Brunch this weekend?',
-                subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-                title: 'Ali Connors',
-                link: { name: "admin.notifications.index" }
-            },
-            {
-                id: 2,
-                action: '15 min',
-                headline: 'Brunch this weekend?',
-                subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-                title: 'Ali Connoraasds',
-                link: { name: "admin.notifications.index" }
-            },
-            {
-                id: 3,
-                action: '15 min',
-                headline: 'Brunch this weekend?',
-                subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-                title: 'Ali Connorsasd',
-                link: { name: "admin.notifications.index" }
-            },
-        ]
+        // notifications: [
+        //     // {
+        //     //     id: 1,
+        //     //     action: '15 min',
+        //     //     headline: 'Brunch this weekend?',
+        //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+        //     //     title: 'Ali Connors',
+        //     //     link: { name: "admin.notifications.index" }
+        //     // },
+        //     // {
+        //     //     id: 2,
+        //     //     action: '15 min',
+        //     //     headline: 'Brunch this weekend?',
+        //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+        //     //     title: 'Ali Connoraasds',
+        //     //     link: { name: "admin.notifications.index" }
+        //     // },
+        //     // {
+        //     //     id: 3,
+        //     //     action: '15 min',
+        //     //     headline: 'Brunch this weekend?',
+        //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+        //     //     title: 'Ali Connorsasd',
+        //     //     link: { name: "admin.notifications.index" }
+        //     // },
+        // ]
     }),
     methods: {
         toProfile() {
@@ -449,7 +450,10 @@ export default {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
             _this.user = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
+
+        
     }
 };
 </script>

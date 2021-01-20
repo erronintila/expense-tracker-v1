@@ -292,6 +292,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -427,35 +428,33 @@ __webpack_require__.r(__webpack_exports__);
       //         },
       //     ]
       // }
-      ],
-      notifications: [{
-        id: 1,
-        action: '15 min',
-        headline: 'Brunch this weekend?',
-        subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
-        title: 'Ali Connors',
-        link: {
-          name: "admin.notifications.index"
-        }
-      }, {
-        id: 2,
-        action: '15 min',
-        headline: 'Brunch this weekend?',
-        subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
-        title: 'Ali Connoraasds',
-        link: {
-          name: "admin.notifications.index"
-        }
-      }, {
-        id: 3,
-        action: '15 min',
-        headline: 'Brunch this weekend?',
-        subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
-        title: 'Ali Connorsasd',
-        link: {
-          name: "admin.notifications.index"
-        }
-      }]
+      ] // notifications: [
+      //     // {
+      //     //     id: 1,
+      //     //     action: '15 min',
+      //     //     headline: 'Brunch this weekend?',
+      //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+      //     //     title: 'Ali Connors',
+      //     //     link: { name: "admin.notifications.index" }
+      //     // },
+      //     // {
+      //     //     id: 2,
+      //     //     action: '15 min',
+      //     //     headline: 'Brunch this weekend?',
+      //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+      //     //     title: 'Ali Connoraasds',
+      //     //     link: { name: "admin.notifications.index" }
+      //     // },
+      //     // {
+      //     //     id: 3,
+      //     //     action: '15 min',
+      //     //     headline: 'Brunch this weekend?',
+      //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+      //     //     title: 'Ali Connorsasd',
+      //     //     link: { name: "admin.notifications.index" }
+      //     // },
+      // ]
+
     };
   },
   methods: {
@@ -482,6 +481,8 @@ __webpack_require__.r(__webpack_exports__);
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this.user = response;
+
+      _this.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   }
 });
@@ -873,8 +874,12 @@ var render = function() {
                                   "v-badge",
                                   {
                                     attrs: {
-                                      content: "2",
-                                      value: "2",
+                                      content:
+                                        _vm.$store.getters.notifications.data
+                                          .length,
+                                      value:
+                                        _vm.$store.getters.notifications.data
+                                          .length,
                                       color: "red",
                                       overlap: ""
                                     }
@@ -891,7 +896,7 @@ var render = function() {
                     ],
                     null,
                     false,
-                    685925669
+                    3801761893
                   )
                 },
                 [_vm._v(" "), _c("span", [_vm._v("Notifications")])]
@@ -1006,7 +1011,17 @@ var render = function() {
                         [
                           _c("v-list-item-title", [_vm._v("Notifications")]),
                           _vm._v(" "),
-                          _c("v-list-item-subtitle", [_vm._v("5 Unread")]),
+                          _vm.$store.getters.notifications.data.length > 0
+                            ? _c("v-list-item-subtitle", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.$store.getters.notifications.data.length
+                                  ) + " Unread"
+                                )
+                              ])
+                            : _c("v-list-item-subtitle", [
+                                _vm._v("No notifications")
+                              ]),
                           _vm._v(" "),
                           _c(
                             "v-list-item-title",
@@ -1060,7 +1075,10 @@ var render = function() {
                 "v-list-item-group",
                 { attrs: { "active-class": "" } },
                 [
-                  _vm._l(_vm.notifications, function(item, index) {
+                  _vm._l(_vm.$store.getters.notifications.data, function(
+                    item,
+                    index
+                  ) {
                     return [
                       _c(
                         "v-list-item",
@@ -1071,19 +1089,19 @@ var render = function() {
                               "v-list-item-content",
                               [
                                 _c("v-list-item-title", {
-                                  domProps: { textContent: _vm._s(item.title) }
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      item.data.data.employee.full_name
+                                    )
+                                  }
                                 }),
                                 _vm._v(" "),
                                 _c("v-list-item-subtitle", {
                                   staticClass: "text--primary",
                                   domProps: {
-                                    textContent: _vm._s(item.headline)
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("v-list-item-subtitle", {
-                                  domProps: {
-                                    textContent: _vm._s(item.subtitle)
+                                    textContent: _vm._s(
+                                      item.data.data.description
+                                    )
                                   }
                                 })
                               ],

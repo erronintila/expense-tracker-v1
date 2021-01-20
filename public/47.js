@@ -235,6 +235,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -250,7 +287,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "created_at"
       }, {
         text: "Employee",
-        value: "employee"
+        value: "data.data.employee.full_name"
       }, {
         text: "Description",
         value: "description"
@@ -269,8 +306,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       items: [],
       employee: 0,
       employees: [],
-      status: "All Notifications",
-      statuses: ["All Notifications", "All Read", "All Unread"],
+      status: "All Unread",
+      statuses: ["All Unread", "All Read", "All Notifications"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -376,46 +413,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    onRead: function onRead(item) {},
-    // onDelete() {
-    //     let _this = this;
-    //     if (_this.selected.length == 0) {
-    //         this.$dialog.message.error("No item(s) selected", {
-    //             position: "top-right",
-    //             timeout: 2000
-    //         });
-    //         return;
-    //     }
-    //     this.$confirm("do you want to cancel payment?").then(res => {
-    //         if (res) {
-    //             axios
-    //                 .delete(`/api/payments/${_this.selected[0].id}`, {
-    //                     params: {
-    //                         ids: _this.selected.map(item => {
-    //                             return item.id;
-    //                         })
-    //                     }
-    //                 })
-    //                 .then(function(response) {
-    //                     _this.$dialog.message.success(
-    //                         "Item(s) moved to archive.",
-    //                         {
-    //                             position: "top-right",
-    //                             timeout: 2000
-    //                         }
-    //                     );
-    //                     _this.getDataFromApi().then(data => {
-    //                         _this.items = data.items;
-    //                         _this.totalItems = data.total;
-    //                     });
-    //                 })
-    //                 .catch(function(error) {
-    //                     console.log(error);
-    //                      console.log(error.response);
-    //                 });
-    //         }
-    //     });
-    // },
+    onRead: function onRead(item) {
+      var _this = this;
+
+      console.log("read");
+      axios.patch("/api/notifications/".concat(item), {
+        action: "read"
+      }).then(function (response) {
+        console.log(response);
+
+        _this.getDataFromApi().then(function (data) {
+          _this.items = data.items;
+          _this.totalItems = data.total;
+        });
+
+        _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
+    onUnread: function onUnread(item) {
+      var _this = this;
+
+      console.log("read");
+      axios.patch("/api/notifications/".concat(item), {
+        action: "unread"
+      }).then(function (response) {
+        console.log(response);
+
+        _this.getDataFromApi().then(function (data) {
+          _this.items = data.items;
+          _this.totalItems = data.total;
+        });
+
+        _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
     onUpdate: function onUpdate(action, method) {
       var _this = this;
 
@@ -503,6 +540,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {},
   created: function created() {
     this.loadEmployees();
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });
 
@@ -881,11 +919,47 @@ var render = function() {
                             [
                               _c("v-container", [
                                 _c("table", [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(item) +
-                                      "\n                            "
-                                  )
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Last Updated")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              item.updated_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _c("strong", [_vm._v("Read at")])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(":")]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              item.read_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ])
+                                  ])
                                 ])
                               ])
                             ],
@@ -907,7 +981,7 @@ var render = function() {
                                   attrs: { small: "" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.onRead(item)
+                                      return _vm.onRead(item.id)
                                     }
                                   }
                                 },
@@ -917,7 +991,23 @@ var render = function() {
                                   )
                                 ]
                               )
-                            : _vm._e()
+                            : _c(
+                                "v-icon",
+                                {
+                                  staticClass: "mr-2",
+                                  attrs: { small: "" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.onUnread(item.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        mdi-close\n                    "
+                                  )
+                                ]
+                              )
                         ]
                       }
                     },
@@ -940,6 +1030,21 @@ var render = function() {
                       }
                     },
                     {
+                      key: "item.description",
+                      fn: function(ref) {
+                        var item = ref.item
+                        return [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(item.data.data.description) +
+                              " - " +
+                              _vm._s(item.data.data.expense_report.code) +
+                              "\n                "
+                          )
+                        ]
+                      }
+                    },
+                    {
                       key: "item.status",
                       fn: function(ref) {
                         var item = ref.item
@@ -952,7 +1057,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                        Read    \n                    "
+                                    "\n                        Read\n                    "
                                   )
                                 ]
                               )

@@ -5,12 +5,16 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NotificationResource;
 use App\Models\Employee;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
+    use ApiResponse;
+
     /**
      * Display a listing of the resource.
      *
@@ -30,10 +34,10 @@ class NotificationController extends Controller
 
         $end_date = request("end_date") ?? date("Y-m-d");
 
-        $user = request()->has("employee_id") ? 
-            (request("employee_id") > 0 ? 
-                Employee::find(request("employee_id"))->user()->first() : 
-                Auth::user()) : 
+        $user = request()->has("employee_id") ?
+            (request("employee_id") > 0 ?
+                Employee::find(request("employee_id"))->user()->first() :
+                Auth::user()) :
             Auth::user();
 
         $status = request("status") ?? "All Notifications";
@@ -82,7 +86,7 @@ class NotificationController extends Controller
      */
     public function show($id)
     {
-        //
+        return new NotificationResource(auth()->user()->unreadNotifications->where('id', $id));
     }
 
     /**
@@ -94,7 +98,42 @@ class NotificationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        switch (request("action")) {
+
+            case 'read':
+
+                if (request()->has("mark_all")) {
+                    auth()->user()->unreadNotifications->markAsRead();
+                } elseif (request()->has("ids")) {
+                    foreach (request("ids") as $notif_id) {
+                        auth()->user()->unreadNotifications->where('id', $notif_id)->markAsRead();
+                    }
+                } else {
+                    auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+                }
+
+                break;
+
+            case 'unread':
+
+                if (request()->has("mark_all")) {
+                    auth()->user()->readNotifications->markAsUnread();
+                } elseif (request()->has("ids")) {
+                    foreach (request("ids") as $notif_id) {
+                        auth()->user()->readNotifications->where('id', $notif_id)->markAsUnread();
+                    }
+                } else {
+                    auth()->user()->readNotifications->where('id', $id)->markAsUnread();
+                }
+
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+        return $this->successResponse([], "Notification(s) marked as read", 200);
     }
 
     /**
@@ -106,5 +145,26 @@ class NotificationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | NOTIFICATION CUSTOM FUNCTIONS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    public function getNotifications(Request $request) {
+        $data = [];
+        $message = "";
+
+        switch(request("action")) {
+            case 'check notifications':
+
+                $data = NotificationResource::collection(auth()->user()->unreadNotifications);
+
+                break;
+        }
+
+        return $this->successResponse($data, $message, 200);
     }
 }
