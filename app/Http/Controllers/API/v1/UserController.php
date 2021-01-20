@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -413,8 +414,17 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function getPermissions()
+    public function getPermissions(Request $request)
     {
+        // return null;
+        // if(request()->has("is_admin")) {
+        //     if(request("is_admin")) {
+        //         return Role::findByName('Administrator')->permissions;
+        //     } else {
+        //         return Role::findByName('Standard User')->permissions;
+        //     }
+        // }
+
         return Permission::all();
     }
     

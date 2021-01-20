@@ -367,7 +367,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -403,7 +402,8 @@ __webpack_require__.r(__webpack_exports__);
         username: "",
         can_login: true,
         has_fund: false,
-        fund: 0
+        fund: 0,
+        is_admin: false
       },
       errors: {
         code: [],
@@ -458,7 +458,11 @@ __webpack_require__.r(__webpack_exports__);
     loadPermissions: function loadPermissions() {
       var _this = this;
 
-      axios.get("/api/data/permissions").then(function (response) {
+      axios.get("/api/data/permissions", {
+        params: {
+          is_admin: _this.is_admin
+        }
+      }).then(function (response) {
         _this.permissions = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -1338,24 +1342,22 @@ var render = function() {
                                   _c(
                                     "v-col",
                                     [
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
+                                      _c("v-data-table", {
+                                        attrs: {
+                                          "show-select": "",
+                                          "items-per-page": -1,
+                                          headers: _vm.headers,
+                                          items: _vm.permissions,
+                                          "group-by": "category"
+                                        },
+                                        model: {
+                                          value: _vm.selected,
+                                          callback: function($$v) {
+                                            _vm.selected = $$v
+                                          },
+                                          expression: "selected"
+                                        }
+                                      })
                                     ],
                                     1
                                   )

@@ -327,7 +327,6 @@
                             <v-row>
                                 <v-col>
                                     <v-data-table
-                                        v-if="form.role == 'Administrator'"
                                         v-model="selected"
                                         show-select
                                         :items-per-page="-1"
@@ -388,7 +387,8 @@ export default {
                 username: "",
                 can_login: true,
                 has_fund: false,
-                fund: 0
+                fund: 0,
+                is_admin: false,
             },
             errors: {
                 code: [],
@@ -451,7 +451,11 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/permissions")
+                .get("/api/data/permissions", {
+                    params: {
+                        is_admin: _this.is_admin
+                    }
+                })
                 .then(response => {
                     _this.permissions = response.data;
                 })
