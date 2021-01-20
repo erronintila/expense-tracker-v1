@@ -98,33 +98,67 @@ class NotificationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $message = "";
+
         switch (request("action")) {
 
             case 'read':
 
-                if (request()->has("mark_all")) {
-                    auth()->user()->unreadNotifications->markAsRead();
-                } elseif (request()->has("ids")) {
-                    foreach (request("ids") as $notif_id) {
-                        auth()->user()->unreadNotifications->where('id', $notif_id)->markAsRead();
-                    }
-                } else {
-                    auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+                switch (request("type")) {
+                    case 'all':
+                        auth()->user()->unreadNotifications->markAsRead();
+                        break;
+                    case 'multiple':
+                        foreach (request("ids") as $notif_id) {
+                            auth()->user()->unreadNotifications->where('id', $notif_id)->markAsRead();
+                        }
+                        break;
+                    default:
+                        auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+                        break;
                 }
+
+                $message = "Notification(s) marked as read";
+
+                // if (request()->has("mark_all")) {
+                //     auth()->user()->unreadNotifications->markAsRead();
+                // } elseif (request()->has("ids")) {
+                //     foreach (request("ids") as $notif_id) {
+                //         auth()->user()->unreadNotifications->where('id', $notif_id)->markAsRead();
+                //     }
+                // } else {
+                //     auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+                // }
 
                 break;
 
             case 'unread':
 
-                if (request()->has("mark_all")) {
-                    auth()->user()->readNotifications->markAsUnread();
-                } elseif (request()->has("ids")) {
-                    foreach (request("ids") as $notif_id) {
-                        auth()->user()->readNotifications->where('id', $notif_id)->markAsUnread();
-                    }
-                } else {
+                switch (request("type")) {
+                    case 'all':
+                        auth()->user()->readNotifications->markAsUnread();
+                        break;
+                    case 'multiple':
+                        foreach (request("ids") as $notif_id) {
+                            auth()->user()->readNotifications->where('id', $notif_id)->markAsUnread();
+                        }
+                        break;
+                    default:
                     auth()->user()->readNotifications->where('id', $id)->markAsUnread();
+                        break;
                 }
+
+                $message = "Notification(s) marked as unread";
+
+                // if (request()->has("mark_all")) {
+                //     auth()->user()->readNotifications->markAsUnread();
+                // } elseif (request()->has("ids")) {
+                //     foreach (request("ids") as $notif_id) {
+                //         auth()->user()->readNotifications->where('id', $notif_id)->markAsUnread();
+                //     }
+                // } else {
+                //     auth()->user()->readNotifications->where('id', $id)->markAsUnread();
+                // }
 
                 break;
             
@@ -133,7 +167,7 @@ class NotificationController extends Controller
                 break;
         }
 
-        return $this->successResponse([], "Notification(s) marked as read", 200);
+        return $this->successResponse([], $message, 200);
     }
 
     /**
@@ -153,11 +187,12 @@ class NotificationController extends Controller
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
-    public function getNotifications(Request $request) {
+    public function getNotifications(Request $request)
+    {
         $data = [];
         $message = "";
 
-        switch(request("action")) {
+        switch (request("action")) {
             case 'check notifications':
 
                 $data = NotificationResource::collection(auth()->user()->unreadNotifications);

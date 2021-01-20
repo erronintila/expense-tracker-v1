@@ -276,6 +276,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -308,8 +328,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       totalAmount: 0,
       items: [],
-      employee: 0,
-      employees: [],
+      // employee: 0,
+      // employees: [],
       status: "All Unread",
       statuses: ["All Unread", "All Read", "All Notifications"],
       selected: [],
@@ -330,23 +350,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
-    loadEmployees: function loadEmployees() {
-      var _this = this;
-
-      axios.get("/api/data/employees?only=true").then(function (response) {
-        _this.employees = response.data.data;
-
-        _this.employees.unshift({
-          id: 0,
-          full_name: "All Employees"
-        });
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
+    // loadEmployees() {
+    //     let _this = this;
+    //     axios
+    //         .get("/api/data/employees?only=true")
+    //         .then(response => {
+    //             _this.employees = response.data.data;
+    //             _this.employees.unshift({
+    //                 id: 0,
+    //                 full_name: "All Employees"
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //             _this.mixin_errorDialog(
+    //                 `Error ${error.response.status}`,
+    //                 error.response.statusText
+    //             );
+    //         });
+    // },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -363,8 +386,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-        var range = _this.date_range;
-        var employee_id = _this.employee;
+        var range = _this.date_range; // let employee_id = _this.employee;
+
         axios.get("/api/notifications", {
           params: {
             search: search,
@@ -374,8 +397,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             status: status,
             start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
-            employee_id: employee_id
+            end_date: range[1] ? range[1] : range[0] // employee_id: employee_id
+
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -398,8 +421,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.selected = [];
-      this.loadEmployees();
+      this.selected = []; // this.loadEmployees();
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -409,21 +431,51 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    onEdit: function onEdit(item) {
-      this.$router.push({
-        name: "admin.payments.edit",
-        params: {
-          id: item.id
-        }
-      });
-    },
-    onRead: function onRead(item) {
+    onReadUpdate: function onReadUpdate(item, action, type) {
       var _this = this;
 
-      console.log("read");
-      axios.patch("/api/notifications/".concat(item), {
-        action: "read"
-      }).then(function (response) {
+      var parameters = {};
+      var item_id = item ? item : this.selected.map(function (item) {
+        return item.id;
+      })[0];
+
+      switch (type) {
+        case 'all':
+          if (this.items.length <= 0) {
+            this.mixin_errorDialog("Error", "No data to be updated.");
+            return;
+          }
+
+          parameters = {
+            action: action,
+            type: type
+          };
+          break;
+
+        case 'multiple':
+          if (this.selected.length <= 0) {
+            this.mixin_errorDialog("Error", "No data selected.");
+            return;
+          }
+
+          parameters = {
+            action: action,
+            type: type,
+            ids: this.selected.map(function (item) {
+              return item.id;
+            })
+          };
+          break;
+
+        default:
+          parameters = {
+            action: action,
+            type: type
+          };
+          break;
+      }
+
+      axios.patch("/api/notifications/".concat(item_id), parameters).then(function (response) {
         console.log(response);
 
         _this.getDataFromApi().then(function (data) {
@@ -432,85 +484,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
 
         _this.$store.dispatch("AUTH_NOTIFICATIONS");
+
+        _this.selected = [];
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
-      });
-    },
-    onUnread: function onUnread(item) {
-      var _this = this;
-
-      console.log("read");
-      axios.patch("/api/notifications/".concat(item), {
-        action: "unread"
-      }).then(function (response) {
-        console.log(response);
-
-        _this.getDataFromApi().then(function (data) {
-          _this.items = data.items;
-          _this.totalItems = data.total;
-        });
-
-        _this.$store.dispatch("AUTH_NOTIFICATIONS");
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-      });
-    },
-    onUpdate: function onUpdate(action, method) {
-      var _this = this;
-
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      if (action == "receive" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Completed")) {
-        this.$dialog.message.error("Payment has already been received", {
-          position: "top-right",
-          timeout: 2000
-        });
-        return;
-      }
-
-      this.$confirm("Do you want to ".concat(action, " payment(s)?")).then(function (res) {
-        if (res) {
-          var ids = _this.selected.map(function (item) {
-            return item.id;
-          });
-
-          axios({
-            method: method,
-            url: "/api/payments/".concat(_this.selected[0].id),
-            data: {
-              ids: ids,
-              action: action
-            }
-          }).then(function (response) {
-            _this.$dialog.message.success(response.data.message, {
-              position: "top-right",
-              timeout: 2000
-            });
-
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
-            }); // _this.$store.dispatch("AUTH_USER");
-
-
-            _this.selected = [];
-          })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-          });
-        }
+        _this.selected = [];
       });
     }
   },
@@ -520,7 +499,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.employee), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     }
   },
   watch: {
@@ -543,7 +522,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {},
   created: function created() {
-    this.loadEmployees();
+    // this.loadEmployees();
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });
@@ -738,28 +717,6 @@ var render = function() {
                               })
                             ],
                             1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("v-select", {
-                                attrs: {
-                                  items: _vm.employees,
-                                  "item-text": "full_name",
-                                  "item-value": "id",
-                                  label: "Employee"
-                                },
-                                model: {
-                                  value: _vm.employee,
-                                  callback: function($$v) {
-                                    _vm.employee = $$v
-                                  },
-                                  expression: "employee"
-                                }
-                              })
-                            ],
-                            1
                           )
                         ],
                         1
@@ -851,6 +808,48 @@ var render = function() {
                     [
                       _c(
                         "v-list-item",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onReadUpdate(null, "read", "all")
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            [
+                              _c("v-icon", [
+                                _vm._v("mdi-credit-card-check-outline")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "\n                            Mark all as read\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-item",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onReadUpdate(null, "read", "multiple")
+                            }
+                          }
+                        },
                         [
                           _c(
                             "v-list-item-icon",
@@ -865,6 +864,45 @@ var render = function() {
                           _c("v-list-item-subtitle", [
                             _vm._v(
                               "\n                            Mark as read\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-item",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onReadUpdate(
+                                null,
+                                "unread",
+                                "multiple"
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            [
+                              _c("v-icon", [
+                                _vm._v("mdi-credit-card-check-outline")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "\n                            Mark as unread\n                        "
                             )
                           ])
                         ],
@@ -985,7 +1023,11 @@ var render = function() {
                                   attrs: { small: "" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.onRead(item.id)
+                                      return _vm.onReadUpdate(
+                                        item.id,
+                                        "read",
+                                        "single"
+                                      )
                                     }
                                   }
                                 },
@@ -1002,7 +1044,11 @@ var render = function() {
                                   attrs: { small: "" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.onUnread(item.id)
+                                      return _vm.onReadUpdate(
+                                        item.id,
+                                        "unread",
+                                        "single"
+                                      )
                                     }
                                   }
                                 },
@@ -1091,18 +1137,6 @@ var render = function() {
                   expression: "selected"
                 }
               }),
-              _vm._v(" "),
-              _vm.status == "All Unread" && _vm.selected.length > 0
-                ? _c("v-btn", { attrs: { color: "green", dark: "" } }, [
-                    _vm._v("Mark as read")
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.status == "All Read" && _vm.selected.length > 0
-                ? _c("v-btn", { attrs: { color: "red", dark: "" } }, [
-                    _vm._v("Mark as unread")
-                  ])
-                : _vm._e(),
               _vm._v(" "),
               _vm.selected.length > 0
                 ? _c(

@@ -95,12 +95,34 @@
                     </template>
 
                     <v-list>
-                        <v-list-item>
+                        <v-list-item @click="onReadUpdate(null, 'read', 'all')">
+                            <v-list-item-icon>
+                                <v-icon>mdi-credit-card-check-outline</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Mark all as read
+                            </v-list-item-subtitle>
+                        </v-list-item>
+                    </v-list>
+
+                    <v-list>
+                        <v-list-item @click="onReadUpdate(null, 'read', 'multiple')">
                             <v-list-item-icon>
                                 <v-icon>mdi-credit-card-check-outline</v-icon>
                             </v-list-item-icon>
                             <v-list-item-subtitle>
                                 Mark as read
+                            </v-list-item-subtitle>
+                        </v-list-item>
+                    </v-list>
+
+                    <v-list>
+                        <v-list-item @click="onReadUpdate(null, 'unread', 'multiple')">
+                            <v-list-item-icon>
+                                <v-icon>mdi-credit-card-check-outline</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Mark as unread
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
@@ -166,7 +188,7 @@
                             v-if="!item.read_at"
                             small
                             class="mr-2"
-                            @click="onRead(item.id)"
+                            @click="onReadUpdate(item.id, 'read', 'single')"
                         >
                             mdi-check
                         </v-icon>
@@ -174,7 +196,7 @@
                             v-else
                             small
                             class="mr-2"
-                            @click="onUnread(item.id)"
+                            @click="onReadUpdate(item.id, 'unread', 'single')"
                         >
                             mdi-close
                         </v-icon>
@@ -237,8 +259,6 @@
                     </template> -->
                 </v-data-table>
 
-                <v-btn color="green" dark v-if="status=='All Unread' && selected.length > 0">Mark as read</v-btn>
-                <v-btn color="red" dark v-if="status=='All Read' && selected.length > 0">Mark as unread</v-btn>
                 <v-btn v-if="selected.length > 0" @click="selected = []">Clear All Selected</v-btn>
             </v-card-text>
         </v-card>
@@ -371,122 +391,63 @@ export default {
                 params: { id: item.id }
             });
         },
-        onRead(item) {
+        onReadUpdate(item, action, type) {
             let _this = this;
+            let parameters = {};
+            let item_id = item ? item : this.selected.map(item => item.id)[0];
 
-            console.log("read");
-
-            axios
-                .patch(`/api/notifications/${item}`, {
-                    action: "read"
-                })
-                .then(response => {
-                    console.log(response);
-                    _this.getDataFromApi().then(data => {
-                        _this.items = data.items;
-                        _this.totalItems = data.total;
-                    });
-
-                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
-        onUnread(item) {
-            let _this = this;
-
-            console.log("read");
-
-            axios
-                .patch(`/api/notifications/${item}`, {
-                    action: "unread"
-                })
-                .then(response => {
-                    console.log(response);
-                    _this.getDataFromApi().then(data => {
-                        _this.items = data.items;
-                        _this.totalItems = data.total;
-                    });
-
-                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-                });
-        },
-        onUpdate(action, method) {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
-
-            if (
-                action == "receive" &&
-                this.selected
-                    .map(item => item.status.status)
-                    .includes("Completed")
-            ) {
-                this.$dialog.message.error(
-                    "Payment has already been received",
-                    {
-                        position: "top-right",
-                        timeout: 2000
+            switch (type) {
+                case 'all':
+                    if(this.items.length <= 0) {
+                        this.mixin_errorDialog("Error", "No data to be updated.");
+                        return;
                     }
-                );
-                return;
+
+                    parameters = {
+                        action: action,
+                        type: type,
+                    };
+                    break;
+                case 'multiple':
+                    if(this.selected.length <= 0) {
+                        this.mixin_errorDialog("Error", "No data selected.");
+                        return;
+                    }
+
+                    parameters = {
+                        action: action,
+                        type: type,
+                        ids: this.selected.map(item => item.id)
+                    };
+                    break;
+                default:
+                    parameters = {
+                        action: action,
+                        type: type,
+                    };
+                    break;
             }
 
-            this.$confirm(`Do you want to ${action} payment(s)?`).then(res => {
-                if (res) {
-                    let ids = _this.selected.map(item => {
-                        return item.id;
+            axios
+                .patch(`/api/notifications/${item_id}`, parameters)
+                .then(response => {
+                    console.log(response);
+                    _this.getDataFromApi().then(data => {
+                        _this.items = data.items;
+                        _this.totalItems = data.total;
                     });
 
-                    axios({
-                        method: method,
-                        url: `/api/payments/${_this.selected[0].id}`,
-                        data: {
-                            ids: ids,
-                            action: action
-                        }
-                    })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                response.data.message,
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
+                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-                            // _this.$store.dispatch("AUTH_USER");
+                    _this.selected = [];
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
 
-                            _this.selected = [];
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
-                        });
-                }
-            });
-        }
+                    _this.selected = [];
+                });
+        },
     },
     computed: {
         params(nv) {
