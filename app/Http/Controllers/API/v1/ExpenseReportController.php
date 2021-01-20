@@ -479,6 +479,11 @@ class ExpenseReportController extends Controller
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, false, false, true, false, false);
+
+                    Notification::send(User::withTrashed()->find($expense_report->employee->user->id), new ExpenseReportNotification([
+                        "action" => "approve",
+                        "expense_report" => $expense_report
+                    ]));
                 }
 
                 $message = "Expense Report(s) approved successfully";
@@ -571,6 +576,11 @@ class ExpenseReportController extends Controller
                     $expense_report->disableLogging();
 
                     $expense_report->save();
+
+                    Notification::send(User::withTrashed()->find($expense_report->employee->user->id), new ExpenseReportNotification([
+                        "action" => "reject",
+                        "expense_report" => $expense_report
+                    ]));
 
                     foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
                         $expense_amount = $expense->amount - $expense->reimbursable_amount;

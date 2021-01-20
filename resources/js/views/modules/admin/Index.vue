@@ -250,7 +250,7 @@
             <v-list two-line>
                 <v-list-item-group active-class="">
                     <template v-for="(item, index) in $store.getters.notifications.data">
-                        <v-list-item :key="item.title" :to="item.link">
+                        <v-list-item :key="item.title" :to="`/admin/${item.data.data.model}/${item.data.data.id}`">
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
@@ -262,9 +262,9 @@
                                         v-text="item.data.data.description"
                                     ></v-list-item-subtitle>
 
-                                    <!-- <v-list-item-subtitle
-                                        v-text="item.subtitle"
-                                    ></v-list-item-subtitle> -->
+                                    <v-list-item-subtitle
+                                        v-text="mixin_getHumanDate(item.created_at)"
+                                    ></v-list-item-subtitle>
                                 </v-list-item-content>
                             </template>
                         </v-list-item>

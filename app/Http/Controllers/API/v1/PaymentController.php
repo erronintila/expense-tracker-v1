@@ -8,8 +8,11 @@ use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentResource;
 use App\Models\ExpenseReport;
 use App\Models\Payment;
+use App\Notifications\PaymentNotification;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -252,6 +255,11 @@ class PaymentController extends Controller
             $payment->expense_reports()->sync($arr);
         }
 
+        Notification::send($payment->employee->user, new PaymentNotification([
+            "action" => "release",
+            "payment" => $payment
+        ]));
+
         return response(
             [
                 'data' => new PaymentResource($payment),
@@ -346,6 +354,13 @@ class PaymentController extends Controller
                     $payment->disableLogging();
 
                     $payment->save();
+
+                    foreach (User::where("is_admin", 1)->get() as $user) {
+                        Notification::send($user, new PaymentNotification([
+                            "action" => "receive",
+                            "payment" => $payment
+                        ]));
+                    }
 
                     activity()
                         ->performedOn($payment)
@@ -526,7 +541,6 @@ class PaymentController extends Controller
             $payment = Payment::withTrashed()->findOrFail($id);
 
             foreach ($payment->expense_reports as $expense_report) {
-
                 if ($payment->received_at !== null) {
                     foreach ($payment->expense_reports as $expense_report) {
                         foreach ($expense_report->expenses as $expense) {

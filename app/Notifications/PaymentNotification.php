@@ -3,13 +3,13 @@
 namespace App\Notifications;
 
 use App\Models\Employee;
-use App\Models\ExpenseReport;
+use App\Models\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ExpenseReportNotification extends Notification
+class PaymentNotification extends Notification
 {
     use Queueable;
     private $details;
@@ -32,7 +32,6 @@ class ExpenseReportNotification extends Notification
      */
     public function via($notifiable)
     {
-        // return ['mail', 'database'];
         return ['database'];
     }
 
@@ -58,20 +57,17 @@ class ExpenseReportNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        $expense_report = $this->details['expense_report'];
-        $report = ExpenseReport::find($expense_report->id);
-        $employee = Employee::find($expense_report->employee_id);
+        $payment_record = $this->details['payment'];
+        $payment = Payment::find($payment_record->id);
+        $employee = Employee::find($payment->employee_id);
         $description = "";
 
         switch ($this->details["action"]) {
-            case 'submit':
-                $description = "Submitted Expense Report";
+            case 'release':
+                $description = "Released Payment";
                 break;
-            case 'approve':
-                $description = "Approved Expense Report";
-                break;
-            case 'reject':
-                $description = "Rejected Expense Report";
+            case 'receive':
+                $description = "Confirmed Payment";
                 break;
             default:
                 # code...
@@ -80,17 +76,17 @@ class ExpenseReportNotification extends Notification
 
         return [
             'data' => [
-                "model" => "expense_reports",
-                "id" => $report->id,
-                "code" => $report->code,
+                "model" => "payments",
+                "id" => $payment->id,
+                "code" => $payment->code,
                 "employee" => [
                     "id" => $employee->id,
                     "full_name" => $employee->full_name
                 ],
                 'expense_report' => [
-                    "id" => $report->id,
-                    "code" => $report->code,
-                    "amount" => $report->total_expense_amount
+                    "id" => $payment->id,
+                    "code" => $payment->code,
+                    "amount" => $payment->getTotalAmountAttribute()
                 ],
                 "description" => $description
             ]

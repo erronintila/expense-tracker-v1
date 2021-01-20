@@ -1082,7 +1082,16 @@ var render = function() {
                     return [
                       _c(
                         "v-list-item",
-                        { key: item.title, attrs: { to: item.link } },
+                        {
+                          key: item.title,
+                          attrs: {
+                            to:
+                              "/admin/" +
+                              item.data.data.model +
+                              "/" +
+                              item.data.data.id
+                          }
+                        },
                         [
                           [
                             _c(
@@ -1101,6 +1110,14 @@ var render = function() {
                                   domProps: {
                                     textContent: _vm._s(
                                       item.data.data.description
+                                    )
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("v-list-item-subtitle", {
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      _vm.mixin_getHumanDate(item.created_at)
                                     )
                                   }
                                 })

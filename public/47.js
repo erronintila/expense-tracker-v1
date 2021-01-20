@@ -272,6 +272,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -1086,7 +1090,33 @@ var render = function() {
                   },
                   expression: "selected"
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.status == "All Unread" && _vm.selected.length > 0
+                ? _c("v-btn", { attrs: { color: "green", dark: "" } }, [
+                    _vm._v("Mark as read")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.status == "All Read" && _vm.selected.length > 0
+                ? _c("v-btn", { attrs: { color: "red", dark: "" } }, [
+                    _vm._v("Mark as unread")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.selected.length > 0
+                ? _c(
+                    "v-btn",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.selected = []
+                        }
+                      }
+                    },
+                    [_vm._v("Clear All Selected")]
+                  )
+                : _vm._e()
             ],
             1
           )

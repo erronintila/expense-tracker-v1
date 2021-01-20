@@ -617,6 +617,7 @@ export default {
     this.$store.dispatch("AUTH_USER").then((response) => {
       _this.user = response;
     });
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
 };
 </script>

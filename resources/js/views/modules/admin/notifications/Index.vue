@@ -245,6 +245,10 @@
                         </tr>
                     </template> -->
                 </v-data-table>
+
+                <v-btn color="green" dark v-if="status=='All Unread' && selected.length > 0">Mark as read</v-btn>
+                <v-btn color="red" dark v-if="status=='All Read' && selected.length > 0">Mark as unread</v-btn>
+                <v-btn v-if="selected.length > 0" @click="selected = []">Clear All Selected</v-btn>
             </v-card-text>
         </v-card>
     </div>

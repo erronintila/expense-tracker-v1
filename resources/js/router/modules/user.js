@@ -165,6 +165,21 @@ const userRoutes = [
                     //     keepAlive: false
                     // }
             },
+            /**
+             *
+             *
+             * Notifications
+             *
+             *
+             */
+            {
+                path: "/notifications",
+                name: "user.notifications.index",
+                component: () =>
+                    import(
+                        "../../views/modules/user/notifications/Index.vue"
+                    ),
+            },
         ]
     },
 ];

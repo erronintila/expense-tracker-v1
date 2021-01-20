@@ -608,6 +608,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this.user = response;
     });
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });
 
