@@ -458,6 +458,20 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    redirectPage: function redirectPage(item) {
+      var _this = this;
+
+      axios.put("/api/notifications/".concat(item.id, "?action=", 'read', "&type=", 'single')).then(function (response) {
+        console.log(response);
+
+        _this.$store.dispatch("AUTH_NOTIFICATIONS");
+
+        _this.$router.push("/admin/".concat(item.data.data.model, "/").concat(item.data.data.id));
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
     toProfile: function toProfile() {
       // Added () => {} on router, used to prevent NavigationDuplicated error
       this.$router.push({
@@ -1084,12 +1098,10 @@ var render = function() {
                         "v-list-item",
                         {
                           key: item.title,
-                          attrs: {
-                            to:
-                              "/admin/" +
-                              item.data.data.model +
-                              "/" +
-                              item.data.data.id
+                          on: {
+                            click: function($event) {
+                              return _vm.redirectPage(item)
+                            }
                           }
                         },
                         [

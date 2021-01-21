@@ -250,7 +250,7 @@
             <v-list two-line>
                 <v-list-item-group active-class="">
                     <template v-for="(item, index) in $store.getters.notifications.data">
-                        <v-list-item :key="item.title" :to="`/admin/${item.data.data.model}/${item.data.data.id}`">
+                        <v-list-item :key="item.title" @click="redirectPage(item)">
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
@@ -434,6 +434,21 @@ export default {
         // ]
     }),
     methods: {
+        redirectPage(item) {
+            let _this = this;
+
+            axios
+                .put(`/api/notifications/${item.id}?action=${'read'}&type=${'single'}`)
+                .then(response => {
+                    console.log(response);
+                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                    _this.$router.push(`/admin/${item.data.data.model}/${item.data.data.id}`);
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error
             this.$router.push({ name: "admin.profile.index" }, () => {});
