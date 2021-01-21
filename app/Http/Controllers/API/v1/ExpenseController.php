@@ -308,6 +308,8 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
+        // validation 
+
         Validator::make($request->all(), [
 
             'employee_id' => ['required'],
@@ -316,6 +318,16 @@ class ExpenseController extends Controller
         $employee = Employee::withTrashed()->findOrFail($request->employee_id);
 
         $this->validator($request->all(), null, $employee->remaining_fund)->validate();
+
+        if (request("reimbursable_amount") > request("amount")) {
+            $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
+        }
+
+        if (($employee->remaining_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
+            $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
+        }
+
+        // end of validation
 
         $expense_type = ExpenseType::withTrashed()->findOrFail($request->sub_type_id ?? $request->expense_type_id);
 
@@ -492,6 +504,8 @@ class ExpenseController extends Controller
                 break;
             default:
 
+                // validation
+
                 Validator::make($request->all(), [
 
                     'employee_id' => ['required'],
@@ -504,6 +518,16 @@ class ExpenseController extends Controller
                 $expense = Expense::withTrashed()->findOrFail($id);
 
                 $expense_type = ExpenseType::withTrashed()->findOrFail($request->sub_type_id ?? $request->expense_type_id);
+
+                if (request("reimbursable_amount") > request("amount")) {
+                    $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
+                }
+
+                $rem_fund = $employee->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
+        
+                if (($rem_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
+                    $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
+                }
 
                 // // Prevent update if expense has an approve expense report and user is not admin
                 // if(true && !Auth::user()->is_admin) {
@@ -536,6 +560,8 @@ class ExpenseController extends Controller
                         return $this->errorResponse("Expense Report has already been submitted.", 422);
                     }
                 }
+
+                // end of validation
 
                 $expense->description = $request->description ?? $expense_type->name;
 

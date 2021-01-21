@@ -420,16 +420,37 @@
                                 </template>
                             </v-data-table>
 
-                            <v-text-field
-                                v-model="form.amount"
-                                label="Amount"
-                                :rules="[
-                                    ...mixin_validation.required,
-                                    ...mixin_validation.minNumberValue(1)
-                                ]"
-                                :readonly="itemize"
-                                type="number"
-                            ></v-text-field>
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.amount"
+                                        label="Expense Amount"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minNumberValue(
+                                                1
+                                            )
+                                        ]"
+                                        :readonly="itemize"
+                                        type="number"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.reimbursable_amount"
+                                        label="Amount to reimburse"
+                                        type="number"
+                                        hint="Amount spent from own pocket"
+                                        persistent-hint
+                                    >
+                                    </v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-checkbox v-model="can_edit_reimbursable" @click="can_edit_reimbursable ? reimbursable_amount = 0 : reimbursable_amount" label="Check">
+
+                                    </v-checkbox>
+                                </v-col>
+                            </v-row>
 
                             <v-row v-if="form.vendor.is_vat_inclusive">
                                 <v-col cols="12" md="4">
@@ -548,9 +569,11 @@ export default {
     },
     data() {
         return {
+            can_edit_reimbursable: false,
             loader: false,
             panel: [0, 1],
             itemize: false,
+            paid_through: "Revolving Fund",
             // paid_through_fund: false,
             reimbursable_amount: false,
             // reimbursable: false,
@@ -759,6 +782,13 @@ export default {
                 return;
             }
 
+            if((_this.amount_to_replenish + _this.amount_to_reimburse) <= 0) {
+
+                _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
+
+                return;
+            }
+
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
@@ -919,10 +949,17 @@ export default {
             return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
         },
         amount_to_replenish() {
+            // return 0;
             let remaining_fund = this.mixin_convertToNumber(
                 this.form.employee.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
+            let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+            let amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
+
+            if(this.can_edit_reimbursable) {
+                return (amount - reimbursable) > remaining_fund ? 0 : amt_to_replenish;
+            }
 
             if (remaining_fund >= amount) {
                 return amount;
@@ -935,6 +972,11 @@ export default {
                 this.form.employee.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
+            let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+
+            if(this.can_edit_reimbursable) {
+                return reimbursable > amount ? 0 : reimbursable;
+            }
 
             if (remaining_fund < amount) {
                 let to_replenish = Math.abs(remaining_fund - amount);
@@ -949,7 +991,10 @@ export default {
             return 0;
         },
         expense_amount() {
-            return this.mixin_convertToNumber(this.form.amount);
+            let amt_to_replenish = this.mixin_convertToNumber(this.amount_to_replenish);
+            let amt_to_reimburse = this.mixin_convertToNumber(this.amount_to_reimburse);
+
+            return this.mixin_convertToNumber(amt_to_replenish + amt_to_reimburse);
         },
         display_reimbursable_amount() {
             return (
