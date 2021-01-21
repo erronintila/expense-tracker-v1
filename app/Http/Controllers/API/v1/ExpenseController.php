@@ -361,7 +361,7 @@ class ExpenseController extends Controller
 
         $expense->save();
 
-        return response(
+        return response(    
             [
                 'data' => new ExpenseResource($expense),
 

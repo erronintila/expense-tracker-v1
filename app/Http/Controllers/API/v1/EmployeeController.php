@@ -240,13 +240,20 @@ class EmployeeController extends Controller
 
         $user->save();
 
-        if ($request->role == "Administrator") {
-            foreach ($request->permissions as $permission) {
-                $user->givePermissionTo($permission["name"]);
-            }
-        } else {
-            $user->assignRole("Standard User");
+        foreach ($request->permissions as $permission) {
+            $user->givePermissionTo($permission["name"]);
         }
+
+        // if ($request->role == "Administrator") {
+        //     foreach ($request->permissions as $permission) {
+        //         $user->givePermissionTo($permission["name"]);
+        //     }
+        // } else {
+        //     // $user->assignRole("Standard User");
+        //     foreach ($request->permissions as $permission) {
+        //         $user->givePermissionTo($permission["name"]);
+        //     }
+        // }
 
         $employee->user_id = $user->id;
 
@@ -364,9 +371,15 @@ class EmployeeController extends Controller
                 break;
             default:
 
-                if (!app("auth")->user()->hasPermissionTo('edit employees')) {
-                    abort(403);
+                if (!request()->has("profile_update")) {
+                    if (!app("auth")->user()->hasPermissionTo('edit employees')) {
+                        abort(403);
+                    }
                 }
+
+                // if (!app("auth")->user()->hasPermissionTo('edit employees')) {
+                //     abort(403);
+                // }
 
                 $this->validator($request->all(), $id)->validate();
 
@@ -417,13 +430,17 @@ class EmployeeController extends Controller
 
                     $user->syncRoles();
 
-                    if ($request->role == "Administrator") {
-                        foreach ($request->permissions as $permission) {
-                            $user->givePermissionTo($permission["name"]);
-                        }
-                    } else {
-                        $user->assignRole("Standard User");
+                    foreach ($request->permissions as $permission) {
+                        $user->givePermissionTo($permission["name"]);
                     }
+
+                    // if ($request->role == "Administrator") {
+                    //     foreach ($request->permissions as $permission) {
+                    //         $user->givePermissionTo($permission["name"]);
+                    //     }
+                    // } else {
+                    //     $user->assignRole("Standard User");
+                    // }
                 }
 
                 break;

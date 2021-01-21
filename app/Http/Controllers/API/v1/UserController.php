@@ -416,14 +416,13 @@ class UserController extends Controller
      */
     public function getPermissions(Request $request)
     {
-        // return null;
-        // if(request()->has("is_admin")) {
-        //     if(request("is_admin")) {
-        //         return Role::findByName('Administrator')->permissions;
-        //     } else {
-        //         return Role::findByName('Standard User')->permissions;
-        //     }
-        // }
+        $permissions = [];
+
+        if(request()->has("role")) {
+            $permissions = Role::findByName(request("role"), 'web')->permissions ?? [];
+
+            return $permissions;
+        }
 
         return Permission::all();
     }

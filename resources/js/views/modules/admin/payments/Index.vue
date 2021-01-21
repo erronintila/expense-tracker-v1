@@ -536,6 +536,15 @@ export default {
         onUpdate(action, method) {
             let _this = this;
 
+            if (action == "receive" && !this.mixin_can("receive payments")) {
+                _this.mixin_errorDialog(
+                    `Error`,
+                    "Not allowed"
+                );
+
+                return;
+            }
+
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",

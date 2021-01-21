@@ -458,12 +458,9 @@ __webpack_require__.r(__webpack_exports__);
     loadPermissions: function loadPermissions() {
       var _this = this;
 
-      axios.get("/api/data/permissions", {
-        params: {
-          is_admin: _this.is_admin
-        }
-      }).then(function (response) {
+      axios.get("/api/data/permissions?role=".concat(this.form.role)).then(function (response) {
         _this.permissions = response.data;
+        _this.selected = response.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -474,13 +471,14 @@ __webpack_require__.r(__webpack_exports__);
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
-    changeRole: function changeRole() {
-      if (this.form.role == "Administrator") {
-        this.selected = this.permissions;
-      } else {
-        this.selected = [];
-      }
-    },
+    // changeRole() {
+    //     this.loadPermissions();
+    //     // if (this.form.role == "Administrator") {
+    //     //     this.selected = this.permissions;
+    //     // } else {
+    //     //     this.selected = [];
+    //     // }
+    // },
     onSave: function onSave() {
       var _this = this;
 
@@ -520,9 +518,7 @@ __webpack_require__.r(__webpack_exports__);
           }); // _this.$store.dispatch("AUTH_USER");
 
 
-          _this.$router.push({
-            name: "admin.employees.index"
-          });
+          window.location.replace("/admin/employees"); // _this.$router.push({ name: "admin.employees.index" });
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -1299,7 +1295,7 @@ var render = function() {
                                           ],
                                           "error-messages": _vm.errors.role
                                         },
-                                        on: { change: _vm.changeRole },
+                                        on: { change: _vm.loadPermissions },
                                         model: {
                                           value: _vm.form.role,
                                           callback: function($$v) {

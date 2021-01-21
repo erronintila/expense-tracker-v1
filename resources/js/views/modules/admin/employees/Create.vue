@@ -312,7 +312,7 @@
                                             'Administrator'
                                         ]"
                                         :error-messages="errors.role"
-                                        @change="changeRole"
+                                        @change="loadPermissions"
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="12" md="4">
@@ -451,13 +451,11 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/permissions", {
-                    params: {
-                        is_admin: _this.is_admin
-                    }
-                })
+                .get(`/api/data/permissions?role=${this.form.role}`)
                 .then(response => {
                     _this.permissions = response.data;
+
+                    _this.selected = response.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -472,13 +470,15 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
-        changeRole() {
-            if (this.form.role == "Administrator") {
-                this.selected = this.permissions;
-            } else {
-                this.selected = [];
-            }
-        },
+        // changeRole() {
+        //     this.loadPermissions();
+
+        //     // if (this.form.role == "Administrator") {
+        //     //     this.selected = this.permissions;
+        //     // } else {
+        //     //     this.selected = [];
+        //     // }
+        // },
         onSave() {
             let _this = this;
             let fund = 0;
@@ -524,7 +524,9 @@ export default {
 
                         // _this.$store.dispatch("AUTH_USER");
 
-                        _this.$router.push({ name: "admin.employees.index" });
+                        window.location.replace("/admin/employees");
+
+                        // _this.$router.push({ name: "admin.employees.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
