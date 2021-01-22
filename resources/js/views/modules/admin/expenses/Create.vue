@@ -437,6 +437,7 @@
                                 </v-col>
                                 <v-col cols="12" md="4">
                                     <v-text-field
+                                        v-if="mixin_can('set reimbursable amount')"
                                         v-model="form.reimbursable_amount"
                                         label="Amount to reimburse"
                                         type="number"
@@ -444,11 +445,6 @@
                                         persistent-hint
                                     >
                                     </v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="4">
-                                    <v-checkbox v-model="can_edit_reimbursable" @click="can_edit_reimbursable ? reimbursable_amount = 0 : reimbursable_amount" label="Check">
-
-                                    </v-checkbox>
                                 </v-col>
                             </v-row>
 
@@ -569,7 +565,6 @@ export default {
     },
     data() {
         return {
-            can_edit_reimbursable: false,
             loader: false,
             panel: [0, 1],
             itemize: false,
@@ -773,7 +768,7 @@ export default {
                 _this.amount_to_replenish > _this.form.employee.remaining_fund
             ) {
                 _this.$dialog.message.error(
-                    "Revolving fund amount is greater than remaining fund",
+                    "Amount to replenish is greater than remaining fund",
                     {
                         position: "top-right",
                         timeout: 2000
@@ -799,7 +794,7 @@ export default {
                         code: _this.form.code,
                         description: _this.form.description,
                         amount: _this.form.amount,
-                        reimbursable_amount: _this.form.reimbursable_amount,
+                        reimbursable_amount: _this.amount_to_reimburse,
                         receipt_number: _this.form.receipt_number,
                         date: _this.form.date,
                         remarks: _this.form.remarks,
@@ -957,7 +952,7 @@ export default {
             let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
             let amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
 
-            if(this.can_edit_reimbursable) {
+            if(this.mixin_can("set reimbursable amount")) {
                 return (amount - reimbursable) > remaining_fund ? 0 : amt_to_replenish;
             }
 
@@ -974,7 +969,7 @@ export default {
             let amount = this.mixin_convertToNumber(this.form.amount);
             let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
 
-            if(this.can_edit_reimbursable) {
+            if(this.mixin_can("set reimbursable amount")) {
                 return reimbursable > amount ? 0 : reimbursable;
             }
 

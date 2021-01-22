@@ -570,10 +570,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -583,7 +579,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      can_edit_reimbursable: false,
       loader: false,
       panel: [0, 1],
       itemize: false,
@@ -783,7 +778,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
-        _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
+        _this.$dialog.message.error("Amount to replenish is greater than remaining fund", {
           position: "top-right",
           timeout: 2000
         });
@@ -805,7 +800,7 @@ __webpack_require__.r(__webpack_exports__);
           code: _this.form.code,
           description: _this.form.description,
           amount: _this.form.amount,
-          reimbursable_amount: _this.form.reimbursable_amount,
+          reimbursable_amount: _this.amount_to_reimburse,
           receipt_number: _this.form.receipt_number,
           date: _this.form.date,
           remarks: _this.form.remarks,
@@ -942,7 +937,7 @@ __webpack_require__.r(__webpack_exports__);
       var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
       var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
 
-      if (this.can_edit_reimbursable) {
+      if (this.mixin_can("set reimbursable amount")) {
         return amount - reimbursable > remaining_fund ? 0 : amt_to_replenish;
       }
 
@@ -957,7 +952,7 @@ __webpack_require__.r(__webpack_exports__);
       var amount = this.mixin_convertToNumber(this.form.amount);
       var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
 
-      if (this.can_edit_reimbursable) {
+      if (this.mixin_can("set reimbursable amount")) {
         return reimbursable > amount ? 0 : reimbursable;
       }
 
@@ -2214,50 +2209,30 @@ var render = function() {
                                     "v-col",
                                     { attrs: { cols: "12", md: "4" } },
                                     [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Amount to reimburse",
-                                          type: "number",
-                                          hint: "Amount spent from own pocket",
-                                          "persistent-hint": ""
-                                        },
-                                        model: {
-                                          value: _vm.form.reimbursable_amount,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "reimbursable_amount",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.reimbursable_amount"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-checkbox", {
-                                        attrs: { label: "Check" },
-                                        on: {
-                                          click: function($event) {
-                                            _vm.can_edit_reimbursable
-                                              ? (_vm.reimbursable_amount = 0)
-                                              : _vm.reimbursable_amount
-                                          }
-                                        },
-                                        model: {
-                                          value: _vm.can_edit_reimbursable,
-                                          callback: function($$v) {
-                                            _vm.can_edit_reimbursable = $$v
-                                          },
-                                          expression: "can_edit_reimbursable"
-                                        }
-                                      })
+                                      _vm.mixin_can("set reimbursable amount")
+                                        ? _c("v-text-field", {
+                                            attrs: {
+                                              label: "Amount to reimburse",
+                                              type: "number",
+                                              hint:
+                                                "Amount spent from own pocket",
+                                              "persistent-hint": ""
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.form.reimbursable_amount,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "reimbursable_amount",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "form.reimbursable_amount"
+                                            }
+                                          })
+                                        : _vm._e()
                                     ],
                                     1
                                   )
