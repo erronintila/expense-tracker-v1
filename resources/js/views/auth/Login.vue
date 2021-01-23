@@ -41,7 +41,8 @@
                                             name="password"
                                             prepend-icon="mdi-lock"
                                             color="success"
-                                            :type="showPassword
+                                            :type="
+                                                showPassword
                                                     ? 'text'
                                                     : 'password'
                                             "
