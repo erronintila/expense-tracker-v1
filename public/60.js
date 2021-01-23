@@ -766,13 +766,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             table: {
               widths: ["*", "*", "*", "*"],
               body: [[{
-                text: "Prepared By",
+                text: "Prepared by:",
                 style: "tableSignaturesBody"
               }, {
-                text: "Checked By",
+                text: "Checked by:",
                 style: "tableSignaturesBody"
               }, {
-                text: "Approved By",
+                text: "Approved by:",
                 style: "tableSignaturesBody"
               }, {
                 text: "Voucher No.",
@@ -1008,13 +1008,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             table: {
               widths: ["*", "*", "*", "*"],
               body: [[{
-                text: "Prepared By",
+                text: "Prepared by:",
                 style: "tableSignaturesBody"
               }, {
-                text: "Checked By",
+                text: "Checked by:",
                 style: "tableSignaturesBody"
               }, {
-                text: "Approved By",
+                text: "Approved by:",
                 style: "tableSignaturesBody"
               }, {
                 text: "Voucher No.",
@@ -1259,16 +1259,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             table: {
               widths: ["*", "*", "*", "*"],
               body: [[{
-                text: "Prepared By",
+                text: "Prepared by:",
                 style: "tableSignaturesBody"
               }, {
-                text: "Recommended By",
+                text: "Recommended by:",
                 style: "tableSignaturesBody"
               }, {
-                text: "Checked By",
+                text: "Checked by:",
                 style: "tableSignaturesBody"
               }, {
-                text: "Approved By",
+                text: "Approved by:",
                 style: "tableSignaturesBody"
               }], [{
                 text: "___________________________________",

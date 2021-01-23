@@ -1153,7 +1153,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios
                     .get(
-                        `/api/data/expenses?expense_report_id=${this.$route.params.id}&only=true`
+                        `/api/data/expenses?expense_report_id=${this.$route.params.id}&only=true&sortBy=date&sortType=asc`
                     )
                     .then(response => {
                         let items = response.data.data;
@@ -1260,7 +1260,9 @@ export default {
                             itemsPerPage: itemsPerPage,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
-                            expense_report_id: expense_report_id
+                            expense_report_id: expense_report_id,
+                            sortBy: "date",
+                            sortType: "asc"
                         }
                     })
                     .then(response => {

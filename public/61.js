@@ -997,7 +997,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/expenses?expense_report_id=".concat(_this4.$route.params.id, "&only=true")).then(function (response) {
+        axios.get("/api/data/expenses?expense_report_id=".concat(_this4.$route.params.id, "&only=true&sortBy=date&sortType=asc")).then(function (response) {
           var items = response.data.data;
           resolve({
             items: items
@@ -1088,7 +1088,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
-            expense_report_id: expense_report_id
+            expense_report_id: expense_report_id,
+            sortBy: "date",
+            sortType: "asc"
           }
         }).then(function (response) {
           var items = response.data.data;

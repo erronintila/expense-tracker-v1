@@ -71,10 +71,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
     return {
+      showPassword: false,
       src: __webpack_require__(/*! ../../assets/img/login.svg */ "./resources/js/assets/img/login.svg"),
       form: {
         username: "",
@@ -269,8 +282,13 @@ var render = function() {
                                           label: "Password",
                                           name: "password",
                                           "prepend-icon": "mdi-lock",
-                                          type: "password",
-                                          color: "success"
+                                          color: "success",
+                                          type: _vm.showPassword
+                                            ? "text"
+                                            : "password",
+                                          "append-icon": _vm.showPassword
+                                            ? "mdi-eye"
+                                            : "mdi-eye-off"
                                         },
                                         on: {
                                           keyup: function($event) {
@@ -290,6 +308,9 @@ var render = function() {
                                           },
                                           input: function($event) {
                                             _vm.errors = []
+                                          },
+                                          "click:append": function($event) {
+                                            _vm.showPassword = !_vm.showPassword
                                           }
                                         },
                                         model: {
