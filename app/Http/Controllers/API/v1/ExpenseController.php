@@ -649,6 +649,9 @@ class ExpenseController extends Controller
      */
     public function getExpenses(Request $request)
     {
+        $sortBy = request("sortBy") ?? "updated_at";
+        $sortType = request("sortType") ?? "desc";
+
         if (request()->has("only")) {
             if (request()->has("expense_report_id")) {
                 $expenses = Expense::with(["expense_type" => function ($query) {
@@ -657,7 +660,9 @@ class ExpenseController extends Controller
                 ->with(["vendor" => function ($query) {
                     $query->withTrashed();
                 }])
-                ->where("expense_report_id", $request->expense_report_id)->get();
+                ->where("expense_report_id", $request->expense_report_id)
+                ->orderBy($sortBy, $sortType)
+                ->get();
 
                 return ExpenseIndexResource::collection($expenses);
             }

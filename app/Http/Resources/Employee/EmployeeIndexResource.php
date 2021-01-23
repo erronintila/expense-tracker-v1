@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Employee;
 
 use App\Http\Resources\Job\JobIndexResource;
+use App\Http\Resources\User\UserOnlyResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EmployeeIndexResource extends JsonResource
@@ -50,6 +51,7 @@ class EmployeeIndexResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "job" => new JobIndexResource($this->whenLoaded("job")),
+            "user" => new UserOnlyResource($this->whenLoaded("user"))
         ];
     }
 }

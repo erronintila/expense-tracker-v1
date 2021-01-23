@@ -40,8 +40,20 @@
                                             label="Password"
                                             name="password"
                                             prepend-icon="mdi-lock"
-                                            type="password"
                                             color="success"
+                                            :type="
+                                                showPassword
+                                                    ? 'text'
+                                                    : 'password'
+                                            "
+                                            :append-icon="
+                                                showPassword
+                                                    ? 'mdi-eye'
+                                                    : 'mdi-eye-off'
+                                            "
+                                            @click:append="
+                                                showPassword = !showPassword
+                                            "
                                         ></v-text-field>
                                     </v-form>
                                 </v-card-text>
@@ -65,6 +77,7 @@ export default {
     name: "login",
     data() {
         return {
+            showPassword: false,
             src: require("../../assets/img/login.svg"),
             form: {
                 username: "",
