@@ -817,15 +817,15 @@ export default {
                                 body: [
                                     [
                                         {
-                                            text: "Prepared By",
+                                            text: "Prepared by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
-                                            text: "Checked By",
+                                            text: "Checked by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
-                                            text: "Approved By",
+                                            text: "Approved by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
@@ -1115,15 +1115,15 @@ export default {
                                 body: [
                                     [
                                         {
-                                            text: "Prepared By",
+                                            text: "Prepared by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
-                                            text: "Checked By",
+                                            text: "Checked by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
-                                            text: "Approved By",
+                                            text: "Approved by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
@@ -1439,19 +1439,19 @@ export default {
                                 body: [
                                     [
                                         {
-                                            text: "Prepared By",
+                                            text: "Prepared by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
-                                            text: "Recommended By",
+                                            text: "Recommended by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
-                                            text: "Checked By",
+                                            text: "Checked by:",
                                             style: "tableSignaturesBody"
                                         },
                                         {
-                                            text: "Approved By",
+                                            text: "Approved by:",
                                             style: "tableSignaturesBody"
                                         }
                                     ],

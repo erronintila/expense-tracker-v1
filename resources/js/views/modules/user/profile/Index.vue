@@ -107,7 +107,9 @@
                                   color="success"
                                   label="Old Password"
                                   name="password"
-                                  type="password"
+                                  :type="showOldPassword ? 'text' : 'password'"
+                                  :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                  @click:append="showOldPassword = !showOldPassword"
                                 ></v-text-field>
                               </v-col>
                               <v-col cols="12">
@@ -126,7 +128,9 @@
                                   color="success"
                                   label="New Password"
                                   name="password"
-                                  type="password"
+                                  :type="showNewPassword ? 'text' : 'password'"
+                                  :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                  @click:append="showNewPassword = !showNewPassword"
                                 ></v-text-field>
                               </v-col>
                               <v-col cols="12">
@@ -144,7 +148,9 @@
                                   color="success"
                                   label="Re-type Password"
                                   name="confirm_password"
-                                  type="password"
+                                  :type="showRetypePassword ? 'text' : 'password'"
+                                  :append-icon="showRetypePassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                  @click:append="showRetypePassword = !showRetypePassword"
                                 ></v-text-field>
                               </v-col>
                             </v-row>
@@ -382,6 +388,9 @@ import moment from "moment";
 export default {
   data() {
     return {
+      showOldPassword: false,
+      showNewPassword: false,
+      showRetypePassword: false,
       dialogPassword: false,
       dialog: false,
       menu: false,

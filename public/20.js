@@ -389,12 +389,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
 
     return {
+      showOldPassword: false,
+      showNewPassword: false,
+      showRetypePassword: false,
       dialogPassword: false,
       dialog: false,
       menu: false,
@@ -1052,12 +1061,21 @@ var render = function() {
                                                                                 "Old Password",
                                                                               name:
                                                                                 "password",
-                                                                              type:
-                                                                                "password"
+                                                                              type: _vm.showOldPassword
+                                                                                ? "text"
+                                                                                : "password",
+                                                                              "append-icon": _vm.showOldPassword
+                                                                                ? "mdi-eye"
+                                                                                : "mdi-eye-off"
                                                                             },
                                                                             on: {
                                                                               input: function() {
                                                                                 _vm.password_errors.old_password = []
+                                                                              },
+                                                                              "click:append": function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.showOldPassword = !_vm.showOldPassword
                                                                               }
                                                                             },
                                                                             model: {
@@ -1105,12 +1123,21 @@ var render = function() {
                                                                                 "New Password",
                                                                               name:
                                                                                 "password",
-                                                                              type:
-                                                                                "password"
+                                                                              type: _vm.showNewPassword
+                                                                                ? "text"
+                                                                                : "password",
+                                                                              "append-icon": _vm.showNewPassword
+                                                                                ? "mdi-eye"
+                                                                                : "mdi-eye-off"
                                                                             },
                                                                             on: {
                                                                               input: function() {
                                                                                 _vm.password_errors.password = []
+                                                                              },
+                                                                              "click:append": function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.showNewPassword = !_vm.showNewPassword
                                                                               }
                                                                             },
                                                                             model: {
@@ -1157,12 +1184,21 @@ var render = function() {
                                                                                 "Re-type Password",
                                                                               name:
                                                                                 "confirm_password",
-                                                                              type:
-                                                                                "password"
+                                                                              type: _vm.showRetypePassword
+                                                                                ? "text"
+                                                                                : "password",
+                                                                              "append-icon": _vm.showRetypePassword
+                                                                                ? "mdi-eye"
+                                                                                : "mdi-eye-off"
                                                                             },
                                                                             on: {
                                                                               input: function() {
                                                                                 _vm.password_errors.password_confirmation = []
+                                                                              },
+                                                                              "click:append": function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.showRetypePassword = !_vm.showRetypePassword
                                                                               }
                                                                             },
                                                                             model: {

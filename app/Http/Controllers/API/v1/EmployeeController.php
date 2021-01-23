@@ -173,7 +173,7 @@ class EmployeeController extends Controller
             $query->orWhere("email", "like", "%" . $search . "%");
         });
 
-        $employees = $employees->paginate($itemsPerPage);
+        $employees = $employees->with("user")->paginate($itemsPerPage);
 
         return EmployeeIndexResource::collection($employees);
     }
