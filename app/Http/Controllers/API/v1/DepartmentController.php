@@ -3,38 +3,25 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DepartmentStoreRequest;
+use App\Http\Requests\DepartmentUpdateRequest;
 use App\Http\Resources\DepartmentResource;
 use App\Models\Department;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
     
     public function __construct()
     {
+        // apply permissions
         $this->middleware(['permission:view all departments'], ['only' => ['index']]);
         $this->middleware(['permission:view departments'], ['only' => ['show']]);
         $this->middleware(['permission:add departments'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit departments'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete departments'], ['only' => ['destroy']]);
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data, $id)
-    {
-        return Validator::make($data, [
-
-            'name' => ['required', 'max:100', Rule::unique('departments')->ignore($id, 'id')],
-        ]);
     }
 
     /**
@@ -86,9 +73,11 @@ class DepartmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DepartmentStoreRequest $request)
     {
-        $this->validator($request->all(), null)->validate();
+        $validated = $request->validated(); // check validation
+
+        $message = "Department created successfully"; // return message
 
         $department = new Department();
 
@@ -96,18 +85,9 @@ class DepartmentController extends Controller
 
         $department->name = $request->name;
 
-        $department->notes = json_encode([]);
-
         $department->save();
 
-        return response(
-            [
-                'data' => new DepartmentResource($department),
-
-                'message' => 'Created successfully'
-            ],
-            201
-        );
+        return $this->successResponse(new DepartmentResource($department), $message, 201);
     }
 
     /**
@@ -118,20 +98,15 @@ class DepartmentController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $message = "Department retrieved successfully"; // return message
+
         $department = Department::withTrashed()
-        ->with(['jobs' => function ($query) {
-            $query->withTrashed();
-        }])
-        ->findOrFail($id);
+            ->with(['jobs' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->findOrFail($id);
 
-        return response(
-            [
-                'data' => new DepartmentResource($department),
-
-                'message' => 'Retrieved successfully'
-            ],
-            200
-        );
+        return $this->successResponse(new DepartmentResource($department), $message, 200);
     }
 
     /**
@@ -141,49 +116,19 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DepartmentUpdateRequest $request, $id)
     {
-        switch ($request->action) {
+        $validated = $request->validated(); // check validation
 
-            case 'restore':
+        $message = "Department updated successfully"; // return message
 
-                if (request()->has("ids")) {
-                    foreach ($request->ids as $id) {
-                        $department = Department::withTrashed()->findOrFail($id);
+        $department = Department::withTrashed()->findOrFail($id);
 
-                        $department->restore();
-                    }
-                } else {
-                    $department = Department::withTrashed()->findOrFail($id);
+        $department->name = $request->name;
 
-                    $department->restore();
-                }
+        $department->save();
 
-                // $department = Department::withTrashed()
-                //     ->whereIn('id', $request->ids)
-                //     ->restore();
-
-                break;
-            default:
-
-                $this->validator($request->all(), $id)->validate();
-
-                $department = Department::withTrashed()->findOrFail($id);
-
-                $department->name = $request->name;
-
-                $department->save();
-
-                break;
-        }
-
-        return response(
-            [
-                'message' => 'Updated successfully',
-                'data' => $department->notes == null ? null : json_decode($department->notes)
-            ],
-            201
-        );
+        return $this->successResponse(null, $message, 201);
     }
 
     /**
@@ -194,24 +139,25 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $message = "Department deleted successfully"; // return message
+
         if (request()->has("ids")) {
             foreach ($request->ids as $id) {
-                $department = Department::withTrashed()->findOrFail($id);
+                $department = Department::findOrFail($id);
 
                 $department->delete();
             }
+
+            $message = "Department(s) deleted successfully";
         } else {
-            $department = Department::withTrashed()->findOrFail($id);
+            $department = Department::findOrFail($id);
 
             $department->delete();
+
+            $message = "Department deleted successfully";
         }
 
-        return response(
-            [
-                'message' => 'Deleted successfully'
-            ],
-            200
-        );
+        return $this->successResponse(null, $message, 200);
     }
 
     /*
@@ -219,6 +165,40 @@ class DepartmentController extends Controller
     | EMPLOYEE CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+    
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function restore(Request $request, $id)
+    {
+        $message = "Department restored successfully"; // return message
+
+        if (request()->has("ids")) {
+            // $department = Department::withTrashed()
+            //     ->whereIn('id', $request->ids)
+            //     ->restore();
+        
+            foreach ($request->ids as $id) {
+                $department = Department::withTrashed()->findOrFail($id);
+
+                $department->restore();
+
+                $message = "Department(s) restored successfully";
+            }
+        } else {
+            $department = Department::withTrashed()->findOrFail($id);
+
+            $department->restore();
+
+            $message = "Department restored successfully";
+        }
+
+        return $this->successResponse(null, $message, 201);
+    }
 
     /**
      * Display a listing of the resource.

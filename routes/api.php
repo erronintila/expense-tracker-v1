@@ -65,6 +65,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/departments', 'API\v1\DepartmentController@getDepartments');
 
+    Route::put('/departments/restore/{id}', 'API\v1\DepartmentController@restore');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | EMPLOYEE CONTROLLER CUSTOM ROUTES
@@ -132,11 +134,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
 
         // $user = $request->user();
-        $user = User::with(['employee' => function($query) {
+        $user = User::with(['employee' => function ($query) {
             $query->withTrashed();
-            $query->with(['job' => function($query) {
+            $query->with(['job' => function ($query) {
                 $query->withTrashed();
-                $query->with(['department' => function($query) {
+                $query->with(['department' => function ($query) {
                     $query->withTrashed();
                 }]);
             }]);

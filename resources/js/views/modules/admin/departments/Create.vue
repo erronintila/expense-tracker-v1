@@ -66,12 +66,9 @@ export default {
                         name: _this.form.name
                     })
                     .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Department created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
 
                         _this.$router.push({ name: "admin.departments.index" });
@@ -88,7 +85,7 @@ export default {
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
                     });
             }
