@@ -77,6 +77,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/validateFund', 'API\v1\EmployeeController@validateFund');
 
+    Route::put('/employees/restore/{id}', 'API\v1\EmployeeController@restore');
+
+    Route::put('/employees/update_settings/{id}', 'API\v1\EmployeeController@updateSettings');
+
+    Route::put('/employees/update_fund/{id}', 'API\v1\EmployeeController@updateFund');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | EXPENSE CONTROLLER CUSTOM ROUTES
