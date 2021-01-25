@@ -101,6 +101,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/expense_types', 'API\v1\ExpenseTypeController@getExpenseTypes');
 
+    Route::put('/expense_types/restore/{id}', 'API\v1\ExpenseTypeController@restore');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | JOB CONTROLLER CUSTOM ROUTES
