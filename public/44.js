@@ -91,7 +91,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/jobs/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
         _this.form.name = data.name;
-        _this.form.department = data.department;
+        _this.form.department = data.department.id;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -122,16 +122,15 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.$refs.form.validate();
 
+      console.log(this.form.department);
+
       if (_this.$refs.form.validate()) {
         axios.put("/api/jobs/" + _this.$route.params.id, {
           action: "update",
           name: _this.form.name,
           department_id: _this.form.department
         }).then(function (response) {
-          _this.$dialog.message.success("Job designation updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this.mixin_successDialog(response.data.status, response.data.message);
 
           _this.$router.push({
             name: "admin.jobs.index"

@@ -192,6 +192,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -329,10 +337,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               })
             }
           }).then(function (response) {
-            _this.$dialog.message.success("Item(s) moved to archive.", {
-              position: "top-right",
-              timeout: 2000
-            });
+            _this.mixin_successDialog(response.data.status, response.data.message);
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -362,16 +367,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/jobs/".concat(_this.selected[0].id), {
+          axios.put("/api/jobs/restore/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
-            }),
-            action: "restore"
+            })
           }).then(function (response) {
-            _this.$dialog.message.success("Item(s) restored.", {
-              position: "top-right",
-              timeout: 2000
-            });
+            _this.mixin_successDialog(response.data.status, response.data.message);
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;

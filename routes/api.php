@@ -109,6 +109,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/jobs', 'API\v1\JobController@getJobs');
 
+    Route::put('/jobs/restore/{id}', 'API\v1\JobController@restore');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | PAYMENT CONTROLLER CUSTOM ROUTES

@@ -31,13 +31,13 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search ?? "";
+        $search = request('search') ?? "";
 
-        $sortBy = $request->sortBy ?? "name";
+        $sortBy = request('sortBy') ?? "name";
 
-        $sortType = $request->sortType ?? "asc";
+        $sortType = request('sortType') ?? "asc";
 
-        $itemsPerPage = $request->itemsPerPage ?? 10;
+        $itemsPerPage = request('itemsPerPage') ?? 10;
 
         $departments = Department::with(['jobs' => function ($query) {
             $query->withTrashed();
@@ -45,7 +45,7 @@ class DepartmentController extends Controller
         ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-            switch ($request->status) {
+            switch (request('status')) {
 
                 case 'Archived':
 
@@ -83,7 +83,7 @@ class DepartmentController extends Controller
 
         $department->code = generate_code(Department::class, "DEP", 10);
 
-        $department->name = $request->name;
+        $department->name = request('name');
 
         $department->save();
 
@@ -124,7 +124,7 @@ class DepartmentController extends Controller
 
         $department = Department::withTrashed()->findOrFail($id);
 
-        $department->name = $request->name;
+        $department->name = request('name');
 
         $department->save();
 
@@ -142,7 +142,7 @@ class DepartmentController extends Controller
         $message = "Department deleted successfully"; // return message
 
         if (request()->has("ids")) {
-            foreach ($request->ids as $id) {
+            foreach (request('ids') as $id) {
                 $department = Department::findOrFail($id);
 
                 $department->delete();
@@ -179,10 +179,10 @@ class DepartmentController extends Controller
 
         if (request()->has("ids")) {
             // $department = Department::withTrashed()
-            //     ->whereIn('id', $request->ids)
+            //     ->whereIn('id', request('')ids)
             //     ->restore();
         
-            foreach ($request->ids as $id) {
+            foreach (request('ids') as $id) {
                 $department = Department::withTrashed()->findOrFail($id);
 
                 $department->restore();
@@ -215,8 +215,8 @@ class DepartmentController extends Controller
         $departments = Department::orderBy("name");
 
         if (request()->has("department_id")) {
-            if ($request->department_id > 0) {
-                $departments = $departments->where("id", $request->department_id);
+            if (request('department_id') > 0) {
+                $departments = $departments->where("id", request('department_id'));
             }
         }
 

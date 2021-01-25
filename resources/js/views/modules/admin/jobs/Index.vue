@@ -7,7 +7,10 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add jobs')">
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add jobs')"
+                    >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -165,7 +168,12 @@
                     class="elevation-0"
                 >
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit jobs')">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="mixin_can('edit jobs')"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -315,12 +323,9 @@ export default {
                             }
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
@@ -355,17 +360,16 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/jobs/${_this.selected[0].id}`, {
+                        .put(`/api/jobs/restore/${_this.selected[0].id}`, {
                             ids: _this.selected.map(item => {
                                 return item.id;
                             }),
-                            action: "restore"
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;

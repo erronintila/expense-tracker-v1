@@ -113,10 +113,7 @@ __webpack_require__.r(__webpack_exports__);
           name: _this.form.name,
           department_id: _this.form.department
         }).then(function (response) {
-          _this.$dialog.message.success("Job designation created successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this.mixin_successDialog(response.data.status, response.data.message);
 
           _this.$router.push({
             name: "admin.jobs.index"
