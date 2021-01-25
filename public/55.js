@@ -270,21 +270,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
-      var _this2 = this;
-
       var _this = this;
 
-      _this.loading = true;
+      var self = this;
+      self.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this2$options = _this2.options,
-            sortBy = _this2$options.sortBy,
-            sortDesc = _this2$options.sortDesc,
-            page = _this2$options.page,
-            itemsPerPage = _this2$options.itemsPerPage;
-
-        var search = _this.search.trim().toLowerCase();
-
-        var status = _this.status;
+        var _this$options = _this.options,
+            sortBy = _this$options.sortBy,
+            sortDesc = _this$options.sortDesc,
+            page = _this$options.page,
+            itemsPerPage = _this$options.itemsPerPage;
+        var search = self.search.trim().toLowerCase();
+        var status = self.status;
         axios.get("/api/vendors", {
           params: {
             search: search,
@@ -297,7 +294,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
+          self.loading = false;
           resolve({
             items: items,
             total: total
@@ -305,10 +302,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.loading = false;
+          self.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+          self.loading = false;
         });
       });
     },
@@ -333,9 +328,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this = this;
+      var self = this;
 
-      if (_this.selected.length == 0) {
+      if (self.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
           timeout: 2000
@@ -345,68 +340,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/vendors/".concat(_this.selected[0].id), {
+          axios["delete"]("/api/vendors/".concat(self.selected[0].id), {
             params: {
-              ids: _this.selected.map(function (item) {
+              ids: self.selected.map(function (item) {
                 return item.id;
               })
             }
           }).then(function (response) {
-            _this.$dialog.message.success("Item(s) moved to archive.", {
-              position: "top-right",
-              timeout: 2000
-            });
+            self.mixin_successDialog(response.data.status, response.data.message); // self.$dialog.message.success(
+            //     "Item(s) moved to archive.",
+            //     {
+            //         position: "top-right",
+            //         timeout: 2000
+            //     }
+            // );
 
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
+            self.getDataFromApi().then(function (data) {
+              self.items = data.items;
+              self.totalItems = data.total;
             });
-
-            _this.selected = [];
+            self.selected = [];
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            self.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
           });
         }
       });
     },
     onRestore: function onRestore() {
-      var _this = this;
+      var self = this;
 
-      if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+      if (self.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/vendors/".concat(_this.selected[0].id), {
-            ids: _this.selected.map(function (item) {
+          axios.put("/api/vendors/restore/".concat(self.selected[0].id), {
+            ids: self.selected.map(function (item) {
               return item.id;
-            }),
-            action: "restore"
+            })
           }).then(function (response) {
-            _this.$dialog.message.success("Item(s) restored.", {
-              position: "top-right",
-              timeout: 2000
+            self.mixin_successDialog(response.data.status, response.data.message);
+            self.getDataFromApi().then(function (data) {
+              self.items = data.items;
+              self.totalItems = data.total;
             });
-
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
-            });
-
-            _this.selected = [];
+            self.selected = [];
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            self.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
           });
         }
       });
@@ -415,11 +401,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this2 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
+          _this2.items = data.items;
+          _this2.totalItems = data.total;
         });
       },
       deep: true

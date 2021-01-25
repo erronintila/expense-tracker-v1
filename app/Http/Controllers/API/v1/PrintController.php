@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReportResource;
 use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class PrintController extends Controller
 {
+    use ApiResponse;
+    
     /**
      * Display a listing of the resource
      *

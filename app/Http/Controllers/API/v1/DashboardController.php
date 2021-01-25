@@ -7,11 +7,14 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseType;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    use ApiResponse;
+    
     /**
      * Displays total expenses amount on each expense type
      *

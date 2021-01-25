@@ -154,6 +154,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -207,7 +237,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
       });
     },
     onSave: function onSave() {
@@ -230,7 +260,7 @@ __webpack_require__.r(__webpack_exports__);
           address: _this.form.address,
           expense_types: _this.selected_expense_types
         }).then(function (response) {
-          _this.mixin_successDialog("Success", "Vendor created successfully.");
+          _this.mixin_successDialog(response.data.status, response.data.message);
 
           _this.$router.push({
             name: "admin.vendors.index"
@@ -239,7 +269,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
 
           if (error.response) {
             if (error.response.data) {
@@ -336,9 +366,6 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.mixin_validation.required.concat(
-                                        _vm.mixin_validation.minLength(150)
-                                      ),
                                       counter: 150,
                                       "error-messages": _vm.errors.name,
                                       label: "Name",
@@ -412,7 +439,6 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      rules: _vm.mixin_validation.required,
                                       "error-messages": _vm.errors.tin,
                                       counter: 100,
                                       label: "Tax Identification Number (TIN)",
@@ -567,7 +593,6 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-textarea", {
                             attrs: {
-                              rules: _vm.mixin_validation.required,
                               "error-messages": _vm.errors.address,
                               label: "Address",
                               rows: "3"

@@ -221,7 +221,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
       });
     },
     onSave: function onSave() {
@@ -244,7 +244,7 @@ __webpack_require__.r(__webpack_exports__);
           address: _this.form.address,
           expense_types: _this.selected_expense_types
         }).then(function (response) {
-          _this.mixin_successDialog("Success", "Vendor created successfully.");
+          _this.mixin_successDialog(response.data.status, response.data.message);
 
           _this.$router.push({
             name: "admin.vendors.index"
@@ -253,7 +253,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
 
           if (error.response) {
             if (error.response.data) {

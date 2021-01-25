@@ -8,12 +8,15 @@ use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentResource;
 use App\Models\ExpenseReport;
 use App\Models\Payment;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
+    use ApiResponse;
+    
     public function __construct()
     {
         $this->middleware(['permission:view all payments'], ['only' => ['index']]);

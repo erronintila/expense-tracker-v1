@@ -219,7 +219,7 @@ export default {
 
                     _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
-                        error.response.statusText
+                        error.response.data.message
                     );
                 });
         },
@@ -246,8 +246,8 @@ export default {
                     })
                     .then(function(response) {
                         _this.mixin_successDialog(
-                            "Success",
-                            "Vendor created successfully."
+                            response.data.status,
+                            response.data.message
                         );
 
                         _this.$router.push({ name: "admin.vendors.index" });
@@ -258,7 +258,7 @@ export default {
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
 
                         if (error.response) {

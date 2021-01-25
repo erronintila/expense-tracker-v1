@@ -5,10 +5,13 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use anlutro\LaravelSettings\Facade as Setting;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
 {
+    use ApiResponse;
+    
     /**
      * Display a listing of the resource.
      *

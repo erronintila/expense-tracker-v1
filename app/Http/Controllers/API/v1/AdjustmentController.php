@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AdjustmentResource;
 use App\Models\Adjustment;
 use App\Models\Employee;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class AdjustmentController extends Controller
 {    
+    use ApiResponse;
+    
     public function __construct()
     {
         $this->middleware(['permission:view all adjustments'], ['only' => ['index']]);
