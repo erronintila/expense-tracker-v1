@@ -45,7 +45,7 @@
                                         @input="errors.job_id = []"
                                         item-text="name"
                                         item-value="id"
-                                        label="Job Designation *"
+                                        label="Job Designation"
                                         required
                                     >
                                     </v-autocomplete>
@@ -61,38 +61,11 @@
                                         :counter="100"
                                         :error-messages="errors.code"
                                         @input="errors.code = []"
-                                        label="Code *"
+                                        label="Code"
                                         required
                                     ></v-text-field>
                                 </v-col>
 
-                                <!-- <v-col cols="12" md="4">
-                                    <v-select
-                                        v-model="selected_expense_types"
-                                        :items="expense_types"
-                                        item-text="name"
-                                        item-value="id"
-                                        label="Allowed Expense Types"
-                                        multiple
-                                    >
-                                        <template
-                                            v-slot:selection="{ item, index }"
-                                        >
-                                            <v-chip v-if="index === 0" small>
-                                                <span>{{ item.name }}</span>
-                                            </v-chip>
-                                            <span
-                                                v-if="index === 1"
-                                                class="grey--text caption"
-                                                >(+{{
-                                                    selected_expense_types.length -
-                                                        1
-                                                }}
-                                                others)</span
-                                            >
-                                        </template>
-                                    </v-select>
-                                </v-col> -->
                             </v-row>
 
                             <v-row>
@@ -106,7 +79,7 @@
                                         :counter="100"
                                         :error-messages="errors.first_name"
                                         @input="errors.first_name = []"
-                                        label="First Name *"
+                                        label="First Name"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -118,7 +91,7 @@
                                         :counter="100"
                                         :error-messages="errors.middle_name"
                                         @input="errors.middle_name = []"
-                                        label="Middle Name"
+                                        label="Middle Name (optional)"
                                     ></v-text-field>
                                 </v-col>
 
@@ -132,7 +105,7 @@
                                         :counter="100"
                                         :error-messages="errors.last_name"
                                         @input="errors.last_name = []"
-                                        label="Last Name *"
+                                        label="Last Name"
                                         required
                                     ></v-text-field>
                                 </v-col>
@@ -145,7 +118,7 @@
                                         :items="['Jr', 'Sr', 'II', 'III']"
                                         :error-messages="errors.suffix"
                                         @input="errors.suffix = []"
-                                        label="Suffix"
+                                        label="Suffix (optional)"
                                     ></v-combobox>
                                 </v-col>
 
@@ -156,7 +129,7 @@
                                         :items="['Male', 'Female']"
                                         :error-messages="errors.gender"
                                         @input="errors.gender = []"
-                                        label="Gender *"
+                                        label="Gender"
                                         required
                                     >
                                     </v-select>
@@ -183,7 +156,7 @@
                                                     errors.birthdate
                                                 "
                                                 @input="errors.birthdate = []"
-                                                label="Birthdate *"
+                                                label="Birthdate"
                                                 readonly
                                                 v-bind="attrs"
                                                 v-on="on"
@@ -207,7 +180,7 @@
                                         :counter="30"
                                         :error-messages="errors.mobile_number"
                                         @input="errors.mobile_number = []"
-                                        label="Mobile Number *"
+                                        label="Mobile Number"
                                         type="number"
                                     ></v-text-field>
                                 </v-col>
@@ -221,7 +194,7 @@
                                             errors.telephone_number
                                         "
                                         @input="errors.telephone_number = []"
-                                        label="Telephone Number"
+                                        label="Telephone Number (optional)"
                                         type="number"
                                     ></v-text-field>
                                 </v-col>
@@ -235,7 +208,7 @@
                                         ]"
                                         :error-messages="errors.email"
                                         @input="errors.email = []"
-                                        label="Email Address *"
+                                        label="Email Address"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -247,7 +220,7 @@
                                         :rules="mixin_validation.required"
                                         :error-messages="errors.address"
                                         @input="errors.address = []"
-                                        label="Address *"
+                                        label="Address"
                                         rows="1"
                                     ></v-textarea>
                                 </v-col>
@@ -299,14 +272,14 @@
                                         :counter="50"
                                         :error-messages="errors.username"
                                         @input="errors.username = []"
-                                        label="Username *"
+                                        label="Username"
                                         required
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="4">
                                     <v-select
                                         v-model="form.role"
-                                        label="Role *"
+                                        label="Role"
                                         :items="[
                                             'Standard User',
                                             'Administrator'
@@ -341,10 +314,6 @@
                     </v-expansion-panel>
                 </v-expansion-panels>
 
-                <small class="ml-4 text--secondary">
-                    * indicates required field
-                </small>
-
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="success" dark @click="onSave">Save</v-btn>
@@ -367,9 +336,7 @@ export default {
             menu: false,
             jobs: [],
             permissions: this.$store.getters.user.permissions,
-            // expense_types: [],
             selected: [],
-            // selected_expense_types: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 code: null,
@@ -430,23 +397,6 @@ export default {
                     );
                 });
         },
-        // loadExpenseTypes() {
-        //     let _this = this;
-        //     axios
-        //         .get("/api/data/expense_types?only=true")
-        //         .then(response => {
-        //             _this.expense_types = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         loadPermissions() {
             let _this = this;
 
@@ -506,7 +456,6 @@ export default {
                         can_login: _this.form.can_login,
                         role: _this.form.role,
                         permissions: _this.selected,
-                        // expense_types: _this.selected_expense_types,
                         fund: fund
                     })
                     .then(function(response) {
@@ -520,9 +469,13 @@ export default {
 
                         // _this.$store.dispatch("AUTH_USER");
 
+                        _this.loader = false;
+
                         _this.$router.push({ name: "admin.employees.index" });
                     })
                     .catch(function(error) {
+                        _this.loader = false;
+
                         console.log(error);
                         console.log(error.response);
 
@@ -550,7 +503,6 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadJobs();
-        // this.loadExpenseTypes();
         this.loadPermissions();
     }
 };

@@ -24,7 +24,7 @@ class EmployeeStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => ['nullable', 'max:255', 'unique:employees'],
+            'code' => ['required', 'max:255', 'unique:employees'],
 
             'first_name' => ['required', 'string', 'max:150'],
 
@@ -36,13 +36,13 @@ class EmployeeStoreRequest extends FormRequest
 
             'gender' => ['required', 'max:10'],
 
-            'birthdate' => ['nullable'],
+            'birthdate' => ['required'],
 
-            'mobile_number' => ['nullable', 'max:50'],
+            'mobile_number' => ['required', 'max:50'],
 
             'telephone_number' => ['nullable', 'max:50'],
 
-            'email' => ['nullable', 'email', 'unique:employees'],
+            'email' => ['required', 'email', 'unique:employees'],
 
             'address' => ['required'],
 

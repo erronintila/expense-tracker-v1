@@ -321,17 +321,7 @@ class EmployeeController extends Controller
             }
         }
 
-        // break;
-        // }
-
         return $this->successResponse(null, $message, 201);
-
-        // return response(
-        //     [
-        //         'message' => 'Updated successfully',
-        //     ],
-        //     201
-        // );
     }
 
     /**

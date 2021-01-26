@@ -337,37 +337,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -378,9 +347,7 @@ __webpack_require__.r(__webpack_exports__);
       menu: false,
       jobs: [],
       permissions: this.$store.getters.user.permissions,
-      // expense_types: [],
       selected: [],
-      // selected_expense_types: [],
       headers: [{
         text: "Permission",
         value: "name",
@@ -439,22 +406,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    // loadExpenseTypes() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/expense_types?only=true")
-    //         .then(response => {
-    //             _this.expense_types = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
     loadPermissions: function loadPermissions() {
       var _this = this;
 
@@ -507,7 +458,6 @@ __webpack_require__.r(__webpack_exports__);
           can_login: _this.form.can_login,
           role: _this.form.role,
           permissions: _this.selected,
-          // expense_types: _this.selected_expense_types,
           fund: fund
         }).then(function (response) {
           _this.$dialog.message.success("Employee created successfully.", {
@@ -516,10 +466,13 @@ __webpack_require__.r(__webpack_exports__);
           }); // _this.$store.dispatch("AUTH_USER");
 
 
+          _this.loader = false;
+
           _this.$router.push({
             name: "admin.employees.index"
           });
         })["catch"](function (error) {
+          _this.loader = false;
           console.log(error);
           console.log(error.response);
 
@@ -542,8 +495,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-    this.loadJobs(); // this.loadExpenseTypes();
-
+    this.loadJobs();
     this.loadPermissions();
   }
 });
@@ -700,7 +652,7 @@ var render = function() {
                                           "error-messages": _vm.errors.job_id,
                                           "item-text": "name",
                                           "item-value": "id",
-                                          label: "Job Designation *",
+                                          label: "Job Designation",
                                           required: ""
                                         },
                                         on: {
@@ -731,7 +683,7 @@ var render = function() {
                                           ),
                                           counter: 100,
                                           "error-messages": _vm.errors.code,
-                                          label: "Code *",
+                                          label: "Code",
                                           required: ""
                                         },
                                         on: {
@@ -769,7 +721,7 @@ var render = function() {
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.first_name,
-                                          label: "First Name *",
+                                          label: "First Name",
                                           required: ""
                                         },
                                         on: {
@@ -803,7 +755,7 @@ var render = function() {
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.middle_name,
-                                          label: "Middle Name"
+                                          label: "Middle Name (optional)"
                                         },
                                         on: {
                                           input: function($event) {
@@ -838,7 +790,7 @@ var render = function() {
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.last_name,
-                                          label: "Last Name *",
+                                          label: "Last Name",
                                           required: ""
                                         },
                                         on: {
@@ -868,7 +820,7 @@ var render = function() {
                                           counter: 30,
                                           items: ["Jr", "Sr", "II", "III"],
                                           "error-messages": _vm.errors.suffix,
-                                          label: "Suffix"
+                                          label: "Suffix (optional)"
                                         },
                                         on: {
                                           input: function($event) {
@@ -896,7 +848,7 @@ var render = function() {
                                           rules: _vm.mixin_validation.required,
                                           items: ["Male", "Female"],
                                           "error-messages": _vm.errors.gender,
-                                          label: "Gender *",
+                                          label: "Gender",
                                           required: ""
                                         },
                                         on: {
@@ -950,8 +902,7 @@ var render = function() {
                                                             "error-messages":
                                                               _vm.errors
                                                                 .birthdate,
-                                                            label:
-                                                              "Birthdate *",
+                                                            label: "Birthdate",
                                                             readonly: ""
                                                           },
                                                           on: {
@@ -1035,7 +986,7 @@ var render = function() {
                                           counter: 30,
                                           "error-messages":
                                             _vm.errors.mobile_number,
-                                          label: "Mobile Number *",
+                                          label: "Mobile Number",
                                           type: "number"
                                         },
                                         on: {
@@ -1069,7 +1020,7 @@ var render = function() {
                                           counter: 30,
                                           "error-messages":
                                             _vm.errors.telephone_number,
-                                          label: "Telephone Number",
+                                          label: "Telephone Number (optional)",
                                           type: "number"
                                         },
                                         on: {
@@ -1103,7 +1054,7 @@ var render = function() {
                                             _vm.mixin_validation.email
                                           ),
                                           "error-messages": _vm.errors.email,
-                                          label: "Email Address *"
+                                          label: "Email Address"
                                         },
                                         on: {
                                           input: function($event) {
@@ -1136,7 +1087,7 @@ var render = function() {
                                         attrs: {
                                           rules: _vm.mixin_validation.required,
                                           "error-messages": _vm.errors.address,
-                                          label: "Address *",
+                                          label: "Address",
                                           rows: "1"
                                         },
                                         on: {
@@ -1262,7 +1213,7 @@ var render = function() {
                                           ),
                                           counter: 50,
                                           "error-messages": _vm.errors.username,
-                                          label: "Username *",
+                                          label: "Username",
                                           required: ""
                                         },
                                         on: {
@@ -1288,7 +1239,7 @@ var render = function() {
                                     [
                                       _c("v-select", {
                                         attrs: {
-                                          label: "Role *",
+                                          label: "Role",
                                           items: [
                                             "Standard User",
                                             "Administrator"
@@ -1371,12 +1322,6 @@ var render = function() {
                     ],
                     1
                   ),
-                  _vm._v(" "),
-                  _c("small", { staticClass: "ml-4 text--secondary" }, [
-                    _vm._v(
-                      "\n                * indicates required field\n            "
-                    )
-                  ]),
                   _vm._v(" "),
                   _c(
                     "v-card-actions",
