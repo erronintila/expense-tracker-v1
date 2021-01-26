@@ -149,13 +149,13 @@ class Expense extends Model
     }
 
     /**
-     * Displays the employee associated with expense.
+     * Displays the user associated with expense.
      *
      * @return mixed
      */
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

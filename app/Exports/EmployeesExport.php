@@ -15,42 +15,43 @@ class EmployeesExport implements FromQuery, WithHeadings
      */
     public function query()
     {
-        return Employee::join('jobs', 'jobs.id', '=', 'employees.job_id')
-            ->select(
-                'employees.id',
-                'jobs.name',
-                'employees.first_name',
-                'employees.middle_name',
-                'employees.last_name',
-                'employees.suffix',
-                'employees.gender',
-                'employees.birthdate',
-                'employees.mobile_number',
-                'employees.telephone_number',
-                'employees.email',
-                'employees.address',
-                'employees.fund',
-                'employees.remaining_fund',
-            );
+        return null;
+        // return Employee::join('jobs', 'jobs.id', '=', 'employees.job_id')
+        //     ->select(
+        //         'employees.id',
+        //         'jobs.name',
+        //         'employees.first_name',
+        //         'employees.middle_name',
+        //         'employees.last_name',
+        //         'employees.suffix',
+        //         'employees.gender',
+        //         'employees.birthdate',
+        //         'employees.mobile_number',
+        //         'employees.telephone_number',
+        //         'employees.email',
+        //         'employees.address',
+        //         'employees.fund',
+        //         'employees.remaining_fund',
+        //     );
     }
 
     public function headings(): array
     {
         return [
-            '#',
-            'Job Designation',
-            'First Name',
-            'Middle Name',
-            'Last Name',
-            'Suffix',
-            'Gender',
-            'Birthdate',
-            'Mobile Number',
-            'Telephone Number',
-            'Email Address',
-            'Address',
-            'Revolving Fund',
-            'Remaining Fund',
+            // '#',
+            // 'Job Designation',
+            // 'First Name',
+            // 'Middle Name',
+            // 'Last Name',
+            // 'Suffix',
+            // 'Gender',
+            // 'Birthdate',
+            // 'Mobile Number',
+            // 'Telephone Number',
+            // 'Email Address',
+            // 'Address',
+            // 'Revolving Fund',
+            // 'Remaining Fund',
         ];
     }
 }

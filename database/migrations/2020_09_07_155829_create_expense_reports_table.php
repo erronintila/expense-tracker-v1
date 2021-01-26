@@ -46,13 +46,13 @@ class CreateExpenseReportsTable extends Migration
             // $table->unsignedBigInteger('paid_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
 
-            $table->unsignedBigInteger('employee_id')->unsigned();
+            $table->unsignedBigInteger('user_id')->unsigned();
             // $table->unsignedBigInteger('payment_id')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             // $table->foreign('payment_id')->references('id')->on('payments');
 
             // $table->foreign('submitted_by')->references('id')->on('users');

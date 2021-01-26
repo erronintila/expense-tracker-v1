@@ -492,7 +492,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
-      headers: [// { text: "Employee", value: "employee" },
+      headers: [// { text: "Employee", value: "user" },
       // { text: "Description", value: "description" },
       // { text: "Amount", value: "total" },
       // { text: "Created", value: "created" },
@@ -532,7 +532,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       items: [],
       selected: [],
-      employees: [],
+      users: [],
       total: 0,
       totalAmount: 0,
       totalItems: 0
@@ -555,11 +555,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       payee_phone: "",
       remarks: "",
       notes: "",
-      employee: {
+      user: {
         id: null
       }
     }), _defineProperty(_ref, "errors", {
-      employee: [],
+      user: [],
       code: [],
       reference_no: [],
       voucher_no: [],
@@ -600,8 +600,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadEmployees: function loadEmployees() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
+      axios.get("/api/data/users").then(function (response) {
+        _this.users = response.data.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -625,7 +625,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-        var employee_id = _this.form.employee.id;
+        var user_id = _this.form.id;
         var range = _this.date_range;
         axios.get("/api/expense_reports", {
           params: {
@@ -635,7 +635,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page: page,
             itemsPerPage: itemsPerPage,
             status: status,
-            employee_id: employee_id,
+            user_id: user_id,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
             admin_page: true,
@@ -669,7 +669,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //                 create_payment: true,
     //                 start_date: start_date,
     //                 end_date: end_date,
-    //                 employee_id: _this.form.employee.id
+    //                 user_id: _this.form.user.id
     //             }
     //         })
     //         .then(response => {
@@ -711,7 +711,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           remarks: _this.form.remarks,
           notes: _this.form.notes,
           expense_reports: _this.selected,
-          employee: _this.form.employee.id
+          user: _this.form.user.id
         }).then(function (response) {
           _this.onRefresh();
 
@@ -742,7 +742,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     },
     maxDate: function maxDate() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
@@ -993,8 +993,8 @@ var render = function() {
                               _c("v-autocomplete", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required,
-                                  items: _vm.employees,
-                                  "error-messages": _vm.errors.employee,
+                                  items: _vm.users,
+                                  "error-messages": _vm.errors.user,
                                   "item-value": "id",
                                   "item-text": "full_name",
                                   label: "Employee",
@@ -1003,16 +1003,16 @@ var render = function() {
                                 },
                                 on: {
                                   input: function($event) {
-                                    _vm.errors.employee = []
+                                    _vm.errors.user = []
                                   },
                                   change: _vm.updateEmployee
                                 },
                                 model: {
-                                  value: _vm.form.employee,
+                                  value: _vm.form.user,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.form, "employee", $$v)
+                                    _vm.$set(_vm.form, "user", $$v)
                                   },
-                                  expression: "form.employee"
+                                  expression: "form.user"
                                 }
                               }),
                               _vm._v(" "),
@@ -1398,16 +1398,16 @@ var render = function() {
                                         }
                                       },
                                       {
-                                        key: "item.employee",
+                                        key: "item.user",
                                         fn: function(ref) {
                                           var item = ref.item
                                           return [
                                             _vm._v(
                                               "\n                                " +
                                                 _vm._s(
-                                                  item.employee.last_name +
+                                                  item.last_name +
                                                     ", " +
-                                                    item.employee.first_name
+                                                    item.first_name
                                                 ) +
                                                 "\n                            "
                                             )

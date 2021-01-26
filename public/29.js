@@ -394,16 +394,19 @@ __webpack_require__.r(__webpack_exports__);
         suffix: "",
         gender: null,
         birthdate: null,
-        job: null,
         mobile_number: null,
         telephone_number: "",
-        email: null,
         address: null,
-        role: "Standard User",
+        fund: 0,
+        remaining_fund: 0,
         username: "",
+        email: null,
+        is_admin: false,
+        is_superadmin: false,
         can_login: true,
         has_fund: false,
-        fund: 0
+        job: null,
+        role: "Standard User"
       },
       errors: {
         code: [],

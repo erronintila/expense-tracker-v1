@@ -58,7 +58,7 @@ class PaymentController extends Controller
 
             "notes" => ['nullable'],
 
-            "employee" => ['required'],
+            "user" => ['required'],
         ]);
     }
 
@@ -77,7 +77,7 @@ class PaymentController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $payments = Payment::with(['employee' => function ($query) {
+        $payments = Payment::with(['user' => function ($query) {
             $query->withTrashed();
         }])
         // ->with(['expense_reports' => function ($query) {
@@ -149,9 +149,9 @@ class PaymentController extends Controller
             $payments = $payments->whereBetween("date", [$request->start_date, $request->end_date]);
         }
 
-        if (request()->has('employee_id')) {
-            if ($request->employee_id > 0) {
-                $payments = $payments->where("employee_id", $request->employee_id);
+        if (request()->has('user_id')) {
+            if ($request->user_id > 0) {
+                $payments = $payments->where("user_id", $request->user_id);
             }
         }
 
@@ -222,7 +222,7 @@ class PaymentController extends Controller
         $payment->received_at = null;
         //////////
 
-        $payment->employee_id = $request->employee;
+        $payment->user_id = $request->user;
 
         $payment->created_by = Auth::id();
 
@@ -274,7 +274,7 @@ class PaymentController extends Controller
             ->with(['expense_reports' => function ($query) {
                 $query->withTrashed();
             }])
-            ->with(['employee' => function ($query) {
+            ->with(['user' => function ($query) {
                 $query->withTrashed();
             }])
             ->findOrFail($id);
@@ -498,9 +498,9 @@ class PaymentController extends Controller
                             foreach ($expense_report->expenses as $expense) {
                                 $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                                $expense->employee->remaining_fund -= $expense_amount;
+                                $expense->user->remaining_fund -= $expense_amount;
 
-                                $expense->employee->save();
+                                $expense->user->save();
                             }
                         }
                     }
@@ -532,9 +532,9 @@ class PaymentController extends Controller
                         foreach ($expense_report->expenses as $expense) {
                             $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                            $expense->employee->remaining_fund -= $expense_amount;
+                            $expense->user->remaining_fund -= $expense_amount;
 
-                            $expense->employee->save();
+                            $expense->user->save();
                         }
                     }
                 }

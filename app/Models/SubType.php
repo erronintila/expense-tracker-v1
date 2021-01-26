@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -108,13 +109,13 @@ class SubType extends Model
     }
 
     /**
-     * Displays the employees associated with subtype.
+     * Displays the users associated with subtype.
      *
      * @return mixed
      */
-    public function employees()
+    public function users()
     {
-        return $this->belongsToMany(Employee::class)->withPivot('limit')->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot('limit')->withTimestamps();
     }
 
     /*

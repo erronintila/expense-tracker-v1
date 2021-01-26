@@ -9,12 +9,12 @@
                 <v-tooltip bottom>
                     <template
                         v-slot:activator="{ on, attrs }"
-                        v-if="mixin_can('add employees')"
+                        v-if="mixin_can('add users')"
                     >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
-                            :to="{ name: 'admin.employees.create' }"
+                            :to="{ name: 'admin.users.create' }"
                             dark
                             fab
                             x-small
@@ -141,7 +141,7 @@
                     <v-list>
                         <!-- <v-list-item
                             @click="onExport"
-                            href="/api/employees/export"
+                            href="/api/users/export"
                         >
                             <v-list-item-icon>
                                 <v-icon>mdi-lock-reset</v-icon>
@@ -260,13 +260,19 @@
                     <template v-slot:[`item.revolving_fund`]="{ item }">
                         {{ `${item.remaining_fund} / ${item.fund}` }}
                     </template>
+                     <template v-slot:[`item.job`]="{ item }">
+                        {{ `${item.job ? item.job.name : ''}` }}
+                    </template>
+                     <template v-slot:[`item.department`]="{ item }">
+                        {{ `${item.job ? (item.job.department ? item.job.department.name : '') : ''}` }}
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon
                             small
                             class="mr-2"
                             @click="
                                 $router.push({
-                                    name: 'admin.employees.show',
+                                    name: 'admin.users.show',
                                     params: { id: item.id }
                                 })
                             "
@@ -274,12 +280,12 @@
                             mdi-eye
                         </v-icon>
                         <v-icon
-                            v-if="mixin_can('edit employees')"
+                            v-if="mixin_can('edit users')"
                             small
                             class="mr-2"
                             @click="
                                 $router.push({
-                                    name: 'admin.employees.edit',
+                                    name: 'admin.users.edit',
                                     params: { id: item.id }
                                 })
                             "
@@ -334,10 +340,10 @@ export default {
             loading: true,
             headers: [
                 { text: "Name", value: "full_name" },
-                { text: "Job Designation", value: "job.name", sortable: false },
+                { text: "Job Designation", value: "job", sortable: false },
                 {
                     text: "Department",
-                    value: "job.department.name",
+                    value: "department",
                     sortable: false
                 },
                 { text: "Revolving Fund", value: "revolving_fund" },
@@ -388,7 +394,7 @@ export default {
                 let status = _this.status;
 
                 axios
-                    .get("/api/employees", {
+                    .get("/api/users", {
                         params: {
                             search: search,
                             sortBy: sortBy[0],
@@ -397,7 +403,8 @@ export default {
                             itemsPerPage: itemsPerPage,
                             status: status,
                             department_id: department_id,
-                            job_id: job_id
+                            job_id: job_id,
+                            is_superadmin: false
                         }
                     })
                     .then(response => {
@@ -471,13 +478,13 @@ export default {
         },
         // onShow(item) {
         //     this.$router.push({
-        //         name: "admin.employees.show",
+        //         name: "admin.users.show",
         //         params: { id: item.id }
         //     });
         // },
         // onEdit(item) {
         //     this.$router.push({
-        //         name: "admin.employees.edit",
+        //         name: "admin.users.edit",
         //         params: { id: item.id }
         //     });
         // },
@@ -491,7 +498,7 @@ export default {
             }
 
             this.$router.push(
-                `/admin/employees/${this.selected[0].id}/edit/fund`
+                `/admin/users/${this.selected[0].id}/edit/fund`
             );
         },
         onPasswordReset() {
@@ -557,7 +564,7 @@ export default {
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
                     axios
-                        .delete(`/api/employees/${_this.selected[0].id}`, {
+                        .delete(`/api/users/${_this.selected[0].id}`, {
                             params: {
                                 ids: _this.selected.map(item => {
                                     return item.id;
@@ -613,7 +620,7 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/employees/${_this.selected[0].id}`, {
+                        .put(`/api/users/${_this.selected[0].id}`, {
                             ids: _this.selected.map(item => {
                                 return item.id;
                             }),
@@ -647,7 +654,7 @@ export default {
         },
         onExport() {
             // this.$store.dispatch("AUTH_USER");
-            axios.get("/api/employees/export");
+            axios.get("/api/users/export");
         }
     },
     watch: {

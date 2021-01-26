@@ -413,10 +413,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.selected = data.user.permissions;
         _this.form.role = data.user.role[0];
         _this.form.username = data.user.username;
-        _this.form.can_login = data.user.can_login; // _this.selected_expense_types = data.expense_types.map(
-        //     item => item.id
-        // );
-
+        _this.form.can_login = data.user.can_login;
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);

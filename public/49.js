@@ -368,7 +368,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "date"
       }, {
         text: "Employee",
-        value: "employee"
+        value: "user"
       }, {
         text: "Description",
         value: "description"
@@ -391,8 +391,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       totalAmount: 0,
       items: [],
-      employee: 0,
-      employees: [],
+      user: 0,
+      users: [],
       status: "All Payments",
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
@@ -419,10 +419,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadEmployees: function loadEmployees() {
       var _this = this;
 
-      axios.get("/api/data/employees?only=true").then(function (response) {
-        _this.employees = response.data.data;
+      axios.get("/api/data/users?only=true").then(function (response) {
+        _this.users = response.data.data;
 
-        _this.employees.unshift({
+        _this.users.unshift({
           id: 0,
           full_name: "All Employees"
         });
@@ -450,7 +450,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var status = _this.status;
         var range = _this.date_range;
-        var employee_id = _this.employee;
+        var user_id = _this.user;
         axios.get("/api/payments", {
           params: {
             search: search,
@@ -461,7 +461,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             status: status,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
-            employee_id: employee_id
+            user_id: user_id
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -622,7 +622,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.employee), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.user), _objectSpread2));
     }
   },
   // mounted() {
@@ -886,17 +886,17 @@ var render = function() {
                             [
                               _c("v-select", {
                                 attrs: {
-                                  items: _vm.employees,
+                                  items: _vm.users,
                                   "item-text": "full_name",
                                   "item-value": "id",
                                   label: "Employee"
                                 },
                                 model: {
-                                  value: _vm.employee,
+                                  value: _vm.user,
                                   callback: function($$v) {
-                                    _vm.employee = $$v
+                                    _vm.user = $$v
                                   },
-                                  expression: "employee"
+                                  expression: "user"
                                 }
                               })
                             ],
@@ -1210,18 +1210,18 @@ var render = function() {
                         }
                       },
                       {
-                        key: "item.employee",
+                        key: "item.user",
                         fn: function(ref) {
                           var item = ref.item
                           return [
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  item.employee.last_name +
+                                  item.last_name +
                                     ", " +
-                                    item.employee.first_name +
+                                    item.first_name +
                                     " " +
-                                    item.employee.middle_name
+                                    item.middle_name
                                 ) +
                                 "\n                "
                             )

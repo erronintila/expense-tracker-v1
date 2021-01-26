@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
             'departments' => 'API\v1\DepartmentController',
 
-            'employees' => 'API\v1\EmployeeController',
+            // 'employees' => 'API\v1\EmployeeController',
 
             'expense_types' => 'API\v1\ExpenseTypeController',
 
@@ -65,15 +65,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/departments', 'API\v1\DepartmentController@getDepartments');
 
-    /*
-    |------------------------------------------------------------------------------------------------------------------------------------
-    | EMPLOYEE CONTROLLER CUSTOM ROUTES
-    |------------------------------------------------------------------------------------------------------------------------------------
-    */
+    // /*
+    // |------------------------------------------------------------------------------------------------------------------------------------
+    // | EMPLOYEE CONTROLLER CUSTOM ROUTES
+    // |------------------------------------------------------------------------------------------------------------------------------------
+    // */
 
-    Route::get('/data/employees', 'API\v1\EmployeeController@getEmployees');
+    // Route::get('/data/employees', 'API\v1\EmployeeController@getEmployees');
 
-    Route::get('/data/validateFund', 'API\v1\EmployeeController@validateFund');
+    // Route::get('/data/validateFund', 'API\v1\EmployeeController@validateFund');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -130,13 +130,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
 
         // $user = $request->user();
-        $user = User::with(['employee' => function($query) {
+        $user = User::with(['job' => function ($query) {
             $query->withTrashed();
-            $query->with(['job' => function($query) {
+            $query->with(['department' => function ($query) {
                 $query->withTrashed();
-                $query->with(['department' => function($query) {
-                    $query->withTrashed();
-                }]);
             }]);
         }])
         ->findOrFail(Auth::id());
@@ -190,5 +187,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Route::get('/users/export', 'API\v1\UserController@export'); // Excel Export Package
 
-    Route::get('/employees/export', 'API\v1\EmployeeController@export'); // Excel Export Package
+    // Route::get('/employees/export', 'API\v1\EmployeeController@export'); // Excel Export Package
 });

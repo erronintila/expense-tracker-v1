@@ -44,11 +44,11 @@
                                 @updateDates="updateDates"
                             ></DateRangePicker>
                             <v-autocomplete
-                                v-model="form.employee"
+                                v-model="form.user"
                                 :rules="mixin_validation.required"
-                                :items="employees"
-                                :error-messages="errors.employee"
-                                @input="errors.employee = []"
+                                :items="users"
+                                :error-messages="errors.user"
+                                @input="errors.user = []"
                                 @change="updateEmployee"
                                 item-value="id"
                                 item-text="full_name"
@@ -495,7 +495,7 @@ export default {
             ],
             items: [],
             selected: [],
-            employees: [],
+            users: [],
             expenses: [],
             total: 0,
             paid: 0,
@@ -511,7 +511,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                employee: { id: 0, remaining_fund: 0, fund: 0 }
+                user: { id: 0, remaining_fund: 0, fund: 0 }
             },
             errors: {
                 date_range: [],
@@ -519,7 +519,7 @@ export default {
                 description: [],
                 remarks: [],
                 notes: [],
-                employee: [],
+                user: [],
                 expenses: []
             }
         };
@@ -544,7 +544,7 @@ export default {
                 .get("/api/data/expenses", {
                     params: {
                         create_report: true,
-                        employee_id: _this.form.employee.id,
+                        user_id: _this.form.user.id,
                         start_date: start_date,
                         end_date: end_date
                     }
@@ -567,9 +567,9 @@ export default {
             let _this = this;
 
             axios
-                .get("/api/data/employees")
+                .get("/api/data/users")
                 .then(response => {
-                    _this.employees = response.data.data;
+                    _this.users = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -590,7 +590,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let range = _this.date_range;
-                let employee_id = _this.form.employee.id;
+                let user_id = _this.form.user.id;
 
                 axios
                     .get("/api/expenses", {
@@ -599,7 +599,7 @@ export default {
                             itemsPerPage: itemsPerPage,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
-                            employee_id: employee_id,
+                            user_id: user_id,
                             expense_report_id: null,
                             update_report: true
                         }
@@ -657,7 +657,7 @@ export default {
                         description: _this.form.description,
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
-                        employee_id: _this.form.employee.id,
+                        user_id: _this.form.user.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
@@ -711,7 +711,7 @@ export default {
             return {
                 ...this.options,
                 query: this.date_range,
-                query: this.form.employee.id
+                query: this.form.user.id
             };
         },
         default_description() {

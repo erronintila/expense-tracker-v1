@@ -67,7 +67,7 @@ class ExpenseResource extends JsonResource
             "expense_type" => new ExpenseTypeResource($this->whenLoaded('expense_type')),
             "sub_type" => new ExpenseTypeResource($this->whenLoaded('sub_type')),
             "vendor" => new VendorResource($this->whenLoaded('vendor')),
-            "employee" => new EmployeeResource($this->whenLoaded('employee')),
+            "user" => new UserResource($this->whenLoaded('user')),
             "expense_report" => new ExpenseReportResource($this->whenLoaded('expense_report')),
             // "tax" => $this->tax,
         ];

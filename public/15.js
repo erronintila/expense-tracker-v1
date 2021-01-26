@@ -289,7 +289,7 @@ __webpack_require__.r(__webpack_exports__);
         icon: "mdi-clipboard-account",
         text: "Employees",
         link: {
-          name: "admin.employees.index"
+          name: "admin.users.index"
         }
       }, {
         icon: "mdi-cash-multiple",

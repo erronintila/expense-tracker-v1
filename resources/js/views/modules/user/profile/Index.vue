@@ -43,36 +43,23 @@
                         </v-avatar>
                       </v-col>
                     </v-row>
-                    <v-row v-if="user.employee !== null">
+                    <v-row>
                       <v-col cols="12" align="center" justify="center">
                         <div>
-                          {{ user.employee.job.department.name }}
+                          {{ user.job.department.name }}
                         </div>
                         <h3 class="display-1 green--text">
                           {{
-                            `${user.employee.last_name}, ${
-                              user.employee.first_name || ""
-                            } ${user.employee.suffix || ""}`
+                            `${user.last_name}, ${
+                              user.first_name || ""
+                            } ${user.suffix || ""}`
                           }}
                         </h3>
                         <p>
-                          {{ user.employee.job.name }}
+                          {{ user.job.name }}
                         </p>
                         <div class="text--primary">
-                          {{ user.employee.mobile_number }}<br />
-                          {{ user.employee.email }}
-                        </div>
-                      </v-col>
-                    </v-row>
-                    <v-row v-else>
-                      <v-col cols="12" align="center" justify="center">
-                        <div>
-                          {{ user.username }}
-                        </div>
-                        <p class="display-1 text--primary">
-                          {{ user.name }}
-                        </p>
-                        <div class="text--primary">
+                          {{ user.mobile_number }}<br />
                           {{ user.email }}
                         </div>
                       </v-col>
@@ -181,43 +168,7 @@
 
             <v-col cols="12" md="8">
               <v-form ref="form">
-                <v-row v-if="user.employee === null">
-                  <v-col cols="12" md="4">
-                    <v-text-field
-                      v-model="user.name"
-                      :rules="rules.first_name"
-                      :counter="100"
-                      :error-messages="errors.first_name"
-                      @input="errors.first_name = []"
-                      label="Name "
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-text-field
-                      v-model="user.username"
-                      :rules="rules.username"
-                      :counter="100"
-                      :error-messages="errors.username"
-                      @input="errors.username = []"
-                      label="Username"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-text-field
-                      v-model="user.email"
-                      :rules="rules.email"
-                      :counter="100"
-                      :error-messages="errors.email"
-                      @input="errors.email = []"
-                      label="Email Address"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-
-                <v-row v-else>
+                <v-row>
                   <v-col cols="12" md="12">
                     <v-text-field
                       v-model="user.username"
@@ -231,7 +182,7 @@
                   </v-col>
                   <v-col cols="12" md="4">
                     <v-text-field
-                      v-model="user.employee.first_name"
+                      v-model="user.first_name"
                       :rules="rules.first_name"
                       :counter="100"
                       :error-messages="errors.first_name"
@@ -243,7 +194,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                      v-model="user.employee.middle_name"
+                      v-model="user.middle_name"
                       :rules="rules.middle_name"
                       :counter="100"
                       :error-messages="errors.middle_name"
@@ -254,7 +205,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                      v-model="user.employee.last_name"
+                      v-model="user.last_name"
                       :rules="rules.last_name"
                       :counter="100"
                       :error-messages="errors.last_name"
@@ -266,7 +217,7 @@
 
                   <v-col cols="12" md="4">
                     <v-combobox
-                      v-model="user.employee.suffix"
+                      v-model="user.suffix"
                       :rules="rules.suffix"
                       :counter="30"
                       :items="['Jr', 'Sr', 'II', 'III']"
@@ -278,7 +229,7 @@
 
                   <v-col cols="12" md="4">
                     <v-select
-                      v-model="user.employee.gender"
+                      v-model="user.gender"
                       :rules="rules.gender"
                       :items="['Male', 'Female']"
                       :error-messages="errors.gender"
@@ -300,7 +251,7 @@
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                          v-model="user.employee.birthdate"
+                          v-model="user.birthdate"
                           :rules="rules.birthdate"
                           :error-messages="errors.birthdate"
                           @input="errors.birthdate = []"
@@ -311,7 +262,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                        v-model="user.employee.birthdate"
+                        v-model="user.birthdate"
                         no-title
                         scrollable
                         color="success"
@@ -323,7 +274,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                      v-model="user.employee.mobile_number"
+                      v-model="user.mobile_number"
                       :rules="rules.mobile_number"
                       :counter="30"
                       :error-messages="errors.mobile_number"
@@ -335,7 +286,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                      v-model="user.employee.telephone_number"
+                      v-model="user.telephone_number"
                       :rules="rules.telephone_number"
                       :counter="30"
                       :error-messages="errors.telephone_number"
@@ -347,7 +298,7 @@
 
                   <v-col cols="12" md="4">
                     <v-text-field
-                      v-model="user.employee.email"
+                      v-model="user.email"
                       :rules="rules.email"
                       :error-messages="errors.email"
                       @input="errors.email = []"
@@ -357,7 +308,7 @@
 
                   <v-col cols="12">
                     <v-textarea
-                      v-model="user.employee.address"
+                      v-model="user.address"
                       :rules="rules.address"
                       :error-messages="errors.address"
                       @input="errors.address = []"
@@ -402,7 +353,7 @@ export default {
         is_admin: "",
         can_login: 0,
         updated_at: "",
-        employee: {
+        user: {
           id: 0,
           fullname: "",
           first_name: "",
@@ -478,65 +429,28 @@ export default {
 
       // _this.$refs.form.validate();
 
-      if (_this.$refs.form.validate() && this.user.employee == null) {
-        axios
-          .put("/api/users/" + _this.user.id, {
-            action: "update",
-            profile_update: true,
-            name: _this.user.name,
-            username: _this.user.username,
-            email: _this.user.email,
-            is_admin: _this.user.is_admin,
-            can_login: _this.user.can_login,
-            employee_id: 0,
-          })
-          .then(function (response) {
-            _this.$dialog.message.success(
-              "User account updated successfully.",
-              {
-                position: "top-right",
-                timeout: 2000,
-              }
-            );
-          })
-          .catch(function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog(
-              `Error ${error.response.status}`,
-              error.response.statusText
-            );
-
-            _this.errors = error.response.data.errors;
-          });
-
-        return;
-      }
-
       if (_this.$refs.form.validate()) {
         axios
           .put("/api/users/" + _this.user.id, {
             action: "update",
             profile_update: true,
-            name: `${_this.user.employee.last_name}, ${_this.user.employee.first_name} ${_this.user.employee.middle_name}`,
-            email: _this.user.employee.email,
+            name: `${_this.user.last_name}, ${_this.user.first_name} ${_this.user.middle_name}`,
+            email: _this.user.email,
             username: _this.user.username,
             is_admin: _this.user.is_admin,
             can_login: _this.user.can_login,
-            employee: {
-              first_name: _this.user.employee.first_name,
-              middle_name: _this.user.employee.middle_name,
-              last_name: _this.user.employee.last_name,
-              suffix: _this.user.employee.suffix,
-              gender: _this.user.employee.gender,
-              birthdate: _this.user.employee.birthdate,
-              mobile_number: _this.user.employee.mobile_number,
-              telephone_number: _this.user.employee.telephone_number,
-              email: _this.user.employee.email,
-              address: _this.user.employee.address,
+            user: {
+              first_name: _this.user.first_name,
+              middle_name: _this.user.middle_name,
+              last_name: _this.user.last_name,
+              suffix: _this.user.suffix,
+              gender: _this.user.gender,
+              birthdate: _this.user.birthdate,
+              mobile_number: _this.user.mobile_number,
+              telephone_number: _this.user.telephone_number,
+              email: _this.user.email,
+              address: _this.user.address,
             },
-            employee_id: _this.user.employee.id,
           })
           .then((response) => {
             _this.$dialog.message.success(

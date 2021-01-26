@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Expense;
 
-use App\Http\Resources\Employee\EmployeeOnlyResource;
+use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
 use App\Http\Resources\Vendor\VendorOnlyResource;
@@ -91,7 +91,7 @@ class ExpenseIndexResource extends JsonResource
             "expense_type" => new ExpenseTypeOnlyResource($this->whenLoaded('expense_type')),
             // "sub_type" => new SubTypeShowResource($this->whenLoaded('sub_type')),
             "vendor" => new VendorOnlyResource($this->whenLoaded('vendor')),
-            "employee" => new EmployeeOnlyResource($this->whenLoaded('employee')),
+            "user" => new UserOnlyResource($this->whenLoaded('user')),
             "expense_report" => new ExpenseReportOnlyResource($this->whenLoaded('expense_report')),
             // "expense_report" => $this->whenLoaded('expense_report'),
             // "expense_report" => new ExpenseReportShowResource($this->whenLoaded('expense_report')),

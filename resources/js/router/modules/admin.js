@@ -53,8 +53,8 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/settings/employee",
-                name: "admin.settings.employee",
+                path: "/admin/settings/user",
+                name: "admin.settings.user",
                 component: () =>
                     import("../../views/modules/admin/settings/Employee.vue")
             },
@@ -260,8 +260,8 @@ const adminRoutes = [
              *
              */
             {
-                path: "/admin/employees",
-                name: "admin.employees.index",
+                path: "/admin/users",
+                name: "admin.users.index",
                 component: () =>
                     import("../../views/modules/admin/employees/Index.vue"),
                 beforeEnter: (to, from, next) => {
@@ -270,7 +270,7 @@ const adminRoutes = [
 
                     if (
                         permissions.includes(
-                            "view all employees"
+                            "view all users"
                         )
                     ) {
                         next();
@@ -280,8 +280,8 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/employees/create",
-                name: "admin.employees.create",
+                path: "/admin/users/create",
+                name: "admin.users.create",
                 component: () =>
                     import("../../views/modules/admin/employees/Create.vue"),
                 beforeEnter: (to, from, next) => {
@@ -289,7 +289,7 @@ const adminRoutes = [
                     permissions = permissions.map(item => item.name);
 
                     if (
-                        permissions.includes("add employees")
+                        permissions.includes("add users")
                     ) {
                         next();
                     } else {
@@ -298,8 +298,8 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/employees/:id/edit",
-                name: "admin.employees.edit",
+                path: "/admin/users/:id/edit",
+                name: "admin.users.edit",
                 component: () =>
                     import("../../views/modules/admin/employees/Edit.vue"),
                 beforeEnter: (to, from, next) => {
@@ -308,7 +308,7 @@ const adminRoutes = [
 
                     if (
                         permissions.includes(
-                            "edit employees"
+                            "edit users"
                         )
                     ) {
                         next();
@@ -318,8 +318,8 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/employees/:id/edit/fund",
-                name: "admin.employees.edit.fund",
+                path: "/admin/users/:id/edit/fund",
+                name: "admin.users.edit.fund",
                 component: () =>
                     import("../../views/modules/admin/employees/EditFund.vue"),
                 beforeEnter: (to, from, next) => {
@@ -328,7 +328,7 @@ const adminRoutes = [
 
                     if (
                         permissions.includes(
-                            "edit employees fund"
+                            "edit users fund"
                         )
                     ) {
                         next();
@@ -338,8 +338,8 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/employees/:id",
-                name: "admin.employees.show",
+                path: "/admin/users/:id",
+                name: "admin.users.show",
                 component: () =>
                     import("../../views/modules/admin/employees/Show.vue"),
                 beforeEnter: (to, from, next) => {
@@ -348,7 +348,7 @@ const adminRoutes = [
 
                     if (
                         permissions.includes(
-                            "view employees"
+                            "view users"
                         )
                     ) {
                         next();

@@ -23,7 +23,7 @@ class CreateAdjustmentsTable extends Migration
             $table->string("type");
             $table->text("remarks")->nullable();
 
-            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
 
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -32,9 +32,9 @@ class CreateAdjustmentsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('employee_id')
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('employees')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }

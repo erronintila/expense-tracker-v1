@@ -447,7 +447,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       valid: false,
       menu: false,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
-      employee: "",
+      user: "",
       code: "",
       reference_no: "",
       voucher_no: "",
@@ -509,7 +509,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         code: "",
         date: "",
         description: "",
-        employee: {
+        user: {
           id: 0,
           name: ""
         },
@@ -593,8 +593,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.remarks = data.remarks;
         _this.notes = data.notes;
         _this.items = data.expense_reports;
-        _this.employee = "".concat(data.employee.last_name, ", ").concat(data.employee.first_name, " ").concat(data.employee.middle_name); // _this.selected.splice(0, 0, ...data.expenses);
-        // _this.loadExpenses(data.employee.id);
+        _this.user = "".concat(data.last_name, ", ").concat(data.first_name, " ").concat(data.middle_name); // _this.selected.splice(0, 0, ...data.expenses);
+        // _this.loadExpenses(data.id);
 
         _this.form.amount = data.amount;
         _this.form.cheque_date = data.cheque_date;
@@ -602,7 +602,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.form.code = data.code;
         _this.form.date = data.date;
         _this.form.description = data.description;
-        _this.form.employee = data.employee; // _this.form.expense_reports = data.expense_reports;
+        _this.form.user = data.user; // _this.form.expense_reports = data.expense_reports;
 
         _this.form.notes = data.notes;
         _this.form.reference_no = data.reference_no;
@@ -646,7 +646,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortDesc = _this3$options.sortDesc,
             page = _this3$options.page,
             itemsPerPage = _this3$options.itemsPerPage;
-        var employee_id = _this.form.employee.id;
+        var user_id = _this.form.user.id;
         var range = _this.date_range;
         var payment_id = _this3.$route.params.id;
         axios.get("/api/expense_reports", {
@@ -655,7 +655,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            employee_id: employee_id,
+            user_id: user_id,
             payment_id: payment_id,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
@@ -713,7 +713,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: {
     params: function params(nv) {
       return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
-        query: this.employee
+        query: this.user
       }, "query", this.date_range));
     }
   },
@@ -868,7 +868,7 @@ var render = function() {
                             _c("div", [
                               _vm._v(
                                 "\n                            " +
-                                  _vm._s(_vm.form.employee.full_name) +
+                                  _vm._s(_vm.form.full_name) +
                                   "\n                        "
                               )
                             ]),
@@ -1216,16 +1216,16 @@ var render = function() {
                                         }
                                       },
                                       {
-                                        key: "item.employee",
+                                        key: "item.user",
                                         fn: function(ref) {
                                           var item = ref.item
                                           return [
                                             _vm._v(
                                               "\n                                " +
                                                 _vm._s(
-                                                  item.employee.last_name +
+                                                  item.last_name +
                                                     ", " +
-                                                    item.employee.first_name
+                                                    item.first_name
                                                 ) +
                                                 "\n                            "
                                             )

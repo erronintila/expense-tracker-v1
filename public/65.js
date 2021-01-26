@@ -294,7 +294,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       totalAmount: 0,
       items: [],
-      employee: this.$store.getters.user.employee,
+      user: this.$store.getters.user,
       status: "All Payments",
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
@@ -335,7 +335,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var status = _this.status;
         var range = _this.date_range;
-        var employee_id = _this.employee.id;
+        var user_id = _this.user.id;
         axios.get("/api/payments", {
           params: {
             search: search,
@@ -346,7 +346,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             status: status,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
-            employee_id: employee_id
+            user_id: user_id
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -368,7 +368,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.selected = []; // this.loadEmployees();
+      this.selected = []; // this.loadusers();
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -506,11 +506,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.employee), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.user), _objectSpread2));
     }
   },
   created: function created() {
-    this.$store.dispatch("AUTH_USER"); // this.loadEmployees();
+    this.$store.dispatch("AUTH_USER"); // this.loadusers();
   }
 });
 
@@ -995,11 +995,11 @@ var render = function() {
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  item.employee.last_name +
+                                  item.last_name +
                                     ", " +
-                                    item.employee.first_name +
+                                    item.first_name +
                                     " " +
-                                    item.employee.middle_name
+                                    item.middle_name
                                 ) +
                                 "\n                "
                             )

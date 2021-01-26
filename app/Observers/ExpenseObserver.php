@@ -17,9 +17,9 @@ class ExpenseObserver
     {
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-        $expense->employee->remaining_fund -= $expense_amount;
+        $expense->user->remaining_fund -= $expense_amount;
 
-        $expense->employee->save();
+        $expense->user->save();
     }
 
     /**
@@ -35,9 +35,9 @@ class ExpenseObserver
         // if ($rejected == null && $expense->expense_report->rejected_at !== null) {
         //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-        //     $expense->employee->remaining_fund += $expense_amount;
+        //     $expense->user->remaining_fund += $expense_amount;
 
-        //     $expense->employee->save();
+        //     $expense->user->save();
 
         //     return;
         // }
@@ -46,11 +46,11 @@ class ExpenseObserver
 
         $new_amount = $expense->amount - $expense->reimbursable_amount;
 
-        $remaining_fund = $expense->employee->remaining_fund;
+        $remaining_fund = $expense->user->remaining_fund;
 
-        $expense->employee->remaining_fund = ($remaining_fund + $original_deducted_amount) - $new_amount;
+        $expense->user->remaining_fund = ($remaining_fund + $original_deducted_amount) - $new_amount;
 
-        $expense->employee->save();
+        $expense->user->save();
     }
 
     /**
@@ -83,9 +83,9 @@ class ExpenseObserver
         // $expense_amount = $expense->revolving_fund;
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-        $expense->employee->remaining_fund += $expense_amount;
+        $expense->user->remaining_fund += $expense_amount;
 
-        $expense->employee->save();
+        $expense->user->save();
     }
 
     /**
@@ -104,9 +104,9 @@ class ExpenseObserver
 
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-        $expense->employee->remaining_fund -= $expense_amount;
+        $expense->user->remaining_fund -= $expense_amount;
 
-        $expense->employee->save();
+        $expense->user->save();
     }
 
     /**
@@ -119,8 +119,8 @@ class ExpenseObserver
     {
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-        $expense->employee->remaining_fund += $expense_amount;
+        $expense->user->remaining_fund += $expense_amount;
 
-        $expense->employee->save();
+        $expense->user->save();
     }
 }

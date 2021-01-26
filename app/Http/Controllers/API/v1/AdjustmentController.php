@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdjustmentResource;
 use App\Models\Adjustment;
-use App\Models\Employee;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,7 +43,7 @@ class AdjustmentController extends Controller
 
             'remarks' => ['nullable'],
 
-            'employee' => ['required']
+            'user' => ['required']
         ]);
     }
 
@@ -114,7 +114,7 @@ class AdjustmentController extends Controller
 
         $adjustment->remarks = $request->remarks;
 
-        $adjustment->employee_id = $request->employee;
+        $adjustment->user_id = $request->user;
 
         if (request()->has("type")) {
 
@@ -122,19 +122,19 @@ class AdjustmentController extends Controller
 
                 case 'Manage Revolving Fund':
 
-                    $employee = Employee::withTrashed()->findOrFail($request->employee);
+                    $user = User::withTrashed()->findOrFail($request->user);
 
-                    $new_fund = ($employee->fund + $request->add_amount) - $request->subtract_amount;
+                    $new_fund = ($user->fund + $request->add_amount) - $request->subtract_amount;
 
-                    $new_remaining_fund = ($employee->remaining_fund + $request->add_amount) - $request->subtract_amount;
+                    $new_remaining_fund = ($user->remaining_fund + $request->add_amount) - $request->subtract_amount;
 
                     if ($new_fund < 0 || $new_remaining_fund < 0) {
                         return response("Error", 500);
                     }
 
                     $adjustment->description = ($request->add_amount < $request->subtract_amount) ?
-                        "Decreased Revolving Fund for {$employee->last_name}, {$employee->first_name}" :
-                        "Added Revolving Fund for {$employee->last_name}, {$employee->first_name}";
+                        "Decreased Revolving Fund for {$user->last_name}, {$user->first_name}" :
+                        "Added Revolving Fund for {$user->last_name}, {$user->first_name}";
 
                     $adjustment->add_amount = $request->add_amount;
 

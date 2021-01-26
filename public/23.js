@@ -243,15 +243,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -721,12 +712,7 @@ var render = function() {
                                               _c("v-list-item-subtitle", {
                                                 domProps: {
                                                   innerHTML: _vm._s(
-                                                    "" +
-                                                      (data.item.employee ==
-                                                      null
-                                                        ? data.item.username
-                                                        : data.item.employee
-                                                            .fullname)
+                                                    "" + data.item.fullname
                                                   )
                                                 }
                                               }),

@@ -404,9 +404,6 @@ export default {
                         _this.form.role = data.user.role[0];
                         _this.form.username = data.user.username;
                         _this.form.can_login = data.user.can_login;
-                        // _this.selected_expense_types = data.expense_types.map(
-                        //     item => item.id
-                        // );
 
                         _this.loader = false;
                     })
