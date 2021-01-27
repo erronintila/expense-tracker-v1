@@ -830,6 +830,12 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      if (_this.amount_to_replenish + _this.amount_to_reimburse < this.form.amount) {
+        _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
+
+        return;
+      }
+
       if (_this.amount_to_replenish + _this.amount_to_reimburse <= 0) {
         _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
 
