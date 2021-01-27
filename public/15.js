@@ -293,6 +293,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -435,10 +486,12 @@ __webpack_require__.r(__webpack_exports__);
     redirectPage: function redirectPage(item) {
       var _this = this;
 
-      axios.put("/api/notifications/".concat(item.id, "?action=", 'read', "&type=", 'single')).then(function (response) {
+      axios.put("/api/notifications/".concat(item.id, "?action=", "read", "&type=", "single")).then(function (response) {
         _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-        _this.$router.push("/admin/".concat(item.data.data.model, "/").concat(item.data.data.id));
+        window.location.replace("/admin/".concat(item.data.data.model, "/").concat(item.data.data.id)); // _this.$router.replace(
+        //     `/admin/${item.data.data.model}/${item.data.data.id}`
+        // );
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -1002,7 +1055,7 @@ var render = function() {
                                 _vm._v(
                                   _vm._s(
                                     _vm.$store.getters.notifications.data.length
-                                  ) + " Unread"
+                                  ) + "\n                        Unread"
                                 )
                               ])
                             : _c("v-list-item-subtitle", [

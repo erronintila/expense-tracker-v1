@@ -172,7 +172,12 @@
                         v-on="on"
                         @click.stop="notificationDrawer = !notificationDrawer"
                     >
-                        <v-badge :content="$store.getters.notifications.data.length" :value="$store.getters.notifications.data.length" color="red" overlap>
+                        <v-badge
+                            :content="$store.getters.notifications.data.length"
+                            :value="$store.getters.notifications.data.length"
+                            color="red"
+                            overlap
+                        >
                             <v-icon>mdi-bell</v-icon>
                         </v-badge>
                     </v-btn>
@@ -230,8 +235,16 @@
 
                     <v-list-item-content>
                         <v-list-item-title>Notifications</v-list-item-title>
-                        <v-list-item-subtitle v-if="$store.getters.notifications.data.length > 0">{{$store.getters.notifications.data.length}} Unread</v-list-item-subtitle>
-                        <v-list-item-subtitle v-else>No notifications</v-list-item-subtitle>
+                        <v-list-item-subtitle
+                            v-if="$store.getters.notifications.data.length > 0"
+                            >{{
+                                $store.getters.notifications.data.length
+                            }}
+                            Unread</v-list-item-subtitle
+                        >
+                        <v-list-item-subtitle v-else
+                            >No notifications</v-list-item-subtitle
+                        >
                         <v-list-item-title>
                             <router-link
                                 :to="{ name: 'admin.notifications.index' }"
@@ -247,14 +260,51 @@
 
             <v-divider></v-divider>
 
+            <!-- <v-list dense shaped>
+                <template
+                    v-for="(item, index) in $store.getters.notifications.data"
+                >
+                    <v-list-item
+                        color="green"
+                        :key="index"
+                        :to="
+                            `/admin/${item.data.data.model}/${item.data.data.id}`
+                        "
+                        link
+                    >
+                        <v-list-item-content>
+                            <v-list-item-title
+                                v-text="item.data.data.employee.full_name  + '-' + index"
+                            ></v-list-item-title>
+
+                            <v-list-item-subtitle
+                                class="text--primary"
+                                v-text="item.data.data.description"
+                            ></v-list-item-subtitle>
+
+                            <v-list-item-subtitle
+                                v-text="mixin_getHumanDate(item.created_at)"
+                            ></v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </v-list> -->
+
+            <!-- `/admin/${item.data.data.model}/${item.data.data.id}` -->
+
             <v-list two-line>
                 <v-list-item-group active-class="">
-                    <template v-for="(item, index) in $store.getters.notifications.data">
+                    <template
+                        v-for="(item, index) in $store.getters.notifications
+                            .data"
+                    >
                         <v-list-item :key="item.id" @click="redirectPage(item)">
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
-                                        v-text="item.data.data.employee.full_name"
+                                        v-text="
+                                            item.data.data.employee.full_name
+                                        "
                                     ></v-list-item-title>
 
                                     <v-list-item-subtitle
@@ -263,7 +313,9 @@
                                     ></v-list-item-subtitle>
 
                                     <v-list-item-subtitle
-                                        v-text="mixin_getHumanDate(item.created_at)"
+                                        v-text="
+                                            mixin_getHumanDate(item.created_at)
+                                        "
                                     ></v-list-item-subtitle>
                                 </v-list-item-content>
                             </template>
@@ -276,7 +328,6 @@
                     </template>
                 </v-list-item-group>
             </v-list>
-
         </v-navigation-drawer>
         <!-- End of Notifications Drawer -->
     </div>
@@ -405,19 +456,28 @@ export default {
             //         },
             //     ]
             // }
-        ],
+        ]
     }),
     methods: {
         redirectPage(item) {
-
             let _this = this;
 
             axios
-                .put(`/api/notifications/${item.id}?action=${'read'}&type=${'single'}`)
+                .put(
+                    `/api/notifications/${
+                        item.id
+                    }?action=${"read"}&type=${"single"}`
+                )
                 .then(response => {
                     _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-                    _this.$router.push(`/admin/${item.data.data.model}/${item.data.data.id}`);
+                    window.location.replace(
+                        `/admin/${item.data.data.model}/${item.data.data.id}`
+                    );
+
+                    // _this.$router.replace(
+                    //     `/admin/${item.data.data.model}/${item.data.data.id}`
+                    // );
                 })
                 .catch(error => {
                     console.log(error);
@@ -442,8 +502,6 @@ export default {
             _this.user = response;
             _this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
-
-        
     }
 };
 </script>
