@@ -2095,6 +2095,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (this.selected.filter(function (item) {
+        return item.status.status === "Unsubmitted";
+      }).length <= 0) {
+        this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+        return;
+      }
+
+      var period = this.$store.getters.settings.submission_period;
+      var last_submission_date = "";
+      var submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.filter(function (item) {
+        return item.status.status === "Unsubmitted";
+      }).map(function (item2) {
+        return moment__WEBPACK_IMPORTED_MODULE_1___default()(item2.from);
+      })).format("YYYY-MM-DD");
+
+      switch (period) {
+        case "Weekly":
+          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("week").format("YYYY-MM-DD");
+          break;
+
+        case "Monthly":
+          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("month").format("YYYY-MM-DD");
+          break;
+
+        default:
+          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).format("YYYY-MM-DD");
+          break;
+      }
+
+      if (!this.mixin_can("submit expense reports beyond due date")) {
+        if (!moment__WEBPACK_IMPORTED_MODULE_1___default()(moment__WEBPACK_IMPORTED_MODULE_1___default()()).isSameOrBefore(last_submission_date, "day")) {
+          this.mixin_errorDialog("Error (Not Allowed)", "Last submission was ".concat(last_submission_date));
+          return;
+        }
+      }
+
       this.onUpdate("submit", "put");
     },
     onReview: function onReview() {
@@ -2204,12 +2240,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     selected: function selected() {
       if (this.selected.map(function (item) {
         return item.status.status;
+      }).includes("Unsubmitted")) {
+        var period = this.$store.getters.settings.submission_period;
+        var last_submission_date = "";
+        var submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_1___default()(item.from);
+        })).format("YYYY-MM-DD");
+
+        switch (period) {
+          case "Weekly":
+            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).format("YYYY-MM-DD");
+            break;
+        }
+
+        this.warning = "Last Submission Date: ".concat(last_submission_date);
+      } else if (this.selected.map(function (item) {
+        return item.status.status;
       }).includes("Submitted")) {
-        var period = this.$store.getters.settings.approval_period;
+        var _period = this.$store.getters.settings.approval_period;
         var submission_period = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.map(function (item) {
           return moment__WEBPACK_IMPORTED_MODULE_1___default()(item.submitted_at);
         })).format("YYYY-MM-DD");
-        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_period).add(period, "days").format("YYYY-MM-DD");
+        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_period).add(_period, "days").format("YYYY-MM-DD");
         this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_period);
       } else if (this.selected.length == 0) {
         this.warning = null;

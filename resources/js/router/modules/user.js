@@ -1,3 +1,5 @@
+import { store } from "../../store/index";
+
 const userRoutes = [
     /** Dashboard */
     {
@@ -6,7 +8,7 @@ const userRoutes = [
         redirect: "/dashboard",
         component: () => import("../../views/modules/user/Index.vue"),
         meta: {
-            requiresAuth: true,
+            requiresAuth: true
             // requiresAdmin: true
             // keepAlive: false,
         },
@@ -22,7 +24,7 @@ const userRoutes = [
                 path: "/dashboard",
                 name: "user.dashboard.index",
                 component: () =>
-                    import("../../views/modules/user/dashboard/Index.vue"),
+                    import("../../views/modules/user/dashboard/Index.vue")
                 // meta: {
                 //     keepAlive: false
                 // }
@@ -38,10 +40,10 @@ const userRoutes = [
                 path: "/profile",
                 name: "user.profile.index",
                 component: () =>
-                    import("../../views/modules/user/profile/Index.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                    import("../../views/modules/user/profile/Index.vue")
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             /**
              *
@@ -55,36 +57,73 @@ const userRoutes = [
                 name: "user.expenses.index",
                 component: () =>
                     import("../../views/modules/user/expenses/Index.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                // meta: {
+                //     keepAlive: false
+                // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("view all expenses")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
             },
             {
                 path: "/expenses/create",
                 name: "user.expenses.create",
                 component: () =>
                     import("../../views/modules/user/expenses/Create.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("add expenses")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
             },
             {
                 path: "/expenses/:id/edit",
                 name: "user.expenses.edit",
                 component: () =>
                     import("../../views/modules/user/expenses/Edit.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("edit expenses")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             {
                 path: "/expenses/:id",
                 name: "user.expenses.show",
                 component: () =>
                     import("../../views/modules/user/expenses/Show.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("view expenses")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             /**
              *
@@ -97,10 +136,22 @@ const userRoutes = [
                 path: "/expense_reports",
                 name: "user.expense_reports.index",
                 component: () =>
-                    import("../../views/modules/user/expense_reports/Index.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                    import(
+                        "../../views/modules/user/expense_reports/Index.vue"
+                    ),
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("view all expense reports")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             {
                 path: "/expense_reports/create",
@@ -109,27 +160,54 @@ const userRoutes = [
                     import(
                         "../../views/modules/user/expense_reports/Create.vue"
                     ),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("add expense reports")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             {
                 path: "/expense_reports/:id/edit",
                 name: "user.expense_reports.edit",
                 component: () =>
                     import("../../views/modules/user/expense_reports/Edit.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("edit expense reports")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
             },
             {
                 path: "/expense_reports/:id",
                 name: "user.expense_reports.show",
                 component: () =>
                     import("../../views/modules/user/expense_reports/Show.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("view expense reports")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             // {
             //     path: "/expense_reports/print/:id",
@@ -152,21 +230,41 @@ const userRoutes = [
                 name: "user.payments.index",
                 component: () =>
                     import("../../views/modules/user/payments/Index.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("view all payments")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+                // meta: {
+                //     keepAlive: false
+                // }
             },
             {
                 path: "/payments/:id",
                 name: "user.payments.show",
                 component: () =>
                     import("../../views/modules/user/payments/Show.vue"),
-                    // meta: {
-                    //     keepAlive: false
-                    // }
-            },
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("view payments")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                }
+                // meta: {
+                //     keepAlive: false
+                // }
+            }
         ]
-    },
+    }
 ];
 
 export default userRoutes.map(route => {

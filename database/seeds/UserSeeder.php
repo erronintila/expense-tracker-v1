@@ -96,6 +96,7 @@ class UserSeeder extends Seeder
             if ($model == "expenses") {
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
                 Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
+                Permission::create(['name' => 'set reimbursable amount', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 
@@ -125,7 +126,7 @@ class UserSeeder extends Seeder
 
         // create roles and assign existing permissions
 
-        $roleUser = Role::create(['name' => 'Standard User']);
+        $roleUser = Role::create(['name' => 'standard user']);
         $roleUser->givePermissionTo("add expenses");
         $roleUser->givePermissionTo("edit expenses");
         $roleUser->givePermissionTo("delete expenses");
@@ -142,9 +143,13 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("receive payments");
         // $roleUser->givePermissionTo("duplicate expense reports");
         $roleUser->givePermissionTo("add vendors");
-        $roleUser->givePermissionTo("edit employees");
+        $roleUser->givePermissionTo("set reimbursable amount");
+        $roleUser->givePermissionTo("add expenses beyond encoding period");
+        $roleUser->givePermissionTo("submit expense reports beyond due date");
+        $roleUser->givePermissionTo("add expenses beyond limit");
+        // $roleUser->givePermissionTo("edit employees");
 
-        $roleSuperAdmin = Role::create(['name' => 'Super Admin']);
+        $roleSuperAdmin = Role::create(['name' => 'administrator']);
 
         foreach (Permission::all() as $permission) {
             $roleSuperAdmin->givePermissionTo($permission->pluck("name"));

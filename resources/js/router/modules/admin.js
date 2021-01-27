@@ -41,11 +41,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "manage settings"
-                        )
-                    ) {
+                    if (permissions.includes("manage settings")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -87,11 +83,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all activity logs"
-                        )
-                    ) {
+                    if (permissions.includes("view all activity logs")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -181,11 +173,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all departments"
-                        )
-                    ) {
+                    if (permissions.includes("view all departments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -201,11 +189,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "add departments"
-                        )
-                    ) {
+                    if (permissions.includes("add departments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -221,11 +205,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit departments"
-                        )
-                    ) {
+                    if (permissions.includes("edit departments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -241,11 +221,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view departments"
-                        )
-                    ) {
+                    if (permissions.includes("view departments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -268,11 +244,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all employees"
-                        )
-                    ) {
+                    if (permissions.includes("view all employees")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -288,9 +260,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("add employees")
-                    ) {
+                    if (permissions.includes("add employees")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -306,11 +276,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit employees"
-                        )
-                    ) {
+                    if (permissions.includes("edit employees")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -326,11 +292,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit employees fund"
-                        )
-                    ) {
+                    if (permissions.includes("edit employees fund")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -346,11 +308,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view employees"
-                        )
-                    ) {
+                    if (permissions.includes("view employees")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -373,11 +331,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all expense types"
-                        )
-                    ) {
+                    if (permissions.includes("view all expense types")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -395,11 +349,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "add expense types"
-                        )
-                    ) {
+                    if (permissions.includes("add expense types")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -415,11 +365,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit expense types"
-                        )
-                    ) {
+                    if (permissions.includes("edit expense types")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -435,11 +381,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view expense types"
-                        )
-                    ) {
+                    if (permissions.includes("view expense types")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -462,11 +404,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all expenses"
-                        )
-                    ) {
+                    if (permissions.includes("view all expenses")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -482,9 +420,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("add expenses")
-                    ) {
+                    if (permissions.includes("add expenses")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -515,9 +451,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("edit expenses")
-                    ) {
+                    if (permissions.includes("edit expenses")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -533,9 +467,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("view expenses")
-                    ) {
+                    if (permissions.includes("view expenses")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -558,9 +490,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("view all jobs")
-                    ) {
+                    if (permissions.includes("view all jobs")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -631,11 +561,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all payments"
-                        )
-                    ) {
+                    if (permissions.includes("view all payments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -651,9 +577,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("add payments")
-                    ) {
+                    if (permissions.includes("add payments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -669,9 +593,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("edit payments")
-                    ) {
+                    if (permissions.includes("edit payments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -687,9 +609,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("view payments")
-                    ) {
+                    if (permissions.includes("view payments")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -714,11 +634,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all expense reports"
-                        )
-                    ) {
+                    if (permissions.includes("view all expense reports")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -736,11 +652,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "add expense reports"
-                        )
-                    ) {
+                    if (permissions.includes("add expense reports")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -758,11 +670,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit expense reports"
-                        )
-                    ) {
+                    if (permissions.includes("edit expense reports")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -780,11 +688,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view expense reports"
-                        )
-                    ) {
+                    if (permissions.includes("view expense reports")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -996,11 +900,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all vendors"
-                        )
-                    ) {
+                    if (permissions.includes("view all vendors")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -1016,9 +916,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("add vendors")
-                    ) {
+                    if (permissions.includes("add vendors")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -1034,9 +932,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("edit vendors")
-                    ) {
+                    if (permissions.includes("edit vendors")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -1052,9 +948,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("view vendors")
-                    ) {
+                    if (permissions.includes("view vendors")) {
                         next();
                     } else {
                         next({ name: "error_403" });

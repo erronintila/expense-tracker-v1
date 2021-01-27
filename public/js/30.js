@@ -338,7 +338,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -396,36 +395,40 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      this.loadPermissions().then(axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.first_name = data.first_name;
-        _this.form.middle_name = data.middle_name;
-        _this.form.last_name = data.last_name;
-        _this.form.suffix = data.suffix;
-        _this.form.gender = data.gender;
-        _this.form.birthdate = data.birthdate;
-        _this.form.job = data.job.id;
-        _this.form.mobile_number = data.mobile_number;
-        _this.form.telephone_number = data.telephone_number;
-        _this.form.email = data.email;
-        _this.form.address = data.address;
-        _this.selected = data.user.permissions;
-        _this.form.role = data.user.role[0];
-        _this.form.username = data.user.username;
-        _this.form.can_login = data.user.can_login; // _this.selected_expense_types = data.expense_types.map(
-        //     item => item.id
-        // );
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
+          var data = response.data.data;
+          _this.form.code = data.code;
+          _this.form.first_name = data.first_name;
+          _this.form.middle_name = data.middle_name;
+          _this.form.last_name = data.last_name;
+          _this.form.suffix = data.suffix;
+          _this.form.gender = data.gender;
+          _this.form.birthdate = data.birthdate;
+          _this.form.job = data.job.id;
+          _this.form.mobile_number = data.mobile_number;
+          _this.form.telephone_number = data.telephone_number;
+          _this.form.email = data.email;
+          _this.form.address = data.address; // _this.selected = data.user.permissions;
 
-        _this.loader = false;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+          _this.form.role = data.user.role[0];
+          _this.form.username = data.user.username;
+          _this.form.can_login = data.user.can_login; // _this.selected_expense_types = data.expense_types.map(
+          //     item => item.id
+          // );
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.loader = false;
+          resolve(data.user.permissions);
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
 
-        _this.loader = false;
-      }));
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          _this.loader = false;
+          reject();
+        });
+      });
     },
     loadJobs: function loadJobs() {
       var _this = this;
@@ -456,11 +459,15 @@ __webpack_require__.r(__webpack_exports__);
     //         });
     // },
     loadPermissions: function loadPermissions() {
+      var _this2 = this;
+
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/permissions").then(function (response) {
+        axios.get("/api/data/permissions?role=".concat(_this2.form.role)).then(function (response) {
+          // console.log("permissions", response);
           _this.permissions = response.data;
+          _this.selected = response.data;
           resolve();
         })["catch"](function (error) {
           console.log(error);
@@ -475,13 +482,13 @@ __webpack_require__.r(__webpack_exports__);
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
-    changeRole: function changeRole() {
-      if (this.form.role == "Administrator") {
-        this.selected = this.permissions;
-      } else {
-        this.selected = [];
-      }
-    },
+    // changeRole() {
+    //     if (this.form.role == "Administrator") {
+    //         this.selected = this.permissions;
+    //     } else {
+    //         this.selected = [];
+    //     }
+    // },
     onSave: function onSave() {
       var _this = this;
 
@@ -512,12 +519,10 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("Employee updated successfully.", {
             position: "top-right",
             timeout: 2000
-          }); // _this.$store.dispatch("AUTH_USER");
-
-
-          _this.$router.push({
-            name: "admin.employees.index"
           });
+
+          window.location.replace("/admin/employees"); // _this.$store.dispatch("AUTH_USER");
+          // _this.$router.push({ name: "admin.employees.index" });
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -535,10 +540,18 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    // this.$store.dispatch("AUTH_USER");
+    var _this3 = this;
+
+    var _this = this; // this.$store.dispatch("AUTH_USER");
+
+
     this.loadJobs(); // this.loadExpenseTypes();
 
-    this.getData();
+    this.getData().then(function (data) {
+      _this3.loadPermissions().then(function () {
+        _this.selected = data;
+      });
+    });
   }
 });
 
@@ -1219,7 +1232,7 @@ var render = function() {
                                           ],
                                           "error-messages": _vm.errors.role
                                         },
-                                        on: { change: _vm.changeRole },
+                                        on: { change: _vm.loadPermissions },
                                         model: {
                                           value: _vm.form.role,
                                           callback: function($$v) {
@@ -1262,24 +1275,22 @@ var render = function() {
                                   _c(
                                     "v-col",
                                     [
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
+                                      _c("v-data-table", {
+                                        attrs: {
+                                          "show-select": "",
+                                          "items-per-page": -1,
+                                          headers: _vm.headers,
+                                          items: _vm.permissions,
+                                          "group-by": "category"
+                                        },
+                                        model: {
+                                          value: _vm.selected,
+                                          callback: function($$v) {
+                                            _vm.selected = $$v
+                                          },
+                                          expression: "selected"
+                                        }
+                                      })
                                     ],
                                     1
                                   )

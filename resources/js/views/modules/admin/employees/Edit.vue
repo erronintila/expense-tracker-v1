@@ -16,7 +16,7 @@
             </v-row>
         </v-container>
         <v-card v-else class="elevation-0 pt-0">
-        <!-- <v-card class="elevation-0 pt-0"> -->
+            <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -285,7 +285,7 @@
                                             'Administrator'
                                         ]"
                                         :error-messages="errors.role"
-                                        @change="changeRole"
+                                        @change="loadPermissions"
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="12" md="4">
@@ -300,7 +300,6 @@
                             <v-row>
                                 <v-col>
                                     <v-data-table
-                                        v-if="form.role == 'Administrator'"
                                         v-model="selected"
                                         show-select
                                         :items-per-page="-1"
@@ -382,7 +381,7 @@ export default {
         getData() {
             let _this = this;
 
-            this.loadPermissions().then(
+            return new Promise((resolve, reject) => {
                 axios
                     .get("/api/employees/" + _this.$route.params.id)
                     .then(response => {
@@ -400,7 +399,7 @@ export default {
                         _this.form.telephone_number = data.telephone_number;
                         _this.form.email = data.email;
                         _this.form.address = data.address;
-                        _this.selected = data.user.permissions;
+                        // _this.selected = data.user.permissions;
                         _this.form.role = data.user.role[0];
                         _this.form.username = data.user.username;
                         _this.form.can_login = data.user.can_login;
@@ -409,6 +408,8 @@ export default {
                         // );
 
                         _this.loader = false;
+
+                        resolve(data.user.permissions);
                     })
                     .catch(error => {
                         console.log(error);
@@ -420,8 +421,10 @@ export default {
                         );
 
                         _this.loader = false;
-                    })
-            );
+
+                        reject();
+                    });
+            });
         },
         loadJobs() {
             let _this = this;
@@ -463,9 +466,12 @@ export default {
 
             return new Promise((resolve, reject) => {
                 axios
-                    .get("/api/data/permissions")
+                    .get(`/api/data/permissions?role=${this.form.role}`)
                     .then(response => {
+                        // console.log("permissions", response);
                         _this.permissions = response.data;
+
+                        _this.selected = response.data;
 
                         resolve();
                     })
@@ -485,13 +491,13 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
-        changeRole() {
-            if (this.form.role == "Administrator") {
-                this.selected = this.permissions;
-            } else {
-                this.selected = [];
-            }
-        },
+        // changeRole() {
+        //     if (this.form.role == "Administrator") {
+        //         this.selected = this.permissions;
+        //     } else {
+        //         this.selected = [];
+        //     }
+        // },
         onSave() {
             let _this = this;
 
@@ -518,7 +524,7 @@ export default {
                         username: _this.form.username,
                         can_login: _this.form.can_login,
                         role: _this.form.role,
-                        permissions: _this.selected,
+                        permissions: _this.selected
                         // expense_types: _this.selected_expense_types
                     })
                     .then(function(response) {
@@ -530,9 +536,11 @@ export default {
                             }
                         );
 
+                        window.location.replace("/admin/employees");
+
                         // _this.$store.dispatch("AUTH_USER");
 
-                        _this.$router.push({ name: "admin.employees.index" });
+                        // _this.$router.push({ name: "admin.employees.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -555,10 +563,15 @@ export default {
         }
     },
     created() {
+        let _this = this;
         // this.$store.dispatch("AUTH_USER");
         this.loadJobs();
         // this.loadExpenseTypes();
-        this.getData();
+        this.getData().then((data) => {
+            this.loadPermissions().then(() => {
+                _this.selected = data;
+            });
+        });
     }
 };
 </script>

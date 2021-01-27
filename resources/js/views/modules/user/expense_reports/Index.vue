@@ -2079,6 +2079,56 @@ export default {
                 return;
             }
 
+            if (
+                this.selected.filter(function(item) {
+                    return item.status.status === "Unsubmitted";
+                }).length <= 0
+            ) {
+                this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+                return;
+            }
+
+            let period = this.$store.getters.settings.submission_period;
+            let last_submission_date = "";
+            let submission_date = moment
+                .min(
+                    this.selected
+                        .filter(function(item) {
+                            return item.status.status === "Unsubmitted";
+                        })
+                        .map(item2 => moment(item2.from))
+                )
+                .format("YYYY-MM-DD");
+
+            switch (period) {
+                case "Weekly":
+                    last_submission_date = moment(submission_date)
+                        .endOf("week")
+                        .format("YYYY-MM-DD");
+                    break;
+                case "Monthly":
+                    last_submission_date = moment(submission_date)
+                        .endOf("month")
+                        .format("YYYY-MM-DD");
+                    break;
+
+                default:
+                    last_submission_date = moment(submission_date).format(
+                        "YYYY-MM-DD"
+                    );
+                    break;
+            }
+
+            if(!this.mixin_can("submit expense reports beyond due date")) {
+                if (!moment(moment()).isSameOrBefore(last_submission_date, "day")) {
+                    this.mixin_errorDialog(
+                        "Error (Not Allowed)",
+                        `Last submission was ${last_submission_date}`
+                    );
+                    return;
+                }
+            }
+
             this.onUpdate("submit", "put");
         },
         onReview() {
@@ -2124,6 +2174,37 @@ export default {
         },
         selected() {
             if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Unsubmitted")
+            ) {
+                let period = this.$store.getters.settings.submission_period;
+                let last_submission_date = "";
+                let submission_date = moment
+                    .min(this.selected.map(item => moment(item.from)))
+                    .format("YYYY-MM-DD");
+
+                switch (period) {
+                    case "Weekly":
+                        last_submission_date = moment(submission_date)
+                            .endOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        last_submission_date = moment(submission_date)
+                            .endOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+
+                    default:
+                        last_submission_date = moment(submission_date).format(
+                            "YYYY-MM-DD"
+                        );
+                        break;
+                }
+
+                this.warning = `Last Submission Date: ${last_submission_date}`;
+            } else if (
                 this.selected
                     .map(item => item.status.status)
                     .includes("Submitted")

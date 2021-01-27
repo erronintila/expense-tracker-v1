@@ -367,7 +367,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -403,7 +402,8 @@ __webpack_require__.r(__webpack_exports__);
         username: "",
         can_login: true,
         has_fund: false,
-        fund: 0
+        fund: 0,
+        is_admin: false
       },
       errors: {
         code: [],
@@ -458,8 +458,9 @@ __webpack_require__.r(__webpack_exports__);
     loadPermissions: function loadPermissions() {
       var _this = this;
 
-      axios.get("/api/data/permissions").then(function (response) {
+      axios.get("/api/data/permissions?role=".concat(this.form.role)).then(function (response) {
         _this.permissions = response.data;
+        _this.selected = response.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -470,13 +471,14 @@ __webpack_require__.r(__webpack_exports__);
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
-    changeRole: function changeRole() {
-      if (this.form.role == "Administrator") {
-        this.selected = this.permissions;
-      } else {
-        this.selected = [];
-      }
-    },
+    // changeRole() {
+    //     this.loadPermissions();
+    //     // if (this.form.role == "Administrator") {
+    //     //     this.selected = this.permissions;
+    //     // } else {
+    //     //     this.selected = [];
+    //     // }
+    // },
     onSave: function onSave() {
       var _this = this;
 
@@ -516,9 +518,7 @@ __webpack_require__.r(__webpack_exports__);
           }); // _this.$store.dispatch("AUTH_USER");
 
 
-          _this.$router.push({
-            name: "admin.employees.index"
-          });
+          window.location.replace("/admin/employees"); // _this.$router.push({ name: "admin.employees.index" });
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -1295,7 +1295,7 @@ var render = function() {
                                           ],
                                           "error-messages": _vm.errors.role
                                         },
-                                        on: { change: _vm.changeRole },
+                                        on: { change: _vm.loadPermissions },
                                         model: {
                                           value: _vm.form.role,
                                           callback: function($$v) {
@@ -1338,24 +1338,22 @@ var render = function() {
                                   _c(
                                     "v-col",
                                     [
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
+                                      _c("v-data-table", {
+                                        attrs: {
+                                          "show-select": "",
+                                          "items-per-page": -1,
+                                          headers: _vm.headers,
+                                          items: _vm.permissions,
+                                          "group-by": "category"
+                                        },
+                                        model: {
+                                          value: _vm.selected,
+                                          callback: function($$v) {
+                                            _vm.selected = $$v
+                                          },
+                                          expression: "selected"
+                                        }
+                                      })
                                     ],
                                     1
                                   )

@@ -256,6 +256,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -427,6 +434,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // },
     onUpdate: function onUpdate(action, method) {
       var _this = this;
+
+      if (action == "receive" && !this.mixin_can("receive payments")) {
+        _this.mixin_errorDialog("Error", "Not allowed");
+
+        return;
+      }
 
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -907,12 +920,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          _vm._s(
-                                            _vm.mixin_formatDate(
-                                              item.created_at,
-                                              "YYYY-MM-DD HH:mm:ss"
-                                            )
-                                          )
+                                          "\n                                        " +
+                                            _vm._s(
+                                              _vm.mixin_formatDate(
+                                                item.created_at,
+                                                "YYYY-MM-DD HH:mm:ss"
+                                              )
+                                            ) +
+                                            "\n                                    "
                                         )
                                       ])
                                     ]),
