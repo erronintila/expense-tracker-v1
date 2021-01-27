@@ -428,33 +428,7 @@ __webpack_require__.r(__webpack_exports__);
       //         },
       //     ]
       // }
-      ] // notifications: [
-      //     // {
-      //     //     id: 1,
-      //     //     action: '15 min',
-      //     //     headline: 'Brunch this weekend?',
-      //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-      //     //     title: 'Ali Connors',
-      //     //     link: { name: "admin.notifications.index" }
-      //     // },
-      //     // {
-      //     //     id: 2,
-      //     //     action: '15 min',
-      //     //     headline: 'Brunch this weekend?',
-      //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-      //     //     title: 'Ali Connoraasds',
-      //     //     link: { name: "admin.notifications.index" }
-      //     // },
-      //     // {
-      //     //     id: 3,
-      //     //     action: '15 min',
-      //     //     headline: 'Brunch this weekend?',
-      //     //     subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-      //     //     title: 'Ali Connorsasd',
-      //     //     link: { name: "admin.notifications.index" }
-      //     // },
-      // ]
-
+      ]
     };
   },
   methods: {
@@ -462,8 +436,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.put("/api/notifications/".concat(item.id, "?action=", 'read', "&type=", 'single')).then(function (response) {
-        console.log(response);
-
         _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
         _this.$router.push("/admin/".concat(item.data.data.model, "/").concat(item.data.data.id));
@@ -1097,7 +1069,7 @@ var render = function() {
                       _c(
                         "v-list-item",
                         {
-                          key: item.title,
+                          key: item.id,
                           on: {
                             click: function($event) {
                               return _vm.redirectPage(item)
