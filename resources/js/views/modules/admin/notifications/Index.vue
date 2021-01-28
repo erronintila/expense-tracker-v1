@@ -115,7 +115,9 @@
                     </v-list>
 
                     <v-list>
-                        <v-list-item @click="onReadUpdate(null, 'read', 'multiple')">
+                        <v-list-item
+                            @click="onReadUpdate(null, 'read', 'multiple')"
+                        >
                             <v-list-item-icon>
                                 <v-icon>mdi-credit-card-check-outline</v-icon>
                             </v-list-item-icon>
@@ -126,7 +128,9 @@
                     </v-list>
 
                     <v-list>
-                        <v-list-item @click="onReadUpdate(null, 'unread', 'multiple')">
+                        <v-list-item
+                            @click="onReadUpdate(null, 'unread', 'multiple')"
+                        >
                             <v-list-item-icon>
                                 <v-icon>mdi-credit-card-check-outline</v-icon>
                             </v-list-item-icon>
@@ -193,22 +197,62 @@
                         </td>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon
-                            v-if="!item.read_at"
-                            small
-                            class="mr-2"
-                            @click="onReadUpdate(item.id, 'read', 'single')"
-                        >
-                            mdi-check
-                        </v-icon>
-                        <v-icon
-                            v-else
-                            small
-                            class="mr-2"
-                            @click="onReadUpdate(item.id, 'unread', 'single')"
-                        >
-                            mdi-close
-                        </v-icon>
+                        <v-tooltip bottom v-if="!item.read_at">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    small
+                                    class="mr-2"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    @click="
+                                        onReadUpdate(item.id, 'read', 'single')
+                                    "
+                                >
+                                    mdi-check
+                                </v-icon>
+                            </template>
+                            <span>Mark as read</span>
+                        </v-tooltip>
+
+                        <v-tooltip bottom v-else>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    small
+                                    class="mr-2"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    @click="
+                                        onReadUpdate(
+                                            item.id,
+                                            'unread',
+                                            'single'
+                                        )
+                                    "
+                                >
+                                    mdi-close
+                                </v-icon>
+                            </template>
+                            <span>Mark as unread</span>
+                        </v-tooltip>
+
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    small
+                                    class="mr-2"
+                                    @click="
+                                        $router.push(
+                                            `/admin/${item.data.data.model}/${item.data.data.id}`
+                                        )
+                                    "
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    mdi-share
+                                </v-icon>
+                            </template>
+                            <span>Go to link</span>
+                        </v-tooltip>
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{
@@ -219,7 +263,8 @@
                         }}
                     </template>
                     <template v-slot:[`item.description`]="{ item }">
-                        {{ item.data.data.description }} - {{ item.data.data.expense_report.code }}
+                        {{ item.data.data.description }} -
+                        {{ item.data.data.expense_report.code }}
                     </template>
                     <template v-slot:[`item.status`]="{ item }">
                         <v-chip color="green" v-if="item.read_at" dark small>
@@ -268,7 +313,9 @@
                     </template> -->
                 </v-data-table>
 
-                <v-btn v-if="selected.length > 0" @click="selected = []">Clear All Selected</v-btn>
+                <v-btn v-if="selected.length > 0" @click="selected = []"
+                    >Clear All Selected</v-btn
+                >
             </v-card-text>
         </v-card>
     </div>
@@ -382,7 +429,7 @@ export default {
                             itemsPerPage: itemsPerPage,
                             status: status,
                             start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
+                            end_date: range[1] ? range[1] : range[0]
                             // employee_id: employee_id
                         }
                     })
@@ -427,19 +474,22 @@ export default {
             let item_id = item ? item : this.selected.map(item => item.id)[0];
 
             switch (type) {
-                case 'all':
-                    if(this.items.length <= 0) {
-                        this.mixin_errorDialog("Error", "No data to be updated.");
+                case "all":
+                    if (this.items.length <= 0) {
+                        this.mixin_errorDialog(
+                            "Error",
+                            "No data to be updated."
+                        );
                         return;
                     }
 
                     parameters = {
                         action: action,
-                        type: type,
+                        type: type
                     };
                     break;
-                case 'multiple':
-                    if(this.selected.length <= 0) {
+                case "multiple":
+                    if (this.selected.length <= 0) {
                         this.mixin_errorDialog("Error", "No data selected.");
                         return;
                     }
@@ -453,7 +503,7 @@ export default {
                 default:
                     parameters = {
                         action: action,
-                        type: type,
+                        type: type
                     };
                     break;
             }
@@ -477,7 +527,7 @@ export default {
 
                     _this.selected = [];
                 });
-        },
+        }
     },
     computed: {
         params(nv) {
@@ -485,7 +535,7 @@ export default {
                 ...this.options,
                 query: this.search,
                 query: this.status,
-                query: this.date_range,
+                query: this.date_range
                 // query: this.employee
             };
         }

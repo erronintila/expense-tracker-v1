@@ -341,7 +341,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-        _this.$router.push("/".concat(item.data.data.model, "/").concat(item.data.data.id));
+        window.location.replace("/".concat(item.data.data.model, "/").concat(item.data.data.id)); // _this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);

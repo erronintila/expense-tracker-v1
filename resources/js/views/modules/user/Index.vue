@@ -321,7 +321,9 @@ export default {
                 .then(response => {
                     console.log(response);
                     _this.$store.dispatch("AUTH_NOTIFICATIONS");
-                    _this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
+
+                    window.location.replace(`/${item.data.data.model}/${item.data.data.id}`);
+                    // _this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
                 })
                 .catch(error => {
                     console.log(error);

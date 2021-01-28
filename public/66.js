@@ -287,6 +287,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -415,7 +462,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       })[0];
 
       switch (type) {
-        case 'all':
+        case "all":
           if (this.items.length <= 0) {
             this.mixin_errorDialog("Error", "No data to be updated.");
             return;
@@ -427,7 +474,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           };
           break;
 
-        case 'multiple':
+        case "multiple":
           if (this.selected.length <= 0) {
             this.mixin_errorDialog("Error", "No data selected.");
             return;
@@ -991,47 +1038,166 @@ var render = function() {
                         return [
                           !item.read_at
                             ? _c(
-                                "v-icon",
+                                "v-tooltip",
                                 {
-                                  staticClass: "mr-2",
-                                  attrs: { small: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.onReadUpdate(
-                                        item.id,
-                                        "read",
-                                        "single"
-                                      )
-                                    }
-                                  }
+                                  attrs: { bottom: "" },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "activator",
+                                        fn: function(ref) {
+                                          var on = ref.on
+                                          var attrs = ref.attrs
+                                          return [
+                                            _c(
+                                              "v-icon",
+                                              _vm._g(
+                                                _vm._b(
+                                                  {
+                                                    staticClass: "mr-2",
+                                                    attrs: { small: "" },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.onReadUpdate(
+                                                          item.id,
+                                                          "read",
+                                                          "single"
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  "v-icon",
+                                                  attrs,
+                                                  false
+                                                ),
+                                                on
+                                              ),
+                                              [
+                                                _vm._v(
+                                                  "\n                                mdi-check\n                            "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    true
+                                  )
                                 },
                                 [
-                                  _vm._v(
-                                    "\n                        mdi-check\n                    "
-                                  )
+                                  _vm._v(" "),
+                                  _c("span", [_vm._v("Mark as read")])
                                 ]
                               )
                             : _c(
-                                "v-icon",
+                                "v-tooltip",
                                 {
-                                  staticClass: "mr-2",
-                                  attrs: { small: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.onReadUpdate(
-                                        item.id,
-                                        "unread",
-                                        "single"
-                                      )
-                                    }
-                                  }
+                                  attrs: { bottom: "" },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "activator",
+                                        fn: function(ref) {
+                                          var on = ref.on
+                                          var attrs = ref.attrs
+                                          return [
+                                            _c(
+                                              "v-icon",
+                                              _vm._g(
+                                                _vm._b(
+                                                  {
+                                                    staticClass: "mr-2",
+                                                    attrs: { small: "" },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.onReadUpdate(
+                                                          item.id,
+                                                          "unread",
+                                                          "single"
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  "v-icon",
+                                                  attrs,
+                                                  false
+                                                ),
+                                                on
+                                              ),
+                                              [
+                                                _vm._v(
+                                                  "\n                                mdi-close\n                            "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    true
+                                  )
                                 },
                                 [
-                                  _vm._v(
-                                    "\n                        mdi-close\n                    "
-                                  )
+                                  _vm._v(" "),
+                                  _c("span", [_vm._v("Mark as unread")])
                                 ]
+                              ),
+                          _vm._v(" "),
+                          _c(
+                            "v-tooltip",
+                            {
+                              attrs: { bottom: "" },
+                              scopedSlots: _vm._u(
+                                [
+                                  {
+                                    key: "activator",
+                                    fn: function(ref) {
+                                      var on = ref.on
+                                      var attrs = ref.attrs
+                                      return [
+                                        _c(
+                                          "v-icon",
+                                          _vm._g(
+                                            _vm._b(
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: { small: "" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.$router.push(
+                                                      "/" +
+                                                        item.data.data.model +
+                                                        "/" +
+                                                        item.data.data.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              "v-icon",
+                                              attrs,
+                                              false
+                                            ),
+                                            on
+                                          ),
+                                          [
+                                            _vm._v(
+                                              "\n                                mdi-share\n                            "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
                               )
+                            },
+                            [_vm._v(" "), _c("span", [_vm._v("Go to link")])]
+                          )
                         ]
                       }
                     },
@@ -1061,7 +1227,7 @@ var render = function() {
                           _vm._v(
                             "\n                    " +
                               _vm._s(item.data.data.description) +
-                              " - " +
+                              " -\n                    " +
                               _vm._s(item.data.data.expense_report.code) +
                               "\n                "
                           )
