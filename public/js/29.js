@@ -367,10 +367,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
-=======
-//
->>>>>>> feature/notifications
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -406,12 +402,8 @@ __webpack_require__.r(__webpack_exports__);
         username: "",
         can_login: true,
         has_fund: false,
-<<<<<<< HEAD
         fund: 0,
         is_admin: false
-=======
-        fund: 0
->>>>>>> feature/notifications
       },
       errors: {
         code: [],
@@ -466,14 +458,9 @@ __webpack_require__.r(__webpack_exports__);
     loadPermissions: function loadPermissions() {
       var _this = this;
 
-<<<<<<< HEAD
       axios.get("/api/data/permissions?role=".concat(this.form.role)).then(function (response) {
         _this.permissions = response.data;
         _this.selected = response.data;
-=======
-      axios.get("/api/data/permissions").then(function (response) {
-        _this.permissions = response.data;
->>>>>>> feature/notifications
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -484,7 +471,6 @@ __webpack_require__.r(__webpack_exports__);
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
-<<<<<<< HEAD
     // changeRole() {
     //     this.loadPermissions();
     //     // if (this.form.role == "Administrator") {
@@ -493,15 +479,6 @@ __webpack_require__.r(__webpack_exports__);
     //     //     this.selected = [];
     //     // }
     // },
-=======
-    changeRole: function changeRole() {
-      if (this.form.role == "Administrator") {
-        this.selected = this.permissions;
-      } else {
-        this.selected = [];
-      }
-    },
->>>>>>> feature/notifications
     onSave: function onSave() {
       var _this = this;
 
@@ -541,13 +518,7 @@ __webpack_require__.r(__webpack_exports__);
           }); // _this.$store.dispatch("AUTH_USER");
 
 
-<<<<<<< HEAD
           window.location.replace("/admin/employees"); // _this.$router.push({ name: "admin.employees.index" });
-=======
-          _this.$router.push({
-            name: "admin.employees.index"
-          });
->>>>>>> feature/notifications
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -1324,11 +1295,7 @@ var render = function() {
                                           ],
                                           "error-messages": _vm.errors.role
                                         },
-<<<<<<< HEAD
                                         on: { change: _vm.loadPermissions },
-=======
-                                        on: { change: _vm.changeRole },
->>>>>>> feature/notifications
                                         model: {
                                           value: _vm.form.role,
                                           callback: function($$v) {
@@ -1371,7 +1338,6 @@ var render = function() {
                                   _c(
                                     "v-col",
                                     [
-<<<<<<< HEAD
                                       _c("v-data-table", {
                                         attrs: {
                                           "show-select": "",
@@ -1388,26 +1354,6 @@ var render = function() {
                                           expression: "selected"
                                         }
                                       })
-=======
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
->>>>>>> feature/notifications
                                     ],
                                     1
                                   )

@@ -338,10 +338,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
-=======
-//
->>>>>>> feature/notifications
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -399,7 +395,6 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-<<<<<<< HEAD
       return new Promise(function (resolve, reject) {
         axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
           var data = response.data.data;
@@ -434,38 +429,6 @@ __webpack_require__.r(__webpack_exports__);
           reject();
         });
       });
-=======
-      this.loadPermissions().then(axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.first_name = data.first_name;
-        _this.form.middle_name = data.middle_name;
-        _this.form.last_name = data.last_name;
-        _this.form.suffix = data.suffix;
-        _this.form.gender = data.gender;
-        _this.form.birthdate = data.birthdate;
-        _this.form.job = data.job.id;
-        _this.form.mobile_number = data.mobile_number;
-        _this.form.telephone_number = data.telephone_number;
-        _this.form.email = data.email;
-        _this.form.address = data.address;
-        _this.selected = data.user.permissions;
-        _this.form.role = data.user.role[0];
-        _this.form.username = data.user.username;
-        _this.form.can_login = data.user.can_login; // _this.selected_expense_types = data.expense_types.map(
-        //     item => item.id
-        // );
-
-        _this.loader = false;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-        _this.loader = false;
-      }));
->>>>>>> feature/notifications
     },
     loadJobs: function loadJobs() {
       var _this = this;
@@ -496,7 +459,6 @@ __webpack_require__.r(__webpack_exports__);
     //         });
     // },
     loadPermissions: function loadPermissions() {
-<<<<<<< HEAD
       var _this2 = this;
 
       var _this = this;
@@ -506,13 +468,6 @@ __webpack_require__.r(__webpack_exports__);
           // console.log("permissions", response);
           _this.permissions = response.data;
           _this.selected = response.data;
-=======
-      var _this = this;
-
-      return new Promise(function (resolve, reject) {
-        axios.get("/api/data/permissions").then(function (response) {
-          _this.permissions = response.data;
->>>>>>> feature/notifications
           resolve();
         })["catch"](function (error) {
           console.log(error);
@@ -527,7 +482,6 @@ __webpack_require__.r(__webpack_exports__);
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
-<<<<<<< HEAD
     // changeRole() {
     //     if (this.form.role == "Administrator") {
     //         this.selected = this.permissions;
@@ -535,15 +489,6 @@ __webpack_require__.r(__webpack_exports__);
     //         this.selected = [];
     //     }
     // },
-=======
-    changeRole: function changeRole() {
-      if (this.form.role == "Administrator") {
-        this.selected = this.permissions;
-      } else {
-        this.selected = [];
-      }
-    },
->>>>>>> feature/notifications
     onSave: function onSave() {
       var _this = this;
 
@@ -574,19 +519,10 @@ __webpack_require__.r(__webpack_exports__);
           _this.$dialog.message.success("Employee updated successfully.", {
             position: "top-right",
             timeout: 2000
-<<<<<<< HEAD
           });
 
           window.location.replace("/admin/employees"); // _this.$store.dispatch("AUTH_USER");
           // _this.$router.push({ name: "admin.employees.index" });
-=======
-          }); // _this.$store.dispatch("AUTH_USER");
-
-
-          _this.$router.push({
-            name: "admin.employees.index"
-          });
->>>>>>> feature/notifications
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -604,7 +540,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-<<<<<<< HEAD
     var _this3 = this;
 
     var _this = this; // this.$store.dispatch("AUTH_USER");
@@ -617,12 +552,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.selected = data;
       });
     });
-=======
-    // this.$store.dispatch("AUTH_USER");
-    this.loadJobs(); // this.loadExpenseTypes();
-
-    this.getData();
->>>>>>> feature/notifications
   }
 });
 
@@ -1303,11 +1232,7 @@ var render = function() {
                                           ],
                                           "error-messages": _vm.errors.role
                                         },
-<<<<<<< HEAD
                                         on: { change: _vm.loadPermissions },
-=======
-                                        on: { change: _vm.changeRole },
->>>>>>> feature/notifications
                                         model: {
                                           value: _vm.form.role,
                                           callback: function($$v) {
@@ -1350,7 +1275,6 @@ var render = function() {
                                   _c(
                                     "v-col",
                                     [
-<<<<<<< HEAD
                                       _c("v-data-table", {
                                         attrs: {
                                           "show-select": "",
@@ -1367,26 +1291,6 @@ var render = function() {
                                           expression: "selected"
                                         }
                                       })
-=======
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
->>>>>>> feature/notifications
                                     ],
                                     1
                                   )

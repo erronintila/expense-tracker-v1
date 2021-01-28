@@ -2080,11 +2080,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.selected = [];
 
             _this.loadTotalCountReportStatus();
-<<<<<<< HEAD
-=======
 
             _this.$store.dispatch("AUTH_NOTIFICATIONS");
->>>>>>> feature/notifications
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -2100,7 +2097,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-<<<<<<< HEAD
       if (this.selected.filter(function (item) {
         return item.status.status === "Unsubmitted";
       }).length <= 0) {
@@ -2137,8 +2133,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
 
-=======
->>>>>>> feature/notifications
       this.onUpdate("submit", "put");
     },
     onReview: function onReview() {
@@ -2189,11 +2183,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     }); // _this.$store.dispatch("AUTH_USER");
 
 
-<<<<<<< HEAD
-=======
                     _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
->>>>>>> feature/notifications
                     _this.selected = [];
                   })["catch"](function (error) {
                     console.log(error);
@@ -2253,7 +2244,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     selected: function selected() {
       if (this.selected.map(function (item) {
         return item.status.status;
-<<<<<<< HEAD
       }).includes("Unsubmitted")) {
         var period = this.$store.getters.settings.submission_period;
         var last_submission_date = "";
@@ -2284,14 +2274,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return moment__WEBPACK_IMPORTED_MODULE_1___default()(item.submitted_at);
         })).format("YYYY-MM-DD");
         var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_period).add(_period, "days").format("YYYY-MM-DD");
-=======
-      }).includes("Submitted")) {
-        var period = this.$store.getters.settings.approval_period;
-        var submission_period = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.map(function (item) {
-          return moment__WEBPACK_IMPORTED_MODULE_1___default()(item.submitted_at);
-        })).format("YYYY-MM-DD");
-        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_period).add(period, "days").format("YYYY-MM-DD");
->>>>>>> feature/notifications
         this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_period);
       } else if (this.selected.length == 0) {
         this.warning = null;
@@ -2361,10 +2343,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-<<<<<<< HEAD
-=======
     this.$store.dispatch("AUTH_NOTIFICATIONS");
->>>>>>> feature/notifications
     this.loadTotalCountReportStatus();
     this.loadEmployees();
     this.loadExpenseTypes();

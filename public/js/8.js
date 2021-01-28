@@ -837,10 +837,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // },
   created: function created() {
     this.$store.dispatch("AUTH_USER");
-<<<<<<< HEAD
-=======
     this.$store.dispatch("AUTH_NOTIFICATIONS");
->>>>>>> feature/notifications
   }
 });
 

@@ -418,10 +418,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     });
   // },
   created: function created() {
-<<<<<<< HEAD
-=======
     this.$store.dispatch("AUTH_NOTIFICATIONS");
->>>>>>> feature/notifications
     this.loadDepartments();
   }
 });

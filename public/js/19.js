@@ -205,8 +205,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
-=======
 //
 //
 //
@@ -291,7 +289,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
->>>>>>> feature/notifications
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -307,10 +304,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       dialog: false,
       drawer: null,
-<<<<<<< HEAD
-=======
       notificationDrawer: null,
->>>>>>> feature/notifications
       items: [{
         icon: "mdi-chart-areaspline",
         text: "Dashboard",
@@ -339,8 +333,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-<<<<<<< HEAD
-=======
     redirectPage: function redirectPage(item) {
       var _this = this;
 
@@ -349,13 +341,12 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-        _this.$router.push("/".concat(item.data.data.model, "/").concat(item.data.data.id));
+        window.location.replace("/".concat(item.data.data.model, "/").concat(item.data.data.id)); // _this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
       });
     },
->>>>>>> feature/notifications
     toProfile: function toProfile() {
       // Added () => {} on router, used to prevent NavigationDuplicated error
       this.$router.push({
@@ -379,11 +370,8 @@ __webpack_require__.r(__webpack_exports__);
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this.user = response;
-<<<<<<< HEAD
-=======
 
       _this.$store.dispatch("AUTH_NOTIFICATIONS");
->>>>>>> feature/notifications
     });
   }
 });
@@ -742,8 +730,6 @@ var render = function() {
               _c(
                 "v-tooltip",
                 {
-<<<<<<< HEAD
-=======
                   attrs: { bottom: "" },
                   scopedSlots: _vm._u(
                     [
@@ -808,7 +794,6 @@ var render = function() {
               _c(
                 "v-tooltip",
                 {
->>>>>>> feature/notifications
                   attrs: { left: "" },
                   scopedSlots: _vm._u(
                     [
@@ -864,9 +849,6 @@ var render = function() {
             ],
             1
           )
-<<<<<<< HEAD
-        : _vm._e()
-=======
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -1030,7 +1012,6 @@ var render = function() {
         ],
         1
       )
->>>>>>> feature/notifications
     ],
     1
   )

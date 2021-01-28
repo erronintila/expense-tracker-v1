@@ -264,8 +264,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
-=======
 //
 //
 //
@@ -346,7 +344,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
->>>>>>> feature/notifications
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -486,8 +483,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-<<<<<<< HEAD
-=======
     redirectPage: function redirectPage(item) {
       var _this = this;
 
@@ -502,7 +497,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
->>>>>>> feature/notifications
     toProfile: function toProfile() {
       // Added () => {} on router, used to prevent NavigationDuplicated error
       this.$router.push({
@@ -526,11 +520,8 @@ __webpack_require__.r(__webpack_exports__);
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this.user = response;
-<<<<<<< HEAD
-=======
 
       _this.$store.dispatch("AUTH_NOTIFICATIONS");
->>>>>>> feature/notifications
     });
   }
 });
@@ -904,8 +895,6 @@ var render = function() {
                                 _vm._b(
                                   {
                                     attrs: { icon: "" },
-<<<<<<< HEAD
-=======
                                     on: {
                                       click: function($event) {
                                         $event.stopPropagation()
@@ -970,7 +959,6 @@ var render = function() {
                                 _vm._b(
                                   {
                                     attrs: { icon: "" },
->>>>>>> feature/notifications
                                     on: { click: _vm.onLogout }
                                   },
                                   "v-btn",
@@ -1062,9 +1050,6 @@ var render = function() {
                         [
                           _c("v-list-item-title", [_vm._v("Notifications")]),
                           _vm._v(" "),
-<<<<<<< HEAD
-                          _c("v-list-item-subtitle", [_vm._v("5 Unread")])
-=======
                           _vm.$store.getters.notifications.data.length > 0
                             ? _c("v-list-item-subtitle", [
                                 _vm._v(
@@ -1098,7 +1083,6 @@ var render = function() {
                             ],
                             1
                           )
->>>>>>> feature/notifications
                         ],
                         1
                       )
@@ -1124,26 +1108,6 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-list",
-<<<<<<< HEAD
-            { attrs: { dense: "" } },
-            [
-              _c(
-                "v-list-item",
-                [
-                  _c(
-                    "v-list-item-icon",
-                    [_c("v-icon", [_vm._v("mdi-bell")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v("Title")])],
-                    1
-                  )
-                ],
-                1
-=======
             { attrs: { "two-line": "" } },
             [
               _c(
@@ -1209,7 +1173,6 @@ var render = function() {
                   })
                 ],
                 2
->>>>>>> feature/notifications
               )
             ],
             1

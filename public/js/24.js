@@ -1100,12 +1100,8 @@ __webpack_require__.r(__webpack_exports__);
     this.load_line_chart();
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id); // this.loadStatistics();
   },
-<<<<<<< HEAD
-  created: function created() {// this.$store.dispatch("AUTH_USER");
-=======
   created: function created() {
     this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.$store.dispatch("AUTH_USER");
->>>>>>> feature/notifications
   }
 });
 
