@@ -411,10 +411,6 @@ class EmployeeController extends Controller
 
                 $employee->save();
 
-                $expense_types = ExpenseType::where("expense_type_id", null)->get();
-
-                $employee->expense_types()->sync($expense_types);
-
                 if ($employee->user_id != null) {
                     $user = User::withTrashed()->findOrFail($employee->user_id);
 
