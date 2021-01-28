@@ -188,7 +188,7 @@ class EmployeeController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $expense_types = ExpenseType::all();
+        $expense_types = ExpenseType::where("expense_type_id", null)->get();
 
         $employee = new Employee();
 
@@ -410,6 +410,10 @@ class EmployeeController extends Controller
                 $employee->address = $request->address;
 
                 $employee->save();
+
+                $expense_types = ExpenseType::where("expense_type_id", null)->get();
+
+                $employee->expense_types()->sync($expense_types);
 
                 if ($employee->user_id != null) {
                     $user = User::withTrashed()->findOrFail($employee->user_id);

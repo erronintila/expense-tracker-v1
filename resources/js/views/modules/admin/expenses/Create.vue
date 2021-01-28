@@ -666,7 +666,10 @@ export default {
             axios
                 .get("/api/data/employees")
                 .then(response => {
+                    
                     let data = response.data.data;
+
+                    console.log(data);
 
                     _this.employees = response.data.data;
                 })
