@@ -437,8 +437,6 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        console.log(items);
-
                         _this.loading = false;
 
                         resolve({ items, total });
@@ -511,7 +509,6 @@ export default {
             axios
                 .patch(`/api/notifications/${item_id}`, parameters)
                 .then(response => {
-                    console.log(response);
                     _this.getDataFromApi().then(data => {
                         _this.items = data.items;
                         _this.totalItems = data.total;
