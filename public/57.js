@@ -1034,6 +1034,12 @@ __webpack_require__.r(__webpack_exports__);
     // );
 
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
+<<<<<<< HEAD
+=======
+  },
+  created: function created() {
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+>>>>>>> feature/notifications
   }
 });
 

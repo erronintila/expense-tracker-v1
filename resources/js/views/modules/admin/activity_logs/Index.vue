@@ -516,6 +516,7 @@ export default {
     // },
     created() {
         this.loadUsers();
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
     }
 };
 </script>

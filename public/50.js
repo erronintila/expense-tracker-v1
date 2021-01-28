@@ -544,12 +544,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onUpdate: function onUpdate(action, method) {
       var _this = this;
 
+<<<<<<< HEAD
       if (action == "receive" && !this.mixin_can("receive payments")) {
         _this.mixin_errorDialog("Error", "Not allowed");
 
         return;
       }
 
+=======
+>>>>>>> feature/notifications
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
@@ -593,6 +596,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }); // _this.$store.dispatch("AUTH_USER");
 
 
+<<<<<<< HEAD
+=======
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+
+>>>>>>> feature/notifications
             _this.selected = [];
           })["catch"](function (error) {
             console.log(error);
@@ -639,6 +647,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+<<<<<<< HEAD
+=======
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+>>>>>>> feature/notifications
     this.loadEmployees();
   }
 });

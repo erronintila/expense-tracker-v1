@@ -2323,6 +2323,8 @@ export default {
                                 _this.selected = [];
 
                                 _this.loadTotalCountReportStatus();
+
+                                _this.$store.dispatch("AUTH_NOTIFICATIONS");
                             })
                             .catch(function(error) {
                                 console.log(error);
@@ -2436,6 +2438,7 @@ export default {
                         });
 
                         // _this.$store.dispatch("AUTH_USER");
+                        _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                         _this.selected = [];
                     })
@@ -2618,6 +2621,7 @@ export default {
     // },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadTotalCountReportStatus();
         this.loadEmployees();
         this.loadExpenseTypes();

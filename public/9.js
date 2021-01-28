@@ -2080,6 +2080,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.selected = [];
 
             _this.loadTotalCountReportStatus();
+
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -2180,6 +2182,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                       _this.totalItems = data.total;
                     }); // _this.$store.dispatch("AUTH_USER");
 
+
+                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                     _this.selected = [];
                   })["catch"](function (error) {
@@ -2339,6 +2343,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.loadTotalCountReportStatus();
     this.loadEmployees();
     this.loadExpenseTypes();

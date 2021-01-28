@@ -131,6 +131,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
 //
 //
 //
@@ -150,6 +151,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+=======
+>>>>>>> feature/notifications
 //
 //
 //
@@ -751,10 +754,17 @@ __webpack_require__.r(__webpack_exports__);
     },
     loadVendors: function loadVendors() {
       var _this = this;
+<<<<<<< HEAD
 
       axios.get("/api/data/vendors").then(function (response) {
         _this.vendors = response.data.data;
 
+=======
+
+      axios.get("/api/data/vendors").then(function (response) {
+        _this.vendors = response.data.data;
+
+>>>>>>> feature/notifications
         _this.vendors.unshift({
           id: null,
           name: "No Vendor",
@@ -822,7 +832,11 @@ __webpack_require__.r(__webpack_exports__);
       _this.$refs.form.validate();
 
       if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
+<<<<<<< HEAD
         _this.$dialog.message.error("Amount to replenish is greater than remaining fund", {
+=======
+        _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
+>>>>>>> feature/notifications
           position: "top-right",
           timeout: 2000
         });
@@ -830,6 +844,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+<<<<<<< HEAD
       if (_this.amount_to_replenish + _this.amount_to_reimburse < this.form.amount) {
         _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
 
@@ -892,6 +907,58 @@ __webpack_require__.r(__webpack_exports__);
         });
         return;
       }
+=======
+      if (_this.$refs.form.validate()) {
+        if (!_this.form.vendor.is_vat_inclusive) {
+          _this.form.tax_rate = 0;
+          _this.form.tax_amount = 0;
+        }
+
+        _this.loader = true;
+        axios.put("/api/expenses/" + _this.$route.params.id, {
+          code: _this.form.code,
+          description: _this.form.description,
+          amount: _this.form.amount,
+          reimbursable_amount: _this.form.reimbursable_amount,
+          receipt_number: _this.form.receipt_number,
+          date: _this.form.date,
+          remarks: _this.form.remarks,
+          is_active: _this.form.is_active,
+          expense_type_id: _this.form.expense_type.id,
+          sub_type_id: _this.form.sub_type.id,
+          employee_id: _this.form.employee.id,
+          vendor_id: _this.form.vendor.id,
+          details: _this.itemize ? _this.items : null,
+          tax_name: "",
+          tax_rate: _this.form.tax_rate,
+          tax_amount: _this.form.tax_amount,
+          is_tax_inclusive: _this.form.is_tax_inclusive
+        }).then(function (response) {
+          // _this.onRefresh();
+          _this.$dialog.message.success("Expense updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          }); // _this.$store.dispatch("AUTH_USER");
+
+
+          _this.$router.push({
+            name: "user.expenses.index"
+          });
+        })["catch"](function (error) {
+          // _this.getData();
+          _this.loader = false;
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          if (error.response.data.data !== null) {
+            _this.errors = error.response.data.errors;
+          }
+        });
+        return;
+      }
+>>>>>>> feature/notifications
     },
     addItem: function addItem() {
       var description = this.form.details.description;
@@ -960,18 +1027,28 @@ __webpack_require__.r(__webpack_exports__);
         case "Monthly":
           submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
           break;
+<<<<<<< HEAD
 
         default:
           submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
           break;
       }
 
+=======
+
+        default:
+          submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
+          break;
+      }
+
+>>>>>>> feature/notifications
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(encodingMinDate).isSameOrAfter(submissionMinDate) ? encodingMinDate : submissionMinDate;
     },
     maxDate: function maxDate() {
       var settings = this.$store.getters.settings;
       var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
       var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
+<<<<<<< HEAD
 
       switch (settings.submission_period) {
         case "Weekly":
@@ -1107,9 +1184,136 @@ __webpack_require__.r(__webpack_exports__);
     this.getData();
   }
 });
+=======
+
+      switch (settings.submission_period) {
+        case "Weekly":
+          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+          break;
+
+        case "Monthly":
+          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+          break;
+
+        default:
+          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+          break;
+      }
+
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
+    },
+    amount_to_replenish: function amount_to_replenish() {
+      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var amount = this.mixin_convertToNumber(this.form.amount);
+
+      if (remaining_fund >= amount) {
+        return amount;
+      }
+>>>>>>> feature/notifications
+
+      return amount - Math.abs(remaining_fund - amount);
+    },
+    amount_to_reimburse: function amount_to_reimburse() {
+      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var amount = this.mixin_convertToNumber(this.form.amount);
+
+      if (remaining_fund < amount) {
+        var to_replenish = Math.abs(remaining_fund - amount);
+        this.form.reimbursable_amount = to_replenish;
+        return to_replenish;
+      }
+
+<<<<<<< HEAD
+=======
+      return 0;
+    },
+    expense_amount: function expense_amount() {
+      return this.mixin_convertToNumber(this.form.amount);
+    },
+    display_reimbursable_amount: function display_reimbursable_amount() {
+      return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
+    },
+    taxable_amount: {
+      get: function get() {
+        if (!this.form.is_tax_inclusive) {
+          this.form.tax_amount = this.tax_exclusive.toFixed(2);
+          return this.tax_exclusive.toFixed(2);
+        }
+
+        this.form.tax_amount = this.tax_inclusive.toFixed(2);
+        return this.tax_inclusive.toFixed(2);
+      },
+      set: function set(amount) {
+        this.form.tax_amount = amount;
+        return amount;
+      }
+    },
+    tax_inclusive: function tax_inclusive() {
+      return this.mixin_convertToNumber(this.form.amount) / (1 + this.mixin_convertToNumber(this.form.tax_rate) / 100) * (this.mixin_convertToNumber(this.form.tax_rate) / 100);
+    },
+    tax_exclusive: function tax_exclusive() {
+      return this.mixin_convertToNumber(this.form.amount) * (this.mixin_convertToNumber(this.form.tax_rate) / 100);
+    },
+    total_details_amount: function total_details_amount() {
+      var total = (this.mixin_convertToNumber(this.form.details.quantity) * this.mixin_convertToNumber(this.form.details.amount)).toFixed(2);
+      this.form.details.total = total;
+      return total;
+    },
+    expense_amount_limit: function expense_amount_limit() {
+      return this.form.sub_type.limit == null ? this.form.expense_type.limit : this.form.sub_type.limit;
+    }
+  },
+  watch: {
+    items: function items() {
+      this.form.amount = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.total);
+      }, 0);
+      this.form.details_amount = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.amount);
+      }, 0);
+      this.form.details_quantity = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.quantity);
+      }, 0);
+    },
+    itemize: function itemize() {
+      this.form.amount = this.items.reduce(function (total, item) {
+        return parseFloat(total) + parseFloat(item.total);
+      }, 0);
+
+      if (this.form.employee.id == null) {
+        this.itemize = false;
+        this.$dialog.message.error("No Employee Selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      if (this.form.expense_type.id == null) {
+        this.itemize = false;
+        this.$dialog.message.error("No Expense Type Selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+    } // "form.vendor": function() {
+    //     this.form.tax_rate = 0;
+    //     this.form.tax_amount = 0;
+    //     this.form.is_tax_inclusive = true;
+    // }
+
+  },
+  created: function created() {
+    // this.$store.dispatch("AUTH_USER");
+    this.loadVendors();
+    this.getData();
+  }
+});
 
 /***/ }),
 
+>>>>>>> feature/notifications
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expenses/Edit.vue?vue&type=template&id=17119421&":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expenses/Edit.vue?vue&type=template&id=17119421& ***!
@@ -2206,6 +2410,7 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
+<<<<<<< HEAD
                               _c(
                                 "v-row",
                                 [
@@ -2348,6 +2553,103 @@ var render = function() {
                                   callback: function($$v) {
                                     _vm.$set(_vm.form, "remarks", $$v)
                                   },
+=======
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Amount",
+                                  rules: _vm.mixin_validation.required.concat(
+                                    _vm.mixin_validation.minNumberValue(1)
+                                  ),
+                                  readonly: _vm.itemize,
+                                  type: "number"
+                                },
+                                model: {
+                                  value: _vm.form.amount,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "amount", $$v)
+                                  },
+                                  expression: "form.amount"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm.form.vendor.is_vat_inclusive
+                                ? _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Tax Rate",
+                                              suffix: "%",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
+                                            },
+                                            model: {
+                                              value: _vm.form.tax_rate,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "tax_rate",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.tax_rate"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "8" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Tax Amount",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
+                                            },
+                                            model: {
+                                              value: _vm.taxable_amount,
+                                              callback: function($$v) {
+                                                _vm.taxable_amount = $$v
+                                              },
+                                              expression: "taxable_amount"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("v-textarea", {
+                                attrs: {
+                                  rows: "3",
+                                  "error-messages": _vm.errors.remarks,
+                                  label: "Remarks"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.remarks = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.remarks,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "remarks", $$v)
+                                  },
+>>>>>>> feature/notifications
                                   expression: "form.remarks"
                                 }
                               }),

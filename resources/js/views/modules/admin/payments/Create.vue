@@ -704,6 +704,8 @@ export default {
                             }
                         );
 
+                        _this.$store.dispatch("AUTH_NOTIFICATIONS");
+
                         // _this.$store.dispatch("AUTH_USER");
 
                         _this.$router.push({ name: "admin.payments.index" });

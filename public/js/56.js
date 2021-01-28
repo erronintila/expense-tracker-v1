@@ -1034,6 +1034,9 @@ __webpack_require__.r(__webpack_exports__);
     // );
 
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
+  },
+  created: function created() {
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });
 

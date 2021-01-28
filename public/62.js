@@ -540,6 +540,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
 //
 //
 //
@@ -557,6 +558,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+=======
+>>>>>>> feature/notifications
 
 
 
@@ -768,6 +771,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+<<<<<<< HEAD
       if (_this.amount_to_replenish + _this.amount_to_reimburse < this.form.amount) {
         _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
 
@@ -780,6 +784,8 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+=======
+>>>>>>> feature/notifications
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {

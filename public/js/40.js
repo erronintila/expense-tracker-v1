@@ -550,6 +550,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
 //
 //
 //
@@ -569,6 +570,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+=======
+>>>>>>> feature/notifications
 
 
 
@@ -853,7 +856,11 @@ __webpack_require__.r(__webpack_exports__);
       _this.$refs.form.validate();
 
       if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
+<<<<<<< HEAD
         _this.$dialog.message.error("Amount to replenish is greater than remaining fund", {
+=======
+        _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
+>>>>>>> feature/notifications
           position: "top-right",
           timeout: 2000
         });
@@ -861,6 +868,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+<<<<<<< HEAD
       if (_this.amount_to_replenish + _this.amount_to_reimburse < this.form.amount) {
         _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
 
@@ -873,6 +881,8 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+=======
+>>>>>>> feature/notifications
       if (_this.$refs.form.validate()) {
         if (!_this.form.vendor.is_vat_inclusive) {
           _this.form.tax_rate = 0;
@@ -884,7 +894,11 @@ __webpack_require__.r(__webpack_exports__);
           code: _this.form.code,
           description: _this.form.description,
           amount: _this.form.amount,
+<<<<<<< HEAD
           reimbursable_amount: _this.amount_to_reimburse,
+=======
+          reimbursable_amount: _this.form.reimbursable_amount,
+>>>>>>> feature/notifications
           receipt_number: _this.form.receipt_number,
           date: _this.form.date,
           remarks: _this.form.remarks,
@@ -1023,12 +1037,15 @@ __webpack_require__.r(__webpack_exports__);
     amount_to_replenish: function amount_to_replenish() {
       var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
+<<<<<<< HEAD
       var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
       var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
 
       if (this.mixin_can("set reimbursable amount")) {
         return amount - reimbursable > remaining_fund ? 0 : amt_to_replenish;
       }
+=======
+>>>>>>> feature/notifications
 
       if (remaining_fund >= amount) {
         return amount;
@@ -1039,11 +1056,14 @@ __webpack_require__.r(__webpack_exports__);
     amount_to_reimburse: function amount_to_reimburse() {
       var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
+<<<<<<< HEAD
       var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
 
       if (this.mixin_can("set reimbursable amount")) {
         return reimbursable > amount ? 0 : reimbursable;
       }
+=======
+>>>>>>> feature/notifications
 
       if (remaining_fund < amount) {
         var to_replenish = Math.abs(remaining_fund - amount);
@@ -1054,9 +1074,13 @@ __webpack_require__.r(__webpack_exports__);
       return 0;
     },
     expense_amount: function expense_amount() {
+<<<<<<< HEAD
       var amt_to_replenish = this.mixin_convertToNumber(this.amount_to_replenish);
       var amt_to_reimburse = this.mixin_convertToNumber(this.amount_to_reimburse);
       return this.mixin_convertToNumber(amt_to_replenish + amt_to_reimburse);
+=======
+      return this.mixin_convertToNumber(this.form.amount);
+>>>>>>> feature/notifications
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
       return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
@@ -2263,6 +2287,7 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
+<<<<<<< HEAD
                               _c(
                                 "v-row",
                                 [
@@ -2327,6 +2352,25 @@ var render = function() {
                                 ],
                                 1
                               ),
+=======
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Amount",
+                                  rules: _vm.mixin_validation.required.concat(
+                                    _vm.mixin_validation.minNumberValue(1)
+                                  ),
+                                  readonly: _vm.itemize,
+                                  type: "number"
+                                },
+                                model: {
+                                  value: _vm.form.amount,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "amount", $$v)
+                                  },
+                                  expression: "form.amount"
+                                }
+                              }),
+>>>>>>> feature/notifications
                               _vm._v(" "),
                               _vm.form.vendor.is_vat_inclusive
                                 ? _c(

@@ -1209,6 +1209,7 @@ export default {
         // this.loadStatistics();
     },
     created() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
         // this.$store.dispatch("AUTH_USER");
     }
 };

@@ -260,7 +260,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+<<<<<<< HEAD
+=======
 //
+>>>>>>> feature/notifications
 //
 //
 //
@@ -473,6 +476,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+<<<<<<< HEAD
+//
+=======
+>>>>>>> feature/notifications
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -718,7 +725,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.$dialog.message.success("Payment created successfully.", {
             position: "top-right",
             timeout: 2000
+<<<<<<< HEAD
           }); // _this.$store.dispatch("AUTH_USER");
+=======
+          });
+
+          _this.$store.dispatch("AUTH_NOTIFICATIONS"); // _this.$store.dispatch("AUTH_USER");
+>>>>>>> feature/notifications
 
 
           _this.$router.push({

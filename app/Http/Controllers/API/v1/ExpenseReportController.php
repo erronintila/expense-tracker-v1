@@ -9,11 +9,14 @@ use App\Http\Resources\ExpenseReportResource;
 use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
+use App\Notifications\ExpenseReportNotification;
 use App\Traits\ApiResponse;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -410,9 +413,18 @@ class ExpenseReportController extends Controller
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, true, false, false, false, false);
+
+                    foreach (User::where("is_admin", 1)->get() as $user) {
+                        Notification::send($user, new ExpenseReportNotification([
+                            "action" => "submit",
+                            "expense_report" => $expense_report
+                        ]));
+                    }
                 }
 
                 $message = "Expense Report(s) submitted successfully";
+                
+                
 
                 break;
 
@@ -467,6 +479,11 @@ class ExpenseReportController extends Controller
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, false, false, true, false, false);
+
+                    Notification::send(User::withTrashed()->find($expense_report->employee->user->id), new ExpenseReportNotification([
+                        "action" => "approve",
+                        "expense_report" => $expense_report
+                    ]));
                 }
 
                 $message = "Expense Report(s) approved successfully";
@@ -559,6 +576,11 @@ class ExpenseReportController extends Controller
                     $expense_report->disableLogging();
 
                     $expense_report->save();
+
+                    Notification::send(User::withTrashed()->find($expense_report->employee->user->id), new ExpenseReportNotification([
+                        "action" => "reject",
+                        "expense_report" => $expense_report
+                    ]));
 
                     foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
                         $expense_amount = $expense->amount - $expense->reimbursable_amount;

@@ -54,6 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'taxes' => 'API\v1\TaxController',
 
             'settings' => 'API\v1\SettingController',
+
+            'notifications' => 'API\v1\NotificationController'
         ]
     );
 
@@ -151,6 +153,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/data/users', 'API\v1\UserController@getUsers');
 
     Route::get('/data/permissions', 'API\v1\UserController@getPermissions');
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | NOTIFICATION CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    Route::get('/data/check_notifications', 'API\v1\NotificationController@getNotifications');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

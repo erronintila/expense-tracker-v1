@@ -954,7 +954,22 @@ const adminRoutes = [
                         next({ name: "error_403" });
                     }
                 }
-            }
+            },
+            /**
+             *
+             *
+             * Notifications
+             *
+             *
+             */
+            {
+                path: "/admin/notifications",
+                name: "admin.notifications.index",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/notifications/Index.vue"
+                    ),
+            },
         ]
     }
 ];

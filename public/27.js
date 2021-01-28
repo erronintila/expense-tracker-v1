@@ -379,6 +379,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         query: this.search
       }, "query", this.status));
     }
+  },
+  created: function created() {
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });
 

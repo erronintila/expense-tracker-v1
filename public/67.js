@@ -256,6 +256,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+<<<<<<< HEAD
 //
 //
 //
@@ -263,6 +264,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+=======
+>>>>>>> feature/notifications
 
 
 
@@ -371,6 +374,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           _this.loading = false;
         });
+<<<<<<< HEAD
       });
     },
     onRefresh: function onRefresh() {
@@ -393,6 +397,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
+=======
+      });
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+      this.selected = []; // this.loadEmployees();
+    },
+    onShow: function onShow(item) {
+      this.$router.push({
+        name: "user.payments.show",
+        params: {
+          id: item.id
+        }
+      });
+    },
+    onEdit: function onEdit(item) {
+      this.$router.push({
+        name: "user.payments.edit",
+        params: {
+          id: item.id
+        }
+      });
+    },
+>>>>>>> feature/notifications
     // onDelete() {
     //     let _this = this;
     //     if (_this.selected.length == 0) {
@@ -435,12 +463,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onUpdate: function onUpdate(action, method) {
       var _this = this;
 
+<<<<<<< HEAD
       if (action == "receive" && !this.mixin_can("receive payments")) {
         _this.mixin_errorDialog("Error", "Not allowed");
 
         return;
       }
 
+=======
+>>>>>>> feature/notifications
       if (_this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
@@ -523,7 +554,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
+<<<<<<< HEAD
     this.$store.dispatch("AUTH_USER"); // this.loadEmployees();
+=======
+    this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.loadEmployees();
+>>>>>>> feature/notifications
   }
 });
 
@@ -920,6 +956,7 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
+<<<<<<< HEAD
                                           "\n                                        " +
                                             _vm._s(
                                               _vm.mixin_formatDate(
@@ -928,6 +965,14 @@ var render = function() {
                                               )
                                             ) +
                                             "\n                                    "
+=======
+                                          _vm._s(
+                                            _vm.mixin_formatDate(
+                                              item.created_at,
+                                              "YYYY-MM-DD HH:mm:ss"
+                                            )
+                                          )
+>>>>>>> feature/notifications
                                         )
                                       ])
                                     ]),

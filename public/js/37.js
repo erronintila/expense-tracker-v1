@@ -382,6 +382,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         query: this.search
       }, "query", this.status));
     }
+<<<<<<< HEAD
+=======
+  },
+  created: function created() {
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+>>>>>>> feature/notifications
   } // mounted() {
   //     this.getDataFromApi().then(data => {
   //         this.items = data.items;
