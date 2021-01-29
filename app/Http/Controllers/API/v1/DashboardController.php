@@ -81,12 +81,14 @@ class DashboardController extends Controller
                 $q->where("cancelled_at", null);
             });
 
-            if (request()->has("user_id")) {
-                if ($request->user_id > 0) {
-                    $q->where('user_id', $request->user_id);
-                }
+            
+        }]);
+        
+        if (request()->has("user_id")) {
+            if ($request->user_id > 0) {
+                $users->where('user_id', $request->user_id)->get();
             }
-        }])->get();
+        }
 
         $users_expenses_summary = [];
 

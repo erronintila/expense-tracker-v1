@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
+use App\Http\Resources\Job\JobIndexResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserShowResource extends JsonResource
@@ -52,6 +54,12 @@ class UserShowResource extends JsonResource
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
             "deleted_at" => $this->deleted_at,
+
+            // -------------------------------------------------------------------
+            // Relationships
+            // -------------------------------------------------------------------
+            "job" => new JobIndexResource($this->whenLoaded("job")),
+            "expense_types" => ExpenseTypeShowResource::collection($this->whenLoaded('expense_types')),
         ];
     }
 }

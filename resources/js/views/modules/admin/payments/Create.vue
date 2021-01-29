@@ -61,7 +61,7 @@
                                 </v-date-picker>
                             </v-menu>
                             <v-autocomplete
-                                v-model="form.user"
+                                v-model="form"
                                 :rules="mixin_validation.required"
                                 :items="users"
                                 :error-messages="errors.user"
@@ -516,6 +516,7 @@ export default {
                 itemsPerPage: 10
             },
             form: {
+                id: 0,
                 code: "",
                 reference_no: "",
                 voucher_no: "",
@@ -573,6 +574,7 @@ export default {
             axios
                 .get("/api/data/users")
                 .then(response => {
+                    console.log(response);
                     _this.users = response.data.data;
                 })
                 .catch(error => {
@@ -691,7 +693,7 @@ export default {
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
                         expense_reports: _this.selected,
-                        user: _this.form.user.id
+                        user: _this.form.id
                     })
                     .then(function(response) {
                         _this.onRefresh();

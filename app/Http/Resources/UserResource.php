@@ -60,6 +60,10 @@ class UserResource extends JsonResource
             "job" => new JobIndexResource($this->whenLoaded("job")),
             "role" => $this->is_admin ? ["Administrator"] : ["Standard User"],
             "permissions" => $this->getAllPermissions(),
+            "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
+            "expense_reports" => ExpenseReportResource::collection($this->whenLoaded('expense_reports')),
+            "expense_types" => ExpenseTypeResource::collection($this->whenLoaded('expense_types')),
+            "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
         ];
     }
 }

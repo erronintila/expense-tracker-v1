@@ -762,6 +762,10 @@ export default {
         load_users_expenses(start, end, user) {
             let _this = this;
 
+            console.log(user);
+
+            // return;
+
             axios
                 .get("/api/data/users_expenses_summary", {
                     params: {
@@ -772,6 +776,7 @@ export default {
                     }
                 })
                 .then(response => {
+                    console.log(response);
                     _this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);

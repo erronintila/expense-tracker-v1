@@ -542,6 +542,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       page: 1,
       itemsPerPage: 10
     }), _defineProperty(_ref, "form", {
+      id: 0,
       code: "",
       reference_no: "",
       voucher_no: "",
@@ -601,6 +602,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/data/users").then(function (response) {
+        console.log(response);
         _this.users = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -711,7 +713,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           remarks: _this.form.remarks,
           notes: _this.form.notes,
           expense_reports: _this.selected,
-          user: _this.form.user.id
+          user: _this.form.id
         }).then(function (response) {
           _this.onRefresh();
 
@@ -1008,11 +1010,11 @@ var render = function() {
                                   change: _vm.updateEmployee
                                 },
                                 model: {
-                                  value: _vm.form.user,
+                                  value: _vm.form,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.form, "user", $$v)
+                                    _vm.form = $$v
                                   },
-                                  expression: "form.user"
+                                  expression: "form"
                                 }
                               }),
                               _vm._v(" "),
