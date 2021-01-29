@@ -39,6 +39,7 @@
                                 <v-col cols="12" md="4">
                                     <v-autocomplete
                                         v-model="form.job"
+                                        :rules="mixin_validation.required"
                                         :items="jobs"
                                         :error-messages="errors.job_id"
                                         @input="errors.job_id = []"
@@ -53,6 +54,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.code"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
                                         :counter="100"
                                         :error-messages="errors.code"
                                         @input="errors.code = []"
@@ -66,6 +71,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.first_name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
                                         :counter="100"
                                         :error-messages="errors.first_name"
                                         @input="errors.first_name = []"
@@ -77,6 +86,7 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.middle_name"
+                                        :rules="[]"
                                         :counter="100"
                                         :error-messages="errors.middle_name"
                                         @input="errors.middle_name = []"
@@ -87,6 +97,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.last_name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
                                         :counter="100"
                                         :error-messages="errors.last_name"
                                         @input="errors.last_name = []"
@@ -98,6 +112,7 @@
                                 <v-col cols="12" md="4">
                                     <v-combobox
                                         v-model="form.suffix"
+                                        :rules="[]"
                                         :counter="30"
                                         :items="['Jr', 'Sr', 'II', 'III']"
                                         :error-messages="errors.suffix"
@@ -109,6 +124,7 @@
                                 <v-col cols="12" md="4">
                                     <v-select
                                         v-model="form.gender"
+                                        :rules="mixin_validation.required"
                                         :items="['Male', 'Female']"
                                         :error-messages="errors.gender"
                                         @input="errors.gender = []"
@@ -132,6 +148,9 @@
                                         >
                                             <v-text-field
                                                 v-model="form.birthdate"
+                                                :rules="
+                                                    mixin_validation.required
+                                                "
                                                 :error-messages="
                                                     errors.birthdate
                                                 "
@@ -156,6 +175,7 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.mobile_number"
+                                        :rules="mixin_validation.required"
                                         :counter="30"
                                         :error-messages="errors.mobile_number"
                                         @input="errors.mobile_number = []"
@@ -167,6 +187,7 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.telephone_number"
+                                        :rules="[]"
                                         :counter="30"
                                         :error-messages="
                                             errors.telephone_number
@@ -180,6 +201,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.email"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.email
+                                        ]"
                                         :error-messages="errors.email"
                                         @input="errors.email = []"
                                         label="Email Address *"
@@ -191,6 +216,7 @@
                                 <v-col cols="12">
                                     <v-textarea
                                         v-model="form.address"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.address"
                                         @input="errors.address = []"
                                         label="Address *"
@@ -214,6 +240,7 @@
                                     <v-text-field
                                         v-model="form.fund"
                                         label="Revolving Fund"
+                                        :rules="[]"
                                         :error-messages="errors.fund"
                                         @input="errors.fund = []"
                                         type="number"
@@ -237,6 +264,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.username"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(50)
+                                        ]"
                                         :counter="50"
                                         :error-messages="errors.username"
                                         @input="errors.username = []"
@@ -245,23 +276,23 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="4">
+                                    <v-select
+                                        v-model="form.role"
+                                        label="Role *"
+                                        :items="[
+                                            'Standard User',
+                                            'Administrator'
+                                        ]"
+                                        :error-messages="errors.role"
+                                        @change="changeRole"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="12" md="4">
                                     <v-checkbox
                                         v-model="form.can_login"
                                         label="Allow Login"
                                         :error-messages="errors.can_login"
                                     ></v-checkbox>
-                                </v-col>
-                                <v-col cols="12" md="4">
-                                    <v-radio-group v-model="form.role" row label="Role">
-                                        <v-radio
-                                            label="Standard User"
-                                            value="Standard User"
-                                        ></v-radio>
-                                        <v-radio
-                                            label="Administrator"
-                                            value="Administrator"
-                                        ></v-radio>
-                                    </v-radio-group>
                                 </v-col>
                             </v-row>
 
@@ -330,8 +361,7 @@ export default {
                 can_login: true,
                 type: "",
                 job: null,
-                permissions: [],
-                role: "Standard User"
+                permissions: []
             },
             errors: {
                 code: [],
@@ -367,7 +397,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(
+                _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -377,9 +407,8 @@ export default {
             let _this = this;
 
             axios
-                .get(`/api/data/permissions?role=${_this.form.role}`)
+                .get("/api/data/permissions")
                 .then(response => {
-                    console.log(response);
                     _this.permissions = response.data;
                 })
                 .catch(error => {
@@ -405,10 +434,9 @@ export default {
         onSave() {
             let _this = this;
             let fund = 0;
-            let is_administrator =
-                this.form.role == "Administrator" ? true : false;
+            let is_administrator = this.form.role == "Administrator" ? true : false;
 
-            if (this.form.has_fund) {
+            if(this.form.has_fund) {
                 fund = this.form.fund == "" ? 0 : this.form.fund;
             }
 
@@ -416,7 +444,7 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 _this.loader = true;
-
+                
                 axios
                     .post("/api/users", {
                         code: _this.form.code,
@@ -440,7 +468,7 @@ export default {
                         can_login: _this.form.can_login,
                         type: "",
                         permissions: _this.form.permissions,
-                        job_id: _this.form.job
+                        job_id: _this.form.job,
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(
@@ -452,12 +480,8 @@ export default {
                         );
 
                         _this.$router.push({ name: "admin.users.index" });
-
-                        _this.loader = false;
                     })
                     .catch(function(error) {
-                        _this.loader = false;
-
                         console.log(error);
                         console.log(error.response);
 
@@ -480,11 +504,6 @@ export default {
     computed: {
         maxDate() {
             return moment().format("YYYY-MM-DD");
-        }
-    },
-    watch: {
-        "form.role": function() {
-            this.loadPermissions();
         }
     },
     created() {

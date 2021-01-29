@@ -308,66 +308,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -377,10 +317,7 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       menu: false,
       jobs: [],
-      permissions: this.$store.getters.user.permissions,
-      // expense_types: [],
-      selected: [],
-      // selected_expense_types: [],
+      permissions: [],
       headers: [{
         text: "Permission",
         value: "name",
@@ -401,11 +338,14 @@ __webpack_require__.r(__webpack_exports__);
         remaining_fund: 0,
         username: "",
         email: null,
+        password: "password",
+        password_confirmation: "password",
         is_admin: false,
         is_superadmin: false,
         can_login: true,
-        has_fund: false,
+        type: "",
         job: null,
+        permissions: [],
         role: "Standard User"
       },
       errors: {
@@ -442,26 +382,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    // loadExpenseTypes() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/expense_types?only=true")
-    //         .then(response => {
-    //             _this.expense_types = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
     loadPermissions: function loadPermissions() {
       var _this = this;
 
-      axios.get("/api/data/permissions").then(function (response) {
+      axios.get("/api/data/permissions?role=".concat(_this.form.role)).then(function (response) {
+        console.log(response);
         _this.permissions = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -475,15 +400,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     changeRole: function changeRole() {
       if (this.form.role == "Administrator") {
-        this.selected = this.permissions;
+        this.form.permissions = this.permissions;
       } else {
-        this.selected = [];
+        this.form.permissions = [];
       }
     },
     onSave: function onSave() {
       var _this = this;
 
       var fund = 0;
+      var is_administrator = this.form.role == "Administrator" ? true : false;
 
       if (this.form.has_fund) {
         fund = this.form.fund == "" ? 0 : this.form.fund;
@@ -493,7 +419,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         _this.loader = true;
-        axios.post("/api/employees", {
+        axios.post("/api/users", {
           code: _this.form.code,
           first_name: _this.form.first_name,
           middle_name: _this.form.middle_name,
@@ -501,28 +427,34 @@ __webpack_require__.r(__webpack_exports__);
           suffix: _this.form.suffix,
           gender: _this.form.gender,
           birthdate: _this.form.birthdate,
-          job_id: _this.form.job,
           mobile_number: _this.form.mobile_number,
           telephone_number: _this.form.telephone_number,
-          email: _this.form.email,
           address: _this.form.address,
+          fund: fund,
+          remaining_fund: fund,
           username: _this.form.username,
+          email: _this.form.email,
+          password: "password",
+          password_confirmation: "password",
+          is_admin: is_administrator,
+          is_superadmin: false,
           can_login: _this.form.can_login,
-          role: _this.form.role,
-          permissions: _this.selected,
-          // expense_types: _this.selected_expense_types,
-          fund: fund
+          type: "",
+          permissions: _this.form.permissions,
+          job_id: _this.form.job
         }).then(function (response) {
           _this.$dialog.message.success("Employee created successfully.", {
             position: "top-right",
             timeout: 2000
-          }); // _this.$store.dispatch("AUTH_USER");
-
+          });
 
           _this.$router.push({
-            name: "admin.employees.index"
+            name: "admin.users.index"
           });
+
+          _this.loader = false;
         })["catch"](function (error) {
+          _this.loader = false;
           console.log(error);
           console.log(error.response);
 
@@ -543,10 +475,14 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
   },
+  watch: {
+    "form.role": function formRole() {
+      this.loadPermissions();
+    }
+  },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-    this.loadJobs(); // this.loadExpenseTypes();
-
+    this.loadJobs();
     this.loadPermissions();
   }
 });
@@ -698,7 +634,6 @@ var render = function() {
                                     [
                                       _c("v-autocomplete", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required,
                                           items: _vm.jobs,
                                           "error-messages": _vm.errors.job_id,
                                           "item-text": "name",
@@ -729,9 +664,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(100)
-                                          ),
                                           counter: 100,
                                           "error-messages": _vm.errors.code,
                                           label: "Code *",
@@ -766,9 +698,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(100)
-                                          ),
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.first_name,
@@ -802,7 +731,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: [],
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.middle_name,
@@ -835,9 +763,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(100)
-                                          ),
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.last_name,
@@ -867,7 +792,6 @@ var render = function() {
                                     [
                                       _c("v-combobox", {
                                         attrs: {
-                                          rules: [],
                                           counter: 30,
                                           items: ["Jr", "Sr", "II", "III"],
                                           "error-messages": _vm.errors.suffix,
@@ -896,7 +820,6 @@ var render = function() {
                                     [
                                       _c("v-select", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required,
                                           items: ["Male", "Female"],
                                           "error-messages": _vm.errors.gender,
                                           label: "Gender *",
@@ -946,10 +869,6 @@ var render = function() {
                                                       _vm._b(
                                                         {
                                                           attrs: {
-                                                            rules:
-                                                              _vm
-                                                                .mixin_validation
-                                                                .required,
                                                             "error-messages":
                                                               _vm.errors
                                                                 .birthdate,
@@ -1034,7 +953,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required,
                                           counter: 30,
                                           "error-messages":
                                             _vm.errors.mobile_number,
@@ -1068,7 +986,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: [],
                                           counter: 30,
                                           "error-messages":
                                             _vm.errors.telephone_number,
@@ -1102,9 +1019,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.email
-                                          ),
                                           "error-messages": _vm.errors.email,
                                           label: "Email Address *"
                                         },
@@ -1137,7 +1051,6 @@ var render = function() {
                                     [
                                       _c("v-textarea", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required,
                                           "error-messages": _vm.errors.address,
                                           label: "Address *",
                                           rows: "1"
@@ -1200,7 +1113,6 @@ var render = function() {
                                           _c("v-text-field", {
                                             attrs: {
                                               label: "Revolving Fund",
-                                              rules: [],
                                               "error-messages": _vm.errors.fund,
                                               type: "number"
                                             },
@@ -1260,9 +1172,6 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minLength(50)
-                                          ),
                                           counter: 50,
                                           "error-messages": _vm.errors.username,
                                           label: "Username *",
@@ -1289,32 +1198,6 @@ var render = function() {
                                     "v-col",
                                     { attrs: { cols: "12", md: "4" } },
                                     [
-                                      _c("v-select", {
-                                        attrs: {
-                                          label: "Role *",
-                                          items: [
-                                            "Standard User",
-                                            "Administrator"
-                                          ],
-                                          "error-messages": _vm.errors.role
-                                        },
-                                        on: { change: _vm.changeRole },
-                                        model: {
-                                          value: _vm.form.role,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "role", $$v)
-                                          },
-                                          expression: "form.role"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
                                       _c("v-checkbox", {
                                         attrs: {
                                           label: "Allow Login",
@@ -1330,6 +1213,43 @@ var render = function() {
                                       })
                                     ],
                                     1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c(
+                                        "v-radio-group",
+                                        {
+                                          attrs: { row: "", label: "Role" },
+                                          model: {
+                                            value: _vm.form.role,
+                                            callback: function($$v) {
+                                              _vm.$set(_vm.form, "role", $$v)
+                                            },
+                                            expression: "form.role"
+                                          }
+                                        },
+                                        [
+                                          _c("v-radio", {
+                                            attrs: {
+                                              label: "Standard User",
+                                              value: "Standard User"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-radio", {
+                                            attrs: {
+                                              label: "Administrator",
+                                              value: "Administrator"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -1341,24 +1261,26 @@ var render = function() {
                                   _c(
                                     "v-col",
                                     [
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
+                                      _c("v-data-table", {
+                                        attrs: {
+                                          "show-select": "",
+                                          "items-per-page": -1,
+                                          headers: _vm.headers,
+                                          items: _vm.permissions,
+                                          "group-by": "category"
+                                        },
+                                        model: {
+                                          value: _vm.form.permission,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.form,
+                                              "permission",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "form.permission"
+                                        }
+                                      })
                                     ],
                                     1
                                   )

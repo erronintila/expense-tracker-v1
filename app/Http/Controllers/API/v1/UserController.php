@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -43,7 +44,7 @@ class UserController extends Controller
     {
         return Validator::make($data, [
 
-            'code' => ['nullable', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
+            'code' => ['required', Rule::unique('users')->ignore($id, 'id'), 'max:255'],
 
             'first_name' => ['required', 'string', 'max:150'],
 
@@ -55,9 +56,9 @@ class UserController extends Controller
 
             'gender' => ['required', 'max:10'],
 
-            'birthdate' => ['nullable'],
+            'birthdate' => ['required'],
 
-            'mobile_number' => ['nullable', 'max:50'],
+            'mobile_number' => ['required', 'max:50'],
 
             'telephone_number' => ['nullable', 'max:50'],
 
@@ -81,7 +82,7 @@ class UserController extends Controller
 
             'type' => [],
 
-            'job_id' => ['nullable'],
+            'job_id' => ['required_if:is_superadmin,0'],
         ]);
     }
 
@@ -217,7 +218,7 @@ class UserController extends Controller
     {
         $this->validator($request->all(), null)->validate();
 
-        $expense_types = ExpenseType::all();
+        $expense_types = ExpenseType::where("expense_type_id", null)->get();
 
         $user = new User();
 
@@ -263,12 +264,8 @@ class UserController extends Controller
 
         $user->save();
 
-        if ($request->is_admin) {
-            foreach ($request->permissions as $permission) {
-                $user->givePermissionTo($permission["name"]);
-            }
-        } else {
-            $user->assignRole("Standard User");
+        foreach ($request->permissions as $permission) {
+            $user->givePermissionTo($permission["name"]);
         }
 
         $user->expense_types()->sync($expense_types);
@@ -562,9 +559,21 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function getPermissions()
+    public function getPermissions(Request $request)
     {
-        return Permission::all();
+        switch ($request->role) {
+            case 'Standard User':
+                return Permission::whereName("Standard User")->get();
+                return Role::findByName('Standard User')->permissions;
+                break;
+            case 'Administrator':
+                return Permission::whereName("Administrator")->get();
+                return Role::findByName('Administrator')->permissions;
+                break;
+            default:
+                return Permission::all();
+                break;
+        }
     }
     
     /**
