@@ -32,7 +32,7 @@
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>
-                                {{ form.employee.full_name }}
+                                {{ form.user.full_name }}
                                 <v-btn
                                     v-if="canEdit"
                                     text
@@ -378,7 +378,7 @@ export default {
             items: [],
             // expense_types: [],
             // sub_types: [],
-            // employees: [],
+            // users: [],
             // vendors: [],
             form: {
                 code: null,
@@ -398,7 +398,7 @@ export default {
                     sub_types: null
                 },
                 sub_type: { id: null, name: "", limit: null },
-                employee: {
+                user: {
                     id: null,
                     remaining_fund: 0,
                     fund: 0,
@@ -449,7 +449,7 @@ export default {
         getData() {
             let _this = this;
 
-            // this.loadEmployees().then(
+            // this.loadUsers().then(
             axios
                 .get("/api/expenses/" + _this.$route.params.id)
                 .then(response => {
@@ -463,7 +463,7 @@ export default {
                     _this.form.remarks = data.remarks;
                     _this.form.notes = data.notes;
                     _this.form.is_active = data.is_active;
-                    _this.form.employee = data.employee;
+                    _this.form.user = data.user;
                     _this.form.vendor =
                         data.vendor == null
                             ? { id: null, name: "", is_vat_inclusive: true }
@@ -472,7 +472,7 @@ export default {
                     _this.form.expense_type = data.expense_type;
                     // _this.form.sub_type = data.sub_type_id;
 
-                    // _this.expense_types = data.employee.expense_types;
+                    // _this.expense_types = data.user.expense_types;
                     // _this.sub_types = data.expense_type.sub_types;
 
                     _this.form.is_tax_inclusive = data.is_tax_inclusive;
@@ -512,7 +512,7 @@ export default {
 
                     _this.form.reimbursable_amount = data.reimbursable_amount;
 
-                    _this.form.employee.remaining_fund +=
+                    _this.form.user.remaining_fund +=
                         data.amount - data.reimbursable_amount;
 
                     _this.form.expense_report = data.expense_report;
@@ -577,7 +577,7 @@ export default {
         },
         amount_to_replenish() {
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.employee.remaining_fund
+                this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
 
@@ -589,7 +589,7 @@ export default {
         },
         amount_to_reimburse() {
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.employee.remaining_fund
+                this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
 
@@ -609,7 +609,7 @@ export default {
         display_reimbursable_amount() {
             return (
                 parseFloat(this.form.amount) >
-                parseFloat(this.form.employee.remaining_fund)
+                parseFloat(this.form.user.remaining_fund)
             );
         }
     },

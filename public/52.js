@@ -254,7 +254,7 @@ var render = function() {
                   staticClass: "mr-2",
                   attrs: {
                     color: "green",
-                    to: { name: "admin.settings.employee" },
+                    to: { name: "admin.settings.user" },
                     outlined: "",
                     dark: ""
                   }

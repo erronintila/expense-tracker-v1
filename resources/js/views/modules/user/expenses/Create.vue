@@ -623,7 +623,7 @@ export default {
         loadExpenseTypes() {
             this.expense_types = this.form.user.expense_types;
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
@@ -711,7 +711,7 @@ export default {
             }
 
             if (_this.form.user.id == null) {
-                _this.$dialog.message.error("No Employee Selected", {
+                _this.$dialog.message.error("No User Selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -1008,7 +1008,7 @@ export default {
             if (this.form.user.id == null) {
                 this.itemize = false;
 
-                this.$dialog.message.error("No Employee Selected", {
+                this.$dialog.message.error("No User Selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -1035,7 +1035,7 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER").then((response) => {
-            this.loadEmployees();
+            this.loadUsers();
         });
         this.loadVendors();
     }

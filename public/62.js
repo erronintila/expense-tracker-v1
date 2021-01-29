@@ -603,7 +603,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "",
           limit: null
         },
-        employee: {
+        user: {
           id: null,
           remaining_fund: 0,
           fund: 0,
@@ -644,7 +644,7 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         is_active: [],
         expense_type_id: [],
-        employee_id: [],
+        user_id: [],
         vendor_id: []
       }
     };
@@ -661,7 +661,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.date = data.date;
         _this.form.remarks = data.remarks;
         _this.form.is_active = data.is_active;
-        _this.form.employee = data.employee;
+        _this.form.user = data.user;
         _this.form.vendor = data.vendor == null ? {
           id: null,
           name: "",
@@ -670,7 +670,7 @@ __webpack_require__.r(__webpack_exports__);
         } : data.vendor;
         _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
 
-        _this.expense_types = data.employee.expense_types;
+        _this.expense_types = data.user.expense_types;
         _this.sub_types = data.expense_type.sub_types;
         _this.form.is_tax_inclusive = data.is_tax_inclusive;
         _this.form.tax_name = data.tax_name;
@@ -707,7 +707,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
-        _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
+        _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
@@ -782,8 +782,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      if (_this.form.employee.id == null) {
-        _this.$dialog.message.error("No Employee Selected", {
+      if (_this.form.user.id == null) {
+        _this.$dialog.message.error("No User Selected", {
           position: "top-right",
           timeout: 2000
         });
@@ -802,7 +802,7 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.$refs.form.validate();
 
-      if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
+      if (_this.amount_to_replenish > _this.form.user.remaining_fund) {
         _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
           position: "top-right",
           timeout: 2000
@@ -829,7 +829,7 @@ __webpack_require__.r(__webpack_exports__);
           is_active: _this.form.is_active,
           expense_type_id: _this.form.expense_type.id,
           sub_type_id: _this.form.sub_type.id,
-          employee_id: _this.form.employee.id,
+          user_id: _this.form.user.id,
           vendor_id: _this.form.vendor.id,
           details: _this.itemize ? _this.items : null,
           tax_name: "",
@@ -959,7 +959,7 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
     },
     amount_to_replenish: function amount_to_replenish() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
 
       if (remaining_fund >= amount) {
@@ -969,7 +969,7 @@ __webpack_require__.r(__webpack_exports__);
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
 
       if (remaining_fund < amount) {
@@ -984,7 +984,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.mixin_convertToNumber(this.form.amount);
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
-      return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
+      return parseFloat(this.form.amount) > parseFloat(this.form.user.remaining_fund);
     },
     taxable_amount: {
       get: function get() {
@@ -1033,9 +1033,9 @@ __webpack_require__.r(__webpack_exports__);
         return parseFloat(total) + parseFloat(item.total);
       }, 0);
 
-      if (this.form.employee.id == null) {
+      if (this.form.user.id == null) {
         this.itemize = false;
-        this.$dialog.message.error("No Employee Selected", {
+        this.$dialog.message.error("No User Selected", {
           position: "top-right",
           timeout: 2000
         });
@@ -1532,7 +1532,7 @@ var render = function() {
                                           _vm._v(
                                             _vm._s(
                                               _vm.mixin_formatNumber(
-                                                _vm.form.employee.remaining_fund
+                                                _vm.form.user.remaining_fund
                                               )
                                             )
                                           )

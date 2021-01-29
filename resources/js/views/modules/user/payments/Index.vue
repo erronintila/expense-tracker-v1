@@ -181,7 +181,7 @@
                             item.status.status
                         }}</v-chip>
                     </template>
-                    <template v-slot:[`item.employee`]="{ item }">
+                    <template v-slot:[`item.user`]="{ item }">
                         {{
                             `${item.last_name}, ${item.first_name} ${item.middle_name}`
                         }}
@@ -246,7 +246,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
-                { text: "Employee", value: "employee" },
+                { text: "User", value: "user" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },

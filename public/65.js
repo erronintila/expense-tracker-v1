@@ -270,8 +270,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Date",
         value: "date"
       }, {
-        text: "Employee",
-        value: "employee"
+        text: "User",
+        value: "user"
       }, {
         text: "Description",
         value: "description"
@@ -988,7 +988,7 @@ var render = function() {
                         }
                       },
                       {
-                        key: "item.employee",
+                        key: "item.user",
                         fn: function(ref) {
                           var item = ref.item
                           return [

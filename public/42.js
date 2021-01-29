@@ -403,7 +403,7 @@ __webpack_require__.r(__webpack_exports__);
       items: [],
       // expense_types: [],
       // sub_types: [],
-      // employees: [],
+      // users: [],
       // vendors: [],
       form: {
         code: null,
@@ -427,7 +427,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "",
           limit: null
         },
-        employee: {
+        user: {
           id: null,
           remaining_fund: 0,
           fund: 0,
@@ -478,7 +478,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
-      var _this = this; // this.loadEmployees().then(
+      var _this = this; // this.loadUsers().then(
 
 
       axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
@@ -490,14 +490,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.remarks = data.remarks;
         _this.form.notes = data.notes;
         _this.form.is_active = data.is_active;
-        _this.form.employee = data.employee;
+        _this.form.user = data.user;
         _this.form.vendor = data.vendor == null ? {
           id: null,
           name: "",
           is_vat_inclusive: true
         } : data.vendor;
         _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
-        // _this.expense_types = data.employee.expense_types;
+        // _this.expense_types = data.user.expense_types;
         // _this.sub_types = data.expense_type.sub_types;
 
         _this.form.is_tax_inclusive = data.is_tax_inclusive;
@@ -536,7 +536,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
-        _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
+        _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
         _this.form.expense_report = data.expense_report;
         _this.form.created_at = data.created_at;
         _this.form.updated_at = data.updated_at;
@@ -555,13 +555,13 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.loader = false;
       }); // );
-    } // loadEmployees() {
+    } // loadUsers() {
     //     let _this = this;
     //     return new Promise((resolve, reject) => {
     //         axios
-    //             .get("/api/data/employees")
+    //             .get("/api/data/users")
     //             .then(response => {
-    //                 _this.employees = response.data.data;
+    //                 _this.users = response.data.data;
     //                 resolve();
     //             })
     //             .catch(error => {
@@ -592,7 +592,7 @@ __webpack_require__.r(__webpack_exports__);
       return true;
     },
     amount_to_replenish: function amount_to_replenish() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
 
       if (remaining_fund >= amount) {
@@ -602,7 +602,7 @@ __webpack_require__.r(__webpack_exports__);
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
 
       if (remaining_fund < amount) {
@@ -617,7 +617,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.mixin_convertToNumber(this.form.amount);
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
-      return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
+      return parseFloat(this.form.amount) > parseFloat(this.form.user.remaining_fund);
     }
   },
   watch: {
@@ -767,7 +767,7 @@ var render = function() {
                               [
                                 _vm._v(
                                   "\n                            " +
-                                    _vm._s(_vm.form.employee.full_name) +
+                                    _vm._s(_vm.form.user.full_name) +
                                     "\n                            "
                                 ),
                                 _vm.canEdit

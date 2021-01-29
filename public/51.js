@@ -106,8 +106,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       panel: [0],
       valid: false,
-      employees: [],
-      employee: {
+      users: [],
+      user: {
         id: null,
         expense_types: null,
         sub_types: null
@@ -136,12 +136,12 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
-      axios.get("/api/data/employees?update_settings=true").then(function (response) {
+      axios.get("/api/data/users?update_settings=true").then(function (response) {
         var data = response.data.data;
-        _this.employees = data;
+        _this.users = data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -164,8 +164,8 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this = this;
 
-      if (_this.employee.id == null) {
-        _this.mixin_errorDialog("Error", "No employee selected");
+      if (_this.user.id == null) {
+        _this.mixin_errorDialog("Error", "No user selected");
 
         return;
       }
@@ -174,18 +174,18 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         _this.loader = true;
-        axios.put("/api/employees/" + _this.employee.id, {
+        axios.put("/api/users/" + _this.user.id, {
           action: "settings",
           expense_types: _this.allowed_expense_types.map(function (item) {
             return item.id;
           })
         }).then(function (response) {
-          _this.$dialog.message.success("Employee settings updated successfully.", {
+          _this.$dialog.message.success("User settings updated successfully.", {
             position: "top-right",
             timeout: 2000
           });
 
-          _this.$store.dispatch("AUTH_USER"); // _this.$router.push({ name: "admin.employees.index" });
+          _this.$store.dispatch("AUTH_USER"); // _this.$router.push({ name: "admin.users.index" });
 
         })["catch"](function (error) {
           console.log(error);
@@ -204,7 +204,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   watch: {
-    employee: function employee(item) {
+    user: function user(item) {
       // this.expense_types = item.expense_types;
       this.allowed_expense_types = item.expense_types;
       this.pivot_expense_types = item.pivot_expense_types;
@@ -235,7 +235,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.loadExpenseTypes();
-    this.loadEmployees();
+    this.loadUsers();
   }
 });
 
@@ -285,7 +285,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title success--text" }, [
-                _vm._v("Employee Settings")
+                _vm._v("User Settings")
               ])
             ],
             1
@@ -307,18 +307,18 @@ var render = function() {
                         [
                           _c("v-autocomplete", {
                             attrs: {
-                              label: "Employee",
+                              label: "User",
                               "return-object": "",
-                              items: _vm.employees,
+                              items: _vm.users,
                               "item-text": "full_name",
                               "item-value": "id"
                             },
                             model: {
-                              value: _vm.employee,
+                              value: _vm.user,
                               callback: function($$v) {
-                                _vm.employee = $$v
+                                _vm.user = $$v
                               },
-                              expression: "employee"
+                              expression: "user"
                             }
                           })
                         ],

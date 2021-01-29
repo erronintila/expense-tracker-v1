@@ -305,6 +305,7 @@ class UserController extends Controller
                 $query->withTrashed();
             }]);
         }])
+        ->where("is_superadmin", false)
         ->findOrFail($id);
 
         return response(
@@ -451,7 +452,23 @@ class UserController extends Controller
 
                 $user = User::withTrashed()->findOrFail($id);
 
-                $user->code = $request->code ?? $user->code;
+                if (!request()->has("profile_update")) {
+                    $user->code = $request->code ?? $user->code;
+
+                    $user->password = $user->password;
+
+                    $user->fund = $user->fund;
+
+                    $user->remaining_fund = $user->remaining_fund;
+
+                    $user->is_admin = $request->is_admin;
+
+                    $user->is_superadmin = $request->is_superadmin;
+
+                    $user->can_login = $request->can_login;
+
+                    $user->job_id = $request->job_id;
+                }
 
                 $user->first_name = $request->first_name;
 
@@ -471,38 +488,24 @@ class UserController extends Controller
 
                 $user->address = $request->address;
 
-                $user->fund = $user->fund;
-
-                $user->remaining_fund = $user->remaining_fund;
-
                 $user->username = $request->username;
 
-                $user->email    = $request->email;
-
-                $user->password = $user->password;
-
-                $user->is_admin = $request->is_admin;
-
-                $user->is_superadmin = $request->is_superadmin;
+                $user->email = $request->email;
 
                 $user->type = $request->type;
 
-                if (!request()->has("profile_update")) {
-                    $user->can_login = $request->can_login;
-
-                    $user->job_id = $request->job_id;
-                }
-
                 $user->save();
 
-                $user->syncPermissions([]);
+                if (!request()->has("profile_update")) {
+                    $user->syncPermissions([]);
 
-                $user->syncRoles([]);
+                    $user->syncRoles([]);
 
-                foreach ($request->permissions as $permission) {
-                    $user->givePermissionTo($permission["name"]);
+                    foreach ($request->permissions as $permission) {
+                        $user->givePermissionTo($permission["name"]);
+                    }
                 }
-
+                
                 break;
         }
 
@@ -591,7 +594,7 @@ class UserController extends Controller
     public function getUsers(Request $request)
     {
         if (request()->has('only')) {
-            return $this->successResponse(User::orderBy("last_name")->get(), "", 200);
+            return $this->successResponse(User::orderBy("last_name")->where("is_superadmin", false)->get(), "", 200);
         }
 
         if (request()->has('expense_ref')) {
@@ -607,6 +610,7 @@ class UserController extends Controller
                     $query->withTrashed();
                 }]);
             }])
+            ->where("is_superadmin", false)
             ->findOrFail($request->user_id);
     
             return response(
@@ -631,6 +635,7 @@ class UserController extends Controller
                     $query2->withTrashed();
                 }]);
             }])
+            ->where("is_superadmin", false)
             ->orderBy("last_name");
 
         if (request()->has("no_user") && request()->has("user_id")) {
@@ -645,6 +650,7 @@ class UserController extends Controller
                     $query->withTrashed();
                 }])
                 ->orderBy("last_name")
+                ->where("is_superadmin", false)
                 ->get();
 
             return UserShowResource::collection($user);

@@ -657,7 +657,7 @@ __webpack_require__.r(__webpack_exports__);
     loadExpenseTypes: function loadExpenseTypes() {
       this.expense_types = this.form.user.expense_types;
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this2 = this;
 
       var _this = this;
@@ -725,7 +725,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (_this.form.user.id == null) {
-        _this.$dialog.message.error("No Employee Selected", {
+        _this.$dialog.message.error("No User Selected", {
           position: "top-right",
           timeout: 2000
         });
@@ -967,7 +967,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.form.user.id == null) {
         this.itemize = false;
-        this.$dialog.message.error("No Employee Selected", {
+        this.$dialog.message.error("No User Selected", {
           position: "top-right",
           timeout: 2000
         });
@@ -993,7 +993,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this3 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this3.loadEmployees();
+      _this3.loadUsers();
     });
     this.loadVendors();
   }

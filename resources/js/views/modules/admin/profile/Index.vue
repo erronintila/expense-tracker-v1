@@ -520,24 +520,14 @@ export default {
                 password_confirmation: []
             },
             rules: {
-                username: [v => !!v || "Username is required"],
-                first_name: [
-                    v => !!v || "First name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "First name must be less than 100 characters"
-                ],
+                username: [],
+                first_name: [],
                 middle_name: [],
-                last_name: [
-                    v => !!v || "Last name is required",
-                    v =>
-                        v.length <= 100 ||
-                        "Last name must be less than 100 characters"
-                ],
+                last_name: [],
                 suffix: [],
-                gender: [v => !!v || "Gender is required"],
-                birthdate: [v => !!v || "Birthdate is required"],
-                job: [v => !!v || "Job designation is required"],
+                gender: [],
+                birthdate: [],
+                job: [],
                 mobile_number: [],
                 telephone_number: [],
                 email: [],
@@ -572,25 +562,53 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 axios
-                    .put("/api/users/" + _this.id, {
+                    .put("/api/users/" + _this.form.id, {
                         action: "update",
                         profile_update: true,
-                        name: `${_this.form.last_name}, ${_this.first_name} ${_this.middle_name}`,
-                        email: _this.email,
-                        username: _this.username,
-                        is_admin: _this.is_admin,
-                        can_login: _this.can_login,
-                        first_name: _this.first_name,
-                        middle_name: _this.middle_name,
-                        last_name: _this.last_name,
-                        suffix: _this.suffix,
-                        gender: _this.gender,
-                        birthdate: _this.birthdate,
-                        mobile_number: _this.mobile_number,
-                        telephone_number: _this.telephone_number,
-                        email: _this.email,
-                        address: _this.address,
-                        user_id: _this.id
+
+
+
+                        // email: _this.form.email,
+                        // username: _this.form.username,
+                        // is_admin: _this.form.is_admin,
+                        // can_login: _this.form.can_login,
+                        // first_name: _this.form.first_name,
+                        // middle_name: _this.form.middle_name,
+                        // last_name: _this.form.last_name,
+                        // suffix: _this.form.suffix,
+                        // gender: _this.form.gender,
+                        // birthdate: _this.form.birthdate,
+                        // mobile_number: _this.form.mobile_number,
+                        // telephone_number: _this.form.telephone_number,
+                        // email: _this.form.email,
+                        // address: _this.form.address,
+                        // user_id: _this.form.id,
+
+
+
+
+                        id: _this.form.id,
+                        code: _this.form.id,
+                        first_name: _this.form.first_name,
+                        middle_name: _this.form.middle_name,
+                        last_name: _this.form.last_name,
+                        suffix: _this.form.suffix,
+                        gender: _this.form.gender,
+                        birthdate: _this.form.birthdate,
+                        mobile_number: _this.form.mobile_number,
+                        telephone_number: _this.form.telephone_number,
+                        address: _this.form.address,
+                        fund: _this.form.fund,
+                        remaining_fund: _this.form.remaining_fund,
+                        username: _this.form.username,
+                        email: _this.form.email,
+                        password: "password",
+                        password_confirmation: "password",
+                        is_admin: _this.form.is_admin,
+                        is_superadmin: _this.form.is_superadmin,
+                        can_login: _this.form.can_login,
+                        type: _this.form.type,
+                        job: _this.form.job,
                     })
                     .then(response => {
                         _this.$dialog.message.success(
