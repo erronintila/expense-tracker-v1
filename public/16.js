@@ -419,7 +419,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/employees/".concat(_this.$route.params.id)).then(function (response) {
+      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
         var data = response.data.data;
         _this.id = data.id;
         _this.full_name = data.full_name;
@@ -437,8 +437,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.remaining_fund = data.remaining_fund;
         _this.job = data.job.name;
         _this.department = data.job.department.name;
-        _this.permissions = data.user.permissions;
-        _this.user = data.user;
+        _this.permissions = data.permissions;
+        _this.user = data;
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
@@ -450,9 +450,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.loader = false;
       });
     },
-    editEmployee: function editEmployee() {
+    editUser: function editUser() {
       this.$router.push({
-        name: "admin.employees.edit",
+        name: "admin.users.edit",
         params: {
           id: this.$route.params.id
         }
@@ -463,8 +463,8 @@ __webpack_require__.r(__webpack_exports__);
 
       var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
       var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
-      var employee_id = this.$route.params.id;
-      axios.get("/api/data/expense_stats?start_date=".concat(start_date, "&end_date=").concat(end_date, "&employee_id=").concat(employee_id)).then(function (response) {
+      var user_id = this.$route.params.id;
+      axios.get("/api/data/expense_stats?start_date=".concat(start_date, "&end_date=").concat(end_date, "&user_id=").concat(user_id)).then(function (response) {
         _this.total_expenses = response.data.summary.total;
         _this.total_replenishments = response.data.summary.replenishments;
         _this.total_reimbursements = response.data.summary.reimbursements;
@@ -774,7 +774,7 @@ var render = function() {
                                                   text: "",
                                                   color: "green"
                                                 },
-                                                on: { click: _vm.editEmployee }
+                                                on: { click: _vm.editUser }
                                               },
                                               [
                                                 _vm._v(
