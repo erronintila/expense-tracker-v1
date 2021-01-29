@@ -694,9 +694,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to reset password?").then(function (res) {
         if (res) {
-          axios.put("/api/users/".concat(_this.selected[0].user.id), {
+          axios.put("/api/users/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
-              return item.user.id;
+              return item.id;
             }),
             action: "password_reset"
           }).then(function (response) {

@@ -58,7 +58,7 @@ class UserResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "job" => new JobIndexResource($this->whenLoaded("job")),
-            "role" => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
+            "role" => $this->is_admin ? ["Administrator"] : ["Standard User"],
             "permissions" => $this->getAllPermissions(),
         ];
     }

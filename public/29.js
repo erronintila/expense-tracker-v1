@@ -388,6 +388,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/data/permissions?role=".concat(_this.form.role)).then(function (response) {
         console.log(response);
         _this.permissions = response.data;
+        _this.form.permissions = response.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -1270,15 +1271,15 @@ var render = function() {
                                           "group-by": "category"
                                         },
                                         model: {
-                                          value: _vm.form.permission,
+                                          value: _vm.form.permissions,
                                           callback: function($$v) {
                                             _vm.$set(
                                               _vm.form,
-                                              "permission",
+                                              "permissions",
                                               $$v
                                             )
                                           },
-                                          expression: "form.permission"
+                                          expression: "form.permissions"
                                         }
                                       })
                                     ],

@@ -515,9 +515,9 @@ export default {
             this.$confirm("Do you want to reset password?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/users/${_this.selected[0].user.id}`, {
+                        .put(`/api/users/${_this.selected[0].id}`, {
                             ids: _this.selected.map(item => {
-                                return item.user.id;
+                                return item.id;
                             }),
                             action: "password_reset"
                         })

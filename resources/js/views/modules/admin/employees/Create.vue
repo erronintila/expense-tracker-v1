@@ -268,7 +268,7 @@
                             <v-row>
                                 <v-col>
                                     <v-data-table
-                                        v-model="form.permission"
+                                        v-model="form.permissions"
                                         show-select
                                         :items-per-page="-1"
                                         :headers="headers"
@@ -381,6 +381,8 @@ export default {
                 .then(response => {
                     console.log(response);
                     _this.permissions = response.data;
+
+                    _this.form.permissions = response.data;
                 })
                 .catch(error => {
                     console.log(error);

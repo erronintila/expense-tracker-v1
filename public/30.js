@@ -314,31 +314,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -348,9 +323,7 @@ __webpack_require__.r(__webpack_exports__);
       menu: false,
       jobs: [],
       permissions: [],
-      // expense_types: [],
       selected: [],
-      // selected_expense_types: [],
       headers: [{
         text: "Permission",
         value: "name",
@@ -364,14 +337,24 @@ __webpack_require__.r(__webpack_exports__);
         suffix: "",
         gender: null,
         birthdate: null,
-        job: null,
         mobile_number: null,
         telephone_number: "",
-        email: null,
         address: null,
-        role: "Standard User",
+        fund: 0,
+        remaining_fund: 0,
         username: "",
-        can_login: true
+        email: null,
+        password: "password",
+        password_confirmation: "password",
+        is_admin: false,
+        is_superadmin: false,
+        can_login: true,
+        type: "",
+        job: null,
+        old_permissions: [],
+        permissions: [],
+        old_role: "",
+        role: "Standard User"
       },
       errors: {
         code: [],
@@ -388,7 +371,9 @@ __webpack_require__.r(__webpack_exports__);
         address: [],
         username: [],
         role: [],
-        can_login: []
+        can_login: [],
+        has_fund: [],
+        fund: []
       }
     };
   },
@@ -396,7 +381,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      this.loadPermissions().then(axios.get("/api/employees/" + _this.$route.params.id).then(function (response) {
+      this.loadPermissions().then(axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
         _this.form.code = data.code;
         _this.form.first_name = data.first_name;
@@ -405,15 +390,22 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.suffix = data.suffix;
         _this.form.gender = data.gender;
         _this.form.birthdate = data.birthdate;
-        _this.form.job = data.job.id;
         _this.form.mobile_number = data.mobile_number;
         _this.form.telephone_number = data.telephone_number;
-        _this.form.email = data.email;
         _this.form.address = data.address;
-        _this.selected = data.user.permissions;
-        _this.form.role = data.user.role[0];
-        _this.form.username = data.user.username;
-        _this.form.can_login = data.user.can_login;
+        _this.form.fund = data.fund;
+        _this.form.remaining_fund = data.remaining_fund;
+        _this.form.username = data.username;
+        _this.form.email = data.email;
+        _this.form.is_admin = data.is_admin;
+        _this.form.is_superadmin = data.is_superadmin;
+        _this.form.can_login = data.can_login;
+        _this.form.permissions = data.permissions;
+        _this.form.old_permissions = data.permissions;
+        _this.form.role = data.role[0];
+        _this.form.old_role = data.role[0];
+        _this.form.type = data.type;
+        _this.form.job = data.job.id;
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
@@ -436,28 +428,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    // loadExpenseTypes() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/expense_types?only=true")
-    //         .then(response => {
-    //             _this.expense_types = response.data.data;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
-    //         });
-    // },
     loadPermissions: function loadPermissions() {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/permissions").then(function (response) {
+        axios.get("/api/data/permissions?role=".concat(_this.form.role)).then(function (response) {
           _this.permissions = response.data;
+          _this.form.permissions = [];
           resolve();
         })["catch"](function (error) {
           console.log(error);
@@ -482,12 +459,13 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this = this;
 
+      var is_administrator = this.form.role == "Administrator" ? true : false;
+
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
         _this.loader = true;
-        axios.put("/api/employees/" + _this.$route.params.id, {
-          action: "update",
+        axios.put("/api/users/" + _this.$route.params.id, {
           code: _this.form.code,
           first_name: _this.form.first_name,
           middle_name: _this.form.middle_name,
@@ -495,16 +473,21 @@ __webpack_require__.r(__webpack_exports__);
           suffix: _this.form.suffix,
           gender: _this.form.gender,
           birthdate: _this.form.birthdate,
-          job_id: _this.form.job,
           mobile_number: _this.form.mobile_number,
           telephone_number: _this.form.telephone_number,
-          email: _this.form.email,
           address: _this.form.address,
+          fund: _this.form.fund,
+          remaining_fund: _this.form.remaining_fund,
           username: _this.form.username,
+          email: _this.form.email,
+          password: _this.form.password,
+          password_confirmation: _this.form.password_confirmation,
+          is_admin: is_administrator,
+          is_superadmin: _this.form.is_superadmin,
           can_login: _this.form.can_login,
-          role: _this.form.role,
-          permissions: _this.selected // expense_types: _this.selected_expense_types
-
+          type: "",
+          permissions: _this.form.permissions,
+          job_id: _this.form.job
         }).then(function (response) {
           _this.$dialog.message.success("Employee updated successfully.", {
             position: "top-right",
@@ -513,7 +496,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
           _this.$router.push({
-            name: "admin.employees.index"
+            name: "admin.users.index"
           });
         })["catch"](function (error) {
           console.log(error);
@@ -529,6 +512,13 @@ __webpack_require__.r(__webpack_exports__);
         });
         return;
       }
+    }
+  },
+  watch: {
+    "form.role": function formRole() {
+      this.loadPermissions().then(function () {// if(this.form.old_role == this.form.role) {
+        // }
+      });
     }
   },
   created: function created() {
@@ -1207,32 +1197,6 @@ var render = function() {
                                     "v-col",
                                     { attrs: { cols: "12", md: "4" } },
                                     [
-                                      _c("v-select", {
-                                        attrs: {
-                                          label: "Role *",
-                                          items: [
-                                            "Standard User",
-                                            "Administrator"
-                                          ],
-                                          "error-messages": _vm.errors.role
-                                        },
-                                        on: { change: _vm.changeRole },
-                                        model: {
-                                          value: _vm.form.role,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "role", $$v)
-                                          },
-                                          expression: "form.role"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
                                       _c("v-checkbox", {
                                         attrs: {
                                           label: "Allow Login",
@@ -1248,6 +1212,43 @@ var render = function() {
                                       })
                                     ],
                                     1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c(
+                                        "v-radio-group",
+                                        {
+                                          attrs: { row: "", label: "Role" },
+                                          model: {
+                                            value: _vm.form.role,
+                                            callback: function($$v) {
+                                              _vm.$set(_vm.form, "role", $$v)
+                                            },
+                                            expression: "form.role"
+                                          }
+                                        },
+                                        [
+                                          _c("v-radio", {
+                                            attrs: {
+                                              label: "Standard User",
+                                              value: "Standard User"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-radio", {
+                                            attrs: {
+                                              label: "Administrator",
+                                              value: "Administrator"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -1259,24 +1260,26 @@ var render = function() {
                                   _c(
                                     "v-col",
                                     [
-                                      _vm.form.role == "Administrator"
-                                        ? _c("v-data-table", {
-                                            attrs: {
-                                              "show-select": "",
-                                              "items-per-page": -1,
-                                              headers: _vm.headers,
-                                              items: _vm.permissions,
-                                              "group-by": "category"
-                                            },
-                                            model: {
-                                              value: _vm.selected,
-                                              callback: function($$v) {
-                                                _vm.selected = $$v
-                                              },
-                                              expression: "selected"
-                                            }
-                                          })
-                                        : _vm._e()
+                                      _c("v-data-table", {
+                                        attrs: {
+                                          "show-select": "",
+                                          "items-per-page": -1,
+                                          headers: _vm.headers,
+                                          items: _vm.permissions,
+                                          "group-by": "category"
+                                        },
+                                        model: {
+                                          value: _vm.form.permissions,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.form,
+                                              "permissions",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "form.permissions"
+                                        }
+                                      })
                                     ],
                                     1
                                   )

@@ -108,6 +108,10 @@ class UserController extends Controller
             }]);
         }]);
 
+        // $users = $users->paginate($itemsPerPage);
+
+        // return UserOnlyResource::collection($users);
+
         switch ($sortBy) {
             case 'fullname':
 
@@ -137,11 +141,11 @@ class UserController extends Controller
         }
 
         if (request()->has('is_admin')) {
-            $users = User::where('is_admin', request("is_admin"));
+            $users = $users->where('is_admin', request("is_admin"));
         }
 
         if (request()->has('is_superadmin')) {
-            $users = User::where('is_superadmin', request("is_admin"));
+            $users = $users->where('is_superadmin', request("is_superadmin"));
         }
 
         if (request()->has('status')) {
@@ -447,6 +451,8 @@ class UserController extends Controller
 
                 $user = User::withTrashed()->findOrFail($id);
 
+                $user->code = $request->code ?? $user->code;
+
                 $user->first_name = $request->first_name;
 
                 $user->middle_name = $request->middle_name;
@@ -487,12 +493,12 @@ class UserController extends Controller
 
                 $user->save();
 
-                if ($request->is_admin) {
-                    foreach ($request->permissions as $permission) {
-                        $user->givePermissionTo($permission["name"]);
-                    }
-                } else {
-                    $user->assignRole("Standard User");
+                $user->syncPermissions([]);
+
+                $user->syncRoles([]);
+
+                foreach ($request->permissions as $permission) {
+                    $user->givePermissionTo($permission["name"]);
                 }
 
                 break;
@@ -563,12 +569,10 @@ class UserController extends Controller
     {
         switch ($request->role) {
             case 'Standard User':
-                return Permission::whereName("Standard User")->get();
-                return Role::findByName('Standard User')->permissions;
+                return Role::findByName("Standard User", 'web')->permissions ?? [];
                 break;
             case 'Administrator':
-                return Permission::whereName("Administrator")->get();
-                return Role::findByName('Administrator')->permissions;
+                return Role::findByName("Administrator", 'web')->permissions ?? [];
                 break;
             default:
                 return Permission::all();

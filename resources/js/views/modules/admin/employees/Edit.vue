@@ -16,7 +16,7 @@
             </v-row>
         </v-container>
         <v-card v-else class="elevation-0 pt-0">
-        <!-- <v-card class="elevation-0 pt-0"> -->
+            <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -66,34 +66,6 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
-
-                                <!-- <v-col cols="12" md="4">
-                                    <v-select
-                                        v-model="selected_expense_types"
-                                        :items="expense_types"
-                                        item-text="name"
-                                        item-value="id"
-                                        label="Allowed Expense Types"
-                                        multiple
-                                    >
-                                        <template
-                                            v-slot:selection="{ item, index }"
-                                        >
-                                            <v-chip v-if="index === 0" small>
-                                                <span>{{ item.name }}</span>
-                                            </v-chip>
-                                            <span
-                                                v-if="index === 1"
-                                                class="grey--text caption"
-                                                >(+{{
-                                                    selected_expense_types.length -
-                                                        1
-                                                }}
-                                                others)</span
-                                            >
-                                        </template>
-                                    </v-select>
-                                </v-col> -->
                             </v-row>
 
                             <v-row>
@@ -277,31 +249,34 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="4">
-                                    <v-select
-                                        v-model="form.role"
-                                        label="Role *"
-                                        :items="[
-                                            'Standard User',
-                                            'Administrator'
-                                        ]"
-                                        :error-messages="errors.role"
-                                        @change="changeRole"
-                                    ></v-select>
-                                </v-col>
-                                <v-col cols="12" md="4">
                                     <v-checkbox
                                         v-model="form.can_login"
                                         label="Allow Login"
                                         :error-messages="errors.can_login"
                                     ></v-checkbox>
                                 </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-radio-group
+                                        v-model="form.role"
+                                        row
+                                        label="Role"
+                                    >
+                                        <v-radio
+                                            label="Standard User"
+                                            value="Standard User"
+                                        ></v-radio>
+                                        <v-radio
+                                            label="Administrator"
+                                            value="Administrator"
+                                        ></v-radio>
+                                    </v-radio-group>
+                                </v-col>
                             </v-row>
 
                             <v-row>
                                 <v-col>
                                     <v-data-table
-                                        v-if="form.role == 'Administrator'"
-                                        v-model="selected"
+                                        v-model="form.permissions"
                                         show-select
                                         :items-per-page="-1"
                                         :headers="headers"
@@ -338,9 +313,7 @@ export default {
             menu: false,
             jobs: [],
             permissions: [],
-            // expense_types: [],
             selected: [],
-            // selected_expense_types: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 code: null,
@@ -350,14 +323,24 @@ export default {
                 suffix: "",
                 gender: null,
                 birthdate: null,
-                job: null,
                 mobile_number: null,
                 telephone_number: "",
-                email: null,
                 address: null,
-                role: "Standard User",
+                fund: 0,
+                remaining_fund: 0,
                 username: "",
-                can_login: true
+                email: null,
+                password: "password",
+                password_confirmation: "password",
+                is_admin: false,
+                is_superadmin: false,
+                can_login: true,
+                type: "",
+                job: null,
+                old_permissions: [],
+                permissions: [],
+                old_role: "",
+                role: "Standard User"
             },
             errors: {
                 code: [],
@@ -374,7 +357,9 @@ export default {
                 address: [],
                 username: [],
                 role: [],
-                can_login: []
+                can_login: [],
+                has_fund: [],
+                fund: []
             }
         };
     },
@@ -384,7 +369,7 @@ export default {
 
             this.loadPermissions().then(
                 axios
-                    .get("/api/employees/" + _this.$route.params.id)
+                    .get("/api/users/" + _this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
 
@@ -395,15 +380,26 @@ export default {
                         _this.form.suffix = data.suffix;
                         _this.form.gender = data.gender;
                         _this.form.birthdate = data.birthdate;
-                        _this.form.job = data.job.id;
+
                         _this.form.mobile_number = data.mobile_number;
                         _this.form.telephone_number = data.telephone_number;
-                        _this.form.email = data.email;
                         _this.form.address = data.address;
-                        _this.selected = data.user.permissions;
-                        _this.form.role = data.user.role[0];
-                        _this.form.username = data.user.username;
-                        _this.form.can_login = data.user.can_login;
+
+                        _this.form.fund = data.fund;
+                        _this.form.remaining_fund = data.remaining_fund;
+                        _this.form.username = data.username;
+                        _this.form.email = data.email;
+                        _this.form.is_admin = data.is_admin;
+                        _this.form.is_superadmin = data.is_superadmin;
+                        _this.form.can_login = data.can_login;
+
+                        _this.form.permissions = data.permissions;
+                        _this.form.old_permissions = data.permissions;
+                        _this.form.role = data.role[0];
+                        _this.form.old_role = data.role[0];
+
+                        _this.form.type = data.type;
+                        _this.form.job = data.job.id;
 
                         _this.loader = false;
                     })
@@ -438,31 +434,16 @@ export default {
                     );
                 });
         },
-        // loadExpenseTypes() {
-        //     let _this = this;
-        //     axios
-        //         .get("/api/data/expense_types?only=true")
-        //         .then(response => {
-        //             _this.expense_types = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         loadPermissions() {
             let _this = this;
 
             return new Promise((resolve, reject) => {
                 axios
-                    .get("/api/data/permissions")
+                    .get(`/api/data/permissions?role=${_this.form.role}`)
                     .then(response => {
                         _this.permissions = response.data;
+
+                        _this.form.permissions = [];
 
                         resolve();
                     })
@@ -492,14 +473,16 @@ export default {
         onSave() {
             let _this = this;
 
+            let is_administrator =
+                this.form.role == "Administrator" ? true : false;
+
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
                 _this.loader = true;
 
                 axios
-                    .put("/api/employees/" + _this.$route.params.id, {
-                        action: "update",
+                    .put("/api/users/" + _this.$route.params.id, {
                         code: _this.form.code,
                         first_name: _this.form.first_name,
                         middle_name: _this.form.middle_name,
@@ -507,16 +490,24 @@ export default {
                         suffix: _this.form.suffix,
                         gender: _this.form.gender,
                         birthdate: _this.form.birthdate,
-                        job_id: _this.form.job,
+
                         mobile_number: _this.form.mobile_number,
                         telephone_number: _this.form.telephone_number,
-                        email: _this.form.email,
                         address: _this.form.address,
+                        fund: _this.form.fund,
+                        remaining_fund: _this.form.remaining_fund,
+
                         username: _this.form.username,
+                        email: _this.form.email,
+                        password: _this.form.password,
+                        password_confirmation: _this.form.password_confirmation,
+
+                        is_admin: is_administrator,
+                        is_superadmin: _this.form.is_superadmin,
                         can_login: _this.form.can_login,
-                        role: _this.form.role,
-                        permissions: _this.selected,
-                        // expense_types: _this.selected_expense_types
+                        type: "",
+                        permissions: _this.form.permissions,
+                        job_id: _this.form.job
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(
@@ -529,7 +520,7 @@ export default {
 
                         // _this.$store.dispatch("AUTH_USER");
 
-                        _this.$router.push({ name: "admin.employees.index" });
+                        _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -549,6 +540,15 @@ export default {
 
                 return;
             }
+        }
+    },
+    watch: {
+        "form.role": function() {
+            this.loadPermissions().then(()=>{
+                // if(this.form.old_role == this.form.role) {
+
+                // }
+            });
         }
     },
     created() {
