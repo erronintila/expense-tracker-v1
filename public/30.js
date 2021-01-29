@@ -516,8 +516,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     "form.role": function formRole() {
-      this.loadPermissions().then(function () {// if(this.form.old_role == this.form.role) {
-        // }
+      var _this2 = this;
+
+      this.loadPermissions().then(function () {
+        if (_this2.form.old_role == _this2.form.role) {
+          _this2.form.permissions = _this2.form.old_permissions;
+        }
       });
     }
   },

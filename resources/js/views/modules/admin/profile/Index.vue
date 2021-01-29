@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container v-if="user.id == ''" style="height: 400px">
+        <v-container v-if="form.id == ''" style="height: 400px">
             <v-row class="fill-height" align-content="center" justify="center">
                 <v-col class="subtitle-1 text-center" cols="12">
                     Loading, Please wait...
@@ -22,7 +22,7 @@
                 <v-spacer></v-spacer>
             </v-card-title>
             <v-card-subtitle>
-                Last updated: {{ user.updated_at }}
+                Last updated: {{ form.updated_at }}
             </v-card-subtitle>
 
             <v-card-text>
@@ -62,8 +62,16 @@
                                                 justify="center"
                                             >
                                                 <div>
-                                                    {{ user.job == null ? '' :
-                                                        (user.job.department == null) ? '' : user.job.department.name
+                                                    {{
+                                                        form.job == null
+                                                            ? ""
+                                                            : form.job
+                                                                  .department ==
+                                                              null
+                                                            ? ""
+                                                            : form.job
+                                                                  .department
+                                                                  .name
                                                     }}
                                                 </div>
                                                 <h3
@@ -71,19 +79,23 @@
                                                 >
                                                     {{
                                                         `${
-                                                            user.last_name
-                                                        }, ${user.first_name ||
-                                                            ""} ${user.suffix ||
+                                                            form.last_name
+                                                        }, ${form.first_name ||
+                                                            ""} ${form.suffix ||
                                                             ""}`
                                                     }}
                                                 </h3>
                                                 <p>
-                                                    {{ user.job == null ? '' : user.job.name }}
+                                                    {{
+                                                        form.job == null
+                                                            ? ""
+                                                            : form.job.name
+                                                    }}
                                                 </p>
                                                 <div class="text--primary">
-                                                    {{ user.mobile_number
+                                                    {{ form.mobile_number
                                                     }}<br />
-                                                    {{ user.email }}
+                                                    {{ form.email }}
                                                 </div>
                                             </v-col>
                                         </v-row>
@@ -259,7 +271,7 @@
                                 <v-row>
                                     <v-col cols="12" md="12">
                                         <v-text-field
-                                            v-model="user.username"
+                                            v-model="form.username"
                                             :rules="rules.username"
                                             :counter="100"
                                             :error-messages="errors.username"
@@ -270,7 +282,7 @@
                                     </v-col>
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="user.first_name"
+                                            v-model="form.first_name"
                                             :rules="rules.first_name"
                                             :counter="100"
                                             :error-messages="errors.first_name"
@@ -282,7 +294,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="user.middle_name"
+                                            v-model="form.middle_name"
                                             :rules="rules.middle_name"
                                             :counter="100"
                                             :error-messages="errors.middle_name"
@@ -293,7 +305,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="user.last_name"
+                                            v-model="form.last_name"
                                             :rules="rules.last_name"
                                             :counter="100"
                                             :error-messages="errors.last_name"
@@ -305,7 +317,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-combobox
-                                            v-model="user.suffix"
+                                            v-model="form.suffix"
                                             :rules="rules.suffix"
                                             :counter="30"
                                             :items="['Jr', 'Sr', 'II', 'III']"
@@ -317,7 +329,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-select
-                                            v-model="user.gender"
+                                            v-model="form.gender"
                                             :rules="rules.gender"
                                             :items="['Male', 'Female']"
                                             :error-messages="errors.gender"
@@ -341,7 +353,7 @@
                                                 v-slot:activator="{ on, attrs }"
                                             >
                                                 <v-text-field
-                                                    v-model="user.birthdate"
+                                                    v-model="form.birthdate"
                                                     :rules="rules.birthdate"
                                                     :error-messages="
                                                         errors.birthdate
@@ -356,7 +368,7 @@
                                                 ></v-text-field>
                                             </template>
                                             <v-date-picker
-                                                v-model="user.birthdate"
+                                                v-model="form.birthdate"
                                                 no-title
                                                 scrollable
                                                 color="success"
@@ -368,7 +380,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="user.mobile_number"
+                                            v-model="form.mobile_number"
                                             :rules="rules.mobile_number"
                                             :counter="30"
                                             :error-messages="
@@ -382,7 +394,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="user.telephone_number"
+                                            v-model="form.telephone_number"
                                             :rules="rules.telephone_number"
                                             :counter="30"
                                             :error-messages="
@@ -398,7 +410,7 @@
 
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="user.email"
+                                            v-model="form.email"
                                             :rules="rules.email"
                                             :error-messages="errors.email"
                                             @input="errors.email = []"
@@ -408,7 +420,7 @@
 
                                     <v-col cols="12">
                                         <v-textarea
-                                            v-model="user.address"
+                                            v-model="form.address"
                                             :rules="rules.address"
                                             :error-messages="errors.address"
                                             @input="errors.address = []"
@@ -445,30 +457,52 @@ export default {
             dialogPassword: false,
             dialog: false,
             menu: false,
-            user: {
-                id: "",
-                name: "",
-                email: "",
+            form: {
+                id: null,
+                code: null,
+                first_name: null,
+                middle_name: "",
+                last_name: null,
+                suffix: "",
+                gender: null,
+                birthdate: null,
+                mobile_number: null,
+                telephone_number: "",
+                address: null,
+                fund: 0,
+                remaining_fund: 0,
                 username: "",
-                is_admin: "",
-                updated_at: "",
-                can_login: 1,
-                user: {
-                    id: 0,
-                    full_name: "",
-                    first_name: "",
-                    middle_name: "",
-                    last_name: "",
-                    suffix: "",
-                    gender: "",
-                    birthdate: "",
-                    mobile_number: "",
-                    telephone_number: "",
-                    email: "",
-                    address: "",
-                    job: { department: {} }
-                }
+                email: null,
+                password: "password",
+                password_confirmation: "password",
+                is_admin: false,
+                is_superadmin: false,
+                can_login: true,
+                type: "",
+                job: null,
+                old_permissions: [],
+                permissions: [],
+                old_role: "",
+                role: "Standard User"
             },
+            // id: "",
+            // email: "",
+            // username: "",
+            // is_admin: "",
+            // updated_at: "",
+            // can_login: 1,
+            // full_name: "",
+            // first_name: "",
+            // middle_name: "",
+            // last_name: "",
+            // suffix: "",
+            // gender: "",
+            // birthdate: "",
+            // mobile_number: "",
+            // telephone_number: "",
+            // email: "",
+            // address: "",
+            // job: { department: {} },
             old_password: "",
             password: "",
             password_confirmation: "",
@@ -510,7 +544,7 @@ export default {
                 address: []
             },
             errors: {
-                username: [],
+                code: [],
                 first_name: [],
                 middle_name: [],
                 last_name: [],
@@ -521,7 +555,12 @@ export default {
                 mobile_number: [],
                 telephone_number: [],
                 email: [],
-                address: []
+                address: [],
+                username: [],
+                role: [],
+                can_login: [],
+                has_fund: [],
+                fund: []
             }
         };
     },
@@ -533,25 +572,25 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 axios
-                    .put("/api/users/" + _this.user.id, {
+                    .put("/api/users/" + _this.id, {
                         action: "update",
                         profile_update: true,
-                        name: `${_this.user.last_name}, ${_this.user.first_name} ${_this.user.middle_name}`,
-                        email: _this.user.email,
-                        username: _this.user.username,
-                        is_admin: _this.user.is_admin,
-                        can_login: _this.user.can_login,
-                        first_name: _this.user.first_name,
-                        middle_name: _this.user.middle_name,
-                        last_name: _this.user.last_name,
-                        suffix: _this.user.suffix,
-                        gender: _this.user.gender,
-                        birthdate: _this.user.birthdate,
-                        mobile_number: _this.user.mobile_number,
-                        telephone_number: _this.user.telephone_number,
-                        email: _this.user.email,
-                        address: _this.user.address,
-                        user_id: _this.user.id
+                        name: `${_this.form.last_name}, ${_this.first_name} ${_this.middle_name}`,
+                        email: _this.email,
+                        username: _this.username,
+                        is_admin: _this.is_admin,
+                        can_login: _this.can_login,
+                        first_name: _this.first_name,
+                        middle_name: _this.middle_name,
+                        last_name: _this.last_name,
+                        suffix: _this.suffix,
+                        gender: _this.gender,
+                        birthdate: _this.birthdate,
+                        mobile_number: _this.mobile_number,
+                        telephone_number: _this.telephone_number,
+                        email: _this.email,
+                        address: _this.address,
+                        user_id: _this.id
                     })
                     .then(response => {
                         _this.$dialog.message.success(
@@ -574,8 +613,6 @@ export default {
                         );
 
                         _this.errors = error.response.data.errors;
-
-                        console.log("hello", error.response.data.errors);
                     });
             }
         },
@@ -584,7 +621,7 @@ export default {
 
             if (_this.$refs.form_password.validate()) {
                 axios
-                    .put("/api/users/" + _this.user.id, {
+                    .put("/api/users/" + _this.id, {
                         action: "change_password",
                         old_password: _this.old_password,
                         password: _this.password,
@@ -640,7 +677,7 @@ export default {
     created() {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.user = response;
+            _this.form = response;
         });
     }
 };

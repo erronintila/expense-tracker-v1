@@ -485,11 +485,13 @@ class UserController extends Controller
 
                 $user->is_superadmin = $request->is_superadmin;
 
-                $user->can_login = $request->can_login;
-
                 $user->type = $request->type;
 
-                $user->job_id = $request->job_id;
+                if (!request()->has("profile_update")) {
+                    $user->can_login = $request->can_login;
+
+                    $user->job_id = $request->job_id;
+                }
 
                 $user->save();
 

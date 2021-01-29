@@ -448,6 +448,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -460,32 +472,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       dialogPassword: false,
       dialog: false,
       menu: false,
-      user: {
-        id: "",
-        name: "",
-        email: "",
+      form: {
+        id: null,
+        code: null,
+        first_name: null,
+        middle_name: "",
+        last_name: null,
+        suffix: "",
+        gender: null,
+        birthdate: null,
+        mobile_number: null,
+        telephone_number: "",
+        address: null,
+        fund: 0,
+        remaining_fund: 0,
         username: "",
-        is_admin: "",
-        updated_at: "",
-        can_login: 1,
-        user: {
-          id: 0,
-          full_name: "",
-          first_name: "",
-          middle_name: "",
-          last_name: "",
-          suffix: "",
-          gender: "",
-          birthdate: "",
-          mobile_number: "",
-          telephone_number: "",
-          email: "",
-          address: "",
-          job: {
-            department: {}
-          }
-        }
+        email: null,
+        password: "password",
+        password_confirmation: "password",
+        is_admin: false,
+        is_superadmin: false,
+        can_login: true,
+        type: "",
+        job: null,
+        old_permissions: [],
+        permissions: [],
+        old_role: "",
+        role: "Standard User"
       },
+      // id: "",
+      // email: "",
+      // username: "",
+      // is_admin: "",
+      // updated_at: "",
+      // can_login: 1,
+      // full_name: "",
+      // first_name: "",
+      // middle_name: "",
+      // last_name: "",
+      // suffix: "",
+      // gender: "",
+      // birthdate: "",
+      // mobile_number: "",
+      // telephone_number: "",
+      // email: "",
+      // address: "",
+      // job: { department: {} },
       old_password: "",
       password: "",
       password_confirmation: "",
@@ -532,7 +564,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         address: []
       },
       errors: {
-        username: [],
+        code: [],
         first_name: [],
         middle_name: [],
         last_name: [],
@@ -543,7 +575,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         mobile_number: [],
         telephone_number: [],
         email: [],
-        address: []
+        address: [],
+        username: [],
+        role: [],
+        can_login: [],
+        has_fund: [],
+        fund: []
       }
     };
   },
@@ -555,23 +592,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (_this.$refs.form.validate()) {
         var _axios$put;
 
-        axios.put("/api/users/" + _this.user.id, (_axios$put = {
+        axios.put("/api/users/" + _this.id, (_axios$put = {
           action: "update",
           profile_update: true,
-          name: "".concat(_this.user.last_name, ", ").concat(_this.user.first_name, " ").concat(_this.user.middle_name),
-          email: _this.user.email,
-          username: _this.user.username,
-          is_admin: _this.user.is_admin,
-          can_login: _this.user.can_login,
-          first_name: _this.user.first_name,
-          middle_name: _this.user.middle_name,
-          last_name: _this.user.last_name,
-          suffix: _this.user.suffix,
-          gender: _this.user.gender,
-          birthdate: _this.user.birthdate,
-          mobile_number: _this.user.mobile_number,
-          telephone_number: _this.user.telephone_number
-        }, _defineProperty(_axios$put, "email", _this.user.email), _defineProperty(_axios$put, "address", _this.user.address), _defineProperty(_axios$put, "user_id", _this.user.id), _axios$put)).then(function (response) {
+          name: "".concat(_this.form.last_name, ", ").concat(_this.first_name, " ").concat(_this.middle_name),
+          email: _this.email,
+          username: _this.username,
+          is_admin: _this.is_admin,
+          can_login: _this.can_login,
+          first_name: _this.first_name,
+          middle_name: _this.middle_name,
+          last_name: _this.last_name,
+          suffix: _this.suffix,
+          gender: _this.gender,
+          birthdate: _this.birthdate,
+          mobile_number: _this.mobile_number,
+          telephone_number: _this.telephone_number
+        }, _defineProperty(_axios$put, "email", _this.email), _defineProperty(_axios$put, "address", _this.address), _defineProperty(_axios$put, "user_id", _this.id), _axios$put)).then(function (response) {
           _this.$dialog.message.success("User account updated successfully.", {
             position: "top-right",
             timeout: 2000
@@ -584,7 +621,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
-          console.log("hello", error.response.data.errors);
         });
       }
     },
@@ -592,7 +628,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (_this.$refs.form_password.validate()) {
-        axios.put("/api/users/" + _this.user.id, {
+        axios.put("/api/users/" + _this.id, {
           action: "change_password",
           old_password: _this.old_password,
           password: _this.password,
@@ -639,7 +675,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this.user = response;
+      _this.form = response;
     });
   }
 });
@@ -664,7 +700,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.user.id == ""
+      _vm.form.id == ""
         ? _c(
             "v-container",
             { staticStyle: { height: "400px" } },
@@ -730,7 +766,7 @@ var render = function() {
               _c("v-card-subtitle", [
                 _vm._v(
                   "\n            Last updated: " +
-                    _vm._s(_vm.user.updated_at) +
+                    _vm._s(_vm.form.updated_at) +
                     "\n        "
                 )
               ]),
@@ -830,14 +866,14 @@ var render = function() {
                                                           _vm._v(
                                                             "\n                                                " +
                                                               _vm._s(
-                                                                _vm.user.job ==
+                                                                _vm.form.job ==
                                                                   null
                                                                   ? ""
-                                                                  : _vm.user.job
+                                                                  : _vm.form.job
                                                                       .department ==
                                                                     null
                                                                   ? ""
-                                                                  : _vm.user.job
+                                                                  : _vm.form.job
                                                                       .department
                                                                       .name
                                                               ) +
@@ -855,14 +891,14 @@ var render = function() {
                                                             _vm._v(
                                                               "\n                                                " +
                                                                 _vm._s(
-                                                                  _vm.user
+                                                                  _vm.form
                                                                     .last_name +
                                                                     ", " +
-                                                                    (_vm.user
+                                                                    (_vm.form
                                                                       .first_name ||
                                                                       "") +
                                                                     " " +
-                                                                    (_vm.user
+                                                                    (_vm.form
                                                                       .suffix ||
                                                                       "")
                                                                 ) +
@@ -875,10 +911,10 @@ var render = function() {
                                                           _vm._v(
                                                             "\n                                                " +
                                                               _vm._s(
-                                                                _vm.user.job ==
+                                                                _vm.form.job ==
                                                                   null
                                                                   ? ""
-                                                                  : _vm.user.job
+                                                                  : _vm.form.job
                                                                       .name
                                                               ) +
                                                               "\n                                            "
@@ -895,7 +931,7 @@ var render = function() {
                                                             _vm._v(
                                                               "\n                                                " +
                                                                 _vm._s(
-                                                                  _vm.user
+                                                                  _vm.form
                                                                     .mobile_number
                                                                 )
                                                             ),
@@ -903,7 +939,7 @@ var render = function() {
                                                             _vm._v(
                                                               "\n                                                " +
                                                                 _vm._s(
-                                                                  _vm.user.email
+                                                                  _vm.form.email
                                                                 ) +
                                                                 "\n                                            "
                                                             )
@@ -1294,15 +1330,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.username,
+                                              value: _vm.form.username,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "username",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.username"
+                                              expression: "form.username"
                                             }
                                           })
                                         ],
@@ -1328,15 +1364,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.first_name,
+                                              value: _vm.form.first_name,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "first_name",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.first_name"
+                                              expression: "form.first_name"
                                             }
                                           })
                                         ],
@@ -1361,15 +1397,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.middle_name,
+                                              value: _vm.form.middle_name,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "middle_name",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.middle_name"
+                                              expression: "form.middle_name"
                                             }
                                           })
                                         ],
@@ -1395,15 +1431,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.last_name,
+                                              value: _vm.form.last_name,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "last_name",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.last_name"
+                                              expression: "form.last_name"
                                             }
                                           })
                                         ],
@@ -1429,15 +1465,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.suffix,
+                                              value: _vm.form.suffix,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "suffix",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.suffix"
+                                              expression: "form.suffix"
                                             }
                                           })
                                         ],
@@ -1463,15 +1499,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.gender,
+                                              value: _vm.form.gender,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "gender",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.gender"
+                                              expression: "form.gender"
                                             }
                                           })
                                         ],
@@ -1524,19 +1560,19 @@ var render = function() {
                                                               },
                                                               model: {
                                                                 value:
-                                                                  _vm.user
+                                                                  _vm.form
                                                                     .birthdate,
                                                                 callback: function(
                                                                   $$v
                                                                 ) {
                                                                   _vm.$set(
-                                                                    _vm.user,
+                                                                    _vm.form,
                                                                     "birthdate",
                                                                     $$v
                                                                   )
                                                                 },
                                                                 expression:
-                                                                  "user.birthdate"
+                                                                  "form.birthdate"
                                                               }
                                                             },
                                                             "v-text-field",
@@ -1568,15 +1604,15 @@ var render = function() {
                                                   max: _vm.maxDate
                                                 },
                                                 model: {
-                                                  value: _vm.user.birthdate,
+                                                  value: _vm.form.birthdate,
                                                   callback: function($$v) {
                                                     _vm.$set(
-                                                      _vm.user,
+                                                      _vm.form,
                                                       "birthdate",
                                                       $$v
                                                     )
                                                   },
-                                                  expression: "user.birthdate"
+                                                  expression: "form.birthdate"
                                                 }
                                               })
                                             ],
@@ -1605,15 +1641,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.mobile_number,
+                                              value: _vm.form.mobile_number,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "mobile_number",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.mobile_number"
+                                              expression: "form.mobile_number"
                                             }
                                           })
                                         ],
@@ -1639,16 +1675,16 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.telephone_number,
+                                              value: _vm.form.telephone_number,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "telephone_number",
                                                   $$v
                                                 )
                                               },
                                               expression:
-                                                "user.telephone_number"
+                                                "form.telephone_number"
                                             }
                                           })
                                         ],
@@ -1672,11 +1708,11 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.email,
+                                              value: _vm.form.email,
                                               callback: function($$v) {
-                                                _vm.$set(_vm.user, "email", $$v)
+                                                _vm.$set(_vm.form, "email", $$v)
                                               },
-                                              expression: "user.email"
+                                              expression: "form.email"
                                             }
                                           })
                                         ],
@@ -1701,15 +1737,15 @@ var render = function() {
                                               }
                                             },
                                             model: {
-                                              value: _vm.user.address,
+                                              value: _vm.form.address,
                                               callback: function($$v) {
                                                 _vm.$set(
-                                                  _vm.user,
+                                                  _vm.form,
                                                   "address",
                                                   $$v
                                                 )
                                               },
-                                              expression: "user.address"
+                                              expression: "form.address"
                                             }
                                           })
                                         ],

@@ -110,7 +110,7 @@
                                     <v-btn
                                         text
                                         color="green"
-                                        @click="editEmployee"
+                                        @click="editUser"
                                     >
                                         Edit Info
                                     </v-btn>
@@ -400,7 +400,7 @@ export default {
             let _this = this;
 
             axios
-                .get(`/api/employees/${_this.$route.params.id}`)
+                .get(`/api/users/${_this.$route.params.id}`)
                 .then(function(response) {
                     let data = response.data.data;
 
@@ -420,8 +420,8 @@ export default {
                     _this.remaining_fund = data.remaining_fund;
                     _this.job = data.job.name;
                     _this.department = data.job.department.name;
-                    _this.permissions = data.user.permissions;
-                    _this.user = data.user;
+                    _this.permissions = data.permissions;
+                    _this.user = data;
 
                     _this.loader = false;
                 })
@@ -437,9 +437,9 @@ export default {
                     _this.loader = false;
                 });
         },
-        editEmployee() {
+        editUser() {
             this.$router.push({
-                name: "admin.employees.edit",
+                name: "admin.users.edit",
                 params: { id: this.$route.params.id }
             });
         },
@@ -451,11 +451,11 @@ export default {
             let end_date = moment()
                 .endOf("month")
                 .format("YYYY-MM-DD");
-            let employee_id = this.$route.params.id;
+            let user_id = this.$route.params.id;
 
             axios
                 .get(
-                    `/api/data/expense_stats?start_date=${start_date}&end_date=${end_date}&employee_id=${employee_id}`
+                    `/api/data/expense_stats?start_date=${start_date}&end_date=${end_date}&user_id=${user_id}`
                 )
                 .then(response => {
                     _this.total_expenses = response.data.summary.total;

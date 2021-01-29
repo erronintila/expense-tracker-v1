@@ -544,10 +544,10 @@ export default {
     },
     watch: {
         "form.role": function() {
-            this.loadPermissions().then(()=>{
-                // if(this.form.old_role == this.form.role) {
-
-                // }
+            this.loadPermissions().then(() => {
+                if (this.form.old_role == this.form.role) {
+                    this.form.permissions = this.form.old_permissions;
+                }
             });
         }
     },
