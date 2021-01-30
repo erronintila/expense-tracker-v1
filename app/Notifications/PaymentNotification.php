@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Employee;
+use App\User;
 use App\Models\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -59,7 +59,7 @@ class PaymentNotification extends Notification
     {
         $payment_record = $this->details['payment'];
         $payment = Payment::find($payment_record->id);
-        $employee = Employee::find($payment->employee_id);
+        $user = User::find($payment->user_id);
         $description = "";
 
         switch ($this->details["action"]) {
@@ -79,9 +79,9 @@ class PaymentNotification extends Notification
                 "model" => "payments",
                 "id" => $payment->id,
                 "code" => $payment->code,
-                "employee" => [
-                    "id" => $employee->id,
-                    "full_name" => $employee->full_name
+                "user" => [
+                    "id" => $user->id,
+                    "full_name" => $user->full_name
                 ],
                 'expense_report' => [
                     "id" => $payment->id,

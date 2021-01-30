@@ -255,7 +255,7 @@ class PaymentController extends Controller
             $payment->expense_reports()->sync($arr);
         }
 
-        Notification::send($payment->employee->user, new PaymentNotification([
+        Notification::send($payment->user, new PaymentNotification([
             "action" => "release",
             "payment" => $payment
         ]));

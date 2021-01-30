@@ -50,7 +50,7 @@
                                 :items="users"
                                 :error-messages="errors.user"
                                 @input="errors.user = []"
-                                @change="updateEmployee"
+                                @change="updateUser"
                                 item-value="id"
                                 item-text="full_name"
                                 label="Employee"
@@ -529,7 +529,7 @@ export default {
                 });
             });
         },
-        updateEmployee() {
+        updateUser() {
             this.loadExpenses(this.form.user.id).then(() => {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
@@ -677,7 +677,7 @@ export default {
                     });
             });
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             return new Promise((resolve, reject) => {
@@ -800,7 +800,7 @@ export default {
         // this.$store.dispatch("AUTH_USER");
         let _this = this;
 
-        this.loadEmployees().then(() => {
+        this.loadUsers().then(() => {
             this.getData().then(() => {
                 this.loadExpenses(this.form.user.id).then(() => {
                     this.getDataFromApi().then(data => {

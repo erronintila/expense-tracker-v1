@@ -95,7 +95,7 @@
                                     :items="users"
                                     item-text="full_name"
                                     item-value="id"
-                                    label="Employee"
+                                    label="User"
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -343,7 +343,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
-                { text: "Employee", value: "user" },
+                { text: "User", value: "user" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },
@@ -404,7 +404,7 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
@@ -413,7 +413,7 @@ export default {
                     _this.users = response.data.data;
                     _this.users.unshift({
                         id: 0,
-                        full_name: "All Employees"
+                        full_name: "All Users"
                     });
                 })
                 .catch(error => {
@@ -478,7 +478,7 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.selected = [];
-            this.loadEmployees();
+            this.loadUsers();
         },
         onShow(item) {
             this.$router.push({
@@ -650,7 +650,7 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadEmployees();
+        this.loadUsers();
     }
 };
 </script>

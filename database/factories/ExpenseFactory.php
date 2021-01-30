@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Models\Employee;
+use App\User;
 use App\Models\Expense;
 use App\Models\ExpenseType;
 use Faker\Factory;
@@ -58,9 +58,9 @@ $factory->define(Expense::class, function (Faker $faker) {
 
     $expense_type = ExpenseType::where('name', $expenses["type"])->first();
 
-    $employee = Employee::find(1);
+    $user = User::find(1);
 
-    $reimbursable_amount = $employee->remaining_fund < $expenses["amount"] ? abs($employee->remaining_fund - $expenses["amount"]) : 0;
+    $reimbursable_amount = $user->remaining_fund < $expenses["amount"] ? abs($user->remaining_fund - $expenses["amount"]) : 0;
 
     return [
         'code' => null,
@@ -70,8 +70,8 @@ $factory->define(Expense::class, function (Faker $faker) {
         'receipt_number' => Str::random(10),
         'date' => $dates,
         'expense_type_id' => $expense_type->id,
-        // 'employee_id' => rand(1, 10),
-        'employee_id' => 1,
+        // 'user_id' => rand(1, 10),
+        'user_id' => 1,
         'vendor_id' => rand(1, 50),
         'created_by' => 1,
         "updated_by" => 1

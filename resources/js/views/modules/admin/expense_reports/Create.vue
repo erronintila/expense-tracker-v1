@@ -49,7 +49,7 @@
                                 :items="users"
                                 :error-messages="errors.user"
                                 @input="errors.user = []"
-                                @change="updateEmployee"
+                                @change="updateUser"
                                 item-value="id"
                                 item-text="full_name"
                                 label="Employee"
@@ -529,7 +529,7 @@ export default {
             this.date_range = e;
             // this.loadExpenses();
         },
-        updateEmployee() {
+        updateUser() {
             this.getDataFromApi().then(data => {
                 this.items = data.items;
                 this.totalItems = data.total;
@@ -563,7 +563,7 @@ export default {
                     );
                 });
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
@@ -725,7 +725,7 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
-        this.loadEmployees();
+        this.loadUsers();
         // this.loadExpenses();
     }
 };

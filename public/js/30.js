@@ -548,7 +548,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    updateEmployee: function updateEmployee() {
+    updateUser: function updateUser() {
       var _this3 = this;
 
       this.loadExpenses(this.form.user.id).then(function () {
@@ -674,7 +674,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
@@ -776,7 +776,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // this.$store.dispatch("AUTH_USER");
     var _this = this;
 
-    this.loadEmployees().then(function () {
+    this.loadUsers().then(function () {
       _this6.getData().then(function () {
         _this6.loadExpenses(_this6.form.user.id).then(function () {
           _this6.getDataFromApi().then(function (data) {
@@ -948,7 +948,7 @@ var render = function() {
                                   input: function($event) {
                                     _vm.errors.user = []
                                   },
-                                  change: _vm.updateEmployee
+                                  change: _vm.updateUser
                                 },
                                 model: {
                                   value: _vm.form.user,

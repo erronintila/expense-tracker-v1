@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NotificationResource;
-use App\Models\Employee;
+use App\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification;
@@ -34,9 +34,9 @@ class NotificationController extends Controller
 
         $end_date = request("end_date") ?? date("Y-m-d");
 
-        $user = request()->has("employee_id") ?
-            (request("employee_id") > 0 ?
-                Employee::find(request("employee_id"))->user()->first() :
+        $user = request()->has("user_id") ?
+            (request("user_id") > 0 ?
+                User::find(request("user_id")) :
                 Auth::user()) :
             Auth::user();
 

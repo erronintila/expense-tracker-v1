@@ -492,7 +492,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
-      headers: [// { text: "Employee", value: "user" },
+      headers: [// { text: "User", value: "user" },
       // { text: "Description", value: "description" },
       // { text: "Amount", value: "total" },
       // { text: "Created", value: "created" },
@@ -590,7 +590,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.totalItems = data.total;
       });
     },
-    updateEmployee: function updateEmployee() {
+    updateUser: function updateUser() {
       var _this3 = this;
 
       this.getDataFromApi().then(function (data) {
@@ -598,7 +598,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this3.totalItems = data.total;
       });
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
       axios.get("/api/data/users").then(function (response) {
@@ -772,7 +772,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-    this.loadEmployees();
+    this.loadUsers();
   }
 });
 
@@ -1001,7 +1001,7 @@ var render = function() {
                                   "error-messages": _vm.errors.user,
                                   "item-value": "id",
                                   "item-text": "full_name",
-                                  label: "Employee",
+                                  label: "User",
                                   "return-object": "",
                                   required: ""
                                 },
@@ -1009,7 +1009,7 @@ var render = function() {
                                   input: function($event) {
                                     _vm.errors.user = []
                                   },
-                                  change: _vm.updateEmployee
+                                  change: _vm.updateUser
                                 },
                                 model: {
                                   value: _vm.form,

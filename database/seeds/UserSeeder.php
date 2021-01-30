@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Employee;
-use App\Models\Job;
-use App\Models\ExpenseType;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +28,6 @@ class UserSeeder extends Seeder
             // "permissions",
             "departments",
             "jobs",
-            // "employees",
             "vendors",
             "expense types",
             "payments",
@@ -98,11 +94,6 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'restore users', 'category' => $model]);
             }
 
-            // if ($model == "employees") {
-            //     Permission::create(['name' => 'edit employees fund', 'category' => $model]);
-            //     Permission::create(['name' => 'restore employees', 'category' => $model]);
-            // }
-
             if ($model == "expenses") {
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
                 Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
@@ -157,7 +148,6 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("add expenses beyond encoding period");
         $roleUser->givePermissionTo("submit expense reports beyond due date");
         $roleUser->givePermissionTo("add expenses beyond limit");
-        // $roleUser->givePermissionTo("edit employees");
         // $roleUser->givePermissionTo("edit users");
 
         $roleSuperAdmin = Role::create(['name' => 'administrator']);
@@ -205,7 +195,7 @@ class UserSeeder extends Seeder
 
         /**
          * -------------------------------------------------------------------------------------------------------------------------
-         * Create New Employee
+         * Create New User
          * -------------------------------------------------------------------------------------------------------------------------
          */
 
@@ -226,28 +216,6 @@ class UserSeeder extends Seeder
         // }
 
         // // $user->assignRole('Standard User');
-
-        // $employee = Employee::create([
-        //     'code' => generate_code(Employee::class, "EMP", 10),
-        //     'first_name' => "Erron1",
-        //     'middle_name' => "Cerdania1",
-        //     'last_name' => "Intila1",
-        //     'suffix' => null,
-        //     'gender' => "Male",
-        //     'birthdate' => "1996-08-19",
-        //     'mobile_number' => "09567653221",
-        //     'telephone_number' => null,
-        //     'email' => 'erronintila1@gmail.com',
-        //     'address' => "Polomolok, South Cotabato",
-        //     "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
-        //     "user_id" => $user->id,
-        //     "fund" => 1000,
-        //     "remaining_fund" => 1000,
-        // ]);
-
-        // //foreach (ExpenseType::all() as $expense_types) {
-        //    $employee->expense_types()->sync(ExpenseType::all());
-        // //}
 
         /**
          * -------------------------------------------------------------------------------------------------------------------------

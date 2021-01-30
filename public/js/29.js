@@ -545,7 +545,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e; // this.loadExpenses();
     },
-    updateEmployee: function updateEmployee() {
+    updateUser: function updateUser() {
       var _this2 = this;
 
       this.getDataFromApi().then(function (data) {
@@ -575,7 +575,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
       axios.get("/api/data/users").then(function (response) {
@@ -712,7 +712,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-    this.loadEmployees(); // this.loadExpenses();
+    this.loadUsers(); // this.loadExpenses();
   }
 });
 
@@ -875,7 +875,7 @@ var render = function() {
                                   input: function($event) {
                                     _vm.errors.user = []
                                   },
-                                  change: _vm.updateEmployee
+                                  change: _vm.updateUser
                                 },
                                 model: {
                                   value: _vm.form.user,

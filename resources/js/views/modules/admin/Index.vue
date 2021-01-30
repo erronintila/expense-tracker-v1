@@ -274,7 +274,7 @@
                     >
                         <v-list-item-content>
                             <v-list-item-title
-                                v-text="item.data.data.employee.full_name  + '-' + index"
+                                v-text="item.data.data.full_name  + '-' + index"
                             ></v-list-item-title>
 
                             <v-list-item-subtitle
@@ -303,7 +303,7 @@
                                 <v-list-item-content>
                                     <v-list-item-title
                                         v-text="
-                                            item.data.data.employee.full_name
+                                            item.data.data.full_name
                                         "
                                     ></v-list-item-title>
 

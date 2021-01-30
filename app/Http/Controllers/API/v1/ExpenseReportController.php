@@ -479,7 +479,7 @@ class ExpenseReportController extends Controller
 
                     $this->updateReport($expense_report, false, false, true, false, false);
 
-                    Notification::send(User::withTrashed()->find($expense_report->employee->user->id), new ExpenseReportNotification([
+                    Notification::send(User::withTrashed()->find($expense_report->user->id), new ExpenseReportNotification([
                         "action" => "approve",
                         "expense_report" => $expense_report
                     ]));
@@ -576,7 +576,7 @@ class ExpenseReportController extends Controller
 
                     $expense_report->save();
 
-                    Notification::send(User::withTrashed()->find($expense_report->employee->user->id), new ExpenseReportNotification([
+                    Notification::send(User::withTrashed()->find($expense_report->user->id), new ExpenseReportNotification([
                         "action" => "reject",
                         "expense_report" => $expense_report
                     ]));

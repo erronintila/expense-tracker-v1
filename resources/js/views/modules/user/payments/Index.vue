@@ -530,7 +530,7 @@ export default {
     created() {
         this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        // this.loadEmployees();
+        // this.loadUsers();
         // this.loadusers();
     }
 };

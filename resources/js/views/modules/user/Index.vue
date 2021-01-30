@@ -250,7 +250,7 @@
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
-                                        v-text="item.data.data.employee.full_name"
+                                        v-text="item.data.data.full_name"
                                     ></v-list-item-title>
 
                                     <v-list-item-subtitle

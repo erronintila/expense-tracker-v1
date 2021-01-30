@@ -367,7 +367,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Date",
         value: "date"
       }, {
-        text: "Employee",
+        text: "User",
         value: "user"
       }, {
         text: "Description",
@@ -416,7 +416,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
       axios.get("/api/data/users?only=true").then(function (response) {
@@ -424,7 +424,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this.users.unshift({
           id: 0,
-          full_name: "All Employees"
+          full_name: "All Users"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -484,7 +484,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.selected = [];
-      this.loadEmployees();
+      this.loadUsers();
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -642,7 +642,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
-    this.loadEmployees();
+    this.loadUsers();
   }
 });
 
@@ -898,7 +898,7 @@ var render = function() {
                                   items: _vm.users,
                                   "item-text": "full_name",
                                   "item-value": "id",
-                                  label: "Employee"
+                                  label: "User"
                                 },
                                 model: {
                                   value: _vm.user,
