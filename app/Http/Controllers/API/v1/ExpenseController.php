@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Expense\ExpenseIndexResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\ExpenseResource;
-use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -75,7 +75,7 @@ class ExpenseController extends Controller
 
             'expense_type_id' => ['required'],
 
-            'employee_id' => ['required'],
+            'user_id' => ['required'],
         ]);
     }
 
@@ -94,7 +94,7 @@ class ExpenseController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $expenses = Expense::with(['employee' => function ($query) {
+        $expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -235,9 +235,9 @@ class ExpenseController extends Controller
             $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
         }
 
-        if (request()->has('employee_id')) {
-            if ($request->employee_id > 0) {
-                $expenses = $expenses->where("employee_id", $request->employee_id);
+        if (request()->has('user_id')) {
+            if ($request->user_id > 0) {
+                $expenses = $expenses->where("user_id", $request->user_id);
             }
         }
 
@@ -264,7 +264,7 @@ class ExpenseController extends Controller
         });
 
         if (request()->has("update_report")) {
-            $expenses = Expense::with(['employee' => function ($query) {
+            $expenses = Expense::with(['user' => function ($query) {
                 $query->withTrashed();
             }])
                 ->with(['expense_type' => function ($query) {
@@ -288,7 +288,7 @@ class ExpenseController extends Controller
                     $q->whereBetween("date", [$request->start_date, $request->end_date]);
                     $q->orWhere("expense_report_id", $request->expense_report_id);
                 })
-                ->where("employee_id", $request->employee_id);
+                ->where("user_id", $request->user_id);
 
             if (request()->has('start_date') && request()->has('end_date')) {
                 $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
@@ -312,18 +312,18 @@ class ExpenseController extends Controller
 
         Validator::make($request->all(), [
 
-            'employee_id' => ['required'],
+            'user_id' => ['required'],
         ]);
 
-        $employee = Employee::withTrashed()->findOrFail($request->employee_id);
+        $user = User::withTrashed()->findOrFail($request->user_id);
 
-        $this->validator($request->all(), null, $employee->remaining_fund)->validate();
+        $this->validator($request->all(), null, $user->remaining_fund)->validate();
 
         if (request("reimbursable_amount") > request("amount")) {
             $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
         }
 
-        if (($employee->remaining_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
+        if (($user->remaining_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
             $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
         }
 
@@ -351,7 +351,7 @@ class ExpenseController extends Controller
 
         $expense->sub_type_id = $request->sub_type_id;
 
-        $expense->employee_id  = $request->employee_id;
+        $expense->user_id  = $request->user_id;
 
         $expense->vendor_id  = $request->vendor_id;
 
@@ -392,7 +392,7 @@ class ExpenseController extends Controller
     public function show(Request $request, $id)
     {
         $expense = Expense::withTrashed()
-            ->with(['employee' => function ($query) {
+            ->with(['user' => function ($query) {
                 $query->withTrashed();
                 $query->with(['expense_types' => function ($query2) {
                     $query2->withTrashed();
@@ -508,12 +508,12 @@ class ExpenseController extends Controller
 
                 Validator::make($request->all(), [
 
-                    'employee_id' => ['required'],
+                    'user_id' => ['required'],
                 ]);
 
-                $employee = Employee::withTrashed()->findOrFail($request->employee_id);
+                $user = User::withTrashed()->findOrFail($request->user_id);
 
-                $this->validator($request->all(), $id, $employee->remaining_fund)->validate();
+                $this->validator($request->all(), $id, $user->remaining_fund)->validate();
 
                 $expense = Expense::withTrashed()->findOrFail($id);
 
@@ -523,7 +523,7 @@ class ExpenseController extends Controller
                     $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
                 }
 
-                $rem_fund = $employee->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
+                $rem_fund = $user->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
         
                 if (($rem_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
                     $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
@@ -579,7 +579,7 @@ class ExpenseController extends Controller
 
                 $expense->sub_type_id = $request->sub_type_id;
 
-                $expense->employee_id  = $request->employee_id;
+                $expense->user_id  = $request->user_id;
 
                 $expense->vendor_id  = $request->vendor_id;
 
@@ -694,7 +694,7 @@ class ExpenseController extends Controller
             }
         }
 
-        $expenses = Expense::with(['employee' => function ($query) {
+        $expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -729,8 +729,8 @@ class ExpenseController extends Controller
             $expenses = $expenses->where("expense_type_id", $request->expense_type_id);
         }
 
-        if (request()->has("employee_id")) {
-            $expenses = $expenses->where("employee_id", $request->employee_id);
+        if (request()->has("user_id")) {
+            $expenses = $expenses->where("user_id", $request->user_id);
         }
 
         if (request()->has("vendor_id")) {
@@ -753,7 +753,7 @@ class ExpenseController extends Controller
         }
 
         if (request()->has("update_report")) {
-            $expenses = Expense::with(['employee' => function ($query) {
+            $expenses = Expense::with(['user' => function ($query) {
                 $query->withTrashed();
             }])
                 ->with(['expense_type' => function ($query) {
@@ -777,7 +777,7 @@ class ExpenseController extends Controller
                     $q->whereBetween("date", [$request->start_date, $request->end_date]);
                     // $q->orWhere("expense_report_id", $request->expense_report_id);
                 })
-                ->where("employee_id", $request->employee_id)
+                ->where("user_id", $request->user_id)
                 ->get();
 
             return response()->json([

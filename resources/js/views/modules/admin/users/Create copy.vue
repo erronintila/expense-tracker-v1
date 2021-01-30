@@ -65,34 +65,6 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
-
-                                <!-- <v-col cols="12" md="4">
-                                    <v-select
-                                        v-model="selected_expense_types"
-                                        :items="expense_types"
-                                        item-text="name"
-                                        item-value="id"
-                                        label="Allowed Expense Types"
-                                        multiple
-                                    >
-                                        <template
-                                            v-slot:selection="{ item, index }"
-                                        >
-                                            <v-chip v-if="index === 0" small>
-                                                <span>{{ item.name }}</span>
-                                            </v-chip>
-                                            <span
-                                                v-if="index === 1"
-                                                class="grey--text caption"
-                                                >(+{{
-                                                    selected_expense_types.length -
-                                                        1
-                                                }}
-                                                others)</span
-                                            >
-                                        </template>
-                                    </v-select>
-                                </v-col> -->
                             </v-row>
 
                             <v-row>
@@ -327,7 +299,7 @@
                             <v-row>
                                 <v-col>
                                     <v-data-table
-                                        v-model="selected"
+                                        v-model="form.permission"
                                         show-select
                                         :items-per-page="-1"
                                         :headers="headers"
@@ -365,10 +337,7 @@ export default {
             valid: false,
             menu: false,
             jobs: [],
-            permissions: this.$store.getters.user.permissions,
-            // expense_types: [],
-            selected: [],
-            // selected_expense_types: [],
+            permissions: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 code: null,
@@ -378,17 +347,21 @@ export default {
                 suffix: "",
                 gender: null,
                 birthdate: null,
-                job: null,
                 mobile_number: null,
                 telephone_number: "",
-                email: null,
                 address: null,
-                role: "Standard User",
-                username: "",
-                can_login: true,
-                has_fund: false,
                 fund: 0,
+                remaining_fund: 0,
+                username: "",
+                email: null,
+                password: "password",
+                password_confirmation: "password",
                 is_admin: false,
+                is_superadmin: false,
+                can_login: true,
+                type: "",
+                job: null,
+                permissions: []
             },
             errors: {
                 code: [],
@@ -430,23 +403,6 @@ export default {
                     );
                 });
         },
-        // loadExpenseTypes() {
-        //     let _this = this;
-        //     axios
-        //         .get("/api/data/expense_types?only=true")
-        //         .then(response => {
-        //             _this.expense_types = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         loadPermissions() {
             let _this = this;
 
@@ -470,18 +426,17 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
-        // changeRole() {
-        //     this.loadPermissions();
-
-        //     // if (this.form.role == "Administrator") {
-        //     //     this.selected = this.permissions;
-        //     // } else {
-        //     //     this.selected = [];
-        //     // }
-        // },
+        changeRole() {
+            if (this.form.role == "Administrator") {
+                this.form.permissions = this.permissions;
+            } else {
+                this.form.permissions = [];
+            }
+        },
         onSave() {
             let _this = this;
             let fund = 0;
+            let is_administrator = this.form.role == "Administrator" ? true : false;
 
             if(this.form.has_fund) {
                 fund = this.form.fund == "" ? 0 : this.form.fund;
@@ -493,7 +448,7 @@ export default {
                 _this.loader = true;
                 
                 axios
-                    .post("/api/employees", {
+                    .post("/api/users", {
                         code: _this.form.code,
                         first_name: _this.form.first_name,
                         middle_name: _this.form.middle_name,
@@ -501,17 +456,21 @@ export default {
                         suffix: _this.form.suffix,
                         gender: _this.form.gender,
                         birthdate: _this.form.birthdate,
-                        job_id: _this.form.job,
                         mobile_number: _this.form.mobile_number,
                         telephone_number: _this.form.telephone_number,
-                        email: _this.form.email,
                         address: _this.form.address,
+                        fund: fund,
+                        remaining_fund: fund,
                         username: _this.form.username,
+                        email: _this.form.email,
+                        password: "password",
+                        password_confirmation: "password",
+                        is_admin: is_administrator,
+                        is_superadmin: false,
                         can_login: _this.form.can_login,
-                        role: _this.form.role,
-                        permissions: _this.selected,
-                        // expense_types: _this.selected_expense_types,
-                        fund: fund
+                        type: "",
+                        permissions: _this.form.permissions,
+                        job_id: _this.form.job,
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(
@@ -522,11 +481,7 @@ export default {
                             }
                         );
 
-                        // _this.$store.dispatch("AUTH_USER");
-
-                        window.location.replace("/admin/employees");
-
-                        // _this.$router.push({ name: "admin.employees.index" });
+                        _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -556,7 +511,6 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadJobs();
-        // this.loadExpenseTypes();
         this.loadPermissions();
     }
 };

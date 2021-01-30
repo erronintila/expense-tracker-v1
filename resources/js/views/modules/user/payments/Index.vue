@@ -188,9 +188,9 @@
                             item.status.status
                         }}</v-chip>
                     </template>
-                    <template v-slot:[`item.employee`]="{ item }">
+                    <template v-slot:[`item.user`]="{ item }">
                         {{
-                            `${item.employee.last_name}, ${item.employee.first_name} ${item.employee.middle_name}`
+                            `${item.last_name}, ${item.first_name} ${item.middle_name}`
                         }}
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">
@@ -253,7 +253,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
-                { text: "Employee", value: "employee" },
+                { text: "User", value: "user" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },
@@ -263,7 +263,7 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            employee: this.$store.getters.user.employee,
+            user: this.$store.getters.user,
             status: "All Payments",
             statuses: [
                 "All Payments",
@@ -324,7 +324,7 @@ export default {
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
                 let range = _this.date_range;
-                let employee_id = _this.employee.id;
+                let user_id = _this.user.id;
 
                 axios
                     .get("/api/payments", {
@@ -337,7 +337,7 @@ export default {
                             status: status,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
-                            employee_id: employee_id
+                            user_id: user_id
                         }
                     })
                     .then(response => {
@@ -365,7 +365,7 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.selected = [];
-            // this.loadEmployees();
+            // this.loadusers();
         },
         onShow(item) {
             this.$router.push({
@@ -523,7 +523,7 @@ export default {
                 query: this.search,
                 query: this.status,
                 query: this.date_range,
-                query: this.employee
+                query: this.user
             };
         }
     },
@@ -531,6 +531,7 @@ export default {
         this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         // this.loadEmployees();
+        // this.loadusers();
     }
 };
 </script>

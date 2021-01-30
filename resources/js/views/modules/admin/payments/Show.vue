@@ -32,7 +32,7 @@
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>
-                                {{ form.employee.full_name }}
+                                {{ form.full_name }}
                             </div>
                             <div class="display-1 green--text">
                                 PHP {{ mixin_formatNumber(form.amount) }}
@@ -111,13 +111,13 @@
                                         <v-spacer></v-spacer>
                                     </v-row>
                                 </template>
-                                <template v-slot:[`item.employee`]="{ item }">
+                                <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.employee.last_name +
+                                        item.last_name +
                                             " " +
-                                            item.employee.first_name +
+                                            item.first_name +
                                             " " +
-                                            item.employee.suffix
+                                            item.suffix
                                     }}
                                 </template>
                                 
@@ -244,11 +244,11 @@
                                 <template v-slot:[`item.total`]="{ item }">
                                     {{ mixin_formatNumber(item.total) }}
                                 </template>
-                                <template v-slot:[`item.employee`]="{ item }">
+                                <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.employee.last_name +
+                                        item.last_name +
                                             ", " +
-                                            item.employee.first_name
+                                            item.first_name
                                     }}
                                 </template>
                                 <template v-slot:[`item.updated_at`]="{ item }">
@@ -434,7 +434,7 @@ export default {
                     .endOf("week")
                     .format("YYYY-MM-DD")
             ],
-            employee: "",
+            user: "",
             code: "",
             reference_no: "",
             voucher_no: "",
@@ -476,7 +476,7 @@ export default {
                 code: "",
                 date: "",
                 description: "",
-                employee: { id: 0, name: "" },
+                user: { id: 0, name: "" },
                 expense_reports: [],
                 notes: "",
                 reference_no: "",
@@ -519,11 +519,11 @@ export default {
                     _this.remarks = data.remarks;
                     _this.notes = data.notes;
                     _this.items = data.expense_reports;
-                    _this.employee = `${data.employee.last_name}, ${data.employee.first_name} ${data.employee.middle_name}`;
+                    _this.user = `${data.last_name}, ${data.first_name} ${data.middle_name}`;
 
                     // _this.selected.splice(0, 0, ...data.expenses);
 
-                    // _this.loadExpenses(data.employee.id);
+                    // _this.loadExpenses(data.id);
 
                     _this.form.amount = data.amount;
                     _this.form.cheque_date = data.cheque_date;
@@ -531,7 +531,7 @@ export default {
                     _this.form.code = data.code;
                     _this.form.date = data.date;
                     _this.form.description = data.description;
-                    _this.form.employee = data.employee;
+                    _this.form.user = data.user;
                     // _this.form.expense_reports = data.expense_reports;
                     _this.form.notes = data.notes;
                     _this.form.reference_no = data.reference_no;
@@ -577,7 +577,7 @@ export default {
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let employee_id = _this.form.employee.id;
+                let user_id = _this.form.user.id;
                 let range = _this.date_range;
                 let payment_id = this.$route.params.id;
 
@@ -588,7 +588,7 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            employee_id: employee_id,
+                            user_id: user_id,
                             payment_id: payment_id,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
@@ -660,7 +660,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.employee,
+                query: this.user,
                 query: this.date_range
             };
         },

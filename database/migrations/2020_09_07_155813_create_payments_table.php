@@ -48,7 +48,7 @@ class CreatePaymentsTable extends Migration
             $table->unsignedBigInteger('released_by')->nullable();
             $table->unsignedBigInteger('received_by')->nullable();
 
-            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -58,7 +58,7 @@ class CreatePaymentsTable extends Migration
             // $table->foreign('deleted_by_user_id')->references('id')->on('users');
             // $table->foreign('released_by_user_id')->references('id')->on('users');
             // $table->foreign('received_by_user_id')->references('id')->on('users');
-            $table->foreign('employee_id')->references('id')->on('employees');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

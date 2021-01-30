@@ -8,7 +8,7 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title success--text">Employee Settings</h4>
+                <h4 class="title success--text">User Settings</h4>
             </v-card-title>
 
             <v-card class="mb-4">
@@ -16,10 +16,10 @@
                     <v-row>
                         <v-col cols="12" md="6">
                             <v-autocomplete
-                                v-model="employee"
-                                label="Employee"
+                                v-model="user"
+                                label="User"
                                 return-object
-                                :items="employees"
+                                :items="users"
                                 item-text="full_name"
                                 item-value="id"
                             ></v-autocomplete>
@@ -96,8 +96,8 @@ export default {
         return {
             panel: [0],
             valid: false,
-            employees: [],
-            employee: { id: null, expense_types: null, sub_types: null },
+            users: [],
+            user: { id: null, expense_types: null, sub_types: null },
 
             headerExpenseTypes: [
                 { text: "Name", value: "name" },
@@ -117,14 +117,14 @@ export default {
         };
     },
     methods: {
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
             axios
-                .get("/api/data/employees?update_settings=true")
+                .get("/api/data/users?update_settings=true")
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.employees = data;
+                    _this.users = data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -156,8 +156,8 @@ export default {
         onSave() {
             let _this = this;
 
-            if(_this.employee.id == null) {
-                _this.mixin_errorDialog("Error", "No employee selected");
+            if(_this.user.id == null) {
+                _this.mixin_errorDialog("Error", "No user selected");
                 return;
             }
 
@@ -167,7 +167,7 @@ export default {
                 _this.loader = true;
 
                 axios
-                    .put("/api/employees/" + _this.employee.id, {
+                    .put("/api/users/" + _this.user.id, {
                         action: "settings",
                         expense_types: _this.allowed_expense_types.map(
                             item => item.id
@@ -175,7 +175,7 @@ export default {
                     })
                     .then(function(response) {
                         _this.$dialog.message.success(
-                            "Employee settings updated successfully.",
+                            "User settings updated successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
@@ -184,7 +184,7 @@ export default {
 
                         _this.$store.dispatch("AUTH_USER");
 
-                        // _this.$router.push({ name: "admin.employees.index" });
+                        // _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -207,7 +207,7 @@ export default {
         }
     },
     watch: {
-        employee(item) {
+        user(item) {
             // this.expense_types = item.expense_types;
             this.allowed_expense_types = item.expense_types;
 
@@ -246,7 +246,7 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadExpenseTypes();
-        this.loadEmployees();
+        this.loadUsers();
     }
 };
 </script>

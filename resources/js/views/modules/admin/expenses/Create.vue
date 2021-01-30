@@ -84,15 +84,15 @@
                                 </v-date-picker>
                             </v-menu>
                             <v-autocomplete
-                                v-model="form.employee"
+                                v-model="form.user"
                                 :rules="mixin_validation.required"
-                                :items="employees"
-                                :error-messages="errors.employee_id"
-                                @input="errors.employee_id = []"
+                                :items="users"
+                                :error-messages="errors.user_id"
+                                @input="errors.user_id = []"
                                 @change="loadExpenseTypes"
                                 item-value="id"
                                 item-text="full_name"
-                                label="Employee"
+                                label="User"
                                 return-object
                                 required
                             >
@@ -199,7 +199,7 @@
 
                                     <v-btn color="green" dark small outlined>{{
                                         mixin_formatNumber(
-                                            form.employee.remaining_fund
+                                            form.user.remaining_fund
                                         )
                                     }}</v-btn>
                                     ~ Expense Limit:
@@ -586,7 +586,7 @@ export default {
             items: [],
             expense_types: [],
             sub_types: [],
-            employees: [],
+            users: [],
             vendors: [],
             form: {
                 code: null,
@@ -606,7 +606,7 @@ export default {
                     sub_types: { id: null, name: "None", limit: null }
                 },
                 sub_type: { id: null, name: "", limit: null },
-                employee: {
+                user: {
                     id: null,
                     remaining_fund: 0,
                     fund: 0,
@@ -651,27 +651,25 @@ export default {
                 remarks: [],
                 is_active: [],
                 expense_type_id: [],
-                employee_id: [],
+                user_id: [],
                 vendor_id: []
             }
         };
     },
     methods: {
         loadExpenseTypes() {
-            this.expense_types = this.form.employee.expense_types;
+            this.expense_types = this.form.user.expense_types;
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
-                .get("/api/data/employees")
+                .get("/api/data/users")
                 .then(response => {
                     
                     let data = response.data.data;
 
-                    console.log(data);
-
-                    _this.employees = response.data.data;
+                    _this.users = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -751,8 +749,8 @@ export default {
                 }
             }
 
-            if (_this.form.employee.id == null) {
-                _this.$dialog.message.error("No Employee Selected", {
+            if (_this.form.user.id == null) {
+                _this.$dialog.message.error("No User Selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -768,7 +766,7 @@ export default {
             }
 
             if (
-                _this.amount_to_replenish > _this.form.employee.remaining_fund
+                _this.amount_to_replenish > _this.form.user.remaining_fund
             ) {
                 _this.$dialog.message.error(
                     "Amount to replenish is greater than remaining fund",
@@ -811,7 +809,7 @@ export default {
                         is_active: _this.form.is_active,
                         expense_type_id: _this.form.expense_type.id,
                         sub_type_id: _this.form.sub_type.id,
-                        employee_id: _this.form.employee.id,
+                        user_id: _this.form.user.id,
                         vendor_id: _this.form.vendor.id,
                         details: _this.itemize ? _this.items : null,
                         tax_name: "",
@@ -956,7 +954,7 @@ export default {
         amount_to_replenish() {
             // return 0;
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.employee.remaining_fund
+                this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
             let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
@@ -974,7 +972,7 @@ export default {
         },
         amount_to_reimburse() {
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.employee.remaining_fund
+                this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
             let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
@@ -1004,7 +1002,7 @@ export default {
         display_reimbursable_amount() {
             return (
                 parseFloat(this.form.amount) >
-                parseFloat(this.form.employee.remaining_fund)
+                parseFloat(this.form.user.remaining_fund)
             );
         },
         taxable_amount: {
@@ -1075,10 +1073,10 @@ export default {
                 0
             );
 
-            if (this.form.employee.id == null) {
+            if (this.form.user.id == null) {
                 this.itemize = false;
 
-                this.$dialog.message.error("No Employee Selected", {
+                this.$dialog.message.error("No User Selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -1105,7 +1103,7 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
-        this.loadEmployees();
+        this.loadUsers();
         this.loadVendors();
         //
     }

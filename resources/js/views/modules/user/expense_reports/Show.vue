@@ -32,7 +32,7 @@
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>
-                                {{ form.employee.full_name }}
+                                {{ form.user.full_name }}
                                 <v-btn
                                     v-if="canEdit"
                                     text
@@ -447,7 +447,7 @@ export default {
                 payment_id: null,
                 balance: 0,
 
-                employee: { id: null, name: "" },
+                user: { id: null, name: "" },
                 payment: { id: null },
                 expenses: [],
 
@@ -521,7 +521,7 @@ export default {
                 // 1st row
                 doc.setFontSize(11)
                     .setTextColor(0, 0, 0)
-                    .text(`${this.form.employee.full_name}`, 0.5, 0.7);
+                    .text(`${this.form.user.full_name}`, 0.5, 0.7);
 
                 doc.setFontSize(11)
                     .setTextColor(0, 0, 0)
@@ -930,7 +930,7 @@ export default {
                         {
                             columns: [
                                 {
-                                    text: this.form.employee.full_name,
+                                    text: this.form.user.full_name,
                                     style: "pageStyle"
                                 },
                                 {
@@ -1199,7 +1199,7 @@ export default {
                     _this.form.payment_id = data.payment_id;
                     _this.form.balance = data.balance;
 
-                    _this.form.employee = data.employee;
+                    _this.form.user = data.user;
                     _this.form.payment = data.payment;
                     // _this.form.expenses = data.expenses;
 

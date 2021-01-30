@@ -459,7 +459,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            employee: this.$store.getters.user.employee.id,
+            user: this.$store.getters.user.id,
             expense_type: 0,
             expense_types: [],
             status: "All Expenses",
@@ -501,7 +501,7 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let employee_id = _this.employee;
+                let user_id = _this.user;
                 let expense_type_id = _this.expense_type;
                 let range = _this.date_range;
 
@@ -514,7 +514,7 @@ export default {
                             page: page,
                             itemsPerPage: itemsPerPage,
                             status: status,
-                            employee_id: employee_id,
+                            user_id: user_id,
                             expense_type_id: expense_type_id,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
@@ -541,16 +541,16 @@ export default {
                     });
             });
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
-                .get("/api/data/employees?only=true")
+                .get("/api/data/users?only=true")
                 .then(response => {
-                    _this.employees = response.data.data;
-                    _this.employees.unshift({
+                    _this.users = response.data.data;
+                    _this.users.unshift({
                         id: 0,
-                        full_name: "All Employees"
+                        full_name: "All Users"
                     });
                 })
                 .catch(error => {
@@ -588,7 +588,7 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.status = "All Expenses";
-            this.loadEmployees();
+            this.loadUsers();
             this.loadExpenseTypes();
             this.selected = [];
         },
@@ -817,7 +817,7 @@ export default {
                 ...this.options,
                 query: this.search,
                 query: this.status,
-                query: this.employee,
+                query: this.user,
                 query: this.expense_type,
                 query: this.date_range
             };
@@ -864,6 +864,7 @@ export default {
         this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         // this.loadEmployees();
+        // this.loadUsers();
         this.loadExpenseTypes();
     }
 };

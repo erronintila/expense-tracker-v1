@@ -592,8 +592,8 @@ __webpack_require__.r(__webpack_exports__);
         text: "Expenses by type",
         value: "expense_type"
       }, {
-        text: "Expenses per employee",
-        value: "employee"
+        text: "Expenses per user",
+        value: "user"
       }, {
         text: "Expenses per department",
         value: "department"
@@ -640,23 +640,23 @@ __webpack_require__.r(__webpack_exports__);
         value: "iron"
       }],
       items: [],
-      employee: {
+      user: {
         id: 0,
-        full_name: "All Employees"
+        full_name: "All Users"
       },
-      employees: []
+      users: []
     };
   },
   methods: {
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
+      axios.get("/api/data/users").then(function (response) {
+        _this.users = response.data.data;
 
-        _this.employees.unshift({
+        _this.users.unshift({
           id: 0,
-          full_name: "All Employees"
+          full_name: "All Users"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -665,7 +665,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    load_department_expenses: function load_department_expenses(start, end, employee) {
+    load_department_expenses: function load_department_expenses(start, end, user) {
       var _this2 = this;
 
       var _this = this;
@@ -674,7 +674,7 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           start_date: start,
           end_date: end,
-          employee_id: employee,
+          user_id: user,
           admin_page: true
         }
       }).then(function (response) {
@@ -705,7 +705,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    load_expense_types_expenses: function load_expense_types_expenses(start, end, employee) {
+    load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
       var _this3 = this;
 
       var _this = this;
@@ -714,7 +714,7 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           start_date: start,
           end_date: end,
-          employee_id: employee,
+          user_id: user,
           admin_page: true
         }
       }).then(function (response) {
@@ -745,19 +745,20 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    load_employees_expenses: function load_employees_expenses(start, end, employee) {
+    load_users_expenses: function load_users_expenses(start, end, user) {
       var _this4 = this;
 
       var _this = this;
 
-      axios.get("/api/data/employees_expenses_summary", {
+      axios.get("/api/data/users_expenses_summary", {
         params: {
           start_date: start,
           end_date: end,
-          employee_id: employee,
+          user_id: user,
           admin_page: true
         }
       }).then(function (response) {
+        console.log("response", response);
         _this.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;
@@ -785,7 +786,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    load_expenses_summary: function load_expenses_summary(start, end, time_unit, employee) {
+    load_expenses_summary: function load_expenses_summary(start, end, time_unit, user) {
       var _this5 = this;
 
       var _this = this;
@@ -795,7 +796,7 @@ __webpack_require__.r(__webpack_exports__);
           start_date: start,
           end_date: end,
           time_unit: time_unit,
-          employee_id: employee,
+          user_id: user,
           admin_page: true
         }
       }).then(function (response) {
@@ -1029,50 +1030,50 @@ __webpack_require__.r(__webpack_exports__);
 
       switch (this.filter) {
         case "expense_type":
-          this.load_expense_types_expenses(start, end, this.employee.id);
+          this.load_expense_types_expenses(start, end, this.user.id);
           break;
 
         case "department":
-          this.load_department_expenses(start, end, this.employee.id);
+          this.load_department_expenses(start, end, this.user.id);
           break;
 
-        case "employee":
-          this.load_employees_expenses(start, end, this.employee.id);
+        case "user":
+          this.load_users_expenses(start, end, this.user.id);
           break;
 
         default:
-          this.load_expense_types_expenses(start, end, this.employee.id);
+          this.load_expense_types_expenses(start, end, this.user.id);
           break;
       }
     },
     onTimeUnitChange: function onTimeUnitChange() {
-      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.employee.id);
+      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.user.id);
     },
     updateDates: function updateDates(e) {
       this.date_range = e;
       this.expenses_by_category = []; // this.onCategoryChange();
 
       this.onTimeUnitChange();
-      this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
     },
-    updateEmployee: function updateEmployee() {
+    updateUser: function updateUser() {
       // this.onCategoryChange();
       this.onTimeUnitChange();
-      this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
     },
     getExpenseStats: function getExpenseStats(start, end, emp) {
       var _this7 = this;
 
       var _this = this;
 
-      axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&employee_id=").concat(emp)).then(function (response) {
+      axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&user_id=").concat(emp)).then(function (response) {
         _this.total = response.data.total;
         _this.count = response.data.count;
         _this.loader = false;
 
-        _this7.load_expense_types_expenses(_this7.date_range[0], _this7.date_range[1], _this7.employee.id);
+        _this7.load_expense_types_expenses(_this7.date_range[0], _this7.date_range[1], _this7.user.id);
 
-        _this7.load_expenses_summary(_this7.date_range[0], _this7.date_range[1], _this7.groupBy, _this7.employee.id);
+        _this7.load_expenses_summary(_this7.date_range[0], _this7.date_range[1], _this7.groupBy, _this7.user.id);
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -1081,9 +1082,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.loader = true;
       });
-    } // loadStatistics(start, end, employee_id) {
+    } // loadStatistics(start, end, user_id) {
     //     let _this = this;
-    //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&employee_id=${employee_id}`)
+    //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
     //     .then(response => {
     //         console.log(response);
     //     }).catch(error => {
@@ -1094,11 +1095,11 @@ __webpack_require__.r(__webpack_exports__);
 
   },
   mounted: function mounted() {
-    this.loadEmployees();
+    this.loadUsers();
     this.load_pie_chart();
     this.load_bar_chart();
     this.load_line_chart();
-    this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id); // this.loadStatistics();
+    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id); // this.loadStatistics();
   },
   created: function created() {
     this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.$store.dispatch("AUTH_USER");
@@ -1249,19 +1250,19 @@ var render = function() {
                                 [
                                   _c("v-select", {
                                     attrs: {
-                                      label: "Employee",
-                                      items: _vm.employees,
+                                      label: "User",
+                                      items: _vm.users,
                                       "item-text": "full_name",
                                       "item-value": "id",
                                       "return-object": ""
                                     },
-                                    on: { change: _vm.updateEmployee },
+                                    on: { change: _vm.updateUser },
                                     model: {
-                                      value: _vm.employee,
+                                      value: _vm.user,
                                       callback: function($$v) {
-                                        _vm.employee = $$v
+                                        _vm.user = $$v
                                       },
-                                      expression: "employee"
+                                      expression: "user"
                                     }
                                   })
                                 ],
@@ -1389,7 +1390,7 @@ var render = function() {
                                             attrs: {
                                               text: "",
                                               to: {
-                                                name: "admin.employees.index"
+                                                name: "admin.users.index"
                                               }
                                             }
                                           },
@@ -1653,7 +1654,7 @@ var render = function() {
                                                       _vm._v(" "),
                                                       _c("div", [
                                                         _vm._v(
-                                                          "\n                                                Payment to Receive:\n                                                Reimbursed expenses waiting\n                                                to be received by the\n                                                employee\n                                            "
+                                                          "\n                                                Payment to Receive:\n                                                Reimbursed expenses waiting\n                                                to be received by the\n                                                user\n                                            "
                                                         )
                                                       ])
                                                     ])

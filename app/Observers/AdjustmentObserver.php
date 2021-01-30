@@ -20,24 +20,24 @@ class AdjustmentObserver
 
             $subtracted_amount = $adjustment->subtract_amount;
 
-            $fund = $adjustment->employee->fund;
+            $fund = $adjustment->user->fund;
 
-            $remaining_fund = $adjustment->employee->remaining_fund;
+            $remaining_fund = $adjustment->user->remaining_fund;
 
-            $adjustment->employee->fund = ($fund + $added_amount) - $subtracted_amount;
+            $adjustment->user->fund = ($fund + $added_amount) - $subtracted_amount;
 
-            $adjustment->employee->remaining_fund = ($remaining_fund + $added_amount) - $subtracted_amount;
+            $adjustment->user->remaining_fund = ($remaining_fund + $added_amount) - $subtracted_amount;
 
             // if ($remaining_fund == 0) {
 
-            //     $adjustment->employee->remaining_fund = $adjustment->employee->fund;
+            //     $adjustment->user->remaining_fund = $adjustment->user->fund;
             // } else {
 
-            //     $adjustment->employee->remaining_fund = $adjustment->employee->fund > $remaining_fund ?
-            //         $remaining_fund : $adjustment->employee->fund;
+            //     $adjustment->user->remaining_fund = $adjustment->user->fund > $remaining_fund ?
+            //         $remaining_fund : $adjustment->user->fund;
             // }
 
-            $adjustment->employee->save();
+            $adjustment->user->save();
         }
     }
 

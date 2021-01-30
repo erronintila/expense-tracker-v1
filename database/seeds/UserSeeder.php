@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             // "permissions",
             "departments",
             "jobs",
-            "employees",
+            // "employees",
             "vendors",
             "expense types",
             "payments",
@@ -74,12 +74,14 @@ class UserSeeder extends Seeder
                 continue;
             }
 
-            if ($model == "users") {
-                // Permission::create(['name' => 'verify users', 'category' => $model]);
-                // Permission::create(['name' => 'restore users', 'category' => $model]);
-                Permission::create(['name' => 'reset user passwords', 'category' => $model]);
-                continue;
-            }
+            // if ($model == "users") {
+            //     // Permission::create(['name' => 'verify users', 'category' => $model]);
+            //     // Permission::create(['name' => 'restore users', 'category' => $model]);
+            //     Permission::create(['name' => 'reset user passwords', 'category' => $model]);
+            //     Permission::create(['name' => 'edit user fund', 'category' => $model]);
+            //     Permission::create(['name' => 'restore users', 'category' => $model]);
+            //     // continue;
+            // }
 
             Permission::create(['name' => 'add ' . $model, 'category' => $model]);
             Permission::create(['name' => 'edit ' . $model, 'category' => $model]);
@@ -88,10 +90,18 @@ class UserSeeder extends Seeder
             Permission::create(['name' => 'view all ' . $model, 'category' => $model]);
             Permission::create(['name' => 'export ' . $model, 'category' => $model]);
 
-            if ($model == "employees") {
-                Permission::create(['name' => 'edit employees fund', 'category' => $model]);
-                Permission::create(['name' => 'restore employees', 'category' => $model]);
+            if ($model == "users") {
+                // Permission::create(['name' => 'verify users', 'category' => $model]);
+                // Permission::create(['name' => 'restore users', 'category' => $model]);
+                Permission::create(['name' => 'reset user passwords', 'category' => $model]);
+                Permission::create(['name' => 'edit users fund', 'category' => $model]);
+                Permission::create(['name' => 'restore users', 'category' => $model]);
             }
+
+            // if ($model == "employees") {
+            //     Permission::create(['name' => 'edit employees fund', 'category' => $model]);
+            //     Permission::create(['name' => 'restore employees', 'category' => $model]);
+            // }
 
             if ($model == "expenses") {
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
@@ -141,13 +151,14 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("view payments");
         $roleUser->givePermissionTo("view all payments");
         $roleUser->givePermissionTo("receive payments");
-        // $roleUser->givePermissionTo("duplicate expense reports");
+        $roleUser->givePermissionTo("duplicate expense reports");
         $roleUser->givePermissionTo("add vendors");
         $roleUser->givePermissionTo("set reimbursable amount");
         $roleUser->givePermissionTo("add expenses beyond encoding period");
         $roleUser->givePermissionTo("submit expense reports beyond due date");
         $roleUser->givePermissionTo("add expenses beyond limit");
         // $roleUser->givePermissionTo("edit employees");
+        // $roleUser->givePermissionTo("edit users");
 
         $roleSuperAdmin = Role::create(['name' => 'administrator']);
 
@@ -165,14 +176,29 @@ class UserSeeder extends Seeder
 
         $user = User::create([
             'code' => generate_code(User::class, "USR", 10),
-            'name' => 'Super Admin',
+            // 'name' => 'Super Admin',
+
+            'first_name' => '',
+            'middle_name' => '',
+            'last_name' => 'Super Admin',
+            'suffix' => '',
+            'gender' => 'Male',
+            'birthdate' => date('Y-m-d'),
+            'mobile_number' => null,
+            'telephone_number' => null,
+            'email' => 'superadmin@superadmin.com',
+            'address' => '',
+            'job_id' => null,
+
             'username' => 'superadmin',
             'email' => 'superadmin@superadmin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'is_admin' => true,
+            'is_superadmin' => true,
             'can_login' => true,
+            'type' => 'administrator',
         ]);
 
         $user->assignRole($roleSuperAdmin);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmployeeExpenseTypeTable extends Migration
+class CreateExpenseTypeUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateEmployeeExpenseTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('employee_expense_type', function (Blueprint $table) {
+        Schema::create('expense_type_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('expense_type_id');
             $table->double('limit', 10, 2)->nullable();
             $table->timestamps();
@@ -25,9 +25,9 @@ class CreateEmployeeExpenseTypeTable extends Migration
             //     ->on('expense_types')
             //     ->onDelete('cascade');
 
-            // $table->foreign('employee_id')
+            // $table->foreign('user_id')
             //     ->references('id')
-            //     ->on('employees')
+            //     ->on('users')
             //     ->onDelete('cascade');
         });
     }
@@ -39,6 +39,6 @@ class CreateEmployeeExpenseTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_expense_type');
+        Schema::dropIfExists('expense_type_user');
     }
 }
