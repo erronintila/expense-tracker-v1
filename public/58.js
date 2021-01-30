@@ -260,7 +260,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: "",
         remarks: "",
         notes: "",
-        employee: {
+        user: {
           id: 0,
           remaining_fund: 0,
           fund: 0
@@ -272,7 +272,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: [],
         remarks: [],
         notes: [],
-        employee: [],
+        user: [],
         expenses: []
       }
     };
@@ -282,7 +282,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       this.date_range = e;
-      this.loadExpenses(this.form.employee.id).then(function () {
+      this.loadExpenses(this.form.user.id).then(function () {
         _this2.getDataFromApi().then(function (data) {
           _this2.items = data.items;
           _this2.totalItems = data.total;
@@ -299,7 +299,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.form.description = data.description;
           _this.form.remarks = data.remarks;
           _this.form.notes = data.notes;
-          _this.form.employee = data.employee;
+          _this.form.user = data.user;
           _this.form.status = data.status; // _this.expenses = data.expenses;
           // _this.submitted_at = data.submitted_at;
           // _this.reviewed_at = data.reviewed_at;
@@ -310,7 +310,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // _this.deleted_at = data.deleted_at;
 
           _this.total = data.total; // _this.date_range = [_this.from, _this.to];
-          // _this.loadExpenses(data.employee.id);
+          // _this.loadExpenses(data.user.id);
           // _this.getDataFromApi().then((data) => {
           //   _this.items = data.items;
           //   _this.totalItems = data.total;
@@ -347,14 +347,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this3$options.page,
             itemsPerPage = _this3$options.itemsPerPage;
         var range = _this.date_range;
-        var employee_id = _this.form.employee.id;
+        var user_id = _this.form.user.id;
         axios.get("/api/expenses", {
           params: {
             page: page,
             itemsPerPage: itemsPerPage,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
-            employee_id: employee_id,
+            user_id: user_id,
             expense_report_id: _this.$route.params.id,
             update_report: true
           }
@@ -387,7 +387,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         axios.get("/api/data/expenses", {
           params: {
             update_report: true,
-            employee_id: emp_id,
+            user_id: emp_id,
             start_date: start_date,
             end_date: end_date,
             expense_report_id: _this.$route.params.id
@@ -429,7 +429,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           description: _this.form.description,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          employee_id: _this.form.employee.id,
+          user_id: _this.form.user.id,
           expenses: _this.selected
         }).then(function (response) {
           _this.$dialog.message.success("Expense Report updated successfully.", {
@@ -476,7 +476,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.date_range
-      }, _defineProperty(_objectSpread2, "query", this.expense_report_id), _defineProperty(_objectSpread2, "query", this.form.employee.id), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.expense_report_id), _defineProperty(_objectSpread2, "query", this.form.user.id), _objectSpread2));
     },
     default_description: function default_description() {
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
@@ -489,7 +489,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this = this;
 
     this.getData().then(function () {
-      _this5.loadExpenses(_this5.form.employee.id).then(function () {
+      _this5.loadExpenses(_this5.form.user.id).then(function () {
         _this5.getDataFromApi().then(function (data) {
           _this.items = data.items;
           _this.totalItems = data.total;

@@ -73,22 +73,22 @@ class DashboardController extends Controller
      */
     public function users_expenses_summary(Request $request)
     {
-        $users = User::with(['expenses' => function ($q) use ($request) {
-            $q->whereHas("expense_report", function ($q) {
-                $q->where("approved_at", "<>", null);
-                $q->where("rejected_at", null);
-                $q->where("deleted_at", null);
-                $q->where("cancelled_at", null);
-            });
+        $users = User::where("is_superadmin", 0)
+            ->with(['expenses' => function ($q) use ($request) {
+                $q->whereHas("expense_report", function ($q) {
+                    $q->where("approved_at", "<>", null);
+                    $q->where("rejected_at", null);
+                    $q->where("deleted_at", null);
+                    $q->where("cancelled_at", null);
+                });
 
-            
-        }]);
-        
-        if (request()->has("user_id")) {
-            if ($request->user_id > 0) {
-                $users->where('user_id', $request->user_id)->get();
-            }
-        }
+                if (request()->has("user_id")) {
+                    if ($request->user_id > 0) {
+                        $q->where('user_id', $request->user_id)->get();
+                    }
+                }
+            }])
+            ->get();
 
         $users_expenses_summary = [];
 

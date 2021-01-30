@@ -750,8 +750,6 @@ __webpack_require__.r(__webpack_exports__);
 
       var _this = this;
 
-      console.log(user); // return;
-
       axios.get("/api/data/users_expenses_summary", {
         params: {
           start_date: start,
@@ -760,7 +758,7 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: true
         }
       }).then(function (response) {
-        console.log(response);
+        console.log("response", response);
         _this.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;

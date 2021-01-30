@@ -285,7 +285,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: "",
         remarks: "",
         notes: "",
-        employee: this.$store.getters.user.employee
+        user: this.$store.getters.user.user
       },
       errors: {
         date_range: [],
@@ -293,7 +293,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: [],
         remarks: [],
         notes: [],
-        employee: [],
+        user: [],
         expenses: []
       }
     };
@@ -312,7 +312,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get("/api/data/expenses", {
         params: {
           create_report: true,
-          employee_id: _this.form.employee.id,
+          user_id: _this.form.user.id,
           start_date: start_date,
           end_date: end_date
         }
@@ -338,14 +338,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this2$options.page,
             itemsPerPage = _this2$options.itemsPerPage;
         var range = _this.date_range;
-        var employee_id = _this.form.employee.id;
+        var user_id = _this.form.user.id;
         axios.get("/api/expenses", {
           params: {
             page: page,
             itemsPerPage: itemsPerPage,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
-            employee_id: employee_id,
+            user_id: user_id,
             expense_report_id: null,
             update_report: true
           }
@@ -395,7 +395,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           description: _this.form.description,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          employee_id: _this.form.employee.id,
+          user_id: _this.form.user.id,
           expenses: _this.selected
         }).then(function (response) {
           _this.$dialog.message.success("Expense Report created successfully.", {
@@ -439,7 +439,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     params: function params(nv) {
       return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
         query: this.date_range
-      }, "query", this.form.employee.id));
+      }, "query", this.form.user.id));
     },
     default_description: function default_description() {
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");

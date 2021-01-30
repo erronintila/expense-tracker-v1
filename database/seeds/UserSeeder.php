@@ -192,7 +192,7 @@ class UserSeeder extends Seeder
             'is_admin' => true,
             'is_superadmin' => true,
             'can_login' => true,
-            'type' => 'Administrator',
+            'type' => 'administrator',
         ]);
 
         $user->assignRole($roleSuperAdmin);

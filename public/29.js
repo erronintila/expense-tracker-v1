@@ -343,7 +343,7 @@ __webpack_require__.r(__webpack_exports__);
         is_admin: false,
         is_superadmin: false,
         can_login: true,
-        type: "",
+        type: "employee",
         job: null,
         permissions: [],
         role: "Standard User"

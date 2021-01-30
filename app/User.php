@@ -122,7 +122,7 @@ class User extends Authenticatable
     ============================================================================================================================================ */
 
     /**
-     * Displays the job designation associated with employee.
+     * Displays the job designation associated with user.
      *
      * @return mixed
      */
@@ -132,7 +132,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Displays the expenses associated with employee.
+     * Displays the expenses associated with user.
      *
      * @return mixed
      */
@@ -142,7 +142,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Displays the adjustments associated with employee.
+     * Displays the adjustments associated with user.
      *
      * @return mixed
      */
@@ -152,7 +152,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Displays the Expense Reports associated with employee.
+     * Displays the Expense Reports associated with user.
      *
      * @return mixed
      */
@@ -162,7 +162,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Displays the Expense types associated with employee.
+     * Displays the Expense types associated with user.
      *
      * @return mixed
      */
@@ -172,7 +172,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Displays the Expense Type Sub-types associated with employee.
+     * Displays the Expense Type Sub-types associated with user.
      *
      * @return mixed
      */
@@ -186,7 +186,7 @@ class User extends Authenticatable
     ============================================================================================================================================ */
 
     /**
-     * Displays the full name of employee.
+     * Displays the full name of user.
      *
      * @return mixed
      */
@@ -196,7 +196,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Displays the full name of employee.
+     * Displays the full name of user.
      *
      * @return mixed
      */
