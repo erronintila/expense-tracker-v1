@@ -150,7 +150,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       valid: false,
       adjustment_type: "Add Amount",
-      employee: {
+      user: {
         id: null,
         fullname: "",
         fund: 0,
@@ -163,7 +163,7 @@ __webpack_require__.r(__webpack_exports__);
       type: "Manage Revolving Fund",
       remarks: "",
       errors: {
-        employee: [],
+        user: [],
         reference: [],
         code: [],
         description: [],
@@ -173,11 +173,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    loadEmployees: function loadEmployees() {
+    loadusers: function loadusers() {
       var _this = this;
 
-      axios.get("/api/employees/" + this.$route.params.id).then(function (response) {
-        _this.employee = response.data.data;
+      axios.get("/api/users/" + this.$route.params.id).then(function (response) {
+        _this.user = response.data.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -196,7 +196,7 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.$refs.form.validate()) {
         this.$confirm("Do you want to update revolving fund?").then(function (res) {
           if (res) {
-            axios.put("/api/employees/".concat(_this.$route.params.id), {
+            axios.put("/api/users/".concat(_this.$route.params.id), {
               action: "update fund",
               fund: _this.new_fund,
               remaining_fund: _this.new_remaining_fund
@@ -208,7 +208,7 @@ __webpack_require__.r(__webpack_exports__);
 
               _this.$store.dispatch("AUTH_USER");
 
-              _this.$router.push("/admin/employees");
+              _this.$router.push("/admin/users");
             })["catch"](function (error) {
               console.log(error);
               console.log(error.response);
@@ -221,8 +221,8 @@ __webpack_require__.r(__webpack_exports__);
         // let subtract_amount =
         //     this.adjustment_type == "Subtract Amount" ? this.amount : 0;
         // axios
-        //     .put("/api/employees", {
-        //         employee: _this.employee.id,
+        //     .put("/api/users", {
+        //         user: _this.user.id,
         //         reference: _this.reference,
         //         code: _this.code,
         //         description: _this.description,
@@ -254,22 +254,22 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     new_fund: function new_fund() {
       if (this.adjustment_type == "Add Amount") {
-        return this.mixin_convertToNumber(this.employee.fund) + this.mixin_convertToNumber(this.amount);
+        return this.mixin_convertToNumber(this.user.fund) + this.mixin_convertToNumber(this.amount);
       }
 
-      return this.mixin_convertToNumber(this.employee.fund) - this.mixin_convertToNumber(this.amount);
+      return this.mixin_convertToNumber(this.user.fund) - this.mixin_convertToNumber(this.amount);
     },
     new_remaining_fund: function new_remaining_fund() {
       if (this.adjustment_type == "Add Amount") {
-        return this.mixin_convertToNumber(this.employee.remaining_fund) + this.mixin_convertToNumber(this.amount);
+        return this.mixin_convertToNumber(this.user.remaining_fund) + this.mixin_convertToNumber(this.amount);
       }
 
-      return this.mixin_convertToNumber(this.employee.remaining_fund) - this.mixin_convertToNumber(this.amount);
+      return this.mixin_convertToNumber(this.user.remaining_fund) - this.mixin_convertToNumber(this.amount);
     }
   },
   created: function created() {
     this.$store.dispatch("AUTH_USER");
-    this.loadEmployees();
+    this.loadusers();
   }
 });
 
@@ -418,9 +418,7 @@ var render = function() {
                                   _vm._v(
                                     "\n                                        " +
                                       _vm._s(
-                                        _vm.mixin_formatNumber(
-                                          _vm.employee.fund
-                                        )
+                                        _vm.mixin_formatNumber(_vm.user.fund)
                                       ) +
                                       "\n                                    "
                                   )
@@ -448,7 +446,7 @@ var render = function() {
                                     "\n                                        " +
                                       _vm._s(
                                         _vm.mixin_formatNumber(
-                                          _vm.employee.remaining_fund
+                                          _vm.user.remaining_fund
                                         )
                                       ) +
                                       "\n                                    "
@@ -558,7 +556,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-btn",
-                        { attrs: { to: { name: "admin.employees.index" } } },
+                        { attrs: { to: { name: "admin.users.index" } } },
                         [
                           _vm._v(
                             "\n                        Cancel\n                    "

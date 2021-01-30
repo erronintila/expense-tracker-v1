@@ -94,7 +94,7 @@ class UserSeeder extends Seeder
                 // Permission::create(['name' => 'verify users', 'category' => $model]);
                 // Permission::create(['name' => 'restore users', 'category' => $model]);
                 Permission::create(['name' => 'reset user passwords', 'category' => $model]);
-                Permission::create(['name' => 'edit user fund', 'category' => $model]);
+                Permission::create(['name' => 'edit users fund', 'category' => $model]);
                 Permission::create(['name' => 'restore users', 'category' => $model]);
             }
 

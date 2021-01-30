@@ -633,7 +633,7 @@ class ExpenseReportController extends Controller
 
                         $new_expense = $expense->replicate();
 
-                        $new_expense->code = generate_code(ExpenseReport::class, "EXP", 10);
+                        $new_expense->code = generate_code(Expense::class, "EXP", 10);
 
                         $new_expense->deleted_at = null;
 
