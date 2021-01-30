@@ -672,7 +672,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     loadExpenseTypes: function loadExpenseTypes() {
-      this.expense_types = this.form.user.expense_types;
+      this.expense_types = this.form.expense_types;
     },
     loadUsers: function loadUsers() {
       var _this2 = this;
@@ -1007,7 +1007,7 @@ __webpack_require__.r(__webpack_exports__);
         return parseFloat(total) + parseFloat(item.total);
       }, 0);
 
-      if (this.form.user.id == null) {
+      if (this.form.id == null) {
         this.itemize = false;
         this.$dialog.message.error("No User Selected", {
           position: "top-right",
@@ -1509,7 +1509,7 @@ var render = function() {
                                           _vm._v(
                                             _vm._s(
                                               _vm.mixin_formatNumber(
-                                                _vm.form.remaining_fund
+                                                _vm.form.user.remaining_fund
                                               )
                                             )
                                           )

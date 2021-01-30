@@ -186,7 +186,7 @@
 
                                     <v-btn color="green" dark small outlined>{{
                                         mixin_formatNumber(
-                                            form.remaining_fund
+                                            form.user.remaining_fund
                                         )
                                     }}</v-btn>
                                     ~ Expense Limit:
@@ -638,7 +638,7 @@ export default {
     },
     methods: {
         loadExpenseTypes() {
-            this.expense_types = this.form.user.expense_types;
+            this.expense_types = this.form.expense_types;
         },
         loadUsers() {
             let _this = this;
@@ -1050,7 +1050,7 @@ export default {
                 0
             );
 
-            if (this.form.user.id == null) {
+            if (this.form.id == null) {
                 this.itemize = false;
 
                 this.$dialog.message.error("No User Selected", {

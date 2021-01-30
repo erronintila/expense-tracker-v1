@@ -303,7 +303,7 @@
                                 <v-list-item-content>
                                     <v-list-item-title
                                         v-text="
-                                            item.data.data.full_name
+                                            item.data.data.user.full_name
                                         "
                                     ></v-list-item-title>
 

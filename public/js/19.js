@@ -969,7 +969,7 @@ var render = function() {
                                 _c("v-list-item-title", {
                                   domProps: {
                                     textContent: _vm._s(
-                                      item.data.data.full_name
+                                      item.data.data.user.full_name
                                     )
                                   }
                                 }),
