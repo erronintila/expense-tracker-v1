@@ -553,6 +553,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -565,6 +582,7 @@ __webpack_require__.r(__webpack_exports__);
       loader: false,
       panel: [0, 1],
       itemize: false,
+      paid_through: "Revolving Fund",
       // paid_through_fund: false,
       reimbursable_amount: false,
       // reimbursable: false,
@@ -760,10 +778,22 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (_this.amount_to_replenish > _this.form.user.remaining_fund) {
-        _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
+        _this.$dialog.message.error("Amount to replenish is greater than remaining fund", {
           position: "top-right",
           timeout: 2000
         });
+
+        return;
+      }
+
+      if (_this.amount_to_replenish + _this.amount_to_reimburse < this.form.amount) {
+        _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
+
+        return;
+      }
+
+      if (_this.amount_to_replenish + _this.amount_to_reimburse <= 0) {
+        _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
 
         return;
       }
@@ -776,7 +806,7 @@ __webpack_require__.r(__webpack_exports__);
           code: _this.form.code,
           description: _this.form.description,
           amount: _this.form.amount,
-          reimbursable_amount: _this.form.reimbursable_amount,
+          reimbursable_amount: _this.amount_to_reimburse,
           receipt_number: _this.form.receipt_number,
           date: _this.form.date,
           remarks: _this.form.remarks,
@@ -907,8 +937,15 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
     },
     amount_to_replenish: function amount_to_replenish() {
+      // return 0;
       var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+      var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return amount - reimbursable > remaining_fund ? 0 : amt_to_replenish;
+      }
 
       if (remaining_fund >= amount) {
         return amount;
@@ -919,6 +956,11 @@ __webpack_require__.r(__webpack_exports__);
     amount_to_reimburse: function amount_to_reimburse() {
       var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return reimbursable > amount ? 0 : reimbursable;
+      }
 
       if (remaining_fund < amount) {
         var to_replenish = Math.abs(remaining_fund - amount);
@@ -930,7 +972,9 @@ __webpack_require__.r(__webpack_exports__);
       return 0;
     },
     expense_amount: function expense_amount() {
-      return this.mixin_convertToNumber(this.form.amount);
+      var amt_to_replenish = this.mixin_convertToNumber(this.amount_to_replenish);
+      var amt_to_reimburse = this.mixin_convertToNumber(this.amount_to_reimburse);
+      return this.mixin_convertToNumber(amt_to_replenish + amt_to_reimburse);
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
       return parseFloat(this.form.amount) > parseFloat(this.form.user.remaining_fund);
@@ -2137,23 +2181,70 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Amount",
-                                  rules: _vm.mixin_validation.required.concat(
-                                    _vm.mixin_validation.minNumberValue(1)
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Expense Amount",
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
+                                          readonly: _vm.itemize,
+                                          type: "number"
+                                        },
+                                        model: {
+                                          value: _vm.form.amount,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "amount", $$v)
+                                          },
+                                          expression: "form.amount"
+                                        }
+                                      })
+                                    ],
+                                    1
                                   ),
-                                  readonly: _vm.itemize,
-                                  type: "number"
-                                },
-                                model: {
-                                  value: _vm.form.amount,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "amount", $$v)
-                                  },
-                                  expression: "form.amount"
-                                }
-                              }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _vm.mixin_can("set reimbursable amount")
+                                        ? _c("v-text-field", {
+                                            attrs: {
+                                              label: "Amount to reimburse",
+                                              type: "number",
+                                              hint:
+                                                "Amount spent from own pocket",
+                                              "persistent-hint": ""
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.form.reimbursable_amount,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "reimbursable_amount",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "form.reimbursable_amount"
+                                            }
+                                          })
+                                        : _vm._e()
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
                               _vm._v(" "),
                               _vm.form.vendor.is_vat_inclusive
                                 ? _c(

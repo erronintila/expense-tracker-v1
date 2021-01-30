@@ -159,10 +159,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/Index.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/users/Index.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -176,6 +176,12 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -513,11 +519,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "full_name"
       }, {
         text: "Job Designation",
-        value: "job.name",
+        value: "job",
         sortable: false
       }, {
         text: "Department",
-        value: "job.department.name",
+        value: "department",
         sortable: false
       }, {
         text: "Revolving Fund",
@@ -578,7 +584,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var department_id = _this.department;
         var job_id = _this.job;
         var status = _this.status;
-        axios.get("/api/employees", {
+        axios.get("/api/users", {
           params: {
             search: search,
             sortBy: sortBy[0],
@@ -587,7 +593,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             status: status,
             department_id: department_id,
-            job_id: job_id
+            job_id: job_id,
+            is_superadmin: false
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -653,13 +660,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     // onShow(item) {
     //     this.$router.push({
-    //         name: "admin.employees.show",
+    //         name: "admin.users.show",
     //         params: { id: item.id }
     //     });
     // },
     // onEdit(item) {
     //     this.$router.push({
-    //         name: "admin.employees.edit",
+    //         name: "admin.users.edit",
     //         params: { id: item.id }
     //     });
     // },
@@ -672,7 +679,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.$router.push("/admin/employees/".concat(this.selected[0].id, "/edit/fund"));
+      this.$router.push("/admin/users/".concat(this.selected[0].id, "/edit/fund"));
     },
     onPasswordReset: function onPasswordReset() {
       var _this = this;
@@ -687,9 +694,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to reset password?").then(function (res) {
         if (res) {
-          axios.put("/api/users/".concat(_this.selected[0].user.id), {
+          axios.put("/api/users/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
-              return item.user.id;
+              return item.id;
             }),
             action: "password_reset"
           }).then(function (response) {
@@ -727,7 +734,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/employees/".concat(_this.selected[0].id), {
+          axios["delete"]("/api/users/".concat(_this.selected[0].id), {
             params: {
               ids: _this.selected.map(function (item) {
                 return item.id;
@@ -769,7 +776,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/employees/".concat(_this.selected[0].id), {
+          axios.put("/api/users/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
             }),
@@ -798,7 +805,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onExport: function onExport() {
       // this.$store.dispatch("AUTH_USER");
-      axios.get("/api/employees/export");
+      axios.get("/api/users/export");
     }
   },
   watch: {
@@ -837,7 +844,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // },
   created: function created() {
     this.$store.dispatch("AUTH_USER");
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });
 
@@ -923,10 +929,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1& ***!
-  \***************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/Index.vue?vue&type=template&id=54658534&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/users/Index.vue?vue&type=template&id=54658534& ***!
+  \***********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -961,7 +967,7 @@ var render = function() {
                   attrs: { bottom: "" },
                   scopedSlots: _vm._u(
                     [
-                      _vm.mixin_can("add employees")
+                      _vm.mixin_can("add users")
                         ? {
                             key: "activator",
                             fn: function(ref) {
@@ -976,9 +982,7 @@ var render = function() {
                                         staticClass: "elevation-3 mr-2",
                                         attrs: {
                                           color: "green",
-                                          to: {
-                                            name: "admin.employees.create"
-                                          },
+                                          to: { name: "admin.users.create" },
                                           dark: "",
                                           fab: "",
                                           "x-small": ""
@@ -1511,6 +1515,39 @@ var render = function() {
                         }
                       },
                       {
+                        key: "item.job",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s("" + (item.job ? item.job.name : "")) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "item.department",
+                        fn: function(ref) {
+                          var item = ref.item
+                          return [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(
+                                  "" +
+                                    (item.job
+                                      ? item.job.department
+                                        ? item.job.department.name
+                                        : ""
+                                      : "")
+                                ) +
+                                "\n                "
+                            )
+                          ]
+                        }
+                      },
+                      {
                         key: "item.actions",
                         fn: function(ref) {
                           var item = ref.item
@@ -1523,7 +1560,7 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     return _vm.$router.push({
-                                      name: "admin.employees.show",
+                                      name: "admin.users.show",
                                       params: { id: item.id }
                                     })
                                   }
@@ -1536,7 +1573,7 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _vm.mixin_can("edit employees")
+                            _vm.mixin_can("edit users")
                               ? _c(
                                   "v-icon",
                                   {
@@ -1545,7 +1582,7 @@ var render = function() {
                                     on: {
                                       click: function($event) {
                                         return _vm.$router.push({
-                                          name: "admin.employees.edit",
+                                          name: "admin.users.edit",
                                           params: { id: item.id }
                                         })
                                       }
@@ -1574,6 +1611,8 @@ var render = function() {
                   }
                 },
                 [
+                  _vm._v(" "),
+                  _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
                   _vm._v(" "),
@@ -1787,17 +1826,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Index.vue":
-/*!**************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Index.vue ***!
-  \**************************************************************/
+/***/ "./resources/js/views/modules/admin/users/Index.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/views/modules/admin/users/Index.vue ***!
+  \**********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=79d46df1& */ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_54658534___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=54658534& */ "./resources/js/views/modules/admin/users/Index.vue?vue&type=template&id=54658534&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/users/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1808,8 +1847,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_template_id_54658534___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_54658534___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1819,38 +1858,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/employees/Index.vue"
+component.options.__file = "resources/js/views/modules/admin/users/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************/
+/***/ "./resources/js/views/modules/admin/users/Index.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/users/Index.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&":
-/*!*********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1& ***!
-  \*********************************************************************************************/
+/***/ "./resources/js/views/modules/admin/users/Index.vue?vue&type=template&id=54658534&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/users/Index.vue?vue&type=template&id=54658534& ***!
+  \*****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=79d46df1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/employees/Index.vue?vue&type=template&id=79d46df1&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_54658534___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=54658534& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/Index.vue?vue&type=template&id=54658534&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_54658534___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_79d46df1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_54658534___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
