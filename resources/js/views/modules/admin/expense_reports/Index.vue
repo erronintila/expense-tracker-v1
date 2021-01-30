@@ -749,10 +749,8 @@ export default {
                 .then(response => {
                     let total = response.data ?? 0;
 
-                    _this.totalUnsubmitted =
-                        total.data.total_unsubmitted ?? 0;
-                    _this.totalUnapproved =
-                        total.data.total_unapproved ?? 0;
+                    _this.totalUnsubmitted = total.data.total_unsubmitted ?? 0;
+                    _this.totalUnapproved = total.data.total_unapproved ?? 0;
                 })
                 .catch(error => {
                     console.log(error);
@@ -2325,6 +2323,8 @@ export default {
                                 _this.selected = [];
 
                                 _this.loadTotalCountReportStatus();
+
+                                _this.$store.dispatch("AUTH_NOTIFICATIONS");
                             })
                             .catch(function(error) {
                                 console.log(error);
@@ -2343,6 +2343,56 @@ export default {
             if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
+            }
+
+            if (
+                this.selected.filter(function(item) {
+                    return item.status.status === "Unsubmitted";
+                }).length <= 0
+            ) {
+                this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+                return;
+            }
+
+            let period = this.$store.getters.settings.submission_period;
+            let last_submission_date = "";
+            let submission_date = moment
+                .min(
+                    this.selected
+                        .filter(function(item) {
+                            return item.status.status === "Unsubmitted";
+                        })
+                        .map(item2 => moment(item2.from))
+                )
+                .format("YYYY-MM-DD");
+
+            switch (period) {
+                case "Weekly":
+                    last_submission_date = moment(submission_date)
+                        .endOf("week")
+                        .format("YYYY-MM-DD");
+                    break;
+                case "Monthly":
+                    last_submission_date = moment(submission_date)
+                        .endOf("month")
+                        .format("YYYY-MM-DD");
+                    break;
+
+                default:
+                    last_submission_date = moment(submission_date).format(
+                        "YYYY-MM-DD"
+                    );
+                    break;
+            }
+
+            if(!this.mixin_can("submit expense reports beyond due date")) {
+                if (!moment(moment()).isSameOrBefore(last_submission_date, "day")) {
+                    this.mixin_errorDialog(
+                        "Error (Not Allowed)",
+                        `Last submission was ${last_submission_date}`
+                    );
+                    return;
+                }
             }
 
             this.onUpdate("submit", "put");
@@ -2388,6 +2438,7 @@ export default {
                         });
 
                         // _this.$store.dispatch("AUTH_USER");
+                        _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                         _this.selected = [];
                     })
@@ -2442,6 +2493,37 @@ export default {
         },
         selected() {
             if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Unsubmitted")
+            ) {
+                let period = this.$store.getters.settings.submission_period;
+                let last_submission_date = "";
+                let submission_date = moment
+                    .min(this.selected.map(item => moment(item.from)))
+                    .format("YYYY-MM-DD");
+
+                switch (period) {
+                    case "Weekly":
+                        last_submission_date = moment(submission_date)
+                            .endOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        last_submission_date = moment(submission_date)
+                            .endOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+
+                    default:
+                        last_submission_date = moment(submission_date).format(
+                            "YYYY-MM-DD"
+                        );
+                        break;
+                }
+
+                this.warning = `Last Submission Date: ${last_submission_date}`;
+            } else if (
                 this.selected
                     .map(item => item.status.status)
                     .includes("Submitted")
@@ -2539,6 +2621,7 @@ export default {
     // },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadTotalCountReportStatus();
         this.loadEmployees();
         this.loadExpenseTypes();

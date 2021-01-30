@@ -40,7 +40,7 @@ class UserResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "employee" => new EmployeeResource($this->whenLoaded('employee')),
-            "role" => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
+            "role" => $this->is_admin ? ["Administrator"] : ["Standard User"],
             "permissions" => $this->getAllPermissions(),
         ];
     }

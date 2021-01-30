@@ -12,7 +12,8 @@ export const store = new Vuex.Store({
         admin: localStorage.getItem("admin") || false,
         authenticated: localStorage.getItem("authenticated") || false,
         user: null || null,
-        settings: null || null
+        settings: null || null,
+        notifications: null || null
     },
     plugins: [
         createPersistedState()
@@ -36,6 +37,9 @@ export const store = new Vuex.Store({
         },
         settings(state) {
             return state.settings;
+        },
+        notifications(state) {
+            return state.notifications;
         }
     },
     mutations: {
@@ -48,6 +52,9 @@ export const store = new Vuex.Store({
         },
         SET_SETTINGS(state, value) {
             state.settings = value;
+        },
+        SET_NOTIFICATIONS(state, value) {
+            state.notifications = value;
         }
     },
     actions: {
@@ -63,6 +70,8 @@ export const store = new Vuex.Store({
                             })
                             .then(response => {
                                 context.dispatch("AUTH_USER");
+
+                                context.dispatch("AUTH_NOTIFICATIONS");
 
                                 resolve(response);
                             })
@@ -99,7 +108,7 @@ export const store = new Vuex.Store({
                         localStorage.removeItem("authenticated");
 
                         console.log(error);
-                        // console.log(error.response);
+                        console.log(error.response);
 
                         context.commit("SET_AUTHENTICATED", false);
                         context.commit("SET_USER", null);
@@ -116,6 +125,7 @@ export const store = new Vuex.Store({
                     .get("/api/user")
                     .then(function(response) {
                         context.dispatch("AUTH_SETTINGS");
+                        context.dispatch("AUTH_NOTIFICATIONS");
 
                         localStorage.setItem("authenticated", "true");
                         localStorage.setItem(
@@ -130,7 +140,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(function(error) {
                         console.log(error);
-                        // console.log(error.response);
+                        console.log(error.response);
 
                         localStorage.removeItem("authenticated");
                         localStorage.removeItem("admin");
@@ -154,9 +164,33 @@ export const store = new Vuex.Store({
                     })
                     .catch(function(error) {
                         console.log(error);
-                        // console.log(error.response);
+                        console.log(error.response);
 
                         context.commit("SET_SETTINGS", null);
+
+                        reject(error);
+                    });
+            });
+        },
+
+        AUTH_NOTIFICATIONS(context) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get(`/api/data/check_notifications`, {
+                        params: {
+                            action: "check notifications"
+                        }
+                    })
+                    .then(function(response) {
+                        context.commit("SET_NOTIFICATIONS", response.data);
+
+                        resolve(response.data.data);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        console.log(error.response);
+
+                        context.commit("SET_NOTIFICATIONS", null);
 
                         reject(error);
                     });

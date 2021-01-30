@@ -1137,6 +1137,9 @@ export default {
             this.date_range[1],
             this.employee.id
         );
-    }
+    },
+    created() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+    },
 };
 </script>

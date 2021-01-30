@@ -27,7 +27,7 @@ export default {
                         )}`
                 ],
                 email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
-            }
+            },
         };
     },
     methods: {

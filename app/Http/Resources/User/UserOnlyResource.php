@@ -37,7 +37,7 @@ class UserOnlyResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "role" => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
+            "role" => $this->is_admin ? ["Administrator"] : ["Standard User"],
             "permissions" => $this->getAllPermissions(),
         ];
     }

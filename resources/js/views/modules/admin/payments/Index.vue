@@ -536,6 +536,15 @@ export default {
         onUpdate(action, method) {
             let _this = this;
 
+            if (action == "receive" && !this.mixin_can("receive payments")) {
+                _this.mixin_errorDialog(
+                    `Error`,
+                    "Not allowed"
+                );
+
+                return;
+            }
+
             if (_this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
@@ -588,6 +597,7 @@ export default {
                             });
 
                             // _this.$store.dispatch("AUTH_USER");
+                            _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                             _this.selected = [];
                         })
@@ -639,6 +649,7 @@ export default {
     // },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadEmployees();
     }
 };
