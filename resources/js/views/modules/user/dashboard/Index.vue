@@ -586,7 +586,7 @@ export default {
             ],
             items: [],
 
-            user: this.$store.getters.user.user
+            user: this.$store.getters.user
         };
     },
     methods: {

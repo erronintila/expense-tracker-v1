@@ -272,7 +272,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                user: this.$store.getters.user.user
+                user: this.$store.getters.user
             },
             errors: {
                 date_range: [],

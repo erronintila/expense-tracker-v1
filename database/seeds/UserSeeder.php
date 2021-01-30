@@ -150,9 +150,9 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("view payments");
         $roleUser->givePermissionTo("view all payments");
         $roleUser->givePermissionTo("receive payments");
-        // $roleUser->givePermissionTo("duplicate expense reports");
+        $roleUser->givePermissionTo("duplicate expense reports");
         $roleUser->givePermissionTo("add vendors");
-        $roleUser->givePermissionTo("edit users");
+        // $roleUser->givePermissionTo("edit users");
 
         $roleSuperAdmin = Role::create(['name' => 'Super Admin']);
 

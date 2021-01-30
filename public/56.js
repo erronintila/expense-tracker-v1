@@ -593,7 +593,7 @@ __webpack_require__.r(__webpack_exports__);
         value: "iron"
       }],
       items: [],
-      user: this.$store.getters.user.user
+      user: this.$store.getters.user
     };
   },
   methods: {

@@ -467,7 +467,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: this.$store.getters.user.user.id,
+            user: this.$store.getters.user.id,
             date_range: [
                 moment()
                     .startOf("month")

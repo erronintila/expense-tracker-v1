@@ -285,7 +285,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: "",
         remarks: "",
         notes: "",
-        user: this.$store.getters.user.user
+        user: this.$store.getters.user
       },
       errors: {
         date_range: [],

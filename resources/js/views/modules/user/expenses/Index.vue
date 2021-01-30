@@ -459,7 +459,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: this.$store.getters.user.user.id,
+            user: this.$store.getters.user.id,
             expense_type: 0,
             expense_types: [],
             status: "All Expenses",
