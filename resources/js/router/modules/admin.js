@@ -56,7 +56,7 @@ const adminRoutes = [
                 path: "/admin/settings/user",
                 name: "admin.settings.user",
                 component: () =>
-                    import("../../views/modules/admin/settings/Employee.vue")
+                    import("../../views/modules/admin/settings/User.vue")
             },
             /**
              *
@@ -255,7 +255,7 @@ const adminRoutes = [
             /**
              *
              *
-             * Employees
+             * Users
              *
              *
              */
@@ -263,7 +263,7 @@ const adminRoutes = [
                 path: "/admin/users",
                 name: "admin.users.index",
                 component: () =>
-                    import("../../views/modules/admin/employees/Index.vue"),
+                    import("../../views/modules/admin/users/Index.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -283,7 +283,7 @@ const adminRoutes = [
                 path: "/admin/users/create",
                 name: "admin.users.create",
                 component: () =>
-                    import("../../views/modules/admin/employees/Create.vue"),
+                    import("../../views/modules/admin/users/Create.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -301,7 +301,7 @@ const adminRoutes = [
                 path: "/admin/users/:id/edit",
                 name: "admin.users.edit",
                 component: () =>
-                    import("../../views/modules/admin/employees/Edit.vue"),
+                    import("../../views/modules/admin/users/Edit.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -321,7 +321,7 @@ const adminRoutes = [
                 path: "/admin/users/:id/edit/fund",
                 name: "admin.users.edit.fund",
                 component: () =>
-                    import("../../views/modules/admin/employees/EditFund.vue"),
+                    import("../../views/modules/admin/users/EditFund.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -341,7 +341,7 @@ const adminRoutes = [
                 path: "/admin/users/:id",
                 name: "admin.users.show",
                 component: () =>
-                    import("../../views/modules/admin/employees/Show.vue"),
+                    import("../../views/modules/admin/users/Show.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);

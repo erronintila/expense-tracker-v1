@@ -195,8 +195,8 @@ class PrintController extends Controller
             ]);
         }
 
-        // query for retrieving expenses grouped by employee
-        if (request()->has('by_employee_id')) {
+        // query for retrieving expenses grouped by user
+        if (request()->has('by_user_id')) {
             $expenses = DB::table('expenses')
             ->join("users", "users.id", "=", "expenses.user_id")
             ->join("jobs", "jobs.id", "=", "users.job_id")
