@@ -1393,7 +1393,7 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map(item => "auto"),
                                 body: body
                             },
                             layout: {

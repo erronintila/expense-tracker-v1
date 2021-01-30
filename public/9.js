@@ -1484,7 +1484,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             table: {
               headerRows: 1,
               widths: table_columns.map(function (item) {
-                return "*";
+                return "auto";
               }),
               body: body
             },
