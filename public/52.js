@@ -1,16 +1,14 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[52],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -147,78 +145,139 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      settings: {
-        company_name: "Twin-Circa Marketing",
-        currency: "Philippine Peso",
-        expiry_period: 1,
-        expense_encoding_period: 1,
-        submission_period: "Weekly",
-        approval_period: 1,
-        tax_rate: 0
+      valid: false,
+      adjustment_type: "Add Amount",
+      user: {
+        id: null,
+        fullname: "",
+        fund: 0,
+        remaining_fund: 0
       },
-      panel: [0, 1, 2, 3]
+      reference: "",
+      code: "",
+      description: "",
+      amount: 0,
+      type: "Manage Revolving Fund",
+      remarks: "",
+      errors: {
+        user: [],
+        reference: [],
+        code: [],
+        description: [],
+        amount: [],
+        remarks: []
+      }
     };
   },
   methods: {
-    onLoad: function onLoad() {
+    loadusers: function loadusers() {
       var _this = this;
 
-      axios.get("/api/settings").then(function (response) {
-        _this.settings = response.data;
+      axios.get("/api/users/" + this.$route.params.id).then(function (response) {
+        _this.user = response.data.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
 
-        _this.mixin_errorDialog(error.response.status, error.response.statusText);
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
     onSave: function onSave() {
-      var _this = this; // let settings = Object.assign(
-      //     this.general_settings,
-      //     this.expense_settings,
-      //     this.expense_report_settings
-      // );
+      var _this = this;
 
+      if (this.new_fund < 0 || this.new_remaining_fund < 0) {
+        this.mixin_errorDialog("Error", "Revolving fund/Remaining fund should not be lesser than current amount");
+        return;
+      }
 
-      axios.post("/api/settings", {
-        settings: _this.settings
-      }).then(function (response) {
-        _this.mixin_successDialog("Success", "Saved settings successfully");
+      if (_this.$refs.form.validate()) {
+        this.$confirm("Do you want to update revolving fund?").then(function (res) {
+          if (res) {
+            axios.put("/api/users/".concat(_this.$route.params.id), {
+              action: "update fund",
+              fund: _this.new_fund,
+              remaining_fund: _this.new_remaining_fund
+            }).then(function (response) {
+              _this.$dialog.message.success("Revolving Fund updated.", {
+                position: "top-right",
+                timeout: 2000
+              });
 
-        _this.$store.dispatch("AUTH_USER");
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+              _this.$store.dispatch("AUTH_USER");
 
-        _this.mixin_errorDialog(error.response.status, error.response.statusText);
-      });
+              _this.$router.push("/admin/users");
+            })["catch"](function (error) {
+              console.log(error);
+              console.log(error.response);
+
+              _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            });
+          }
+        }); // let add_amount =
+        //     this.adjustment_type == "Add Amount" ? this.amount : 0;
+        // let subtract_amount =
+        //     this.adjustment_type == "Subtract Amount" ? this.amount : 0;
+        // axios
+        //     .put("/api/users", {
+        //         user: _this.user.id,
+        //         reference: _this.reference,
+        //         code: _this.code,
+        //         description: _this.description,
+        //         remarks: _this.remarks,
+        //         // amount: _this.amount,
+        //         add_amount: add_amount,
+        //         subtract_amount: subtract_amount,
+        //         type: _this.type
+        //     })
+        //     .then(function(response) {
+        //         _this.mixin_successDialog(
+        //             "Success",
+        //             "Adjustment created successfully."
+        //         );
+        //         _this.$router.push({ name: "admin.adjustments.index" });
+        //     })
+        //     .catch(function(error) {
+        //         console.log(error);
+        //         console.log(error.response);
+        //         _this.errors = error.response.data.errors;
+        //         _this.mixin_errorDialog(
+        //             `Error ${error.response.status}`,
+        //             error.response.statusText
+        //         );
+        //     });
+      }
+    }
+  },
+  computed: {
+    new_fund: function new_fund() {
+      if (this.adjustment_type == "Add Amount") {
+        return this.mixin_convertToNumber(this.user.fund) + this.mixin_convertToNumber(this.amount);
+      }
+
+      return this.mixin_convertToNumber(this.user.fund) - this.mixin_convertToNumber(this.amount);
+    },
+    new_remaining_fund: function new_remaining_fund() {
+      if (this.adjustment_type == "Add Amount") {
+        return this.mixin_convertToNumber(this.user.remaining_fund) + this.mixin_convertToNumber(this.amount);
+      }
+
+      return this.mixin_convertToNumber(this.user.remaining_fund) - this.mixin_convertToNumber(this.amount);
     }
   },
   created: function created() {
-    // this.$store.dispatch("AUTH_USER");
-    this.onLoad();
+    this.$store.dispatch("AUTH_USER");
+    this.loadusers();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd& ***!
   \**************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -242,292 +301,267 @@ var render = function() {
             "v-card-title",
             { staticClass: "pt-0" },
             [
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Settings")
-              ]),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "mr-3",
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.go(-1)
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                1
+              ),
               _vm._v(" "),
               _c("v-spacer"),
               _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  staticClass: "mr-2",
-                  attrs: {
-                    color: "green",
-                    to: { name: "admin.settings.user" },
-                    outlined: "",
-                    dark: ""
-                  }
-                },
-                [_vm._v("\n                Employee Settings\n            ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { color: "green", dark: "" },
-                  on: { click: _vm.onSave }
-                },
-                [_vm._v("Save Changes")]
-              )
+              _c("h4", { staticClass: "title green--text" }, [
+                _vm._v("Edit Revolving Fund")
+              ])
             ],
             1
           ),
           _vm._v(" "),
           _c(
-            "v-expansion-panels",
+            "v-form",
             {
-              attrs: { multiple: "" },
+              ref: "form",
               model: {
-                value: _vm.panel,
+                value: _vm.valid,
                 callback: function($$v) {
-                  _vm.panel = $$v
+                  _vm.valid = $$v
                 },
-                expression: "panel"
+                expression: "valid"
               }
             },
             [
               _c(
-                "v-expansion-panel",
+                "v-container",
                 [
-                  _c("v-expansion-panel-header", [
-                    _c("div", { staticClass: "green--text" }, [
-                      _vm._v(
-                        "\n                        Expenses\n                    "
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
                   _c(
-                    "v-expansion-panel-content",
+                    "v-row",
                     [
                       _c(
-                        "v-container",
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
                         [
-                          _c(
-                            "v-form",
-                            { ref: "formExpenses" },
-                            [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Expense Encoding Period",
-                                          suffix: "days",
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minNumberValue(
-                                              1
-                                            )
-                                          ),
-                                          hint:
-                                            "Allowed period for expenses to be encoded based on date",
-                                          "persistent-hint": ""
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.settings
-                                              .expense_encoding_period,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings,
-                                              "expense_encoding_period",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "settings.expense_encoding_period"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
+                          _c("v-select", {
+                            attrs: {
+                              label: "Adjustment Type",
+                              items: ["Add Amount", "Subtract Amount"]
+                            },
+                            model: {
+                              value: _vm.adjustment_type,
+                              callback: function($$v) {
+                                _vm.adjustment_type = $$v
+                              },
+                              expression: "adjustment_type"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.minNumberValue(1),
+                              label: "Amount",
+                              type: "number"
+                            },
+                            model: {
+                              value: _vm.amount,
+                              callback: function($$v) {
+                                _vm.amount = $$v
+                              },
+                              expression: "amount"
+                            }
+                          })
                         ],
                         1
                       )
                     ],
                     1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-expansion-panel",
-                [
-                  _c("v-expansion-panel-header", [
-                    _c("div", { staticClass: "green--text" }, [
-                      _vm._v(
-                        "\n                        Expense Reports\n                    "
-                      )
-                    ])
-                  ]),
+                  ),
                   _vm._v(" "),
                   _c(
-                    "v-expansion-panel-content",
+                    "v-row",
                     [
-                      _c(
-                        "v-container",
-                        [
-                          _c(
-                            "v-form",
-                            { ref: "formExpenseReports" },
-                            [
+                      _c("v-col", { attrs: { cols: "12", md: "6" } }, [
+                        _vm._v(
+                          "\n                        Current Balance\n                        "
+                        ),
+                        _c("table", { staticClass: "ml-4" }, [
+                          _c("tbody", [
+                            _c("tr", [
+                              _c("td", { staticClass: "headline" }, [
+                                _vm._v(
+                                  "\n                                        Revolving Fund\n                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(":")]),
+                              _vm._v(" "),
                               _c(
-                                "v-row",
+                                "td",
+                                {
+                                  staticClass:
+                                    "headline green--text text--darken-4 text-right"
+                                },
                                 [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-select", {
-                                        attrs: {
-                                          label: "Submission Date",
-                                          items: ["Daily", "Weekly", "Monthly"],
-                                          hint:
-                                            "Due date for submission of expense reports",
-                                          "persistent-hint": ""
-                                        },
-                                        model: {
-                                          value: _vm.settings.submission_period,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings,
-                                              "submission_period",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "settings.submission_period"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Approval Period",
-                                          suffix: "days",
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minNumberValue(
-                                              1
-                                            )
-                                          ),
-                                          hint:
-                                            "Allowed period for expense reports to be approved based on submission date",
-                                          "persistent-hint": "",
-                                          type: "number"
-                                        },
-                                        model: {
-                                          value: _vm.settings.approval_period,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings,
-                                              "approval_period",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "settings.approval_period"
-                                        }
-                                      })
-                                    ],
-                                    1
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(_vm.user.fund)
+                                      ) +
+                                      "\n                                    "
                                   )
-                                ],
-                                1
+                                ]
                               )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
+                            ]),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td", { staticClass: "headline" }, [
+                                _vm._v(
+                                  "\n                                        Remaining Fund\n                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(":")]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "headline green--text text--darken-4 text-right"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.user.remaining_fund
+                                        )
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("v-col", { attrs: { cols: "12", md: "6" } }, [
+                        _vm._v(
+                          "\n                        New Balance\n                        "
+                        ),
+                        _c("table", { staticClass: "ml-4" }, [
+                          _c("tbody", [
+                            _c("tr", [
+                              _c("td", { staticClass: "headline" }, [
+                                _vm._v(
+                                  "\n                                        Revolving Fund\n                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(":")]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  class:
+                                    "headline " +
+                                    (_vm.new_fund < 0
+                                      ? "red--text"
+                                      : "green--text") +
+                                    " text--darken-4 text-right"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(_vm.new_fund)
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td", { staticClass: "headline" }, [
+                                _vm._v(
+                                  "\n                                        Remaining Fund\n                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(":")]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  class:
+                                    "headline " +
+                                    (_vm.new_remaining_fund < 0
+                                      ? "red--text"
+                                      : "green--text") +
+                                    " text--darken-4 text-right"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(
+                                        _vm.mixin_formatNumber(
+                                          _vm.new_remaining_fund
+                                        )
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        ])
+                      ])
                     ],
                     1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-expansion-panel",
-                [
-                  _c("v-expansion-panel-header", [
-                    _c("div", { staticClass: "green--text" }, [
-                      _vm._v(
-                        "\n                        Taxes\n                    "
-                      )
-                    ])
+                  ),
+                  _vm._v(" "),
+                  _c("small", { staticClass: "text--secondary" }, [
+                    _vm._v(
+                      "\n                    * indicates required field\n                "
+                    )
                   ]),
                   _vm._v(" "),
                   _c(
-                    "v-expansion-panel-content",
+                    "v-card-actions",
                     [
+                      _c("v-spacer"),
+                      _vm._v(" "),
                       _c(
-                        "v-container",
+                        "v-btn",
+                        {
+                          attrs: { color: "green", dark: "" },
+                          on: { click: _vm.onSave }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        { attrs: { to: { name: "admin.users.index" } } },
                         [
-                          _c(
-                            "v-form",
-                            { ref: "formTaxes" },
-                            [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Tax Rate",
-                                          suffix: "%",
-                                          rules: _vm.mixin_validation.required.concat(
-                                            _vm.mixin_validation.minNumberValue(
-                                              0
-                                            )
-                                          ),
-                                          hint:
-                                            "Tax rate to be imposed on expenses.",
-                                          "persistent-hint": ""
-                                        },
-                                        model: {
-                                          value: _vm.settings.tax_rate,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings,
-                                              "tax_rate",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "settings.tax_rate"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
+                          _vm._v(
+                            "\n                        Cancel\n                    "
                           )
-                        ],
-                        1
+                        ]
                       )
                     ],
                     1
@@ -552,17 +586,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/settings/Index.vue":
+/***/ "./resources/js/views/modules/admin/users/EditFund.vue":
 /*!*************************************************************!*\
-  !*** ./resources/js/views/modules/admin/settings/Index.vue ***!
+  !*** ./resources/js/views/modules/admin/users/EditFund.vue ***!
   \*************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=2bdf5f8d& */ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditFund.vue?vue&type=template&id=2af643fd& */ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&");
+/* harmony import */ var _EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditFund.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -572,9 +606,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -584,38 +618,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/settings/Index.vue"
+component.options.__file = "resources/js/views/modules/admin/users/EditFund.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFund.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&":
+/***/ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&":
 /*!********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d& ***!
+  !*** ./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd& ***!
   \********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=2bdf5f8d& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFund.vue?vue&type=template&id=2af643fd& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
