@@ -608,7 +608,7 @@ export default {
                         is_superadmin: _this.form.is_superadmin,
                         can_login: _this.form.can_login,
                         type: _this.form.type,
-                        job: _this.form.job,
+                        job_id: _this.form.job == null ? null : _this.form.job.id,
                     })
                     .then(response => {
                         _this.$dialog.message.success(
@@ -695,6 +695,7 @@ export default {
     created() {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
+            console.log(response);
             _this.form = response;
         });
     }

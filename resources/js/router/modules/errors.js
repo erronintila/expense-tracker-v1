@@ -27,6 +27,15 @@ const routes = [
         // }
     },
     {
+        path: "/error-503",
+        name: "error_503",
+        component: () => import("../../views/errors/503"),
+        // meta: {
+        //     requiresAuth: false,
+        //     requiresAdmin: false
+        // }
+    },
+    {
         path: "/error-401",
         name: "error_401",
         component: () => import("../../views/errors/401"),

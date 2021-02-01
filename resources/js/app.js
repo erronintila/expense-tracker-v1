@@ -121,6 +121,9 @@ axios.interceptors.response.use(
             case 500:
                 router.push({ name: "error_500" });
                 break;
+            case 503:
+                router.push({ name: "error_503" });
+                break;
             default:
                 break;
         }
@@ -167,7 +170,7 @@ const app = new Vue({
     router,
     store,
     vuetify,
-    components: { App },
+    components: { App }
     // created() {
     //     this.$store.dispatch("AUTH_USER");
     // },

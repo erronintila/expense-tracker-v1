@@ -101,7 +101,7 @@
                                                 ></v-list-item-title>
                                                 <v-list-item-subtitle
                                                     v-html="
-                                                        `${data.item.fullname}`
+                                                        `${data.item.username}`
                                                     "
                                                 ></v-list-item-subtitle>
                                                 <v-list-item-subtitle

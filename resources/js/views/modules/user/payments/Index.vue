@@ -190,7 +190,7 @@
                     </template>
                     <template v-slot:[`item.user`]="{ item }">
                         {{
-                            `${item.last_name}, ${item.first_name} ${item.middle_name}`
+                            `${item.user.full_name}`
                         }}
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">

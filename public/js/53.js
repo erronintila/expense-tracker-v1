@@ -1,8 +1,8 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[53],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/vendors/Create.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/vendors/Create.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -145,39 +145,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
+    var _this2 = this;
+
     return {
+      no_tin: false,
       valid: false,
-      adjustment_type: "Add Amount",
-      user: {
-        id: null,
-        fullname: "",
-        fund: 0,
-        remaining_fund: 0
+      row: null,
+      selected_expense_types: [],
+      expense_types: [],
+      rules: {
+        tin: [function (v) {
+          return _this2.is_vat_inclusive == true || "This field is required.";
+        }]
       },
-      reference: "",
-      code: "",
-      description: "",
-      amount: 0,
-      type: "Manage Revolving Fund",
-      remarks: "",
+      form: {
+        code: "",
+        name: "",
+        email: "",
+        tin: "",
+        contact_person: "",
+        mobile_number: "",
+        telephone_number: "",
+        remarks: "",
+        website: "",
+        is_vat_inclusive: true,
+        address: ""
+      },
       errors: {
-        user: [],
-        reference: [],
         code: [],
-        description: [],
-        amount: [],
-        remarks: []
+        name: [],
+        email: [],
+        tin: [],
+        contact_person: [],
+        mobile_number: [],
+        telephone_number: [],
+        remarks: [],
+        website: [],
+        is_vat_inclusive: [],
+        address: []
       }
     };
   },
   methods: {
-    loadusers: function loadusers() {
+    loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
-      axios.get("/api/users/" + this.$route.params.id).then(function (response) {
-        _this.user = response.data.data;
+      axios.get("/api/data/expense_types").then(function (response) {
+        _this.expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -188,96 +213,53 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this = this;
 
-      if (this.new_fund < 0 || this.new_remaining_fund < 0) {
-        this.mixin_errorDialog("Error", "Revolving fund/Remaining fund should not be lesser than current amount");
-        return;
-      }
+      _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
-        this.$confirm("Do you want to update revolving fund?").then(function (res) {
-          if (res) {
-            axios.put("/api/users/".concat(_this.$route.params.id), {
-              action: "update fund",
-              fund: _this.new_fund,
-              remaining_fund: _this.new_remaining_fund
-            }).then(function (response) {
-              _this.$dialog.message.success("Revolving Fund updated.", {
-                position: "top-right",
-                timeout: 2000
-              });
+        axios.post("/api/vendors", {
+          code: _this.form.code,
+          name: _this.form.name,
+          email: _this.form.email,
+          tin: _this.form.tin == "N/A" ? null : _this.form.tin,
+          contact_person: _this.form.contact_person,
+          mobile_number: _this.form.mobile_number,
+          telephone_number: _this.form.telephone_number,
+          remarks: _this.form.remarks,
+          website: _this.form.website,
+          is_vat_inclusive: _this.form.is_vat_inclusive,
+          address: _this.form.address,
+          expense_types: _this.selected_expense_types
+        }).then(function (response) {
+          _this.mixin_successDialog("Success", "Vendor created successfully.");
 
-              _this.$store.dispatch("AUTH_USER");
+          _this.$router.push({
+            name: "admin.vendors.index"
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
 
-              _this.$router.push("/admin/users");
-            })["catch"](function (error) {
-              console.log(error);
-              console.log(error.response);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
-              _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-            });
+          if (error.response) {
+            if (error.response.data) {
+              _this.errors = error.response.data.errors;
+            }
           }
-        }); // let add_amount =
-        //     this.adjustment_type == "Add Amount" ? this.amount : 0;
-        // let subtract_amount =
-        //     this.adjustment_type == "Subtract Amount" ? this.amount : 0;
-        // axios
-        //     .put("/api/users", {
-        //         user: _this.user.id,
-        //         reference: _this.reference,
-        //         code: _this.code,
-        //         description: _this.description,
-        //         remarks: _this.remarks,
-        //         // amount: _this.amount,
-        //         add_amount: add_amount,
-        //         subtract_amount: subtract_amount,
-        //         type: _this.type
-        //     })
-        //     .then(function(response) {
-        //         _this.mixin_successDialog(
-        //             "Success",
-        //             "Adjustment created successfully."
-        //         );
-        //         _this.$router.push({ name: "admin.adjustments.index" });
-        //     })
-        //     .catch(function(error) {
-        //         console.log(error);
-        //         console.log(error.response);
-        //         _this.errors = error.response.data.errors;
-        //         _this.mixin_errorDialog(
-        //             `Error ${error.response.status}`,
-        //             error.response.statusText
-        //         );
-        //     });
+        });
+        return;
       }
     }
   },
-  computed: {
-    new_fund: function new_fund() {
-      if (this.adjustment_type == "Add Amount") {
-        return this.mixin_convertToNumber(this.user.fund) + this.mixin_convertToNumber(this.amount);
-      }
-
-      return this.mixin_convertToNumber(this.user.fund) - this.mixin_convertToNumber(this.amount);
-    },
-    new_remaining_fund: function new_remaining_fund() {
-      if (this.adjustment_type == "Add Amount") {
-        return this.mixin_convertToNumber(this.user.remaining_fund) + this.mixin_convertToNumber(this.amount);
-      }
-
-      return this.mixin_convertToNumber(this.user.remaining_fund) - this.mixin_convertToNumber(this.amount);
-    }
-  },
-  created: function created() {
-    this.$store.dispatch("AUTH_USER");
-    this.loadusers();
+  created: function created() {// this.loadExpenseTypes();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/vendors/Create.vue?vue&type=template&id=0ee89247&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/vendors/Create.vue?vue&type=template&id=0ee89247& ***!
   \**************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -319,7 +301,7 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit Revolving Fund")
+                _vm._v("New Vendor")
               ])
             ],
             1
@@ -327,241 +309,313 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-form",
-            {
-              ref: "form",
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
-              }
-            },
+            { ref: "form" },
             [
               _c(
                 "v-container",
                 [
                   _c(
-                    "v-row",
+                    "v-card",
+                    { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
                     [
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        "v-container",
                         [
-                          _c("v-select", {
-                            attrs: {
-                              label: "Adjustment Type",
-                              items: ["Add Amount", "Subtract Amount"]
-                            },
-                            model: {
-                              value: _vm.adjustment_type,
-                              callback: function($$v) {
-                                _vm.adjustment_type = $$v
-                              },
-                              expression: "adjustment_type"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
+                          _c("div", { staticClass: "overline green--text" }, [
+                            _vm._v(
+                              "\n                            BASIC DETAILS\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "9" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(150)
+                                      ),
+                                      counter: 150,
+                                      "error-messages": _vm.errors.name,
+                                      label: "Name",
+                                      required: ""
+                                    },
+                                    model: {
+                                      value: _vm.form.name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "name", $$v)
+                                      },
+                                      expression: "form.name"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "3" } },
+                                [
+                                  _c(
+                                    "v-radio-group",
+                                    {
+                                      attrs: { row: "" },
+                                      on: {
+                                        change: function($event) {
+                                          _vm.no_tin = false
+                                          _vm.form.tin = ""
+                                        }
+                                      },
+                                      model: {
+                                        value: _vm.form.is_vat_inclusive,
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.form,
+                                            "is_vat_inclusive",
+                                            $$v
+                                          )
+                                        },
+                                        expression: "form.is_vat_inclusive"
+                                      }
+                                    },
+                                    [
+                                      _c("v-radio", {
+                                        attrs: { label: "VAT", value: true }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-radio", {
+                                        attrs: {
+                                          label: "Non-VAT",
+                                          value: false
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "9", md: "9" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.mixin_validation.required,
+                                      "error-messages": _vm.errors.tin,
+                                      counter: 100,
+                                      label: "Tax Identification Number (TIN)",
+                                      required: "",
+                                      readonly: _vm.no_tin
+                                    },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "append",
+                                        fn: function() {
+                                          return undefined
+                                        },
+                                        proxy: true
+                                      }
+                                    ]),
+                                    model: {
+                                      value: _vm.form.tin,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "tin", $$v)
+                                      },
+                                      expression: "form.tin"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "3", md: "3" } },
+                                [
+                                  _c("v-checkbox", {
+                                    attrs: {
+                                      label: "N/A",
+                                      readonly: _vm.form.is_vat_inclusive
+                                    },
+                                    on: {
+                                      click: function() {
+                                        _vm.form.tin = _vm.no_tin ? "N/A" : ""
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.no_tin,
+                                      callback: function($$v) {
+                                        _vm.no_tin = $$v
+                                      },
+                                      expression: "no_tin"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              rules: _vm.mixin_validation.minNumberValue(1),
-                              label: "Amount",
-                              type: "number"
+                              rules: [],
+                              "error-messages": _vm.errors.email,
+                              label: "Email Address"
                             },
                             model: {
-                              value: _vm.amount,
+                              value: _vm.form.email,
                               callback: function($$v) {
-                                _vm.amount = $$v
+                                _vm.$set(_vm.form, "email", $$v)
                               },
-                              expression: "amount"
+                              expression: "form.email"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: [],
+                              "error-messages": _vm.errors.contact_person,
+                              counter: 100,
+                              label: "Contact Person"
+                            },
+                            model: {
+                              value: _vm.form.contact_person,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "contact_person", $$v)
+                              },
+                              expression: "form.contact_person"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: [],
+                              counter: 30,
+                              "error-messages": _vm.errors.mobile_number,
+                              label: "Mobile Number",
+                              type: "number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.mobile_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.mobile_number,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "mobile_number", $$v)
+                              },
+                              expression: "form.mobile_number"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: [],
+                              counter: 30,
+                              "error-messages": _vm.errors.telephone_number,
+                              label: "Telephone Number",
+                              type: "number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.telephone_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.telephone_number,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "telephone_number", $$v)
+                              },
+                              expression: "form.telephone_number"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              counter: 100,
+                              rules: [],
+                              "error-messages": _vm.errors.website,
+                              label: "Website"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.website = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.website,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "website", $$v)
+                              },
+                              expression: "form.website"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-textarea", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required,
+                              "error-messages": _vm.errors.address,
+                              label: "Address",
+                              rows: "3"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.address = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.address,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "address", $$v)
+                              },
+                              expression: "form.address"
                             }
                           })
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "12", md: "6" } }, [
-                        _vm._v(
-                          "\n                        Current Balance\n                        "
-                        ),
-                        _c("table", { staticClass: "ml-4" }, [
-                          _c("tbody", [
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Revolving Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "headline green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.user.fund)
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Remaining Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "headline green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(
-                                          _vm.user.remaining_fund
-                                        )
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ])
-                          ])
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "6" } }, [
-                        _vm._v(
-                          "\n                        New Balance\n                        "
-                        ),
-                        _c("table", { staticClass: "ml-4" }, [
-                          _c("tbody", [
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Revolving Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  class:
-                                    "headline " +
-                                    (_vm.new_fund < 0
-                                      ? "red--text"
-                                      : "green--text") +
-                                    " text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.new_fund)
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Remaining Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  class:
-                                    "headline " +
-                                    (_vm.new_remaining_fund < 0
-                                      ? "red--text"
-                                      : "green--text") +
-                                    " text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(
-                                          _vm.new_remaining_fund
-                                        )
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ])
-                          ])
-                        ])
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("small", { staticClass: "text--secondary" }, [
-                    _vm._v(
-                      "\n                    * indicates required field\n                "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "green", dark: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [_vm._v("Save")]
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-btn",
-                        { attrs: { to: { name: "admin.users.index" } } },
+                        "v-card-actions",
                         [
-                          _vm._v(
-                            "\n                        Cancel\n                    "
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "success", dark: "" },
+                              on: { click: _vm.onSave }
+                            },
+                            [_vm._v("Save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.$router.go(-1)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
                           )
-                        ]
+                        ],
+                        1
                       )
                     ],
                     1
@@ -586,17 +640,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/users/EditFund.vue":
+/***/ "./resources/js/views/modules/admin/vendors/Create.vue":
 /*!*************************************************************!*\
-  !*** ./resources/js/views/modules/admin/users/EditFund.vue ***!
+  !*** ./resources/js/views/modules/admin/vendors/Create.vue ***!
   \*************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditFund.vue?vue&type=template&id=2af643fd& */ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&");
-/* harmony import */ var _EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditFund.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Create_vue_vue_type_template_id_0ee89247___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=0ee89247& */ "./resources/js/views/modules/admin/vendors/Create.vue?vue&type=template&id=0ee89247&");
+/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/vendors/Create.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -606,9 +660,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Create_vue_vue_type_template_id_0ee89247___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Create_vue_vue_type_template_id_0ee89247___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -618,38 +672,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/users/EditFund.vue"
+component.options.__file = "resources/js/views/modules/admin/vendors/Create.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/views/modules/admin/vendors/Create.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/views/modules/admin/vendors/Create.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFund.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/vendors/Create.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&":
+/***/ "./resources/js/views/modules/admin/vendors/Create.vue?vue&type=template&id=0ee89247&":
 /*!********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd& ***!
+  !*** ./resources/js/views/modules/admin/vendors/Create.vue?vue&type=template&id=0ee89247& ***!
   \********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFund.vue?vue&type=template&id=2af643fd& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/users/EditFund.vue?vue&type=template&id=2af643fd&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_0ee89247___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=0ee89247& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/vendors/Create.vue?vue&type=template&id=0ee89247&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_0ee89247___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFund_vue_vue_type_template_id_2af643fd___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_0ee89247___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

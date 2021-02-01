@@ -32,7 +32,7 @@
                     <v-row>
                         <v-col cols="12" md="8">
                             <div>
-                                {{ form.full_name }}
+                                {{ form.user.full_name }}
                             </div>
                             <div class="display-1 green--text">
                                 PHP {{ mixin_formatNumber(form.amount) }}
@@ -476,7 +476,7 @@ export default {
                 code: "",
                 date: "",
                 description: "",
-                user: { id: 0, name: "" },
+                user: { id: 0, full_name: "" },
                 expense_reports: [],
                 notes: "",
                 reference_no: "",
