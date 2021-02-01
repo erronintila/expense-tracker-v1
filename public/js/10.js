@@ -708,7 +708,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Period",
         value: "date"
       }, {
-        text: "User",
+        text: "Employee",
         value: "user",
         sortable: false
       }, {
@@ -853,7 +853,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var table_rows = [];
         var table_footer = [];
         table_columns.push({
-          text: "User",
+          text: "Employee",
           style: "tableOfExpensesHeader"
         });
 
@@ -990,8 +990,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpenses",
             table: {
               headerRows: 1,
-              widths: table_columns.map(function (item) {
-                return "*";
+              widths: table_columns.map(function (item, index) {
+                if (table_columns.length - 1 == index) {
+                  return "*";
+                }
+
+                return "auto";
               }),
               body: body
             },
@@ -1232,8 +1236,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpenses",
             table: {
               headerRows: 1,
-              widths: table_columns.map(function (item) {
-                return "*";
+              widths: table_columns.map(function (item, index) {
+                if (table_columns.length - 1 == index) {
+                  return "*";
+                }
+
+                return "auto";
               }),
               body: body
             },
@@ -1483,7 +1491,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpenses",
             table: {
               headerRows: 1,
-              widths: table_columns.map(function (item) {
+              widths: table_columns.map(function (item, index) {
+                if (table_columns.length - 1 == index) {
+                  return "*";
+                }
+
                 return "auto";
               }),
               body: body
@@ -1660,7 +1672,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this.users.unshift({
           id: 0,
-          full_name: "All Users"
+          full_name: "All Employees"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -2604,7 +2616,7 @@ var render = function() {
                                   items: _vm.users,
                                   "item-text": "full_name",
                                   "item-value": "id",
-                                  label: "User"
+                                  label: "Employee"
                                 },
                                 model: {
                                   value: _vm.user,

@@ -1310,7 +1310,7 @@ var render = function() {
                                   "error-messages": _vm.errors.user_id,
                                   "item-value": "id",
                                   "item-text": "full_name",
-                                  label: "User",
+                                  label: "Employee",
                                   "return-object": "",
                                   required: ""
                                 },

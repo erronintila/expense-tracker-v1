@@ -32,6 +32,9 @@ class JobSeeder extends Seeder
             ["department" => "Logistics Department", "job" => "Operations Services and Logistics Officer"],
             ["department" => "Logistics Department", "job" => "Logistics Coordinator"],
             ["department" => "Utility and Maintenance Department", "job" => "Utility and Maintenance"],
+            ["department" => "Sales & Marketing Department", "job" => "Consignment Officer"],
+            ["department" => "Sales & Marketing Department", "job" => "Chief Executive Officer"],
+            ["department" => "Financial Administrative Department", "job" => "Accounting Clerk"],
         ];
 
         foreach ($jobs as $key => $value) {

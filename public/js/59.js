@@ -602,7 +602,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var table_rows = [];
         var table_footer = [];
         table_columns.push({
-          text: "User",
+          text: "Employee",
           style: "tableOfExpensesHeader"
         });
 
@@ -739,8 +739,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpenses",
             table: {
               headerRows: 1,
-              widths: table_columns.map(function (item) {
-                return "*";
+              widths: table_columns.map(function (item, index) {
+                if (table_columns.length - 1 == index) {
+                  return "*";
+                }
+
+                return "auto";
               }),
               body: body
             },
@@ -981,8 +985,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpenses",
             table: {
               headerRows: 1,
-              widths: table_columns.map(function (item) {
-                return "*";
+              widths: table_columns.map(function (item, index) {
+                if (table_columns.length - 1 == index) {
+                  return "*";
+                }
+
+                return "auto";
               }),
               body: body
             },
@@ -1232,7 +1240,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpenses",
             table: {
               headerRows: 1,
-              widths: table_columns.map(function (item) {
+              widths: table_columns.map(function (item, index) {
+                if (table_columns.length - 1 == index) {
+                  return "*";
+                }
+
                 return "auto";
               }),
               body: body

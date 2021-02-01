@@ -608,7 +608,7 @@ export default {
                 let table_footer = [];
 
                 table_columns.push({
-                    text: "User",
+                    text: "Employee",
                     style: "tableOfExpensesHeader"
                 });
                 this.expense_types.forEach(element => {
@@ -771,7 +771,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -1069,7 +1075,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -1393,7 +1405,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "auto"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {

@@ -523,7 +523,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "expense_type.name",
         sortable: false
       }, {
-        text: "User",
+        text: "Employee",
         value: "user.full_name",
         sortable: false
       }, {
@@ -631,7 +631,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this.users.unshift({
           id: 0,
-          full_name: "All Users"
+          full_name: "All Employees"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -1160,7 +1160,7 @@ var render = function() {
                                   items: _vm.users,
                                   "item-text": "full_name",
                                   "item-value": "id",
-                                  label: "User"
+                                  label: "Employee"
                                 },
                                 model: {
                                   value: _vm.user,

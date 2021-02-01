@@ -550,7 +550,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this.users.unshift({
           id: 0,
-          full_name: "All Users"
+          full_name: "All Employees"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -578,8 +578,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.status = "All Expenses";
-      this.loadUsers();
+      this.status = "All Expenses"; // this.loadUsers();
+
       this.loadExpenseTypes();
       this.selected = [];
     },

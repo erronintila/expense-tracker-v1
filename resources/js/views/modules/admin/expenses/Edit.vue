@@ -89,7 +89,7 @@
                                 @change="loadExpenseTypes"
                                 item-value="id"
                                 item-text="full_name"
-                                label="User"
+                                label="Employee"
                                 return-object
                                 required
                             >

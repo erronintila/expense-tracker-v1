@@ -550,7 +550,7 @@ export default {
                     _this.users = response.data.data;
                     _this.users.unshift({
                         id: 0,
-                        full_name: "All Users"
+                        full_name: "All Employees"
                     });
                 })
                 .catch(error => {
@@ -588,7 +588,7 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.status = "All Expenses";
-            this.loadUsers();
+            // this.loadUsers();
             this.loadExpenseTypes();
             this.selected = [];
         },

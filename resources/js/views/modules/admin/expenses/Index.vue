@@ -95,7 +95,7 @@
                                     :items="users"
                                     item-text="full_name"
                                     item-value="id"
-                                    label="User"
+                                    label="Employee"
                                 ></v-select>
                             </v-list-item>
                             <v-list-item>
@@ -524,7 +524,7 @@ export default {
                     sortable: false
                 },
                 {
-                    text: "User",
+                    text: "Employee",
                     value: "user.full_name",
                     sortable: false
                 },
@@ -632,7 +632,7 @@ export default {
                     _this.users = response.data.data;
                     _this.users.unshift({
                         id: 0,
-                        full_name: "All Users"
+                        full_name: "All Employees"
                     });
                 })
                 .catch(error => {

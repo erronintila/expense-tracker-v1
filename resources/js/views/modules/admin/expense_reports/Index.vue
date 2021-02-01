@@ -95,7 +95,7 @@
                                     :items="users"
                                     item-text="full_name"
                                     item-value="id"
-                                    label="User"
+                                    label="Employee"
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -562,7 +562,7 @@
                             Print By Expense
                         </v-btn>
                         <v-btn @click="onPrint('print', 'user')">
-                            Print By User
+                            Print By Employee
                         </v-btn>
                         <v-btn @click="onPrint('print', 'date')">
                             Print By Date
@@ -662,7 +662,7 @@ export default {
             headers: [
                 { text: "Report No.", value: "code" },
                 { text: "Period", value: "date" },
-                { text: "User", value: "user", sortable: false },
+                { text: "Employee", value: "user", sortable: false },
                 { text: "Amount", value: "total", sortable: false },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status", sortable: false },
@@ -843,7 +843,7 @@ export default {
                 let table_footer = [];
 
                 table_columns.push({
-                    text: "User",
+                    text: "Employee",
                     style: "tableOfExpensesHeader"
                 });
                 this.expense_types.forEach(element => {
@@ -1006,7 +1006,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -1304,7 +1310,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -1628,7 +1640,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "auto"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -1841,7 +1859,7 @@ export default {
                     _this.users = response.data.data;
                     _this.users.unshift({
                         id: 0,
-                        full_name: "All Users"
+                        full_name: "All Employees"
                     });
                 })
                 .catch(error => {
