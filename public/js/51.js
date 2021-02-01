@@ -495,9 +495,7 @@ __webpack_require__.r(__webpack_exports__);
           }); // _this.$store.dispatch("AUTH_USER");
 
 
-          _this.$router.push({
-            name: "admin.users.index"
-          });
+          window.location.replace("/admin/users"); // _this.$router.push({ name: "admin.users.index" });
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);

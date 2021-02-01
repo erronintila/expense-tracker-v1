@@ -520,7 +520,9 @@ export default {
 
                         // _this.$store.dispatch("AUTH_USER");
 
-                        _this.$router.push({ name: "admin.users.index" });
+                        window.location.replace("/admin/users");
+
+                        // _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
                         console.log(error);

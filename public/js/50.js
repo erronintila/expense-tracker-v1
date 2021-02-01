@@ -308,6 +308,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -449,9 +476,7 @@ __webpack_require__.r(__webpack_exports__);
             timeout: 2000
           });
 
-          _this.$router.push({
-            name: "admin.users.index"
-          });
+          window.location.replace("/admin/users"); // _this.$router.push({ name: "admin.users.index" });
 
           _this.loader = false;
         })["catch"](function (error) {
@@ -635,6 +660,7 @@ var render = function() {
                                     [
                                       _c("v-autocomplete", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required,
                                           items: _vm.jobs,
                                           "error-messages": _vm.errors.job_id,
                                           "item-text": "name",
@@ -665,6 +691,9 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minLength(100)
+                                          ),
                                           counter: 100,
                                           "error-messages": _vm.errors.code,
                                           label: "Code *",
@@ -699,6 +728,9 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minLength(100)
+                                          ),
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.first_name,
@@ -764,6 +796,9 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minLength(100)
+                                          ),
                                           counter: 100,
                                           "error-messages":
                                             _vm.errors.last_name,
@@ -821,6 +856,7 @@ var render = function() {
                                     [
                                       _c("v-select", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required,
                                           items: ["Male", "Female"],
                                           "error-messages": _vm.errors.gender,
                                           label: "Gender *",
@@ -870,6 +906,10 @@ var render = function() {
                                                       _vm._b(
                                                         {
                                                           attrs: {
+                                                            rules:
+                                                              _vm
+                                                                .mixin_validation
+                                                                .required,
                                                             "error-messages":
                                                               _vm.errors
                                                                 .birthdate,
@@ -954,6 +994,7 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required,
                                           counter: 30,
                                           "error-messages":
                                             _vm.errors.mobile_number,
@@ -1020,6 +1061,9 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.email
+                                          ),
                                           "error-messages": _vm.errors.email,
                                           label: "Email Address *"
                                         },
@@ -1052,6 +1096,7 @@ var render = function() {
                                     [
                                       _c("v-textarea", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required,
                                           "error-messages": _vm.errors.address,
                                           label: "Address *",
                                           rows: "1"
@@ -1173,6 +1218,9 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minLength(50)
+                                          ),
                                           counter: 50,
                                           "error-messages": _vm.errors.username,
                                           label: "Username *",

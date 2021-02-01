@@ -39,6 +39,7 @@
                                 <v-col cols="12" md="4">
                                     <v-autocomplete
                                         v-model="form.job"
+                                        :rules="mixin_validation.required"
                                         :items="jobs"
                                         :error-messages="errors.job_id"
                                         @input="errors.job_id = []"
@@ -53,6 +54,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.code"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
                                         :counter="100"
                                         :error-messages="errors.code"
                                         @input="errors.code = []"
@@ -66,6 +71,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.first_name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
                                         :counter="100"
                                         :error-messages="errors.first_name"
                                         @input="errors.first_name = []"
@@ -87,6 +96,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.last_name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
                                         :counter="100"
                                         :error-messages="errors.last_name"
                                         @input="errors.last_name = []"
@@ -109,6 +122,7 @@
                                 <v-col cols="12" md="4">
                                     <v-select
                                         v-model="form.gender"
+                                        :rules="mixin_validation.required"
                                         :items="['Male', 'Female']"
                                         :error-messages="errors.gender"
                                         @input="errors.gender = []"
@@ -132,6 +146,9 @@
                                         >
                                             <v-text-field
                                                 v-model="form.birthdate"
+                                                :rules="
+                                                    mixin_validation.required
+                                                "
                                                 :error-messages="
                                                     errors.birthdate
                                                 "
@@ -156,6 +173,7 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.mobile_number"
+                                        :rules="mixin_validation.required"
                                         :counter="30"
                                         :error-messages="errors.mobile_number"
                                         @input="errors.mobile_number = []"
@@ -180,6 +198,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.email"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.email
+                                        ]"
                                         :error-messages="errors.email"
                                         @input="errors.email = []"
                                         label="Email Address *"
@@ -191,6 +213,7 @@
                                 <v-col cols="12">
                                     <v-textarea
                                         v-model="form.address"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.address"
                                         @input="errors.address = []"
                                         label="Address *"
@@ -237,6 +260,10 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.username"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(50)
+                                        ]"
                                         :counter="50"
                                         :error-messages="errors.username"
                                         @input="errors.username = []"
@@ -453,7 +480,9 @@ export default {
                             }
                         );
 
-                        _this.$router.push({ name: "admin.users.index" });
+                        window.location.replace("/admin/users");
+
+                        // _this.$router.push({ name: "admin.users.index" });
 
                         _this.loader = false;
                     })
