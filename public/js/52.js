@@ -335,6 +335,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -423,16 +427,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
-    changeRole: function changeRole() {
-      if (this.form.role == "Administrator") {
-        this.form.permissions = this.permissions;
-      } else {
-        this.form.permissions = [];
-      }
-    },
     onSave: function onSave() {
       var _this = this;
 
@@ -471,10 +465,7 @@ __webpack_require__.r(__webpack_exports__);
           permissions: _this.form.permissions,
           job_id: _this.form.job
         }).then(function (response) {
-          _this.$dialog.message.success("Employee created successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this.mixin_successDialog(response.data.status, response.data.message);
 
           window.location.replace("/admin/users"); // _this.$router.push({ name: "admin.users.index" });
 
@@ -490,7 +481,7 @@ __webpack_require__.r(__webpack_exports__);
             }
           }
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
         });
         return;
       }

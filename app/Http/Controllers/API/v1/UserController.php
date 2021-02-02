@@ -483,6 +483,9 @@ class UserController extends Controller
         $message = "User email verified successfully";
 
         if (request()->has("ids")) {
+            // $user = User::whereIn('id', request("ids"))
+            //     ->update(array('email_verified_at' => now()));
+        
             foreach (request("ids") as $id) {
                 $user = User::withTrashed()->findOrFail($id);
 
@@ -508,19 +511,11 @@ class UserController extends Controller
             ->log("verified user email");
 
         return $this->successResponse(null, $message, 200);
-
-        // $user = User::whereIn('id', request("")ids)
-        //     ->update(array('email_verified_at' => now()));
     }
 
     public function update_password(UserUpdatePasswordRequest $request, $id)
     {
         $validated = $request->validated();
-
-        // $request->validate([
-        //     'old_password' => ['required', new MatchOldPassword],
-        //     'password' => ['required', 'confirmed', 'string', 'max:255'],
-        // ]);
 
         $message = "User password updated successfully";
 
