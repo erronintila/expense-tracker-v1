@@ -101,16 +101,7 @@
                                                 ></v-list-item-title>
                                                 <v-list-item-subtitle
                                                     v-html="
-                                                        `${
-                                                            data.item
-                                                                .employee ==
-                                                            null
-                                                                ? data.item
-                                                                      .username
-                                                                : data.item
-                                                                      .employee
-                                                                      .fullname
-                                                        }`
+                                                        `${data.item.username}`
                                                     "
                                                 ></v-list-item-subtitle>
                                                 <v-list-item-subtitle

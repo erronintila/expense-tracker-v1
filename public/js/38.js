@@ -612,7 +612,11 @@ __webpack_require__.r(__webpack_exports__);
       items: [],
       expense_types: [],
       sub_types: [],
+<<<<<<< HEAD
       employees: [],
+=======
+      users: [],
+>>>>>>> develop
       vendors: [],
       form: {
         code: null,
@@ -636,7 +640,11 @@ __webpack_require__.r(__webpack_exports__);
           name: "",
           limit: null
         },
+<<<<<<< HEAD
         employee: {
+=======
+        user: {
+>>>>>>> develop
           id: null,
           remaining_fund: 0,
           fund: 0,
@@ -677,7 +685,11 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         is_active: [],
         expense_type_id: [],
+<<<<<<< HEAD
         employee_id: [],
+=======
+        user_id: [],
+>>>>>>> develop
         vendor_id: []
       }
     };
@@ -686,7 +698,11 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
+<<<<<<< HEAD
       this.loadEmployees().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
+=======
+      this.loadUsers().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
+>>>>>>> develop
         var data = response.data.data;
         _this.form.code = data.code;
         _this.form.description = data.description;
@@ -694,7 +710,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.date = data.date;
         _this.form.remarks = data.remarks;
         _this.form.is_active = data.is_active;
+<<<<<<< HEAD
         _this.form.employee = data.employee;
+=======
+        _this.form.user = data.user;
+>>>>>>> develop
         _this.form.vendor = data.vendor == null ? {
           id: null,
           name: "",
@@ -703,7 +723,11 @@ __webpack_require__.r(__webpack_exports__);
         } : data.vendor;
         _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
 
+<<<<<<< HEAD
         _this.expense_types = data.employee.expense_types;
+=======
+        _this.expense_types = data.user.expense_types;
+>>>>>>> develop
         _this.sub_types = data.expense_type.sub_types;
         _this.form.is_tax_inclusive = data.is_tax_inclusive;
         _this.form.tax_name = data.tax_name;
@@ -740,7 +764,11 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
+<<<<<<< HEAD
         _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
+=======
+        _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
+>>>>>>> develop
         _this.loader = false;
       })["catch"](function (error) {
         console.log(error);
@@ -763,12 +791,21 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
+<<<<<<< HEAD
     loadEmployees: function loadEmployees() {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/employees").then(function (response) {
           _this.employees = response.data.data;
+=======
+    loadUsers: function loadUsers() {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/data/users").then(function (response) {
+          _this.users = response.data.data;
+>>>>>>> develop
           resolve();
         })["catch"](function (error) {
           console.log(error);
@@ -832,8 +869,13 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
+<<<<<<< HEAD
       if (_this.form.employee.id == null) {
         _this.$dialog.message.error("No Employee Selected", {
+=======
+      if (_this.form.user.id == null) {
+        _this.$dialog.message.error("No User Selected", {
+>>>>>>> develop
           position: "top-right",
           timeout: 2000
         });
@@ -852,7 +894,11 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.$refs.form.validate();
 
+<<<<<<< HEAD
       if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
+=======
+      if (_this.amount_to_replenish > _this.form.user.remaining_fund) {
+>>>>>>> develop
         _this.$dialog.message.error("Amount to replenish is greater than remaining fund", {
           position: "top-right",
           timeout: 2000
@@ -891,7 +937,11 @@ __webpack_require__.r(__webpack_exports__);
           is_active: _this.form.is_active,
           expense_type_id: _this.form.expense_type.id,
           sub_type_id: _this.form.sub_type.id,
+<<<<<<< HEAD
           employee_id: _this.form.employee.id,
+=======
+          user_id: _this.form.user.id,
+>>>>>>> develop
           vendor_id: _this.form.vendor.id,
           details: _this.itemize ? _this.items : null,
           tax_name: "",
@@ -1021,7 +1071,11 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
     },
     amount_to_replenish: function amount_to_replenish() {
+<<<<<<< HEAD
       var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+=======
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
+>>>>>>> develop
       var amount = this.mixin_convertToNumber(this.form.amount);
       var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
       var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
@@ -1037,7 +1091,11 @@ __webpack_require__.r(__webpack_exports__);
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
+<<<<<<< HEAD
       var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+=======
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
+>>>>>>> develop
       var amount = this.mixin_convertToNumber(this.form.amount);
       var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
 
@@ -1059,7 +1117,11 @@ __webpack_require__.r(__webpack_exports__);
       return this.mixin_convertToNumber(amt_to_replenish + amt_to_reimburse);
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
+<<<<<<< HEAD
       return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
+=======
+      return parseFloat(this.form.amount) > parseFloat(this.form.user.remaining_fund);
+>>>>>>> develop
     },
     taxable_amount: {
       get: function get() {
@@ -1108,9 +1170,15 @@ __webpack_require__.r(__webpack_exports__);
         return parseFloat(total) + parseFloat(item.total);
       }, 0);
 
+<<<<<<< HEAD
       if (this.form.employee.id == null) {
         this.itemize = false;
         this.$dialog.message.error("No Employee Selected", {
+=======
+      if (this.form.user.id == null) {
+        this.itemize = false;
+        this.$dialog.message.error("No User Selected", {
+>>>>>>> develop
           position: "top-right",
           timeout: 2000
         });
@@ -1388,8 +1456,13 @@ var render = function() {
                               _c("v-autocomplete", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required,
+<<<<<<< HEAD
                                   items: _vm.employees,
                                   "error-messages": _vm.errors.employee_id,
+=======
+                                  items: _vm.users,
+                                  "error-messages": _vm.errors.user_id,
+>>>>>>> develop
                                   "item-value": "id",
                                   "item-text": "full_name",
                                   label: "Employee",
@@ -1398,16 +1471,28 @@ var render = function() {
                                 },
                                 on: {
                                   input: function($event) {
+<<<<<<< HEAD
                                     _vm.errors.employee_id = []
+=======
+                                    _vm.errors.user_id = []
+>>>>>>> develop
                                   },
                                   change: _vm.loadExpenseTypes
                                 },
                                 model: {
+<<<<<<< HEAD
                                   value: _vm.form.employee,
                                   callback: function($$v) {
                                     _vm.$set(_vm.form, "employee", $$v)
                                   },
                                   expression: "form.employee"
+=======
+                                  value: _vm.form.user,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "user", $$v)
+                                  },
+                                  expression: "form.user"
+>>>>>>> develop
                                 }
                               }),
                               _vm._v(" "),
@@ -1633,7 +1718,11 @@ var render = function() {
                                           _vm._v(
                                             _vm._s(
                                               _vm.mixin_formatNumber(
+<<<<<<< HEAD
                                                 _vm.form.employee.remaining_fund
+=======
+                                                _vm.form.user.remaining_fund
+>>>>>>> develop
                                               )
                                             )
                                           )

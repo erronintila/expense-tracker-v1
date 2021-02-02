@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\ExpenseReport;
 
-use App\Http\Resources\Employee\EmployeeOnlyResource;
+use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\Payment\PaymentOnlyResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -85,7 +85,7 @@ class ExpenseReportIndexResource extends JsonResource
             // -------------------------------------------------------------------
             // "expenses" => ExpenseOnlyResource::collection($this->whenLoaded('expenses')),
             "payments" => PaymentOnlyResource::collection($this->whenLoaded('payments')),
-            "employee" => new EmployeeOnlyResource($this->whenLoaded('employee'))
+            "user" => new UserOnlyResource($this->whenLoaded('user'))
         ];
     }
 }

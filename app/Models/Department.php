@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\ApiResponse;
+use App\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -148,19 +149,19 @@ class Department extends Model
     }
 
     /**
-     * Displays employees associated with department
+     * Displays users associated with department
      * Has-Many-Through Relationship
-     * Get all of the employees for the department.
+     * Get all of the users for the department.
      *
      * @return mixed
      */
-    public function employees()
+    public function users()
     {
         return $this->hasManyThrough(
-            Employee::class,
+            User::class,
             Job::class,
             'department_id', // Foreign key on jobs table...
-            'job_id', // Foreign key on employees table...
+            'job_id', // Foreign key on users table...
             'id', // Local key on departments table...
             'id' // Local key on jobs table...
         );

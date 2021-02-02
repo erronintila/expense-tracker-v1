@@ -45,13 +45,13 @@
                             </v-list-item>
                             <v-list-item>
                                 <v-select
-                                    label="Employee"
-                                    v-model="employee"
-                                    :items="employees"
+                                    label="User"
+                                    v-model="user"
+                                    :items="users"
                                     item-text="full_name"
                                     item-value="id"
                                     return-object
-                                    @change="updateEmployee"
+                                    @change="updateUser"
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -99,7 +99,7 @@
                                     class="ml-0 pl-0"
                                     text
                                     :to="{
-                                        name: 'admin.employees.index'
+                                        name: 'admin.users.index'
                                     }"
                                 >
                                     <span>
@@ -217,7 +217,7 @@
                                                     Payment to Receive:
                                                     Reimbursed expenses waiting
                                                     to be received by the
-                                                    employee
+                                                    user
                                                 </div>
                                             </v-card-text>
                                         </v-card>
@@ -579,7 +579,7 @@ export default {
             filter: { text: "Expenses by type", value: "expense_type" },
             filterItems: [
                 { text: "Expenses by type", value: "expense_type" },
-                { text: "Expenses per employee", value: "employee" },
+                { text: "Expenses per user", value: "user" },
                 { text: "Expenses per department", value: "department" }
             ],
 
@@ -633,22 +633,22 @@ export default {
             ],
             items: [],
 
-            employee: { id: 0, full_name: "All Employees" },
-            employees: []
+            user: { id: 0, full_name: "All Users" },
+            users: []
         };
     },
     methods: {
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
-                .get("/api/data/employees")
+                .get("/api/data/users")
                 .then(response => {
-                    _this.employees = response.data.data;
+                    _this.users = response.data.data;
 
-                    _this.employees.unshift({
+                    _this.users.unshift({
                         id: 0,
-                        full_name: "All Employees"
+                        full_name: "All Users"
                     });
                 })
                 .catch(error => {
@@ -661,7 +661,7 @@ export default {
                     );
                 });
         },
-        load_department_expenses(start, end, employee) {
+        load_department_expenses(start, end, user) {
             let _this = this;
 
             axios
@@ -669,7 +669,7 @@ export default {
                     params: {
                         start_date: start,
                         end_date: end,
-                        employee_id: employee,
+                        user_id: user,
                         admin_page: true
                     }
                 })
@@ -710,7 +710,7 @@ export default {
                     );
                 });
         },
-        load_expense_types_expenses(start, end, employee) {
+        load_expense_types_expenses(start, end, user) {
             let _this = this;
 
             axios
@@ -718,7 +718,7 @@ export default {
                     params: {
                         start_date: start,
                         end_date: end,
-                        employee_id: employee,
+                        user_id: user,
                         admin_page: true
                     }
                 })
@@ -759,19 +759,21 @@ export default {
                     );
                 });
         },
-        load_employees_expenses(start, end, employee) {
+        load_users_expenses(start, end, user) {
             let _this = this;
 
             axios
-                .get("/api/data/employees_expenses_summary", {
+                .get("/api/data/users_expenses_summary", {
                     params: {
-                        start_date: start,
-                        end_date: end,
-                        employee_id: employee,
-                        admin_page: true
+                        start_date: start, 
+                        end_date: end, 
+                        user_id: user, 
+                        admin_page: true 
                     }
                 })
                 .then(response => {
+                    console.log("response", response);
+
                     _this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
@@ -808,7 +810,7 @@ export default {
                     );
                 });
         },
-        load_expenses_summary(start, end, time_unit, employee) {
+        load_expenses_summary(start, end, time_unit, user) {
             let _this = this;
 
             axios
@@ -817,7 +819,7 @@ export default {
                         start_date: start,
                         end_date: end,
                         time_unit: time_unit,
-                        employee_id: employee,
+                        user_id: user,
                         admin_page: true
                     }
                 })
@@ -1092,20 +1094,20 @@ export default {
                     this.load_expense_types_expenses(
                         start,
                         end,
-                        this.employee.id
+                        this.user.id
                     );
                     break;
                 case "department":
-                    this.load_department_expenses(start, end, this.employee.id);
+                    this.load_department_expenses(start, end, this.user.id);
                     break;
-                case "employee":
-                    this.load_employees_expenses(start, end, this.employee.id);
+                case "user":
+                    this.load_users_expenses(start, end, this.user.id);
                     break;
                 default:
                     this.load_expense_types_expenses(
                         start,
                         end,
-                        this.employee.id
+                        this.user.id
                     );
                     break;
             }
@@ -1115,7 +1117,7 @@ export default {
                 this.date_range[0],
                 this.date_range[1],
                 this.groupBy,
-                this.employee.id
+                this.user.id
             );
         },
         updateDates(e) {
@@ -1130,10 +1132,10 @@ export default {
             this.getExpenseStats(
                 this.date_range[0],
                 this.date_range[1],
-                this.employee.id
+                this.user.id
             );
         },
-        updateEmployee() {
+        updateUser() {
             // this.onCategoryChange();
 
             this.onTimeUnitChange();
@@ -1141,7 +1143,7 @@ export default {
             this.getExpenseStats(
                 this.date_range[0],
                 this.date_range[1],
-                this.employee.id
+                this.user.id
             );
         },
         getExpenseStats(start, end, emp) {
@@ -1149,7 +1151,7 @@ export default {
 
             axios
                 .get(
-                    `/api/data/expense_stats?start_date=${start}&end_date=${end}&employee_id=${emp}`
+                    `/api/data/expense_stats?start_date=${start}&end_date=${end}&user_id=${emp}`
                 )
                 .then(response => {
                     _this.total = response.data.total;
@@ -1160,14 +1162,14 @@ export default {
                     this.load_expense_types_expenses(
                         this.date_range[0],
                         this.date_range[1],
-                        this.employee.id
+                        this.user.id
                     );
 
                     this.load_expenses_summary(
                         this.date_range[0],
                         this.date_range[1],
                         this.groupBy,
-                        this.employee.id
+                        this.user.id
                     );
                 })
                 .catch(error => {
@@ -1182,9 +1184,9 @@ export default {
                     _this.loader = true;
                 });
         },
-        // loadStatistics(start, end, employee_id) {
+        // loadStatistics(start, end, user_id) {
         //     let _this = this;
-        //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&employee_id=${employee_id}`)
+        //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
         //     .then(response => {
         //         console.log(response);
         //     }).catch(error => {
@@ -1194,7 +1196,7 @@ export default {
         // }
     },
     mounted() {
-        this.loadEmployees();
+        this.loadUsers();
 
         this.load_pie_chart();
         this.load_bar_chart();
@@ -1203,7 +1205,7 @@ export default {
         this.getExpenseStats(
             this.date_range[0],
             this.date_range[1],
-            this.employee.id
+            this.user.id
         );
 
         // this.loadStatistics();

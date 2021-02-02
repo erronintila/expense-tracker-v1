@@ -103,7 +103,7 @@
             <template v-slot:append>
                 <!-- <div
                     class="text-center mt-5 mb-5"
-                    v-if="$store.getters.user.employee.fund > 0"
+                    v-if="$store.getters.user.fund > 0"
                 >
                     <div>
                         <v-divider width="50%" inset></v-divider>
@@ -118,7 +118,7 @@
                     >
                         {{
                             mixin_formatNumber(
-                                $store.getters.user.employee.remaining_fund
+                                $store.getters.user.remaining_fund
                             )
                         }}
                     </v-btn>
@@ -126,7 +126,7 @@
                         /
                         {{
                             mixin_formatNumber(
-                                $store.getters.user.employee.fund
+                                $store.getters.user.fund
                             )
                         }}
                     </div>
@@ -250,7 +250,7 @@
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
-                                        v-text="item.data.data.employee.full_name"
+                                        v-text="item.data.data.user.full_name"
                                     ></v-list-item-title>
 
                                     <v-list-item-subtitle

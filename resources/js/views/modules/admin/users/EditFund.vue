@@ -47,7 +47,7 @@
                                         >
                                             {{
                                                 mixin_formatNumber(
-                                                    employee.fund
+                                                    user.fund
                                                 )
                                             }}
                                         </td>
@@ -62,7 +62,7 @@
                                         >
                                             {{
                                                 mixin_formatNumber(
-                                                    employee.remaining_fund
+                                                    user.remaining_fund
                                                 )
                                             }}
                                         </td>
@@ -124,7 +124,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn :to="{ name: 'admin.employees.index' }">
+                        <v-btn :to="{ name: 'admin.users.index' }">
                             Cancel
                         </v-btn>
                     </v-card-actions>
@@ -140,7 +140,7 @@ export default {
         return {
             valid: false,
             adjustment_type: "Add Amount",
-            employee: { id: null, fullname: "", fund: 0, remaining_fund: 0 },
+            user: { id: null, fullname: "", fund: 0, remaining_fund: 0 },
             reference: "",
             code: "",
             description: "",
@@ -148,7 +148,7 @@ export default {
             type: "Manage Revolving Fund",
             remarks: "",
             errors: {
-                employee: [],
+                user: [],
                 reference: [],
                 code: [],
                 description: [],
@@ -158,13 +158,13 @@ export default {
         };
     },
     methods: {
-        loadEmployees() {
+        loadusers() {
             let _this = this;
 
             axios
-                .get("/api/employees/" + this.$route.params.id)
+                .get("/api/users/" + this.$route.params.id)
                 .then(response => {
-                    _this.employee = response.data.data;
+                    _this.user = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -193,7 +193,7 @@ export default {
                         if (res) {
                             axios
                                 .put(
-                                    `/api/employees/${_this.$route.params.id}`,
+                                    `/api/users/${_this.$route.params.id}`,
                                     {
                                         action: "update fund",
                                         fund: _this.new_fund,
@@ -211,7 +211,7 @@ export default {
 
                                     _this.$store.dispatch("AUTH_USER");
 
-                                    _this.$router.push("/admin/employees");
+                                    _this.$router.push("/admin/users");
                                 })
                                 .catch(function(error) {
                                     console.log(error);
@@ -231,8 +231,8 @@ export default {
                 //     this.adjustment_type == "Subtract Amount" ? this.amount : 0;
 
                 // axios
-                //     .put("/api/employees", {
-                //         employee: _this.employee.id,
+                //     .put("/api/users", {
+                //         user: _this.user.id,
                 //         reference: _this.reference,
                 //         code: _this.code,
                 //         description: _this.description,
@@ -268,33 +268,33 @@ export default {
         new_fund() {
             if (this.adjustment_type == "Add Amount") {
                 return (
-                    this.mixin_convertToNumber(this.employee.fund) +
+                    this.mixin_convertToNumber(this.user.fund) +
                     this.mixin_convertToNumber(this.amount)
                 );
             }
 
             return (
-                this.mixin_convertToNumber(this.employee.fund) -
+                this.mixin_convertToNumber(this.user.fund) -
                 this.mixin_convertToNumber(this.amount)
             );
         },
         new_remaining_fund() {
             if (this.adjustment_type == "Add Amount") {
                 return (
-                    this.mixin_convertToNumber(this.employee.remaining_fund) +
+                    this.mixin_convertToNumber(this.user.remaining_fund) +
                     this.mixin_convertToNumber(this.amount)
                 );
             }
 
             return (
-                this.mixin_convertToNumber(this.employee.remaining_fund) -
+                this.mixin_convertToNumber(this.user.remaining_fund) -
                 this.mixin_convertToNumber(this.amount)
             );
         }
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-        this.loadEmployees();
+        this.loadusers();
     }
 };
 </script>

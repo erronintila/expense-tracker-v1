@@ -395,6 +395,72 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
+=======
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+>>>>>>> develop
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -407,6 +473,7 @@ __webpack_require__.r(__webpack_exports__);
       dialogPassword: false,
       dialog: false,
       menu: false,
+<<<<<<< HEAD
       user: {
         id: "",
         name: "",
@@ -433,6 +500,54 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       },
+=======
+      form: {
+        id: null,
+        code: null,
+        first_name: null,
+        middle_name: "",
+        last_name: null,
+        suffix: "",
+        gender: null,
+        birthdate: null,
+        mobile_number: null,
+        telephone_number: "",
+        address: null,
+        fund: 0,
+        remaining_fund: 0,
+        username: "",
+        email: null,
+        password: "password",
+        password_confirmation: "password",
+        is_admin: false,
+        is_superadmin: false,
+        can_login: true,
+        type: "",
+        job: null,
+        old_permissions: [],
+        permissions: [],
+        old_role: "",
+        role: "Standard User"
+      },
+      // id: "",
+      // email: "",
+      // username: "",
+      // is_admin: "",
+      // updated_at: "",
+      // can_login: 1,
+      // full_name: "",
+      // first_name: "",
+      // middle_name: "",
+      // last_name: "",
+      // suffix: "",
+      // gender: "",
+      // birthdate: "",
+      // mobile_number: "",
+      // telephone_number: "",
+      // email: "",
+      // address: "",
+      // job: { department: {} },
+>>>>>>> develop
       old_password: "",
       password: "",
       password_confirmation: "",
@@ -449,6 +564,7 @@ __webpack_require__.r(__webpack_exports__);
         password_confirmation: []
       },
       rules: {
+<<<<<<< HEAD
         username: [function (v) {
           return !!v || "Username is required";
         }],
@@ -473,13 +589,27 @@ __webpack_require__.r(__webpack_exports__);
         job: [function (v) {
           return !!v || "Job designation is required";
         }],
+=======
+        username: [],
+        first_name: [],
+        middle_name: [],
+        last_name: [],
+        suffix: [],
+        gender: [],
+        birthdate: [],
+        job: [],
+>>>>>>> develop
         mobile_number: [],
         telephone_number: [],
         email: [],
         address: []
       },
       errors: {
+<<<<<<< HEAD
         username: [],
+=======
+        code: [],
+>>>>>>> develop
         first_name: [],
         middle_name: [],
         last_name: [],
@@ -490,7 +620,16 @@ __webpack_require__.r(__webpack_exports__);
         mobile_number: [],
         telephone_number: [],
         email: [],
+<<<<<<< HEAD
         address: []
+=======
+        address: [],
+        username: [],
+        role: [],
+        can_login: [],
+        has_fund: [],
+        fund: []
+>>>>>>> develop
       }
     };
   },
@@ -499,6 +638,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this; // _this.$refs.form.validate();
 
 
+<<<<<<< HEAD
       if (_this.$refs.form.validate() && this.user.employee == null) {
         axios.put("/api/users/" + _this.user.id, {
           action: "update",
@@ -509,16 +649,65 @@ __webpack_require__.r(__webpack_exports__);
           is_admin: _this.user.is_admin,
           can_login: _this.user.can_login,
           employee_id: 0
+=======
+      if (_this.$refs.form.validate()) {
+        axios.put("/api/users/" + _this.form.id, {
+          action: "update",
+          profile_update: true,
+          // email: _this.form.email,
+          // username: _this.form.username,
+          // is_admin: _this.form.is_admin,
+          // can_login: _this.form.can_login,
+          // first_name: _this.form.first_name,
+          // middle_name: _this.form.middle_name,
+          // last_name: _this.form.last_name,
+          // suffix: _this.form.suffix,
+          // gender: _this.form.gender,
+          // birthdate: _this.form.birthdate,
+          // mobile_number: _this.form.mobile_number,
+          // telephone_number: _this.form.telephone_number,
+          // email: _this.form.email,
+          // address: _this.form.address,
+          // user_id: _this.form.id,
+          id: _this.form.id,
+          code: _this.form.id,
+          first_name: _this.form.first_name,
+          middle_name: _this.form.middle_name,
+          last_name: _this.form.last_name,
+          suffix: _this.form.suffix,
+          gender: _this.form.gender,
+          birthdate: _this.form.birthdate,
+          mobile_number: _this.form.mobile_number,
+          telephone_number: _this.form.telephone_number,
+          address: _this.form.address,
+          fund: _this.form.fund,
+          remaining_fund: _this.form.remaining_fund,
+          username: _this.form.username,
+          email: _this.form.email,
+          password: "password",
+          password_confirmation: "password",
+          is_admin: _this.form.is_admin,
+          is_superadmin: _this.form.is_superadmin,
+          can_login: _this.form.can_login,
+          type: _this.form.type,
+          job_id: _this.form.job == null ? null : _this.form.job.id
+>>>>>>> develop
         }).then(function (response) {
           _this.$dialog.message.success("User account updated successfully.", {
             position: "top-right",
             timeout: 2000
+<<<<<<< HEAD
           });
+=======
+          }); // _this.$store.dispatch("AUTH_USER");
+
+>>>>>>> develop
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
 
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+<<<<<<< HEAD
 
           _this.errors = error.response.data.errors;
         });
@@ -596,6 +785,46 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       }
+=======
+
+          _this.errors = error.response.data.errors;
+        });
+      }
+    },
+    onUpdatePassword: function onUpdatePassword() {
+      var _this = this;
+
+      if (_this.$refs.form_password.validate()) {
+        axios.put("/api/users/" + _this.id, {
+          action: "change_password",
+          old_password: _this.old_password,
+          password: _this.password,
+          password_confirmation: _this.password_confirmation
+        }).then(function (response) {
+          _this.$dialog.message.success("User account password has been updated.", {
+            position: "top-right",
+            timeout: 2000
+          }); // _this.$store.dispatch("AUTH_USER");
+
+
+          _this.dialogPassword = false;
+          _this.old_password = "";
+          _this.password = "";
+          _this.password_confirmation = "";
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          if (error.response) {
+            if (error.response.data) {
+              _this.password_errors = error.response.data.errors;
+            }
+          }
+        });
+      }
+>>>>>>> develop
     },
     closePasswordDialog: function closePasswordDialog() {
       this.dialogPassword = false;
@@ -603,6 +832,7 @@ __webpack_require__.r(__webpack_exports__);
       this.password = "";
       this.password_confirmation = "";
       this.$refs.form_password.resetValidation();
+<<<<<<< HEAD
     }
   },
   computed: {
@@ -610,11 +840,24 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
   },
+=======
+    }
+  },
+  computed: {
+    maxDate: function maxDate() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+    }
+  },
+>>>>>>> develop
   created: function created() {
     var _this = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
+<<<<<<< HEAD
       _this.user = response;
+=======
+      _this.form = response;
+>>>>>>> develop
 
       _this.$store.dispatch("AUTH_NOTIFICATIONS");
     });
@@ -641,7 +884,11 @@ var render = function() {
   return _c(
     "div",
     [
+<<<<<<< HEAD
       _vm.user.id == ""
+=======
+      _vm.form.id == ""
+>>>>>>> develop
         ? _c(
             "v-container",
             { staticStyle: { height: "400px" } },
@@ -659,7 +906,15 @@ var render = function() {
                       staticClass: "subtitle-1 text-center",
                       attrs: { cols: "12" }
                     },
+<<<<<<< HEAD
                     [_vm._v("\n        Loading, Please wait...\n      ")]
+=======
+                    [
+                      _vm._v(
+                        "\n                Loading, Please wait...\n            "
+                      )
+                    ]
+>>>>>>> develop
                   ),
                   _vm._v(" "),
                   _c(
@@ -701,7 +956,15 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("v-card-subtitle", [
+<<<<<<< HEAD
                 _vm._v(" Last updated: " + _vm._s(_vm.user.updated_at) + " ")
+=======
+                _vm._v(
+                  "\n            Last updated: " +
+                    _vm._s(_vm.form.updated_at) +
+                    "\n        "
+                )
+>>>>>>> develop
               ]),
               _vm._v(" "),
               _c(
@@ -782,6 +1045,7 @@ var render = function() {
                                                   1
                                                 ),
                                                 _vm._v(" "),
+<<<<<<< HEAD
                                                 _vm.user.employee !== null
                                                   ? _c(
                                                       "v-row",
@@ -949,6 +1213,109 @@ var render = function() {
                                                       ],
                                                       1
                                                     )
+=======
+                                                _c(
+                                                  "v-row",
+                                                  [
+                                                    _c(
+                                                      "v-col",
+                                                      {
+                                                        attrs: {
+                                                          cols: "12",
+                                                          align: "center",
+                                                          justify: "center"
+                                                        }
+                                                      },
+                                                      [
+                                                        _c("div", [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.form.job ==
+                                                                  null
+                                                                  ? ""
+                                                                  : _vm.form.job
+                                                                      .department ==
+                                                                    null
+                                                                  ? ""
+                                                                  : _vm.form.job
+                                                                      .department
+                                                                      .name
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "h3",
+                                                          {
+                                                            staticClass:
+                                                              "display-1 green--text"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                                                " +
+                                                                _vm._s(
+                                                                  _vm.form
+                                                                    .last_name +
+                                                                    ", " +
+                                                                    (_vm.form
+                                                                      .first_name ||
+                                                                      "") +
+                                                                    " " +
+                                                                    (_vm.form
+                                                                      .suffix ||
+                                                                      "")
+                                                                ) +
+                                                                "\n                                            "
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c("p", [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.form.job ==
+                                                                  null
+                                                                  ? ""
+                                                                  : _vm.form.job
+                                                                      .name
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "text--primary"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                                                " +
+                                                                _vm._s(
+                                                                  _vm.form
+                                                                    .mobile_number
+                                                                )
+                                                            ),
+                                                            _c("br"),
+                                                            _vm._v(
+                                                              "\n                                                " +
+                                                                _vm._s(
+                                                                  _vm.form.email
+                                                                ) +
+                                                                "\n                                            "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+>>>>>>> develop
                                               ],
                                               1
                                             ),
@@ -987,7 +1354,11 @@ var render = function() {
                                                             ),
                                                             [
                                                               _vm._v(
+<<<<<<< HEAD
                                                                 "\n                      Change Password\n                    "
+=======
+                                                                "\n                                            Change Password\n                                        "
+>>>>>>> develop
                                                               )
                                                             ]
                                                           )
@@ -1018,7 +1389,11 @@ var render = function() {
                                                       },
                                                       [
                                                         _vm._v(
+<<<<<<< HEAD
                                                           "\n                      Change Password\n                    "
+=======
+                                                          "\n                                            Change Password\n                                        "
+>>>>>>> develop
                                                         )
                                                       ]
                                                     ),
@@ -1089,7 +1464,11 @@ var render = function() {
                                                                                 _vm.old_password = $$v
                                                                               },
                                                                               expression:
+<<<<<<< HEAD
                                                                                 "old_password"
+=======
+                                                                                "\n                                                                    old_password\n                                                                "
+>>>>>>> develop
                                                                             }
                                                                           }
                                                                         )
@@ -1151,7 +1530,11 @@ var render = function() {
                                                                                 _vm.password = $$v
                                                                               },
                                                                               expression:
+<<<<<<< HEAD
                                                                                 "password"
+=======
+                                                                                "\n                                                                    password\n                                                                "
+>>>>>>> develop
                                                                             }
                                                                           }
                                                                         )
@@ -1212,7 +1595,11 @@ var render = function() {
                                                                                 _vm.password_confirmation = $$v
                                                                               },
                                                                               expression:
+<<<<<<< HEAD
                                                                                 "password_confirmation"
+=======
+                                                                                "\n                                                                    password_confirmation\n                                                                "
+>>>>>>> develop
                                                                             }
                                                                           }
                                                                         )
@@ -1249,7 +1636,11 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
+<<<<<<< HEAD
                                                                   "\n                          Cancel\n                        "
+=======
+                                                                  "\n                                                    Cancel\n                                                "
+>>>>>>> develop
                                                                 )
                                                               ]
                                                             ),
@@ -1269,7 +1660,11 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
+<<<<<<< HEAD
                                                                   "\n                          Save\n                        "
+=======
+                                                                  "\n                                                    Save\n                                                "
+>>>>>>> develop
                                                                 )
                                                               ]
                                                             )
@@ -1902,6 +2297,456 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-row",
+<<<<<<< HEAD
+=======
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "12" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.username,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.username,
+                                              label: "Username",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.username = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.username,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "username",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.username"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.first_name,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.first_name,
+                                              label: "First Name",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.first_name = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.first_name,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "first_name",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.first_name"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.middle_name,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.middle_name,
+                                              label: "Middle Name"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.middle_name = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.middle_name,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "middle_name",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.middle_name"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.last_name,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.last_name,
+                                              label: "Last Name",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.last_name = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.last_name,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "last_name",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.last_name"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-combobox", {
+                                            attrs: {
+                                              rules: _vm.rules.suffix,
+                                              counter: 30,
+                                              items: ["Jr", "Sr", "II", "III"],
+                                              "error-messages":
+                                                _vm.errors.suffix,
+                                              label: "Suffix"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.suffix = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.suffix,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "suffix",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.suffix"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-select", {
+                                            attrs: {
+                                              rules: _vm.rules.gender,
+                                              items: ["Male", "Female"],
+                                              "error-messages":
+                                                _vm.errors.gender,
+                                              label: "Gender",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.gender = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.gender,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "gender",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.gender"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c(
+                                            "v-menu",
+                                            {
+                                              ref: "menu",
+                                              attrs: {
+                                                transition: "scale-transition",
+                                                "offset-y": "",
+                                                "min-width": "290px",
+                                                "close-on-content-click": false
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "activator",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    return [
+                                                      _c(
+                                                        "v-text-field",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                rules:
+                                                                  _vm.rules
+                                                                    .birthdate,
+                                                                "error-messages":
+                                                                  _vm.errors
+                                                                    .birthdate,
+                                                                label:
+                                                                  "Birthdate ",
+                                                                readonly: ""
+                                                              },
+                                                              on: {
+                                                                input: function(
+                                                                  $event
+                                                                ) {
+                                                                  _vm.errors.birthdate = []
+                                                                }
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.form
+                                                                    .birthdate,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.form,
+                                                                    "birthdate",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "form.birthdate"
+                                                              }
+                                                            },
+                                                            "v-text-field",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        )
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ]),
+                                              model: {
+                                                value: _vm.menu,
+                                                callback: function($$v) {
+                                                  _vm.menu = $$v
+                                                },
+                                                expression: "menu"
+                                              }
+                                            },
+                                            [
+                                              _vm._v(" "),
+                                              _c("v-date-picker", {
+                                                attrs: {
+                                                  "no-title": "",
+                                                  scrollable: "",
+                                                  color: "success",
+                                                  max: _vm.maxDate
+                                                },
+                                                model: {
+                                                  value: _vm.form.birthdate,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.form,
+                                                      "birthdate",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "form.birthdate"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.mobile_number,
+                                              counter: 30,
+                                              "error-messages":
+                                                _vm.errors.mobile_number,
+                                              label: "Mobile Number",
+                                              type: "number"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.mobile_number = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.mobile_number,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "mobile_number",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.mobile_number"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.telephone_number,
+                                              counter: 30,
+                                              "error-messages":
+                                                _vm.errors.telephone_number,
+                                              label: "Telephone Number",
+                                              type: "number"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.telephone_number = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.telephone_number,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "telephone_number",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "form.telephone_number"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.email,
+                                              "error-messages":
+                                                _vm.errors.email,
+                                              label: "Email Address"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.email = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.email,
+                                              callback: function($$v) {
+                                                _vm.$set(_vm.form, "email", $$v)
+                                              },
+                                              expression: "form.email"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12" } },
+                                        [
+                                          _c("v-textarea", {
+                                            attrs: {
+                                              rules: _vm.rules.address,
+                                              "error-messages":
+                                                _vm.errors.address,
+                                              label: "Address",
+                                              rows: "1"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.address = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.address,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "address",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.address"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+>>>>>>> develop
                                     [
                                       _c("v-spacer"),
                                       _vm._v(" "),

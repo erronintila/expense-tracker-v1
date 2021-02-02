@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -88,13 +89,13 @@ class Adjustment extends Model
     */
     
     /**
-     * Displays the employee associated with adjustment.
+     * Displays the user associated with adjustment.
      *
      * @return mixed
      */
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(User::class);
     }
 
     /*

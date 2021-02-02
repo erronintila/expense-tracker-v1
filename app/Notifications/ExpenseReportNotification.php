@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Employee;
+use App\User;
 use App\Models\ExpenseReport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -60,7 +60,7 @@ class ExpenseReportNotification extends Notification
     {
         $expense_report = $this->details['expense_report'];
         $report = ExpenseReport::find($expense_report->id);
-        $employee = Employee::find($expense_report->employee_id);
+        $user = User::find($expense_report->user_id);
         $description = "";
 
         switch ($this->details["action"]) {
@@ -83,9 +83,9 @@ class ExpenseReportNotification extends Notification
                 "model" => "expense_reports",
                 "id" => $report->id,
                 "code" => $report->code,
-                "employee" => [
-                    "id" => $employee->id,
-                    "full_name" => $employee->full_name
+                "user" => [
+                    "id" => $user->id,
+                    "full_name" => $user->full_name
                 ],
                 'expense_report' => [
                     "id" => $report->id,

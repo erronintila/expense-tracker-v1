@@ -34,7 +34,7 @@ class JobResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "department" => new DepartmentResource($this->whenLoaded('department')),
-            "employees" => EmployeeResource::collection($this->whenLoaded('employees')),
+            "users" => UserResource::collection($this->whenLoaded('users')),
         ];
     }
 }

@@ -369,7 +369,11 @@ __webpack_require__.r(__webpack_exports__);
         icon: "mdi-clipboard-account",
         text: "Employees",
         link: {
+<<<<<<< HEAD
           name: "admin.employees.index"
+=======
+          name: "admin.users.index"
+>>>>>>> develop
         }
       }, {
         icon: "mdi-cash-multiple",
@@ -1137,7 +1141,11 @@ var render = function() {
                                 _c("v-list-item-title", {
                                   domProps: {
                                     textContent: _vm._s(
+<<<<<<< HEAD
                                       item.data.data.employee.full_name
+=======
+                                      item.data.data.user.full_name
+>>>>>>> develop
                                     )
                                   }
                                 }),

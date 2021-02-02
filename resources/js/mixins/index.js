@@ -96,10 +96,10 @@ export default {
         },
         mixin_validate_fund() {
             let _this = this;
-            let employee_id = this.$store.getters.user.employee.id;
+            let user_id = this.$store.getters.user.id;
 
             axios
-                .get(`/api/data/validateFund?id=${employee_id}`)
+                .get(`/api/data/validateFund?id=${user_id}`)
                 .then(response => {
                     _this.$store.dispatch("AUTH_USER");
                 })

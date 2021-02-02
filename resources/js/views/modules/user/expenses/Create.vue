@@ -186,7 +186,7 @@
 
                                     <v-btn color="green" dark small outlined>{{
                                         mixin_formatNumber(
-                                            form.employee.remaining_fund
+                                            form.user.remaining_fund
                                         )
                                     }}</v-btn>
                                     ~ Expense Limit:
@@ -591,7 +591,7 @@ export default {
                     sub_types: { id: null, name: "None", limit: null }
                 },
                 sub_type: { id: null, name: "", limit: null },
-                employee: this.$store.getters.user.employee,
+                user: this.$store.getters.user,
                 vendor: {
                     id: null,
                     name: "",
@@ -631,20 +631,20 @@ export default {
                 remarks: [],
                 is_active: [],
                 expense_type_id: [],
-                employee_id: [],
+                user_id: [],
                 vendor_id: []
             }
         };
     },
     methods: {
         loadExpenseTypes() {
-            this.expense_types = this.form.employee.expense_types;
+            this.expense_types = this.form.expense_types;
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
-                .get(`/api/data/employees?expense_ref=true&employee_id=${this.form.employee.id}`)
+                .get(`/api/data/users?expense_ref=true&user_id=${this.form.user.id}`)
                 .then(response => {
                     let data = response.data.data;
                     this.expense_types = data.expense_types;
@@ -727,8 +727,8 @@ export default {
                 }
             }
 
-            if (_this.form.employee.id == null) {
-                _this.$dialog.message.error("No Employee Selected", {
+            if (_this.form.user.id == null) {
+                _this.$dialog.message.error("No User Selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -744,7 +744,7 @@ export default {
             }
 
             if (
-                _this.amount_to_replenish > _this.form.employee.remaining_fund
+                _this.amount_to_replenish > _this.form.user.remaining_fund
             ) {
                 _this.$dialog.message.error(
                     "Amount to replenish is greater than remaining fund",
@@ -787,7 +787,7 @@ export default {
                         is_active: _this.form.is_active,
                         expense_type_id: _this.form.expense_type.id,
                         sub_type_id: _this.form.sub_type.id,
-                        employee_id: _this.form.employee.id,
+                        user_id: _this.form.user.id,
                         vendor_id: _this.form.vendor.id,
                         details: _this.itemize ? _this.items : null,
                         tax_name: "",
@@ -931,7 +931,7 @@ export default {
         },
         amount_to_replenish() {
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.employee.remaining_fund
+                this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
             let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
@@ -949,7 +949,7 @@ export default {
         },
         amount_to_reimburse() {
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.employee.remaining_fund
+                this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
             let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
@@ -979,7 +979,7 @@ export default {
         display_reimbursable_amount() {
             return (
                 parseFloat(this.form.amount) >
-                parseFloat(this.form.employee.remaining_fund)
+                parseFloat(this.form.user.remaining_fund)
             );
         },
         taxable_amount: {
@@ -1050,10 +1050,10 @@ export default {
                 0
             );
 
-            if (this.form.employee.id == null) {
+            if (this.form.id == null) {
                 this.itemize = false;
 
-                this.$dialog.message.error("No Employee Selected", {
+                this.$dialog.message.error("No User Selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -1080,7 +1080,7 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER").then((response) => {
-            this.loadEmployees();
+            this.loadUsers();
         });
         this.loadVendors();
     }

@@ -505,7 +505,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      employee: this.$store.getters.user.employee.id,
+      user: this.$store.getters.user.id,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
@@ -524,7 +524,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         itemsPerPage: 10
       },
       expense_types: [],
-      reports_by_employee: [],
+      reports_by_user: [],
       reports_by_expense: [],
       reports_by_date: []
     };
@@ -558,7 +558,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    loadReportByEmployee: function loadReportByEmployee() {
+    loadReportByUser: function loadReportByUser() {
       var _this3 = this;
 
       return new Promise(function (resolve, reject) {
@@ -566,8 +566,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var ids = _this.selected == null ? [] : _this.selected.map(function (item) {
           return item.id;
         });
-        axios.get("/api/data/print_report?by_employee_id=true&ids=".concat(ids)).then(function (response) {
-          _this.reports_by_employee = response.data.data;
+        axios.get("/api/data/print_report?by_user_id=true&ids=".concat(ids)).then(function (response) {
+          _this.reports_by_user = response.data.data;
           resolve();
         })["catch"](function (error) {
           reject();
@@ -594,15 +594,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    printReportByEmployee: function printReportByEmployee(action) {
+    printReportByUser: function printReportByUser(action) {
       var _this5 = this;
 
-      this.loadReportByEmployee().then(function () {
+      this.loadReportByUser().then(function () {
         var table_columns = [];
         var table_rows = [];
         var table_footer = [];
         table_columns.push({
-          text: "Employee",
+          text: "User",
           style: "tableOfExpensesHeader"
         });
 
@@ -619,21 +619,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
         var temp_table_body = {};
         var temp_expense_types = {};
-        var employee_id = null;
+        var user_id = null;
         var expense_type = null; // loop through retrieved records
 
-        _this5.reports_by_employee.forEach(function (element) {
-          // create new object if current employee does not match with previous record
-          if (employee_id !== element.employee_id) {
+        _this5.reports_by_user.forEach(function (element) {
+          // create new object if current user does not match with previous record
+          if (user_id !== element.user_id) {
             temp_table_body = {};
-            employee_id = element.employee_id; // set default values for current row
+            user_id = element.user_id; // set default values for current row
 
             _this5.expense_types.forEach(function (expense_type) {
               temp_expense_types[expense_type.name] = 0;
             });
 
             temp_table_body = _objectSpread(_objectSpread({
-              Employee: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
+              User: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
             }, temp_expense_types), {}, {
               Total: 0
             });
@@ -865,7 +865,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var expense_type = null; // loop through retrieved records
 
         _this6.reports_by_date.forEach(function (element) {
-          // create new object if current employee does not match with previous record
+          // create new object if current user does not match with previous record
           if (expense_date !== element.expense_date) {
             temp_table_body = {};
             expense_date = element.expense_date; // set default values for current row
@@ -1111,7 +1111,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var expense_type = null; // loop through retrieved records
 
         _this7.reports_by_expense.forEach(function (element) {
-          // create new object if current employee does not match with previous record
+          // create new object if current user does not match with previous record
           if (expense_id !== element.expense_id) {
             temp_table_body = {};
             expense_id = element.expense_id; // set default values for current row
@@ -1233,7 +1233,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             table: {
               headerRows: 1,
               widths: table_columns.map(function (item) {
-                return "*";
+                return "auto";
               }),
               body: body
             },
@@ -1336,8 +1336,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       switch (group_by) {
-        case "employee":
-          this.printReportByEmployee(action);
+        case "user":
+          this.printReportByUser(action);
           break;
 
         case "date":
@@ -1368,7 +1368,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-        var employee_id = _this.employee;
+        var user_id = _this.user;
         var range = _this.date_range;
         axios.get("/api/expense_reports", {
           params: {
@@ -1376,7 +1376,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            employee_id: employee_id,
+            user_id: user_id,
             status: status,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
@@ -1947,7 +1947,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     },
     minDate: function minDate() {
       var settings = this.$store.getters.settings;
@@ -1997,8 +1997,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
+<<<<<<< HEAD
     this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.loadEmployees();
+=======
+    this.$store.dispatch("AUTH_USER"); // this.loadUsers();
+>>>>>>> feature/employee-user-fix
 
     this.loadExpenseTypes();
   }
@@ -2708,16 +2712,16 @@ var render = function() {
                         }
                       },
                       {
-                        key: "item.employee",
+                        key: "item.user",
                         fn: function(ref) {
                           var item = ref.item
                           return [
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  item.employee.last_name +
+                                  item.user.last_name +
                                     ", " +
-                                    item.employee.first_name
+                                    item.user.first_name
                                 ) +
                                 "\n                "
                             )

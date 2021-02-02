@@ -592,8 +592,13 @@ __webpack_require__.r(__webpack_exports__);
         text: "Expenses by type",
         value: "expense_type"
       }, {
+<<<<<<< HEAD
         text: "Expenses per employee",
         value: "employee"
+=======
+        text: "Expenses per user",
+        value: "user"
+>>>>>>> develop
       }, {
         text: "Expenses per department",
         value: "department"
@@ -640,6 +645,7 @@ __webpack_require__.r(__webpack_exports__);
         value: "iron"
       }],
       items: [],
+<<<<<<< HEAD
       employee: {
         id: 0,
         full_name: "All Employees"
@@ -657,6 +663,25 @@ __webpack_require__.r(__webpack_exports__);
         _this.employees.unshift({
           id: 0,
           full_name: "All Employees"
+=======
+      user: {
+        id: 0,
+        full_name: "All Users"
+      },
+      users: []
+    };
+  },
+  methods: {
+    loadUsers: function loadUsers() {
+      var _this = this;
+
+      axios.get("/api/data/users").then(function (response) {
+        _this.users = response.data.data;
+
+        _this.users.unshift({
+          id: 0,
+          full_name: "All Users"
+>>>>>>> develop
         });
       })["catch"](function (error) {
         console.log(error);
@@ -665,7 +690,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
+<<<<<<< HEAD
     load_department_expenses: function load_department_expenses(start, end, employee) {
+=======
+    load_department_expenses: function load_department_expenses(start, end, user) {
+>>>>>>> develop
       var _this2 = this;
 
       var _this = this;
@@ -674,7 +703,11 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           start_date: start,
           end_date: end,
+<<<<<<< HEAD
           employee_id: employee,
+=======
+          user_id: user,
+>>>>>>> develop
           admin_page: true
         }
       }).then(function (response) {
@@ -705,7 +738,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
+<<<<<<< HEAD
     load_expense_types_expenses: function load_expense_types_expenses(start, end, employee) {
+=======
+    load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
+>>>>>>> develop
       var _this3 = this;
 
       var _this = this;
@@ -714,7 +751,11 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           start_date: start,
           end_date: end,
+<<<<<<< HEAD
           employee_id: employee,
+=======
+          user_id: user,
+>>>>>>> develop
           admin_page: true
         }
       }).then(function (response) {
@@ -745,11 +786,16 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
+<<<<<<< HEAD
     load_employees_expenses: function load_employees_expenses(start, end, employee) {
+=======
+    load_users_expenses: function load_users_expenses(start, end, user) {
+>>>>>>> develop
       var _this4 = this;
 
       var _this = this;
 
+<<<<<<< HEAD
       axios.get("/api/data/employees_expenses_summary", {
         params: {
           start_date: start,
@@ -758,6 +804,17 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: true
         }
       }).then(function (response) {
+=======
+      axios.get("/api/data/users_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          user_id: user,
+          admin_page: true
+        }
+      }).then(function (response) {
+        console.log("response", response);
+>>>>>>> develop
         _this.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;
@@ -785,7 +842,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
+<<<<<<< HEAD
     load_expenses_summary: function load_expenses_summary(start, end, time_unit, employee) {
+=======
+    load_expenses_summary: function load_expenses_summary(start, end, time_unit, user) {
+>>>>>>> develop
       var _this5 = this;
 
       var _this = this;
@@ -795,7 +856,11 @@ __webpack_require__.r(__webpack_exports__);
           start_date: start,
           end_date: end,
           time_unit: time_unit,
+<<<<<<< HEAD
           employee_id: employee,
+=======
+          user_id: user,
+>>>>>>> develop
           admin_page: true
         }
       }).then(function (response) {
@@ -1029,6 +1094,7 @@ __webpack_require__.r(__webpack_exports__);
 
       switch (this.filter) {
         case "expense_type":
+<<<<<<< HEAD
           this.load_expense_types_expenses(start, end, this.employee.id);
           break;
 
@@ -1042,37 +1108,75 @@ __webpack_require__.r(__webpack_exports__);
 
         default:
           this.load_expense_types_expenses(start, end, this.employee.id);
+=======
+          this.load_expense_types_expenses(start, end, this.user.id);
+          break;
+
+        case "department":
+          this.load_department_expenses(start, end, this.user.id);
+          break;
+
+        case "user":
+          this.load_users_expenses(start, end, this.user.id);
+          break;
+
+        default:
+          this.load_expense_types_expenses(start, end, this.user.id);
+>>>>>>> develop
           break;
       }
     },
     onTimeUnitChange: function onTimeUnitChange() {
+<<<<<<< HEAD
       this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.employee.id);
+=======
+      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.user.id);
+>>>>>>> develop
     },
     updateDates: function updateDates(e) {
       this.date_range = e;
       this.expenses_by_category = []; // this.onCategoryChange();
 
       this.onTimeUnitChange();
+<<<<<<< HEAD
       this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
     },
     updateEmployee: function updateEmployee() {
       // this.onCategoryChange();
       this.onTimeUnitChange();
       this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id);
+=======
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
+    },
+    updateUser: function updateUser() {
+      // this.onCategoryChange();
+      this.onTimeUnitChange();
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
+>>>>>>> develop
     },
     getExpenseStats: function getExpenseStats(start, end, emp) {
       var _this7 = this;
 
       var _this = this;
 
+<<<<<<< HEAD
       axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&employee_id=").concat(emp)).then(function (response) {
+=======
+      axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&user_id=").concat(emp)).then(function (response) {
+>>>>>>> develop
         _this.total = response.data.total;
         _this.count = response.data.count;
         _this.loader = false;
 
+<<<<<<< HEAD
         _this7.load_expense_types_expenses(_this7.date_range[0], _this7.date_range[1], _this7.employee.id);
 
         _this7.load_expenses_summary(_this7.date_range[0], _this7.date_range[1], _this7.groupBy, _this7.employee.id);
+=======
+        _this7.load_expense_types_expenses(_this7.date_range[0], _this7.date_range[1], _this7.user.id);
+
+        _this7.load_expenses_summary(_this7.date_range[0], _this7.date_range[1], _this7.groupBy, _this7.user.id);
+>>>>>>> develop
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -1081,9 +1185,15 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.loader = true;
       });
+<<<<<<< HEAD
     } // loadStatistics(start, end, employee_id) {
     //     let _this = this;
     //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&employee_id=${employee_id}`)
+=======
+    } // loadStatistics(start, end, user_id) {
+    //     let _this = this;
+    //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
+>>>>>>> develop
     //     .then(response => {
     //         console.log(response);
     //     }).catch(error => {
@@ -1094,11 +1204,19 @@ __webpack_require__.r(__webpack_exports__);
 
   },
   mounted: function mounted() {
+<<<<<<< HEAD
     this.loadEmployees();
     this.load_pie_chart();
     this.load_bar_chart();
     this.load_line_chart();
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.employee.id); // this.loadStatistics();
+=======
+    this.loadUsers();
+    this.load_pie_chart();
+    this.load_bar_chart();
+    this.load_line_chart();
+    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id); // this.loadStatistics();
+>>>>>>> develop
   },
   created: function created() {
     this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.$store.dispatch("AUTH_USER");
@@ -1249,12 +1367,18 @@ var render = function() {
                                 [
                                   _c("v-select", {
                                     attrs: {
+<<<<<<< HEAD
                                       label: "Employee",
                                       items: _vm.employees,
+=======
+                                      label: "User",
+                                      items: _vm.users,
+>>>>>>> develop
                                       "item-text": "full_name",
                                       "item-value": "id",
                                       "return-object": ""
                                     },
+<<<<<<< HEAD
                                     on: { change: _vm.updateEmployee },
                                     model: {
                                       value: _vm.employee,
@@ -1262,6 +1386,15 @@ var render = function() {
                                         _vm.employee = $$v
                                       },
                                       expression: "employee"
+=======
+                                    on: { change: _vm.updateUser },
+                                    model: {
+                                      value: _vm.user,
+                                      callback: function($$v) {
+                                        _vm.user = $$v
+                                      },
+                                      expression: "user"
+>>>>>>> develop
                                     }
                                   })
                                 ],
@@ -1389,7 +1522,11 @@ var render = function() {
                                             attrs: {
                                               text: "",
                                               to: {
+<<<<<<< HEAD
                                                 name: "admin.employees.index"
+=======
+                                                name: "admin.users.index"
+>>>>>>> develop
                                               }
                                             }
                                           },
@@ -1653,7 +1790,11 @@ var render = function() {
                                                       _vm._v(" "),
                                                       _c("div", [
                                                         _vm._v(
+<<<<<<< HEAD
                                                           "\n                                                Payment to Receive:\n                                                Reimbursed expenses waiting\n                                                to be received by the\n                                                employee\n                                            "
+=======
+                                                          "\n                                                Payment to Receive:\n                                                Reimbursed expenses waiting\n                                                to be received by the\n                                                user\n                                            "
+>>>>>>> develop
                                                         )
                                                       ])
                                                     ])
