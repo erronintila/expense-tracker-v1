@@ -1,6 +1,22 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <v-container v-if="loader" style="height: 400px;">
+            <v-row class="fill-height" align-content="center" justify="center">
+                <v-col class="subtitle-1 text-center" cols="12">
+                    Loading, Please wait...
+                </v-col>
+                <v-col cols="6">
+                    <v-progress-linear
+                        color="green accent-4"
+                        indeterminate
+                        rounded
+                        height="6"
+                    ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </v-container>
+        <v-card v-else class="elevation-0 pt-0">
+            <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -8,96 +24,280 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">Edit User</h4>
+                <h4 class="title success--text">Edit Employee</h4>
             </v-card-title>
 
             <v-form ref="form" v-model="valid">
-                <v-container>
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="form.name"
-                                :rules="[
-                                    ...mixin_validation.required,
-                                    ...mixin_validation.minLength(150)
-                                ]"
-                                :counter="150"
-                                :error-messages="errors.name"
-                                @input="errors.name = []"
-                                label="Name *"
-                                required
-                            ></v-text-field>
-                        </v-col>
+                <v-expansion-panels flat v-model="panel" multiple>
+                    <v-expansion-panel>
+                        <v-expansion-panel-header>
+                            <div class="overline green--text">
+                                Basic Details
+                            </div>
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-autocomplete
+                                        v-model="form.job"
+                                        :rules="mixin_validation.required"
+                                        :items="jobs"
+                                        :error-messages="errors.job_id"
+                                        @input="errors.job_id = []"
+                                        item-text="name"
+                                        item-value="id"
+                                        label="Job Designation *"
+                                        required
+                                    >
+                                    </v-autocomplete>
+                                </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="form.username"
-                                :rules="[
-                                    ...mixin_validation.required,
-                                    ...mixin_validation.minLength(50)
-                                ]"
-                                :counter="50"
-                                :error-messages="errors.username"
-                                @input="errors.username = []"
-                                label="Username *"
-                                required
-                            ></v-text-field>
-                        </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.code"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
+                                        :counter="100"
+                                        :error-messages="errors.code"
+                                        @input="errors.code = []"
+                                        label="Code *"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field
-                                v-model="form.email"
-                                :rules="[
-                                    ...mixin_validation.required,
-                                    ...mixin_validation.email
-                                ]"
-                                :error-messages="errors.email"
-                                @input="errors.email = []"
-                                label="Email Address *"
-                                required
-                            ></v-text-field>
-                        </v-col>
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.first_name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
+                                        :counter="100"
+                                        :error-messages="errors.first_name"
+                                        @input="errors.first_name = []"
+                                        label="First Name *"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-select
-                                v-model="form.employee"
-                                :items="employees"
-                                item-text="fullname"
-                                item-value="id"
-                                label="Link Employee Info"
-                            >
-                            </v-select>
-                        </v-col>
-                    </v-row>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.middle_name"
+                                        :rules="[]"
+                                        :counter="100"
+                                        :error-messages="errors.middle_name"
+                                        @input="errors.middle_name = []"
+                                        label="Middle Name"
+                                    ></v-text-field>
+                                </v-col>
 
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-checkbox
-                                v-model="form.is_admin"
-                                label="Is Administrator"
-                                :error-messages="errors.is_admin"
-                            ></v-checkbox>
-                        </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.last_name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(100)
+                                        ]"
+                                        :counter="100"
+                                        :error-messages="errors.last_name"
+                                        @input="errors.last_name = []"
+                                        label="Last Name *"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-checkbox
-                                v-model="form.can_login"
-                                label="Allow Login"
-                                :error-messages="errors.can_login"
-                            ></v-checkbox>
-                        </v-col>
-                    </v-row>
+                                <v-col cols="12" md="4">
+                                    <v-combobox
+                                        v-model="form.suffix"
+                                        :rules="[]"
+                                        :counter="30"
+                                        :items="['Jr', 'Sr', 'II', 'III']"
+                                        :error-messages="errors.suffix"
+                                        @input="errors.suffix = []"
+                                        label="Suffix"
+                                    ></v-combobox>
+                                </v-col>
 
-                    <small class="text--secondary">
-                        * indicates required field
-                    </small>
+                                <v-col cols="12" md="4">
+                                    <v-select
+                                        v-model="form.gender"
+                                        :rules="mixin_validation.required"
+                                        :items="['Male', 'Female']"
+                                        :error-messages="errors.gender"
+                                        @input="errors.gender = []"
+                                        label="Gender *"
+                                        required
+                                    >
+                                    </v-select>
+                                </v-col>
 
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="onSave">Save</v-btn>
-                        <v-btn @click="$router.go(-1)">Cancel</v-btn>
-                    </v-card-actions>
-                </v-container>
+                                <v-col cols="12" md="4">
+                                    <v-menu
+                                        ref="menu"
+                                        v-model="menu"
+                                        :close-on-content-click="false"
+                                        transition="scale-transition"
+                                        offset-y
+                                        min-width="290px"
+                                    >
+                                        <template
+                                            v-slot:activator="{ on, attrs }"
+                                        >
+                                            <v-text-field
+                                                v-model="form.birthdate"
+                                                :rules="
+                                                    mixin_validation.required
+                                                "
+                                                :error-messages="
+                                                    errors.birthdate
+                                                "
+                                                @input="errors.birthdate = []"
+                                                label="Birthdate *"
+                                                readonly
+                                                v-bind="attrs"
+                                                v-on="on"
+                                            ></v-text-field>
+                                        </template>
+                                        <v-date-picker
+                                            v-model="form.birthdate"
+                                            no-title
+                                            scrollable
+                                            color="success"
+                                        >
+                                        </v-date-picker>
+                                    </v-menu>
+                                </v-col>
+
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.mobile_number"
+                                        :rules="mixin_validation.required"
+                                        :counter="30"
+                                        :error-messages="errors.mobile_number"
+                                        @input="errors.mobile_number = []"
+                                        label="Mobile Number *"
+                                        type="number"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.telephone_number"
+                                        :rules="[]"
+                                        :counter="30"
+                                        :error-messages="
+                                            errors.telephone_number
+                                        "
+                                        @input="errors.telephone_number = []"
+                                        label="Telephone Number"
+                                        type="number"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.email"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.email
+                                        ]"
+                                        :error-messages="errors.email"
+                                        @input="errors.email = []"
+                                        label="Email Address *"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-textarea
+                                        v-model="form.address"
+                                        :rules="mixin_validation.required"
+                                        :error-messages="errors.address"
+                                        @input="errors.address = []"
+                                        label="Address *"
+                                        rows="1"
+                                    ></v-textarea>
+                                </v-col>
+                            </v-row>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                    <v-expansion-panel>
+                        <v-expansion-panel-header>
+                            <div class="overline green--text">
+                                Account Details
+                            </div>
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.username"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(50)
+                                        ]"
+                                        :counter="50"
+                                        :error-messages="errors.username"
+                                        @input="errors.username = []"
+                                        label="Username *"
+                                        required
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-checkbox
+                                        v-model="form.can_login"
+                                        label="Allow Login"
+                                        :error-messages="errors.can_login"
+                                    ></v-checkbox>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-radio-group
+                                        v-model="form.role"
+                                        row
+                                        label="Role"
+                                    >
+                                        <v-radio
+                                            label="Standard User"
+                                            value="Standard User"
+                                        ></v-radio>
+                                        <v-radio
+                                            label="Administrator"
+                                            value="Administrator"
+                                        ></v-radio>
+                                    </v-radio-group>
+                                </v-col>
+                            </v-row>
+
+                            <v-row>
+                                <v-col>
+                                    <v-data-table
+                                        v-model="form.permissions"
+                                        show-select
+                                        :items-per-page="-1"
+                                        :headers="headers"
+                                        :items="permissions"
+                                        group-by="category"
+                                    ></v-data-table>
+                                </v-col>
+                            </v-row>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+
+                <small class="ml-4 text--secondary">
+                    * indicates required field
+                </small>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="success" dark @click="onSave">Save</v-btn>
+                    <v-btn @click="$router.go(-1)">Cancel</v-btn>
+                </v-card-actions>
             </v-form>
         </v-card>
     </div>
@@ -107,26 +307,59 @@
 export default {
     data() {
         return {
+            loader: true,
+            panel: [0, 1],
             valid: false,
-            showPassword: false,
-            showPasswordConfirmation: false,
-            employees: [],
+            menu: false,
+            jobs: [],
+            permissions: [],
+            selected: [],
+            headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
-                name: "",
+                code: null,
+                first_name: null,
+                middle_name: "",
+                last_name: null,
+                suffix: "",
+                gender: null,
+                birthdate: null,
+                mobile_number: null,
+                telephone_number: "",
+                address: null,
+                fund: 0,
+                remaining_fund: 0,
                 username: "",
-                email: "",
-                password: "",
-                password_confirmation: "",
-                employee: 0,
+                email: null,
+                password: "password",
+                password_confirmation: "password",
                 is_admin: false,
-                can_login: false
+                is_superadmin: false,
+                can_login: true,
+                type: "employee",
+                job: null,
+                old_permissions: [],
+                permissions: [],
+                old_role: "",
+                role: "Standard User"
             },
             errors: {
-                is_admin: [],
-                can_login: [],
-                name: [],
+                code: [],
+                first_name: [],
+                middle_name: [],
+                last_name: [],
+                suffix: [],
+                gender: [],
+                birthdate: [],
+                job: [],
+                mobile_number: [],
+                telephone_number: [],
+                email: [],
+                address: [],
                 username: [],
-                email: []
+                role: [],
+                can_login: [],
+                has_fund: [],
+                fund: []
             }
         };
     },
@@ -134,18 +367,62 @@ export default {
         getData() {
             let _this = this;
 
-            axios
-                .get("/api/users/" + _this.$route.params.id)
-                .then(response => {
-                    let data = response.data.data;
+            this.loadPermissions().then(
+                axios
+                    .get("/api/users/" + _this.$route.params.id)
+                    .then(response => {
+                        let data = response.data.data;
 
-                    _this.form.name = data.name;
-                    _this.form.username = data.username;
-                    _this.form.email = data.email;
-                    _this.form.is_admin = data.is_admin;
-                    (_this.form.can_login = data.can_login),
-                        (_this.form.employee =
-                            data.employee !== null ? data.employee.id : 0);
+                        _this.form.code = data.code;
+                        _this.form.first_name = data.first_name;
+                        _this.form.middle_name = data.middle_name;
+                        _this.form.last_name = data.last_name;
+                        _this.form.suffix = data.suffix;
+                        _this.form.gender = data.gender;
+                        _this.form.birthdate = data.birthdate;
+
+                        _this.form.mobile_number = data.mobile_number;
+                        _this.form.telephone_number = data.telephone_number;
+                        _this.form.address = data.address;
+
+                        _this.form.fund = data.fund;
+                        _this.form.remaining_fund = data.remaining_fund;
+                        _this.form.username = data.username;
+                        _this.form.email = data.email;
+                        _this.form.is_admin = data.is_admin;
+                        _this.form.is_superadmin = data.is_superadmin;
+                        _this.form.can_login = data.can_login;
+
+                        _this.form.permissions = data.permissions;
+                        _this.form.old_permissions = data.permissions;
+                        _this.form.role = data.role[0];
+                        _this.form.old_role = data.role[0];
+
+                        _this.form.type = data.type;
+                        _this.form.job = data.job.id;
+
+                        _this.loader = false;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+
+                        _this.loader = false;
+                    })
+            );
+        },
+        loadJobs() {
+            let _this = this;
+
+            axios
+                .get("/api/data/jobs?only=true")
+                .then(response => {
+                    _this.jobs = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -157,77 +434,130 @@ export default {
                     );
                 });
         },
-        loadEmployees() {
+        loadPermissions() {
             let _this = this;
-            axios
-                .get(
-                    `/api/data/employees?no_user=true&user_id=${_this.$route.params.id}`
-                )
-                .then(response => {
-                    _this.employees = response.data.data;
 
-                    _this.employees.unshift({ id: 0, fullname: "None" });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+            return new Promise((resolve, reject) => {
+                axios
+                    .get(`/api/data/permissions?role=${_this.form.role}`)
+                    .then(response => {
+                        _this.permissions = response.data;
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+                        _this.form.permissions = [];
+
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
+
+                        reject();
+                    });
+            });
+        },
+        onRefresh() {
+            Object.assign(this.$data, this.$options.data.apply(this));
+        },
+        changeRole() {
+            if (this.form.role == "Administrator") {
+                this.selected = this.permissions;
+            } else {
+                this.selected = [];
+            }
         },
         onSave() {
             let _this = this;
 
+            let is_administrator =
+                this.form.role == "Administrator" ? true : false;
+
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
+                _this.loader = true;
+
                 axios
                     .put("/api/users/" + _this.$route.params.id, {
-                        action: "update",
-                        name: _this.form.name,
+                        code: _this.form.code,
+                        first_name: _this.form.first_name,
+                        middle_name: _this.form.middle_name,
+                        last_name: _this.form.last_name,
+                        suffix: _this.form.suffix,
+                        gender: _this.form.gender,
+                        birthdate: _this.form.birthdate,
+
+                        mobile_number: _this.form.mobile_number,
+                        telephone_number: _this.form.telephone_number,
+                        address: _this.form.address,
+                        fund: _this.form.fund,
+                        remaining_fund: _this.form.remaining_fund,
+
                         username: _this.form.username,
                         email: _this.form.email,
-                        is_admin: _this.form.is_admin,
+                        password: _this.form.password,
+                        password_confirmation: _this.form.password_confirmation,
+
+                        is_admin: is_administrator,
+                        is_superadmin: _this.form.is_superadmin,
                         can_login: _this.form.can_login,
-                        employee_id:
-                            _this.form.employee !== null
-                                ? _this.form.employee
-                                : 0
+                        type: "",
+                        permissions: _this.form.permissions,
+                        job_id: _this.form.job
                     })
                     .then(function(response) {
-                        _this.mixin_successDialog(
-                            "Success",
-                            "User created successfully"
+                        _this.$dialog.message.success(
+                            "Employee updated successfully.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
                         );
 
-                        _this.$router.push({ name: "admin.users.index" });
+                        // _this.$store.dispatch("AUTH_USER");
+
+                        window.location.replace("/admin/users");
+
+                        // _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
                         console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            `Error ${error.response.status}`,
+                            error.response.statusText
+                        );
 
                         if (error.response) {
                             if (error.response.data) {
                                 _this.errors = error.response.data.errors;
                             }
                         }
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
                     });
 
                 return;
             }
         }
     },
+    watch: {
+        "form.role": function() {
+            this.loadPermissions().then(() => {
+                if (this.form.old_role == this.form.role) {
+                    this.form.permissions = this.form.old_permissions;
+                }
+            });
+        }
+    },
     created() {
+        // this.$store.dispatch("AUTH_USER");
+        this.loadJobs();
+        // this.loadExpenseTypes();
         this.getData();
-        this.loadEmployees();
     }
 };
 </script>

@@ -2,10 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Employee;
-use App\Models\Expense;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\Activitylog\Models\Activity;
 
@@ -86,7 +83,7 @@ class ExpenseReportResource extends JsonResource
             // -------------------------------------------------------------------
             "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
             // "payments" => PaymentResource::collection($this->whenLoaded('payments')),
-            "employee" => new EmployeeResource($this->whenLoaded('employee'))
+            "user" => new UserResource($this->whenLoaded('user'))
         ];
     }
 }

@@ -469,7 +469,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      employee: this.$store.getters.user.employee.id,
+      user: this.$store.getters.user.id,
       expense_type: 0,
       expense_types: [],
       status: "All Expenses",
@@ -508,7 +508,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-        var employee_id = _this.employee;
+        var user_id = _this.user;
         var expense_type_id = _this.expense_type;
         var range = _this.date_range;
         axios.get("/api/expenses", {
@@ -519,7 +519,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page: page,
             itemsPerPage: itemsPerPage,
             status: status,
-            employee_id: employee_id,
+            user_id: user_id,
             expense_type_id: expense_type_id,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0]
@@ -542,15 +542,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
-      axios.get("/api/data/employees?only=true").then(function (response) {
-        _this.employees = response.data.data;
+      axios.get("/api/data/users?only=true").then(function (response) {
+        _this.users = response.data.data;
 
-        _this.employees.unshift({
+        _this.users.unshift({
           id: 0,
-          full_name: "All Employees"
+          full_name: "All Users"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -579,7 +579,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.status = "All Expenses";
-      this.loadEmployees();
+      this.loadUsers();
       this.loadExpenseTypes();
       this.selected = [];
     },
@@ -786,7 +786,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.expense_type), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.expense_type), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     },
     maxDate: function maxDate() {
       var settings = this.$store.getters.settings;
@@ -823,7 +823,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   created: function created() {
-    this.$store.dispatch("AUTH_USER"); // this.loadEmployees();
+<<<<<<< HEAD
+    this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.loadEmployees();
+=======
+    this.$store.dispatch("AUTH_USER"); // this.loadUsers();
+>>>>>>> feature/employee-user-fix
 
     this.loadExpenseTypes();
   }

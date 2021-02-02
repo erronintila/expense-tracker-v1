@@ -16,15 +16,15 @@
                     <v-row>
                         <v-col cols="12" md="6">
                             <v-autocomplete
-                                v-model="employee"
-                                label="Employee *"
-                                :items="employees"
+                                v-model="user"
+                                label="User *"
+                                :items="users"
                                 item-text="fullname"
                                 item-value="id"
                                 return-object
                                 :rules="mixin_validation.required"
-                                :error-messages="errors.employee"
-                                @input="errors.employee = []"
+                                :error-messages="errors.user"
+                                @input="errors.user = []"
                             >
                             </v-autocomplete>
                         </v-col>
@@ -65,7 +65,7 @@
                                         >
                                             {{
                                                 mixin_formatNumber(
-                                                    employee.fund
+                                                    user.fund
                                                 )
                                             }}
                                         </td>
@@ -80,7 +80,7 @@
                                         >
                                             {{
                                                 mixin_formatNumber(
-                                                    employee.remaining_fund
+                                                    user.remaining_fund
                                                 )
                                             }}
                                         </td>
@@ -168,8 +168,8 @@ export default {
         return {
             valid: false,
             adjustment_type: "Add Amount",
-            employee: { id: null, fullname: "", fund: 0, remaining_fund: 0 },
-            employees: [],
+            user: { id: null, fullname: "", fund: 0, remaining_fund: 0 },
+            users: [],
             reference: "",
             code: "",
             description: "",
@@ -177,7 +177,7 @@ export default {
             type: "Manage Revolving Fund",
             remarks: "",
             errors: {
-                employee: [],
+                user: [],
                 reference: [],
                 code: [],
                 description: [],
@@ -187,13 +187,13 @@ export default {
         };
     },
     methods: {
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
-                .get("/api/data/employees")
+                .get("/api/data/users")
                 .then(response => {
-                    _this.employees = response.data.data;
+                    _this.users = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -221,7 +221,7 @@ export default {
 
                 axios
                     .post("/api/adjustments", {
-                        employee: _this.employee.id,
+                        user: _this.user.id,
                         reference: _this.reference,
                         code: _this.code,
                         description: _this.description,
@@ -257,32 +257,32 @@ export default {
         new_fund() {
             if (this.adjustment_type == "Add Amount") {
                 return (
-                    this.mixin_convertToNumber(this.employee.fund) +
+                    this.mixin_convertToNumber(this.user.fund) +
                     this.mixin_convertToNumber(this.amount)
                 );
             }
 
             return (
-                this.mixin_convertToNumber(this.employee.fund) -
+                this.mixin_convertToNumber(this.user.fund) -
                 this.mixin_convertToNumber(this.amount)
             );
         },
         new_remaining_fund() {
             if (this.adjustment_type == "Add Amount") {
                 return (
-                    this.mixin_convertToNumber(this.employee.remaining_fund) +
+                    this.mixin_convertToNumber(this.user.remaining_fund) +
                     this.mixin_convertToNumber(this.amount)
                 );
             }
 
             return (
-                this.mixin_convertToNumber(this.employee.remaining_fund) -
+                this.mixin_convertToNumber(this.user.remaining_fund) -
                 this.mixin_convertToNumber(this.amount)
             );
         }
     },
     created() {
-        this.loadEmployees();
+        this.loadUsers();
     }
 };
 </script>

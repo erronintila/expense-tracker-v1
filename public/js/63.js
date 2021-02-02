@@ -540,6 +540,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -610,7 +627,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "",
           limit: null
         },
-        employee: this.$store.getters.user.employee,
+        user: this.$store.getters.user,
         vendor: {
           id: null,
           name: "",
@@ -648,21 +665,21 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         is_active: [],
         expense_type_id: [],
-        employee_id: [],
+        user_id: [],
         vendor_id: []
       }
     };
   },
   methods: {
     loadExpenseTypes: function loadExpenseTypes() {
-      this.expense_types = this.form.employee.expense_types;
+      this.expense_types = this.form.expense_types;
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this2 = this;
 
       var _this = this;
 
-      axios.get("/api/data/employees?expense_ref=true&employee_id=".concat(this.form.employee.id)).then(function (response) {
+      axios.get("/api/data/users?expense_ref=true&user_id=".concat(this.form.user.id)).then(function (response) {
         var data = response.data.data;
         _this2.expense_types = data.expense_types;
       })["catch"](function (error) {
@@ -724,8 +741,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      if (_this.form.employee.id == null) {
-        _this.$dialog.message.error("No Employee Selected", {
+      if (_this.form.user.id == null) {
+        _this.$dialog.message.error("No User Selected", {
           position: "top-right",
           timeout: 2000
         });
@@ -742,11 +759,23 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (_this.amount_to_replenish > _this.form.employee.remaining_fund) {
-        _this.$dialog.message.error("Revolving fund amount is greater than remaining fund", {
+      if (_this.amount_to_replenish > _this.form.user.remaining_fund) {
+        _this.$dialog.message.error("Amount to replenish is greater than remaining fund", {
           position: "top-right",
           timeout: 2000
         });
+
+        return;
+      }
+
+      if (_this.amount_to_replenish + _this.amount_to_reimburse < this.form.amount) {
+        _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
+
+        return;
+      }
+
+      if (_this.amount_to_replenish + _this.amount_to_reimburse <= 0) {
+        _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
 
         return;
       }
@@ -759,14 +788,14 @@ __webpack_require__.r(__webpack_exports__);
           code: _this.form.code,
           description: _this.form.description,
           amount: _this.form.amount,
-          reimbursable_amount: _this.form.reimbursable_amount,
+          reimbursable_amount: _this.amount_to_reimburse,
           receipt_number: _this.form.receipt_number,
           date: _this.form.date,
           remarks: _this.form.remarks,
           is_active: _this.form.is_active,
           expense_type_id: _this.form.expense_type.id,
           sub_type_id: _this.form.sub_type.id,
-          employee_id: _this.form.employee.id,
+          user_id: _this.form.user.id,
           vendor_id: _this.form.vendor.id,
           details: _this.itemize ? _this.items : null,
           tax_name: "",
@@ -890,8 +919,14 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
     },
     amount_to_replenish: function amount_to_replenish() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+      var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return amount - reimbursable > remaining_fund ? 0 : amt_to_replenish;
+      }
 
       if (remaining_fund >= amount) {
         return amount;
@@ -900,8 +935,13 @@ __webpack_require__.r(__webpack_exports__);
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return reimbursable > amount ? 0 : reimbursable;
+      }
 
       if (remaining_fund < amount) {
         var to_replenish = Math.abs(remaining_fund - amount);
@@ -913,10 +953,12 @@ __webpack_require__.r(__webpack_exports__);
       return 0;
     },
     expense_amount: function expense_amount() {
-      return this.mixin_convertToNumber(this.form.amount);
+      var amt_to_replenish = this.mixin_convertToNumber(this.amount_to_replenish);
+      var amt_to_reimburse = this.mixin_convertToNumber(this.amount_to_reimburse);
+      return this.mixin_convertToNumber(amt_to_replenish + amt_to_reimburse);
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
-      return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
+      return parseFloat(this.form.amount) > parseFloat(this.form.user.remaining_fund);
     },
     taxable_amount: {
       get: function get() {
@@ -965,9 +1007,9 @@ __webpack_require__.r(__webpack_exports__);
         return parseFloat(total) + parseFloat(item.total);
       }, 0);
 
-      if (this.form.employee.id == null) {
+      if (this.form.id == null) {
         this.itemize = false;
-        this.$dialog.message.error("No Employee Selected", {
+        this.$dialog.message.error("No User Selected", {
           position: "top-right",
           timeout: 2000
         });
@@ -993,7 +1035,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this3 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this3.loadEmployees();
+      _this3.loadUsers();
     });
     this.loadVendors();
   }
@@ -1467,7 +1509,7 @@ var render = function() {
                                           _vm._v(
                                             _vm._s(
                                               _vm.mixin_formatNumber(
-                                                _vm.form.employee.remaining_fund
+                                                _vm.form.user.remaining_fund
                                               )
                                             )
                                           )
@@ -2097,23 +2139,70 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Amount",
-                                  rules: _vm.mixin_validation.required.concat(
-                                    _vm.mixin_validation.minNumberValue(1)
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Expense Amount",
+                                          rules: _vm.mixin_validation.required.concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
+                                          readonly: _vm.itemize,
+                                          type: "number"
+                                        },
+                                        model: {
+                                          value: _vm.form.amount,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "amount", $$v)
+                                          },
+                                          expression: "form.amount"
+                                        }
+                                      })
+                                    ],
+                                    1
                                   ),
-                                  readonly: _vm.itemize,
-                                  type: "number"
-                                },
-                                model: {
-                                  value: _vm.form.amount,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "amount", $$v)
-                                  },
-                                  expression: "form.amount"
-                                }
-                              }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _vm.mixin_can("set reimbursable amount")
+                                        ? _c("v-text-field", {
+                                            attrs: {
+                                              label: "Amount to reimburse",
+                                              type: "number",
+                                              hint:
+                                                "Amount spent from own pocket",
+                                              "persistent-hint": ""
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.form.reimbursable_amount,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "reimbursable_amount",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "form.reimbursable_amount"
+                                            }
+                                          })
+                                        : _vm._e()
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
                               _vm._v(" "),
                               _vm.form.vendor.is_vat_inclusive
                                 ? _c(

@@ -508,7 +508,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       items: [],
       selected: [],
-      employees: [],
+      users: [],
       expenses: [],
       total: 0,
       paid: 0,
@@ -524,7 +524,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: "",
         remarks: "",
         notes: "",
-        employee: {
+        user: {
           id: 0,
           remaining_fund: 0,
           fund: 0
@@ -536,7 +536,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: [],
         remarks: [],
         notes: [],
-        employee: [],
+        user: [],
         expenses: []
       }
     };
@@ -545,7 +545,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e; // this.loadExpenses();
     },
-    updateEmployee: function updateEmployee() {
+    updateUser: function updateUser() {
       var _this2 = this;
 
       this.getDataFromApi().then(function (data) {
@@ -562,7 +562,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get("/api/data/expenses", {
         params: {
           create_report: true,
-          employee_id: _this.form.employee.id,
+          user_id: _this.form.user.id,
           start_date: start_date,
           end_date: end_date
         }
@@ -575,11 +575,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
       });
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
+      axios.get("/api/data/users").then(function (response) {
+        _this.users = response.data.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -600,14 +600,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this3$options.page,
             itemsPerPage = _this3$options.itemsPerPage;
         var range = _this.date_range;
-        var employee_id = _this.form.employee.id;
+        var user_id = _this.form.user.id;
         axios.get("/api/expenses", {
           params: {
             page: page,
             itemsPerPage: itemsPerPage,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
-            employee_id: employee_id,
+            user_id: user_id,
             expense_report_id: null,
             update_report: true
           }
@@ -657,7 +657,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           description: _this.form.description,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          employee_id: _this.form.employee.id,
+          user_id: _this.form.user.id,
           expenses: _this.selected
         }).then(function (response) {
           _this.$dialog.message.success("Expense Report created successfully.", {
@@ -701,7 +701,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     params: function params(nv) {
       return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
         query: this.date_range
-      }, "query", this.form.employee.id));
+      }, "query", this.form.user.id));
     },
     default_description: function default_description() {
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
@@ -712,7 +712,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-    this.loadEmployees(); // this.loadExpenses();
+    this.loadUsers(); // this.loadExpenses();
   }
 });
 
@@ -863,8 +863,8 @@ var render = function() {
                               _c("v-autocomplete", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required,
-                                  items: _vm.employees,
-                                  "error-messages": _vm.errors.employee,
+                                  items: _vm.users,
+                                  "error-messages": _vm.errors.user,
                                   "item-value": "id",
                                   "item-text": "full_name",
                                   label: "Employee",
@@ -873,16 +873,16 @@ var render = function() {
                                 },
                                 on: {
                                   input: function($event) {
-                                    _vm.errors.employee = []
+                                    _vm.errors.user = []
                                   },
-                                  change: _vm.updateEmployee
+                                  change: _vm.updateUser
                                 },
                                 model: {
-                                  value: _vm.form.employee,
+                                  value: _vm.form.user,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.form, "employee", $$v)
+                                    _vm.$set(_vm.form, "user", $$v)
                                   },
-                                  expression: "form.employee"
+                                  expression: "form.user"
                                 }
                               }),
                               _vm._v(" "),

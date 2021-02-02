@@ -412,6 +412,9 @@ export default {
             };
         }
     },
+    created() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+    },
     // mounted() {
     //     this.getDataFromApi().then(data => {
     //         this.items = data.items;

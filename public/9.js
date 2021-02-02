@@ -708,8 +708,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Period",
         value: "date"
       }, {
-        text: "Employee",
-        value: "employee",
+        text: "User",
+        value: "user",
         sortable: false
       }, {
         text: "Amount",
@@ -731,8 +731,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      employee: 0,
-      employees: [],
+      user: 0,
+      users: [],
       date_range: [moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
@@ -753,7 +753,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         itemsPerPage: 10
       },
       expense_types: [],
-      reports_by_employee: [],
+      reports_by_user: [],
       reports_by_expense: [],
       reports_by_date: []
     };
@@ -809,7 +809,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    loadReportByEmployee: function loadReportByEmployee() {
+    loadReportByUser: function loadReportByUser() {
       var _this3 = this;
 
       return new Promise(function (resolve, reject) {
@@ -817,8 +817,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var ids = _this.selected == null ? [] : _this.selected.map(function (item) {
           return item.id;
         });
-        axios.get("/api/data/print_report?by_employee_id=true&ids=".concat(ids)).then(function (response) {
-          _this.reports_by_employee = response.data.data;
+        axios.get("/api/data/print_report?by_user_id=true&ids=".concat(ids)).then(function (response) {
+          _this.reports_by_user = response.data.data;
           resolve();
         })["catch"](function (error) {
           reject();
@@ -845,15 +845,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    printReportByEmployee: function printReportByEmployee(action) {
+    printReportByUser: function printReportByUser(action) {
       var _this5 = this;
 
-      this.loadReportByEmployee().then(function () {
+      this.loadReportByUser().then(function () {
         var table_columns = [];
         var table_rows = [];
         var table_footer = [];
         table_columns.push({
-          text: "Employee",
+          text: "User",
           style: "tableOfExpensesHeader"
         });
 
@@ -870,21 +870,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
         var temp_table_body = {};
         var temp_expense_types = {};
-        var employee_id = null;
+        var user_id = null;
         var expense_type = null; // loop through retrieved records
 
-        _this5.reports_by_employee.forEach(function (element) {
-          // create new object if current employee does not match with previous record
-          if (employee_id !== element.employee_id) {
+        _this5.reports_by_user.forEach(function (element) {
+          // create new object if current user does not match with previous record
+          if (user_id !== element.user_id) {
             temp_table_body = {};
-            employee_id = element.employee_id; // set default values for current row
+            user_id = element.user_id; // set default values for current row
 
             _this5.expense_types.forEach(function (expense_type) {
               temp_expense_types[expense_type.name] = 0;
             });
 
             temp_table_body = _objectSpread(_objectSpread({
-              Employee: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
+              User: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
             }, temp_expense_types), {}, {
               Total: 0
             });
@@ -1116,7 +1116,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var expense_type = null; // loop through retrieved records
 
         _this6.reports_by_date.forEach(function (element) {
-          // create new object if current employee does not match with previous record
+          // create new object if current user does not match with previous record
           if (expense_date !== element.expense_date) {
             temp_table_body = {};
             expense_date = element.expense_date; // set default values for current row
@@ -1362,7 +1362,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var expense_type = null; // loop through retrieved records
 
         _this7.reports_by_expense.forEach(function (element) {
-          // create new object if current employee does not match with previous record
+          // create new object if current user does not match with previous record
           if (expense_id !== element.expense_id) {
             temp_table_body = {};
             expense_id = element.expense_id; // set default values for current row
@@ -1484,7 +1484,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             table: {
               headerRows: 1,
               widths: table_columns.map(function (item) {
-                return "*";
+                return "auto";
               }),
               body: body
             },
@@ -1587,8 +1587,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       switch (group_by) {
-        case "employee":
-          this.printReportByEmployee(action);
+        case "user":
+          this.printReportByUser(action);
           break;
 
         case "date":
@@ -1619,7 +1619,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-        var employee_id = _this.employee;
+        var user_id = _this.user;
         var range = _this.date_range;
         axios.get("/api/expense_reports", {
           params: {
@@ -1628,7 +1628,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
             itemsPerPage: itemsPerPage,
-            employee_id: employee_id,
+            user_id: user_id,
             status: status,
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
@@ -1652,15 +1652,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    loadEmployees: function loadEmployees() {
+    loadUsers: function loadUsers() {
       var _this = this;
 
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
+      axios.get("/api/data/users").then(function (response) {
+        _this.users = response.data.data;
 
-        _this.employees.unshift({
+        _this.users.unshift({
           id: 0,
-          full_name: "All Employees"
+          full_name: "All Users"
         });
       })["catch"](function (error) {
         console.log(error);
@@ -1672,7 +1672,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.loadTotalCountReportStatus();
-      this.loadEmployees();
+      this.loadUsers();
       this.selected = [];
     },
     onShow: function onShow(item) {
@@ -2080,6 +2080,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.selected = [];
 
             _this.loadTotalCountReportStatus();
+
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -2093,6 +2095,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;
+      }
+
+      if (this.selected.filter(function (item) {
+        return item.status.status === "Unsubmitted";
+      }).length <= 0) {
+        this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+        return;
+      }
+
+      var period = this.$store.getters.settings.submission_period;
+      var last_submission_date = "";
+      var submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.filter(function (item) {
+        return item.status.status === "Unsubmitted";
+      }).map(function (item2) {
+        return moment__WEBPACK_IMPORTED_MODULE_1___default()(item2.from);
+      })).format("YYYY-MM-DD");
+
+      switch (period) {
+        case "Weekly":
+          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("week").format("YYYY-MM-DD");
+          break;
+
+        case "Monthly":
+          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("month").format("YYYY-MM-DD");
+          break;
+
+        default:
+          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).format("YYYY-MM-DD");
+          break;
+      }
+
+      if (!this.mixin_can("submit expense reports beyond due date")) {
+        if (!moment__WEBPACK_IMPORTED_MODULE_1___default()(moment__WEBPACK_IMPORTED_MODULE_1___default()()).isSameOrBefore(last_submission_date, "day")) {
+          this.mixin_errorDialog("Error (Not Allowed)", "Last submission was ".concat(last_submission_date));
+          return;
+        }
       }
 
       this.onUpdate("submit", "put");
@@ -2144,6 +2182,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                       _this.totalItems = data.total;
                     }); // _this.$store.dispatch("AUTH_USER");
 
+
+                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                     _this.selected = [];
                   })["catch"](function (error) {
@@ -2204,12 +2244,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     selected: function selected() {
       if (this.selected.map(function (item) {
         return item.status.status;
+      }).includes("Unsubmitted")) {
+        var period = this.$store.getters.settings.submission_period;
+        var last_submission_date = "";
+        var submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.map(function (item) {
+          return moment__WEBPACK_IMPORTED_MODULE_1___default()(item.from);
+        })).format("YYYY-MM-DD");
+
+        switch (period) {
+          case "Weekly":
+            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).endOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).format("YYYY-MM-DD");
+            break;
+        }
+
+        this.warning = "Last Submission Date: ".concat(last_submission_date);
+      } else if (this.selected.map(function (item) {
+        return item.status.status;
       }).includes("Submitted")) {
-        var period = this.$store.getters.settings.approval_period;
+        var _period = this.$store.getters.settings.approval_period;
         var submission_period = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.map(function (item) {
           return moment__WEBPACK_IMPORTED_MODULE_1___default()(item.submitted_at);
         })).format("YYYY-MM-DD");
-        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_period).add(period, "days").format("YYYY-MM-DD");
+        var last_approval_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_period).add(_period, "days").format("YYYY-MM-DD");
         this.warning = "Last Approval Date: ".concat(last_approval_date, "; First Submitted Report: ").concat(submission_period);
       } else if (this.selected.length == 0) {
         this.warning = null;
@@ -2222,7 +2286,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     },
     minDate: function minDate() {
       var settings = this.$store.getters.settings;
@@ -2279,8 +2343,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.loadTotalCountReportStatus();
-    this.loadEmployees();
+    this.loadUsers();
     this.loadExpenseTypes();
   }
 });
@@ -2536,17 +2601,17 @@ var render = function() {
                             [
                               _c("v-select", {
                                 attrs: {
-                                  items: _vm.employees,
+                                  items: _vm.users,
                                   "item-text": "full_name",
                                   "item-value": "id",
-                                  label: "Employee"
+                                  label: "User"
                                 },
                                 model: {
-                                  value: _vm.employee,
+                                  value: _vm.user,
                                   callback: function($$v) {
-                                    _vm.employee = $$v
+                                    _vm.user = $$v
                                   },
-                                  expression: "employee"
+                                  expression: "user"
                                 }
                               })
                             ],
@@ -3049,16 +3114,16 @@ var render = function() {
                         }
                       },
                       {
-                        key: "item.employee",
+                        key: "item.user",
                         fn: function(ref) {
                           var item = ref.item
                           return [
                             _vm._v(
                               "\n                    " +
                                 _vm._s(
-                                  item.employee.last_name +
+                                  item.user.last_name +
                                     ", " +
-                                    item.employee.first_name
+                                    item.user.first_name
                                 ) +
                                 "\n                "
                             )
@@ -3408,14 +3473,14 @@ var render = function() {
                                   {
                                     on: {
                                       click: function($event) {
-                                        return _vm.onPrint("print", "employee")
+                                        return _vm.onPrint("print", "user")
                                       }
                                     }
                                   },
                                   [
                                     _c("v-list-item-title", [
                                       _vm._v(
-                                        "Group by\n                                        employee"
+                                        "Group by\n                                        user"
                                       )
                                     ])
                                   ],
@@ -3507,14 +3572,14 @@ var render = function() {
                                   {
                                     on: {
                                       click: function($event) {
-                                        return _vm.onPrint("pdf", "employee")
+                                        return _vm.onPrint("pdf", "user")
                                       }
                                     }
                                   },
                                   [
                                     _c("v-list-item-title", [
                                       _vm._v(
-                                        "Group by\n                                        employee"
+                                        "Group by\n                                        user"
                                       )
                                     ])
                                   ],

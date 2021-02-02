@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Department;
-use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,13 +30,13 @@ class DashboardController extends Controller
                 $q->where("deleted_at", null);
                 $q->where("cancelled_at", null);
             });
-            if (request()->has("employee_id")) {
+            if (request()->has("user_id")) {
                 if (request()->has("admin_page")) {
-                    if ($request->employee_id > 0) {
-                        $q->where('employee_id', $request->employee_id);
+                    if ($request->user_id > 0) {
+                        $q->where('user_id', $request->user_id);
                     }
                 } else {
-                    $q->where('employee_id', $request->employee_id);
+                    $q->where('user_id', $request->user_id);
                 }
             }
         }])->where('expense_type_id', null)->get();
@@ -48,9 +48,9 @@ class DashboardController extends Controller
                 ->where('deleted_at', null)
                 ->whereBetween('date', [$request->start_date, $request->end_date]);
 
-            if (request()->has('employee_id')) {
-                if ($request->employee_id > 0) {
-                    $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
+            if (request()->has('user_id')) {
+                if ($request->user_id > 0) {
+                    $total_expenses = $total_expenses->where('user_id', $request->user_id);
                 }
             }
 
@@ -69,38 +69,40 @@ class DashboardController extends Controller
     }
     
     /**
-     * Displays total expenses amount on each employee
+     * Displays total expenses amount on each user
      *
      * @param  mixed $request
      * @return void
      */
-    public function employees_expenses_summary(Request $request)
+    public function users_expenses_summary(Request $request)
     {
-        $employees = Employee::with(['expenses' => function ($q) use ($request) {
-            $q->whereHas("expense_report", function ($q) {
-                $q->where("approved_at", "<>", null);
-                $q->where("rejected_at", null);
-                $q->where("deleted_at", null);
-                $q->where("cancelled_at", null);
-            });
+        $users = User::where("is_superadmin", 0)
+            ->with(['expenses' => function ($q) use ($request) {
+                $q->whereHas("expense_report", function ($q) {
+                    $q->where("approved_at", "<>", null);
+                    $q->where("rejected_at", null);
+                    $q->where("deleted_at", null);
+                    $q->where("cancelled_at", null);
+                });
 
-            if (request()->has("employee_id")) {
-                if ($request->employee_id > 0) {
-                    $q->where('employee_id', $request->employee_id);
+                if (request()->has("user_id")) {
+                    if ($request->user_id > 0) {
+                        $q->where('user_id', $request->user_id)->get();
+                    }
                 }
-            }
-        }])->get();
+            }])
+            ->get();
 
-        $employees_expenses_summary = [];
+        $users_expenses_summary = [];
 
-        foreach ($employees as $key => $value) {
+        foreach ($users as $key => $value) {
             $total_expenses = $value["expenses"]->where('cancelled_at', null)
                 ->where('deleted_at', null)
                 ->whereBetween('date', [$request->start_date, $request->end_date])
                 ->sum("amount");
 
             array_push(
-                $employees_expenses_summary,
+                $users_expenses_summary,
                 [
                     "text" => $value->getFullNameAttribute(),
                     "value" => $total_expenses
@@ -108,7 +110,7 @@ class DashboardController extends Controller
             );
         }
 
-        return $employees_expenses_summary;
+        return $users_expenses_summary;
     }
     
     /**
@@ -119,7 +121,7 @@ class DashboardController extends Controller
      */
     public function departments_expenses_summary(Request $request)
     {
-        $departments = Department::with(['jobs.employees.expenses' => function ($q) use ($request) {
+        $departments = Department::with(['jobs.users.expenses' => function ($q) use ($request) {
             $q->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
                 $q->where("rejected_at", null);
@@ -127,9 +129,9 @@ class DashboardController extends Controller
                 $q->where("cancelled_at", null);
             });
 
-            if (request()->has("employee_id")) {
-                if ($request->employee_id > 0) {
-                    $q->where('employee_id', $request->employee_id);
+            if (request()->has("user_id")) {
+                if ($request->user_id > 0) {
+                    $q->where('user_id', $request->user_id);
                 }
             }
         }])->get();
@@ -143,7 +145,7 @@ class DashboardController extends Controller
             $total_expenses = 0;
 
             foreach ($value["jobs"] as $key => $value) {
-                foreach ($value["employees"] as $key => $value) {
+                foreach ($value["users"] as $key => $value) {
                     $total_expenses += $value["expenses"]->where('cancelled_at', null)
                         ->where('deleted_at', null)
                         ->whereBetween('date', [$request->start_date, $request->end_date])
@@ -173,8 +175,8 @@ class DashboardController extends Controller
     {
         $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
 
-        if (request()->has('employee_id')) {
-            $expenses = $expenses->where('employee_id', $request->employee_id);
+        if (request()->has('user_id')) {
+            $expenses = $expenses->where('user_id', $request->user_id);
         }
 
         $expenses = $expenses->sum('amount');
@@ -201,13 +203,13 @@ class DashboardController extends Controller
             ->orderBy('date')
             ->select(DB::raw('date as text, sum(amount) as value'));
 
-        if (request()->has('employee_id')) {
+        if (request()->has('user_id')) {
             if (request()->has("admin_page")) {
-                if ($request->employee_id > 0) {
-                    $expenses = $expenses->where('employee_id', $request->employee_id);
+                if ($request->user_id > 0) {
+                    $expenses = $expenses->where('user_id', $request->user_id);
                 }
             } else {
-                $expenses = $expenses->where('employee_id', $request->employee_id);
+                $expenses = $expenses->where('user_id', $request->user_id);
             }
         }
 
@@ -259,7 +261,7 @@ class DashboardController extends Controller
     public function expense_stats(Request $request)
     {
         $expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])
-            ->with(['employee' => function ($query) {
+            ->with(['user' => function ($query) {
                 $query->withTrashed();
             }])
                 ->with(['expense_type' => function ($query) {
@@ -284,9 +286,9 @@ class DashboardController extends Controller
             ->get();
 
         $all_expenses = Expense::all();
-        $employees = Employee::all();
+        $users = User::all();
 
-        $unsubmitted_reports = Expense::with(['employee' => function ($query) {
+        $unsubmitted_reports = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -312,7 +314,7 @@ class DashboardController extends Controller
             })
             ->get();
 
-        $submitted_reports = Expense::with(['employee' => function ($query) {
+        $submitted_reports = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -338,7 +340,7 @@ class DashboardController extends Controller
             })
             ->get();
 
-        $approved_reports = Expense::with(['employee' => function ($query) {
+        $approved_reports = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -365,7 +367,7 @@ class DashboardController extends Controller
                 $query->whereDoesntHave("payments");
             })->get();
 
-        $payment_to_receive = Expense::with(['employee' => function ($query) {
+        $payment_to_receive = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -411,7 +413,7 @@ class DashboardController extends Controller
         //
         //
         //
-        $total_expenses_by_date = Expense::with(['employee' => function ($query) {
+        $total_expenses_by_date = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -427,7 +429,7 @@ class DashboardController extends Controller
                 $query->withTrashed();
             }])
             ->whereBetween('date', [$request->start_date, $request->end_date])->get();
-        $pending_expenses = Expense::with(['employee' => function ($query) {
+        $pending_expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -453,7 +455,7 @@ class DashboardController extends Controller
             ->get()
             ->where('expense_report', '<>', null);
 
-        $total_expenses = Expense::with(['employee' => function ($query) {
+        $total_expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             ->with(['expense_type' => function ($query) {
@@ -479,20 +481,20 @@ class DashboardController extends Controller
         //
         //
 
-        // if (request()->has('employee_id') && request()->has("admin_page")) {
-        if (request()->has('employee_id')) {
-            if ($request->employee_id > 0) {
-                $total_expenses_by_date = $total_expenses_by_date->where('employee_id', $request->employee_id);
-                $pending_expenses = $pending_expenses->where('employee_id', $request->employee_id);
-                $total_expenses = $total_expenses->where('employee_id', $request->employee_id);
+        // if (request()->has('user_id') && request()->has("admin_page")) {
+        if (request()->has('user_id')) {
+            if ($request->user_id > 0) {
+                $total_expenses_by_date = $total_expenses_by_date->where('user_id', $request->user_id);
+                $pending_expenses = $pending_expenses->where('user_id', $request->user_id);
+                $total_expenses = $total_expenses->where('user_id', $request->user_id);
                 //
-                $all_expenses = $all_expenses->where("employee_id", $request->employee_id);
-                $employees = $employees->where("id", $request->employee_id);
-                $expenses_by_date =  $expenses_by_date->where('employee_id', $request->employee_id);
-                $unsubmitted_reports = $unsubmitted_reports->where('employee_id', $request->employee_id);
-                $submitted_reports = $submitted_reports->where('employee_id', $request->employee_id);
-                $approved_reports = $approved_reports->where('employee_id', $request->employee_id);
-                $payment_to_receive = $payment_to_receive->where('employee_id', $request->employee_id);
+                $all_expenses = $all_expenses->where("user_id", $request->user_id);
+                $users = $users->where("id", $request->user_id);
+                $expenses_by_date =  $expenses_by_date->where('user_id', $request->user_id);
+                $unsubmitted_reports = $unsubmitted_reports->where('user_id', $request->user_id);
+                $submitted_reports = $submitted_reports->where('user_id', $request->user_id);
+                $approved_reports = $approved_reports->where('user_id', $request->user_id);
+                $payment_to_receive = $payment_to_receive->where('user_id', $request->user_id);
             }
         }
 
@@ -519,8 +521,8 @@ class DashboardController extends Controller
             ],
             "total" => [
                 "expenses_by_date" => $expenses_by_date->sum("amount"),
-                "remaining_fund" => $employees->sum("remaining_fund"),
-                "total_fund" => $employees->sum("fund"),
+                "remaining_fund" => $users->sum("remaining_fund"),
+                "total_fund" => $users->sum("fund"),
                 "unreported_expenses" => $all_expenses->where("expense_report_id", null)->sum("amount"),
                 "unsubmitted_reports" => $unsubmitted_reports->sum("amount"),
                 "pending_for_approval_reports" => $submitted_reports->sum("amount"),
@@ -548,13 +550,13 @@ class DashboardController extends Controller
      */
     public function statistics(Request $request)
     {
-        $employee_id = $request->employee_id ?? 0;
+        $user_id = $request->user_id ?? 0;
         $start_date = $request->start_date ?? "2020-01-01";
         $end_date = $request->end_date ?? "2020-12-31";
 
         $expenses = DB::table('expenses')
-            ->join("employees", "employees.id", "=", "expenses.employee_id")
-            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("users", "users.id", "=", "expenses.user_id")
+            ->join("jobs", "jobs.id", "=", "users.job_id")
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->leftJoin("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
@@ -571,11 +573,11 @@ class DashboardController extends Controller
                 `expenses`.`date`,
                 `expenses`.`amount`,
                 `expenses`.`created_at` AS expense_created_at,
-                `employees`.`id` AS employee_id,
-                `employees`.`last_name`,
-                `employees`.`first_name`,
-                `employees`.`middle_name`,
-                `employees`.`suffix`,
+                `users`.`id` AS user_id,
+                `users`.`last_name`,
+                `users`.`first_name`,
+                `users`.`middle_name`,
+                `users`.`suffix`,
                 `departments`.`id` AS department_id,
                 `departments`.`name` AS department_name,
                 `expense_types`.`id` AS expense_type_id,
@@ -659,9 +661,9 @@ class DashboardController extends Controller
                 ) AS balance 
             "));
 
-        if ($employee_id) {
-            if ($request->employee_id > 0) {
-                $expenses = $expenses->where("employee_id", $request->employee_id);
+        if ($user_id) {
+            if ($request->user_id > 0) {
+                $expenses = $expenses->where("user_id", $request->user_id);
             }
         }
 

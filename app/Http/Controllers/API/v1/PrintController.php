@@ -161,21 +161,21 @@ class PrintController extends Controller
         // query for retrieving all expenses
         if (request()->has('by_expense_id')) {
             $expenses = DB::table('expenses')
-            ->join("employees", "employees.id", "=", "expenses.employee_id")
-            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("users", "users.id", "=", "expenses.user_id")
+            ->join("jobs", "jobs.id", "=", "users.job_id")
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
             ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id") , "=", "expenses.sub_type_id")
             ->whereIn('expense_reports.id', explode(",", $ids))
-            ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`id`"))
-            ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
+            ->groupBy(DB::raw("`users`.`id`, `expense_types`.`id`, `expenses`.`id`"))
+            ->orderBy(DB::raw("`users`.`id`, `expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
             ->select(DB::raw("
-                `employees`.`id` AS employee_id,
-                `employees`.`last_name`,
-                `employees`.`first_name`,
-                `employees`.`middle_name`,
-                `employees`.`suffix`,
+                `users`.`id` AS user_id,
+                `users`.`last_name`,
+                `users`.`first_name`,
+                `users`.`middle_name`,
+                `users`.`suffix`,
                 `jobs`.`id` AS job_id,
                 `jobs`.`name` job_name,
                 `departments`.`id` AS department_id,
@@ -198,23 +198,23 @@ class PrintController extends Controller
             ]);
         }
 
-        // query for retrieving expenses grouped by employee
-        if (request()->has('by_employee_id')) {
+        // query for retrieving expenses grouped by user
+        if (request()->has('by_user_id')) {
             $expenses = DB::table('expenses')
-            ->join("employees", "employees.id", "=", "expenses.employee_id")
-            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("users", "users.id", "=", "expenses.user_id")
+            ->join("jobs", "jobs.id", "=", "users.job_id")
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
             ->whereIn('expense_reports.id', explode(",", $ids))
-            ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`"))
-            ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
+            ->groupBy(DB::raw("`users`.`id`, `expense_types`.`id`"))
+            ->orderBy(DB::raw("`users`.`id`, `expenses`.`date`, `expense_types`.`name`"))
             ->select(DB::raw("
-                `employees`.`id` AS employee_id,
-                `employees`.`last_name`,
-                `employees`.`first_name`,
-                `employees`.`middle_name`,
-                `employees`.`suffix`,
+                `users`.`id` AS user_id,
+                `users`.`last_name`,
+                `users`.`first_name`,
+                `users`.`middle_name`,
+                `users`.`suffix`,
                 `departments`.`name` department_name,
                 `expense_types`.`name` expense_type_name,
                 `expenses`.`date` AS expense_date,
@@ -230,20 +230,20 @@ class PrintController extends Controller
         // query for retrieving expenses grouped by expense date
         if (request()->has('by_date')) {
             $expenses = DB::table('expenses')
-            ->join("employees", "employees.id", "=", "expenses.employee_id")
-            ->join("jobs", "jobs.id", "=", "employees.job_id")
+            ->join("users", "users.id", "=", "expenses.user_id")
+            ->join("jobs", "jobs.id", "=", "users.job_id")
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
             ->whereIn('expense_reports.id', explode(",", $ids))
-            ->groupBy(DB::raw("`employees`.`id`, `expense_types`.`id`, `expenses`.`date`"))
-            ->orderBy(DB::raw("`employees`.`id`, `expenses`.`date`, `expense_types`.`name`"))
+            ->groupBy(DB::raw("`users`.`id`, `expense_types`.`id`, `expenses`.`date`"))
+            ->orderBy(DB::raw("`users`.`id`, `expenses`.`date`, `expense_types`.`name`"))
             ->select(DB::raw("
-                `employees`.`id` AS employee_id,
-                `employees`.`last_name`,
-                `employees`.`first_name`,
-                `employees`.`middle_name`,
-                `employees`.`suffix`,
+                `users`.`id` AS user_id,
+                `users`.`last_name`,
+                `users`.`first_name`,
+                `users`.`middle_name`,
+                `users`.`suffix`,
                 `jobs`.`name` job_name,
                 `departments`.`name` department_name,
                 `expense_types`.`name` expense_type_name,

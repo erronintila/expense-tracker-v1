@@ -374,6 +374,9 @@ export default {
                 query: this.status
             };
         }
-    }
+    },
+    created() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+    },
 };
 </script>

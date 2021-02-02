@@ -103,7 +103,7 @@
             <template v-slot:append>
                 <!-- <div
                     class="text-center mt-5 mb-5"
-                    v-if="$store.getters.user.employee.fund > 0"
+                    v-if="$store.getters.user.fund > 0"
                 >
                     <div>
                         <v-divider width="50%" inset></v-divider>
@@ -118,7 +118,7 @@
                     >
                         {{
                             mixin_formatNumber(
-                                $store.getters.user.employee.remaining_fund
+                                $store.getters.user.remaining_fund
                             )
                         }}
                     </v-btn>
@@ -126,7 +126,7 @@
                         /
                         {{
                             mixin_formatNumber(
-                                $store.getters.user.employee.fund
+                                $store.getters.user.fund
                             )
                         }}
                     </div>
@@ -164,7 +164,7 @@
 
             <v-spacer></v-spacer>
 
-            <!-- <v-tooltip bottom>
+            <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         icon
@@ -172,13 +172,18 @@
                         v-on="on"
                         @click.stop="notificationDrawer = !notificationDrawer"
                     >
-                        <v-badge content="2" value="2" color="red" overlap>
+                        <v-badge
+                            :content="$store.getters.notifications.data.length"
+                            :value="$store.getters.notifications.data.length"
+                            color="red"
+                            overlap
+                        >
                             <v-icon>mdi-bell</v-icon>
                         </v-badge>
                     </v-btn>
                 </template>
                 <span>Notifications</span>
-            </v-tooltip> -->
+            </v-tooltip>
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -230,23 +235,98 @@
 
                     <v-list-item-content>
                         <v-list-item-title>Notifications</v-list-item-title>
-                        <v-list-item-subtitle>5 Unread</v-list-item-subtitle>
+                        <v-list-item-subtitle
+                            v-if="$store.getters.notifications.data.length > 0"
+                            >{{
+                                $store.getters.notifications.data.length
+                            }}
+                            Unread</v-list-item-subtitle
+                        >
+                        <v-list-item-subtitle v-else
+                            >No notifications</v-list-item-subtitle
+                        >
+                        <v-list-item-title>
+                            <router-link
+                                :to="{ name: 'admin.notifications.index' }"
+                                class="text-decoration-none"
+                                style="color: #4caf50"
+                            >
+                                View all
+                            </router-link>
+                        </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </template>
 
             <v-divider></v-divider>
 
-            <v-list dense>
-                <v-list-item>
-                    <v-list-item-icon>
-                        <v-icon>mdi-bell</v-icon>
-                    </v-list-item-icon>
+            <!-- <v-list dense shaped>
+                <template
+                    v-for="(item, index) in $store.getters.notifications.data"
+                >
+                    <v-list-item
+                        color="green"
+                        :key="index"
+                        :to="
+                            `/admin/${item.data.data.model}/${item.data.data.id}`
+                        "
+                        link
+                    >
+                        <v-list-item-content>
+                            <v-list-item-title
+                                v-text="item.data.data.full_name  + '-' + index"
+                            ></v-list-item-title>
 
-                    <v-list-item-content>
-                        <v-list-item-title>Title</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                            <v-list-item-subtitle
+                                class="text--primary"
+                                v-text="item.data.data.description"
+                            ></v-list-item-subtitle>
+
+                            <v-list-item-subtitle
+                                v-text="mixin_getHumanDate(item.created_at)"
+                            ></v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </v-list> -->
+
+            <!-- `/admin/${item.data.data.model}/${item.data.data.id}` -->
+
+            <v-list two-line>
+                <v-list-item-group active-class="">
+                    <template
+                        v-for="(item, index) in $store.getters.notifications
+                            .data"
+                    >
+                        <v-list-item :key="item.id" @click="redirectPage(item)">
+                            <template>
+                                <v-list-item-content>
+                                    <v-list-item-title
+                                        v-text="
+                                            item.data.data.user.full_name
+                                        "
+                                    ></v-list-item-title>
+
+                                    <v-list-item-subtitle
+                                        class="text--primary"
+                                        v-text="item.data.data.description"
+                                    ></v-list-item-subtitle>
+
+                                    <v-list-item-subtitle
+                                        v-text="
+                                            mixin_getHumanDate(item.created_at)
+                                        "
+                                    ></v-list-item-subtitle>
+                                </v-list-item-content>
+                            </template>
+                        </v-list-item>
+
+                        <v-divider
+                            v-if="index < items.length - 1"
+                            :key="index"
+                        ></v-divider>
+                    </template>
+                </v-list-item-group>
             </v-list>
         </v-navigation-drawer>
         <!-- End of Notifications Drawer -->
@@ -273,7 +353,7 @@ export default {
             {
                 icon: "mdi-clipboard-account",
                 text: "Employees",
-                link: { name: "admin.employees.index" }
+                link: { name: "admin.users.index" }
             },
             {
                 icon: "mdi-cash-multiple",
@@ -379,6 +459,31 @@ export default {
         ]
     }),
     methods: {
+        redirectPage(item) {
+            let _this = this;
+
+            axios
+                .put(
+                    `/api/notifications/${
+                        item.id
+                    }?action=${"read"}&type=${"single"}`
+                )
+                .then(response => {
+                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
+
+                    window.location.replace(
+                        `/admin/${item.data.data.model}/${item.data.data.id}`
+                    );
+
+                    // _this.$router.replace(
+                    //     `/admin/${item.data.data.model}/${item.data.data.id}`
+                    // );
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.log(error.response);
+                });
+        },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error
             this.$router.push({ name: "admin.profile.index" }, () => {});
@@ -395,6 +500,7 @@ export default {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
             _this.user = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };

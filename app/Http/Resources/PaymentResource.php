@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Employee;
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentResource extends JsonResource
@@ -64,7 +62,7 @@ class PaymentResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "expense_reports" => ExpenseReportResource::collection($this->whenLoaded('expense_reports')),
-            "employee" => new EmployeeResource($this->whenLoaded('employee'))
+            "user" => new UserResource($this->whenLoaded('user'))
         ];
     }
 }

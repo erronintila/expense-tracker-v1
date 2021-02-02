@@ -210,6 +210,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.onLoad();
   }
 });
@@ -254,7 +255,7 @@ var render = function() {
                   staticClass: "mr-2",
                   attrs: {
                     color: "green",
-                    to: { name: "admin.settings.employee" },
+                    to: { name: "admin.settings.user" },
                     outlined: "",
                     dark: ""
                   }

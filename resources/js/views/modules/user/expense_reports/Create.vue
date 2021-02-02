@@ -272,7 +272,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                employee: this.$store.getters.user.employee
+                user: this.$store.getters.user
             },
             errors: {
                 date_range: [],
@@ -280,7 +280,7 @@ export default {
                 description: [],
                 remarks: [],
                 notes: [],
-                employee: [],
+                user: [],
                 expenses: []
             }
         };
@@ -299,7 +299,7 @@ export default {
                 .get("/api/data/expenses", {
                     params: {
                         create_report: true,
-                        employee_id: _this.form.employee.id,
+                        user_id: _this.form.user.id,
                         start_date: start_date,
                         end_date: end_date
                     }
@@ -328,7 +328,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let range = _this.date_range;
-                let employee_id = _this.form.employee.id;
+                let user_id = _this.form.user.id;
 
                 axios
                     .get("/api/expenses", {
@@ -337,7 +337,7 @@ export default {
                             itemsPerPage: itemsPerPage,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
-                            employee_id: employee_id,
+                            user_id: user_id,
                             expense_report_id: null,
                             update_report: true
                         }
@@ -395,7 +395,7 @@ export default {
                         description: _this.form.description,
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
-                        employee_id: _this.form.employee.id,
+                        user_id: _this.form.user.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
@@ -449,7 +449,7 @@ export default {
             return {
                 ...this.options,
                 query: this.date_range,
-                query: this.form.employee.id
+                query: this.form.user.id
             };
         },
         default_description() {

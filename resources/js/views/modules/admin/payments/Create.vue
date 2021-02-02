@@ -61,12 +61,12 @@
                                 </v-date-picker>
                             </v-menu>
                             <v-autocomplete
-                                v-model="form.employee"
+                                v-model="form"
                                 :rules="mixin_validation.required"
-                                :items="employees"
-                                :error-messages="errors.employee"
-                                @input="errors.employee = []"
-                                @change="updateEmployee"
+                                :items="users"
+                                :error-messages="errors.user"
+                                @input="errors.user = []"
+                                @change="updateUser"
                                 item-value="id"
                                 item-text="full_name"
                                 label="Employee"
@@ -148,13 +148,13 @@
                                         hide-details
                                     ></v-text-field>
                                 </template>
-                                <template v-slot:[`item.employee`]="{ item }">
+                                <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.employee.last_name +
+                                        item.user.last_name +
                                             " " +
-                                            item.employee.first_name +
+                                            item.user.first_name +
                                             " " +
-                                            item.employee.suffix
+                                            item.user.suffix
                                     }}
                                 </template>
                                 <template v-slot:[`item.created`]="{ item }">
@@ -395,11 +395,11 @@
                                 <template v-slot:[`item.total`]="{ item }">
                                     {{ mixin_formatNumber(item.total) }}
                                 </template>
-                                <template v-slot:[`item.employee`]="{ item }">
+                                <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.employee.last_name +
+                                        item.last_name +
                                             ", " +
-                                            item.employee.first_name
+                                            item.first_name
                                     }}
                                 </template>
                                 <template v-slot:[`item.updated_at`]="{ item }">
@@ -487,7 +487,7 @@ export default {
                 "This Year"
             ],
             headers: [
-                // { text: "Employee", value: "employee" },
+                // { text: "User", value: "user" },
                 // { text: "Description", value: "description" },
                 // { text: "Amount", value: "total" },
                 // { text: "Created", value: "created" },
@@ -504,7 +504,7 @@ export default {
             ],
             items: [],
             selected: [],
-            employees: [],
+            users: [],
             total: 0,
             totalAmount: 0,
             totalItems: 0,
@@ -516,6 +516,7 @@ export default {
                 itemsPerPage: 10
             },
             form: {
+                id: 0,
                 code: "",
                 reference_no: "",
                 voucher_no: "",
@@ -529,10 +530,10 @@ export default {
                 payee_phone: "",
                 remarks: "",
                 notes: "",
-                employee: { id: null }
+                user: { id: null }
             },
             errors: {
-                employee: [],
+                user: [],
                 code: [],
                 reference_no: [],
                 voucher_no: [],
@@ -561,19 +562,20 @@ export default {
                 this.totalItems = data.total;
             });
         },
-        updateEmployee() {
+        updateUser() {
             this.getDataFromApi().then(data => {
                 this.items = data.items;
                 this.totalItems = data.total;
             });
         },
-        loadEmployees() {
+        loadUsers() {
             let _this = this;
 
             axios
-                .get("/api/data/employees")
+                .get("/api/data/users")
                 .then(response => {
-                    _this.employees = response.data.data;
+                    console.log(response);
+                    _this.users = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -595,7 +597,7 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let employee_id = _this.form.employee.id;
+                let user_id = _this.form.id;
                 let range = _this.date_range;
 
                 axios
@@ -607,7 +609,7 @@ export default {
                             page: page,
                             itemsPerPage: itemsPerPage,
                             status: status,
-                            employee_id: employee_id,
+                            user_id: user_id,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
                             admin_page: true,
@@ -646,7 +648,7 @@ export default {
         //                 create_payment: true,
         //                 start_date: start_date,
         //                 end_date: end_date,
-        //                 employee_id: _this.form.employee.id
+        //                 user_id: _this.form.user.id
         //             }
         //         })
         //         .then(response => {
@@ -691,7 +693,7 @@ export default {
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
                         expense_reports: _this.selected,
-                        employee: _this.form.employee.id
+                        user: _this.form.id
                     })
                     .then(function(response) {
                         _this.onRefresh();
@@ -703,6 +705,8 @@ export default {
                                 timeout: 2000
                             }
                         );
+
+                        _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                         // _this.$store.dispatch("AUTH_USER");
 
@@ -729,7 +733,7 @@ export default {
             return {
                 ...this.options,
                 query: this.search,
-                query: this.employee,
+                query: this.user,
                 query: this.date_range
             };
         },
@@ -755,7 +759,7 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
-        this.loadEmployees();
+        this.loadUsers();
     }
 };
 </script>

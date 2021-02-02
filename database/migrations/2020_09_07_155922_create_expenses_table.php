@@ -42,7 +42,7 @@ class CreateExpensesTable extends Migration
 
             $table->unsignedBigInteger('expense_type_id')->unsigned();
             $table->unsignedBigInteger('sub_type_id')->nullable();
-            $table->unsignedBigInteger('employee_id')->unsigned();
+            $table->unsignedBigInteger('user_id')->unsigned();
             $table->unsignedBigInteger('vendor_id')->nullable();
             $table->unsignedBigInteger('expense_report_id')->nullable();
             $table->unsignedBigInteger('tax_id')->nullable();
@@ -76,9 +76,9 @@ class CreateExpensesTable extends Migration
             $table->foreign('sub_type_id')
                 ->references('id')
                 ->on('expense_types');
-            $table->foreign('employee_id')
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('employees');
+                ->on('users');
             $table->foreign('vendor_id')
                 ->references('id')
                 ->on('vendors');

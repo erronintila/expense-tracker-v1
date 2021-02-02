@@ -290,11 +290,11 @@
                     <template v-slot:[`item.total`]="{ item }">
                         {{ mixin_formatNumber(item.total) }}
                     </template>
-                    <template v-slot:[`item.employee`]="{ item }">
+                    <template v-slot:[`item.user`]="{ item }">
                         {{
-                            item.employee.last_name +
+                            item.user.last_name +
                                 ", " +
-                                item.employee.first_name
+                                item.user.first_name
                         }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
@@ -467,7 +467,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            employee: this.$store.getters.user.employee.id,
+            user: this.$store.getters.user.id,
             date_range: [
                 moment()
                     .startOf("month")
@@ -515,7 +515,7 @@ export default {
                 itemsPerPage: 10
             },
             expense_types: [],
-            reports_by_employee: [],
+            reports_by_user: [],
             reports_by_expense: [],
             reports_by_date: []
         };
@@ -556,7 +556,7 @@ export default {
                     });
             });
         },
-        loadReportByEmployee() {
+        loadReportByUser() {
             return new Promise((resolve, reject) => {
                 let _this = this;
                 let ids =
@@ -566,10 +566,10 @@ export default {
 
                 axios
                     .get(
-                        `/api/data/print_report?by_employee_id=true&ids=${ids}`
+                        `/api/data/print_report?by_user_id=true&ids=${ids}`
                     )
                     .then(response => {
-                        _this.reports_by_employee = response.data.data;
+                        _this.reports_by_user = response.data.data;
 
                         resolve();
                     })
@@ -601,8 +601,8 @@ export default {
                     });
             });
         },
-        printReportByEmployee(action) {
-            this.loadReportByEmployee().then(() => {
+        printReportByUser(action) {
+            this.loadReportByUser().then(() => {
                 let table_columns = [];
                 let table_rows = [];
                 let table_footer = [];
@@ -624,15 +624,15 @@ export default {
 
                 let temp_table_body = {};
                 let temp_expense_types = {};
-                let employee_id = null;
+                let user_id = null;
                 let expense_type = null;
 
                 // loop through retrieved records
-                this.reports_by_employee.forEach(element => {
-                    // create new object if current employee does not match with previous record
-                    if (employee_id !== element.employee_id) {
+                this.reports_by_user.forEach(element => {
+                    // create new object if current user does not match with previous record
+                    if (user_id !== element.user_id) {
                         temp_table_body = {};
-                        employee_id = element.employee_id;
+                        user_id = element.user_id;
 
                         // set default values for current row
                         this.expense_types.forEach(expense_type => {
@@ -640,7 +640,7 @@ export default {
                         });
 
                         temp_table_body = {
-                            Employee: `${element.last_name}, ${
+                            User: `${element.last_name}, ${
                                 element.first_name
                             } ${
                                 element.middle_name == null
@@ -771,7 +771,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -933,7 +939,7 @@ export default {
 
                 // loop through retrieved records
                 this.reports_by_date.forEach(element => {
-                    // create new object if current employee does not match with previous record
+                    // create new object if current user does not match with previous record
                     if (expense_date !== element.expense_date) {
                         temp_table_body = {};
                         expense_date = element.expense_date;
@@ -1069,7 +1075,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -1235,7 +1247,7 @@ export default {
 
                 // loop through retrieved records
                 this.reports_by_expense.forEach(element => {
-                    // create new object if current employee does not match with previous record
+                    // create new object if current user does not match with previous record
                     if (expense_id !== element.expense_id) {
                         temp_table_body = {};
                         expense_id = element.expense_id;
@@ -1393,7 +1405,13 @@ export default {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
-                                widths: table_columns.map(item => "*"),
+                                widths: table_columns.map((item, index) => {
+                                    if((table_columns.length - 1) == index) {
+                                        return "*";
+                                    }
+
+                                    return "auto";
+                                }),
                                 body: body
                             },
                             layout: {
@@ -1534,8 +1552,8 @@ export default {
             }
 
             switch (group_by) {
-                case "employee":
-                    this.printReportByEmployee(action);
+                case "user":
+                    this.printReportByUser(action);
                     break;
                 case "date":
                     this.printReportByDate(action);
@@ -1558,7 +1576,7 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let employee_id = _this.employee;
+                let user_id = _this.user;
                 let range = _this.date_range;
 
                 axios
@@ -1568,7 +1586,7 @@ export default {
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
                             itemsPerPage: itemsPerPage,
-                            employee_id: employee_id,
+                            user_id: user_id,
                             status: status,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
@@ -2079,6 +2097,56 @@ export default {
                 return;
             }
 
+            if (
+                this.selected.filter(function(item) {
+                    return item.status.status === "Unsubmitted";
+                }).length <= 0
+            ) {
+                this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+                return;
+            }
+
+            let period = this.$store.getters.settings.submission_period;
+            let last_submission_date = "";
+            let submission_date = moment
+                .min(
+                    this.selected
+                        .filter(function(item) {
+                            return item.status.status === "Unsubmitted";
+                        })
+                        .map(item2 => moment(item2.from))
+                )
+                .format("YYYY-MM-DD");
+
+            switch (period) {
+                case "Weekly":
+                    last_submission_date = moment(submission_date)
+                        .endOf("week")
+                        .format("YYYY-MM-DD");
+                    break;
+                case "Monthly":
+                    last_submission_date = moment(submission_date)
+                        .endOf("month")
+                        .format("YYYY-MM-DD");
+                    break;
+
+                default:
+                    last_submission_date = moment(submission_date).format(
+                        "YYYY-MM-DD"
+                    );
+                    break;
+            }
+
+            if(!this.mixin_can("submit expense reports beyond due date")) {
+                if (!moment(moment()).isSameOrBefore(last_submission_date, "day")) {
+                    this.mixin_errorDialog(
+                        "Error (Not Allowed)",
+                        `Last submission was ${last_submission_date}`
+                    );
+                    return;
+                }
+            }
+
             this.onUpdate("submit", "put");
         },
         onReview() {
@@ -2126,6 +2194,37 @@ export default {
             if (
                 this.selected
                     .map(item => item.status.status)
+                    .includes("Unsubmitted")
+            ) {
+                let period = this.$store.getters.settings.submission_period;
+                let last_submission_date = "";
+                let submission_date = moment
+                    .min(this.selected.map(item => moment(item.from)))
+                    .format("YYYY-MM-DD");
+
+                switch (period) {
+                    case "Weekly":
+                        last_submission_date = moment(submission_date)
+                            .endOf("week")
+                            .format("YYYY-MM-DD");
+                        break;
+                    case "Monthly":
+                        last_submission_date = moment(submission_date)
+                            .endOf("month")
+                            .format("YYYY-MM-DD");
+                        break;
+
+                    default:
+                        last_submission_date = moment(submission_date).format(
+                            "YYYY-MM-DD"
+                        );
+                        break;
+                }
+
+                this.warning = `Last Submission Date: ${last_submission_date}`;
+            } else if (
+                this.selected
+                    .map(item => item.status.status)
                     .includes("Submitted")
             ) {
                 let period = this.$store.getters.settings.approval_period;
@@ -2148,7 +2247,7 @@ export default {
                 ...this.options,
                 query: this.search,
                 query: this.status,
-                query: this.employee,
+                query: this.user,
                 query: this.date_range
             };
         },
@@ -2215,7 +2314,9 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-        // this.loadEmployees();
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        // this.loadUsers();
+        // this.loadUsers();
         this.loadExpenseTypes();
     }
 };

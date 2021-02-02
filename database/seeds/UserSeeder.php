@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Employee;
-use App\Models\Job;
-use App\Models\ExpenseType;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +28,6 @@ class UserSeeder extends Seeder
             // "permissions",
             "departments",
             "jobs",
-            "employees",
             "vendors",
             "expense types",
             "payments",
@@ -74,12 +70,14 @@ class UserSeeder extends Seeder
                 continue;
             }
 
-            if ($model == "users") {
-                // Permission::create(['name' => 'verify users', 'category' => $model]);
-                // Permission::create(['name' => 'restore users', 'category' => $model]);
-                Permission::create(['name' => 'reset user passwords', 'category' => $model]);
-                continue;
-            }
+            // if ($model == "users") {
+            //     // Permission::create(['name' => 'verify users', 'category' => $model]);
+            //     // Permission::create(['name' => 'restore users', 'category' => $model]);
+            //     Permission::create(['name' => 'reset user passwords', 'category' => $model]);
+            //     Permission::create(['name' => 'edit user fund', 'category' => $model]);
+            //     Permission::create(['name' => 'restore users', 'category' => $model]);
+            //     // continue;
+            // }
 
             Permission::create(['name' => 'add ' . $model, 'category' => $model]);
             Permission::create(['name' => 'edit ' . $model, 'category' => $model]);
@@ -88,14 +86,18 @@ class UserSeeder extends Seeder
             Permission::create(['name' => 'view all ' . $model, 'category' => $model]);
             Permission::create(['name' => 'export ' . $model, 'category' => $model]);
 
-            if ($model == "employees") {
-                Permission::create(['name' => 'edit employees fund', 'category' => $model]);
-                Permission::create(['name' => 'restore employees', 'category' => $model]);
+            if ($model == "users") {
+                // Permission::create(['name' => 'verify users', 'category' => $model]);
+                // Permission::create(['name' => 'restore users', 'category' => $model]);
+                Permission::create(['name' => 'reset user passwords', 'category' => $model]);
+                Permission::create(['name' => 'edit users fund', 'category' => $model]);
+                Permission::create(['name' => 'restore users', 'category' => $model]);
             }
 
             if ($model == "expenses") {
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
                 Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
+                Permission::create(['name' => 'set reimbursable amount', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 
@@ -125,7 +127,7 @@ class UserSeeder extends Seeder
 
         // create roles and assign existing permissions
 
-        $roleUser = Role::create(['name' => 'Standard User']);
+        $roleUser = Role::create(['name' => 'standard user']);
         $roleUser->givePermissionTo("add expenses");
         $roleUser->givePermissionTo("edit expenses");
         $roleUser->givePermissionTo("delete expenses");
@@ -140,11 +142,15 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("view payments");
         $roleUser->givePermissionTo("view all payments");
         $roleUser->givePermissionTo("receive payments");
-        // $roleUser->givePermissionTo("duplicate expense reports");
+        $roleUser->givePermissionTo("duplicate expense reports");
         $roleUser->givePermissionTo("add vendors");
-        $roleUser->givePermissionTo("edit employees");
+        $roleUser->givePermissionTo("set reimbursable amount");
+        $roleUser->givePermissionTo("add expenses beyond encoding period");
+        $roleUser->givePermissionTo("submit expense reports beyond due date");
+        $roleUser->givePermissionTo("add expenses beyond limit");
+        // $roleUser->givePermissionTo("edit users");
 
-        $roleSuperAdmin = Role::create(['name' => 'Super Admin']);
+        $roleSuperAdmin = Role::create(['name' => 'administrator']);
 
         foreach (Permission::all() as $permission) {
             $roleSuperAdmin->givePermissionTo($permission->pluck("name"));
@@ -160,21 +166,36 @@ class UserSeeder extends Seeder
 
         $user = User::create([
             'code' => generate_code(User::class, "USR", 10),
-            'name' => 'Super Admin',
+            // 'name' => 'Super Admin',
+
+            'first_name' => 'Super Admin',
+            'middle_name' => '',
+            'last_name' => 'Super Admin',
+            'suffix' => '',
+            'gender' => 'Male',
+            'birthdate' => date('Y-m-d'),
+            'mobile_number' => 0,
+            'telephone_number' => null,
+            'email' => 'superadmin@superadmin.com',
+            'address' => '',
+            'job_id' => null,
+
             'username' => 'superadmin',
             'email' => 'superadmin@superadmin.com',
-            'email_verified_at' => now(),
+            'email_verified_at' => null,
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'is_admin' => true,
+            'is_superadmin' => true,
             'can_login' => true,
+            'type' => 'administrator',
         ]);
 
         $user->assignRole($roleSuperAdmin);
 
         /**
          * -------------------------------------------------------------------------------------------------------------------------
-         * Create New Employee
+         * Create New User
          * -------------------------------------------------------------------------------------------------------------------------
          */
 
@@ -195,28 +216,6 @@ class UserSeeder extends Seeder
         // }
 
         // // $user->assignRole('Standard User');
-
-        // $employee = Employee::create([
-        //     'code' => generate_code(Employee::class, "EMP", 10),
-        //     'first_name' => "Erron1",
-        //     'middle_name' => "Cerdania1",
-        //     'last_name' => "Intila1",
-        //     'suffix' => null,
-        //     'gender' => "Male",
-        //     'birthdate' => "1996-08-19",
-        //     'mobile_number' => "09567653221",
-        //     'telephone_number' => null,
-        //     'email' => 'erronintila1@gmail.com',
-        //     'address' => "Polomolok, South Cotabato",
-        //     "job_id" => Job::where('name', "Junior Software Developer")->first()->id,
-        //     "user_id" => $user->id,
-        //     "fund" => 1000,
-        //     "remaining_fund" => 1000,
-        // ]);
-
-        // //foreach (ExpenseType::all() as $expense_types) {
-        //    $employee->expense_types()->sync(ExpenseType::all());
-        // //}
 
         /**
          * -------------------------------------------------------------------------------------------------------------------------

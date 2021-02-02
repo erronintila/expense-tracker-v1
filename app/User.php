@@ -2,7 +2,11 @@
 
 namespace App;
 
-use App\Models\Employee;
+use App\Models\Adjustment;
+use App\Models\Expense;
+use App\Models\ExpenseReport;
+use App\Models\ExpenseType;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,6 +52,16 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'full_name',
+        'name',
     ];
 
     /** ========================================================================================================================================
@@ -108,16 +122,86 @@ class User extends Authenticatable
     ============================================================================================================================================ */
 
     /**
-     * employee
+     * Displays the job designation associated with user.
      *
      * @return mixed
      */
-    public function employee()
+    public function job()
     {
-        return $this->hasOne(Employee::class);
+        return $this->belongsTo(Job::class);
+    }
+
+    /**
+     * Displays the expenses associated with user.
+     *
+     * @return mixed
+     */
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
+
+    /**
+     * Displays the adjustments associated with user.
+     *
+     * @return mixed
+     */
+    public function adjustments()
+    {
+        return $this->hasMany(Adjustment::class);
+    }
+
+    /**
+     * Displays the Expense Reports associated with user.
+     *
+     * @return mixed
+     */
+    public function expense_reports()
+    {
+        return $this->hasMany(ExpenseReport::class);
+    }
+
+    /**
+     * Displays the Expense types associated with user.
+     *
+     * @return mixed
+     */
+    public function expense_types()
+    {
+        return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
+    }
+
+    /**
+     * Displays the Expense Type Sub-types associated with user.
+     *
+     * @return mixed
+     */
+    public function sub_types()
+    {
+        return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
     }
 
     /** ========================================================================================================================================
         LARAVEL ACCESSORS
     ============================================================================================================================================ */
+
+    /**
+     * Displays the full name of user.
+     *
+     * @return mixed
+     */
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . "" . ($this->middle_name ?  " " . $this->middle_name . " " : " ") . $this->last_name . ($this->suffix ? ", " . $this->suffix : "");
+    }
+
+    /**
+     * Displays the full name of user.
+     *
+     * @return mixed
+     */
+    public function getNameAttribute()
+    {
+        return $this->first_name . "" . ($this->middle_name ?  " " . $this->middle_name . " " : " ") . $this->last_name . ($this->suffix ? ", " . $this->suffix : "");
+    }
 }

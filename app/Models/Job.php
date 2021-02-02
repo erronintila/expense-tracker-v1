@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,7 @@ class Job extends Model
     //     parent::boot();
 
     //     static::deleting(function ($job) {
-    //         if ($job->employees()->count() > 0) {
+    //         if ($job->users()->count() > 0) {
 
     //             abort(422, "Item has child records");
     //         }
@@ -133,13 +134,13 @@ class Job extends Model
     }
 
     /**
-     * Displays the employees associated with job designation.
+     * Displays the users associated with job designation.
      *
      * @return mixed
      */
-    public function employees()
+    public function users()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(User::class);
     }
 
     // /**

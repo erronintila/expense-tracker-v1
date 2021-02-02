@@ -6,7 +6,7 @@
                 <v-spacer></v-spacer>
                 <v-btn
                     color="green"
-                    :to="{ name: 'admin.settings.employee' }"
+                    :to="{ name: 'admin.settings.user' }"
                     outlined
                     dark
                     class="mr-2"
@@ -214,6 +214,7 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.onLoad();
     }
 };

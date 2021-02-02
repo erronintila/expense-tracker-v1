@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Employee;
+use App\User;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
 use Illuminate\Database\Seeder;
@@ -14,20 +14,20 @@ class ExpenseReportSeeder extends Seeder
      */
     public function run()
     {
-        $count = count(Employee::all());
+        $count = count(User::all());
 
         for ($i = 1; $i <= $count; $i++) {
 
-            $expenses = Expense::where('employee_id', $i)->get();
+            $expenses = Expense::where('user_id', $i)->get();
 
             if (count($expenses) > 0) {
-                $employee = Employee::find($i);
+                $user = User::find($i);
 
                 $expense_report = new ExpenseReport();
 
-                $expense_report->description = $employee->getFullNameAttribute() . " Expenses";
+                $expense_report->description = $user->getFullNameAttribute() . " Expenses";
                 $expense_report->remarks = "";
-                $expense_report->employee_id = $employee->id;
+                $expense_report->user_id = $user->id;
                 $expense_report->save();
 
                 foreach ($expenses as $key => $value) {

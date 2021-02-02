@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseReport\ExpenseReportIndexResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\Http\Resources\ExpenseReportResource;
-use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseReport;
+use App\Notifications\ExpenseReportNotification;
 use App\Traits\ApiResponse;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -40,11 +42,11 @@ class ExpenseReportController extends Controller
     {
         return Validator::make($data, [
 
-            'code' => ['nullable', Rule::unique('employees')->ignore($id, 'id'), 'max:255'],
+            'code' => ['nullable', Rule::unique('expense_reports')->ignore($id, 'id'), 'max:255'],
 
             'description' => ['required', 'max:255'],
 
-            'employee_id' => ['required'],
+            'user_id' => ['required'],
 
             'remarks' => ['nullable'],
 
@@ -67,7 +69,7 @@ class ExpenseReportController extends Controller
 
         $itemsPerPage = $request->itemsPerPage ?? 10;
 
-        $expense_reports = ExpenseReport::with(['employee' => function ($query) {
+        $expense_reports = ExpenseReport::with(['user' => function ($query) {
             $query->withTrashed();
         }])
             // ->with(['expenses' => function ($query) {
@@ -181,9 +183,9 @@ class ExpenseReportController extends Controller
             }
         }
 
-        if (request()->has("employee_id")) {
-            if ($request->employee_id > 0) {
-                $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
+        if (request()->has("user_id")) {
+            if ($request->user_id > 0) {
+                $expense_reports = $expense_reports->where("user_id", $request->user_id);
             }
         }
 
@@ -214,7 +216,7 @@ class ExpenseReportController extends Controller
 
             $end_date = Carbon::parse($request->end_date)->endOfDay();
 
-            $expense_reports = ExpenseReport::with(['employee' => function ($query) {
+            $expense_reports = ExpenseReport::with(['user' => function ($query) {
                 $query->withTrashed();
             }])
                 ->where(function ($query) use ($search) {
@@ -222,7 +224,7 @@ class ExpenseReportController extends Controller
         
                     $query->orWhere('description', "like", "%" . $search . "%");
                 })
-                ->where("employee_id", $request->employee_id)
+                ->where("user_id", $request->user_id)
                 ->orderBy($sortBy, $sortType)
                 ->whereBetween("created_at", [$start_date, $end_date])
                 ->where("approved_at", "<>", null)
@@ -250,7 +252,7 @@ class ExpenseReportController extends Controller
 
         $expense_report->description = $request->description;
 
-        $expense_report->employee_id = $request->employee_id;
+        $expense_report->user_id = $request->user_id;
 
         $expense_report->remarks = $request->remarks;
 
@@ -311,7 +313,7 @@ class ExpenseReportController extends Controller
     public function show(Request $request, $id)
     {
         $expense_report = ExpenseReport::withTrashed()
-            ->with(['employee' => function ($query) {
+            ->with(['user' => function ($query) {
                 $query->withTrashed();
             }])
             // ->with(['expenses' => function ($query) {
@@ -410,9 +412,18 @@ class ExpenseReportController extends Controller
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, true, false, false, false, false);
+
+                    foreach (User::where("is_admin", 1)->get() as $user) {
+                        Notification::send($user, new ExpenseReportNotification([
+                            "action" => "submit",
+                            "expense_report" => $expense_report
+                        ]));
+                    }
                 }
 
                 $message = "Expense Report(s) submitted successfully";
+                
+                
 
                 break;
 
@@ -467,6 +478,11 @@ class ExpenseReportController extends Controller
                     $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
 
                     $this->updateReport($expense_report, false, false, true, false, false);
+
+                    Notification::send(User::withTrashed()->find($expense_report->user->id), new ExpenseReportNotification([
+                        "action" => "approve",
+                        "expense_report" => $expense_report
+                    ]));
                 }
 
                 $message = "Expense Report(s) approved successfully";
@@ -560,14 +576,19 @@ class ExpenseReportController extends Controller
 
                     $expense_report->save();
 
+                    Notification::send(User::withTrashed()->find($expense_report->user->id), new ExpenseReportNotification([
+                        "action" => "reject",
+                        "expense_report" => $expense_report
+                    ]));
+
                     foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
                         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
-                        $expense->employee->remaining_fund += $expense_amount;
+                        $expense->user->remaining_fund += $expense_amount;
 
-                        $expense->employee->disableLogging();
+                        $expense->user->disableLogging();
 
-                        $expense->employee->save();
+                        $expense->user->save();
                     }
                 }
 
@@ -588,9 +609,9 @@ class ExpenseReportController extends Controller
                     // check if remaining fund will be less than zero when duplicated
                     $report_amount = $expense_report->expenses()->withTrashed()->sum("amount") - $expense_report->expenses()->withTrashed()->sum("reimbursable_amount");
 
-                    $employee = Employee::withTrashed()->findOrFail($expense_report->employee_id);
+                    $user = User::withTrashed()->findOrFail($expense_report->user_id);
 
-                    if (($employee->remaining_fund - $report_amount) < 0) {
+                    if (($user->remaining_fund - $report_amount) < 0) {
                         return $this->errorResponse("Employee revolving fund can't be less than zero.", 422);
                     }
 
@@ -633,7 +654,7 @@ class ExpenseReportController extends Controller
 
                         $new_expense = $expense->replicate();
 
-                        $new_expense->code = generate_code(ExpenseReport::class, "EXP", 10);
+                        $new_expense->code = generate_code(Expense::class, "EXP", 10);
 
                         $new_expense->deleted_at = null;
 
@@ -734,7 +755,7 @@ class ExpenseReportController extends Controller
 
                 $expense_report->description = $request->description;
 
-                $expense_report->employee_id = $request->employee_id;
+                $expense_report->user_id = $request->user_id;
 
                 $expense_report->remarks = $request->remarks;
 
@@ -1024,7 +1045,7 @@ class ExpenseReportController extends Controller
     {
         if (request()->has('edit_report')) {
             $expense_report = ExpenseReport::withTrashed()
-            ->with(['employee' => function ($query) {
+            ->with(['user' => function ($query) {
                 $query->withTrashed();
             }])
             // ->with(['expenses' => function ($query) {
@@ -1055,7 +1076,7 @@ class ExpenseReportController extends Controller
                 $query2->withTrashed();
             }]);
         }])
-        ->with(['employee' => function ($query) {
+        ->with(['user' => function ($query) {
             $query->withTrashed();
         }])
         ->orderBy("created_at");
@@ -1064,8 +1085,8 @@ class ExpenseReportController extends Controller
             $expense_reports = $expense_reports->where("id", $request->id);
         }
 
-        if (request()->has("employee_id")) {
-            $expense_reports = $expense_reports->where("employee_id", $request->employee_id);
+        if (request()->has("user_id")) {
+            $expense_reports = $expense_reports->where("user_id", $request->user_id);
         }
 
         // if (request()->has("payment_id")) {

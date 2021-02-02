@@ -485,7 +485,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         payments: [],
         payment_id: null,
         balance: 0,
-        employee: {
+        user: {
           id: null,
           name: ""
         },
@@ -548,7 +548,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }); // header details
         // 1st row
 
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this2.form.employee.full_name), 0.5, 0.7);
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this2.form.user.full_name), 0.5, 0.7);
         doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this2.form.code), 6.0, 0.7); // end of 1st row
         // 2nd row
 
@@ -834,7 +834,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           },
           content: [{
             columns: [{
-              text: _this3.form.employee.full_name,
+              text: _this3.form.user.full_name,
               style: "pageStyle"
             }, {
               text: _this3.form.code,
@@ -1034,7 +1034,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.form.payments = data.payments;
         _this.form.payment_id = data.payment_id;
         _this.form.balance = data.balance;
-        _this.form.employee = data.employee;
+        _this.form.user = data.user;
         _this.form.payment = data.payment; // _this.form.expenses = data.expenses;
         // _this.form.created = data.created;
         // _this.form.updated = data.updated;
@@ -1258,7 +1258,7 @@ var render = function() {
                               [
                                 _vm._v(
                                   "\n                            " +
-                                    _vm._s(_vm.form.employee.full_name) +
+                                    _vm._s(_vm.form.user.full_name) +
                                     "\n                            "
                                 ),
                                 _vm.canEdit
