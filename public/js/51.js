@@ -458,7 +458,7 @@ var render = function() {
                                   _c(
                                     "v-btn",
                                     {
-                                      attrs: { color: "green" },
+                                      attrs: { color: "green", dark: "" },
                                       on: { click: _vm.onSave }
                                     },
                                     [

@@ -77,7 +77,7 @@
                             </v-row> -->
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-btn @click="onSave" color="green">
+                                    <v-btn @click="onSave" color="green" dark>
                                         Save Changes
                                     </v-btn>
                                 </v-col>
