@@ -403,11 +403,7 @@ __webpack_require__.r(__webpack_exports__);
       items: [],
       // expense_types: [],
       // sub_types: [],
-<<<<<<< HEAD
-      // employees: [],
-=======
       // users: [],
->>>>>>> develop
       // vendors: [],
       form: {
         code: null,
@@ -482,11 +478,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
-<<<<<<< HEAD
-      var _this = this; // this.loadEmployees().then(
-=======
       var _this = this; // this.loadUsers().then(
->>>>>>> develop
 
 
       axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
@@ -505,11 +497,7 @@ __webpack_require__.r(__webpack_exports__);
           is_vat_inclusive: true
         } : data.vendor;
         _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
-<<<<<<< HEAD
-        // _this.expense_types = data.employee.expense_types;
-=======
         // _this.expense_types = data.user.expense_types;
->>>>>>> develop
         // _this.sub_types = data.expense_type.sub_types;
 
         _this.form.is_tax_inclusive = data.is_tax_inclusive;
@@ -548,11 +536,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
-<<<<<<< HEAD
-        _this.form.employee.remaining_fund += data.amount - data.reimbursable_amount;
-=======
         _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
->>>>>>> develop
         _this.form.expense_report = data.expense_report;
         _this.form.created_at = data.created_at;
         _this.form.updated_at = data.updated_at;
@@ -571,15 +555,6 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.loader = false;
       }); // );
-<<<<<<< HEAD
-    } // loadEmployees() {
-    //     let _this = this;
-    //     return new Promise((resolve, reject) => {
-    //         axios
-    //             .get("/api/data/employees")
-    //             .then(response => {
-    //                 _this.employees = response.data.data;
-=======
     } // loadUsers() {
     //     let _this = this;
     //     return new Promise((resolve, reject) => {
@@ -587,7 +562,6 @@ __webpack_require__.r(__webpack_exports__);
     //             .get("/api/data/users")
     //             .then(response => {
     //                 _this.users = response.data.data;
->>>>>>> develop
     //                 resolve();
     //             })
     //             .catch(error => {
@@ -601,38 +575,6 @@ __webpack_require__.r(__webpack_exports__);
     //             });
     //     });
     // }
-<<<<<<< HEAD
-
-  },
-  computed: {
-    canEdit: function canEdit() {
-      if (this.form.deleted_at !== null || this.form.approved_at !== null || this.form.rejected_at !== null || this.form.cancelled_at !== null) {
-        return false;
-      }
-
-      if (this.form.expense_report !== null) {
-        if (this.form.expense_report.approved_at !== null || this.form.expense_report.cancelled_at !== null || this.form.expense_report.deleted_at !== null || this.form.expense_report.rejected_at !== null) {
-          return false;
-        }
-      }
-
-      return true;
-    },
-    amount_to_replenish: function amount_to_replenish() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
-      var amount = this.mixin_convertToNumber(this.form.amount);
-
-      if (remaining_fund >= amount) {
-        return amount;
-      }
-
-      return amount - Math.abs(remaining_fund - amount);
-    },
-    amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.employee.remaining_fund);
-      var amount = this.mixin_convertToNumber(this.form.amount);
-
-=======
 
   },
   computed: {
@@ -663,7 +605,6 @@ __webpack_require__.r(__webpack_exports__);
       var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
 
->>>>>>> develop
       if (remaining_fund < amount) {
         var to_replenish = Math.abs(remaining_fund - amount);
         this.form.reimbursable_amount = to_replenish;
@@ -676,11 +617,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.mixin_convertToNumber(this.form.amount);
     },
     display_reimbursable_amount: function display_reimbursable_amount() {
-<<<<<<< HEAD
-      return parseFloat(this.form.amount) > parseFloat(this.form.employee.remaining_fund);
-=======
       return parseFloat(this.form.amount) > parseFloat(this.form.user.remaining_fund);
->>>>>>> develop
     }
   },
   watch: {
@@ -830,11 +767,7 @@ var render = function() {
                               [
                                 _vm._v(
                                   "\n                            " +
-<<<<<<< HEAD
-                                    _vm._s(_vm.form.employee.full_name) +
-=======
                                     _vm._s(_vm.form.user.full_name) +
->>>>>>> develop
                                     "\n                            "
                                 ),
                                 _vm.canEdit

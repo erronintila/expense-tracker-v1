@@ -358,11 +358,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "created_at"
       }, {
         text: "Employee",
-<<<<<<< HEAD
-        value: "data.data.employee.full_name"
-=======
         value: "data.data.user.full_name"
->>>>>>> develop
       }, {
         text: "Description",
         value: "description"
@@ -379,13 +375,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       totalAmount: 0,
       items: [],
-<<<<<<< HEAD
-      // employee: 0,
-      // employees: [],
-=======
       // user: 0,
       // users: [],
->>>>>>> develop
       status: "All Unread",
       statuses: ["All Unread", "All Read", "All Notifications"],
       selected: [],
@@ -406,17 +397,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
-<<<<<<< HEAD
-    // loadEmployees() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/employees?only=true")
-    //         .then(response => {
-    //             _this.employees = response.data.data;
-    //             _this.employees.unshift({
-    //                 id: 0,
-    //                 full_name: "All Employees"
-=======
     // loadUsers() {
     //     let _this = this;
     //     axios
@@ -426,7 +406,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //             _this.users.unshift({
     //                 id: 0,
     //                 full_name: "All Users"
->>>>>>> develop
     //             });
     //         })
     //         .catch(error => {
@@ -454,11 +433,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-<<<<<<< HEAD
-        var range = _this.date_range; // let employee_id = _this.employee;
-=======
         var range = _this.date_range; // let user_id = _this.user;
->>>>>>> develop
 
         axios.get("/api/notifications", {
           params: {
@@ -469,11 +444,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             status: status,
             start_date: range[0],
-<<<<<<< HEAD
-            end_date: range[1] ? range[1] : range[0] // employee_id: employee_id
-=======
             end_date: range[1] ? range[1] : range[0] // user_id: user_id
->>>>>>> develop
 
           }
         }).then(function (response) {
@@ -496,11 +467,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-<<<<<<< HEAD
-      this.selected = []; // this.loadEmployees();
-=======
       this.selected = []; // this.loadUsers();
->>>>>>> develop
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -599,11 +566,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {},
   created: function created() {
-<<<<<<< HEAD
-    // this.loadEmployees();
-=======
     // this.loadUsers();
->>>>>>> develop
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });

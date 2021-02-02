@@ -243,18 +243,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-<<<<<<< HEAD
-//
-//
-//
-//
-//
-//
-//
-//
-//
-=======
->>>>>>> develop
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -292,7 +280,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         username: "",
         name: "All Users",
         email: ""
-<<<<<<< HEAD
       },
       users: [],
       selected: [],
@@ -304,19 +291,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         page: 1,
         itemsPerPage: 10
       },
-=======
-      },
-      users: [],
-      selected: [],
-      search: "",
-      totalItems: 0,
-      options: {
-        sortBy: ["created_at"],
-        sortDesc: [true],
-        page: 1,
-        itemsPerPage: 10
-      },
->>>>>>> develop
       export_data: []
     };
   },
@@ -419,7 +393,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return false;
     } // onDeleteAll() {
-<<<<<<< HEAD
     //     let _this = this;
     //     this.$confirm(
     //         "WARNING: Delete All Activity Logs? This action can't be revoked."
@@ -455,43 +428,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // },
     // onDelete() {
     //     let _this = this;
-=======
-    //     let _this = this;
-    //     this.$confirm(
-    //         "WARNING: Delete All Activity Logs? This action can't be revoked."
-    //     ).then(res => {
-    //         if (res) {
-    //             axios
-    //                 .delete(`/api/activity_logs/0`, {
-    //                     params: {
-    //                         delete_all: true
-    //                     }
-    //                 })
-    //                 .then(function(response) {
-    //                     _this.mixin_successDialog(
-    //                         "Success",
-    //                         "Deleted All Logs successfully"
-    //                     );
-    //                     _this.getDataFromApi().then(data => {
-    //                         _this.items = data.items;
-    //                         _this.totalItems = data.total;
-    //                     });
-    //                     _this.selected = [];
-    //                 })
-    //                 .catch(function(error) {
-    //                     console.log(error);
-    //                     console.log(error.response);
-    //                     _this.mixin_errorDialog(
-    //                         `Error ${error.response.status}`,
-    //                         error.response.statusText
-    //                     );
-    //                 });
-    //         }
-    //     });
-    // },
-    // onDelete() {
-    //     let _this = this;
->>>>>>> develop
     //     if (_this.selected.length == 0) {
     //         this.$dialog.message.error("No item(s) selected", {
     //             position: "top-right",
@@ -777,16 +713,7 @@ var render = function() {
                                               _c("v-list-item-subtitle", {
                                                 domProps: {
                                                   innerHTML: _vm._s(
-<<<<<<< HEAD
-                                                    "" +
-                                                      (data.item.employee ==
-                                                      null
-                                                        ? data.item.username
-                                                        : data.item.employee
-                                                            .fullname)
-=======
                                                     "" + data.item.username
->>>>>>> develop
                                                   )
                                                 }
                                               }),
