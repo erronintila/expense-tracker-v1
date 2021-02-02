@@ -79,11 +79,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Route::get('/data/validateFund', 'API\v1\UserController@validateFund');
 
-    Route::put('/employees/restore/{id}', 'API\v1\EmployeeController@restore');
+    // Route::put('/employees/restore/{id}', 'API\v1\EmployeeController@restore');
 
-    Route::put('/employees/update_settings/{id}', 'API\v1\EmployeeController@updateSettings');
+    // Route::put('/employees/update_settings/{id}', 'API\v1\EmployeeController@updateSettings');
 
-    Route::put('/employees/update_fund/{id}', 'API\v1\EmployeeController@updateFund');
+    // Route::put('/employees/update_fund/{id}', 'API\v1\EmployeeController@updateFund');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -156,6 +156,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
         return new UserResource($user);
     });
+
+    Route::put('/users/restore/{id}', 'API\v1\UserController@restore');
+
+    Route::put('/users/update_settings/{id}', 'API\v1\UserController@update_settings');
+
+    Route::put('/users/update_fund/{id}', 'API\v1\UserController@update_fund');
+
+    Route::put('/users/reset_password/{id}', 'API\v1\UserController@reset_password');
+
+    Route::put('/users/verify_email/{id}', 'API\v1\UserController@verify_email');
+
+    Route::put('/users/update_password/{id}', 'API\v1\UserController@update_password');
 
     Route::get('/permissions', function (Request $request) {
         return $request->user->getAllPermissions();

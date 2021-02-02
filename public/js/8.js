@@ -502,6 +502,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -672,10 +680,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // },
     onEditFund: function onEditFund() {
       if (this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
@@ -685,25 +690,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
       this.$confirm("Do you want to reset password?").then(function (res) {
         if (res) {
-          axios.put("/api/users/".concat(_this.selected[0].id), {
+          axios.put("/api/users/reset_password/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
-            }),
-            action: "password_reset"
+            }) // action: "password_reset"
+
           }).then(function (response) {
-            _this.$dialog.message.success("Password reset successfully. (Default: password)", {
-              position: "top-right",
-              timeout: 2000
-            });
+            _this.mixin_successDialog(response.data.status, response.data.message);
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -725,10 +724,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
@@ -741,10 +737,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               })
             }
           }).then(function (response) {
-            _this.$dialog.message.success("Item(s) moved to archive.", {
-              position: "top-right",
-              timeout: 2000
-            });
+            _this.mixin_successDialog(response.data.status, response.data.message);
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -767,25 +760,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (_this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/users/".concat(_this.selected[0].id), {
+          axios.put("/api/users/restore/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
-            }),
-            action: "restore"
+            }) // action: "restore"
+
           }).then(function (response) {
-            _this.$dialog.message.success("Item(s) restored.", {
-              position: "top-right",
-              timeout: 2000
-            });
+            _this.mixin_successDialog(response.data.status, response.data.message);
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;

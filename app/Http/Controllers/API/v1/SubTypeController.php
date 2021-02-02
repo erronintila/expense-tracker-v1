@@ -64,7 +64,7 @@ class SubTypeController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
-            foreach ($request->sub_types as $key => $value) {
+            foreach (request("sub_types") as $key => $value) {
                 $sub_type = SubType::withTrashed()->findOrFail($value["id"]);
 
                 if (count($sub_type->expenses)) {

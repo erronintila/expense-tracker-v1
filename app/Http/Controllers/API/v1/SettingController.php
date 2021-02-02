@@ -30,7 +30,7 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        $settings = request()->has("settings") ? $request->settings : [];
+        $settings = request()->has("settings") ? request("settings") : [];
 
         foreach ($settings as $key => $value) {
             Setting::set($key, $value);

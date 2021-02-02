@@ -28,29 +28,29 @@ class ActivityLogController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search ?? "";
+        $search = request("search") ?? "";
 
-        $sortBy = $request->sortBy ?? "updated_at";
+        $sortBy = request("sortBy") ?? "updated_at";
 
-        $sortType = $request->sortType ?? "desc";
+        $sortType = request("sortType") ?? "desc";
 
-        $itemsPerPage = $request->itemsPerPage ?? 10;
+        $itemsPerPage = request("itemsPerPage") ?? 10;
 
         $activity_logs = Activity::orderBy($sortBy, $sortType);
 
         if (request()->has('start_date') && request()->has('end_date')) {
-            $start_date = Carbon::parse($request->start_date)->startOfDay();
+            $start_date = Carbon::parse(request("start_date"))->startOfDay();
 
-            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            $end_date = Carbon::parse(request("end_date"))->endOfDay();
             
             $activity_logs = $activity_logs->whereBetween("created_at", [$start_date, $end_date]);
         }
 
         if (request()->has('user_id')) {
 
-            if ($request->user_id > 0) {
+            if (request("user_id") > 0) {
 
-                $activity_logs = $activity_logs->where("causer_id", $request->user_id);
+                $activity_logs = $activity_logs->where("causer_id", request("user_id"));
             }
         }
 
@@ -115,7 +115,7 @@ class ActivityLogController extends Controller
 
         if (request()->has("ids")) {
 
-            foreach ($request->ids as $id) {
+            foreach (request("ids") as $id) {
 
                 $activity_logs = DB::table('activity_log')->where("id", $id)->delete();
             }

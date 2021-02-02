@@ -632,8 +632,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (_this.$refs.form_password.validate()) {
-        axios.put("/api/users/" + _this.id, {
-          action: "change_password",
+        axios.put("/api/users/update_password/" + _this.id, {
           old_password: _this.old_password,
           password: _this.password,
           password_confirmation: _this.password_confirmation

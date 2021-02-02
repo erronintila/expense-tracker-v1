@@ -492,11 +492,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
-<<<<<<< HEAD
-      headers: [// { text: "Employee", value: "employee" },
-=======
       headers: [// { text: "User", value: "user" },
->>>>>>> develop
       // { text: "Description", value: "description" },
       // { text: "Amount", value: "total" },
       // { text: "Created", value: "created" },
@@ -536,11 +532,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       items: [],
       selected: [],
-<<<<<<< HEAD
-      employees: [],
-=======
       users: [],
->>>>>>> develop
       total: 0,
       totalAmount: 0,
       totalItems: 0
@@ -550,10 +542,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       page: 1,
       itemsPerPage: 10
     }), _defineProperty(_ref, "form", {
-<<<<<<< HEAD
-=======
       id: 0,
->>>>>>> develop
       code: "",
       reference_no: "",
       voucher_no: "",
@@ -567,19 +556,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       payee_phone: "",
       remarks: "",
       notes: "",
-<<<<<<< HEAD
-      employee: {
-        id: null
-      }
-    }), _defineProperty(_ref, "errors", {
-      employee: [],
-=======
       user: {
         id: null
       }
     }), _defineProperty(_ref, "errors", {
       user: [],
->>>>>>> develop
       code: [],
       reference_no: [],
       voucher_no: [],
@@ -609,11 +590,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.totalItems = data.total;
       });
     },
-<<<<<<< HEAD
-    updateEmployee: function updateEmployee() {
-=======
     updateUser: function updateUser() {
->>>>>>> develop
       var _this3 = this;
 
       this.getDataFromApi().then(function (data) {
@@ -621,20 +598,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this3.totalItems = data.total;
       });
     },
-<<<<<<< HEAD
-    loadEmployees: function loadEmployees() {
-      var _this = this;
-
-      axios.get("/api/data/employees").then(function (response) {
-        _this.employees = response.data.data;
-=======
     loadUsers: function loadUsers() {
       var _this = this;
 
       axios.get("/api/data/users").then(function (response) {
         console.log(response);
         _this.users = response.data.data;
->>>>>>> develop
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -658,11 +627,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-<<<<<<< HEAD
-        var employee_id = _this.form.employee.id;
-=======
         var user_id = _this.form.id;
->>>>>>> develop
         var range = _this.date_range;
         axios.get("/api/expense_reports", {
           params: {
@@ -672,11 +637,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page: page,
             itemsPerPage: itemsPerPage,
             status: status,
-<<<<<<< HEAD
-            employee_id: employee_id,
-=======
             user_id: user_id,
->>>>>>> develop
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
             admin_page: true,
@@ -710,11 +671,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //                 create_payment: true,
     //                 start_date: start_date,
     //                 end_date: end_date,
-<<<<<<< HEAD
-    //                 employee_id: _this.form.employee.id
-=======
     //                 user_id: _this.form.user.id
->>>>>>> develop
     //             }
     //         })
     //         .then(response => {
@@ -756,24 +713,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           remarks: _this.form.remarks,
           notes: _this.form.notes,
           expense_reports: _this.selected,
-<<<<<<< HEAD
-          employee: _this.form.employee.id
-=======
           user: _this.form.id
->>>>>>> develop
         }).then(function (response) {
           _this.onRefresh();
 
           _this.$dialog.message.success("Payment created successfully.", {
             position: "top-right",
             timeout: 2000
-<<<<<<< HEAD
-          }); // _this.$store.dispatch("AUTH_USER");
-=======
           });
 
           _this.$store.dispatch("AUTH_NOTIFICATIONS"); // _this.$store.dispatch("AUTH_USER");
->>>>>>> develop
 
 
           _this.$router.push({
@@ -797,11 +746,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-<<<<<<< HEAD
-      }, _defineProperty(_objectSpread2, "query", this.employee), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
-=======
       }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
->>>>>>> develop
     },
     maxDate: function maxDate() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
@@ -827,11 +772,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
-<<<<<<< HEAD
-    this.loadEmployees();
-=======
     this.loadUsers();
->>>>>>> develop
   }
 });
 
@@ -1056,13 +997,8 @@ var render = function() {
                               _c("v-autocomplete", {
                                 attrs: {
                                   rules: _vm.mixin_validation.required,
-<<<<<<< HEAD
-                                  items: _vm.employees,
-                                  "error-messages": _vm.errors.employee,
-=======
                                   items: _vm.users,
                                   "error-messages": _vm.errors.user,
->>>>>>> develop
                                   "item-value": "id",
                                   "item-text": "full_name",
                                   label: "Employee",
@@ -1071,18 +1007,6 @@ var render = function() {
                                 },
                                 on: {
                                   input: function($event) {
-<<<<<<< HEAD
-                                    _vm.errors.employee = []
-                                  },
-                                  change: _vm.updateEmployee
-                                },
-                                model: {
-                                  value: _vm.form.employee,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "employee", $$v)
-                                  },
-                                  expression: "form.employee"
-=======
                                     _vm.errors.user = []
                                   },
                                   change: _vm.updateUser
@@ -1093,7 +1017,6 @@ var render = function() {
                                     _vm.form = $$v
                                   },
                                   expression: "form"
->>>>>>> develop
                                 }
                               }),
                               _vm._v(" "),
@@ -1479,26 +1402,16 @@ var render = function() {
                                         }
                                       },
                                       {
-<<<<<<< HEAD
-                                        key: "item.employee",
-=======
                                         key: "item.user",
->>>>>>> develop
                                         fn: function(ref) {
                                           var item = ref.item
                                           return [
                                             _vm._v(
                                               "\n                                " +
                                                 _vm._s(
-<<<<<<< HEAD
-                                                  item.employee.last_name +
-                                                    ", " +
-                                                    item.employee.first_name
-=======
                                                   item.last_name +
                                                     ", " +
                                                     item.first_name
->>>>>>> develop
                                                 ) +
                                                 "\n                            "
                                             )

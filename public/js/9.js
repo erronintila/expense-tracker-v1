@@ -1485,6 +1485,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
           },
           content: [{
+            image: 'data:../../assets/img/report_logo/png;base64,...encodedContent...',
             text: ["Expense Summary Report"],
             style: "header"
           }, {

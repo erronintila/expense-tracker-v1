@@ -193,9 +193,8 @@ export default {
                         if (res) {
                             axios
                                 .put(
-                                    `/api/users/${_this.$route.params.id}`,
+                                    `/api/users/update_fund/${_this.$route.params.id}`,
                                     {
-                                        action: "update fund",
                                         fund: _this.new_fund,
                                         remaining_fund: _this.new_remaining_fund
                                     }

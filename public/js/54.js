@@ -196,8 +196,7 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.$refs.form.validate()) {
         this.$confirm("Do you want to update revolving fund?").then(function (res) {
           if (res) {
-            axios.put("/api/users/".concat(_this.$route.params.id), {
-              action: "update fund",
+            axios.put("/api/users/update_fund/".concat(_this.$route.params.id), {
               fund: _this.new_fund,
               remaining_fund: _this.new_remaining_fund
             }).then(function (response) {

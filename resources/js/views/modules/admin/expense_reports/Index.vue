@@ -1633,6 +1633,7 @@ export default {
                     },
                     content: [
                         {
+                            image: 'data:../../assets/img/report_logo/png;base64,...encodedContent...',
                             text: ["Expense Summary Report"],
                             style: "header"
                         },

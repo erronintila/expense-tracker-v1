@@ -86,13 +86,13 @@ class ExpenseController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search ?? "";
+        $search = request("search") ?? "";
 
-        $sortBy = $request->sortBy ?? "updated_at";
+        $sortBy = request("sortBy") ?? "updated_at";
 
-        $sortType = $request->sortType ?? "desc";
+        $sortType = request("sortType") ?? "desc";
 
-        $itemsPerPage = $request->itemsPerPage ?? 10;
+        $itemsPerPage = request("itemsPerPage") ?? 10;
 
         $expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
@@ -109,7 +109,7 @@ class ExpenseController extends Controller
             ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-            switch ($request->status) {
+            switch (request("status")) {
 
                 case 'Cancelled Expenses':
 
@@ -232,24 +232,24 @@ class ExpenseController extends Controller
         }
 
         if (request()->has('start_date') && request()->has('end_date')) {
-            $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
+            $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
         }
 
         if (request()->has('user_id')) {
-            if ($request->user_id > 0) {
-                $expenses = $expenses->where("user_id", $request->user_id);
+            if (request("user_id") > 0) {
+                $expenses = $expenses->where("user_id", request("user_id"));
             }
         }
 
         if (request()->has('expense_type_id')) {
-            if ($request->expense_type_id > 0) {
-                $expenses = $expenses->where("expense_type_id", $request->expense_type_id);
+            if (request("expense_type_id") > 0) {
+                $expenses = $expenses->where("expense_type_id", request("expense_type_id"));
             }
         }
 
         if (request()->has('expense_report_id')) {
-            if ($request->expense_report_id > 0) {
-                $expenses = $expenses->where("expense_report_id", $request->expense_report_id);
+            if (request("expense_report_id") > 0) {
+                $expenses = $expenses->where("expense_report_id", request("expense_report_id"));
             }
         }
 
@@ -281,17 +281,17 @@ class ExpenseController extends Controller
                 }])
                 ->orderBy($sortBy, $sortType)
                 ->where(function ($q) use ($request) {
-                    $q->where("expense_report_id", $request->expense_report_id);
+                    $q->where("expense_report_id", request("expense_report_id"));
                     $q->orWhere("expense_report_id", null);
                 })
                 ->where(function ($q) use ($request) {
-                    $q->whereBetween("date", [$request->start_date, $request->end_date]);
-                    $q->orWhere("expense_report_id", $request->expense_report_id);
+                    $q->whereBetween("date", [request("start_date"), request("end_date")]);
+                    $q->orWhere("expense_report_id", request("expense_report_id"));
                 })
-                ->where("user_id", $request->user_id);
+                ->where("user_id", request("user_id"));
 
             if (request()->has('start_date') && request()->has('end_date')) {
-                $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
+                $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
             }
         }
 
@@ -315,7 +315,7 @@ class ExpenseController extends Controller
             'user_id' => ['required'],
         ]);
 
-        $user = User::withTrashed()->findOrFail($request->user_id);
+        $user = User::withTrashed()->findOrFail(request("user_id"));
 
         $this->validator($request->all(), null, $user->remaining_fund)->validate();
 
@@ -329,41 +329,41 @@ class ExpenseController extends Controller
 
         // end of validation
 
-        $expense_type = ExpenseType::withTrashed()->findOrFail($request->sub_type_id ?? $request->expense_type_id);
+        $expense_type = ExpenseType::withTrashed()->findOrFail(request("sub_type_id") ?? request("expense_type_id"));
 
         $expense = new Expense();
 
         $expense->code = generate_code(Expense::class, "EXP", 10);
 
-        $expense->description = $request->description ?? $expense_type->name;
+        $expense->description = request("description") ?? $expense_type->name;
 
-        $expense->receipt_number = $request->receipt_number;
+        $expense->receipt_number = request("receipt_number");
 
-        $expense->date = $request->date;
+        $expense->date = request("date");
 
-        $expense->amount = $request->amount;
+        $expense->amount = request("amount");
 
-        $expense->reimbursable_amount = $request->reimbursable_amount;
+        $expense->reimbursable_amount = request("reimbursable_amount");
 
-        $expense->remarks = $request->remarks;
+        $expense->remarks = request("remarks");
 
-        $expense->expense_type_id = $request->expense_type_id;
+        $expense->expense_type_id = request("expense_type_id");
 
-        $expense->sub_type_id = $request->sub_type_id;
+        $expense->sub_type_id = request("sub_type_id");
 
-        $expense->user_id  = $request->user_id;
+        $expense->user_id  = request("user_id");
 
-        $expense->vendor_id  = $request->vendor_id;
+        $expense->vendor_id  = request("vendor_id");
 
-        $expense->details  = $request->details == null ? null : json_encode($request->details);
+        $expense->details  = request("details") == null ? null : json_encode(request("details"));
 
-        $expense->tax_name = $request->tax_name;
+        $expense->tax_name = request("tax_name");
 
-        $expense->tax_rate = $request->is_tax_inclusive ? $request->tax_rate : 0;
+        $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
 
-        $expense->tax_amount = $request->is_tax_inclusive ? $request->tax_amount : 0;
+        $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
 
-        $expense->is_tax_inclusive = $request->is_tax_inclusive;
+        $expense->is_tax_inclusive = request("is_tax_inclusive");
 
         $expense->created_by = Auth::id();
 
@@ -440,7 +440,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        switch ($request->action) {
+        switch (request("action")) {
 
             case 'restore':
 
@@ -450,7 +450,7 @@ class ExpenseController extends Controller
                 // }
 
                 // check if deleted
-                $deleted = Expense::whereIn("id", $request->ids)
+                $deleted = Expense::whereIn("id", request("ids"))
                     ->where("deleted_at", null)->count();
 
                 if ($deleted > 0) {
@@ -458,7 +458,7 @@ class ExpenseController extends Controller
                 }
 
                 // check if deleted
-                $reported = Expense::whereIn("id", $request->ids)
+                $reported = Expense::whereIn("id", request("ids"))
                     ->where("expense_report_id", "<>", null)->count();
 
                 if ($reported > 0) {
@@ -466,7 +466,7 @@ class ExpenseController extends Controller
                 }
 
                 if (request()->has("ids")) {
-                    foreach ($request->ids as $id) {
+                    foreach (request("ids") as $id) {
                         $expense = Expense::withTrashed()->findOrFail($id);
 
                         $expense->disableLogging();
@@ -511,13 +511,13 @@ class ExpenseController extends Controller
                     'user_id' => ['required'],
                 ]);
 
-                $user = User::withTrashed()->findOrFail($request->user_id);
+                $user = User::withTrashed()->findOrFail(request("user_id"));
 
                 $this->validator($request->all(), $id, $user->remaining_fund)->validate();
 
                 $expense = Expense::withTrashed()->findOrFail($id);
 
-                $expense_type = ExpenseType::withTrashed()->findOrFail($request->sub_type_id ?? $request->expense_type_id);
+                $expense_type = ExpenseType::withTrashed()->findOrFail(request("sub_type_id") ?? request("expense_type_id"));
 
                 if (request("reimbursable_amount") > request("amount")) {
                     $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
@@ -563,35 +563,35 @@ class ExpenseController extends Controller
 
                 // end of validation
 
-                $expense->description = $request->description ?? $expense_type->name;
+                $expense->description = request("description") ?? $expense_type->name;
 
-                $expense->receipt_number = $request->receipt_number;
+                $expense->receipt_number = request("receipt_number");
 
-                $expense->date = $request->date;
+                $expense->date = request("date");
 
-                $expense->amount = $request->amount;
+                $expense->amount = request("amount");
 
-                $expense->reimbursable_amount = $request->reimbursable_amount;
+                $expense->reimbursable_amount = request("reimbursable_amount");
 
-                $expense->remarks = $request->remarks;
+                $expense->remarks = request("remarks");
 
-                $expense->expense_type_id = $request->expense_type_id;
+                $expense->expense_type_id = request("expense_type_id");
 
-                $expense->sub_type_id = $request->sub_type_id;
+                $expense->sub_type_id = request("sub_type_id");
 
-                $expense->user_id  = $request->user_id;
+                $expense->user_id  = request("user_id");
 
-                $expense->vendor_id  = $request->vendor_id;
+                $expense->vendor_id  = request("vendor_id");
 
-                $expense->details  = json_encode($request->details);
+                $expense->details  = json_encode(request("details"));
 
-                $expense->tax_name = $request->tax_name;
+                $expense->tax_name = request("tax_name");
 
-                $expense->tax_rate = $request->is_tax_inclusive ? $request->tax_rate : 0;
+                $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
 
-                $expense->tax_amount = $request->is_tax_inclusive ? $request->tax_amount : 0;
+                $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
 
-                $expense->is_tax_inclusive = $request->is_tax_inclusive;
+                $expense->is_tax_inclusive = request("is_tax_inclusive");
 
                 $expense->encoding_period = setting("expense_encoding_period");
 
@@ -617,7 +617,7 @@ class ExpenseController extends Controller
         return response(
             [
                 'message' => 'Updated successfully',
-                'sub_type' => $request->sub_type_id
+                'sub_type' => request("sub_type_id")
             ],
             201
         );
@@ -632,7 +632,7 @@ class ExpenseController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
-            foreach ($request->ids as $id) {
+            foreach (request("ids") as $id) {
                 $expense = Expense::withTrashed()->findOrFail($id);
 
                 // // Prevent delete if expense has an expense report and user is not admin
@@ -686,7 +686,7 @@ class ExpenseController extends Controller
                 ->with(["vendor" => function ($query) {
                     $query->withTrashed();
                 }])
-                ->where("expense_report_id", $request->expense_report_id)
+                ->where("expense_report_id", request("expense_report_id"))
                 ->orderBy($sortBy, $sortType)
                 ->get();
 
@@ -712,33 +712,33 @@ class ExpenseController extends Controller
             ->orderBy('date', 'desc');
 
         if (request()->has("summary")) {
-            if ($request->summary) {
-                $expenses = $expenses->where("id", $request->id);
+            if (request("summary")) {
+                $expenses = $expenses->where("id", request("id"));
                 return $expenses;
             }
 
-            $expenses = $expenses->where("id", $request->id);
+            $expenses = $expenses->where("id", request("id"));
             return $expenses;
         }
 
         if (request()->has("id")) {
-            $expenses = $expenses->where("id", $request->id);
+            $expenses = $expenses->where("id", request("id"));
         }
 
         if (request()->has("expense_type_id")) {
-            $expenses = $expenses->where("expense_type_id", $request->expense_type_id);
+            $expenses = $expenses->where("expense_type_id", request("expense_type_id"));
         }
 
         if (request()->has("user_id")) {
-            $expenses = $expenses->where("user_id", $request->user_id);
+            $expenses = $expenses->where("user_id", request("user_id"));
         }
 
         if (request()->has("vendor_id")) {
-            $expenses = $expenses->where("vendor_id", $request->vendor_id);
+            $expenses = $expenses->where("vendor_id", request("vendor_id"));
         }
 
         if (request()->has("status")) {
-            switch ($request->status) {
+            switch (request("status")) {
                 case 'Archived':
                     $expenses = $expenses->onlyTrashed();
                     break;
@@ -770,14 +770,14 @@ class ExpenseController extends Controller
                 }])
                 ->orderBy("date")
                 ->where(function ($q) use ($request) {
-                    $q->where("expense_report_id", $request->expense_report_id);
+                    $q->where("expense_report_id", request("expense_report_id"));
                     // $q->orWhere("expense_report_id", null);
                 })
                 ->where(function ($q) use ($request) {
-                    $q->whereBetween("date", [$request->start_date, $request->end_date]);
-                    // $q->orWhere("expense_report_id", $request->expense_report_id);
+                    $q->whereBetween("date", [request("start_date"), request("end_date")]);
+                    // $q->orWhere("expense_report_id", request("")expense_report_id);
                 })
-                ->where("user_id", $request->user_id)
+                ->where("user_id", request("user_id"))
                 ->get();
 
             return response()->json([
@@ -787,11 +787,11 @@ class ExpenseController extends Controller
         }
 
         if (request()->has("expense_report_id")) {
-            $expenses = $expenses->where("expense_report_id", $request->expense_report_id);
+            $expenses = $expenses->where("expense_report_id", request("expense_report_id"));
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
-            $expenses = $expenses->whereBetween("date", [$request->start_date, $request->end_date]);
+            $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
         }
 
         return response()->json([
