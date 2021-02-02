@@ -101,6 +101,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/expense_reports', 'API\v1\ExpenseReportController@getExpenseReports');
 
+    Route::put('/expense_reports/restore/{id}', 'API\v1\ExpenseReportController@restore');
+
+    Route::put('/expense_reports/submit/{id}', 'API\v1\ExpenseReportController@submit');
+
+    Route::put('/expense_reports/approve/{id}', 'API\v1\ExpenseReportController@approve');
+
+    Route::put('/expense_reports/reject/{id}', 'API\v1\ExpenseReportController@reject');
+
+    Route::put('/expense_reports/duplicate/{id}', 'API\v1\ExpenseReportController@duplicate');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | EXPENSE TYPE CONTROLLER CUSTOM ROUTES

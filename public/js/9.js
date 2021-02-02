@@ -684,12 +684,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1485,7 +1479,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
           },
           content: [{
-            image: 'data:../../assets/img/report_logo/png;base64,...encodedContent...',
+            image: "data:../../assets/img/report_logo/png;base64,...encodedContent...",
             text: ["Expense Summary Report"],
             style: "header"
           }, {
@@ -2068,6 +2062,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onUpdate: function onUpdate(action, method) {
       var _this = this;
 
+      var url = "";
+
+      switch (action) {
+        case "submit":
+          url = "/api/expense_reports/submit/".concat(_this.selected[0].id);
+          break;
+
+        case "approve":
+          url = "/api/expense_reports/approve/".concat(_this.selected[0].id);
+          break;
+
+        case "reject":
+          url = "/api/expense_reports/reject/".concat(_this.selected[0].id);
+          break;
+
+        case "duplicate":
+          url = "/api/expense_reports/duplicate/".concat(_this.selected[0].id);
+          break;
+
+        default:
+          url = "/api/expense_reports/".concat(_this.selected[0].id);
+          break;
+      }
+
       this.$confirm("Do you want to ".concat(action, " expense report(s)?")).then(function (res) {
         if (res) {
           var ids = _this.selected.map(function (item) {
@@ -2076,19 +2094,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           axios({
             method: method,
-            url: "/api/expense_reports/".concat(_this.selected[0].id),
+            url: url,
             data: {
               ids: ids,
               action: action
             }
           }).then(function (response) {
-            _this.mixin_successDialog("Success", response.data.message);
+            _this.mixin_successDialog(response.data.status, response.data.message);
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            }); // _this.$store.dispatch("AUTH_USER");
-
+            });
 
             _this.selected = [];
 
@@ -2099,7 +2116,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
-            _this.mixin_errorDialog(error.response.data.status, error.response.data.message);
+            _this.mixin_errorDialog(error.response.status, error.response.data.message);
           });
         }
       });
@@ -2181,7 +2198,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   });
                   axios({
                     method: "put",
-                    url: "/api/expense_reports/".concat(_this.selected[0].id),
+                    url: "/api/expense_reports/reject/".concat(_this.selected[0].id),
                     data: {
                       ids: ids,
                       action: "reject",
@@ -2203,7 +2220,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(error.response.data.status, error.response.data.message);
+                    _this.mixin_errorDialog(error.response.status, error.response.data.message);
                   });
                 }
 
@@ -3492,9 +3509,7 @@ var render = function() {
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v(
-                                        "Group by\n                                        user"
-                                      )
+                                      _vm._v("Group by user")
                                     ])
                                   ],
                                   1
@@ -3591,9 +3606,7 @@ var render = function() {
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v(
-                                        "Group by\n                                        user"
-                                      )
+                                      _vm._v("Group by user")
                                     ])
                                   ],
                                   1

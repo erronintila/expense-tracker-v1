@@ -46,10 +46,10 @@
                             ></DateRangePicker>
                             <v-autocomplete
                                 v-model="form.user"
-                                :rules="mixin_validation.required"
+                                :rules="[...mixin_validation.required]"
                                 :items="users"
-                                :error-messages="errors.user"
-                                @input="errors.user = []"
+                                :error-messages="errors.user_id"
+                                @input="errors.user_id = []"
                                 @change="updateUser"
                                 item-value="id"
                                 item-text="full_name"
@@ -72,160 +72,6 @@
                             ></v-combobox>
 
                             <div class="overline green--text">Expenses</div>
-
-                            <!-- <v-data-table
-                                elevation="0"
-                                v-model="selected"
-                                :headers="headers"
-                                :items="items"
-                                :items-per-page="5"
-                                item-key="id"
-                                show-select
-                                show-expand
-                                single-expand
-                            >
-                                <template
-                                    slot="body.append"
-                                    v-if="items.length > 0"
-                                >
-                                    <tr class="green--text hidden-md-and-up">
-                                        <td class="title">
-                                            Total:
-                                            <strong>{{ total }}</strong>
-                                        </td>
-                                    </tr>
-                                    <tr class="green--text hidden-sm-and-down">
-                                        <td class="title">Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <strong>{{ total }}</strong>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </template>
-                                <template v-slot:[`item.actions`]="{ item }">
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/admin/expenses/${item.id}`
-                                            )
-                                        "
-                                    >
-                                        mdi-eye
-                                    </v-icon>
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/admin/expenses/${item.id}/edit`
-                                            )
-                                        "
-                                    >
-                                        mdi-pencil
-                                    </v-icon>
-                                </template>
-                                <template v-slot:top>
-                                    <v-row>
-                                        <v-spacer></v-spacer>
-
-                                        <v-btn
-                                            class="mr-2"
-                                            :to="{
-                                                name: 'admin.expenses.create'
-                                            }"
-                                        >
-                                            New Item
-                                        </v-btn>
-                                    </v-row>
-                                </template>
-                                <template
-                                    v-slot:expanded-item="{ headers, item }"
-                                >
-                                    <td :colspan="headers.length">
-                                        <v-container>
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        <strong
-                                                            >Reimbursable</strong
-                                                        >
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            mixin_formatNumber(
-                                                                item.reimbursable_amount
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Code</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>{{ item.code }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong
-                                                            >Description</strong
-                                                        >
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{ item.description }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Remarks</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>{{ item.remarks }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <strong>Created</strong>
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            mixin_formatDate(
-                                                                item.created_at,
-                                                                "YYYY-MM-DD HH:mm:ss"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr v-if="item.deleted">
-                                                    <td>
-                                                        <strong
-                                                            >Cancelled</strong
-                                                        >
-                                                    </td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        {{
-                                                            mixin_formatDate(
-                                                                item.deleted_at,
-                                                                "YYYY-MM-DD HH:mm:ss"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </v-container>
-                                    </td>
-                                </template>
-                            </v-data-table> -->
 
                             <v-data-table
                                 v-model="selected"
@@ -359,6 +205,10 @@
                                     </v-icon>
                                 </template>
                             </v-data-table>
+
+                            <div class="red--text" v-if="errors.expenses.length > 0">
+                                <small>{{errors.expenses[0]}}</small>
+                            </div>
 
                             <v-row>
                                 <v-col cols="12" md="6">
@@ -506,7 +356,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                user: { id: 0, remaining_fund: 0, fund: 0 }
+                user: null
             },
             errors: {
                 date_range: [],
@@ -514,7 +364,7 @@ export default {
                 description: [],
                 remarks: [],
                 notes: [],
-                user: [],
+                user_id: [],
                 expenses: []
             }
         };
@@ -522,7 +372,7 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenses(this.form.user.id).then(() => {
+            this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(() => {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
@@ -530,7 +380,7 @@ export default {
             });
         },
         updateUser() {
-            this.loadExpenses(this.form.user.id).then(() => {
+            this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(() => {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
@@ -551,40 +401,15 @@ export default {
                         _this.form.notes = data.notes;
                         _this.form.user = data.user;
                         _this.form.status = data.status;
-                        // _this.expenses = data.expenses;
-                        // _this.submitted_at = data.submitted_at;
-                        // _this.reviewed_at = data.reviewed_at;
-                        // _this.approved_at = data.approved_at;
-                        // _this.cancelled_at = data.cancelled_at;
-                        // _this.created_at = data.created_at;
-                        // _this.updated_at = data.updated_at;
-                        // _this.deleted_at = data.deleted_at;
+                        
                         _this.total = data.total;
-
-                        // _this.date_range = [_this.from, _this.to];
-
-                        // _this.loadExpenses(data.user.id);
-                        // _this.getDataFromApi().then((data) => {
-                        //     _this.items = data.items;
-                        //     _this.totalItems = data.total;
-
-                        //     let selected = data.items.filter(function (item) {
-                        //     return item.expense_report !== null;
-                        //     });
-
-                        //     _this.selected = _.union(_this.selected, selected);
-
-                        //     // _this.selected.splice(0, 0, ...selected);
-                        // });
-
-                        // _this.selected.splice(0, 0, ...data.expenses);
 
                         _this.loader = false;
 
-                        return resolve();
+                        resolve();
                     })
                     .catch(error => {
-                        return reject();
+                        reject();
 
                         console.log(error);
                         console.log(error.response);
@@ -607,7 +432,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let range = _this.date_range;
-                let user_id = _this.form.user.id;
+                let user_id = _this.form.user == null ? null : _this.form.user.id;
 
                 axios
                     .get("/api/expenses", {
@@ -632,6 +457,8 @@ export default {
                         resolve({ items, total });
                     })
                     .catch(error => {
+                        reject();
+
                         console.log(error);
                         console.log(error.response);
 
@@ -727,19 +554,11 @@ export default {
                         description: _this.form.description,
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
-                        user_id: _this.form.user.id,
+                        user_id: _this.form.user == null ? null : _this.form.user.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Expense Report updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
-                        // _this.$store.dispatch("AUTH_USER");
+                        _this.mixin_successDialog(response.data.status, response.data.message);
 
                         _this.$router.push({
                             name: "admin.expense_reports.index"
@@ -751,9 +570,11 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
+                        _this.errors = error.response.data.errors;
+
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
                     });
 
@@ -784,7 +605,7 @@ export default {
                 ...this.options,
                 query: this.date_range,
                 query: this.expense_report_id,
-                query: this.form.user.id
+                query: this.form.user == null ? null : this.form.user.id
             };
         },
         default_description() {
@@ -802,7 +623,7 @@ export default {
 
         this.loadUsers().then(() => {
             this.getData().then(() => {
-                this.loadExpenses(this.form.user.id).then(() => {
+                this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(() => {
                     this.getDataFromApi().then(data => {
                         _this.items = data.items;
                         _this.totalItems = data.total;

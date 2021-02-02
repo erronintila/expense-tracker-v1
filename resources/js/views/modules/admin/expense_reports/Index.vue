@@ -448,11 +448,7 @@
                         {{ mixin_formatNumber(item.total) }}
                     </template>
                     <template v-slot:[`item.user`]="{ item }">
-                        {{
-                            item.user.last_name +
-                                ", " +
-                                item.user.first_name
-                        }}
+                        {{ item.user.last_name + ", " + item.user.first_name }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
                         {{ mixin_getHumanDate(item.updated_at) }}
@@ -591,8 +587,7 @@
                                         @click="onPrint('print', 'user')"
                                     >
                                         <v-list-item-title
-                                            >Group by
-                                            user</v-list-item-title
+                                            >Group by user</v-list-item-title
                                         >
                                     </v-list-item>
                                     <v-list-item
@@ -627,8 +622,7 @@
                                         @click="onPrint('pdf', 'user')"
                                     >
                                         <v-list-item-title
-                                            >Group by
-                                            user</v-list-item-title
+                                            >Group by user</v-list-item-title
                                         >
                                     </v-list-item>
                                     <v-list-item
@@ -800,9 +794,7 @@ export default {
                         : _this.selected.map(item => item.id);
 
                 axios
-                    .get(
-                        `/api/data/print_report?by_user_id=true&ids=${ids}`
-                    )
+                    .get(`/api/data/print_report?by_user_id=true&ids=${ids}`)
                     .then(response => {
                         _this.reports_by_user = response.data.data;
 
@@ -1007,7 +999,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -1311,7 +1303,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -1633,7 +1625,8 @@ export default {
                     },
                     content: [
                         {
-                            image: 'data:../../assets/img/report_logo/png;base64,...encodedContent...',
+                            image:
+                                "data:../../assets/img/report_logo/png;base64,...encodedContent...",
                             text: ["Expense Summary Report"],
                             style: "header"
                         },
@@ -1642,7 +1635,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -2310,6 +2303,31 @@ export default {
         // ------------------------------------------------------------------------------------------------------------------
         onUpdate(action, method) {
             let _this = this;
+            let url = "";
+
+            switch (action) {
+                case "submit":
+                    url = `/api/expense_reports/submit/${_this.selected[0].id}`;
+
+                    break;
+                case "approve":
+                    url = `/api/expense_reports/approve/${_this.selected[0].id}`;
+
+                    break;
+                case "reject":
+                    url = `/api/expense_reports/reject/${_this.selected[0].id}`;
+
+                    break;
+                case "duplicate":
+                    url = `/api/expense_reports/duplicate/${_this.selected[0].id}`;
+
+                    break;
+
+                default:
+                    url = `/api/expense_reports/${_this.selected[0].id}`;
+
+                    break;
+            }
 
             this.$confirm(`Do you want to ${action} expense report(s)?`).then(
                 res => {
@@ -2320,7 +2338,7 @@ export default {
 
                         axios({
                             method: method,
-                            url: `/api/expense_reports/${_this.selected[0].id}`,
+                            url: url,
                             data: {
                                 ids: ids,
                                 action: action
@@ -2328,7 +2346,7 @@ export default {
                         })
                             .then(function(response) {
                                 _this.mixin_successDialog(
-                                    "Success",
+                                    response.data.status,
                                     response.data.message
                                 );
 
@@ -2336,8 +2354,6 @@ export default {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
                                 });
-
-                                // _this.$store.dispatch("AUTH_USER");
 
                                 _this.selected = [];
 
@@ -2350,7 +2366,7 @@ export default {
                                 console.log(error.response);
 
                                 _this.mixin_errorDialog(
-                                    error.response.data.status,
+                                    error.response.status,
                                     error.response.data.message
                                 );
                             });
@@ -2369,7 +2385,10 @@ export default {
                     return item.status.status === "Unsubmitted";
                 }).length <= 0
             ) {
-                this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+                this.mixin_errorDialog(
+                    "Error",
+                    "No selected unsubmitted report(s)"
+                );
                 return;
             }
 
@@ -2404,8 +2423,13 @@ export default {
                     break;
             }
 
-            if(!this.mixin_can("submit expense reports beyond due date")) {
-                if (!moment(moment()).isSameOrBefore(last_submission_date, "day")) {
+            if (!this.mixin_can("submit expense reports beyond due date")) {
+                if (
+                    !moment(moment()).isSameOrBefore(
+                        last_submission_date,
+                        "day"
+                    )
+                ) {
                     this.mixin_errorDialog(
                         "Error (Not Allowed)",
                         `Last submission was ${last_submission_date}`
@@ -2438,7 +2462,7 @@ export default {
 
                 axios({
                     method: "put",
-                    url: `/api/expense_reports/${_this.selected[0].id}`,
+                    url: `/api/expense_reports/reject/${_this.selected[0].id}`,
                     data: {
                         ids: ids,
                         action: "reject",
@@ -2466,7 +2490,7 @@ export default {
                         console.log(error.response);
 
                         _this.mixin_errorDialog(
-                            error.response.data.status,
+                            error.response.status,
                             error.response.data.message
                         );
                     });

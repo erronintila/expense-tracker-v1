@@ -312,156 +312,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -519,11 +369,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: "",
         remarks: "",
         notes: "",
-        user: {
-          id: 0,
-          remaining_fund: 0,
-          fund: 0
-        }
+        user: null
       },
       errors: {
         date_range: [],
@@ -531,7 +377,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: [],
         remarks: [],
         notes: [],
-        user: [],
+        user_id: [],
         expenses: []
       }
     };
@@ -541,7 +387,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       this.date_range = e;
-      this.loadExpenses(this.form.user.id).then(function () {
+      this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
         _this2.getDataFromApi().then(function (data) {
           _this2.items = data.items;
           _this2.totalItems = data.total;
@@ -551,7 +397,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateUser: function updateUser() {
       var _this3 = this;
 
-      this.loadExpenses(this.form.user.id).then(function () {
+      this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
         _this3.getDataFromApi().then(function (data) {
           _this3.items = data.items;
           _this3.totalItems = data.total;
@@ -569,32 +415,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.form.remarks = data.remarks;
           _this.form.notes = data.notes;
           _this.form.user = data.user;
-          _this.form.status = data.status; // _this.expenses = data.expenses;
-          // _this.submitted_at = data.submitted_at;
-          // _this.reviewed_at = data.reviewed_at;
-          // _this.approved_at = data.approved_at;
-          // _this.cancelled_at = data.cancelled_at;
-          // _this.created_at = data.created_at;
-          // _this.updated_at = data.updated_at;
-          // _this.deleted_at = data.deleted_at;
-
-          _this.total = data.total; // _this.date_range = [_this.from, _this.to];
-          // _this.loadExpenses(data.user.id);
-          // _this.getDataFromApi().then((data) => {
-          //     _this.items = data.items;
-          //     _this.totalItems = data.total;
-          //     let selected = data.items.filter(function (item) {
-          //     return item.expense_report !== null;
-          //     });
-          //     _this.selected = _.union(_this.selected, selected);
-          //     // _this.selected.splice(0, 0, ...selected);
-          // });
-          // _this.selected.splice(0, 0, ...data.expenses);
-
+          _this.form.status = data.status;
+          _this.total = data.total;
           _this.loader = false;
-          return resolve();
+          resolve();
         })["catch"](function (error) {
-          return reject();
+          reject();
           console.log(error);
           console.log(error.response);
 
@@ -617,7 +443,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this4$options.page,
             itemsPerPage = _this4$options.itemsPerPage;
         var range = _this.date_range;
-        var user_id = _this.form.user.id;
+        var user_id = _this.form.user == null ? null : _this.form.user.id;
         axios.get("/api/expenses", {
           params: {
             page: page,
@@ -638,6 +464,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
+          reject();
           console.log(error);
           console.log(error.response);
 
@@ -714,14 +541,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           description: _this.form.description,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          user_id: _this.form.user.id,
+          user_id: _this.form.user == null ? null : _this.form.user.id,
           expenses: _this.selected
         }).then(function (response) {
-          _this.$dialog.message.success("Expense Report updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          }); // _this.$store.dispatch("AUTH_USER");
-
+          _this.mixin_successDialog(response.data.status, response.data.message);
 
           _this.$router.push({
             name: "admin.expense_reports.index"
@@ -730,8 +553,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.loader = false;
           console.log(error);
           console.log(error.response);
+          _this.errors = error.response.data.errors;
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
         });
         return;
       }
@@ -761,7 +585,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.date_range
-      }, _defineProperty(_objectSpread2, "query", this.expense_report_id), _defineProperty(_objectSpread2, "query", this.form.user.id), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.expense_report_id), _defineProperty(_objectSpread2, "query", this.form.user == null ? null : this.form.user.id), _objectSpread2));
     },
     default_description: function default_description() {
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
@@ -778,7 +602,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     this.loadUsers().then(function () {
       _this6.getData().then(function () {
-        _this6.loadExpenses(_this6.form.user.id).then(function () {
+        _this6.loadExpenses(_this6.form.user == null ? null : _this6.form.user.id).then(function () {
           _this6.getDataFromApi().then(function (data) {
             _this.items = data.items;
             _this.totalItems = data.total;
@@ -935,9 +759,11 @@ var render = function() {
                               _vm._v(" "),
                               _c("v-autocomplete", {
                                 attrs: {
-                                  rules: _vm.mixin_validation.required,
+                                  rules: [].concat(
+                                    _vm.mixin_validation.required
+                                  ),
                                   items: _vm.users,
-                                  "error-messages": _vm.errors.user,
+                                  "error-messages": _vm.errors.user_id,
                                   "item-value": "id",
                                   "item-text": "full_name",
                                   label: "Employee",
@@ -946,7 +772,7 @@ var render = function() {
                                 },
                                 on: {
                                   input: function($event) {
-                                    _vm.errors.user = []
+                                    _vm.errors.user_id = []
                                   },
                                   change: _vm.updateUser
                                 },
@@ -1289,6 +1115,14 @@ var render = function() {
                                   expression: "selected"
                                 }
                               }),
+                              _vm._v(" "),
+                              _vm.errors.expenses.length > 0
+                                ? _c("div", { staticClass: "red--text" }, [
+                                    _c("small", [
+                                      _vm._v(_vm._s(_vm.errors.expenses[0]))
+                                    ])
+                                  ])
+                                : _vm._e(),
                               _vm._v(" "),
                               _c(
                                 "v-row",

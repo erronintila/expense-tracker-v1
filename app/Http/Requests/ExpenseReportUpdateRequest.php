@@ -34,6 +34,8 @@ class ExpenseReportUpdateRequest extends FormRequest
             'remarks' => ['nullable'],
 
             'notes' => ['nullable'],
+
+            'expenses' => ['required']
         ];
     }
 
@@ -45,7 +47,9 @@ class ExpenseReportUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            // 'tin.required_if' => 'The tax identification number field is required if VAT inclusive.'
+            'expenses.required' => 'Expense Report has no expense(s)',
+
+            'user_id.required' => 'Employee is required'
         ];
     }
 }

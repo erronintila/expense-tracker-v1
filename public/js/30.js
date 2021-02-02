@@ -316,158 +316,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -524,11 +372,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: "",
         remarks: "",
         notes: "",
-        user: {
-          id: 0,
-          remaining_fund: 0,
-          fund: 0
-        }
+        user: null
       },
       errors: {
         date_range: [],
@@ -536,7 +380,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         description: [],
         remarks: [],
         notes: [],
-        user: [],
+        user_id: [],
         expenses: []
       }
     };
@@ -552,6 +396,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.items = data.items;
         _this2.totalItems = data.total;
       });
+      this.errors.user_id = [];
     },
     loadExpenses: function loadExpenses() {
       var start_date = this.date_range[0];
@@ -562,7 +407,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get("/api/data/expenses", {
         params: {
           create_report: true,
-          user_id: _this.form.user.id,
+          user_id: _this.form.user == null ? null : _this.form.user.id,
           start_date: start_date,
           end_date: end_date
         }
@@ -600,7 +445,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this3$options.page,
             itemsPerPage = _this3$options.itemsPerPage;
         var range = _this.date_range;
-        var user_id = _this.form.user.id;
+        var user_id = _this.form.user == null ? null : _this.form.user.id;
         axios.get("/api/expenses", {
           params: {
             page: page,
@@ -614,11 +459,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false; // let selected = items.filter(function(item) {
-          //     return item.expense_report !== null;
-          // });
-          // _this.selected.splice(0, 0, ...selected);
-
+          _this.loading = false;
           resolve({
             items: items,
             total: total
@@ -627,25 +468,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
 
           _this.loading = false;
         });
       });
-    },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
       var _this = this;
 
       _this.$refs.form.validate();
 
+      if (_this.form.user == null) {
+        _this.mixin_errorDialog("Error", "No employee selected");
+
+        return;
+      }
+
       if (_this.selected.length == 0) {
-        _this.$dialog.message.error("No Expenses selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        _this.mixin_errorDialog("Error", "No expense(s) selected");
 
         return;
       }
@@ -657,23 +498,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           description: _this.form.description,
           remarks: _this.form.remarks,
           notes: _this.form.notes,
-          user_id: _this.form.user.id,
+          user_id: _this.form.user == null ? null : _this.form.user.id,
           expenses: _this.selected
         }).then(function (response) {
-          _this.$dialog.message.success("Expense Report created successfully.", {
-            position: "top-right",
-            timeout: 2000
-          }); // _this.$store.dispatch("AUTH_USER");
-
+          _this.mixin_successDialog(response.data.status, response.data.message);
 
           _this.$router.push({
             name: "admin.expense_reports.index"
           });
         })["catch"](function (error) {
+          _this.loader = false;
           console.log(error);
           console.log(error.response);
+          _this.errors = error.response.data.errors;
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
         });
         return;
       }
@@ -695,13 +534,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.total = this.selected.reduce(function (total, item) {
         return total + item.amount;
       }, 0);
+
+      if (this.selected.length > 0) {
+        this.errors.expenses = [];
+      }
     }
   },
   computed: {
     params: function params(nv) {
       return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
         query: this.date_range
-      }, "query", this.form.user.id));
+      }, "query", this.form.user == null ? null : this.form.user.id));
     },
     default_description: function default_description() {
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
@@ -711,8 +554,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    // this.$store.dispatch("AUTH_USER");
-    this.loadUsers(); // this.loadExpenses();
+    this.loadUsers();
   }
 });
 
@@ -862,9 +704,11 @@ var render = function() {
                               _vm._v(" "),
                               _c("v-autocomplete", {
                                 attrs: {
-                                  rules: _vm.mixin_validation.required,
+                                  rules: [].concat(
+                                    _vm.mixin_validation.required
+                                  ),
                                   items: _vm.users,
-                                  "error-messages": _vm.errors.user,
+                                  "error-messages": _vm.errors.user_id,
                                   "item-value": "id",
                                   "item-text": "full_name",
                                   label: "Employee",
@@ -873,7 +717,7 @@ var render = function() {
                                 },
                                 on: {
                                   input: function($event) {
-                                    _vm.errors.user = []
+                                    _vm.errors.user_id = []
                                   },
                                   change: _vm.updateUser
                                 },
@@ -1221,6 +1065,14 @@ var render = function() {
                                 }
                               }),
                               _vm._v(" "),
+                              _vm.errors.expenses.length > 0
+                                ? _c("div", { staticClass: "red--text" }, [
+                                    _c("small", [
+                                      _vm._v(_vm._s(_vm.errors.expenses[0]))
+                                    ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
@@ -1229,11 +1081,7 @@ var render = function() {
                                     { attrs: { cols: "12", md: "6" } },
                                     [
                                       _c("v-textarea", {
-                                        attrs: {
-                                          label: "Remarks",
-                                          rules: [],
-                                          rows: 3
-                                        },
+                                        attrs: { label: "Remarks", rows: 3 },
                                         model: {
                                           value: _vm.form.remarks,
                                           callback: function($$v) {
