@@ -125,6 +125,8 @@ class UserController extends Controller
 
         $users = $users->paginate($itemsPerPage);
 
+        // return UserResource::collection($users);
+        
         return UserOnlyResource::collection($users);
     }
 

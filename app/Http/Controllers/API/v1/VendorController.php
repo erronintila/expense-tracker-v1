@@ -72,29 +72,15 @@ class VendorController extends Controller
      */
     public function store(VendorStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
-        $message = "Vendor created successfully"; // return message
+        $validated = $request->validated();
+        $message = "Vendor created successfully"; 
 
-        // create new vendor
         $vendor = new Vendor();
-        $vendor->code = generate_code(Vendor::class, "VEN", 10);
-        $vendor->name = request('name');
-        $vendor->email = request('email');
-        $vendor->tin = request('tin');
-        $vendor->contact_person = request('contact_person');
-        $vendor->mobile_number = request('mobile_number');
-        $vendor->telephone_number = request('telephone_number');
-        $vendor->website = request('website');
-        $vendor->remarks = request('remarks');
-        $vendor->is_vat_inclusive = request('is_vat_inclusive');
-        $vendor->address = request('address');
-        $vendor->save();
+        $vendor->create($validated);
 
         // store expense types associated with vendor
         if (request()->has("expense_types")) {
             $vendor->expense_types()->sync(request('expense_types'));
-            // $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail(request('expense_types'));
-            // $vendor->expense_types()->attach($expense_types);
         }
 
         return $this->successResponse(new VendorResource($vendor), $message, 201);
@@ -122,23 +108,11 @@ class VendorController extends Controller
      */
     public function update(VendorUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
-        $message = "Vendor updated successfully"; // return message
+        $validated = $request->validated();
+        $message = "Vendor updated successfully";
 
-        // update vendor
         $vendor = Vendor::withTrashed()->findOrFail($id);
-        $vendor->code = request('code');
-        $vendor->name = request('name');
-        $vendor->email = request('email');
-        $vendor->tin = request('tin');
-        $vendor->contact_person = request('contact_person');
-        $vendor->mobile_number = request('mobile_number');
-        $vendor->telephone_number = request('telephone_number');
-        $vendor->website = request('website');
-        $vendor->remarks = request('remarks');
-        $vendor->is_vat_inclusive = request('is_vat_inclusive');
-        $vendor->address = request('address');
-        $vendor->save();
+        $vendor->update($validated);
 
         // update expense types associated with vendor
         if (request()->has("expense_types")) {
@@ -162,12 +136,12 @@ class VendorController extends Controller
 
         // check if multiple records
         if (request()->has("ids")) {
-            // $vendor = Vendor::whereIn('id', request('')ids)->delete();
+            $vendor = Vendor::whereIn('id', request('ids'))->delete();
 
-            foreach (request('ids') as $id) {
-                $vendor = Vendor::findOrFail($id);
-                $vendor->delete();
-            }
+            // foreach (request('ids') as $id) {
+            //     $vendor = Vendor::findOrFail($id);
+            //     $vendor->delete();
+            // }
 
             $message = "Vendor(s) deleted successfully";
         } else {
@@ -198,20 +172,19 @@ class VendorController extends Controller
 
         // check if multiple records
         if (request()->has("ids")) {
-            // $vendor = Vendor::withTrashed()
-            //     ->whereIn('id', request('')ids)
-            //     ->restore();
+            $vendor = Vendor::withTrashed()
+                ->whereIn('id', request('ids'))
+                ->restore();
 
-            foreach (request('ids') as $id) {
-                $vendor = Vendor::withTrashed()->findOrFail($id);
-                $vendor->restore();
-            }
+            // foreach (request('ids') as $id) {
+            //     $vendor = Vendor::withTrashed()->findOrFail($id);
+            //     $vendor->restore();
+            // }
 
             $message = "Vendor(s) restored successfully";
         } else {
             $vendor = Vendor::withTrashed()->findOrFail($id);
             $vendor->restore();
-            $message = "Vendor restored successfully";
         }
 
         return $this->successResponse(null, $message, 201);
