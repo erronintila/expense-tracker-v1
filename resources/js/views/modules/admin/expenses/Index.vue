@@ -814,11 +814,10 @@ export default {
             this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/expenses/${_this.selected[0].id}`, {
+                        .put(`/api/expenses/restore/${_this.selected[0].id}`, {
                             ids: _this.selected.map(item => {
                                 return item.id;
                             }),
-                            action: "restore"
                         })
                         .then(function(response) {
                             _this.$dialog.message.success("Item(s) restored.", {

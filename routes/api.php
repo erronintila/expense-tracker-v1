@@ -73,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
     */
 
     Route::get('/data/expenses', 'API\v1\ExpenseController@getExpenses');
+    Route::put('/expenses/restore/{id}', 'API\v1\ExpenseController@restore');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

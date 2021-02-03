@@ -29,7 +29,7 @@ class ExpenseUpdateRequest extends FormRequest
             'reference_no' => ['nullable'],
             'description' => ['nullable', 'max:255'],
             'amount' => ['required', 'numeric', 'gt:0',],
-            'reimbursable_amount' => ['required', 'numeric'],
+            'reimbursable_amount' => ['required', 'numeric', 'min:0', 'lte:amount'],
             'tax_name' => ['nullable', 'max:100'],
             'tax_rate' => ['required'],
             'is_compound_tax' => ['nullable'],
@@ -40,8 +40,14 @@ class ExpenseUpdateRequest extends FormRequest
             'details' => ['nullable'],
             'remarks' => ['nullable'],
             'notes' => ['nullable'],
+            'encoding_period' => ['nullable'],
+            'sub_type_id' => ['nullable'],
             'expense_type_id' => ['required'],
             'user_id' => ['required'],
+            'vendor_id' => ['nullable'],
+            'expense_report_id' => ['nullable'],
+            'tax_id' => ['nullable'],
+            'expense_header_id' => ['nullable']
         ];
     }
 

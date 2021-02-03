@@ -791,11 +791,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore expenses(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/expenses/".concat(_this.selected[0].id), {
+          axios.put("/api/expenses/restore/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
-            }),
-            action: "restore"
+            })
           }).then(function (response) {
             _this.$dialog.message.success("Item(s) restored.", {
               position: "top-right",

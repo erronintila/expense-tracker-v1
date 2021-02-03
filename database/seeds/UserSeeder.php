@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class, 500)->create();
+        factory(\App\User::class, 10)->create();
 
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
@@ -98,6 +98,7 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
                 Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
                 Permission::create(['name' => 'set reimbursable amount', 'category' => $model]);
+                Permission::create(['name' => 'restore expenses', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 

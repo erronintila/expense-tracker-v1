@@ -27,8 +27,8 @@ class ExpenseStoreRequest extends FormRequest
             'code' => ['nullable', 'unique:expenses', 'max:255'],
             'reference_no' => ['nullable'],
             'description' => ['nullable', 'max:255'],
-            'amount' => ['required', 'numeric', 'gt:0',],
-            'reimbursable_amount' => ['required', 'numeric'],
+            'amount' => ['required', 'numeric', 'gt:0'],
+            'reimbursable_amount' => ['required', 'numeric', 'min:0', 'lte:amount'],
             'tax_name' => ['nullable', 'max:100'],
             'tax_rate' => ['required'],
             'is_compound_tax' => ['nullable'],
@@ -39,8 +39,14 @@ class ExpenseStoreRequest extends FormRequest
             'details' => ['nullable'],
             'remarks' => ['nullable'],
             'notes' => ['nullable'],
+            'encoding_period' => ['nullable'],
             'expense_type_id' => ['required'],
+            'sub_type_id' => ['nullable'],
             'user_id' => ['required'],
+            'vendor_id' => ['nullable'],
+            'expense_report_id' => ['nullable'],
+            'tax_id' => ['nullable'],
+            'expense_header_id' => ['nullable']
         ];
     }
 
@@ -52,7 +58,10 @@ class ExpenseStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            // 'tin.required_if' => 'The tax identification number field is required if VAT inclusive.'
+            'user_id.required' => 'The employee field is required.',
+            'expense_type_id.required' => 'The expense type field is required.',
+            // 'reimbursable_amount.gte' => 'Reimbursable amount must be greater than or equal 0',
+            'reimbursable_amount.lte' => 'Reimbursable amount must be less than or equal to amount'
         ];
     }
 }

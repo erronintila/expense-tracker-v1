@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExpenseStoreRequest;
+use App\Http\Requests\ExpenseUpdateRequest;
 use App\Http\Resources\Expense\ExpenseIndexResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\ExpenseResource;
@@ -27,35 +29,7 @@ class ExpenseController extends Controller
         $this->middleware(['permission:add expenses'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit expenses'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete expenses'], ['only' => ['destroy']]);
-    }
-
-    /**
-     * Get a validator for an incoming request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data, $id, $fund)
-    {
-        return Validator::make($data, [
-            'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
-            'reference_no' => ['nullable'],
-            'description' => ['nullable', 'max:255'],
-            'amount' => ['required', 'numeric', 'gt:0',],
-            'reimbursable_amount' => ['required', 'numeric'],
-            'tax_name' => ['nullable', 'max:100'],
-            'tax_rate' => ['required'],
-            'is_compound_tax' => ['nullable'],
-            'is_tax_inclusive' => ['required'],
-            'tax_amount' => ['required'],
-            'receipt_number' => ['nullable', 'max:255'],
-            'date' => ['required'],
-            'details' => ['nullable'],
-            'remarks' => ['nullable'],
-            'notes' => ['nullable'],
-            'expense_type_id' => ['required'],
-            'user_id' => ['required'],
-        ]);
+        $this->middleware(['permission:restore expenses'], ['only' => ['restore']]);
     }
 
     /**
@@ -69,6 +43,7 @@ class ExpenseController extends Controller
         $sortBy = request("sortBy") ?? "updated_at";
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
+
         $expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
@@ -247,17 +222,11 @@ class ExpenseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ExpenseStoreRequest $request)
     {
-        // validation 
-
-        Validator::make($request->all(), [
-            'user_id' => ['required'],
-        ]);
-
+        $validated = $request->validated();
+        $message = "Expense created successfully";
         $user = User::withTrashed()->findOrFail(request("user_id"));
-
-        $this->validator($request->all(), null, $user->remaining_fund)->validate();
 
         if (request("reimbursable_amount") > request("amount")) {
             $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
@@ -267,40 +236,19 @@ class ExpenseController extends Controller
             $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
         }
 
-        // end of validation
-
         $expense_type = ExpenseType::withTrashed()->findOrFail(request("sub_type_id") ?? request("expense_type_id"));
-
         $expense = new Expense();
-
+        $expense->fill($validated);
         $expense->code = generate_code(Expense::class, "EXP", 10);
         $expense->description = request("description") ?? $expense_type->name;
-        $expense->receipt_number = request("receipt_number");
-        $expense->date = request("date");
-        $expense->amount = request("amount");
-        $expense->reimbursable_amount = request("reimbursable_amount");
-        $expense->remarks = request("remarks");
-        $expense->expense_type_id = request("expense_type_id");
-        $expense->sub_type_id = request("sub_type_id");
-        $expense->user_id  = request("user_id");
-        $expense->vendor_id  = request("vendor_id");
-        $expense->details  = request("details") == null ? null : json_encode(request("details"));
-        $expense->tax_name = request("tax_name");
         $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
         $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
-        $expense->is_tax_inclusive = request("is_tax_inclusive");
+        $expense->details  = request("details") == null ? null : json_encode(request("details"));
         $expense->created_by = Auth::id();
         $expense->updated_by = Auth::id();
-        $expense->encoding_period = setting("expense_encoding_period");
         $expense->save();
 
-        return response(    
-            [
-                'data' => new ExpenseResource($expense),
-                'message' => 'Created successfully'
-            ],
-            201
-        );
+        return $this->successResponse(new ExpenseResource($expense), $message, 201);
     }
 
     /**
@@ -358,106 +306,34 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ExpenseUpdateRequest $request, $id)
     {
-        switch (request("action")) {
+        $validated = $request->validated();
+        $message = "Expense updated successfully";
 
-            case 'restore':
+        $user = User::withTrashed()->findOrFail(request("user_id"));
+        $expense_type = ExpenseType::withTrashed()->findOrFail(request("sub_type_id") ?? request("expense_type_id"));
+        $expense = Expense::withTrashed()->findOrFail($id);
 
-                // // check if user is allowed to restore
-                // if (!app("auth")->user()->hasPermissionTo('restore expenses')) {
-                //     abort(403);
-                // }
+        if (request("reimbursable_amount") > request("amount")) {
+            $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
+        }
 
-                // check if deleted
-                $deleted = Expense::whereIn("id", request("ids"))
-                    ->where("deleted_at", null)->count();
-
-                if ($deleted > 0) {
-                    return $this->errorResponse("Expense(s) has not been deleted.", 422);
-                }
-
-                // check if deleted
-                $reported = Expense::whereIn("id", request("ids"))
-                    ->where("expense_report_id", "<>", null)->count();
-
-                if ($reported > 0) {
-                    return $this->errorResponse("Expense(s) has been reported.", 422);
-                }
-
-                if (request()->has("ids")) {
-                    foreach (request("ids") as $id) {
-                        $expense = Expense::withTrashed()->findOrFail($id);
-
-                        $expense->disableLogging();
-
-                        $expense->restore();
-
-                        log_activity(
-                            "expense",
-                            $expense,
-                            [
-                            "attributes" => ["code" => $expense->code, "restored_at" => $expense->updated_at],
-                            "custom" => ["link" => "expenses/{$expense->id}"]
-                        ],
-                            "restored expense record"
-                        );
-                    }
-                } else {
-                    $expense = Expense::withTrashed()->findOrFail($id);
-
-                    $expense->disableLogging();
-
-                    $expense->restore();
-
-                    log_activity(
-                        "expense",
-                        $expense,
-                        [
-                        "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at],
-                        "custom" => ["link" => "expenses/{$expense->id}"]
-                    ],
-                        "restored expense record"
-                    );
-                }
-
-                break;
-            default:
-
-                // validation
-
-                Validator::make($request->all(), [
-
-                    'user_id' => ['required'],
-                ]);
-
-                $user = User::withTrashed()->findOrFail(request("user_id"));
-
-                $this->validator($request->all(), $id, $user->remaining_fund)->validate();
-
-                $expense = Expense::withTrashed()->findOrFail($id);
-
-                $expense_type = ExpenseType::withTrashed()->findOrFail(request("sub_type_id") ?? request("expense_type_id"));
-
-                if (request("reimbursable_amount") > request("amount")) {
-                    $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
-                }
-
-                $rem_fund = $user->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
+        $rem_fund = $user->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
         
-                if (($rem_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
-                    $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
-                }
+        if (($rem_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
+            $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
+        }
 
-                // // Prevent update if expense has an approve expense report and user is not admin
-                // if(true && !Auth::user()->is_admin) {
-                //     abort(403);
-                // }
+        // // Prevent update if expense has an approve expense report and user is not admin
+        // if(true && !Auth::user()->is_admin) {
+        //     abort(403);
+        // }
 
-                // // Prevent update if expense has an approve expense report and user is not admin
-                if ($expense->expense_report) {
-                    if (Auth::user()->is_admin) {
-                        $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
+        // // Prevent update if expense has an approve expense report and user is not admin
+        if ($expense->expense_report) {
+            if (Auth::user()->is_admin) {
+                $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
                         ->where(function ($query) {
                             $query->whereHas('payments');
                             $query->orWhere("cancelled_at", "<>", null);
@@ -465,8 +341,8 @@ class ExpenseController extends Controller
                             $query->orWhere("deleted_at", "<>", null);
                         })
                         ->count();
-                    } else {
-                        $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
+            } else {
+                $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
                         ->where(function ($query) {
                             $query->where("approved_at", "<>", null);
                             $query->orWhere("cancelled_at", "<>", null);
@@ -474,55 +350,33 @@ class ExpenseController extends Controller
                             $query->orWhere("deleted_at", "<>", null);
                         })
                         ->count();
-                    }
+            }
 
-                    if ($expense_report > 0) {
-                        return $this->errorResponse("Expense Report has already been submitted.", 422);
-                    }
-                }
+            if ($expense_report > 0) {
+                return $this->errorResponse("Expense Report has already been submitted.", 422);
+            }
+        }
 
-                // end of validation
+        $expense->fill($validated);
+        $expense->description = request("description") ?? $expense_type->name;
+        $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
+        $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
+        $expense->details  = request("details") == null ? null : json_encode(request("details"));
+        $expense->updated_by = Auth::id();
+        $expense->disableLogging();
+        $expense->save();
 
-                $expense->description = request("description") ?? $expense_type->name;
-                $expense->receipt_number = request("receipt_number");
-                $expense->date = request("date");
-                $expense->amount = request("amount");
-                $expense->reimbursable_amount = request("reimbursable_amount");
-                $expense->remarks = request("remarks");
-                $expense->expense_type_id = request("expense_type_id");
-                $expense->sub_type_id = request("sub_type_id");
-                $expense->user_id  = request("user_id");
-                $expense->vendor_id  = request("vendor_id");
-                $expense->details  = json_encode(request("details"));
-                $expense->tax_name = request("tax_name");
-                $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
-                $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
-                $expense->is_tax_inclusive = request("is_tax_inclusive");
-                $expense->encoding_period = setting("expense_encoding_period");
-                $expense->updated_by = Auth::id();
-                $expense->disableLogging();
-                $expense->save();
-
-                log_activity(
-                    "expense",
-                    $expense,
-                    [
+        log_activity(
+            "expense",
+            $expense,
+            [
                     "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at],
                     "custom" => ["link" => "expenses/{$expense->id}"]
                 ],
-                    "updated expense record"
-                );
-
-                break;
-        }
-
-        return response(
-            [
-                'message' => 'Updated successfully',
-                'sub_type' => request("sub_type_id")
-            ],
-            201
+            "updated expense record"
         );
+
+        return $this->successResponse(null, $message, 201);
     }
 
     /**
@@ -568,6 +422,66 @@ class ExpenseController extends Controller
     | EXPENSE CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    public function restore(Request $request, $id)
+    {
+        // // check if user is allowed to restore
+        // if (!app("auth")->user()->hasPermissionTo('restore expenses')) {
+        //     abort(403);
+        // }
+
+        $message = "Expense restored successfully";
+
+        // check if deleted
+        $deleted = Expense::whereIn("id", request("ids"))
+                    ->where("deleted_at", null)->count();
+
+        if ($deleted > 0) {
+            return $this->errorResponse("Expense(s) has not been deleted.", 422);
+        }
+
+        // check if deleted
+        $reported = Expense::whereIn("id", request("ids"))
+                    ->where("expense_report_id", "<>", null)->count();
+
+        if ($reported > 0) {
+            return $this->errorResponse("Expense(s) has been reported.", 422);
+        }
+
+        if (request()->has("ids")) {
+            foreach (request("ids") as $id) {
+                $expense = Expense::withTrashed()->findOrFail($id);
+                $expense->disableLogging();
+                $expense->restore();
+
+                log_activity(
+                    "expense",
+                    $expense,
+                    [
+                            "attributes" => ["code" => $expense->code, "restored_at" => $expense->updated_at],
+                            "custom" => ["link" => "expenses/{$expense->id}"]
+                        ],
+                    "restored expense record"
+                );
+            }
+        } else {
+            $expense = Expense::withTrashed()->findOrFail($id);
+            $expense->disableLogging();
+            $expense->restore();
+
+            log_activity(
+                "expense",
+                $expense,
+                [
+                        "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at],
+                        "custom" => ["link" => "expenses/{$expense->id}"]
+                    ],
+                "restored expense record"
+            );
+        }
+
+        return $this->successResponse(null, $message, 201);
+    }
 
     /**
      * Get Expenses data

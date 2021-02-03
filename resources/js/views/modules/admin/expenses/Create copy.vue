@@ -64,6 +64,7 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="form.date"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         label="Date"
@@ -84,6 +85,7 @@
                             </v-menu>
                             <v-autocomplete
                                 v-model="form.user"
+                                :rules="mixin_validation.required"
                                 :items="users"
                                 :error-messages="errors.user_id"
                                 @input="errors.user_id = []"
@@ -97,6 +99,7 @@
                             </v-autocomplete>
                             <v-autocomplete
                                 v-model="form.vendor"
+                                :rules="[]"
                                 :items="vendors"
                                 :error-messages="errors.vendor_id"
                                 @input="errors.vendor_id = []"
@@ -151,6 +154,7 @@
                                     <v-autocomplete
                                         return-object
                                         v-model="form.expense_type"
+                                        :rules="mixin_validation.required"
                                         :items="expense_types"
                                         :error-messages="errors.expense_type_id"
                                         @input="errors.expense_type_id = []"
@@ -165,9 +169,10 @@
                                 <v-col cols="12" md="">
                                     <v-autocomplete
                                         v-model="form.sub_type"
+                                        :rules="mixin_validation.required"
                                         :items="sub_types"
-                                        :error-messages="errors.sub_type_id"
-                                        @input="errors.sub_type_id = []"
+                                        :error-messages="errors.sub_type"
+                                        @input="errors.sub_type = []"
                                         item-value="id"
                                         item-text="name"
                                         label="Sub Type (optional)"
@@ -225,6 +230,7 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         v-model="form.receipt_number"
+                                        :rules="[]"
                                         :error-messages="errors.receipt_number"
                                         @input="errors.receipt_number = []"
                                         label="Receipt No."
@@ -419,19 +425,19 @@
                                     <v-text-field
                                         v-model="form.amount"
                                         label="Expense Amount"
-                                        :error-messages="errors.amount"
-                                        @input="errors.amount = []"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minNumberValue(
+                                                1
+                                            )
+                                        ]"
                                         :readonly="itemize"
                                         type="number"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="4">
                                     <v-text-field
-                                        v-if="
-                                            mixin_can('set reimbursable amount')
-                                        "
-                                        :error-messages="errors.reimbursable_amount"
-                                        @input="errors.reimbursable_amount = []"
+                                        v-if="mixin_can('set reimbursable amount')"
                                         v-model="form.reimbursable_amount"
                                         label="Amount to reimburse"
                                         type="number"
@@ -584,26 +590,15 @@ export default {
             vendors: [],
             form: {
                 code: null,
-                reference_no: null,
                 description: null,
                 amount: 0,
-                reimbursable_amount: 0,
-                tax_name: "",
-                tax_rate: 0,
-                is_compound_tax: false,
-                is_tax_inclusive: true,
-                tax_amount: 0,
+                detials_quantity: 0,
+                details_amount: 0,
+                // reimbursable_amount: 0,
                 receipt_number: null,
                 date: moment().format("YYYY-MM-DD"),
-                details: {
-                    description: "",
-                    quantity: 1,
-                    amount: 0,
-                    total: 0
-                },
                 remarks: "",
-                notes: "",
-                encoding_period: this.$store.getters.settings.expense_encoding_period,
+                is_active: true,
                 expense_type: {
                     id: null,
                     name: "",
@@ -623,17 +618,24 @@ export default {
                     tin: "",
                     is_vat_inclusive: false
                 },
-                expense_report_id: null,
-                tax_id: null,
-                expense_header_id: null,
-                detials_quantity: 0,
-                details_amount: 0,
-                is_active: true,
                 // particular: "",
                 // particular_amount: 0,
                 // particular_reimbursable_amount: 0,
                 is_reimbursable: false,
-                revolving_fund: 0
+
+                revolving_fund: 0,
+                reimbursable_amount: 0,
+                details: {
+                    description: "",
+                    quantity: 1,
+                    amount: 0,
+                    total: 0
+                },
+
+                is_tax_inclusive: true,
+                tax_name: "",
+                tax_rate: 0,
+                tax_amount: 0
             },
             rules: {
                 reimbursable_amount: [],
@@ -641,31 +643,16 @@ export default {
             },
             errors: {
                 sub_type: [],
-                code: [],
-                reference_no: [],
                 description: [],
                 amount: [],
                 reimbursable_amount: [],
-                tax_name: [],
-                tax_rate: [],
-                is_compound_tax: [],
-                is_tax_inclusive: [],
-                tax_amount: [],
                 receipt_number: [],
                 date: [],
-                details: [],
                 remarks: [],
-                notes: [],
-                encoding_period: [],
+                is_active: [],
                 expense_type_id: [],
-                sub_type_id: [],
                 user_id: [],
-                vendor_id: [],
-                expense_report_id: [],
-                tax_id: [],
-                expense_header_id: [],
-
-                is_active: []
+                vendor_id: []
             }
         };
     },
@@ -679,6 +666,7 @@ export default {
             axios
                 .get("/api/data/users")
                 .then(response => {
+                    
                     let data = response.data.data;
 
                     _this.users = response.data.data;
@@ -729,80 +717,80 @@ export default {
                 sub_type_limit == null ? expense_type_limit : sub_type_limit;
             let expense_amount = this.form.amount;
 
-            // if (!this.mixin_can("add expenses beyond limit")) {
-            //     if (!this.itemize) {
-            //         if (
-            //             expense_limit !== null &&
-            //             expense_limit < expense_amount
-            //         ) {
-            //             _this.$dialog.message.error(
-            //                 "Amount can't be greater than expense limit.",
-            //                 {
-            //                     position: "top-right",
-            //                     timeout: 2000
-            //                 }
-            //             );
-            //             return;
-            //         }
-            //     } else {
-            //         if (
-            //             expense_limit !== null &&
-            //             expense_limit < this.form.details_amount
-            //         ) {
-            //             _this.$dialog.message.error(
-            //                 "Itemized Expenses Amount can't be greater than expense limit",
-            //                 {
-            //                     position: "top-right",
-            //                     timeout: 2000
-            //                 }
-            //             );
-            //             return;
-            //         }
-            //     }
-            // }
+            if (!this.mixin_can("add expenses beyond limit")) {
+                if (!this.itemize) {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < expense_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Amount can't be greater than expense limit.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
+                    }
+                } else {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < this.form.details_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Itemized Expenses Amount can't be greater than expense limit",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
+                    }
+                }
+            }
 
-            // if (_this.form.user.id == null) {
-            //     _this.$dialog.message.error("No User Selected", {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     });
-            //     return;
-            // }
+            if (_this.form.user.id == null) {
+                _this.$dialog.message.error("No User Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
-            // if (_this.form.expense_type.id == null) {
-            //     _this.$dialog.message.error("No Expense Type Selected", {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     });
-            //     return;
-            // }
+            if (_this.form.expense_type.id == null) {
+                _this.$dialog.message.error("No Expense Type Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
-            // if (
-            //     _this.amount_to_replenish > _this.form.user.remaining_fund
-            // ) {
-            //     _this.$dialog.message.error(
-            //         "Amount to replenish is greater than remaining fund",
-            //         {
-            //             position: "top-right",
-            //             timeout: 2000
-            //         }
-            //     );
-            //     return;
-            // }
+            if (
+                _this.amount_to_replenish > _this.form.user.remaining_fund
+            ) {
+                _this.$dialog.message.error(
+                    "Amount to replenish is greater than remaining fund",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
 
-            // if((_this.amount_to_replenish + _this.amount_to_reimburse) < this.form.amount) {
+            if((_this.amount_to_replenish + _this.amount_to_reimburse) < this.form.amount) {
+                
+                _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
 
-            //     _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
+                return;
+            }
 
-            //     return;
-            // }
+            if((_this.amount_to_replenish + _this.amount_to_reimburse) <= 0) {
 
-            // if((_this.amount_to_replenish + _this.amount_to_reimburse) <= 0) {
+                _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
 
-            //     _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
-
-            //     return;
-            // }
+                return;
+            }
 
             _this.$refs.form.validate();
 
@@ -812,40 +800,39 @@ export default {
                 axios
                     .post("/api/expenses", {
                         code: _this.form.code,
-                        reference_no: _this.form.reference_no,
                         description: _this.form.description,
                         amount: _this.form.amount,
                         reimbursable_amount: _this.amount_to_reimburse,
-                        tax_name: _this.form.tax_name,
-                        tax_rate: _this.form.tax_rate,
-                        is_compound_tax: _this.form.is_compound_tax,
-                        is_tax_inclusive: _this.form.is_tax_inclusive,
-                        tax_amount: _this.form.tax_amount,
                         receipt_number: _this.form.receipt_number,
                         date: _this.form.date,
-                        details: _this.itemize ? _this.items : null,
                         remarks: _this.form.remarks,
-                        notes: _this.form.notes,
-                        encoding_period: _this.form.encoding_period,
+                        is_active: _this.form.is_active,
                         expense_type_id: _this.form.expense_type.id,
                         sub_type_id: _this.form.sub_type.id,
                         user_id: _this.form.user.id,
                         vendor_id: _this.form.vendor.id,
-                        expense_report_id: _this.form.expense_report_id,
-                        tax_id: _this.form.tax_id,
-                        expense_header_id: _this.form.expense_header_id,
+                        details: _this.itemize ? _this.items : null,
+                        tax_name: "",
+                        tax_rate: _this.form.tax_rate,
+                        tax_amount: _this.form.tax_amount,
+                        is_tax_inclusive: _this.form.is_tax_inclusive
                     })
                     .then(function(response) {
-                        _this.mixin_successDialog(
-                            response.data.status,
-                            response.data.message
+                        // _this.onRefresh();
+
+                        _this.$dialog.message.success(
+                            "Expense created successfully.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
                         );
+
+                        // _this.$store.dispatch("AUTH_USER");
 
                         _this.$router.go(-1);
                     })
                     .catch(function(error) {
-                        _this.loader = false;
-
                         console.log(error);
                         console.log(error.response);
 
@@ -970,16 +957,11 @@ export default {
                 this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
-            let reimbursable = this.mixin_convertToNumber(
-                this.form.reimbursable_amount
-            );
-            let amt_to_replenish =
-                amount < reimbursable ? 0 : amount - reimbursable;
+            let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+            let amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
 
-            if (this.mixin_can("set reimbursable amount")) {
-                return amount - reimbursable > remaining_fund
-                    ? 0
-                    : amt_to_replenish;
+            if(this.mixin_can("set reimbursable amount")) {
+                return (amount - reimbursable) > remaining_fund ? 0 : amt_to_replenish;
             }
 
             if (remaining_fund >= amount) {
@@ -993,11 +975,9 @@ export default {
                 this.form.user.remaining_fund
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
-            let reimbursable = this.mixin_convertToNumber(
-                this.form.reimbursable_amount
-            );
+            let reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
 
-            if (this.mixin_can("set reimbursable amount")) {
+            if(this.mixin_can("set reimbursable amount")) {
                 return reimbursable > amount ? 0 : reimbursable;
             }
 
@@ -1014,16 +994,10 @@ export default {
             return 0;
         },
         expense_amount() {
-            let amt_to_replenish = this.mixin_convertToNumber(
-                this.amount_to_replenish
-            );
-            let amt_to_reimburse = this.mixin_convertToNumber(
-                this.amount_to_reimburse
-            );
+            let amt_to_replenish = this.mixin_convertToNumber(this.amount_to_replenish);
+            let amt_to_reimburse = this.mixin_convertToNumber(this.amount_to_reimburse);
 
-            return this.mixin_convertToNumber(
-                amt_to_replenish + amt_to_reimburse
-            );
+            return this.mixin_convertToNumber(amt_to_replenish + amt_to_reimburse);
         },
         display_reimbursable_amount() {
             return (
