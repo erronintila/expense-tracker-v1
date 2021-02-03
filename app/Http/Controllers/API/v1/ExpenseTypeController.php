@@ -34,11 +34,8 @@ class ExpenseTypeController extends Controller
     public function index(Request $request)
     {
         $search = request('search') ?? "";
-
         $sortBy = request('sortBy') ?? "name";
-
         $sortType = request('sortType') ?? "asc";
-
         $itemsPerPage = request('itemsPerPage') ?? 10;
 
         $expense_types = ExpenseType::where('expense_type_id', null)
@@ -46,14 +43,11 @@ class ExpenseTypeController extends Controller
 
         if (request()->has('status')) {
             switch (request('status')) {
-
                 case 'Archived':
-
                     $expense_types = $expense_types->onlyTrashed();
 
                     break;
                 default:
-
                     $expense_types = $expense_types;
 
                     break;
@@ -61,7 +55,6 @@ class ExpenseTypeController extends Controller
         }
 
         $expense_types = $expense_types->where('name', "like", "%" . $search . "%");
-
         $expense_types = $expense_types->paginate($itemsPerPage);
 
         return ExpenseTypeOnlyResource::collection($expense_types);
@@ -76,30 +69,21 @@ class ExpenseTypeController extends Controller
     public function store(ExpenseTypeStoreRequest $request)
     {
         $validated = $request->validated(); // checks validation
-
         $message = "Expense type created successfully"; // return message
 
         $expense_type = new ExpenseType();
-
         $expense_type->code = generate_code(ExpenseType::class, "EXT", 10);
-
         $expense_type->name = request('name');
-
         $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
-
         $expense_type->save();
 
         // store sub types associated with expense type
         if (request()->has("sub_types")) {
             foreach (request('sub_types') as $item) {
                 $sub_type = new ExpenseType();
-
                 $sub_type->name = $item["name"];
-
                 $sub_type->limit = is_numeric($item["limit"]) && ($item["limit"] > 0) ? $item["limit"] : null;
-
                 $sub_type->expense_type_id = $expense_type->id;
-
                 $sub_type->save();
             }
         }
@@ -137,13 +121,9 @@ class ExpenseTypeController extends Controller
         $validated = $request->validated(); // checks validation
 
         $message = "Expense type updated successfully"; // return message
-
         $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-
         $expense_type->name = request('name');
-
         $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
-
         $expense_type->save();
 
         // remove sub types associated with expense type
@@ -157,11 +137,8 @@ class ExpenseTypeController extends Controller
                 ['id' => $value["id"]],
                 [
                     'name' => $value["name"],
-
                     "limit" => is_numeric($value["limit"]) && ($value["limit"] > 0) ? $value["limit"] : null,
-
                     'expense_type_id' => $expense_type->id,
-
                     'deleted_at' => null,
                 ]
             );
@@ -230,7 +207,6 @@ class ExpenseTypeController extends Controller
             $message = "Expense type(s) restored successfully.";
         } else {
             $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-
             $expense_type->restore();
 
             $message = "Expense type restored successfully.";

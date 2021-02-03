@@ -25,25 +25,15 @@ class VendorStoreRequest extends FormRequest
     {
         return [
             'code' => ['nullable', 'max:255', 'unique:vendors'],
-
             'name' => ['required', 'max:150'],
-
             'email' => ['nullable', 'email', 'max:150', 'unique:vendors'],
-
             'tin' => ['required_if:is_vat_inclusive,true', 'max:255', 'unique:vendors'],
-
             'contact_person' => ['nullable', 'max:150'],
-
             'mobile_number' => ['nullable', 'max:50'],
-
             'telephone_number' => ['nullable', 'max:50'],
-
             'website' => ['nullable', 'max:150'],
-
             'remarks' => ['nullable'],
-
             'is_vat_inclusive' => ['required'],
-
             'address' => ['required'],
         ];
     }

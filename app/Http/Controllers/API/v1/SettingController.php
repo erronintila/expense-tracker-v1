@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
     
     /**
      * Display a listing of the resource.

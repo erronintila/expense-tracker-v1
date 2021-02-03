@@ -26,7 +26,6 @@ class DepartmentUpdateRequest extends FormRequest
     {
         return [
             'code' => ['nullable', 'max:255', Rule::unique('departments', 'code')->ignore($this->department)],
-
             'name' => ['required', 'max:100', Rule::unique('departments', 'name')->ignore($this->department)],
         ];
     }

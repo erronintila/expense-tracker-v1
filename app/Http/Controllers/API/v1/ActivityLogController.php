@@ -12,14 +12,13 @@ use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
 
     public function __construct()
     {
         $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
         $this->middleware(['permission:delete activity logs'], ['only' => ['destroy']]);
     }
-
 
     /**
      * Display a listing of the resource.
@@ -29,27 +28,19 @@ class ActivityLogController extends Controller
     public function index(Request $request)
     {
         $search = request("search") ?? "";
-
         $sortBy = request("sortBy") ?? "updated_at";
-
         $sortType = request("sortType") ?? "desc";
-
         $itemsPerPage = request("itemsPerPage") ?? 10;
-
         $activity_logs = Activity::orderBy($sortBy, $sortType);
 
         if (request()->has('start_date') && request()->has('end_date')) {
             $start_date = Carbon::parse(request("start_date"))->startOfDay();
-
             $end_date = Carbon::parse(request("end_date"))->endOfDay();
-            
             $activity_logs = $activity_logs->whereBetween("created_at", [$start_date, $end_date]);
         }
 
         if (request()->has('user_id')) {
-
             if (request("user_id") > 0) {
-
                 $activity_logs = $activity_logs->where("causer_id", request("user_id"));
             }
         }
@@ -102,7 +93,6 @@ class ActivityLogController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("delete_all")) {
-
             $activity_logs = DB::table('activity_log')->delete();
 
             return response(
@@ -114,9 +104,7 @@ class ActivityLogController extends Controller
         }
 
         if (request()->has("ids")) {
-
             foreach (request("ids") as $id) {
-
                 $activity_logs = DB::table('activity_log')->where("id", $id)->delete();
             }
 

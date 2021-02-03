@@ -25,15 +25,10 @@ class ExpenseReportStoreRequest extends FormRequest
     {
         return [
             'code' => ['nullable', 'unique:expense_reports', 'max:255'],
-
             'description' => ['required', 'max:255'],
-
             'user_id' => ['required'],
-
             'remarks' => ['nullable'],
-
             'notes' => ['nullable'],
-
             'expenses' => ['required']
         ];
     }
@@ -47,7 +42,6 @@ class ExpenseReportStoreRequest extends FormRequest
     {
         return [
             'expenses.required' => 'Expense Report has no expense(s)',
-
             'user_id.required' => 'Employee is required'
         ];
     }

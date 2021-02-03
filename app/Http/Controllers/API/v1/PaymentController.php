@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
     
     public function __construct()
     {
@@ -39,31 +39,18 @@ class PaymentController extends Controller
     {
         return Validator::make($data, [
             "code" => ['nullable', 'string', 'max:255'],
-
             "reference_no" => ['nullable', 'max:255'],
-
             "voucher_no" => ['nullable', 'max:255'],
-
             "description" => ['required', 'string', 'max:255'],
-
             "date" => ['required'],
-
             "cheque_no" => ['nullable', 'max:255'],
-
             "cheque_date" => ['nullable'],
-
             "amount" => ['required'],
-
             "payee" => ['nullable', 'string', 'max:255'],
-
             "payee_address" => ['nullable', 'max:255'],
-
             "payee_phone" => ['nullable', 'max:255'],
-
             "remarks"  => ['nullable'],
-
             "notes" => ['nullable'],
-
             "user" => ['required'],
         ]);
     }
@@ -76,11 +63,8 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $search = request("search") ?? "";
-
         $sortBy = request("sortBy") ?? "updated_at";
-
         $sortType = request("sortType") ?? "desc";
-
         $itemsPerPage = request("itemsPerPage") ?? 10;
 
         $payments = Payment::with(['user' => function ($query) {
@@ -93,14 +77,10 @@ class PaymentController extends Controller
 
         if (request()->has('status')) {
             switch (request("status")) {
-
                 case 'Cancelled Payments':
-
                     $payments = $payments->onlyTrashed();
-
                     break;
                 case 'Completed Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -111,7 +91,6 @@ class PaymentController extends Controller
 
                     break;
                 case 'Received Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -122,7 +101,6 @@ class PaymentController extends Controller
 
                     break;
                 case 'Released Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -133,7 +111,6 @@ class PaymentController extends Controller
 
                     break;
                 case 'Approved Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -144,7 +121,6 @@ class PaymentController extends Controller
 
                     break;
                 default:
-
                     $payments = $payments;
 
                     break;
@@ -163,17 +139,11 @@ class PaymentController extends Controller
 
         $payments = $payments->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-
             $query->orWhere('reference_no', "like", "%" . $search . "%");
-
             $query->orWhere('voucher_no', "like", "%" . $search . "%");
-
             $query->orWhere('description', "like", "%" . $search . "%");
-
             $query->orWhere('cheque_no', "like", "%" . $search . "%");
-
             $query->orWhere('amount', "like", "%" . $search . "%");
-
             $query->orWhere('payee', "like", "%" . $search . "%");
         });
 
@@ -193,45 +163,28 @@ class PaymentController extends Controller
         $this->validator($request->all(), null)->validate();
 
         $payment = new Payment();
-
         $payment->code = generate_code(Payment::class, "PAY", 10);
-
         $payment->reference_no = request("reference_no");
-
         $payment->voucher_no = request("voucher_no");
-
         $payment->description = request("description");
-
         $payment->date = request("date");
-
         $payment->cheque_no = request("cheque_no");
-
         $payment->cheque_date = request("cheque_date");
-
         $payment->amount = request("amount");
-
         $payment->payee = request("payee");
-
         $payment->payee_address = request("payee_address");
-
         $payment->payee_phone = request("payee_phone");
-
         $payment->remarks = request("remarks");
-
         $payment->notes = request("notes");
 
         ////////// TEMPORARY
         $payment->approved_at = now();
-
         $payment->released_at = now();
-
         $payment->received_at = null;
         //////////
 
         $payment->user_id = request("user");
-
         $payment->created_by = Auth::id();
-
         $payment->updated_by = Auth::id();
 
         $payment->save();
@@ -241,7 +194,6 @@ class PaymentController extends Controller
 
             foreach (request("expense_reports") as $item) {
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
-
                 $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
 
                 log_activity(
@@ -266,7 +218,6 @@ class PaymentController extends Controller
         return response(
             [
                 'data' => new PaymentResource($payment),
-
                 'message' => 'Created successfully',
             ],
             201

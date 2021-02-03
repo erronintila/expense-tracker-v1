@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
     
     /**
      * Register new user
@@ -23,33 +23,22 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-
             'name'      => ['required', 'max:200'],
-
             'username'  => ['required', 'unique:users', 'max:150'],
-
             'email'     => ['required', 'email', 'unique:users', 'max:255'],
-
             'password'  => ['required', 'min:8', 'max:255', 'confirmed'],
         ]);
 
         $user = User::create([
-
             'name' => request("name"),
-
             'username' => request("username"),
-
             'email' => request("email"),
-
             'password' => bcrypt(request("password"))
         ]);
 
         return response([
-
             'data' => $user,
-
             'message' => 'Registered successfully'
-
         ], 200);
     }
     
@@ -62,9 +51,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
             'username' => 'required|exists:users,username',
-
             'password' => 'required'
         ]);
 
@@ -84,13 +71,9 @@ class AuthController extends Controller
             $token = $user->createToken('authToken')->accessToken;
 
             return response()->json([
-
                 'user_id' => $user->id,
-
                 'user' => $user,
-
                 'access_token' => $token,
-
                 'permissions' => $user->getAllPermissions()->pluck("name"),
             ]);
         }
@@ -111,7 +94,6 @@ class AuthController extends Controller
         });
 
         return response()->json([
-
             'message' => 'Successfully logged out'
         ]);
     }

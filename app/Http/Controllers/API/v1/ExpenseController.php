@@ -18,18 +18,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
 
     public function __construct()
     {
         $this->middleware(['permission:view all expenses'], ['only' => ['index']]);
-
         $this->middleware(['permission:view expenses'], ['only' => ['show']]);
-
         $this->middleware(['permission:add expenses'], ['only' => ['create', 'store']]);
-
         $this->middleware(['permission:edit expenses'], ['only' => ['edit', 'update']]);
-
         $this->middleware(['permission:delete expenses'], ['only' => ['destroy']]);
     }
 
@@ -42,39 +38,22 @@ class ExpenseController extends Controller
     protected function validator(array $data, $id, $fund)
     {
         return Validator::make($data, [
-
             'code' => ['nullable', Rule::unique('expenses')->ignore($id, 'id'), 'max:255'],
-
             'reference_no' => ['nullable'],
-
             'description' => ['nullable', 'max:255'],
-
             'amount' => ['required', 'numeric', 'gt:0',],
-
             'reimbursable_amount' => ['required', 'numeric'],
-
             'tax_name' => ['nullable', 'max:100'],
-
             'tax_rate' => ['required'],
-
             'is_compound_tax' => ['nullable'],
-
             'is_tax_inclusive' => ['required'],
-
             'tax_amount' => ['required'],
-
             'receipt_number' => ['nullable', 'max:255'],
-
             'date' => ['required'],
-
             'details' => ['nullable'],
-
             'remarks' => ['nullable'],
-
             'notes' => ['nullable'],
-
             'expense_type_id' => ['required'],
-
             'user_id' => ['required'],
         ]);
     }
@@ -87,13 +66,9 @@ class ExpenseController extends Controller
     public function index(Request $request)
     {
         $search = request("search") ?? "";
-
         $sortBy = request("sortBy") ?? "updated_at";
-
         $sortType = request("sortType") ?? "desc";
-
         $itemsPerPage = request("itemsPerPage") ?? 10;
-
         $expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
@@ -110,36 +85,25 @@ class ExpenseController extends Controller
 
         if (request()->has('status')) {
             switch (request("status")) {
-
                 case 'Cancelled Expenses':
-
                     $expenses = $expenses->onlyTrashed();
 
                     break;
                 case 'Reimbursed Expenses':
-
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
                         $query->where([
-
                             ["submitted_at", "<>", null],
-
                             ["approved_at", "<>", null],
-
                             ["rejected_at", "=", null],
-
                             ["cancelled_at", "=", null]
                         ]);
 
                         $query->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
-
                                 ["released_at", "<>", null],
-
                                 ["received_at", "<>", null],
-
                                 ["cancelled_at", "=", null],
-
                                 ["deleted_at", "=", null],
                             ]);
                         });
@@ -147,34 +111,23 @@ class ExpenseController extends Controller
 
                     break;
                 case 'Rejected Expenses':
-
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
                         $query->where([
-
                             ["expense_report_id", "<>", null],
-
                             ["submitted_at", "<>", null],
-
                             // ["approved_at", "<>", null],
-
                             ["rejected_at", "<>", null],
-
                             // ["cancelled_at", "=", null],
                         ]);
                     });
 
                     break;
                 case 'Approved Expenses':
-
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
                         $query->where([
-
                             ["submitted_at", "<>", null],
-
                             ["approved_at", "<>", null],
-
                             ["rejected_at", "=", null],
-
                             ["cancelled_at", "=", null],
                         ]);
 
@@ -183,16 +136,11 @@ class ExpenseController extends Controller
 
                     break;
                 case 'Submitted Expenses':
-
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
                         $query->where([
-
                             ["submitted_at", "<>", null],
-
                             ["approved_at", "=", null],
-
                             ["rejected_at", "=", null],
-
                             ["cancelled_at", "=", null],
                         ]);
 
@@ -201,16 +149,11 @@ class ExpenseController extends Controller
 
                     break;
                 case 'Unsubmitted Expenses':
-
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
                         $query->where([
-
                             ["submitted_at", "=", null],
-
                             ["approved_at", "=", null],
-
                             ["rejected_at", "=", null],
-
                             ["cancelled_at", "=", null],
                         ]);
 
@@ -219,12 +162,10 @@ class ExpenseController extends Controller
 
                     break;
                 case 'Unreported Expenses':
-
                     $expenses = $expenses->doesnthave("expense_report");
 
                     break;
                 default:
-
                     $expenses = $expenses;
 
                     break;
@@ -311,7 +252,6 @@ class ExpenseController extends Controller
         // validation 
 
         Validator::make($request->all(), [
-
             'user_id' => ['required'],
         ]);
 
@@ -334,49 +274,29 @@ class ExpenseController extends Controller
         $expense = new Expense();
 
         $expense->code = generate_code(Expense::class, "EXP", 10);
-
         $expense->description = request("description") ?? $expense_type->name;
-
         $expense->receipt_number = request("receipt_number");
-
         $expense->date = request("date");
-
         $expense->amount = request("amount");
-
         $expense->reimbursable_amount = request("reimbursable_amount");
-
         $expense->remarks = request("remarks");
-
         $expense->expense_type_id = request("expense_type_id");
-
         $expense->sub_type_id = request("sub_type_id");
-
         $expense->user_id  = request("user_id");
-
         $expense->vendor_id  = request("vendor_id");
-
         $expense->details  = request("details") == null ? null : json_encode(request("details"));
-
         $expense->tax_name = request("tax_name");
-
         $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
-
         $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
-
         $expense->is_tax_inclusive = request("is_tax_inclusive");
-
         $expense->created_by = Auth::id();
-
         $expense->updated_by = Auth::id();
-
         $expense->encoding_period = setting("expense_encoding_period");
-
         $expense->save();
 
         return response(    
             [
                 'data' => new ExpenseResource($expense),
-
                 'message' => 'Created successfully'
             ],
             201
@@ -564,41 +484,23 @@ class ExpenseController extends Controller
                 // end of validation
 
                 $expense->description = request("description") ?? $expense_type->name;
-
                 $expense->receipt_number = request("receipt_number");
-
                 $expense->date = request("date");
-
                 $expense->amount = request("amount");
-
                 $expense->reimbursable_amount = request("reimbursable_amount");
-
                 $expense->remarks = request("remarks");
-
                 $expense->expense_type_id = request("expense_type_id");
-
                 $expense->sub_type_id = request("sub_type_id");
-
                 $expense->user_id  = request("user_id");
-
                 $expense->vendor_id  = request("vendor_id");
-
                 $expense->details  = json_encode(request("details"));
-
                 $expense->tax_name = request("tax_name");
-
                 $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
-
                 $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
-
                 $expense->is_tax_inclusive = request("is_tax_inclusive");
-
                 $expense->encoding_period = setting("expense_encoding_period");
-
                 $expense->updated_by = Auth::id();
-
                 $expense->disableLogging();
-
                 $expense->save();
 
                 log_activity(

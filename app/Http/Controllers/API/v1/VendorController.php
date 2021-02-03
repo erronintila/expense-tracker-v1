@@ -24,6 +24,7 @@ class VendorController extends Controller
         $this->middleware(['permission:add vendors'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit vendors'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete vendors'], ['only' => ['destroy']]);
+        $this->middleware(['permission:restore vendors'], ['only' => ['restore']]);
     }
 
     /**
@@ -34,47 +35,32 @@ class VendorController extends Controller
     public function index(Request $request)
     {
         $search = request('search') ?? "";
-
         $sortBy = request('sortBy') ?? "name";
-
         $sortType = request('sortType') ?? "asc";
-
         $itemsPerPage = request('itemsPerPage') ?? 10;
-
         $vendors = Vendor::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch (request('status')) {
-
                 case 'Archived':
-
                     $vendors = $vendors->onlyTrashed();
-
                     break;
                 default:
-
                     $vendors = $vendors;
-
                     break;
             }
         }
 
         $vendors = $vendors->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-
             $query->orWhere("name", "like", "%" . $search . "%");
-
             $query->orWhere("email", "like", "%" . $search . "%");
-
             $query->orWhere("tin", "like", "%" . $search . "%");
-
             $query->orWhere("mobile_number", "like", "%" . $search . "%");
-
             $query->orWhere("telephone_number", "like", "%" . $search . "%");
         });
 
         $vendors = $vendors->paginate($itemsPerPage);
-
         return VendorIndexResource::collection($vendors);
     }
 
@@ -87,42 +73,27 @@ class VendorController extends Controller
     public function store(VendorStoreRequest $request)
     {
         $validated = $request->validated(); // check validation
-        
         $message = "Vendor created successfully"; // return message
 
         // create new vendor
         $vendor = new Vendor();
-
         $vendor->code = generate_code(Vendor::class, "VEN", 10);
-
         $vendor->name = request('name');
-
         $vendor->email = request('email');
-
         $vendor->tin = request('tin');
-
         $vendor->contact_person = request('contact_person');
-
         $vendor->mobile_number = request('mobile_number');
-
         $vendor->telephone_number = request('telephone_number');
-
         $vendor->website = request('website');
-
         $vendor->remarks = request('remarks');
-
         $vendor->is_vat_inclusive = request('is_vat_inclusive');
-
         $vendor->address = request('address');
-
         $vendor->save();
 
         // store expense types associated with vendor
         if (request()->has("expense_types")) {
             $vendor->expense_types()->sync(request('expense_types'));
-
             // $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail(request('expense_types'));
-
             // $vendor->expense_types()->attach($expense_types);
         }
 
@@ -152,34 +123,21 @@ class VendorController extends Controller
     public function update(VendorUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // check validation
-
         $message = "Vendor updated successfully"; // return message
 
         // update vendor
         $vendor = Vendor::withTrashed()->findOrFail($id);
-
         $vendor->code = request('code');
-
         $vendor->name = request('name');
-
         $vendor->email = request('email');
-
         $vendor->tin = request('tin');
-
         $vendor->contact_person = request('contact_person');
-
         $vendor->mobile_number = request('mobile_number');
-
         $vendor->telephone_number = request('telephone_number');
-
         $vendor->website = request('website');
-
         $vendor->remarks = request('remarks');
-
         $vendor->is_vat_inclusive = request('is_vat_inclusive');
-
         $vendor->address = request('address');
-
         $vendor->save();
 
         // update expense types associated with vendor
@@ -208,16 +166,13 @@ class VendorController extends Controller
 
             foreach (request('ids') as $id) {
                 $vendor = Vendor::findOrFail($id);
-
                 $vendor->delete();
             }
 
             $message = "Vendor(s) deleted successfully";
         } else {
             $vendor = Vendor::findOrFail($id);
-
             $vendor->delete();
-
             $message = "Vendor deleted successfully";
         }
 
@@ -249,16 +204,13 @@ class VendorController extends Controller
 
             foreach (request('ids') as $id) {
                 $vendor = Vendor::withTrashed()->findOrFail($id);
-
                 $vendor->restore();
             }
 
             $message = "Vendor(s) restored successfully";
         } else {
             $vendor = Vendor::withTrashed()->findOrFail($id);
-
             $vendor->restore();
-
             $message = "Vendor restored successfully";
         }
 

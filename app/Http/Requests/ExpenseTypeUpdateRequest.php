@@ -26,9 +26,7 @@ class ExpenseTypeUpdateRequest extends FormRequest
     {
         return [
             'code' => ['nullable', 'max:255', Rule::unique('expense_types', 'code')->ignore($this->expense_type)],
-
             'name' => ['required', 'max:100', Rule::unique('expense_types', 'name')->ignore($this->expense_type)],
-
             'limit' => ['nullable']
         ];
     }

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class SubTypeController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
     
     /**
      * Display a listing of the resource.

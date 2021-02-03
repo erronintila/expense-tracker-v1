@@ -25,7 +25,6 @@ class JobStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:100', 'unique:jobs'],
-
             'department_id' => ['required'],
         ];
     }

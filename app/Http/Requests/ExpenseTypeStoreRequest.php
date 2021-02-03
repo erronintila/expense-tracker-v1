@@ -25,9 +25,7 @@ class ExpenseTypeStoreRequest extends FormRequest
     {
         return [
             'code' => ['nullable', 'max:255', 'unique:expense_types'],
-
             'name' => ['required', 'max:100', 'unique:expense_types'],
-
             'limit' => ['nullable']
         ];
     }

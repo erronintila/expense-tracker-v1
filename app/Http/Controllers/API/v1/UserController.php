@@ -24,7 +24,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
 
     public function __construct()
     {
@@ -43,11 +43,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $search = request("search") ?? "";
-
         $sortBy = request("sortBy") ?? "last_name";
-
         $sortType = request("sortType") ?? "asc";
-
         $itemsPerPage = request("itemsPerPage") ?? 10;
 
         $users = User::with(['job' => function ($query) {
@@ -59,29 +56,19 @@ class UserController extends Controller
 
         switch ($sortBy) {
             case 'fullname':
-
                 $users = $users->orderBy("last_name", $sortType);
-
                 break;
             case 'job.name':
-
                 $users = $users->orderBy("last_name", $sortType);
-
                 break;
             case 'department.name':
-
                 $users = $users->orderBy("last_name", $sortType);
-
                 break;
             case 'revolving_fund':
-
                 $users = $users->orderBy("fund", $sortType);
-
                 break;
             default:
-
                 $users = $users->orderBy($sortBy, $sortType);
-
                 break;
         }
 
@@ -96,24 +83,16 @@ class UserController extends Controller
         if (request()->has('status')) {
             switch (request("status")) {
                 case 'Archived':
-
                     $users = $users->onlyTrashed();
-
                     break;
                 case 'Verified':
-
                     $users = $users->where('email_verified_at', '<>', null);
-
                     break;
                 case 'Unverified':
-
                     $users = $users->where('email_verified_at', null);
-
                     break;
                 default:
-
                     $users = $users;
-
                     break;
             }
         }
@@ -134,21 +113,13 @@ class UserController extends Controller
 
         $users = $users->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-
             $query->orWhere("first_name", "like", "%" . $search . "%");
-
             $query->orWhere("middle_name", "like", "%" . $search . "%");
-
             $query->orWhere("last_name", "like", "%" . $search . "%");
-
             $query->orWhere("gender", "like", "%" . $search . "%");
-
             $query->orWhere("birthdate", "like", "%" . $search . "%");
-
             $query->orWhere("mobile_number", "like", "%" . $search . "%");
-
             $query->orWhere("username", "like", "%" . $search . "%");
-
             $query->orWhere("email", "like", "%" . $search . "%");
         });
 
@@ -166,53 +137,31 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         $validated = $request->validated(); // check validation
-
         $message = "User created successfully"; // return message
 
         $expense_types = ExpenseType::where("expense_type_id", null)->get();
 
         $user = new User();
-
         $user->code = request("code") ?? generate_code(User::class, "USR", 10);
-
         $user->first_name = request("first_name");
-
         $user->middle_name = request("middle_name");
-
         $user->last_name = request("last_name");
-
         $user->suffix = request("suffix");
-
         $user->gender = request("gender");
-
         $user->birthdate = request("birthdate");
-
         $user->mobile_number = request("mobile_number");
-
         $user->telephone_number = request("telephone_number");
-
         $user->address = request("address");
-
         $user->fund = request("fund");
-
         $user->remaining_fund = request("fund");
-
         $user->username = request("username");
-
         $user->email    = request("email");
-
         $user->password = Hash::make(request("password"));
-
         $user->is_admin = request("is_admin");
-
         $user->is_superadmin = request("is_superadmin");
-
         $user->can_login = request("can_login");
-
         $user->type = request("type");
-
         $user->job_id = request("job_id");
-
         $user->save();
 
         foreach (request("permissions") as $permission) {
@@ -276,46 +225,27 @@ class UserController extends Controller
 
         if (!request()->has("profile_update")) {
             $user->code = request("code") ?? $user->code;
-
             $user->password = $user->password;
-
             $user->fund = $user->fund;
-
             $user->remaining_fund = $user->remaining_fund;
-
             $user->is_admin = request("is_admin");
-
             $user->is_superadmin = request("is_superadmin");
-
             $user->can_login = request("can_login");
-
             $user->job_id = request("job_id");
         }
 
         $user->first_name = request("first_name");
-
         $user->middle_name = request("middle_name");
-
         $user->last_name = request("last_name");
-
         $user->suffix = request("suffix");
-
         $user->gender = request("gender");
-
         $user->birthdate = request("birthdate");
-
         $user->mobile_number = request("mobile_number");
-
         $user->telephone_number = request("telephone_number");
-
         $user->address = request("address");
-
         $user->username = request("username");
-
         $user->email = request("email");
-
         $user->type = request("type");
-
         $user->save();
 
         if (!request()->has("profile_update")) {
@@ -373,16 +303,12 @@ class UserController extends Controller
         if (request()->has("ids")) {
             foreach (request("ids") as $id) {
                 $user = User::withTrashed()->findOrFail($id);
-
                 $user->disableLogging();
-
                 $user->restore();
             }
         } else {
             $user = User::withTrashed()->findOrFail($id);
-
             $user->disableLogging();
-
             $user->restore();
         }
 
@@ -401,7 +327,6 @@ class UserController extends Controller
     public function update_settings(Request $request, $id)
     {
         $message = "User settings updated successfully";
-
         $user = User::withTrashed()->findOrFail($id);
 
         if (request()->has("expense_types")) {
@@ -425,13 +350,9 @@ class UserController extends Controller
         $message = "User fund updated successfully";
 
         $user = User::withTrashed()->findOrFail($id);
-
         $user->fund = request("fund");
-
         $user->remaining_fund = request("remaining_fund");
-
         $user->disableLogging();
-
         $user->save();
 
         activity('user')
@@ -453,20 +374,14 @@ class UserController extends Controller
         if (request()->has("ids")) {
             foreach (request("ids") as $id) {
                 $user = User::withTrashed()->findOrFail($id);
-
                 $user->password = Hash::make('password');
-
                 $user->disableLogging();
-
                 $user->save();
             }
         } else {
             $user = User::withTrashed()->findOrFail($id);
-
             $user->password = Hash::make('password');
-
             $user->disableLogging();
-
             $user->save();
         }
 
@@ -488,20 +403,14 @@ class UserController extends Controller
         
             foreach (request("ids") as $id) {
                 $user = User::withTrashed()->findOrFail($id);
-
                 $user->email_verified_at = now();
-
                 $user->disableLogging();
-
                 $user->save();
             }
         } else {
             $user = User::withTrashed()->findOrFail($id);
-
             $user->email_verified_at = now();
-
             $user->disableLogging();
-
             $user->save();
         }
 
@@ -516,13 +425,10 @@ class UserController extends Controller
     public function update_password(UserUpdatePasswordRequest $request, $id)
     {
         $validated = $request->validated();
-
         $message = "User password updated successfully";
 
         $user = User::withTrashed()->findOrFail(auth()->user()->id);
-
         $user->disableLogging();
-
         $user->update(['password' => Hash::make(request("password"))]);
 
         activity('user')

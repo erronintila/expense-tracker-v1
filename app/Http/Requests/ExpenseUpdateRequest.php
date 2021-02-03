@@ -26,37 +26,21 @@ class ExpenseUpdateRequest extends FormRequest
     {
         return [
             'code' => ['nullable', Rule::unique('expenses', 'code')->ignore($this->expense), 'max:255'],
-
             'reference_no' => ['nullable'],
-
             'description' => ['nullable', 'max:255'],
-
             'amount' => ['required', 'numeric', 'gt:0',],
-
             'reimbursable_amount' => ['required', 'numeric'],
-
             'tax_name' => ['nullable', 'max:100'],
-
             'tax_rate' => ['required'],
-
             'is_compound_tax' => ['nullable'],
-
             'is_tax_inclusive' => ['required'],
-
             'tax_amount' => ['required'],
-
             'receipt_number' => ['nullable', 'max:255'],
-
             'date' => ['required'],
-
             'details' => ['nullable'],
-
             'remarks' => ['nullable'],
-
             'notes' => ['nullable'],
-
             'expense_type_id' => ['required'],
-
             'user_id' => ['required'],
         ];
     }

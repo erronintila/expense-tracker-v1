@@ -26,7 +26,6 @@ class JobUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:100', Rule::unique('jobs', 'name')->ignore($this->job)],
-
             'department_id' => ['required'],
         ];
     }

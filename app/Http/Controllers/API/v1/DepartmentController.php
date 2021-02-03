@@ -32,11 +32,8 @@ class DepartmentController extends Controller
     public function index(Request $request)
     {
         $search = request('search') ?? "";
-
         $sortBy = request('sortBy') ?? "name";
-
         $sortType = request('sortType') ?? "asc";
-
         $itemsPerPage = request('itemsPerPage') ?? 10;
 
         $departments = Department::with(['jobs' => function ($query) {
@@ -46,14 +43,11 @@ class DepartmentController extends Controller
 
         if (request()->has('status')) {
             switch (request('status')) {
-
                 case 'Archived':
-
                     $departments = $departments->onlyTrashed();
 
                     break;
                 default:
-
                     $departments = $departments;
 
                     break;
@@ -61,7 +55,6 @@ class DepartmentController extends Controller
         }
 
         $departments = $departments->where('name', "like", "%" . $search . "%");
-
         $departments = $departments->paginate($itemsPerPage);
 
         return DepartmentResource::collection($departments);
@@ -76,15 +69,11 @@ class DepartmentController extends Controller
     public function store(DepartmentStoreRequest $request)
     {
         $validated = $request->validated(); // check validation
-
         $message = "Department created successfully"; // return message
 
         $department = new Department();
-
         $department->code = generate_code(Department::class, "DEP", 10);
-
         $department->name = request('name');
-
         $department->save();
 
         return $this->successResponse(new DepartmentResource($department), $message, 201);
@@ -119,13 +108,10 @@ class DepartmentController extends Controller
     public function update(DepartmentUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // check validation
-
         $message = "Department updated successfully"; // return message
 
         $department = Department::withTrashed()->findOrFail($id);
-
         $department->name = request('name');
-
         $department->save();
 
         return $this->successResponse(null, $message, 201);
@@ -144,16 +130,13 @@ class DepartmentController extends Controller
         if (request()->has("ids")) {
             foreach (request('ids') as $id) {
                 $department = Department::findOrFail($id);
-
                 $department->delete();
             }
 
             $message = "Department(s) deleted successfully";
         } else {
             $department = Department::findOrFail($id);
-
             $department->delete();
-
             $message = "Department deleted successfully";
         }
 
@@ -184,16 +167,12 @@ class DepartmentController extends Controller
         
             foreach (request('ids') as $id) {
                 $department = Department::withTrashed()->findOrFail($id);
-
                 $department->restore();
-
                 $message = "Department(s) restored successfully";
             }
         } else {
             $department = Department::withTrashed()->findOrFail($id);
-
             $department->restore();
-
             $message = "Department restored successfully";
         }
 

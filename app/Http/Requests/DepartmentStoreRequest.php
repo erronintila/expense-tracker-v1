@@ -25,7 +25,6 @@ class DepartmentStoreRequest extends FormRequest
     {
         return [
             'code' => ['nullable', 'max:255', 'unique:departments'],
-
             'name' => ['required', 'max:100', 'unique:departments'],
         ];
     }

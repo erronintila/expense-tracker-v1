@@ -32,11 +32,8 @@ class JobController extends Controller
     public function index(Request $request)
     {
         $search = request('search') ?? "";
-
         $sortBy = request('sortBy') ?? "name";
-
         $sortType = request('sortType') ?? "asc";
-
         $itemsPerPage = request('itemsPerPage') ?? 10;
 
         // if($sortBy == "department.name") {
@@ -49,14 +46,11 @@ class JobController extends Controller
 
         if (request()->has('status')) {
             switch (request('status')) {
-
                 case 'Archived':
-
                     $jobs = $jobs->onlyTrashed();
 
                     break;
                 default:
-
                     $jobs = $jobs;
 
                     break;
@@ -70,7 +64,6 @@ class JobController extends Controller
         }
 
         $jobs = $jobs->where('name', "like", "%" . $search . "%");
-
         $jobs = $jobs->paginate($itemsPerPage);
 
         return JobResource::collection($jobs);
@@ -85,17 +78,11 @@ class JobController extends Controller
     public function store(JobStoreRequest $request)
     {
         $validated = $request->validated(); // checks validation
-
         $message = "Job designation created successfully"; // return message
-
         $job = new Job();
-
         $job->code = generate_code(Job::class, "JOB", 10);
-
         $job->name = request('name');
-
         $job->department_id = request('department_id');
-
         $job->save();
 
         return $this->successResponse(new JobResource($job), $message, 201);
@@ -129,15 +116,11 @@ class JobController extends Controller
     public function update(JobUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // checks validation
-
         $message = "Job designation updated successfully"; // return message
 
         $job = Job::withTrashed()->findOrFail($id);
-
         $job->name = request('name');
-
         $job->department_id = request('department_id');
-
         $job->save();
 
         return $this->successResponse(null, $message, 201);
@@ -158,16 +141,13 @@ class JobController extends Controller
 
             foreach (request('ids') as $id) {
                 $job = Job::withTrashed()->findOrFail($id);
-
                 $job->delete();
             }
 
             $message = "Job designation(s) deleted successfully";
         } else {
             $job = Job::withTrashed()->findOrFail($id);
-
             $job->delete();
-
             $message = "Job designation deleted successfully";
         }
 
@@ -192,16 +172,13 @@ class JobController extends Controller
         if (request()->has("ids")) {
             foreach (request('ids') as $id) {
                 $job = Job::withTrashed()->findOrFail($id);
-
                 $job->restore();
             }
 
             $message = "Job designation(s) restored successfully";
         } else {
             $job = Job::withTrashed()->findOrFail($id);
-
             $job->restore();
-
             $message = "Job designation restored successfully";
         }
 
