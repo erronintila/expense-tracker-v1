@@ -743,10 +743,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
         _this.loader = false;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
 
         _this.loader = false;
       }));
@@ -757,10 +754,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/data/expense_types").then(function (response) {
         _this.expense_types = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     loadUsers: function loadUsers() {
@@ -771,10 +765,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.users = response.data.data;
           resolve();
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_showErrors(error);
 
           reject();
         });
@@ -793,10 +784,7 @@ __webpack_require__.r(__webpack_exports__);
           is_vat_inclusive: false
         });
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     onRefresh: function onRefresh() {
@@ -910,12 +898,9 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.expenses.index"
           });
         })["catch"](function (error) {
-          // _this.getData();
           _this.loader = false;
-          console.log(error);
-          console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_showErrors(error);
 
           if (error.response.data.data !== null) {
             _this.errors = error.response.data.errors;

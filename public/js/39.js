@@ -502,6 +502,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -614,10 +616,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_showErrors(error);
 
           _this.loading = false;
         });
@@ -634,10 +633,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           full_name: "All Employees"
         });
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {
@@ -651,10 +647,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           name: "All Expense Types"
         });
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     onRefresh: function onRefresh() {
@@ -758,10 +751,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             _this.selected = [];
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_showErrors(error);
           });
         }
       });
@@ -809,10 +799,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             _this.selected = [];
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this.mixin_showErrors(error);
           });
         }
       });
@@ -1868,7 +1855,9 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("v-btn", [_vm._v("Create New")])
     ],
     1
   )

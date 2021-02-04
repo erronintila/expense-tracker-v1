@@ -477,6 +477,8 @@
                 </v-card>
             </v-col>
         </v-row> -->
+
+        <v-btn>Create New</v-btn>
     </div>
 </template>
 
@@ -611,14 +613,7 @@ export default {
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        _this.mixin_showErrors(error);
                         _this.loading = false;
                     });
             });
@@ -636,13 +631,7 @@ export default {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         loadExpenseTypes() {
@@ -658,13 +647,7 @@ export default {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
@@ -777,13 +760,7 @@ export default {
                             _this.selected = [];
                         })
                         .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                            _this.mixin_showErrors(error);
                         });
                 }
             });
@@ -835,13 +812,7 @@ export default {
                             _this.selected = [];
                         })
                         .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                            _this.mixin_showErrors(error);
                         });
                 }
             });

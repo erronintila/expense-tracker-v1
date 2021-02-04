@@ -23,6 +23,8 @@ class ExpenseStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $remaining_fund = request("");
+
         return [
             'code' => ['nullable', 'unique:expenses', 'max:255'],
             'reference_no' => ['nullable'],

@@ -233,6 +233,65 @@
                                 </v-col>
                             </v-row>
 
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.amount"
+                                        label="Expense Amount"
+                                        :error-messages="errors.amount"
+                                        @input="errors.amount = []"
+                                        :readonly="itemize"
+                                        type="number"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-if="
+                                            mixin_can('set reimbursable amount')
+                                        "
+                                        :error-messages="
+                                            errors.reimbursable_amount
+                                        "
+                                        @input="errors.reimbursable_amount = []"
+                                        v-model="form.reimbursable_amount"
+                                        label="Amount to reimburse"
+                                        type="number"
+                                        hint="Amount spent from own pocket"
+                                        persistent-hint
+                                    >
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
+
+                            <v-row v-if="form.vendor.is_vat_inclusive">
+                                <v-col cols="12" md="4">
+                                    <v-text-field
+                                        v-model="form.tax_rate"
+                                        label="Tax Rate"
+                                        suffix="%"
+                                        type="number"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" md="8">
+                                    <v-text-field
+                                        v-model="taxable_amount"
+                                        label="Tax Amount"
+                                        type="number"
+                                        :readonly="
+                                            !mixin_can(
+                                                'modify taxes on expense'
+                                            )
+                                        "
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+
                             <v-checkbox
                                 v-model="itemize"
                                 label="Itemize Expenses"
@@ -414,72 +473,95 @@
                                 </template>
                             </v-data-table>
 
+                            <v-divider class="mt-2 mb-2"></v-divider>
+
                             <v-row>
-                                <v-col cols="12" md="4">
-                                    <v-text-field
-                                        v-model="form.amount"
-                                        label="Expense Amount"
-                                        :error-messages="errors.amount"
-                                        @input="errors.amount = []"
-                                        :readonly="itemize"
-                                        type="number"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="4">
-                                    <v-text-field
-                                        v-if="
-                                            mixin_can('set reimbursable amount')
-                                        "
-                                        :error-messages="errors.reimbursable_amount"
-                                        @input="errors.reimbursable_amount = []"
-                                        v-model="form.reimbursable_amount"
-                                        label="Amount to reimburse"
-                                        type="number"
-                                        hint="Amount spent from own pocket"
-                                        persistent-hint
+                                <v-col cols="12" md="6">
+                                    <v-textarea
+                                        rows="3"
+                                        v-model="form.remarks"
+                                        :error-messages="errors.remarks"
+                                        @input="errors.remarks = []"
+                                        label="Remarks"
                                     >
-                                    </v-text-field>
+                                    </v-textarea>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <table width="100%" class="mt-2">
+                                        <tbody>
+                                            <tr>
+                                                <td class="green--text">
+                                                    Subtotal
+                                                </td>
+                                                <td class="text-right">
+                                                    {{
+                                                        mixin_formatNumber(
+                                                            form.amount
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <small
+                                                        >(To replenish:
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                amount_to_replenish
+                                                            )
+                                                        }})</small
+                                                    >
+                                                </td>
+                                                <td class="text-right">--</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <small
+                                                        >(To reimburse:
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                form.reimbursable_amount
+                                                            )
+                                                        }})</small
+                                                    >
+                                                </td>
+                                                <td class="text-right">--</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="green--text">
+                                                    Tax (12%)
+                                                    <small>Inclusive</small>
+                                                </td>
+                                                <td class="text-right">
+                                                    {{ mixin_formatNumber(0) }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td><hr /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="green--text">
+                                                    <b>Total</b>
+                                                </td>
+                                                <td
+                                                    class="green--text text-right"
+                                                >
+                                                    <b>
+                                                        {{
+                                                            mixin_formatNumber(
+                                                                expense_amount
+                                                            )
+                                                        }}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </v-col>
                             </v-row>
 
-                            <v-row v-if="form.vendor.is_vat_inclusive">
-                                <v-col cols="12" md="4">
-                                    <v-text-field
-                                        v-model="form.tax_rate"
-                                        label="Tax Rate"
-                                        suffix="%"
-                                        type="number"
-                                        :readonly="
-                                            !mixin_can(
-                                                'modify taxes on expense'
-                                            )
-                                        "
-                                    ></v-text-field>
-                                </v-col>
-
-                                <v-col cols="12" md="8">
-                                    <v-text-field
-                                        v-model="taxable_amount"
-                                        label="Tax Amount"
-                                        type="number"
-                                        :readonly="
-                                            !mixin_can(
-                                                'modify taxes on expense'
-                                            )
-                                        "
-                                    ></v-text-field>
-                                </v-col>
-                            </v-row>
-
-                            <v-textarea
-                                rows="3"
-                                v-model="form.remarks"
-                                :error-messages="errors.remarks"
-                                @input="errors.remarks = []"
-                                label="Remarks"
-                            ></v-textarea>
-
-                            <v-row>
+                            <!-- <v-row>
                                 <v-col>
                                     <div class="green--text">
                                         Amount to replenish
@@ -495,9 +577,9 @@
                                         }}
                                     </div>
                                 </v-col>
-                            </v-row>
+                            </v-row> -->
 
-                            <v-row>
+                            <!-- <v-row>
                                 <v-col>
                                     <div class="green--text">
                                         Amount to reimburse
@@ -508,14 +590,14 @@
                                     <div class="green--text">
                                         {{
                                             mixin_formatNumber(
-                                                amount_to_reimburse
+                                                form.reimbursable_amount
                                             )
                                         }}
                                     </div>
                                 </v-col>
-                            </v-row>
+                            </v-row> -->
 
-                            <v-divider></v-divider>
+                            <!-- <v-divider></v-divider>
 
                             <v-row>
                                 <v-col>
@@ -529,14 +611,14 @@
                                         {{ mixin_formatNumber(expense_amount) }}
                                     </div>
                                 </v-col>
-                            </v-row>
+                            </v-row> -->
                         </v-container>
 
                         <v-card-actions class="mt-3 mb-4">
                             <v-spacer></v-spacer>
-                            <v-btn color="green" dark @click="onSave"
-                                >Save</v-btn
-                            >
+                            <v-btn color="green" dark @click="onSave">
+                                Save
+                            </v-btn>
                             <v-btn @click="$router.go(-1)">Cancel</v-btn>
                         </v-card-actions>
                     </v-card>
@@ -603,7 +685,8 @@ export default {
                 },
                 remarks: "",
                 notes: "",
-                encoding_period: this.$store.getters.settings.expense_encoding_period,
+                encoding_period: this.$store.getters.settings
+                    .expense_encoding_period,
                 expense_type: {
                     id: null,
                     name: "",
@@ -684,13 +767,7 @@ export default {
                     _this.users = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         loadVendors() {
@@ -709,13 +786,7 @@ export default {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
@@ -815,7 +886,9 @@ export default {
                         reference_no: _this.form.reference_no,
                         description: _this.form.description,
                         amount: _this.form.amount,
-                        reimbursable_amount: _this.amount_to_reimburse,
+                        reimbursable_amount: _this.mixin_convertToNumber(
+                            _this.form.reimbursable_amount
+                        ),
                         tax_name: _this.form.tax_name,
                         tax_rate: _this.form.tax_rate,
                         is_compound_tax: _this.form.is_compound_tax,
@@ -833,7 +906,7 @@ export default {
                         vendor_id: _this.form.vendor.id,
                         expense_report_id: _this.form.expense_report_id,
                         tax_id: _this.form.tax_id,
-                        expense_header_id: _this.form.expense_header_id,
+                        expense_header_id: _this.form.expense_header_id
                     })
                     .then(function(response) {
                         _this.mixin_successDialog(
@@ -845,15 +918,7 @@ export default {
                     })
                     .catch(function(error) {
                         _this.loader = false;
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        _this.mixin_showErrors(error);
                         _this.errors = error.response.data.errors;
                     });
 

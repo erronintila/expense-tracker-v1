@@ -564,6 +564,88 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -715,10 +797,7 @@ __webpack_require__.r(__webpack_exports__);
         var data = response.data.data;
         _this.users = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     loadVendors: function loadVendors() {
@@ -734,10 +813,7 @@ __webpack_require__.r(__webpack_exports__);
           is_vat_inclusive: false
         });
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     onRefresh: function onRefresh() {
@@ -824,7 +900,7 @@ __webpack_require__.r(__webpack_exports__);
           reference_no: _this.form.reference_no,
           description: _this.form.description,
           amount: _this.form.amount,
-          reimbursable_amount: _this.amount_to_reimburse,
+          reimbursable_amount: _this.mixin_convertToNumber(_this.form.reimbursable_amount),
           tax_name: _this.form.tax_name,
           tax_rate: _this.form.tax_rate,
           is_compound_tax: _this.form.is_compound_tax,
@@ -849,10 +925,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$router.go(-1);
         })["catch"](function (error) {
           _this.loader = false;
-          console.log(error);
-          console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_showErrors(error);
 
           _this.errors = error.response.data.errors;
         });
@@ -1674,6 +1748,140 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Expense Amount",
+                                          "error-messages": _vm.errors.amount,
+                                          readonly: _vm.itemize,
+                                          type: "number"
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            _vm.errors.amount = []
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.form.amount,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "amount", $$v)
+                                          },
+                                          expression: "form.amount"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _vm.mixin_can("set reimbursable amount")
+                                        ? _c("v-text-field", {
+                                            attrs: {
+                                              "error-messages":
+                                                _vm.errors.reimbursable_amount,
+                                              label: "Amount to reimburse",
+                                              type: "number",
+                                              hint:
+                                                "Amount spent from own pocket",
+                                              "persistent-hint": ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.reimbursable_amount = []
+                                              }
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.form.reimbursable_amount,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "reimbursable_amount",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "form.reimbursable_amount"
+                                            }
+                                          })
+                                        : _vm._e()
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _vm.form.vendor.is_vat_inclusive
+                                ? _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Tax Rate",
+                                              suffix: "%",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
+                                            },
+                                            model: {
+                                              value: _vm.form.tax_rate,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "tax_rate",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.tax_rate"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "8" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Tax Amount",
+                                              type: "number",
+                                              readonly: !_vm.mixin_can(
+                                                "modify taxes on expense"
+                                              )
+                                            },
+                                            model: {
+                                              value: _vm.taxable_amount,
+                                              callback: function($$v) {
+                                                _vm.taxable_amount = $$v
+                                              },
+                                              expression: "taxable_amount"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
                               _c("v-checkbox", {
                                 attrs: { label: "Itemize Expenses" },
                                 on: {
@@ -2193,31 +2401,32 @@ var render = function() {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
+                              _c("v-divider", { staticClass: "mt-2 mb-2" }),
+                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
                                   _c(
                                     "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
+                                    { attrs: { cols: "12", md: "6" } },
                                     [
-                                      _c("v-text-field", {
+                                      _c("v-textarea", {
                                         attrs: {
-                                          label: "Expense Amount",
-                                          "error-messages": _vm.errors.amount,
-                                          readonly: _vm.itemize,
-                                          type: "number"
+                                          rows: "3",
+                                          "error-messages": _vm.errors.remarks,
+                                          label: "Remarks"
                                         },
                                         on: {
                                           input: function($event) {
-                                            _vm.errors.amount = []
+                                            _vm.errors.remarks = []
                                           }
                                         },
                                         model: {
-                                          value: _vm.form.amount,
+                                          value: _vm.form.remarks,
                                           callback: function($$v) {
-                                            _vm.$set(_vm.form, "amount", $$v)
+                                            _vm.$set(_vm.form, "remarks", $$v)
                                           },
-                                          expression: "form.amount"
+                                          expression: "form.remarks"
                                         }
                                       })
                                     ],
@@ -2226,222 +2435,159 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _vm.mixin_can("set reimbursable amount")
-                                        ? _c("v-text-field", {
-                                            attrs: {
-                                              "error-messages":
-                                                _vm.errors.reimbursable_amount,
-                                              label: "Amount to reimburse",
-                                              type: "number",
-                                              hint:
-                                                "Amount spent from own pocket",
-                                              "persistent-hint": ""
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                _vm.errors.reimbursable_amount = []
-                                              }
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.form.reimbursable_amount,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.form,
-                                                  "reimbursable_amount",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "form.reimbursable_amount"
-                                            }
-                                          })
-                                        : _vm._e()
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _vm.form.vendor.is_vat_inclusive
-                                ? _c(
-                                    "v-row",
+                                    { attrs: { cols: "12", md: "6" } },
                                     [
                                       _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
+                                        "table",
+                                        {
+                                          staticClass: "mt-2",
+                                          attrs: { width: "100%" }
+                                        },
                                         [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              label: "Tax Rate",
-                                              suffix: "%",
-                                              type: "number",
-                                              readonly: !_vm.mixin_can(
-                                                "modify taxes on expense"
+                                          _c("tbody", [
+                                            _c("tr", [
+                                              _c(
+                                                "td",
+                                                { staticClass: "green--text" },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                Subtotal\n                                            "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                { staticClass: "text-right" },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.form.amount
+                                                        )
+                                                      ) +
+                                                      "\n                                            "
+                                                  )
+                                                ]
                                               )
-                                            },
-                                            model: {
-                                              value: _vm.form.tax_rate,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.form,
-                                                  "tax_rate",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "form.tax_rate"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "8" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              label: "Tax Amount",
-                                              type: "number",
-                                              readonly: !_vm.mixin_can(
-                                                "modify taxes on expense"
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [
+                                                _c("small", [
+                                                  _vm._v(
+                                                    "(To replenish:\n                                                    " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.amount_to_replenish
+                                                        )
+                                                      ) +
+                                                      ")"
+                                                  )
+                                                ])
+                                              ]),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                { staticClass: "text-right" },
+                                                [_vm._v("--")]
                                               )
-                                            },
-                                            model: {
-                                              value: _vm.taxable_amount,
-                                              callback: function($$v) {
-                                                _vm.taxable_amount = $$v
-                                              },
-                                              expression: "taxable_amount"
-                                            }
-                                          })
-                                        ],
-                                        1
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td", [
+                                                _c("small", [
+                                                  _vm._v(
+                                                    "(To reimburse:\n                                                    " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.form
+                                                            .reimbursable_amount
+                                                        )
+                                                      ) +
+                                                      ")"
+                                                  )
+                                                ])
+                                              ]),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                { staticClass: "text-right" },
+                                                [_vm._v("--")]
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c(
+                                                "td",
+                                                { staticClass: "green--text" },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                Tax (12%)\n                                                "
+                                                  ),
+                                                  _c("small", [
+                                                    _vm._v("Inclusive")
+                                                  ])
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                { staticClass: "text-right" },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          0
+                                                        )
+                                                      ) +
+                                                      "\n                                            "
+                                                  )
+                                                ]
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td"),
+                                              _vm._v(" "),
+                                              _c("td", [_c("hr")])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c(
+                                                "td",
+                                                { staticClass: "green--text" },
+                                                [_c("b", [_vm._v("Total")])]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "green--text text-right"
+                                                },
+                                                [
+                                                  _c("b", [
+                                                    _vm._v(
+                                                      "\n                                                    " +
+                                                        _vm._s(
+                                                          _vm.mixin_formatNumber(
+                                                            _vm.expense_amount
+                                                          )
+                                                        ) +
+                                                        "\n                                                "
+                                                    )
+                                                  ])
+                                                ]
+                                              )
+                                            ])
+                                          ])
+                                        ]
                                       )
-                                    ],
-                                    1
+                                    ]
                                   )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("v-textarea", {
-                                attrs: {
-                                  rows: "3",
-                                  "error-messages": _vm.errors.remarks,
-                                  label: "Remarks"
-                                },
-                                on: {
-                                  input: function($event) {
-                                    _vm.errors.remarks = []
-                                  }
-                                },
-                                model: {
-                                  value: _vm.form.remarks,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "remarks", $$v)
-                                  },
-                                  expression: "form.remarks"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c("v-col", [
-                                    _c("div", { staticClass: "green--text" }, [
-                                      _vm._v(
-                                        "\n                                    Amount to replenish\n                                "
-                                      )
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("v-spacer"),
-                                  _vm._v(" "),
-                                  _c("v-col", { staticClass: "text-right" }, [
-                                    _c("div", { staticClass: "green--text" }, [
-                                      _vm._v(
-                                        "\n                                    " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(
-                                              _vm.amount_to_replenish
-                                            )
-                                          ) +
-                                          "\n                                "
-                                      )
-                                    ])
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c("v-col", [
-                                    _c("div", { staticClass: "green--text" }, [
-                                      _vm._v(
-                                        "\n                                    Amount to reimburse\n                                "
-                                      )
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("v-spacer"),
-                                  _vm._v(" "),
-                                  _c("v-col", { staticClass: "text-right" }, [
-                                    _c("div", { staticClass: "green--text" }, [
-                                      _vm._v(
-                                        "\n                                    " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(
-                                              _vm.amount_to_reimburse
-                                            )
-                                          ) +
-                                          "\n                                "
-                                      )
-                                    ])
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-divider"),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c("v-col", [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "font-weight-bold green--text"
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Total Expenses\n                                "
-                                        )
-                                      ]
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("v-spacer"),
-                                  _vm._v(" "),
-                                  _c("v-col", { staticClass: "text-right" }, [
-                                    _c("div", { staticClass: "green--text" }, [
-                                      _vm._v(
-                                        "\n                                    " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(
-                                              _vm.expense_amount
-                                            )
-                                          ) +
-                                          "\n                                "
-                                      )
-                                    ])
-                                  ])
                                 ],
                                 1
                               )
@@ -2461,7 +2607,11 @@ var render = function() {
                                   attrs: { color: "green", dark: "" },
                                   on: { click: _vm.onSave }
                                 },
-                                [_vm._v("Save")]
+                                [
+                                  _vm._v(
+                                    "\n                            Save\n                        "
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
                               _c(

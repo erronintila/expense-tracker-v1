@@ -77,6 +77,15 @@ export default {
                 }
             });
         },
+        mixin_showErrors: function(error) {
+            let errorTitle = "Error " + error.response.status;
+            let errorMesssage = error.response.data ? error.response.data.message : error.response.statusText;
+
+            console.log(error);
+            console.log(error.response);
+
+            this.mixin_errorDialog(errorTitle, errorMesssage);
+        },
         mixin_is_empty(value, message) {
             if (value == "" || value == null || value == 0) {
                 this.mixin_errorDialog("Error ", message);
