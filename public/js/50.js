@@ -157,6 +157,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -168,7 +211,13 @@ __webpack_require__.r(__webpack_exports__);
         expense_encoding_period: 1,
         submission_period: "Weekly",
         approval_period: 1,
-        tax_rate: 0
+        tax_rate: 0,
+        expense_report: {
+          report_no: {
+            prefix: "",
+            length: 1
+          }
+        }
       },
       panel: [0, 1, 2, 3]
     };
@@ -178,6 +227,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/settings").then(function (response) {
+        console.log(response);
         _this.settings = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -206,6 +256,17 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.mixin_errorDialog(error.response.status, error.response.statusText);
       });
+    }
+  },
+  computed: {
+    report_no: {
+      get: function get() {
+        var prefix = this.settings.expense_report.report_no.prefix;
+        var num_length = this.settings.expense_report.report_no.num_length;
+        var report_no = "";
+        report_no = prefix + moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYYMM") + String(1).padStart(num_length, '0');
+        return report_no;
+      }
     }
   },
   created: function created() {
@@ -341,7 +402,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "settings.expense_encoding_period"
+                                            "\n                                            settings.expense_encoding_period\n                                        "
                                         }
                                       })
                                     ],
@@ -448,6 +509,101 @@ var render = function() {
                                       })
                                     ],
                                     1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c("v-col", [
+                                    _c("div", [_vm._v("Report No. Format: ")])
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "2" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Prefix" },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .report_no.prefix,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .report_no,
+                                              "prefix",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "settings.expense_report.report_no.prefix"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "2" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Length",
+                                          type: "number"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .report_no.num_length,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .report_no,
+                                              "num_length",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "settings.expense_report.report_no.num_length"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c(
+                                        "div",
+                                        { staticClass: "green--text" },
+                                        [
+                                          _vm._v(
+                                            "\n                                        e.g. " +
+                                              _vm._s(_vm.report_no) +
+                                              "\n                                    "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("small", [
+                                        _vm._v(
+                                          "(Prefix + YYYYMM + (length + report count))"
+                                        )
+                                      ])
+                                    ]
                                   )
                                 ],
                                 1
