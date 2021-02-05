@@ -78,7 +78,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChangeData: function onChangeData() {
-      this.$emit("onChangeData", this.item);
+      this.$emit("onChangeData", this.selectedItem);
     },
     onChangeInput: function onChangeInput() {
       this.$emit("onChangeInput");
@@ -119,7 +119,7 @@ __webpack_require__.r(__webpack_exports__);
         return this.item;
       },
       set: function set(value) {
-        this.$emit('input', value);
+        this.$emit('onChangeData', value);
       }
     }
   },

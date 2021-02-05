@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         onChangeData: function() {
-            this.$emit("onChangeData", this.item);
+            this.$emit("onChangeData", this.selectedItem);
         },
         onChangeInput: function() {
             this.$emit("onChangeInput");
@@ -98,7 +98,7 @@ export default {
                 return this.item;
             },
             set: function(value) {
-                this.$emit('input', value);
+                this.$emit('onChangeData', value);
             }
         }
     },
