@@ -27,7 +27,7 @@ export default {
                         )}`
                 ],
                 email: [v => /.+@.+/.test(v) || "E-mail is not valid"]
-            },
+            }
         };
     },
     methods: {
@@ -77,9 +77,21 @@ export default {
                 }
             });
         },
+        mixin_showSuccess: function(response) {
+            let successTitle = response.data.status;
+            let successMesssage = response.data.message;
+
+            console.log(response);
+
+            this.mixin_successDialog(successTitle, successMesssage);
+        },
         mixin_showErrors: function(error) {
             let errorTitle = "Error " + error.response.status;
-            let errorMesssage = error.response.data ? error.response.data.message : error.response.statusText;
+            let errorMesssage = error.response.data
+                ? error.response.data.message == ""
+                    ? error.response.statusText
+                    : error.response.data.message
+                : error.response.statusText;
 
             console.log(error);
             console.log(error.response);
@@ -100,7 +112,7 @@ export default {
         mixin_can(permissionName) {
             let permissions = this.$store.getters.user.permissions;
             permissions = permissions.map(item => item.name);
-            
+
             return permissions.indexOf(permissionName) !== -1;
         },
         mixin_validate_fund() {
@@ -116,7 +128,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
                 });
-        },
+        }
     },
     computed: {
         mixin_currentUser() {

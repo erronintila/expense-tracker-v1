@@ -1,14 +1,39 @@
 <template>
-    <div></div>
+    <div>
+        <UserSelector
+            v-model="form.user"
+            ref="userData"
+            :showAll="true"
+            :errors="errors.user"
+            @onChangeData="getUser"
+            @onChangeInput="errors.user = []"
+        />
+        <VendorSelector
+            ref="vendorData"
+            :showAll="false"
+            :errors="[]"
+            @onChangeData="getVendor"
+        />
+        <v-btn @click="onSave">Save</v-btn>
+    </div>
 </template>
 
 <script>
 import moment from "moment";
+import UserDataService from "../../../../services/UserDataService";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
+import VendorDataService from "../../../../services/VendorDataService";
+import UserSelector from "../../../../components/selector/dropdown/UserSelector";
+import VendorSelector from "../../../../components/selector/dropdown/VendorSelector";
 
 export default {
+    props: {},
+    components: {
+        UserSelector,
+        VendorSelector
+    },
     data: function() {
         return {
-            self: this,
             misc: {},
             collections: {
                 users: [],
@@ -34,25 +59,10 @@ export default {
                 notes: null,
                 encoding_period: this.$store.getters.settings
                     .expense_encoding_period,
-                expense_type: {
-                    id: null,
-                    name: null,
-                    limit: null,
-                    sub_types: { id: null, name: "None", limit: null }
-                },
-                sub_type: { id: null, name: null, limit: null },
-                user: {
-                    id: null,
-                    remaining_fund: 0,
-                    fund: 0,
-                    expense_types: null
-                },
-                vendor: {
-                    id: null,
-                    name: null,
-                    tin: null,
-                    is_vat_inclusive: false
-                },
+                expense_type: null,
+                sub_type: null,
+                user: null,
+                vendor: null,
                 expense_report: {
                     id: null
                 },
@@ -116,49 +126,41 @@ export default {
         };
     },
     methods: {
+        getUser(e) {
+            this.form.user = e;
+        },
+        getVendor(e) {
+            this.form.vendor = e;
+        },
+        getExpenseType(e) {
+            // this.form.vendor = e;
+        },
+        getSubType(e) {
+            // this.form.vendor = e;
+        },
         onRefresh: function() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
-        loadExpenseTypes: function() {},
-        loadSubTypes: function() {},
-        loadVendors: function() {
-            let _this = this;
-
-            axios
-                .get("")
-                .then(response => {
-                    console.log(response);
-                })
-                .catch(error => {
-                    _this.mixin_showErrors(error);
-                });
-        },
-        loadUsers: function() {
-            let _this = this;
-
-            axios
-                .get("")
-                .then(response => {
-                    console.log(response);
-                })
-                .catch(error => {
-                    _this.mixin_showErrors(error);
-                });
-        },
         onSave: function() {
+            console.log("user", this.form.user);
+            console.log("vendor", this.form.vendor);
+            return;
+
             let _this = this;
-            let params = this.form;
+            let data = this.form;
+            // data.date = "2021-02-01";
+            // data.expense_type_id = 2;
+            // data.is_tax_inclusive = false;
+            // data.amount = 100;
+            // data.reimbursable_amount = 100;
+            // data.tax_amount = 0;
+            // data.tax_rate = 0;
+            // data.user_id = 2;
 
             if (this.isValid) {
-                axios
-                    .post("/api/expenses", {
-                        params: params
-                    })
+                ExpenseDataService.store(data)
                     .then(function(response) {
-                        _this.mixin_successDialog(
-                            response.data.status,
-                            response.data.message
-                        );
+                        _this.mixin_showSuccess(response);
                     })
                     .catch(function(error) {
                         _this.mixin_showErrors(error);
@@ -171,13 +173,13 @@ export default {
         minDate: function() {},
         maxDate: function() {},
         isValid: function() {
-            let _this = this;
+            // let _this = this;
             let errorTitle = "";
             let errorMessage = "";
 
-            if(!_this.$refs.form.validate()) {
-                return false;
-            }
+            // if (!this.$refs.form.validate()) {
+            //     return false;
+            // }
 
             return true;
         },
@@ -187,9 +189,6 @@ export default {
     },
     mounted: function() {
         console.log("create component loaded");
-
-        this.loadUsers();
-        this.loadVendors();
     }
 };
 </script>

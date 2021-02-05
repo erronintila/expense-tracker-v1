@@ -12,6 +12,14 @@ const adminRoutes = [
             requiresAdmin: true
         },
         children: [
+            {
+                path: "/sample",
+                name: "admin.sample",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/expenses/CreateExpense.vue"
+                    )
+            },
             /**
              *
              *
@@ -244,11 +252,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all users"
-                        )
-                    ) {
+                    if (permissions.includes("view all users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -264,9 +268,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("add users")
-                    ) {
+                    if (permissions.includes("add users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -282,11 +284,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit users"
-                        )
-                    ) {
+                    if (permissions.includes("edit users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -302,11 +300,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit users fund"
-                        )
-                    ) {
+                    if (permissions.includes("edit users fund")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -322,11 +316,7 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view users"
-                        )
-                    ) {
+                    if (permissions.includes("view users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
@@ -984,10 +974,8 @@ const adminRoutes = [
                 path: "/admin/notifications",
                 name: "admin.notifications.index",
                 component: () =>
-                    import(
-                        "../../views/modules/admin/notifications/Index.vue"
-                    ),
-            },
+                    import("../../views/modules/admin/notifications/Index.vue")
+            }
         ]
     }
 ];

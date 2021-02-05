@@ -42,6 +42,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        // abort(422);
         $search = request("search") ?? "";
         $sortBy = request("sortBy") ?? "last_name";
         $sortType = request("sortType") ?? "asc";
