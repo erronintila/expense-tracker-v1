@@ -504,10 +504,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -1350,8 +1346,6 @@ var render = function() {
             ],
             1
           ),
-          _vm._v(" "),
-          _c("div", [_vm._v("\n            Hello\n        ")]),
           _vm._v(" "),
           _c(
             "v-card-subtitle",

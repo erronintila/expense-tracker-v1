@@ -174,10 +174,6 @@
                 </v-menu>
             </v-card-title>
 
-            <div>
-                Hello
-            </div>
-
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
