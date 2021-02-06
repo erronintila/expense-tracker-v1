@@ -1482,6 +1482,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             text: ["Expense Summary Report"],
             style: "header"
           }, {
+            text: "Report No. : " + _this7.selected.map(function (item) {
+              return item.code;
+            }),
+            style: "subheader"
+          }, {
             style: "tableOfExpenses",
             table: {
               headerRows: 1,
@@ -1548,6 +1553,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               fontSize: 13,
               bold: false,
               alignment: "center"
+            },
+            subheader: {
+              fontSize: 10
             },
             tableSignatures: {
               margin: [0, 5, 0, 15]

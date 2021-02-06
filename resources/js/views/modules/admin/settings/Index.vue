@@ -119,6 +119,42 @@
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <div>Report No. Format:</div>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .report_no.prefix
+                                            "
+                                            label="Prefix"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="2">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .report_no.num_length
+                                            "
+                                            label="Length"
+                                            type="number"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="4">
+                                        <div class="green--text">
+                                            e.g. {{ report_no }}
+                                        </div>
+                                        <small
+                                            >(Prefix + YYYYMM + (length + report
+                                            count))</small
+                                        >
+                                    </v-col>
+                                </v-row>
                             </v-form>
                         </v-container>
                     </v-expansion-panel-content>
@@ -174,7 +210,13 @@ export default {
                 expense_encoding_period: 1,
                 submission_period: "Weekly",
                 approval_period: 1,
-                tax_rate: 0
+                tax_rate: 0,
+                expense_report: {
+                    report_no: {
+                        prefix: "",
+                        length: 1
+                    }
+                }
             },
             panel: [0, 1, 2, 3]
         };
@@ -217,6 +259,7 @@ export default {
                     );
 
                     _this.$store.dispatch("AUTH_USER");
+                    _this.$store.dispatch("AUTH_SETTINGS");
                 })
                 .catch(error => {
                     console.log(error);
@@ -229,8 +272,26 @@ export default {
                 });
         }
     },
+    computed: {
+        report_no: {
+            get() {
+                let prefix = this.settings.expense_report.report_no.prefix;
+                let num_length = this.settings.expense_report.report_no
+                    .num_length;
+                let report_no = "";
+
+                report_no =
+                    prefix +
+                    moment().format("YYYYMM") +
+                    String(1).padStart(num_length, "0");
+
+                return report_no;
+            }
+        }
+    },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_SETTINGS");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.onLoad();
     },

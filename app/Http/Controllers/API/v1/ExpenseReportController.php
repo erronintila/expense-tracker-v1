@@ -258,7 +258,7 @@ class ExpenseReportController extends Controller
 
         $expense_report->notes = $request->notes;
 
-        $expense_report->code = generate_code(ExpenseReport::class, "EXR", 10);
+        $expense_report->code = generate_code(ExpenseReport::class, setting("expense_report.report_no.prefix"), setting("expense_report.report_no.length"));
 
         $expense_report->submission_period = setting("submission_period");
 
@@ -645,7 +645,7 @@ class ExpenseReportController extends Controller
 
                     // $new_report->save();
 
-                    $new_report->code = generate_code(ExpenseReport::class, "EXR", 10);
+                    $new_report->code = generate_code(ExpenseReport::class, setting("expense_report.report_no.prefix"), setting("expense_report.report_no.length"));
 
                     $new_report->save();
 

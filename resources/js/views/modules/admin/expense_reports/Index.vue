@@ -1629,6 +1629,10 @@ export default {
                             style: "header"
                         },
                         {
+                            text: "Report No. : " + this.selected.map(item => item.code),
+                            style: "subheader"
+                        },
+                        {
                             style: "tableOfExpenses",
                             table: {
                                 headerRows: 1,
@@ -1732,6 +1736,9 @@ export default {
                             fontSize: 13,
                             bold: false,
                             alignment: "center"
+                        },
+                        subheader: {
+                            fontSize: 10,
                         },
                         tableSignatures: {
                             margin: [0, 5, 0, 15]
