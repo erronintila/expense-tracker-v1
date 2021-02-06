@@ -886,9 +886,7 @@ export default {
                         reference_no: _this.form.reference_no,
                         description: _this.form.description,
                         amount: _this.form.amount,
-                        reimbursable_amount: _this.mixin_convertToNumber(
-                            _this.form.reimbursable_amount
-                        ),
+                        reimbursable_amount: _this.form.reimbursable_amount,
                         tax_name: _this.form.tax_name,
                         tax_rate: _this.form.tax_rate,
                         is_compound_tax: _this.form.is_compound_tax,

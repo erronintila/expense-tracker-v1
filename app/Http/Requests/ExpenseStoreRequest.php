@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ExpenseStoreRequest extends FormRequest
@@ -23,7 +24,7 @@ class ExpenseStoreRequest extends FormRequest
      */
     public function rules()
     {
-        $remaining_fund = request("");
+        $remaining_fund = User::findOrFail(request("user_id"), ['remaining_fund']);
 
         return [
             'code' => ['nullable', 'unique:expenses', 'max:255'],
