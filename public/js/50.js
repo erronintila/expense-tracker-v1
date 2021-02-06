@@ -259,6 +259,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_successDialog("Success", "Saved settings successfully");
 
         _this.$store.dispatch("AUTH_USER");
+
+        _this.$store.dispatch("AUTH_SETTINGS");
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -280,6 +282,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_SETTINGS");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.onLoad();
   }

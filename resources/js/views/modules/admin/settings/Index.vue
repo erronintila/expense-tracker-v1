@@ -259,6 +259,7 @@ export default {
                     );
 
                     _this.$store.dispatch("AUTH_USER");
+                    _this.$store.dispatch("AUTH_SETTINGS");
                 })
                 .catch(error => {
                     console.log(error);
@@ -290,6 +291,7 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_SETTINGS");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.onLoad();
     }
