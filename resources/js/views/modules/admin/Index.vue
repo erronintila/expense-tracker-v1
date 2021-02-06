@@ -201,7 +201,13 @@
             <!-- <v-container> -->
             <v-row class="ml-2 mr-2 mt-4 pb-12 mb-5">
                 <v-col>
-                    <router-view></router-view>
+                    <!-- <keep-alive>
+                        <router-view></router-view>
+                    </keep-alive> -->
+                    <keep-alive>
+                        <router-view v-if="$route.meta.keepAlive"></router-view>
+                    </keep-alive>
+                    <router-view v-if="!$route.meta.keepAlive"></router-view>
                 </v-col>
             </v-row>
             <!-- </v-container> -->
@@ -302,9 +308,7 @@
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
-                                        v-text="
-                                            item.data.data.user.full_name
-                                        "
+                                        v-text="item.data.data.user.full_name"
                                     ></v-list-item-title>
 
                                     <v-list-item-subtitle

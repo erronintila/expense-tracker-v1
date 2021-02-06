@@ -448,11 +448,7 @@
                         {{ mixin_formatNumber(item.total) }}
                     </template>
                     <template v-slot:[`item.user`]="{ item }">
-                        {{
-                            item.user.last_name +
-                                ", " +
-                                item.user.first_name
-                        }}
+                        {{ item.user.last_name + ", " + item.user.first_name }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
                         {{ mixin_getHumanDate(item.updated_at) }}
@@ -591,8 +587,7 @@
                                         @click="onPrint('print', 'user')"
                                     >
                                         <v-list-item-title
-                                            >Group by
-                                            user</v-list-item-title
+                                            >Group by user</v-list-item-title
                                         >
                                     </v-list-item>
                                     <v-list-item
@@ -627,8 +622,7 @@
                                         @click="onPrint('pdf', 'user')"
                                     >
                                         <v-list-item-title
-                                            >Group by
-                                            user</v-list-item-title
+                                            >Group by user</v-list-item-title
                                         >
                                     </v-list-item>
                                     <v-list-item
@@ -800,9 +794,7 @@ export default {
                         : _this.selected.map(item => item.id);
 
                 axios
-                    .get(
-                        `/api/data/print_report?by_user_id=true&ids=${ids}`
-                    )
+                    .get(`/api/data/print_report?by_user_id=true&ids=${ids}`)
                     .then(response => {
                         _this.reports_by_user = response.data.data;
 
@@ -1007,7 +999,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -1311,7 +1303,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -1641,7 +1633,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -2368,7 +2360,10 @@ export default {
                     return item.status.status === "Unsubmitted";
                 }).length <= 0
             ) {
-                this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+                this.mixin_errorDialog(
+                    "Error",
+                    "No selected unsubmitted report(s)"
+                );
                 return;
             }
 
@@ -2403,8 +2398,13 @@ export default {
                     break;
             }
 
-            if(!this.mixin_can("submit expense reports beyond due date")) {
-                if (!moment(moment()).isSameOrBefore(last_submission_date, "day")) {
+            if (!this.mixin_can("submit expense reports beyond due date")) {
+                if (
+                    !moment(moment()).isSameOrBefore(
+                        last_submission_date,
+                        "day"
+                    )
+                ) {
                     this.mixin_errorDialog(
                         "Error (Not Allowed)",
                         `Last submission was ${last_submission_date}`
@@ -2643,6 +2643,13 @@ export default {
         this.loadTotalCountReportStatus();
         this.loadUsers();
         this.loadExpenseTypes();
+    },
+    activated() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

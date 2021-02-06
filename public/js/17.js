@@ -682,6 +682,9 @@ __webpack_require__.r(__webpack_exports__);
       console.log(response);
       _this.form = response;
     });
+  },
+  activated: function activated() {
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
   }
 });
 

@@ -385,13 +385,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     this.$store.dispatch("AUTH_NOTIFICATIONS");
-  } // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // }
+  },
+  activated: function activated() {
+    var _this4 = this;
 
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this4.items = data.items;
+      _this4.totalItems = data.total;
+    });
+  }
 });
 
 /***/ }),

@@ -684,12 +684,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2359,6 +2353,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.loadTotalCountReportStatus();
     this.loadUsers();
     this.loadExpenseTypes();
+  },
+  activated: function activated() {
+    var _this11 = this;
+
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this11.items = data.items;
+      _this11.totalItems = data.total;
+    });
   }
 });
 
@@ -3491,9 +3494,7 @@ var render = function() {
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v(
-                                        "Group by\n                                        user"
-                                      )
+                                      _vm._v("Group by user")
                                     ])
                                   ],
                                   1
@@ -3590,9 +3591,7 @@ var render = function() {
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v(
-                                        "Group by\n                                        user"
-                                      )
+                                      _vm._v("Group by user")
                                     ])
                                   ],
                                   1

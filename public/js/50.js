@@ -157,6 +157,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -210,6 +227,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.onLoad();
+  },
+  activated: function activated() {
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.onLoad();
   }
@@ -341,7 +362,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "settings.expense_encoding_period"
+                                            "\n                                            settings.expense_encoding_period\n                                        "
                                         }
                                       })
                                     ],

@@ -52,10 +52,17 @@
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-text-field
-                                            v-model="settings.expense_encoding_period"
+                                            v-model="
+                                                settings.expense_encoding_period
+                                            "
                                             label="Expense Encoding Period"
                                             suffix="days"
-                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
+                                            :rules="[
+                                                ...mixin_validation.required,
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             :hint="
                                                 'Allowed period for expenses to be encoded based on date'
                                             "
@@ -98,7 +105,12 @@
                                             v-model="settings.approval_period"
                                             label="Approval Period"
                                             suffix="days"
-                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
+                                            :rules="[
+                                                ...mixin_validation.required,
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             :hint="
                                                 'Allowed period for expense reports to be approved based on submission date'
                                             "
@@ -127,7 +139,12 @@
                                             v-model="settings.tax_rate"
                                             label="Tax Rate"
                                             suffix="%"
-                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(0)]"
+                                            :rules="[
+                                                ...mixin_validation.required,
+                                                ...mixin_validation.minNumberValue(
+                                                    0
+                                                )
+                                            ]"
                                             :hint="
                                                 'Tax rate to be imposed on expenses.'
                                             "
@@ -157,7 +174,7 @@ export default {
                 expense_encoding_period: 1,
                 submission_period: "Weekly",
                 approval_period: 1,
-                tax_rate: 0,
+                tax_rate: 0
             },
             panel: [0, 1, 2, 3]
         };
@@ -214,6 +231,10 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.onLoad();
+    },
+    activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.onLoad();
     }

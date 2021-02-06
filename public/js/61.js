@@ -2014,6 +2014,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // this.loadUsers();
 
     this.loadExpenseTypes();
+  },
+  activated: function activated() {
+    var _this10 = this;
+
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this10.items = data.items;
+      _this10.totalItems = data.total;
+    });
   }
 });
 

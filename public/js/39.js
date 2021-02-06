@@ -502,6 +502,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -895,16 +901,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return today;
     }
   },
-  // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
   created: function created() {
-    // this.$store.dispatch("AUTH_USER");
+    console.log("created");
     this.loadUsers();
     this.loadExpenseTypes();
+  },
+  activated: function activated() {
+    var _this4 = this;
+
+    console.log("activated");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadUsers();
+    this.loadExpenseTypes();
+    this.getDataFromApi().then(function (data) {
+      _this4.items = data.items;
+      _this4.totalItems = data.total;
+    });
   }
 });
 
@@ -1138,16 +1150,25 @@ var render = function() {
                           _c(
                             "v-list-item",
                             [
-                              _c("v-select", {
-                                attrs: { items: _vm.statuses, label: "Status" },
-                                model: {
-                                  value: _vm.status,
-                                  callback: function($$v) {
-                                    _vm.status = $$v
-                                  },
-                                  expression: "status"
-                                }
-                              })
+                              _c(
+                                "keep-alive",
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.statuses,
+                                      label: "Status"
+                                    },
+                                    model: {
+                                      value: _vm.status,
+                                      callback: function($$v) {
+                                        _vm.status = $$v
+                                      },
+                                      expression: "status"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             ],
                             1
                           ),
@@ -1329,6 +1350,8 @@ var render = function() {
             ],
             1
           ),
+          _vm._v(" "),
+          _c("div", [_vm._v("\n            Hello\n        ")]),
           _vm._v(" "),
           _c(
             "v-card-subtitle",

@@ -1196,6 +1196,7 @@ export default {
         // }
     },
     mounted() {
+        console.log("mounted");
         this.loadUsers();
 
         this.load_pie_chart();
@@ -1211,8 +1212,25 @@ export default {
         // this.loadStatistics();
     },
     created() {
+        console.log("created");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         // this.$store.dispatch("AUTH_USER");
+    },
+    activated() {
+        console.log("activated");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+
+        this.loadUsers();
+
+        this.load_pie_chart();
+        this.load_bar_chart();
+        this.load_line_chart();
+
+        this.getExpenseStats(
+            this.date_range[0],
+            this.date_range[1],
+            this.user.id
+        );
     }
 };
 </script>

@@ -508,6 +508,13 @@ export default {
     created() {
         this.loadUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
+    },
+    activated() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

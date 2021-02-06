@@ -1095,6 +1095,7 @@ __webpack_require__.r(__webpack_exports__);
 
   },
   mounted: function mounted() {
+    console.log("mounted");
     this.loadUsers();
     this.load_pie_chart();
     this.load_bar_chart();
@@ -1102,7 +1103,17 @@ __webpack_require__.r(__webpack_exports__);
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id); // this.loadStatistics();
   },
   created: function created() {
+    console.log("created");
     this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.$store.dispatch("AUTH_USER");
+  },
+  activated: function activated() {
+    console.log("activated");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadUsers();
+    this.load_pie_chart();
+    this.load_bar_chart();
+    this.load_line_chart();
+    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
   }
 });
 

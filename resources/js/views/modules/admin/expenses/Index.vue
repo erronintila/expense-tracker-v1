@@ -83,11 +83,13 @@
                                 ></DateRangePicker>
                             </v-list-item>
                             <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
+                                <keep-alive>
+                                    <v-select
+                                        v-model="status"
+                                        :items="statuses"
+                                        label="Status"
+                                    ></v-select>
+                                </keep-alive>
                             </v-list-item>
                             <v-list-item>
                                 <v-select
@@ -171,6 +173,10 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+
+            <div>
+                Hello
+            </div>
 
             <v-card-subtitle>
                 <v-text-field
@@ -599,7 +605,7 @@ export default {
                             user_id: user_id,
                             expense_type_id: expense_type_id,
                             start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
+                            end_date: range[1] ? range[1] : range[0]
                         }
                     })
                     .then(response => {
@@ -936,16 +942,20 @@ export default {
             return today;
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
     created() {
-        // this.$store.dispatch("AUTH_USER");
+        console.log("created");
         this.loadUsers();
         this.loadExpenseTypes();
+    },
+    activated() {
+        console.log("activated");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.loadUsers();
+        this.loadExpenseTypes();
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

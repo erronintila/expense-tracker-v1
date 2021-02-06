@@ -828,6 +828,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // this.loadUsers();
 
     this.loadExpenseTypes();
+  },
+  activated: function activated() {
+    var _this5 = this;
+
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this5.items = data.items;
+      _this5.totalItems = data.total;
+    });
   }
 });
 

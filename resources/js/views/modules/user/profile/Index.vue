@@ -566,8 +566,6 @@ export default {
                         action: "update",
                         profile_update: true,
 
-
-                        
                         // email: _this.form.email,
                         // username: _this.form.username,
                         // is_admin: _this.form.is_admin,
@@ -583,9 +581,6 @@ export default {
                         // email: _this.form.email,
                         // address: _this.form.address,
                         // user_id: _this.form.id,
-
-
-
 
                         id: _this.form.id,
                         code: _this.form.id,
@@ -608,7 +603,8 @@ export default {
                         is_superadmin: _this.form.is_superadmin,
                         can_login: _this.form.can_login,
                         type: _this.form.type,
-                        job_id: _this.form.job == null ? null : _this.form.job.id,
+                        job_id:
+                            _this.form.job == null ? null : _this.form.job.id
                     })
                     .then(response => {
                         _this.$dialog.message.success(
@@ -692,12 +688,19 @@ export default {
             return moment().format("YYYY-MM-DD");
         }
     },
-  created() {
-    let _this = this;
-    this.$store.dispatch("AUTH_USER").then((response) => {
-      _this.form = response;
-      _this.$store.dispatch("AUTH_NOTIFICATIONS");
-    });
-  },
+    created() {
+        let _this = this;
+        this.$store.dispatch("AUTH_USER").then(response => {
+            _this.form = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+        });
+    },
+    activated() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.$store.dispatch("AUTH_USER").then(response => {
+            _this.form = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+        });
+    }
 };
 </script>

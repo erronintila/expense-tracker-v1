@@ -16,7 +16,7 @@
             </v-row>
         </v-container>
         <v-card v-else class="elevation-0 pt-0">
-        <!-- <v-card class="elevation-0 pt-0"> -->
+            <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -166,13 +166,15 @@
                                             <table>
                                                 <tr>
                                                     <td>
-                                                        <strong>Created</strong
-                                                        >
+                                                        <strong>Created</strong>
                                                     </td>
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss")
+                                                            mixin_formatDate(
+                                                                item.created_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
                                                         }}
                                                     </td>
                                                 </tr>
@@ -246,9 +248,7 @@
                                 </template>
                                 <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.last_name +
-                                            ", " +
-                                            item.first_name
+                                        item.last_name + ", " + item.first_name
                                     }}
                                 </template>
                                 <template v-slot:[`item.updated_at`]="{ item }">
@@ -592,7 +592,7 @@ export default {
                             payment_id: payment_id,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
-                            admin_page: true,
+                            admin_page: true
                         }
                     })
                     .then(response => {
@@ -663,7 +663,7 @@ export default {
                 query: this.user,
                 query: this.date_range
             };
-        },
+        }
     },
     watch: {
         params: {
@@ -695,6 +695,12 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.getData();
+    },
+    activated() {
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>
