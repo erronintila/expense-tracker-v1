@@ -91,6 +91,7 @@
                                 item-value="id"
                                 item-text="name"
                                 return-object
+                                @change="changeUser"
                             >
                                 <template v-slot:item="data">
                                     <template>
@@ -153,6 +154,35 @@
             </v-menu> -->
         </v-card-title>
 
+        <v-row>
+            {{ filters[0].show_chip_component }}
+            <div v-for="(item, index) in filters" :key="index">
+                <v-chip
+                    v-if="item.show_chip_component"
+                    class="ma-2"
+                    close
+                    small
+                    @click:close="closeFilter(item.name)"
+                >
+                    {{ item.item_text }}
+                </v-chip>
+            </div>
+            <div>
+                <v-chip
+                    v-if="
+                        filters.filter(item => item.show_chip_component == true)
+                            .length > 0
+                    "
+                    class="ma-2"
+                    close
+                    small
+                    @click:close="onRefresh"
+                >
+                    Clear all
+                </v-chip>
+            </div>
+        </v-row>
+
         <br />
 
         <v-card-text>
@@ -184,8 +214,10 @@
                         small
                         class="mr-2"
                         @click="
-                            $router.push(hasLink(item) ? 
-                                `/admin/${item.properties.custom.link}` : null
+                            $router.push(
+                                hasLink(item)
+                                    ? `/admin/${item.properties.custom.link}`
+                                    : null
                             )
                         "
                     >
@@ -233,6 +265,7 @@ export default {
     },
     data() {
         return {
+            yawa: false,
             loading: true,
             date_range: [
                 moment()
@@ -283,6 +316,62 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
+            this.showChips();
+        },
+        changeUser() {
+            this.showChips();
+        },
+        showChips() {
+            let dateRange = JSON.stringify([
+                this.date_range[0],
+                this.date_range[1]
+            ]);
+            let defaultDateRange = JSON.stringify([
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ]);
+
+            this.filters[0].show_chip_component =
+                dateRange == defaultDateRange ? false : true;
+
+            this.filters[1].show_chip_component =
+                this.user.name == "All Users" ? false : true;
+        },
+        closeFilter(name) {
+            switch (name) {
+                case "date_range":
+                    this.date_range = [
+                        moment()
+                            .startOf("month")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .endOf("month")
+                            .format("YYYY-MM-DD")
+                    ];
+                    break;
+                case "user":
+                    this.user = {
+                        id: 0,
+                        username: "",
+                        name: "All Users",
+                        email: ""
+                    };
+                    break;
+                default:
+                    this.user = {
+                        id: 0,
+                        username: "",
+                        name: "All Users",
+                        email: ""
+                    };
+                    break;
+            }
+
+            this.showChips();
         },
         getDataFromApi() {
             let _this = this;
@@ -306,7 +395,7 @@ export default {
                             itemsPerPage: itemsPerPage,
                             user_id: user_id,
                             start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
+                            end_date: range[1] ? range[1] : range[0]
                         }
                     })
                     .then(response => {
@@ -387,7 +476,7 @@ export default {
             }
 
             return false;
-        },
+        }
         // onDeleteAll() {
         //     let _this = this;
 
@@ -497,14 +586,22 @@ export default {
                 query: this.user,
                 query: this.date_range
             };
+        },
+        filters() {
+            return [
+                {
+                    show_chip_component: false,
+                    name: "date_range",
+                    item_text: [this.date_range[0], this.date_range[1]]
+                },
+                {
+                    show_chip_component: false,
+                    name: "user",
+                    item_text: this.user == null ? "" : this.user.name
+                }
+            ];
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
     created() {
         this.loadUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");

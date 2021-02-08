@@ -502,6 +502,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -537,9 +576,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      department: 0,
+      department: {
+        id: null,
+        name: "All Departments"
+      },
       // departments: [],
-      job: 0,
+      job: {
+        id: null,
+        name: "All Job Designations"
+      },
       jobs: [],
       total_fund: 0,
       total_remaining_fund: 0,
@@ -557,14 +602,57 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    changeStatus: function changeStatus() {
+      this.showChips();
+    },
     changeDepartment: function changeDepartment(e) {
-      this.department = e.id;
-      this.job = null; // this.loadJobs();
-
-      this.$refs.jobData.resetData(this.department);
+      this.department = e;
+      this.job = {
+        id: null,
+        name: "All Job Designations"
+      };
+      this.$refs.jobData.resetData(this.department.id);
+      this.showChips();
     },
     changeJob: function changeJob(e) {
-      this.job = e.id;
+      this.job = e;
+      this.showChips();
+    },
+    closeFilter: function closeFilter(name) {
+      switch (name) {
+        case "status":
+          this.status = "Active";
+          break;
+
+        case "department":
+          this.$refs.departmentData.resetData();
+          this.department = {
+            id: null,
+            name: "All Departments"
+          };
+          break;
+
+        case "job":
+          this.$refs.jobData.resetData();
+          this.job = {
+            id: null,
+            name: "All Job Designations"
+          };
+          break;
+
+        default:
+          this.status = "Active";
+          this.$refs.departmentData.resetData();
+          this.$refs.jobData.resetData();
+          break;
+      }
+
+      this.showChips();
+    },
+    showChips: function showChips() {
+      this.filters[0].show_chip_component = this.status == "Active" ? false : true;
+      this.filters[1].show_chip_component = this.department.name == "All Departments" ? false : true;
+      this.filters[2].show_chip_component = this.job.name == "All Job Designations" ? false : true;
     },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
@@ -581,8 +669,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var search = _this.search.trim().toLowerCase();
 
-        var department_id = _this.department;
-        var job_id = _this.job;
+        var department_id = _this.department == null ? null : _this.department.id;
+        var job_id = _this.job == null ? null : _this.job.id;
         var status = _this.status;
         axios.get("/api/users", {
           params: {
@@ -611,65 +699,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
+          reject();
         });
       });
     },
-    // loadDepartments() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/departments")
-    //         .then(response => {
-    //             _this.departments = response.data.data;
-    //             _this.departments.unshift({
-    //                 id: 0,
-    //                 name: "All Departments"
-    //             });
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //         });
-    // },
-    // loadJobs() {
-    //     let _this = this;
-    //     axios
-    //         .get("/api/data/jobs", {
-    //             params: {
-    //                 department_id: _this.department
-    //             }
-    //         })
-    //         .then(response => {
-    //             _this.jobs = response.data.data;
-    //             _this.jobs.unshift({ id: 0, name: "All Job Designations" });
-    //             _this.job = 0;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //         });
-    // },
-    // updateDepartment() {
-    //     this.loadJobs();
-    // },
     onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this)); // this.loadDepartments();
-      // this.loadJobs();
-
+      Object.assign(this.$data, this.$options.data.apply(this));
       this.$refs.departmentData.resetData();
       this.$refs.jobData.resetData();
     },
-    // onShow(item) {
-    //     this.$router.push({
-    //         name: "admin.users.show",
-    //         params: { id: item.id }
-    //     });
-    // },
-    // onEdit(item) {
-    //     this.$router.push({
-    //         name: "admin.users.edit",
-    //         params: { id: item.id }
-    //     });
-    // },
     onEditFund: function onEditFund() {
       if (this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
@@ -749,8 +787,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
-            }); // _this.$store.dispatch("AUTH_USER");
-
+            });
 
             _this.selected = [];
           })["catch"](function (error) {
@@ -834,20 +871,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
+    },
+    filters: function filters() {
+      return [{
+        show_chip_component: false,
+        name: "status",
+        item_text: this.status
+      }, {
+        show_chip_component: false,
+        name: "department",
+        item_text: this.department == null ? "" : this.department.name
+      }, {
+        show_chip_component: false,
+        name: "job",
+        item_text: this.job == null ? "" : this.job.name
+      }];
     }
   },
-  // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
   created: function created() {
     this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
     var _this4 = this;
 
+    this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
       _this4.items = data.items;
@@ -1154,6 +1202,7 @@ var render = function() {
                             [
                               _c("v-select", {
                                 attrs: { items: _vm.statuses, label: "Status" },
+                                on: { change: _vm.changeStatus },
                                 model: {
                                   value: _vm.status,
                                   callback: function($$v) {
@@ -1185,7 +1234,7 @@ var render = function() {
                                 ref: "jobData",
                                 attrs: {
                                   showAll: true,
-                                  department_id: _vm.department
+                                  department_id: _vm.department.id
                                 },
                                 on: { changeData: _vm.changeJob }
                               })
@@ -1367,6 +1416,67 @@ var render = function() {
               )
             ],
             1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            [
+              _vm._l(_vm.filters, function(item, index) {
+                return _c(
+                  "div",
+                  { key: index },
+                  [
+                    item.show_chip_component
+                      ? _c(
+                          "v-chip",
+                          {
+                            staticClass: "ma-2",
+                            attrs: { close: "", small: "" },
+                            on: {
+                              "click:close": function($event) {
+                                return _vm.closeFilter(item.name)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(item.item_text) +
+                                "\n                "
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              }),
+              _vm._v(" "),
+              _c(
+                "div",
+                [
+                  _vm.filters.filter(function(item) {
+                    return item.show_chip_component == true
+                  }).length > 0
+                    ? _c(
+                        "v-chip",
+                        {
+                          staticClass: "ma-2",
+                          attrs: { close: "", small: "" },
+                          on: { "click:close": _vm.onRefresh }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Clear all\n                "
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
+            ],
+            2
           ),
           _vm._v(" "),
           _c(
