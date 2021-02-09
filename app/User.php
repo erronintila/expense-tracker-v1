@@ -112,7 +112,7 @@ class User extends Authenticatable
                 'section' => 'users',
                 'section_id' => $this->id,
                 'causer_role' => $role,
-                'link' => null
+                'link' => "users/{$this->id}"
             ],
         ]);
     }
