@@ -985,12 +985,10 @@ export default {
         }
     },
     created() {
-        console.log("created");
         this.loadUsers();
         this.loadExpenseTypes();
     },
     activated() {
-        console.log("activated");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadUsers();
         this.loadExpenseTypes();
