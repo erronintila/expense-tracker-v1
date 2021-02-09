@@ -47,7 +47,9 @@
                     </v-card>
                 </v-menu>
             </v-card-title>
-            <v-card-subtitle> </v-card-subtitle>
+            <v-card-subtitle>
+                {{ formattedDateRange }}
+            </v-card-subtitle>
 
             <v-row>
                 <v-col cols="12" md="4">
@@ -199,8 +201,7 @@
                                                 <div>
                                                     Payment to Receive:
                                                     Reimbursed expenses waiting
-                                                    to be received by the
-                                                    user
+                                                    to be received by the user
                                                 </div>
                                             </v-card-text>
                                         </v-card>
@@ -1018,11 +1019,7 @@ export default {
 
             switch (this.filter) {
                 case "expense_type":
-                    this.load_expense_types_expenses(
-                        start,
-                        end,
-                        this.user.id
-                    );
+                    this.load_expense_types_expenses(start, end, this.user.id);
                     break;
                 case "department":
                     this.load_department_expenses(start, end, this.user.id);
@@ -1031,11 +1028,7 @@ export default {
                     this.load_users_expenses(start, end, this.user.id);
                     break;
                 default:
-                    this.load_expense_types_expenses(
-                        start,
-                        end,
-                        this.user.id
-                    );
+                    this.load_expense_types_expenses(start, end, this.user.id);
                     break;
             }
         },
@@ -1112,6 +1105,22 @@ export default {
                 });
         }
     },
+    computed: {
+        formattedDateRange() {
+            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
+            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+                return start_date;
+            }
+
+            if (JSON.stringify(end_date) == null) {
+                return start_date;
+            }
+
+            return `${start_date} ~ ${end_date}`;
+        }
+    },
     mounted() {
         this.$store.dispatch("AUTH_USER");
 
@@ -1154,6 +1163,6 @@ export default {
         //     this.date_range[1],
         //     this.user.id
         // );
-    },
+    }
 };
 </script>

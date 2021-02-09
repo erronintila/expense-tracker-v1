@@ -1094,6 +1094,22 @@ __webpack_require__.r(__webpack_exports__);
     // }
 
   },
+  computed: {
+    formattedDateRange: function formattedDateRange() {
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("MMM DD, YYYY");
+
+      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+        return start_date;
+      }
+
+      if (JSON.stringify(end_date) == null) {
+        return start_date;
+      }
+
+      return "".concat(start_date, " ~ ").concat(end_date);
+    }
+  },
   mounted: function mounted() {
     console.log("mounted");
     this.loadUsers();
@@ -1292,7 +1308,20 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("v-card-subtitle"),
+              _c(
+                "v-card-subtitle",
+                [
+                  _vm._v(
+                    " \n            " + _vm._s(_vm.formattedDateRange) + " "
+                  ),
+                  _vm.user != null && _vm.user.id > 0
+                    ? _c("v-chip", { attrs: { small: "" } }, [
+                        _vm._v(_vm._s(_vm.user.full_name))
+                      ])
+                    : _vm._e()
+                ],
+                1
+              ),
               _vm._v(" "),
               _c(
                 "v-row",
@@ -1665,7 +1694,7 @@ var render = function() {
                                                       _vm._v(" "),
                                                       _c("div", [
                                                         _vm._v(
-                                                          "\n                                                Payment to Receive:\n                                                Reimbursed expenses waiting\n                                                to be received by the\n                                                user\n                                            "
+                                                          "\n                                                Payment to Receive:\n                                                Reimbursed expenses waiting\n                                                to be received by the user\n                                            "
                                                         )
                                                       ])
                                                     ])

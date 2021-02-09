@@ -96,6 +96,7 @@
                                     item-text="full_name"
                                     item-value="id"
                                     label="Employee"
+                                    return-object
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -186,6 +187,23 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+            
+            <v-card-subtitle>
+                {{ formattedDateRange }}
+            </v-card-subtitle>
+
+            <v-row class="ml-4">
+                <v-chip v-if="status!=null" class="mr-2" small>
+                    {{ status }}
+                </v-chip>
+                <v-chip v-if="user!=null" class="mr-2" small>
+                    {{ user.full_name }}
+                </v-chip>
+                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                    Refresh
+                </v-chip>
+            </v-row>
+
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
@@ -664,7 +682,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: 0,
+            user: {id: 0, full_name: 'All Employees'},
             users: [],
             date_range: [
                 moment()
@@ -1810,7 +1828,7 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let user_id = _this.user;
+                let user_id = _this.user.id;
                 let range = _this.date_range;
 
                 axios
@@ -2636,6 +2654,20 @@ export default {
             }
 
             return today;
+        },
+        formattedDateRange() {
+            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
+            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+
+            if(JSON.stringify(start_date) == JSON.stringify(end_date)) {
+                return start_date;
+            }
+
+            if(JSON.stringify(end_date) == null) {
+                return start_date;
+            }
+
+            return `${start_date} ~ ${end_date}`;
         }
     },
     // mounted() {

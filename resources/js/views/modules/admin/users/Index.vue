@@ -191,33 +191,25 @@
                 </v-menu>
             </v-card-title>
 
-            <v-row>
-                <div v-for="(item, index) in filters" :key="index">
-                    <v-chip
-                        v-if="item.show_chip_component"
-                        class="ma-2"
-                        close
-                        small
-                        @click:close="closeFilter(item.name)"
-                    >
-                        {{ item.item_text }}
-                    </v-chip>
-                </div>
-                <div>
-                    <v-chip
-                        v-if="
-                            filters.filter(
-                                item => item.show_chip_component == true
-                            ).length > 0
-                        "
-                        class="ma-2"
-                        close
-                        small
-                        @click:close="onRefresh"
-                    >
-                        Clear all
-                    </v-chip>
-                </div>
+            <v-row class="ml-4">
+                <v-chip v-if="status != null" class="mr-2" small>
+                    {{ status }}
+                </v-chip>
+                <v-chip v-if="department != null" class="mr-2" small>
+                    {{ department.name }}
+                </v-chip>
+                <v-chip v-if="job != null" class="mr-2" small>
+                    {{ job.name }}
+                </v-chip>
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
+                    Refresh
+                </v-chip>
             </v-row>
 
             <v-card-subtitle>
@@ -410,48 +402,14 @@ export default {
         };
     },
     methods: {
-        changeStatus() {
-            this.showChips();
-        },
+        changeStatus() {},
         changeDepartment(e) {
             this.department = e;
             this.job = { id: null, name: "All Job Designations" };
             this.$refs.jobData.resetData(this.department.id);
-            this.showChips();
         },
         changeJob(e) {
             this.job = e;
-            this.showChips();
-        },
-        closeFilter(name) {
-            switch (name) {
-                case "status":
-                    this.status = "Active";
-                    break;
-                case "department":
-                    this.$refs.departmentData.resetData();
-                    this.department = { id: null, name: "All Departments" };
-                    break;
-                case "job":
-                    this.$refs.jobData.resetData();
-                    this.job = { id: null, name: "All Job Designations" };
-                    break;
-                default:
-                    this.status = "Active";
-                    this.$refs.departmentData.resetData();
-                    this.$refs.jobData.resetData();
-                    break;
-            }
-
-            this.showChips();
-        },
-        showChips() {
-            this.filters[0].show_chip_component =
-                this.status == "Active" ? false : true;
-            this.filters[1].show_chip_component =
-                this.department.name == "All Departments" ? false : true;
-            this.filters[2].show_chip_component =
-                this.job.name == "All Job Designations" ? false : true;
         },
         getDataFromApi() {
             let _this = this;
@@ -706,26 +664,6 @@ export default {
                 query: this.department,
                 query: this.job
             };
-        },
-        filters() {
-            return [
-                {
-                    show_chip_component: false,
-                    name: "status",
-                    item_text: this.status
-                },
-                {
-                    show_chip_component: false,
-                    name: "department",
-                    item_text:
-                        this.department == null ? "" : this.department.name
-                },
-                {
-                    show_chip_component: false,
-                    name: "job",
-                    item_text: this.job == null ? "" : this.job.name
-                }
-            ];
         }
     },
     created() {

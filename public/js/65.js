@@ -426,6 +426,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -470,7 +487,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       items: [],
       user: this.$store.getters.user.id,
-      expense_type: 0,
+      expense_type: {
+        id: 0,
+        name: 'All Expense Types'
+      },
       expense_types: [],
       status: "All Expenses",
       statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Reimbursed Expenses" // "Archived Expenses"
@@ -509,7 +529,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var status = _this.status;
         var user_id = _this.user;
-        var expense_type_id = _this.expense_type;
+        var expense_type_id = _this.expense_type.id;
         var range = _this.date_range;
         axios.get("/api/expenses", {
           params: {
@@ -812,6 +832,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return today;
+    },
+    formattedDateRange: function formattedDateRange() {
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("MMM DD, YYYY");
+
+      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+        return start_date;
+      }
+
+      if (JSON.stringify(end_date) == null) {
+        return start_date;
+      }
+
+      return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
   mounted: function mounted() {
@@ -1092,7 +1126,8 @@ var render = function() {
                                   items: _vm.expense_types,
                                   "item-text": "name",
                                   "item-value": "id",
-                                  label: "Expense Types"
+                                  label: "Expense Types",
+                                  "return-object": ""
                                 },
                                 model: {
                                   value: _vm.expense_type,
@@ -1235,6 +1270,49 @@ var render = function() {
                   )
                 ],
                 1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-card-subtitle", [
+            _vm._v(
+              "\n            " + _vm._s(_vm.formattedDateRange) + "\n        "
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            { staticClass: "ml-4" },
+            [
+              _vm.status != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.status) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.expense_type != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.expense_type.name) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-chip",
+                {
+                  staticClass: "mr-2",
+                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+                  on: { "click:close": _vm.onRefresh }
+                },
+                [_vm._v(" \n                Refresh\n            ")]
               )
             ],
             1

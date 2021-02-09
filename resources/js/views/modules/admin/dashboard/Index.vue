@@ -58,7 +58,9 @@
                     </v-card>
                 </v-menu>
             </v-card-title>
-            <v-card-subtitle> </v-card-subtitle>
+            <v-card-subtitle> 
+                {{ formattedDateRange}} <v-chip v-if="user!=null && user.id > 0" small>{{ user.full_name }}</v-chip>
+            </v-card-subtitle>
 
             <v-row>
                 <v-col cols="12" md="4">
@@ -216,15 +218,13 @@
                                                 <div>
                                                     Payment to Receive:
                                                     Reimbursed expenses waiting
-                                                    to be received by the
-                                                    user
+                                                    to be received by the user
                                                 </div>
                                             </v-card-text>
                                         </v-card>
                                     </v-menu>
                                 </div>
                                 <v-row>
-                                    
                                     <v-col
                                         cols="12"
                                         md="3"
@@ -765,10 +765,10 @@ export default {
             axios
                 .get("/api/data/users_expenses_summary", {
                     params: {
-                        start_date: start, 
-                        end_date: end, 
-                        user_id: user, 
-                        admin_page: true 
+                        start_date: start,
+                        end_date: end,
+                        user_id: user,
+                        admin_page: true
                     }
                 })
                 .then(response => {
@@ -1091,11 +1091,7 @@ export default {
 
             switch (this.filter) {
                 case "expense_type":
-                    this.load_expense_types_expenses(
-                        start,
-                        end,
-                        this.user.id
-                    );
+                    this.load_expense_types_expenses(start, end, this.user.id);
                     break;
                 case "department":
                     this.load_department_expenses(start, end, this.user.id);
@@ -1104,11 +1100,7 @@ export default {
                     this.load_users_expenses(start, end, this.user.id);
                     break;
                 default:
-                    this.load_expense_types_expenses(
-                        start,
-                        end,
-                        this.user.id
-                    );
+                    this.load_expense_types_expenses(start, end, this.user.id);
                     break;
             }
         },
@@ -1183,7 +1175,7 @@ export default {
 
                     _this.loader = true;
                 });
-        },
+        }
         // loadStatistics(start, end, user_id) {
         //     let _this = this;
         //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
@@ -1194,6 +1186,22 @@ export default {
         //         console.log(error.response);
         //     });
         // }
+    },
+    computed: {
+        formattedDateRange() {
+            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
+            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+                return start_date;
+            }
+
+            if (JSON.stringify(end_date) == null) {
+                return start_date;
+            }
+
+            return `${start_date} ~ ${end_date}`;
+        }
     },
     mounted() {
         console.log("mounted");

@@ -192,6 +192,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -210,7 +238,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortable: false
       }],
       items: [],
-      department: 0,
+      department: {
+        id: 0,
+        name: 'All Departments'
+      },
       departments: [],
       status: "Active",
       statuses: ["Active", "Archived"],
@@ -241,7 +272,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var search = _this.search.trim().toLowerCase();
 
-        var department_id = _this.department;
+        var department_id = _this.department.id;
         var status = _this.status;
         axios.get("/api/jobs", {
           params: {
@@ -669,7 +700,8 @@ var render = function() {
                                   items: _vm.departments,
                                   "item-text": "name",
                                   "item-value": "id",
-                                  label: "Department"
+                                  label: "Department",
+                                  "return-object": ""
                                 },
                                 model: {
                                   value: _vm.department,
@@ -812,6 +844,43 @@ var render = function() {
                   )
                 ],
                 1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            { staticClass: "ml-4" },
+            [
+              _vm.status != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.status) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.department != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.department.name) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-chip",
+                {
+                  staticClass: "mr-2",
+                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+                  on: { "click:close": _vm.onRefresh }
+                },
+                [_vm._v("\n                Refresh\n            ")]
               )
             ],
             1

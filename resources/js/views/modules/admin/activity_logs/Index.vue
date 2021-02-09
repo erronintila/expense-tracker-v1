@@ -154,36 +154,22 @@
             </v-menu> -->
         </v-card-title>
 
-        <v-row>
-            {{ filters[0].show_chip_component }}
-            <div v-for="(item, index) in filters" :key="index">
-                <v-chip
-                    v-if="item.show_chip_component"
-                    class="ma-2"
-                    close
-                    small
-                    @click:close="closeFilter(item.name)"
-                >
-                    {{ item.item_text }}
-                </v-chip>
-            </div>
-            <div>
-                <v-chip
-                    v-if="
-                        filters.filter(item => item.show_chip_component == true)
-                            .length > 0
-                    "
-                    class="ma-2"
-                    close
-                    small
-                    @click:close="onRefresh"
-                >
-                    Clear all
-                </v-chip>
-            </div>
-        </v-row>
+        <v-card-subtitle>{{ formattedDateRange }}</v-card-subtitle>
 
-        <br />
+        <v-row class="ml-4">
+            <v-chip v-if="user != null" class="mr-2" small>
+                {{ user.name }}
+            </v-chip>
+            <v-chip
+                close
+                class="mr-2"
+                small
+                @click:close="onRefresh"
+                close-icon="mdi-refresh"
+            >
+                Refresh
+            </v-chip>
+        </v-row>
 
         <v-card-text>
             <v-data-table
@@ -316,63 +302,8 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            this.showChips();
         },
-        changeUser() {
-            this.showChips();
-        },
-        showChips() {
-            let dateRange = JSON.stringify([
-                this.date_range[0],
-                this.date_range[1]
-            ]);
-            let defaultDateRange = JSON.stringify([
-                moment()
-                    .startOf("month")
-                    .format("YYYY-MM-DD"),
-                moment()
-                    .endOf("month")
-                    .format("YYYY-MM-DD")
-            ]);
-
-            this.filters[0].show_chip_component =
-                dateRange == defaultDateRange ? false : true;
-
-            this.filters[1].show_chip_component =
-                this.user.name == "All Users" ? false : true;
-        },
-        closeFilter(name) {
-            switch (name) {
-                case "date_range":
-                    this.date_range = [
-                        moment()
-                            .startOf("month")
-                            .format("YYYY-MM-DD"),
-                        moment()
-                            .endOf("month")
-                            .format("YYYY-MM-DD")
-                    ];
-                    break;
-                case "user":
-                    this.user = {
-                        id: 0,
-                        username: "",
-                        name: "All Users",
-                        email: ""
-                    };
-                    break;
-                default:
-                    this.user = {
-                        id: 0,
-                        username: "",
-                        name: "All Users",
-                        email: ""
-                    };
-                    break;
-            }
-
-            this.showChips();
-        },
+        changeUser() {},
         getDataFromApi() {
             let _this = this;
 
@@ -587,19 +518,19 @@ export default {
                 query: this.date_range
             };
         },
-        filters() {
-            return [
-                {
-                    show_chip_component: false,
-                    name: "date_range",
-                    item_text: [this.date_range[0], this.date_range[1]]
-                },
-                {
-                    show_chip_component: false,
-                    name: "user",
-                    item_text: this.user == null ? "" : this.user.name
-                }
-            ];
+        formattedDateRange() {
+            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
+            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+                return start_date;
+            }
+
+            if (JSON.stringify(end_date) == null) {
+                return start_date;
+            }
+
+            return `${start_date} ~ ${end_date}`;
         }
     },
     created() {

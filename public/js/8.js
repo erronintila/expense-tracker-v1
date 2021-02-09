@@ -533,14 +533,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -602,9 +594,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
-    changeStatus: function changeStatus() {
-      this.showChips();
-    },
+    changeStatus: function changeStatus() {},
     changeDepartment: function changeDepartment(e) {
       this.department = e;
       this.job = {
@@ -612,47 +602,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         name: "All Job Designations"
       };
       this.$refs.jobData.resetData(this.department.id);
-      this.showChips();
     },
     changeJob: function changeJob(e) {
       this.job = e;
-      this.showChips();
-    },
-    closeFilter: function closeFilter(name) {
-      switch (name) {
-        case "status":
-          this.status = "Active";
-          break;
-
-        case "department":
-          this.$refs.departmentData.resetData();
-          this.department = {
-            id: null,
-            name: "All Departments"
-          };
-          break;
-
-        case "job":
-          this.$refs.jobData.resetData();
-          this.job = {
-            id: null,
-            name: "All Job Designations"
-          };
-          break;
-
-        default:
-          this.status = "Active";
-          this.$refs.departmentData.resetData();
-          this.$refs.jobData.resetData();
-          break;
-      }
-
-      this.showChips();
-    },
-    showChips: function showChips() {
-      this.filters[0].show_chip_component = this.status == "Active" ? false : true;
-      this.filters[1].show_chip_component = this.department.name == "All Departments" ? false : true;
-      this.filters[2].show_chip_component = this.job.name == "All Job Designations" ? false : true;
     },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
@@ -871,21 +823,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
-    },
-    filters: function filters() {
-      return [{
-        show_chip_component: false,
-        name: "status",
-        item_text: this.status
-      }, {
-        show_chip_component: false,
-        name: "department",
-        item_text: this.department == null ? "" : this.department.name
-      }, {
-        show_chip_component: false,
-        name: "job",
-        item_text: this.job == null ? "" : this.job.name
-      }];
     }
   },
   created: function created() {
@@ -1420,63 +1357,49 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-row",
+            { staticClass: "ml-4" },
             [
-              _vm._l(_vm.filters, function(item, index) {
-                return _c(
-                  "div",
-                  { key: index },
-                  [
-                    item.show_chip_component
-                      ? _c(
-                          "v-chip",
-                          {
-                            staticClass: "ma-2",
-                            attrs: { close: "", small: "" },
-                            on: {
-                              "click:close": function($event) {
-                                return _vm.closeFilter(item.name)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                    " +
-                                _vm._s(item.item_text) +
-                                "\n                "
-                            )
-                          ]
-                        )
-                      : _vm._e()
-                  ],
-                  1
-                )
-              }),
+              _vm.status != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.status) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.department != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.department.name) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.job != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.job.name) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
               _vm._v(" "),
               _c(
-                "div",
-                [
-                  _vm.filters.filter(function(item) {
-                    return item.show_chip_component == true
-                  }).length > 0
-                    ? _c(
-                        "v-chip",
-                        {
-                          staticClass: "ma-2",
-                          attrs: { close: "", small: "" },
-                          on: { "click:close": _vm.onRefresh }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Clear all\n                "
-                          )
-                        ]
-                      )
-                    : _vm._e()
-                ],
-                1
+                "v-chip",
+                {
+                  staticClass: "mr-2",
+                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+                  on: { "click:close": _vm.onRefresh }
+                },
+                [_vm._v("\n                Refresh\n            ")]
               )
             ],
-            2
+            1
           ),
           _vm._v(" "),
           _c(

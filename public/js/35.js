@@ -189,6 +189,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -757,6 +773,33 @@ var render = function() {
                   )
                 ],
                 1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            { staticClass: "ml-4" },
+            [
+              _vm.status != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.status) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-chip",
+                {
+                  staticClass: "mr-2",
+                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+                  on: { "click:close": _vm.onRefresh }
+                },
+                [_vm._v("\n                Refresh\n            ")]
               )
             ],
             1

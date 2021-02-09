@@ -261,20 +261,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -330,44 +316,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     updateDates: function updateDates(e) {
       this.date_range = e;
-      this.showChips();
     },
-    changeUser: function changeUser() {
-      this.showChips();
-    },
-    showChips: function showChips() {
-      var dateRange = JSON.stringify([this.date_range[0], this.date_range[1]]);
-      var defaultDateRange = JSON.stringify([moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")]);
-      this.filters[0].show_chip_component = dateRange == defaultDateRange ? false : true;
-      this.filters[1].show_chip_component = this.user.name == "All Users" ? false : true;
-    },
-    closeFilter: function closeFilter(name) {
-      switch (name) {
-        case "date_range":
-          this.date_range = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-          break;
-
-        case "user":
-          this.user = {
-            id: 0,
-            username: "",
-            name: "All Users",
-            email: ""
-          };
-          break;
-
-        default:
-          this.user = {
-            id: 0,
-            username: "",
-            name: "All Users",
-            email: ""
-          };
-          break;
-      }
-
-      this.showChips();
-    },
+    changeUser: function changeUser() {},
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -565,16 +515,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         query: this.search
       }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     },
-    filters: function filters() {
-      return [{
-        show_chip_component: false,
-        name: "date_range",
-        item_text: [this.date_range[0], this.date_range[1]]
-      }, {
-        show_chip_component: false,
-        name: "user",
-        item_text: this.user == null ? "" : this.user.name
-      }];
+    formattedDateRange: function formattedDateRange() {
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("MMM DD, YYYY");
+
+      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+        return start_date;
+      }
+
+      if (JSON.stringify(end_date) == null) {
+        return start_date;
+      }
+
+      return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
   created: function created() {
@@ -845,69 +798,30 @@ var render = function() {
         1
       ),
       _vm._v(" "),
+      _c("v-card-subtitle", [_vm._v(_vm._s(_vm.formattedDateRange))]),
+      _vm._v(" "),
       _c(
         "v-row",
+        { staticClass: "ml-4" },
         [
-          _vm._v(
-            "\n        " +
-              _vm._s(_vm.filters[0].show_chip_component) +
-              "\n        "
-          ),
-          _vm._l(_vm.filters, function(item, index) {
-            return _c(
-              "div",
-              { key: index },
-              [
-                item.show_chip_component
-                  ? _c(
-                      "v-chip",
-                      {
-                        staticClass: "ma-2",
-                        attrs: { close: "", small: "" },
-                        on: {
-                          "click:close": function($event) {
-                            return _vm.closeFilter(item.name)
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(item.item_text) +
-                            "\n            "
-                        )
-                      ]
-                    )
-                  : _vm._e()
-              ],
-              1
-            )
-          }),
+          _vm.user != null
+            ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                _vm._v("\n            " + _vm._s(_vm.user.name) + "\n        ")
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c(
-            "div",
-            [
-              _vm.filters.filter(function(item) {
-                return item.show_chip_component == true
-              }).length > 0
-                ? _c(
-                    "v-chip",
-                    {
-                      staticClass: "ma-2",
-                      attrs: { close: "", small: "" },
-                      on: { "click:close": _vm.onRefresh }
-                    },
-                    [_vm._v("\n                Clear all\n            ")]
-                  )
-                : _vm._e()
-            ],
-            1
+            "v-chip",
+            {
+              staticClass: "mr-2",
+              attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+              on: { "click:close": _vm.onRefresh }
+            },
+            [_vm._v("\n            Refresh\n        ")]
           )
         ],
-        2
+        1
       ),
-      _vm._v(" "),
-      _c("br"),
       _vm._v(" "),
       _c(
         "v-card-text",
