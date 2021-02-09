@@ -8,9 +8,9 @@ const userRoutes = [
         redirect: "/dashboard",
         component: () => import("../../views/modules/user/Index.vue"),
         meta: {
-            requiresAuth: true
-            // requiresAdmin: true
-            // keepAlive: false,
+            requiresAuth: true,
+            // requiresAdmin: true,
+            keepAlive: true
         },
         children: [
             /**
@@ -24,10 +24,10 @@ const userRoutes = [
                 path: "/dashboard",
                 name: "user.dashboard.index",
                 component: () =>
-                    import("../../views/modules/user/dashboard/Index.vue")
-                // meta: {
-                //     keepAlive: false
-                // }
+                    import("../../views/modules/user/dashboard/Index.vue"),
+                meta: {
+                    keepAlive: false
+                }
             },
             /**
              *
@@ -40,10 +40,10 @@ const userRoutes = [
                 path: "/profile",
                 name: "user.profile.index",
                 component: () =>
-                    import("../../views/modules/user/profile/Index.vue")
-                // meta: {
-                //     keepAlive: false
-                // }
+                    import("../../views/modules/user/profile/Index.vue"),
+                meta: {
+                    keepAlive: true
+                }
             },
             /**
              *
@@ -57,9 +57,6 @@ const userRoutes = [
                 name: "user.expenses.index",
                 component: () =>
                     import("../../views/modules/user/expenses/Index.vue"),
-                // meta: {
-                //     keepAlive: false
-                // }
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -69,6 +66,9 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -85,6 +85,9 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -101,10 +104,10 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
-                // meta: {
-                //     keepAlive: false
-                // }
             },
             {
                 path: "/expenses/:id",
@@ -120,10 +123,10 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
-                // meta: {
-                //     keepAlive: false
-                // }
             },
             /**
              *
@@ -148,10 +151,10 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
-                // meta: {
-                //     keepAlive: false
-                // }
             },
             {
                 path: "/expense_reports/create",
@@ -169,10 +172,10 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
-                // meta: {
-                //     keepAlive: false
-                // }
             },
             {
                 path: "/expense_reports/:id/edit",
@@ -188,6 +191,9 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -204,10 +210,10 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
-                // meta: {
-                //     keepAlive: false
-                // }
             },
             // {
             //     path: "/expense_reports/print/:id",
@@ -239,10 +245,10 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
-                // meta: {
-                //     keepAlive: false
-                // }
             },
             {
                 path: "/payments/:id",
@@ -258,10 +264,10 @@ const userRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
-                // meta: {
-                //     keepAlive: false
-                // }
             },
             /**
              *
@@ -274,10 +280,11 @@ const userRoutes = [
                 path: "/notifications",
                 name: "user.notifications.index",
                 component: () =>
-                    import(
-                        "../../views/modules/user/notifications/Index.vue"
-                    ),
-            },
+                    import("../../views/modules/user/notifications/Index.vue"),
+                meta: {
+                    keepAlive: true
+                }
+            }
         ]
     }
 ];

@@ -664,6 +664,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.getData();
+  },
+  activated: function activated() {
+    var _this5 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this5.items = data.items;
+      _this5.totalItems = data.total;
+    });
   }
 });
 
