@@ -947,14 +947,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    console.log("created");
     this.loadUsers();
     this.loadExpenseTypes();
   },
   activated: function activated() {
     var _this4 = this;
 
-    console.log("activated");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.loadUsers();
     this.loadExpenseTypes();
