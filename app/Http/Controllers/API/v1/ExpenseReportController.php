@@ -197,7 +197,6 @@ class ExpenseReportController extends Controller
     public function store(ExpenseReportStoreRequest $request)
     {
         $validated = $request->validated();
-
         $message = "Expense Report created successfully";
 
         $expense_report = new ExpenseReport();

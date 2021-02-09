@@ -119,21 +119,28 @@
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
+
                                 <v-row>
                                     <v-col>
-                                        <div>Report No. Format: </div>
+                                        <div>Report No. Format:</div>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" md="2">
                                         <v-text-field
-                                            v-model="settings.expense_report.report_no.prefix"
+                                            v-model="
+                                                settings.expense_report
+                                                    .report_no.prefix
+                                            "
                                             label="Prefix"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="2">
                                         <v-text-field
-                                            v-model="settings.expense_report.report_no.num_length"
+                                            v-model="
+                                                settings.expense_report
+                                                    .report_no.num_length
+                                            "
                                             label="Length"
                                             type="number"
                                         ></v-text-field>
@@ -142,7 +149,10 @@
                                         <div class="green--text">
                                             e.g. {{ report_no }}
                                         </div>
-                                        <small>(Prefix + YYYYMM + (length + report count))</small>
+                                        <small
+                                            >(Prefix + YYYYMM + (length + report
+                                            count))</small
+                                        >
                                     </v-col>
                                 </v-row>
                             </v-form>
@@ -250,6 +260,7 @@ export default {
                     );
 
                     _this.$store.dispatch("AUTH_USER");
+                    _this.$store.dispatch("AUTH_SETTINGS");
                 })
                 .catch(error => {
                     console.log(error);
@@ -270,14 +281,22 @@ export default {
                     .num_length;
                 let report_no = "";
 
-                report_no = prefix + moment().format("YYYYMM") + String(1).padStart(num_length, '0');
+                report_no =
+                    prefix +
+                    moment().format("YYYYMM") +
+                    String(1).padStart(num_length, "0");
 
                 return report_no;
-            },
+            }
         }
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_SETTINGS");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.onLoad();
+    },
+    activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.onLoad();
     }

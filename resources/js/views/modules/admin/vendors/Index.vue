@@ -125,6 +125,16 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+
+            <v-row class="ml-4">
+                <v-chip v-if="status!=null" class="mr-2" small>
+                    {{ status }}
+                </v-chip>
+                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                    Refresh
+                </v-chip>
+            </v-row>
+
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
@@ -415,11 +425,12 @@ export default {
     created() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // }
+    activated() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
+    }
 };
 </script>

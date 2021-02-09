@@ -151,6 +151,20 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+
+            <v-card-subtitle>
+                {{ formattedDateRange}}
+            </v-card-subtitle>
+
+            <v-row class="ml-4">
+                <v-chip v-if="status!=null" class="mr-2" small>
+                    {{ status }}
+                </v-chip>
+                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                    Refresh
+                </v-chip>
+            </v-row>
+            
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
@@ -1404,9 +1418,7 @@ export default {
                             style: "header"
                         },
                         {
-                            text: [
-                                "Report No. : " + this.selected.map(item => item.code)
-                            ],
+                            text: "Report No. : " + this.selected.map(item => item.code),
                             style: "subheader"
                         },
                         {
@@ -2321,6 +2333,20 @@ export default {
             }
 
             return today;
+        },
+        formattedDateRange() {
+            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
+            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+
+            if(JSON.stringify(start_date) == JSON.stringify(end_date)) {
+                return start_date;
+            }
+
+            if(JSON.stringify(end_date) == null) {
+                return start_date;
+            }
+
+            return `${start_date} ~ ${end_date}`;
         }
     },
     created() {
@@ -2329,6 +2355,13 @@ export default {
         // this.loadUsers();
         // this.loadUsers();
         this.loadExpenseTypes();
+    },
+    activated() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

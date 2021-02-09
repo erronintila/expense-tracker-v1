@@ -414,6 +414,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1141,6 +1149,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.getData();
+  },
+  activated: function activated() {
+    var _this7 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this7.form.expenses = data.items;
+      _this7.totalItems = data.total;
+    });
   }
 });
 

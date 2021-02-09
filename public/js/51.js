@@ -200,6 +200,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -250,6 +260,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_successDialog("Success", "Saved settings successfully");
 
         _this.$store.dispatch("AUTH_USER");
+
+        _this.$store.dispatch("AUTH_SETTINGS");
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
@@ -264,13 +276,18 @@ __webpack_require__.r(__webpack_exports__);
         var prefix = this.settings.expense_report.report_no.prefix;
         var num_length = this.settings.expense_report.report_no.num_length;
         var report_no = "";
-        report_no = prefix + moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYYMM") + String(1).padStart(num_length, '0');
+        report_no = prefix + moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYYMM") + String(1).padStart(num_length, "0");
         return report_no;
       }
     }
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_SETTINGS");
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.onLoad();
+  },
+  activated: function activated() {
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.onLoad();
   }
@@ -518,7 +535,7 @@ var render = function() {
                                 "v-row",
                                 [
                                   _c("v-col", [
-                                    _c("div", [_vm._v("Report No. Format: ")])
+                                    _c("div", [_vm._v("Report No. Format:")])
                                   ])
                                 ],
                                 1
@@ -546,7 +563,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "settings.expense_report.report_no.prefix"
+                                            "\n                                            settings.expense_report\n                                                .report_no.prefix\n                                        "
                                         }
                                       })
                                     ],
@@ -575,7 +592,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "settings.expense_report.report_no.num_length"
+                                            "\n                                            settings.expense_report\n                                                .report_no.num_length\n                                        "
                                         }
                                       })
                                     ],
@@ -600,7 +617,7 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("small", [
                                         _vm._v(
-                                          "(Prefix + YYYYMM + (length + report count))"
+                                          "(Prefix + YYYYMM + (length + report\n                                        count))"
                                         )
                                       ])
                                     ]

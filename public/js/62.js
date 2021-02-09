@@ -468,6 +468,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1237,9 +1251,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             text: ["Expense Summary Report"],
             style: "header"
           }, {
-            text: ["Report No. : " + _this7.selected.map(function (item) {
+            text: "Report No. : " + _this7.selected.map(function (item) {
               return item.code;
-            })],
+            }),
             style: "subheader"
           }, {
             style: "tableOfExpenses",
@@ -2014,6 +2028,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return today;
+    },
+    formattedDateRange: function formattedDateRange() {
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("MMM DD, YYYY");
+
+      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+        return start_date;
+      }
+
+      if (JSON.stringify(end_date) == null) {
+        return start_date;
+      }
+
+      return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
   created: function created() {
@@ -2022,6 +2050,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // this.loadUsers();
 
     this.loadExpenseTypes();
+  },
+  activated: function activated() {
+    var _this10 = this;
+
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this10.items = data.items;
+      _this10.totalItems = data.total;
+    });
   }
 });
 
@@ -2421,6 +2458,39 @@ var render = function() {
                   )
                 ],
                 1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-card-subtitle", [
+            _vm._v(
+              "\n            " + _vm._s(_vm.formattedDateRange) + "\n        "
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            { staticClass: "ml-4" },
+            [
+              _vm.status != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.status) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-chip",
+                {
+                  staticClass: "mr-2",
+                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+                  on: { "click:close": _vm.onRefresh }
+                },
+                [_vm._v(" \n                Refresh\n            ")]
               )
             ],
             1

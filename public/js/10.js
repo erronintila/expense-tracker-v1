@@ -684,6 +684,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -725,7 +754,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      user: 0,
+      user: {
+        id: 0,
+        full_name: "All Employees"
+      },
       users: [],
       date_range: [moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
@@ -1483,9 +1515,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             text: ["Expense Summary Report"],
             style: "header"
           }, {
-            text: ["Report No. : " + _this7.selected.map(function (item) {
+            text: "Report No. : " + _this7.selected.map(function (item) {
               return item.code;
-            })],
+            }),
             style: "subheader"
           }, {
             style: "tableOfExpenses",
@@ -1634,7 +1666,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-        var user_id = _this.user;
+        var user_id = _this.user.id;
         var range = _this.date_range;
         axios.get("/api/expense_reports", {
           params: {
@@ -2371,6 +2403,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return today;
+    },
+    formattedDateRange: function formattedDateRange() {
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.date_range[0]).format("MMM DD, YYYY");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.date_range[1]).format("MMM DD, YYYY");
+
+      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+        return start_date;
+      }
+
+      if (JSON.stringify(end_date) == null) {
+        return start_date;
+      }
+
+      return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
   // mounted() {
@@ -2385,6 +2431,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.loadTotalCountReportStatus();
     this.loadUsers();
     this.loadExpenseTypes();
+  },
+  activated: function activated() {
+    var _this11 = this;
+
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this11.items = data.items;
+      _this11.totalItems = data.total;
+    });
   }
 });
 
@@ -2642,7 +2697,8 @@ var render = function() {
                                   items: _vm.users,
                                   "item-text": "full_name",
                                   "item-value": "id",
-                                  label: "Employee"
+                                  label: "Employee",
+                                  "return-object": ""
                                 },
                                 model: {
                                   value: _vm.user,
@@ -2845,6 +2901,97 @@ var render = function() {
                 ],
                 1
               )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-card-subtitle", [
+            _vm._v(
+              "\n            " + _vm._s(_vm.formattedDateRange) + "\n        "
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            { staticClass: "ml-4" },
+            [
+              _vm.status != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.status) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.user != null
+                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.user.full_name) +
+                        "\n            "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-chip",
+                {
+                  staticClass: "mr-2",
+                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+                  on: { "click:close": _vm.onRefresh }
+                },
+                [_vm._v("\n                Refresh\n            ")]
+              ),
+              _vm._v(" "),
+              _vm.totalUnsubmitted > 0
+                ? _c(
+                    "v-chip",
+                    {
+                      staticClass: "mr-2",
+                      attrs: {
+                        color: "red",
+                        dark: "",
+                        small: "",
+                        close: "",
+                        "close-icon": "mdi-alert"
+                      },
+                      on: { "click:close": _vm.showAllUnsubmitted }
+                    },
+                    [
+                      _vm._v(
+                        "\n                Unsubmitted (" +
+                          _vm._s(_vm.totalUnsubmitted) +
+                          ")\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.totalUnapproved > 0
+                ? _c(
+                    "v-chip",
+                    {
+                      staticClass: "mr-2",
+                      attrs: {
+                        color: "red",
+                        dark: "",
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-alert"
+                      },
+                      on: { "click:close": _vm.showAllUnapproved }
+                    },
+                    [
+                      _vm._v(
+                        "\n                For Approval (" +
+                          _vm._s(_vm.totalUnapproved) +
+                          ")\n            "
+                      )
+                    ]
+                  )
+                : _vm._e()
             ],
             1
           ),
@@ -3362,47 +3509,6 @@ var render = function() {
                 "v-row",
                 [
                   _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                    _c(
-                      "div",
-                      { staticClass: "mb-4" },
-                      [
-                        _vm.totalUnsubmitted > 0
-                          ? _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "red", dark: "", small: "" },
-                                on: { click: _vm.showAllUnsubmitted }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                            Unsubmitted (" +
-                                    _vm._s(_vm.totalUnsubmitted) +
-                                    ")\n                        "
-                                )
-                              ]
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.totalUnapproved > 0
-                          ? _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "red", dark: "", small: "" },
-                                on: { click: _vm.showAllUnapproved }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                            For Approval (" +
-                                    _vm._s(_vm.totalUnapproved) +
-                                    ")\n                        "
-                                )
-                              ]
-                            )
-                          : _vm._e()
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
                     _c("div", [
                       _c("h4", { staticClass: "green--text" }, [
                         _vm._v(

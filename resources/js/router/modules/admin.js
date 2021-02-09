@@ -9,7 +9,8 @@ const adminRoutes = [
         component: () => import("../../views/modules/admin/Index.vue"),
         meta: {
             requiresAuth: true,
-            requiresAdmin: true
+            requiresAdmin: true,
+            keepAlive: true
         },
         children: [
             {
@@ -31,7 +32,10 @@ const adminRoutes = [
                 path: "/admin/dashboard",
                 name: "admin.dashboard.index",
                 component: () =>
-                    import("../../views/modules/admin/dashboard/Index.vue")
+                    import("../../views/modules/admin/dashboard/Index.vue"),
+                meta: {
+                    keepAlive: false
+                }
             },
             /**
              *
@@ -54,13 +58,19 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
                 path: "/admin/settings/user",
                 name: "admin.settings.user",
                 component: () =>
-                    import("../../views/modules/admin/settings/User.vue")
+                    import("../../views/modules/admin/settings/User.vue"),
+                meta: {
+                    keepAlive: true
+                }
             },
             /**
              *
@@ -73,7 +83,10 @@ const adminRoutes = [
                 path: "/admin/profile",
                 name: "admin.profile.index",
                 component: () =>
-                    import("../../views/modules/admin/profile/Index.vue")
+                    import("../../views/modules/admin/profile/Index.vue"),
+                meta: {
+                    keepAlive: true
+                }
             },
             /**
              *
@@ -96,6 +109,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             // {
@@ -186,6 +202,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -202,6 +221,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -218,6 +240,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -234,6 +259,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -257,6 +285,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -273,6 +304,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -289,6 +323,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -305,6 +342,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -321,6 +361,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -344,6 +387,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -362,6 +408,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -378,6 +427,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -394,6 +446,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -417,6 +472,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -433,6 +491,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             // {
@@ -464,6 +525,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -480,6 +544,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -503,6 +570,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -519,6 +589,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -535,6 +608,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -551,6 +627,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -574,6 +653,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -590,6 +672,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -606,6 +691,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -622,6 +710,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -647,6 +738,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -665,6 +759,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -683,6 +780,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -701,6 +801,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             // {
@@ -913,6 +1016,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -929,6 +1035,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -945,6 +1054,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -961,6 +1073,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -974,7 +1089,10 @@ const adminRoutes = [
                 path: "/admin/notifications",
                 name: "admin.notifications.index",
                 component: () =>
-                    import("../../views/modules/admin/notifications/Index.vue")
+                    import("../../views/modules/admin/notifications/Index.vue"),
+                meta: {
+                    keepAlive: true
+                }
             }
         ]
     }

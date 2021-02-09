@@ -68,10 +68,20 @@
                                 </v-btn>
                             </div>
                             <div>
-                                <v-btn v-if="form.is_late_submitted" color="red" x-small dark>
+                                <v-btn
+                                    v-if="form.is_late_submitted"
+                                    color="red"
+                                    x-small
+                                    dark
+                                >
                                     Late Submitted
                                 </v-btn>
-                                <v-btn v-if="form.is_late_approved" color="red" x-small dark>
+                                <v-btn
+                                    v-if="form.is_late_approved"
+                                    color="red"
+                                    x-small
+                                    dark
+                                >
                                     Late Approved
                                 </v-btn>
                             </div>
@@ -1322,6 +1332,12 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.getData();
+    },
+    activated() {
+        this.getDataFromApi().then(data => {
+            this.form.expenses = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

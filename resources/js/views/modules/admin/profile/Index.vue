@@ -697,6 +697,9 @@ export default {
             console.log(response);
             _this.form = response;
         });
+    },
+    activated() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
     }
 };
 </script>
