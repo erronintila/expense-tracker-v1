@@ -702,6 +702,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -745,7 +756,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       items: [],
       user: {
         id: 0,
-        full_name: 'All Employees'
+        full_name: "All Employees"
       },
       users: [],
       date_range: [moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().endOf("month").format("YYYY-MM-DD")],
@@ -2907,8 +2918,56 @@ var render = function() {
                   attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
                   on: { "click:close": _vm.onRefresh }
                 },
-                [_vm._v(" \n                Refresh\n            ")]
-              )
+                [_vm._v("\n                Refresh\n            ")]
+              ),
+              _vm._v(" "),
+              _vm.totalUnsubmitted > 0
+                ? _c(
+                    "v-chip",
+                    {
+                      staticClass: "mr-2",
+                      attrs: {
+                        color: "red",
+                        dark: "",
+                        small: "",
+                        close: "",
+                        "close-icon": "mdi-alert"
+                      },
+                      on: { "click:close": _vm.showAllUnsubmitted }
+                    },
+                    [
+                      _vm._v(
+                        "\n                Unsubmitted (" +
+                          _vm._s(_vm.totalUnsubmitted) +
+                          ")\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.totalUnapproved > 0
+                ? _c(
+                    "v-chip",
+                    {
+                      staticClass: "mr-2",
+                      attrs: {
+                        color: "red",
+                        dark: "",
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-alert"
+                      },
+                      on: { "click:close": _vm.showAllUnapproved }
+                    },
+                    [
+                      _vm._v(
+                        "\n                For Approval (" +
+                          _vm._s(_vm.totalUnapproved) +
+                          ")\n            "
+                      )
+                    ]
+                  )
+                : _vm._e()
             ],
             1
           ),
@@ -3426,47 +3485,6 @@ var render = function() {
                 "v-row",
                 [
                   _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                    _c(
-                      "div",
-                      { staticClass: "mb-4" },
-                      [
-                        _vm.totalUnsubmitted > 0
-                          ? _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "red", dark: "", small: "" },
-                                on: { click: _vm.showAllUnsubmitted }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                            Unsubmitted (" +
-                                    _vm._s(_vm.totalUnsubmitted) +
-                                    ")\n                        "
-                                )
-                              ]
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.totalUnapproved > 0
-                          ? _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "red", dark: "", small: "" },
-                                on: { click: _vm.showAllUnapproved }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                            For Approval (" +
-                                    _vm._s(_vm.totalUnapproved) +
-                                    ")\n                        "
-                                )
-                              ]
-                            )
-                          : _vm._e()
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
                     _c("div", [
                       _c("h4", { staticClass: "green--text" }, [
                         _vm._v(
