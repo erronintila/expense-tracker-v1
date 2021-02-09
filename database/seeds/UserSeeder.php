@@ -98,6 +98,7 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
                 Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
                 Permission::create(['name' => 'set reimbursable amount', 'category' => $model]);
+                Permission::create(['name' => 'restore expenses', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 
@@ -148,6 +149,7 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("add expenses beyond encoding period");
         $roleUser->givePermissionTo("submit expense reports beyond due date");
         $roleUser->givePermissionTo("add expenses beyond limit");
+        $roleUser->givePermissionTo("restore expenses");
         // $roleUser->givePermissionTo("edit users");
 
         $roleSuperAdmin = Role::create(['name' => 'administrator']);
@@ -227,6 +229,8 @@ class UserSeeder extends Seeder
         Setting::set("submission_period", "Weekly");
         Setting::set("approval_period", 3);
         Setting::set("tax_rate", 12);
+        Setting::set("expense_report.report_no.prefix", 'EXR');
+        Setting::set("expense_report.report_no.num_length", 10);
         Setting::save();
     }
 }
