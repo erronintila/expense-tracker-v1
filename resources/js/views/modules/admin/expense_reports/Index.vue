@@ -1258,7 +1258,6 @@ export default {
 
                 let itemss = temp.map(item => {
                     let val = [];
-
                     for (let i = 0; i < item.length; i++) {
                         val.push({
                             text: item[i],
@@ -1588,7 +1587,6 @@ export default {
 
                 let itemss = temp.map(item => {
                     let val = [];
-
                     for (let i = 0; i < item.length; i++) {
                         val.push({
                             text: item[i],
@@ -1908,6 +1906,8 @@ export default {
             this.loadTotalCountReportStatus();
 
             this.loadUsers();
+
+            this.loadExpenseTypes();
 
             this.selected = [];
         },
@@ -2698,6 +2698,9 @@ export default {
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.loadTotalCountReportStatus();
+        this.loadUsers();
+        this.loadExpenseTypes();
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;

@@ -1719,6 +1719,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
       this.loadTotalCountReportStatus();
       this.loadUsers();
+      this.loadExpenseTypes();
       this.selected = [];
     },
     onShow: function onShow(item) {
@@ -2412,6 +2413,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this11 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadTotalCountReportStatus();
+    this.loadUsers();
+    this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {
       _this11.items = data.items;
       _this11.totalItems = data.total;

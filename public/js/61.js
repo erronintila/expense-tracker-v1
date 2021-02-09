@@ -482,6 +482,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -1436,6 +1437,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.$store.dispatch("AUTH_USER");
+      this.$store.dispatch("AUTH_NOTIFICATIONS");
+      this.loadExpenseTypes();
       this.selected = [];
     },
     onShow: function onShow(item) {
@@ -2054,7 +2058,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   activated: function activated() {
     var _this10 = this;
 
+    this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {
       _this10.items = data.items;
       _this10.totalItems = data.total;
@@ -2490,7 +2496,7 @@ var render = function() {
                   attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
                   on: { "click:close": _vm.onRefresh }
                 },
-                [_vm._v(" \n                Refresh\n            ")]
+                [_vm._v("\n                Refresh\n            ")]
               )
             ],
             1

@@ -89,7 +89,6 @@
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
-
                         </v-list>
                     </v-card>
                 </v-menu>
@@ -153,18 +152,24 @@
             </v-card-title>
 
             <v-card-subtitle>
-                {{ formattedDateRange}}
+                {{ formattedDateRange }}
             </v-card-subtitle>
 
             <v-row class="ml-4">
-                <v-chip v-if="status!=null" class="mr-2" small>
+                <v-chip v-if="status != null" class="mr-2" small>
                     {{ status }}
                 </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
                 </v-chip>
             </v-row>
-            
+
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
@@ -305,11 +310,7 @@
                         {{ mixin_formatNumber(item.total) }}
                     </template>
                     <template v-slot:[`item.user`]="{ item }">
-                        {{
-                            item.user.last_name +
-                                ", " +
-                                item.user.first_name
-                        }}
+                        {{ item.user.last_name + ", " + item.user.first_name }}
                     </template>
                     <template v-slot:[`item.updated_at`]="{ item }">
                         {{ mixin_getHumanDate(item.updated_at) }}
@@ -413,7 +414,7 @@
                                             >Group by expense</v-list-item-title
                                         >
                                     </v-list-item>
-                                   
+
                                     <v-list-item
                                         @click="onPrint('print', 'date')"
                                     >
@@ -442,7 +443,7 @@
                                             >Group by expense</v-list-item-title
                                         >
                                     </v-list-item>
-                                    
+
                                     <v-list-item
                                         @click="onPrint('pdf', 'date')"
                                     >
@@ -541,7 +542,6 @@ export default {
             axios
                 .get(`/api/data/expense_types?only=true`)
                 .then(response => {
-
                     _this.expense_types = response.data.data;
                 })
                 .catch(error => {
@@ -579,9 +579,7 @@ export default {
                         : _this.selected.map(item => item.id);
 
                 axios
-                    .get(
-                        `/api/data/print_report?by_user_id=true&ids=${ids}`
-                    )
+                    .get(`/api/data/print_report?by_user_id=true&ids=${ids}`)
                     .then(response => {
                         _this.reports_by_user = response.data.data;
 
@@ -786,7 +784,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -1090,7 +1088,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -1416,7 +1414,9 @@ export default {
                             style: "header"
                         },
                         {
-                            text: "Report No. : " + this.selected.map(item => item.code),
+                            text:
+                                "Report No. : " +
+                                this.selected.map(item => item.code),
                             style: "subheader"
                         },
                         {
@@ -1424,7 +1424,7 @@ export default {
                             table: {
                                 headerRows: 1,
                                 widths: table_columns.map((item, index) => {
-                                    if((table_columns.length - 1) == index) {
+                                    if (table_columns.length - 1 == index) {
                                         return "*";
                                     }
 
@@ -1525,7 +1525,7 @@ export default {
                             alignment: "center"
                         },
                         subheader: {
-                            fontSize: 10,
+                            fontSize: 10
                         },
                         tableSignatures: {
                             margin: [0, 5, 0, 15]
@@ -1637,6 +1637,10 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.$store.dispatch("AUTH_USER");
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.loadExpenseTypes();
 
             this.selected = [];
         },
@@ -2123,7 +2127,10 @@ export default {
                     return item.status.status === "Unsubmitted";
                 }).length <= 0
             ) {
-                this.mixin_errorDialog("Error", "No selected unsubmitted report(s)");
+                this.mixin_errorDialog(
+                    "Error",
+                    "No selected unsubmitted report(s)"
+                );
                 return;
             }
 
@@ -2158,8 +2165,13 @@ export default {
                     break;
             }
 
-            if(!this.mixin_can("submit expense reports beyond due date")) {
-                if (!moment(moment()).isSameOrBefore(last_submission_date, "day")) {
+            if (!this.mixin_can("submit expense reports beyond due date")) {
+                if (
+                    !moment(moment()).isSameOrBefore(
+                        last_submission_date,
+                        "day"
+                    )
+                ) {
                     this.mixin_errorDialog(
                         "Error (Not Allowed)",
                         `Last submission was ${last_submission_date}`
@@ -2336,11 +2348,11 @@ export default {
             let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
             let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
 
-            if(JSON.stringify(start_date) == JSON.stringify(end_date)) {
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
                 return start_date;
             }
 
-            if(JSON.stringify(end_date) == null) {
+            if (JSON.stringify(end_date) == null) {
                 return start_date;
             }
 
@@ -2355,7 +2367,9 @@ export default {
         this.loadExpenseTypes();
     },
     activated() {
+        this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.loadExpenseTypes();
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;
