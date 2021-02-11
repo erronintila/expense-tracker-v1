@@ -155,6 +155,214 @@
                                         >
                                     </v-col>
                                 </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <div>Print Format</div>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" md="3">
+                                        <v-select
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format
+                                                    .pageOrientation
+                                            "
+                                            label="Page Orientation"
+                                            :items="['portrait', 'landscape']"
+                                        ></v-select>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.pageSize.width
+                                            "
+                                            label="Page Size (width)"
+                                            type="number"
+                                        ></v-text-field>
+                                    </v-col>
+
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.pageSize
+                                                    .height
+                                            "
+                                            label="Page Size (height)"
+                                            type="number"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.pageMargins
+                                                    .left
+                                            "
+                                            type="number"
+                                            label="Page Margin (Left)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.pageMargins
+                                                    .top
+                                            "
+                                            type="number"
+                                            label="Page Margin (Top)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.pageMargins
+                                                    .right
+                                            "
+                                            type="number"
+                                            label="Page Margin (Right)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.pageMargins
+                                                    .bottom
+                                            "
+                                            type="number"
+                                            label="Page Margin (Bottom)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.defaultStyle
+                                                    .font
+                                            "
+                                            label="Font"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" md="3">
+                                        <v-select
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background
+                                                    .alignment
+                                            "
+                                            :items="['left', 'right', 'center']"
+                                            label="Background Alignment"
+                                        >
+                                        </v-select>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background
+                                                    .width
+                                            "
+                                            label="Background Width"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background
+                                                    .height
+                                            "
+                                            label="Background Height"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col>
+                                        <v-textarea
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background
+                                                    .image
+                                            "
+                                            label="Background Image"
+                                        ></v-textarea>
+                                    </v-col>
+                                </v-row>
+ 
+                                <v-row>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background.margin
+                                                    .left
+                                            "
+                                            type="number"
+                                            label="Background Margin (Left)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background.margin
+                                                    .top
+                                            "
+                                            type="number"
+                                            label="Background Margin (Top)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background.margin
+                                                    .right
+                                            "
+                                            type="number"
+                                            label="Background Margin (Right)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background.margin
+                                                    .bottom
+                                            "
+                                            type="number"
+                                            label="Background Margin (Bottom)"
+                                        >
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
                             </v-form>
                         </v-container>
                     </v-expansion-panel-content>
@@ -215,6 +423,34 @@ export default {
                     report_no: {
                         prefix: "",
                         length: 1
+                    },
+                    print_format: {
+                        pageSize: {
+                            width: 0,
+                            height: 0
+                        },
+                        pageOrientation: "landscape",
+                        pageMargins: {
+                            left: 0,
+                            top: 0,
+                            right: 0,
+                            bottom: 0
+                        },
+                        defaultStyle: {
+                            font: "Roboto"
+                        },
+                        background: {
+                            alignment: "left",
+                            width: 0,
+                            height: 0,
+                            image: "",
+                            margin: {
+                                left: 0,
+                                top: 0,
+                                right: 0,
+                                bottom: 0
+                            }
+                        },
                     }
                 }
             },
@@ -227,6 +463,7 @@ export default {
             axios
                 .get("/api/settings")
                 .then(response => {
+                    console.log(response.data);
                     _this.settings = response.data;
                 })
                 .catch(error => {

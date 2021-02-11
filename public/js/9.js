@@ -782,23 +782,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       reports_by_user: [],
       reports_by_expense: [],
       reports_by_date: [],
-      printout: {
+      print_format: {
         pageSize: {
-          width: 13 * 72,
-          height: 8.5 * 72
+          width: this.$store.getters.settings.expense_report.print_format.pageSize.width * 72,
+          height: this.$store.getters.settings.expense_report.print_format.pageSize.height * 72
         },
-        pageOrientation: "landscape",
-        pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+        pageOrientation: this.$store.getters.settings.expense_report.print_format.pageOrientation,
+        pageMargins: [this.$store.getters.settings.expense_report.print_format.pageMargins.left * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.top * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.right * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.bottom * 72],
         defaultStyle: {
-          font: "Roboto"
+          font: this.$store.getters.settings.expense_report.print_format.defaultStyle.font
         },
         background: {
-          alignment: "right",
-          margin: [0, 0.4 * 72, 0.3 * 72, 0],
+          alignment: this.$store.getters.settings.expense_report.print_format.background.alignment,
+          margin: [this.$store.getters.settings.expense_report.print_format.background.margin.left * 72, this.$store.getters.settings.expense_report.print_format.background.margin.top * 72, this.$store.getters.settings.expense_report.print_format.background.margin.right * 72, this.$store.getters.settings.expense_report.print_format.background.margin.bottom * 72],
           // absolutePosition: {x: -300, y: 40},
-          width: 140,
-          // height: 25,
-          image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKgAAAAoCAYAAABq+7FsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAABkPSURBVHhe7ZwJmBNVtsf/VdnT3UknvUM3iAoIbk8UEREFlVHcUMRBfeqI4Ig+RcTBDR4qAm7ouIEygysPR0FHUQHBfVSGHQFhkJ1uoOk1naSXdJKqeufcqnSS7jQ2ot/3vjf5adGpW1U3VbfOPed/bt2KpBHoAMqevQh/+DGiW7ZAq6oBQiFImRmQcrwwnXoKzOecDQv9TZPm1+RnDbTp5b+gacqjUKsrIWdlA3Y7IMt0pASodKimAo1N0JpoUSOwDDgHjvF3wjpiuFFDmjS/nMMaqK/HiVD3lELKz4NkMhmlh0cLh6HV+qCZZDinToFz4gRjS5o0R067BlqT1wmSKkHKcBol7cCeNEUVmqpCqyYpYLXA9eECWM4fbGxJk6bjUKxuS/DGUZBC0ZTGqUUVaP4AlLJSqOQpldI9UH110DjMc8g3kEgGyOx5s1zwX3ARgiOuM7akSdNx2nhQtbQMNV27wNylexvPqAWCABmt455xMA8+j0J5LeSCfERXr0Pkiy8R/mCR2E/yeiGZzeJzDLWuDpInB55920A+N02aDtHGQGt7UiZeXy88oAjfBqrPB8vQi+BaMN8oSU0zGWnjuAlQK6uF8SbCiRTIA3tqD1LVaTNN8/MkhfjQm/8DddcuPSFKMCBOfEw9e/yscTK2q4bBU7YLjpmPI1q2B5qiGFuoSocDoOSp7oT0cFSajpHkQatkJ8ydOyUZJxMt24mcqirIublGScdQKypQ26sPJEqUeGG4Zs3vh2lgf7g/0SVBmjTt0eJBgzf/ESZXVhvj1Cjc20f+5xEbJyMXFCC3ditylEPwNpbDoYaoQtrgzkZk8WcIf/qZvmOaNO0gPKjqC6DG64a5hBIjYUEG5Fyj+/cjTyPD6iAbd0fx5foQKnxAXb2GnOJMVHy/FQWrPsdQ3zKc41sBRPxQZTd8riLk7P6XcWSaNG0RBlp72plAeWVLGI6hlh9Cxmt/gf3Gww8RRRUN414KYu7iJkQigNMuwWyWWG5C5aEnux0huwvNXD2VdQ+UYsrOp3DDhlnAVx8Dgy7TK0qTphVS9MBBzUe609RqWEkjS5O8Hni2bDBKUvPyR42448/1cJM6yHJI7WTnVC/9LxneOSqZcdDhBRqBp7qvxMRpZ4nyNGlaI4demQPZU5RknIx6aB9cSw6fxDw2rx53zAygOF+CyykfZuiIymmbJsliMUFFl8YqlEhVeGBjbxReXYlNu8n1pknTClnZvBWwJId2rSkEy4jrYOraxShpyxYyqCmzgujSyZzSMMMRDcFGjXSoCn+DirBmEv5T4skl1BlUcYyEzhnNkGUJp46qwein/OLYNGliSP6hw7To+g2kP61GEXnPg+Vw/7AS5pNOMkraUjiiSmhMExlXIqxHK2pV9D/RgoGnWHAcGXBQteGdt7djjfkEaGYgJ9SITKWe/KjuWWPUBlR0LZCx5fUjHzFI8/8TKXDLbVrk48WQeBqdgVpZiexNa2HqwVl9W2YubMCkufUo8CTPcGLj5GHVFS/loFthwrZIHSVKHsAt4wfvWZjcazoWFw5CbkNQH3oSo6M6DU0a3JkSds9PG+m/G/Pnz4fL5aLEWsWwYcNEmWweeA5ZBWUricgmRP7xvbHSGg0TXwmiIFsP2THYMMurVex9Oy/ZOIm6c69ETU4JajOPRffQAXzy/WAEl3RGt7rtKAvY9UzfIIMSLX+Dhm7XVxslaf4dePXVV1FcXIxgMAi3240lS5aIctlx/UhEG2vjoZYMjbP3hoem6OutuGKSHzlZ/Cg00e8BvqCGqaMzYLMmlpLz/PpbRFeugGy3if2bZQsZancozcDqwDXYsCALATLIcDTBSO2SqG/AXXReaf4tcDqdwjjfeOMNDBo0CBs26KNHYhzU138wtN27INlsopBRD1XAOXMGHOPuNEqAvQcVdLuWsm/SlYko5AEbm1X4FhUYJXFqcopIPjiSJzxTJ1D270d22W6YizshFNYok68S3jNR01bUKHh1ggs3DHUYJXGiW/8lpAhMyefSBu54VdUwn3cOomvXAzaSMhYF1rPPM3aIo+4rReOj02AbfTMsA842SuNEN22GynNcIxGY+54OiXp6+Muv9XajsGQ9b2BLR296+s+Qi4pgu+FasZ6K8PLPACt1XIcD5n59kzp8DIXyAXXX7qRo1QJ9l1ZeDsvQ39E52BGhc6E7TecXhfX85OuLrtsAlQwAKSaec+IqFxaQpOthlLQPDz9yzqI1k4eRkqZy0DotDQ3k4HJh6dtHL0uB6vejccIDsN10HSznnSvK3vnb38QEpZEjR2LatGm4+uqr0atXL+NJUn09arKyYC45XuwcQyEDcq9cCQs1HlM8sorvA8ym5KY8WK1g2dPZuOC0uIEzDZMeRui5WZBzSH8mwPNJrbeNQeZT040SYOeBCLpfX4OSorjBKfRdwQYFgcXJhq+QwdXm50G2ZdFaqtuaQHMDTGf0Q/aa71HryoNGDch32xOogJzJx+vwBOsa2i7TTVfqffD+9BPdsOT24Jle2vbtdHgE3oMHxM32dTpGGKdUUADP3p+EsTY98TQaHryfjpCQMeMJOB6cqFeQgBYIoLbzsUB9HUyn90X22n8aW3TCHy9B/Z3joZXugWahDt4qGRU0N0HueQI82zZB3b0HNccdT+qMDD43F95DpcZO1F67d8N33HGUCLd9lC2g9tDCIUhmKxwP3Qfno/9tbIijVFQiOOxqRFetImdjISNI4RjY8YSDyOVpmJ7kex6DJx5VUxuZ3PlQ/JVwLfoYtiv0BzVr167Fjz/+iMGDB6Nr166irGWySAN5jqZpT8JUVCg28Jfxu0fR0h3I++ITPJZ9KaY8UIeunnDLEBHD3q97Zxnfv5gj1mNoTc2odtrbGD3PblIDdBHBKqMkzq3P+PH+N2FkOuONWO1X8eztmRh7RXzydF3/QVB37iRvaHQIOp+WoS7y5vyfgK5BralFTlUZJOqAwat+j8i3pK3JC2R9+hEs/eMPCELz30HDzbcKr6cF6mC5/HJkzXvV2EpV1TfA1723qF/qUgIPGbxaU4O6k6nzqop4LSZ7w2q6eTJp7guhbiNjpcQzuv8A3Ms+gXXI+UZNOloj1XfiGUDAD/MZfeCifWLU33E3Qi9Txy4qEfNqufOkQi2vgOfALpjI+6ll++E7hbwwS6kcLzw/UrQwqDuxD1QyMNC29mDvxaag7i+D7ZZRyHr1FWMLNRdFnjqKGKZ8Oh9qc2EyutkkwU8eM2e/APtto42SttSdMQBqaaloG3Fd1K7eukPG1ra0+OiMhyfD3OdU4d0EfMOpAn7CFLxkJP4wqAgnZddhnysfIYnCJJ0gh4YqCsNLn2zbWwLDR8CU09lYi6NVViHr7TeMtWSm35IFny/5ZrAeffcrCicGze8sIE37D4Cn7vE5csiKRvVGI+NRo2F28dzi0Hx1yJj5hDBOxsxhrykkGkZZuVqUxQg9+ay4sXSGAHnWyDIKv+xtDaJr1wlj5xcErYP0sNRyk/gPL7F+JZI+fcXcuQj+S4YhuvlHsZ5E4vEGkeWfIzRnLkwl3cT1KWTgaKZr4jE9vl5e2Jiqa+GcOkkYZxsS6mv884uI/rQ93l7tLCzpQM7D1KUrQq/NgbqDHIBBYMAgmDqRt7daRRto1DFFuyfWQeFOPvbYwxpndONmkhrUiY0RI9EpyKM2PjVTrKciSURkr/oOcrdu0Orq9AL6YnKxiOQXIdudgc3LumHLF/3Qp3Ezypx5KJXzcde4QvEUKZH62+8iPfQNJGeydtSaQ5BPPhG2yy81SpLJ98g4tquJ2inewjw9YGtphDw1G64G27W/Ry51DC95dm/ZTnj3bRcajA1Hra2B++8L4N27nbbtQA4lf447x+oVEZZzBkINNUGyWBBZvcYoJaNYs4407RZRrlIH4uvmENz0+lvGHtS4pLtki5UiQDTJ86YkMRxTRzGTd2XPoZDHS0mCQQXH/QlyXq7QemyI/KjZSxHAu8+4Xl7o2nNCPjgnPWgc1T7Oe+5CbrRetEfL8SkWTw11BPaO0QgltB6El30ujq+fcJ8YI+fIoJEXznjmcWpXkkDU7kl1lO+Bd8dmcUx7BK+6hqJCsfisHjgonIqcm4OG+9tKoBitVC4Z6Q8rSbNRSCijE2aoEm5uhf6pcfdA13AFPv12ALRP7Fjz9Rl4tmq26PVNf3kN9bfegZrMXITnvwsTabIkqB5OalwfLDQKUhPhbD7x/tLnEDlQM3uQxA2JNDbqm+hQlfRPe5hOII3G0wapwSMbNhqlnNA8C5m8LD9By/psMSTyyJLbhRBdU4zoipV0A63iJpr69zNKD4+QM6SX2dvInmz4TztTeIz2UDgZOnhQ6DstWA/3t1/C1KunsfW3ha/ffsN1+pCjxaS//UBESAuDtqnV1XDOeBT2sX8U5UdK87y3Kac5ICSLUrYXHl85NPLabKSm7EIESV6loo2BMu4vl8E5+3kxUZkbWXRw+keG0jJMVOsowQmmagTufxiBy4aj6d77EP77IkjZbrG0hl+ss987AaauJUZJW9bviKLsEIWZBA/En6LkPM2mBDfzC5EcTsjHsyYmlUqNw43OBh35aLEwCvNJvWEdOACms8hDkpEq23cg8t0KcWx0y1axj1xQGNfp7cGnyomT14PMt+YKr8zemeus69Nf34fqasG43Og60o3sOcmIzeeeA9Mx7T9q/i1o5nZgKUAdXjK+m3W2+B0EkhmOP40XZb+E4B9uFXKEI5P9trGQXS7YSVaizg/JlYXQm3P1kYFWpDRQxnH7rRQaInSwCzJZPGeR5JBFW/In/hshY5Xc2WKIQqKsjd8CFe8yxaDeIf7QSUkUtjJnPi7W2+OGGXUoykt+ABBVgELxxCputEeDeQAZX5C0ZSRKOmsXmv+2gErpinhi9uQHxD6Oh/4k5IKckYGm514U5yN+TSUchfm0DryuwqfKcw5CIdiuuRrOJx4TWlJyOqHu2wf/0CspbFIyY22dCdOB3H5kyLLQw0dP/Z33IHDplRReR7a/XHsjavKKyXuXi46kKY2wD9ef5PAtZJkHMiLjdh4xjVMeo7akJJfCoeqvQuYrL4ryjMn3Q42EhRM00fcHhrcdkmvXQBnJZIZn20ZEP1wKS9lueBt2wKzRjeUbKha6AH1X/UpaIUIcZZfyiSfBu2ebUZqaeYsbsa2MDMBEutcoYxqaNVzWPz5P4GjhBEclHcm6qnnxEoT/+jp1sizIxZ1hvVDPtC19z4D5TArjJCuUdRvQvODvZGyNYijGctEQsU/HoDYKR+AYfxdFj7tF1i17vYh+9x0ZzVUisWCNGmtEuZA8Mxs2JyO79uqFR4lCnp+fCka+X9H+8sXXosOw4Oeo6Xzmebp2vfPILDfor+YPkhbSw/6RwMc2zXiCtKNbRJIMklOJZM56XiR8nDhFlnxIOj05oz+sgcbIHXYhMocpuKbfUuy35CEnSIK7npZwFZzhINT6BnLP1BP452/8fsoID5FhktfNzkbW0kXI/v4Lo6b2ue2lIDrn6I0RQyWjbw5reGZsplFy9FjO7k9egkR/ZgZCL70ChXQxn7P97ruMPXQcE8frv5BCIbfxllvFK9OsJS199THhDmN03MyZT8By2cV0M6rFGGF0zVo9pCXIGfOZfcTgPxtHdPUqRJYuM7YcBZzg0M0XmTN5ZpYPSQvrbTH8RC6HtKZ302Y4J4zTjyUsA0iS0H6yx0XJb7y8owSvuU6/Jq6f9HtrmWAffbMwXh5ZkQu7IjD4ImOLTocMlBnd14dF9oHoPXg1TMM0DB64Es+V3I11PS5GzvgbYaHGNV94AWx33o7MN1+Fp7YSnq0bYL2YMuyfYcwzAVjNPJbJPicOP+6cNiqT5Fpi6dHB+ljucTxlqxRGSb4ISULa1E6SJhHbiOGQunU1tKSXGlARf03djzX2OHJcHyyA1KsXSZ6gbjQxOWRcHj9xs151hRgblYqKEKDw23D/JCg7dkLZWwpl997kZc9eRNf/IH5MQ3ji9qD6tfogbKP+AMejU2Cf9IBY+LNt1E3iyQ6fi7p/P6KtPJiNjJWHlqSMTITffQ+BCy5BhDqXUlrW9nx4+WkH/d0tjlVIzoTfe084A5UkTsbbb4pyHvZq2b+CnNxjD+talDqT8hN5/M+/EvsxLQP1PwvtJg2uRJcCCltkSc2yDT6TCxFyAsufBoboA/9HTFmlgi7Dq1BSnKzHOJu3kvTc926eUdI+wWtvEBelUQaatXA+rJddYmxJTf1NoxFevJQanRqOkgD7+HHImP6IsTVOaPYcNNxzn3i/XyM9aTrpREogPzW2ku2SN6w75Uy6E8ZA/cbV4kaLgXoKrWzQ2T+uJ8+RLFF83U8SXpuNVNR7CtX7uV4v34xabyfy8tQedMP4NwpUHpsmaZUMWzV5QG8hcmvKyQAOwnfy6cIb8vd6tugD9f6LLoeyYSPUqkPwbtkIuXcvUZ6In+SGsmKF+BUYhUK8hzpDYjIbvPpahJcuF0NCfL6az0+nk+o9NYnS6DDyyspIMhXDd9pZ+qgERR4pMxOe7ZvF8JX/4iG0J7eJbnpSBkks1tykbtgRcGTJqdZHkTrsQdm9/fXeLJSKB0ASbEozCinEd5Uq8bvry7Hou7YZWEe48r/rUFDASVAylXUq5k6MP4o8LNzHeHCc9VuSSEiNefAgMaqgh18NjnF36BtaYb/5Jn1skPbTqIdbL0kOPwL+ztbf23I+qc/FtXYFZQ4ki9jzsXGTB4/BZufd+SMlD3SjKqvF+1xypyLInbskL8VkQOZMeDeu0w8kT69/L59LInweeplCxp4K9+IPxKEaJY5y0TGo652cCGa9/w7MQy4QP3fEZygV5qc4ny7UqexwzXxOGGd4+edQfvhB19Ple+EifcnwTyCZirrRMSUtx7IU1EiPa3yeZGf8gCX05jyxf8cNlBhzuRNX9LegNqhXxItCoaWkxIIrJ/sw6injKVQHWbq6Geu3R0mbGzHOoJESo3NPsWLIGfE5qoclRJ4kRAKeNR0lJT+H7abrIeflILp/F2z/dXubX0Bpwekgz/ooZeC7xGfb2GQZoDVHhOGKoaHYX4afQHF2ymVkgK0xuV1wrVtNCcEeKLXlcDzEz+3jsAfMrT0A5/NPixESralRjAig2VjCzdAoHDvum0DG0Ek/KErfTV5ZPxefXkbwI1rRLqDyFMM4MbIWvg3tULk4XiJj9ZP3S8S9aCFcny2F+VTy/tS5ks6HF/6eHA8clAwywYsuIa9Iup0ilHXYCJiOPw4Nd93T0jZJx/J5JSyy14MgOwei4yE+gdNvr8FPexV43cn2HahX0Uz3Y+qoDEz8fYZRmpptpRH0GetDjosFkq4/GT6dg9Uqaj/OhdvZ1rP+mvCbA+ydfg61qkYY9K8OyRgxSaPVE7f/M3BSlThe21G4k7R6jYhhQ0t2RYeHR4F+kYEyV0zyYcmqCDrlJhspTz7mCcfNEQ2X9rNhaD8rzuptRU6WJAbct+6LYs5HTSQJQuhMoZ0HlWLGyfBrH+NGODDjlg6G9zS/KSHylHYeAUhBosE1GUNQDh7oJ6JkXGbSniqFbflwCVwK9lJy1aULSQA67siOTOCj6R48PiYDZaVR8apHDH4BzpMlo8Aj47stEUx4uR7/MaYGx95Yg2Our8awyXVYsTWCkkKzmNqWaJxR8iiUt6SN8zdgwQJ+IKGzatUqNPLj4QSmT59O0ZfCbwJPPvkkVq5ciTlz5hglwLx587CPDOj9999vMc5FixZh3bp12LRpk1ECvLdwIR555BHhgJiFtB7jhRdeoMhfIz4vWxYfSlPIqB966CEEAwG8/trr4jx/sYEyE6/NwIGP82Ejb87ZeKKh8vQ3h1WCl4y1ON+EgmzSqnkmFHpNsLeadc/wmGd5hYJPpqWeR5jml8NecAVl6T6frk1nzZrV8pmpp+RpwIABYp9E8vLy0Lt3b5SXkzY1WL58OQ4dOiQmFMfgIMz325wgB84991wMGULZuuGBEt/8PeaYY4ShMzZKQmM899xzmDFjBk4++WSMHj0a/fr1OzoDZTrlyNjzdh4+fMwthoXKKlQxR/RIhAO/KMe684sXPOjbs612SXN0VFZWYsyYMfjmm2+EV3rwwQdRWhqf0Dx79mxs27YNc+fOpSgWH86SZRkzZ84UnjBGz549k45l+HUNfo+Ilxj84lss7LemoqIC48ePF560ujr+7lmYHxwYrF+/HlOnTj16A40xbIAde9/Jwz9nZZPmtGA/edT9lZTsUMbfRFk5vyfPY5u88OeGkIYqv4qy/QoGn2ZF06f5OL/VjPw0vw7s8fLz89GtWzcxa51fpYgZA287/fTTMXbsWLz77rt46634FEPWk/fee6942zIGe7zhw4fj+eefN0p48MAv6mtOGCXg94s8CbPqE42VPTYzbty4pLonTJiAyZMnY82aNaKus88++5cnSR3hX6RPv9oQxqbdingtJESGyUNdDruEHsUm9O1uwcgLOjiUlOY3gT0de8rD0d4+sdDOsAzgfQpaT7PsAIn1MDt27EB2djZJjDz8L043CkDaTizrAAAAAElFTkSuQmCC"
+          width: this.$store.getters.settings.expense_report.print_format.background.width * 72,
+          height: this.$store.getters.settings.expense_report.print_format.background.height * 72,
+          image: this.$store.getters.settings.expense_report.print_format.background.image
         }
       }
     };
@@ -1004,15 +1004,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         var docDefinition = {
           // pageSize: 'legal',
-          pageSize: _this5.printout.pageSize,
-          pageOrientation: _this5.printout.pageOrientation,
-          pageMargins: _this5.printout.pageMargins,
-          defaultStyle: _this5.printout.defaultStyle,
+          pageSize: _this5.print_format.pageSize,
+          pageOrientation: _this5.print_format.pageOrientation,
+          pageMargins: _this5.print_format.pageMargins,
+          defaultStyle: _this5.print_format.defaultStyle,
           background: {
-            alignment: "right",
-            margin: [0, 0.4 * 72, 0.3 * 72, 0],
-            width: 140,
-            image: _this5.printout.background.image
+            alignment: _this5.print_format.background.alignment,
+            margin: [_this5.print_format.background.margin.left, _this5.print_format.background.margin.top, _this5.print_format.background.margin.right, _this5.print_format.background.margin.bottom],
+            height: _this5.print_format.background.height,
+            width: _this5.print_format.background.width,
+            image: _this5.print_format.background.image
           },
           footer: function footer(currentPage, pageCount) {
             return {
@@ -1257,15 +1258,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         var docDefinition = {
           // pageSize: 'legal',
-          pageSize: _this6.printout.pageSize,
-          pageOrientation: _this6.printout.pageOrientation,
-          pageMargins: _this6.printout.pageMargins,
-          defaultStyle: _this6.printout.defaultStyle,
+          pageSize: _this6.print_format.pageSize,
+          pageOrientation: _this6.print_format.pageOrientation,
+          pageMargins: _this6.print_format.pageMargins,
+          defaultStyle: _this6.print_format.defaultStyle,
           background: {
-            alignment: "right",
-            margin: [0, 0.4 * 72, 0.3 * 72, 0],
-            width: 140,
-            image: _this6.printout.background.image
+            alignment: _this6.print_format.background.alignment,
+            margin: [_this6.print_format.background.margin.left, _this6.print_format.background.margin.top, _this6.print_format.background.margin.right, _this6.print_format.background.margin.bottom],
+            height: _this6.print_format.background.height,
+            width: _this6.print_format.background.width,
+            image: _this6.print_format.background.image
           },
           footer: function footer(currentPage, pageCount) {
             return {
@@ -1522,15 +1524,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         var docDefinition = {
           // pageSize: 'legal',
-          pageSize: _this7.printout.pageSize,
-          pageOrientation: _this7.printout.pageOrientation,
-          pageMargins: _this7.printout.pageMargins,
-          defaultStyle: _this7.printout.defaultStyle,
+          pageSize: _this7.print_format.pageSize,
+          pageOrientation: _this7.print_format.pageOrientation,
+          pageMargins: _this7.print_format.pageMargins,
+          defaultStyle: _this7.print_format.defaultStyle,
           background: {
-            alignment: "right",
-            margin: [0, 0.4 * 72, 0.3 * 72, 0],
-            width: 140,
-            image: _this7.printout.background.image
+            alignment: _this7.print_format.background.alignment,
+            margin: [_this7.print_format.background.margin.left, _this7.print_format.background.margin.top, _this7.print_format.background.margin.right, _this7.print_format.background.margin.bottom],
+            height: _this7.print_format.background.height,
+            width: _this7.print_format.background.width,
+            image: _this7.print_format.background.image
           },
           footer: function footer(currentPage, pageCount) {
             return {
@@ -2433,15 +2436,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
-  // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.$store.dispatch("AUTH_SETTINGS");
     this.loadTotalCountReportStatus();
     this.loadUsers();
     this.loadExpenseTypes();
@@ -2450,6 +2448,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this11 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.$store.dispatch("AUTH_SETTINGS");
     this.loadTotalCountReportStatus();
     this.loadUsers();
     this.loadExpenseTypes();
