@@ -231,6 +231,24 @@ class UserSeeder extends Seeder
         Setting::set("tax_rate", 12);
         Setting::set("expense_report.report_no.prefix", 'EXR');
         Setting::set("expense_report.report_no.num_length", 10);
+
+        Setting::set("expense_report.print_format.pageSize.width", 11.69);
+        Setting::set("expense_report.print_format.pageSize.height", 8.27);
+        Setting::set("expense_report.print_format.pageOrientation", 'landscape');
+        Setting::set("expense_report.print_format.pageMargins.left", 0.5);
+        Setting::set("expense_report.print_format.pageMargins.top", 0.5);
+        Setting::set("expense_report.print_format.pageMargins.right", 0.5);
+        Setting::set("expense_report.print_format.pageMargins.bottom", 0.5);
+        Setting::set("expense_report.print_format.defaultStyle.font", 'Roboto');
+        Setting::set("expense_report.print_format.background.alignment", 'right');
+        Setting::set("expense_report.print_format.background.width", 2.2);
+        Setting::set("expense_report.print_format.background.height", 0);
+        Setting::set("expense_report.print_format.background.image", null);
+        Setting::set("expense_report.print_format.background.margin.left", 0.5);
+        Setting::set("expense_report.print_format.background.margin.top", 0.4);
+        Setting::set("expense_report.print_format.background.margin.right", 0);
+        Setting::set("expense_report.print_format.background.margin.bottom", 0);
+        
         Setting::save();
     }
 }
