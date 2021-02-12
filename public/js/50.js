@@ -454,11 +454,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      validExpenses: false,
+      validExpenseReports: false,
+      validTaxes: false,
       file_input: null,
+      rules: {
+        file_input: [function (value) {
+          return !value || value.size < 30000 || "Report logo size should be less than 30 KB";
+        }]
+      },
       settings: {
         company_name: "Twin-Circa Marketing",
         currency: "Philippine Peso",
@@ -510,6 +538,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/settings").then(function (response) {
+        _this.file_input = null;
         _this.settings = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -526,20 +555,30 @@ __webpack_require__.r(__webpack_exports__);
       // );
 
 
-      axios.post("/api/settings", {
-        settings: _this.settings
-      }).then(function (response) {
-        _this.mixin_successDialog("Success", "Saved settings successfully");
+      _this.$refs.formExpenses.validate();
 
-        _this.$store.dispatch("AUTH_USER");
+      _this.$refs.formExpenseReports.validate();
 
-        _this.$store.dispatch("AUTH_SETTINGS");
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      _this.$refs.formTaxes.validate();
 
-        _this.mixin_errorDialog(error.response.status, error.response.statusText);
-      });
+      if (_this.$refs.formExpenses.validate() && _this.$refs.formExpenseReports.validate() && _this.$refs.formTaxes.validate()) {
+        axios.post("/api/settings", {
+          settings: _this.settings
+        }).then(function (response) {
+          _this.mixin_successDialog("Success", "Saved settings successfully");
+
+          _this.$store.dispatch("AUTH_USER");
+
+          _this.$store.dispatch("AUTH_SETTINGS");
+
+          window.location.replace("/admin/settings");
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog(error.response.status, error.response.statusText);
+        });
+      }
     }
   },
   computed: {
@@ -600,6 +639,26 @@ __webpack_require__.r(__webpack_exports__);
         var report_no = "";
         report_no = prefix + moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYYMM") + String(1).padStart(num_length, "0");
         return report_no;
+      }
+    }
+  },
+  watch: {
+    file_input: function file_input() {
+      var _this2 = this;
+
+      if (this.file_input) {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.file_input);
+
+        reader.onload = function () {
+          _this2.settings.expense_report.print_format.background.image = reader.result;
+        };
+
+        reader.onerror = function (error) {
+          console.log("Error: ", error);
+        };
+      } else {
+        this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
       }
     }
   },
@@ -707,7 +766,16 @@ var render = function() {
                         [
                           _c(
                             "v-form",
-                            { ref: "formExpenses" },
+                            {
+                              ref: "formExpenses",
+                              model: {
+                                value: _vm.validExpenses,
+                                callback: function($$v) {
+                                  _vm.validExpenses = $$v
+                                },
+                                expression: "validExpenses"
+                              }
+                            },
                             [
                               _c(
                                 "v-row",
@@ -782,7 +850,16 @@ var render = function() {
                         [
                           _c(
                             "v-form",
-                            { ref: "formExpenseReports" },
+                            {
+                              ref: "formExpenseReports",
+                              model: {
+                                value: _vm.validExpenseReports,
+                                callback: function($$v) {
+                                  _vm.validExpenseReports = $$v
+                                },
+                                expression: "validExpenseReports"
+                              }
+                            },
                             [
                               _c(
                                 "v-row",
@@ -791,7 +868,11 @@ var render = function() {
                                     _c(
                                       "div",
                                       { staticClass: "overline green--text" },
-                                      [_vm._v("General")]
+                                      [
+                                        _vm._v(
+                                          "\n                                        General\n                                    "
+                                        )
+                                      ]
                                     )
                                   ])
                                 ],
@@ -876,7 +957,11 @@ var render = function() {
                                     _c(
                                       "div",
                                       { staticClass: "overline  green--text" },
-                                      [_vm._v("Report No. Format:")]
+                                      [
+                                        _vm._v(
+                                          "\n                                        Report No. Format:\n                                    "
+                                        )
+                                      ]
                                     )
                                   ])
                                 ],
@@ -977,7 +1062,11 @@ var render = function() {
                                     _c(
                                       "div",
                                       { staticClass: "overline green--text" },
-                                      [_vm._v("Print Format")]
+                                      [
+                                        _vm._v(
+                                          "\n                                        Print Format\n                                    "
+                                        )
+                                      ]
                                     )
                                   ])
                                 ],
@@ -1243,7 +1332,11 @@ var render = function() {
                                     _c(
                                       "div",
                                       { staticClass: "overline green--text" },
-                                      [_vm._v("Report Logo")]
+                                      [
+                                        _vm._v(
+                                          "\n                                        Report Logo\n                                    "
+                                        )
+                                      ]
                                     )
                                   ])
                                 ],
@@ -1275,9 +1368,12 @@ var render = function() {
                                     [
                                       _c("v-file-input", {
                                         attrs: {
+                                          rules: _vm.rules.file_input,
+                                          "prepend-icon": "mdi-upload",
                                           "show-size": "",
                                           label: "Upload",
-                                          accept: "image/*"
+                                          accept:
+                                            "image/png, image/jpeg, image/bmp"
                                         },
                                         model: {
                                           value: _vm.file_input,
@@ -1551,7 +1647,16 @@ var render = function() {
                         [
                           _c(
                             "v-form",
-                            { ref: "formTaxes" },
+                            {
+                              ref: "formTaxes",
+                              model: {
+                                value: _vm.validTaxes,
+                                callback: function($$v) {
+                                  _vm.validTaxes = $$v
+                                },
+                                expression: "validTaxes"
+                              }
+                            },
                             [
                               _c(
                                 "v-row",

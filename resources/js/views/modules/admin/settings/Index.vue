@@ -48,7 +48,7 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-container>
-                            <v-form ref="formExpenses">
+                            <v-form ref="formExpenses" v-model="validExpenses">
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-text-field
@@ -83,10 +83,15 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-container>
-                            <v-form ref="formExpenseReports">
+                            <v-form
+                                ref="formExpenseReports"
+                                v-model="validExpenseReports"
+                            >
                                 <v-row>
                                     <v-col>
-                                        <div class="overline green--text">General</div>
+                                        <div class="overline green--text">
+                                            General
+                                        </div>
                                     </v-col>
                                 </v-row>
 
@@ -130,7 +135,9 @@
 
                                 <v-row>
                                     <v-col>
-                                        <div class="overline  green--text">Report No. Format:</div>
+                                        <div class="overline  green--text">
+                                            Report No. Format:
+                                        </div>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -168,7 +175,9 @@
 
                                 <v-row>
                                     <v-col>
-                                        <div class="overline green--text">Print Format</div>
+                                        <div class="overline green--text">
+                                            Print Format
+                                        </div>
                                     </v-col>
                                 </v-row>
 
@@ -288,7 +297,9 @@
 
                                 <v-row>
                                     <v-col>
-                                        <div class="overline green--text">Report Logo</div>
+                                        <div class="overline green--text">
+                                            Report Logo
+                                        </div>
                                     </v-col>
                                 </v-row>
 
@@ -300,10 +311,19 @@
                                         />
                                     </v-col>
                                     <v-col cols="12" md="3">
-                                        <v-file-input
+                                        <!-- <v-file-input
                                             show-size
                                             label="Upload"
                                             accept="image/*"
+                                            v-model="file_input"
+                                        /> -->
+
+                                        <v-file-input
+                                            :rules="rules.file_input"
+                                            prepend-icon="mdi-upload"
+                                            show-size
+                                            label="Upload"
+                                            accept="image/png, image/jpeg, image/bmp"
                                             v-model="file_input"
                                         />
                                     </v-col>
@@ -412,7 +432,7 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-container>
-                            <v-form ref="formTaxes">
+                            <v-form ref="formTaxes" v-model="validTaxes">
                                 <v-row>
                                     <v-col cols="12" md="4">
                                         <v-text-field
@@ -447,7 +467,18 @@ import moment from "moment";
 export default {
     data() {
         return {
+            validExpenses: false,
+            validExpenseReports: false,
+            validTaxes: false,
             file_input: null,
+            rules: {
+                file_input: [
+                    value =>
+                        !value ||
+                        value.size < 30000 ||
+                        "Report logo size should be less than 30 KB"
+                ]
+            },
             settings: {
                 company_name: "Twin-Circa Marketing",
                 currency: "Philippine Peso",
@@ -500,6 +531,7 @@ export default {
             axios
                 .get("/api/settings")
                 .then(response => {
+                    _this.file_input = null;
                     _this.settings = response.data;
                 })
                 .catch(error => {
@@ -521,28 +553,40 @@ export default {
             //     this.expense_report_settings
             // );
 
-            axios
-                .post("/api/settings", {
-                    settings: _this.settings
-                })
-                .then(response => {
-                    _this.mixin_successDialog(
-                        "Success",
-                        "Saved settings successfully"
-                    );
+            _this.$refs.formExpenses.validate();
+            _this.$refs.formExpenseReports.validate();
+            _this.$refs.formTaxes.validate();
 
-                    _this.$store.dispatch("AUTH_USER");
-                    _this.$store.dispatch("AUTH_SETTINGS");
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+            if (
+                _this.$refs.formExpenses.validate() &&
+                _this.$refs.formExpenseReports.validate() &&
+                _this.$refs.formTaxes.validate()
+            ) {
+                axios
+                    .post("/api/settings", {
+                        settings: _this.settings
+                    })
+                    .then(response => {
+                        _this.mixin_successDialog(
+                            "Success",
+                            "Saved settings successfully"
+                        );
 
-                    _this.mixin_errorDialog(
-                        error.response.status,
-                        error.response.statusText
-                    );
-                });
+                        _this.$store.dispatch("AUTH_USER");
+                        _this.$store.dispatch("AUTH_SETTINGS");
+
+                        window.location.replace("/admin/settings");
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        console.log(error.response);
+
+                        _this.mixin_errorDialog(
+                            error.response.status,
+                            error.response.statusText
+                        );
+                    });
+            }
         }
     },
     computed: {
@@ -550,53 +594,61 @@ export default {
             return [
                 {
                     name: "A4",
-                    width: this.expense_report.print_format.pageOrientation ==
+                    width:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
                             : 9,
-                    height: this.expense_report.print_format.pageOrientation ==
+                    height:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
-                            : 9,
+                            : 9
                 },
                 {
                     name: "Letter",
-                    width: this.expense_report.print_format.pageOrientation ==
+                    width:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
                             : 9,
-                    height: this.expense_report.print_format.pageOrientation ==
+                    height:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
-                            : 9,
+                            : 9
                 },
                 {
                     name: "Folio",
-                    width: this.expense_report.print_format.pageOrientation ==
+                    width:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
                             : 9,
-                    height: this.expense_report.print_format.pageOrientation ==
+                    height:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
-                            : 9,
+                            : 9
                 },
                 {
                     name: "Legal",
-                    width: this.expense_report.print_format.pageOrientation ==
+                    width:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
                             : 9,
-                    height: this.expense_report.print_format.pageOrientation ==
+                    height:
+                        this.expense_report.print_format.pageOrientation ==
                         "portrait"
                             ? 10
-                            : 9,
+                            : 9
                 },
                 {
                     name: "Custom",
                     width: 0,
-                    height: 0,
-                },
+                    height: 0
+                }
             ];
         },
         url() {
@@ -642,6 +694,23 @@ export default {
                     String(1).padStart(num_length, "0");
 
                 return report_no;
+            }
+        }
+    },
+    watch: {
+        file_input() {
+            if (this.file_input) {
+                let reader = new FileReader();
+                reader.readAsDataURL(this.file_input);
+                reader.onload = () => {
+                    this.settings.expense_report.print_format.background.image =
+                        reader.result;
+                };
+                reader.onerror = function(error) {
+                    console.log("Error: ", error);
+                };
+            } else {
+                this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
             }
         }
     },
