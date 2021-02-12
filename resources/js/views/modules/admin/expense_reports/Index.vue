@@ -774,7 +774,7 @@ export default {
                     width: this.$store.getters.settings.expense_report.print_format.background.width * 72, 
                     height: this.$store.getters.settings.expense_report.print_format.background.height * 72, 
                     image: this.$store.getters.settings.expense_report.print_format.background.image
-                }
+                },
             }
         };
     },
@@ -1015,6 +1015,8 @@ export default {
                     }
                 };
 
+                console.log(this.print_format.background.margin);
+
                 let docDefinition = {
                     // pageSize: 'legal',
                     pageSize: this.print_format.pageSize,
@@ -1023,12 +1025,7 @@ export default {
                     defaultStyle: this.print_format.defaultStyle,
                     background: {
                         alignment: this.print_format.background.alignment,
-                        margin: [
-                            this.print_format.background.margin.left, 
-                            this.print_format.background.margin.top, 
-                            this.print_format.background.margin.right, 
-                            this.print_format.background.margin.bottom
-                        ],
+                        margin: this.print_format.background.margin,
                         height: this.print_format.background.height,
                         width: this.print_format.background.width,
                         image: this.print_format.background.image
@@ -1335,6 +1332,8 @@ export default {
                     }
                 };
 
+                console.log(this.print_format.background.margin);
+
                 let docDefinition = {
                     // pageSize: 'legal',
                     pageSize: this.print_format.pageSize,
@@ -1343,12 +1342,7 @@ export default {
                     defaultStyle: this.print_format.defaultStyle,
                     background: {
                         alignment: this.print_format.background.alignment,
-                        margin: [
-                            this.print_format.background.margin.left, 
-                            this.print_format.background.margin.top, 
-                            this.print_format.background.margin.right, 
-                            this.print_format.background.margin.bottom
-                        ],
+                        margin: this.print_format.background.margin,
                         height: this.print_format.background.height,
                         width: this.print_format.background.width,
                         image: this.print_format.background.image
@@ -1534,8 +1528,6 @@ export default {
             });
         },
         printReportByExpense(action) {
-            console.log(this.selected.map(item => new Date(item.from)));
-
             this.loadReportByExpense().then(() => {
                 let table_columns = [];
                 let table_rows = [];
@@ -1683,6 +1675,8 @@ export default {
                     }
                 };
 
+                console.log(this.print_format.background);
+
                 let docDefinition = {
                     // pageSize: 'legal',
                     pageSize: this.print_format.pageSize,
@@ -1691,12 +1685,7 @@ export default {
                     defaultStyle: this.print_format.defaultStyle,
                     background: {
                         alignment: this.print_format.background.alignment,
-                        margin: [
-                            this.print_format.background.margin.left, 
-                            this.print_format.background.margin.top, 
-                            this.print_format.background.margin.right, 
-                            this.print_format.background.margin.bottom
-                        ],
+                        margin: this.print_format.background.margin,
                         height: this.print_format.background.height,
                         width: this.print_format.background.width,
                         image: this.print_format.background.image
@@ -1709,7 +1698,7 @@ export default {
                                         "YYYY-MM-DD HH:mm:ss"
                                     )}`,
                                     width: 500,
-                                    margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                                    margin: [0.5 * 72, 0.5 * 72, 0, 0],
                                     style: "pageFooter"
                                 },
                                 {
@@ -1977,14 +1966,12 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
             this.loadTotalCountReportStatus();
-
             this.loadUsers();
-
             this.loadExpenseTypes();
-
             this.selected = [];
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.$store.dispatch("AUTH_SETTINGS");
         },
         onShow(item) {
             this.$router.push({

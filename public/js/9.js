@@ -1002,6 +1002,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             bolditalics: "Roboto-MediumItalic.ttf"
           }
         };
+        console.log(_this5.print_format.background.margin);
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: _this5.print_format.pageSize,
@@ -1010,7 +1011,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           defaultStyle: _this5.print_format.defaultStyle,
           background: {
             alignment: _this5.print_format.background.alignment,
-            margin: [_this5.print_format.background.margin.left, _this5.print_format.background.margin.top, _this5.print_format.background.margin.right, _this5.print_format.background.margin.bottom],
+            margin: _this5.print_format.background.margin,
             height: _this5.print_format.background.height,
             width: _this5.print_format.background.width,
             image: _this5.print_format.background.image
@@ -1256,6 +1257,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             bolditalics: "Roboto-MediumItalic.ttf"
           }
         };
+        console.log(_this6.print_format.background.margin);
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: _this6.print_format.pageSize,
@@ -1264,7 +1266,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           defaultStyle: _this6.print_format.defaultStyle,
           background: {
             alignment: _this6.print_format.background.alignment,
-            margin: [_this6.print_format.background.margin.left, _this6.print_format.background.margin.top, _this6.print_format.background.margin.right, _this6.print_format.background.margin.bottom],
+            margin: _this6.print_format.background.margin,
             height: _this6.print_format.background.height,
             width: _this6.print_format.background.width,
             image: _this6.print_format.background.image
@@ -1401,9 +1403,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     printReportByExpense: function printReportByExpense(action) {
       var _this7 = this;
 
-      console.log(this.selected.map(function (item) {
-        return new Date(item.from);
-      }));
       this.loadReportByExpense().then(function () {
         var table_columns = [];
         var table_rows = [];
@@ -1522,6 +1521,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             bolditalics: "Roboto-MediumItalic.ttf"
           }
         };
+        console.log(_this7.print_format.background);
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: _this7.print_format.pageSize,
@@ -1530,7 +1530,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           defaultStyle: _this7.print_format.defaultStyle,
           background: {
             alignment: _this7.print_format.background.alignment,
-            margin: [_this7.print_format.background.margin.left, _this7.print_format.background.margin.top, _this7.print_format.background.margin.right, _this7.print_format.background.margin.bottom],
+            margin: _this7.print_format.background.margin,
             height: _this7.print_format.background.height,
             width: _this7.print_format.background.width,
             image: _this7.print_format.background.image
@@ -1540,7 +1540,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               columns: [{
                 text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD HH:mm:ss")),
                 width: 500,
-                margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                margin: [0.5 * 72, 0.5 * 72, 0, 0],
                 style: "pageFooter"
               }, {
                 text: "Page " + currentPage.toString() + " of " + pageCount,
@@ -1761,6 +1761,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.loadUsers();
       this.loadExpenseTypes();
       this.selected = [];
+      this.$store.dispatch("AUTH_NOTIFICATIONS");
+      this.$store.dispatch("AUTH_SETTINGS");
     },
     onShow: function onShow(item) {
       this.$router.push({

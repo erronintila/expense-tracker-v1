@@ -85,6 +85,12 @@
                         <v-container>
                             <v-form ref="formExpenseReports">
                                 <v-row>
+                                    <v-col>
+                                        <div class="overline green--text">General</div>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
                                     <v-col cols="12" md="4">
                                         <v-select
                                             v-model="settings.submission_period"
@@ -120,9 +126,11 @@
                                     </v-col>
                                 </v-row>
 
+                                <v-divider></v-divider>
+
                                 <v-row>
                                     <v-col>
-                                        <div>Report No. Format:</div>
+                                        <div class="overline  green--text">Report No. Format:</div>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -156,9 +164,11 @@
                                     </v-col>
                                 </v-row>
 
+                                <v-divider></v-divider>
+
                                 <v-row>
                                     <v-col>
-                                        <div>Print Format</div>
+                                        <div class="overline green--text">Print Format</div>
                                     </v-col>
                                 </v-row>
 
@@ -251,15 +261,54 @@
 
                                 <v-row>
                                     <v-col cols="12" md="3">
-                                        <v-text-field
+                                        <v-select
                                             v-model="
                                                 settings.expense_report
                                                     .print_format.defaultStyle
                                                     .font
                                             "
                                             label="Font"
+                                            :items="['Roboto']"
                                         >
-                                        </v-text-field>
+                                        </v-select>
+                                    </v-col>
+                                </v-row>
+
+                                <!-- <v-row>
+                                    <v-col>
+                                        <v-textarea
+                                            v-model="base64Image"
+                                            readonly
+                                            label="Background Image"
+                                        ></v-textarea>
+                                    </v-col>
+                                </v-row> -->
+
+                                <v-divider></v-divider>
+
+                                <v-row>
+                                    <v-col>
+                                        <div class="overline green--text">Report Logo</div>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col v-if="url" cols="12" md="3">
+                                        <v-img
+                                            label="Report Image Logo"
+                                            :src="url"
+                                        />
+                                    </v-col>
+                                    <v-col cols="12" md="3">
+                                        <v-file-input
+                                            show-size
+                                            label="Upload"
+                                            accept="image/*"
+                                            v-model="file_input"
+                                        />
+                                    </v-col>
+                                    <v-col cols="12" md="6">
+                                        <small v-text="base64Image"></small>
                                     </v-col>
                                 </v-row>
 
@@ -272,7 +321,7 @@
                                                     .alignment
                                             "
                                             :items="['left', 'right', 'center']"
-                                            label="Background Alignment"
+                                            label="Logo Alignment"
                                         >
                                         </v-select>
                                     </v-col>
@@ -283,7 +332,7 @@
                                                     .print_format.background
                                                     .width
                                             "
-                                            label="Background Width"
+                                            label="Logo Width"
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -294,35 +343,22 @@
                                                     .print_format.background
                                                     .height
                                             "
-                                            label="Background Height"
+                                            label="Logo Height"
                                         >
                                         </v-text-field>
                                     </v-col>
                                 </v-row>
 
                                 <v-row>
-                                    <v-col>
-                                        <v-textarea
+                                    <v-col cols="12" md="3">
+                                        <v-text-field
                                             v-model="
                                                 settings.expense_report
                                                     .print_format.background
-                                                    .image
-                                            "
-                                            label="Background Image"
-                                        ></v-textarea>
-                                    </v-col>
-                                </v-row>
- 
-                                <v-row>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background.margin
-                                                    .left
+                                                    .margin.left
                                             "
                                             type="number"
-                                            label="Background Margin (Left)"
+                                            label="Logo Margin (Left)"
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -330,11 +366,11 @@
                                         <v-text-field
                                             v-model="
                                                 settings.expense_report
-                                                    .print_format.background.margin
-                                                    .top
+                                                    .print_format.background
+                                                    .margin.top
                                             "
                                             type="number"
-                                            label="Background Margin (Top)"
+                                            label="Logo Margin (Top)"
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -342,11 +378,11 @@
                                         <v-text-field
                                             v-model="
                                                 settings.expense_report
-                                                    .print_format.background.margin
-                                                    .right
+                                                    .print_format.background
+                                                    .margin.right
                                             "
                                             type="number"
-                                            label="Background Margin (Right)"
+                                            label="Logo Margin (Right)"
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -354,11 +390,11 @@
                                         <v-text-field
                                             v-model="
                                                 settings.expense_report
-                                                    .print_format.background.margin
-                                                    .bottom
+                                                    .print_format.background
+                                                    .margin.bottom
                                             "
                                             type="number"
-                                            label="Background Margin (Bottom)"
+                                            label="Logo Margin (Bottom)"
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -411,6 +447,7 @@ import moment from "moment";
 export default {
     data() {
         return {
+            file_input: null,
             settings: {
                 company_name: "Twin-Circa Marketing",
                 currency: "Philippine Peso",
@@ -450,7 +487,7 @@ export default {
                                 right: 0,
                                 bottom: 0
                             }
-                        },
+                        }
                     }
                 }
             },
@@ -463,7 +500,6 @@ export default {
             axios
                 .get("/api/settings")
                 .then(response => {
-                    console.log(response.data);
                     _this.settings = response.data;
                 })
                 .catch(error => {
@@ -510,6 +546,89 @@ export default {
         }
     },
     computed: {
+        page_sizes() {
+            return [
+                {
+                    name: "A4",
+                    width: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                    height: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                },
+                {
+                    name: "Letter",
+                    width: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                    height: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                },
+                {
+                    name: "Folio",
+                    width: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                    height: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                },
+                {
+                    name: "Legal",
+                    width: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                    height: this.expense_report.print_format.pageOrientation ==
+                        "portrait"
+                            ? 10
+                            : 9,
+                },
+                {
+                    name: "Custom",
+                    width: 0,
+                    height: 0,
+                },
+            ];
+        },
+        url() {
+            if (this.file_input) {
+                return URL.createObjectURL(this.file_input);
+            }
+
+            return this.$store.getters.settings.expense_report.print_format
+                .background.image;
+        },
+        base64Image() {
+            // let _this = this;
+            // if (this.file_input) {
+            //     let reader = new FileReader();
+            //     reader.readAsDataURL(this.file_input);
+            //     reader.onload = () => {
+            //         _this.settings.expense_report.print_format.background.image =
+            //             reader.result;
+            //         return reader.result;
+            //     };
+            //     reader.onerror = function(error) {
+            //         console.log("Error: ", error);
+            //         // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+            //         return;
+            //     };
+            // }
+
+            // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+
+            // return this.$store.getters.settings.expense_report.print_format.background.image;
+            return;
+        },
         report_no: {
             get() {
                 let prefix = this.settings.expense_report.report_no.prefix;

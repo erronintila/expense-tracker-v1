@@ -418,10 +418,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      file_input: null,
       settings: {
         company_name: "Twin-Circa Marketing",
         currency: "Philippine Peso",
@@ -473,7 +510,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/settings").then(function (response) {
-        console.log(response.data);
         _this.settings = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -507,6 +543,56 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    page_sizes: function page_sizes() {
+      return [{
+        name: "A4",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Letter",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Folio",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Legal",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Custom",
+        width: 0,
+        height: 0
+      }];
+    },
+    url: function url() {
+      if (this.file_input) {
+        return URL.createObjectURL(this.file_input);
+      }
+
+      return this.$store.getters.settings.expense_report.print_format.background.image;
+    },
+    base64Image: function base64Image() {
+      // let _this = this;
+      // if (this.file_input) {
+      //     let reader = new FileReader();
+      //     reader.readAsDataURL(this.file_input);
+      //     reader.onload = () => {
+      //         _this.settings.expense_report.print_format.background.image =
+      //             reader.result;
+      //         return reader.result;
+      //     };
+      //     reader.onerror = function(error) {
+      //         console.log("Error: ", error);
+      //         // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+      //         return;
+      //     };
+      // }
+      // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+      // return this.$store.getters.settings.expense_report.print_format.background.image;
+      return;
+    },
     report_no: {
       get: function get() {
         var prefix = this.settings.expense_report.report_no.prefix;
@@ -701,6 +787,20 @@ var render = function() {
                               _c(
                                 "v-row",
                                 [
+                                  _c("v-col", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline green--text" },
+                                      [_vm._v("General")]
+                                    )
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
                                   _c(
                                     "v-col",
                                     { attrs: { cols: "12", md: "4" } },
@@ -767,11 +867,17 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
                                   _c("v-col", [
-                                    _c("div", [_vm._v("Report No. Format:")])
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline  green--text" },
+                                      [_vm._v("Report No. Format:")]
+                                    )
                                   ])
                                 ],
                                 1
@@ -862,11 +968,17 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
                                   _c("v-col", [
-                                    _c("div", [_vm._v("Print Format")])
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline green--text" },
+                                      [_vm._v("Print Format")]
+                                    )
                                   ])
                                 ],
                                 1
@@ -1094,8 +1206,11 @@ var render = function() {
                                     "v-col",
                                     { attrs: { cols: "12", md: "3" } },
                                     [
-                                      _c("v-text-field", {
-                                        attrs: { label: "Font" },
+                                      _c("v-select", {
+                                        attrs: {
+                                          label: "Font",
+                                          items: ["Roboto"]
+                                        },
                                         model: {
                                           value:
                                             _vm.settings.expense_report
@@ -1119,6 +1234,78 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c("v-col", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline green--text" },
+                                      [_vm._v("Report Logo")]
+                                    )
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _vm.url
+                                    ? _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-img", {
+                                            attrs: {
+                                              label: "Report Image Logo",
+                                              src: _vm.url
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-file-input", {
+                                        attrs: {
+                                          "show-size": "",
+                                          label: "Upload",
+                                          accept: "image/*"
+                                        },
+                                        model: {
+                                          value: _vm.file_input,
+                                          callback: function($$v) {
+                                            _vm.file_input = $$v
+                                          },
+                                          expression: "file_input"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "6" } },
+                                    [
+                                      _c("small", {
+                                        domProps: {
+                                          textContent: _vm._s(_vm.base64Image)
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
@@ -1129,7 +1316,7 @@ var render = function() {
                                       _c("v-select", {
                                         attrs: {
                                           items: ["left", "right", "center"],
-                                          label: "Background Alignment"
+                                          label: "Logo Alignment"
                                         },
                                         model: {
                                           value:
@@ -1157,7 +1344,7 @@ var render = function() {
                                     { attrs: { cols: "12", md: "3" } },
                                     [
                                       _c("v-text-field", {
-                                        attrs: { label: "Background Width" },
+                                        attrs: { label: "Logo Width" },
                                         model: {
                                           value:
                                             _vm.settings.expense_report
@@ -1183,7 +1370,7 @@ var render = function() {
                                     { attrs: { cols: "12", md: "3" } },
                                     [
                                       _c("v-text-field", {
-                                        attrs: { label: "Background Height" },
+                                        attrs: { label: "Logo Height" },
                                         model: {
                                           value:
                                             _vm.settings.expense_report
@@ -1212,43 +1399,12 @@ var render = function() {
                                 [
                                   _c(
                                     "v-col",
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: { label: "Background Image" },
-                                        model: {
-                                          value:
-                                            _vm.settings.expense_report
-                                              .print_format.background.image,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings.expense_report
-                                                .print_format.background,
-                                              "image",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .image\n                                        "
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
                                     { attrs: { cols: "12", md: "3" } },
                                     [
                                       _c("v-text-field", {
                                         attrs: {
                                           type: "number",
-                                          label: "Background Margin (Left)"
+                                          label: "Logo Margin (Left)"
                                         },
                                         model: {
                                           value:
@@ -1264,7 +1420,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background.margin\n                                                .left\n                                        "
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.left\n                                        "
                                         }
                                       })
                                     ],
@@ -1278,7 +1434,7 @@ var render = function() {
                                       _c("v-text-field", {
                                         attrs: {
                                           type: "number",
-                                          label: "Background Margin (Top)"
+                                          label: "Logo Margin (Top)"
                                         },
                                         model: {
                                           value:
@@ -1294,7 +1450,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background.margin\n                                                .top\n                                        "
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.top\n                                        "
                                         }
                                       })
                                     ],
@@ -1308,7 +1464,7 @@ var render = function() {
                                       _c("v-text-field", {
                                         attrs: {
                                           type: "number",
-                                          label: "Background Margin (Right)"
+                                          label: "Logo Margin (Right)"
                                         },
                                         model: {
                                           value:
@@ -1324,7 +1480,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background.margin\n                                                .right\n                                        "
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.right\n                                        "
                                         }
                                       })
                                     ],
@@ -1338,7 +1494,7 @@ var render = function() {
                                       _c("v-text-field", {
                                         attrs: {
                                           type: "number",
-                                          label: "Background Margin (Bottom)"
+                                          label: "Logo Margin (Bottom)"
                                         },
                                         model: {
                                           value:
@@ -1354,7 +1510,7 @@ var render = function() {
                                             )
                                           },
                                           expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background.margin\n                                                .bottom\n                                        "
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.bottom\n                                        "
                                         }
                                       })
                                     ],
