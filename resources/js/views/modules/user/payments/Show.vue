@@ -365,7 +365,7 @@ export default {
                     .endOf("week")
                     .format("YYYY-MM-DD")
             ],
-            user: this.$store.getters.user,
+            user: this.$store == null ? {id: 0} : this.$store.getters.user,
             code: "",
             reference_no: "",
             voucher_no: "",
@@ -407,7 +407,7 @@ export default {
                 code: "",
                 date: "",
                 description: "",
-                user: this.$store.getters.user,
+                user: this.$store == null ? {id: 0} : this.$store.getters.user,
                 expense_reports: [],
                 notes: "",
                 reference_no: "",
