@@ -936,14 +936,54 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             _this3.expense_types.forEach(function (expense_type) {
               temp_expense_types[expense_type.name] = 0;
-            }); // SET DEFAULT VALUES FOR CURRENT ROW
+            }); // // SET DEFAULT VALUES FOR CURRENT ROW
+            // temp_table_body = {
+            //     User: `${element.last_name}, ${
+            //         element.first_name
+            //     } ${
+            //         element.middle_name == null
+            //             ? ""
+            //             : element.middle_name
+            //     } ${element.suffix == null ? "" : element.suffix}`,
+            //     ...temp_expense_types,
+            //     Total: 0
+            // };
 
 
-            temp_table_body = _objectSpread(_objectSpread({
-              User: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
-            }, temp_expense_types), {}, {
-              Total: 0
-            });
+            switch (report_type) {
+              case "all_expenses":
+                var details = !element.expense_details || element.expense_details == "null" ? [] : JSON.parse(element.expense_details).map(function (item) {
+                  return "".concat(item.sub_type_name == null ? "" : item.sub_type_name + "/ ").concat(item.description, ": ").concat(item.total) + "\n";
+                }).join("");
+                temp_table_body = _objectSpread(_objectSpread({
+                  Date: element.expense_date,
+                  Particulars: element.expense_description + "\n" + details
+                }, temp_expense_types), {}, {
+                  Total: 0
+                });
+                break;
+
+              case "expenses_by_user":
+                // SET DEFAULT VALUES FOR CURRENT ROW
+                temp_table_body = _objectSpread(_objectSpread({
+                  User: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
+                }, temp_expense_types), {}, {
+                  Total: 0
+                });
+                break;
+
+              case "expenses_by_date":
+                temp_table_body = _objectSpread(_objectSpread({
+                  Date: element.expense_date
+                }, temp_expense_types), {}, {
+                  Total: 0
+                });
+                break;
+
+              default:
+                break;
+            }
+
             table_rows.push(temp_table_body);
           } // SET EXPENSE TYPE AMOUNT
 

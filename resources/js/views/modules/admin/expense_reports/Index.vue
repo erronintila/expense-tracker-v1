@@ -746,8 +746,7 @@ export default {
             expense_types: [],
             reports_by_user: [],
             reports_by_expense: [],
-            reports_by_date: [],
-
+            reports_by_date: []
         };
     },
     methods: {
@@ -866,7 +865,8 @@ export default {
                     });
 
                     temp_table_body = {};
-                    subheader = "Report No. : " + this.selected.map(item => item.code);
+                    subheader =
+                        "Report No. : " + this.selected.map(item => item.code);
                     break;
                 case "expenses_by_user":
                     table_columns.push({
@@ -916,18 +916,80 @@ export default {
                             temp_expense_types[expense_type.name] = 0;
                         });
 
-                        // SET DEFAULT VALUES FOR CURRENT ROW
-                        temp_table_body = {
-                            User: `${element.last_name}, ${
-                                element.first_name
-                            } ${
-                                element.middle_name == null
-                                    ? ""
-                                    : element.middle_name
-                            } ${element.suffix == null ? "" : element.suffix}`,
-                            ...temp_expense_types,
-                            Total: 0
-                        };
+                        // // SET DEFAULT VALUES FOR CURRENT ROW
+                        // temp_table_body = {
+                        //     User: `${element.last_name}, ${
+                        //         element.first_name
+                        //     } ${
+                        //         element.middle_name == null
+                        //             ? ""
+                        //             : element.middle_name
+                        //     } ${element.suffix == null ? "" : element.suffix}`,
+                        //     ...temp_expense_types,
+                        //     Total: 0
+                        // };
+
+                        switch (report_type) {
+                            case "all_expenses":
+                                let details =
+                                    !element.expense_details ||
+                                    element.expense_details == "null"
+                                        ? []
+                                        : JSON.parse(element.expense_details)
+                                              .map(item => {
+                                                  return (
+                                                      `${
+                                                          item.sub_type_name ==
+                                                          null
+                                                              ? ""
+                                                              : item.sub_type_name +
+                                                                "/ "
+                                                      }${item.description}: ${
+                                                          item.total
+                                                      }` + "\n"
+                                                  );
+                                              })
+                                              .join("");
+
+                                temp_table_body = {
+                                    Date: element.expense_date,
+                                    Particulars:
+                                        element.expense_description +
+                                        "\n" +
+                                        details,
+                                    ...temp_expense_types,
+                                    Total: 0
+                                };
+                                break;
+                            case "expenses_by_user":
+                                // SET DEFAULT VALUES FOR CURRENT ROW
+                                temp_table_body = {
+                                    User: `${element.last_name}, ${
+                                        element.first_name
+                                    } ${
+                                        element.middle_name == null
+                                            ? ""
+                                            : element.middle_name
+                                    } ${
+                                        element.suffix == null
+                                            ? ""
+                                            : element.suffix
+                                    }`,
+                                    ...temp_expense_types,
+                                    Total: 0
+                                };
+                                break;
+                            case "expenses_by_date":
+                                temp_table_body = {
+                                    Date: element.expense_date,
+                                    ...temp_expense_types,
+                                    Total: 0
+                                };
+                                break;
+
+                            default:
+                                break;
+                        }
 
                         table_rows.push(temp_table_body);
                     }
@@ -3190,7 +3252,7 @@ export default {
                     image: this.$store.getters.settings.expense_report
                         .print_format.background.image
                 }
-            }
+            };
         }
     },
     created() {
