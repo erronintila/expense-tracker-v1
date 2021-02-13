@@ -503,7 +503,6 @@ export default {
             axios
                 .get(`/api/payments/${_this.$route.params.id}`)
                 .then(response => {
-                    console.log(response);
                     let data = response.data.data;
 
                     _this.code = data.code;
@@ -591,13 +590,12 @@ export default {
                             itemsPerPage: itemsPerPage,
                             user_id: user_id,
                             payment_id: payment_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
+                            // start_date: range[0],
+                            // end_date: range[1] ? range[1] : range[0],
                             admin_page: true
                         }
                     })
                     .then(response => {
-                        console.log("response",response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 

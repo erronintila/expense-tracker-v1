@@ -578,7 +578,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       axios.get("/api/payments/".concat(_this.$route.params.id)).then(function (response) {
-        console.log(response);
         var data = response.data.data;
         _this.code = data.code;
         _this.reference_no = data.reference_no;
@@ -658,12 +657,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             user_id: user_id,
             payment_id: payment_id,
-            start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
+            // start_date: range[0],
+            // end_date: range[1] ? range[1] : range[0],
             admin_page: true
           }
         }).then(function (response) {
-          console.log("response", response);
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
