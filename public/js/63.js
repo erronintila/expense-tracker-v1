@@ -1038,6 +1038,14 @@ __webpack_require__.r(__webpack_exports__);
       _this3.loadUsers();
     });
     this.loadVendors();
+  },
+  activated: function activated() {
+    var _this4 = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this4.loadUsers();
+    });
+    this.loadVendors();
   }
 });
 

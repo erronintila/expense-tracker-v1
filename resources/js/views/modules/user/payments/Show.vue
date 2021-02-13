@@ -167,9 +167,17 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.status.status }}
+                                                        {{
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .status
+                                                        }}
                                                         ({{
-                                                            item.status.remarks
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .remarks
                                                         }})
                                                     </td>
                                                 </tr>
@@ -620,10 +628,11 @@ export default {
         this.getData();
     },
     activated() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    }
+        this.getData();
+    },
+    deactivated() {
+        this.form.expense_reports = [];
+        Object.assign(this.$data.form, this.$options.data());
+    },
 };
 </script>

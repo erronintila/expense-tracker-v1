@@ -451,6 +451,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this4.loadExpenses();
     });
+  },
+  activated: function activated() {
+    var _this5 = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this5.loadExpenses();
+    });
   }
 });
 

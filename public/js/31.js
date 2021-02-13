@@ -786,6 +786,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     });
+  },
+  activated: function activated() {
+    var _this7 = this;
+
+    // this.$store.dispatch("AUTH_USER");
+    var _this = this;
+
+    this.loadUsers().then(function () {
+      _this7.getData().then(function () {
+        _this7.loadExpenses(_this7.form.user.id).then(function () {
+          _this7.getDataFromApi().then(function (data) {
+            _this.items = data.items;
+            _this.totalItems = data.total;
+          });
+        });
+      });
+    });
   }
 });
 

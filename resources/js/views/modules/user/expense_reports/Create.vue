@@ -462,6 +462,11 @@ export default {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.loadExpenses();
         });
+    },
+    activated() {
+        this.$store.dispatch("AUTH_USER").then(response => {
+            this.loadExpenses();
+        });
     }
 };
 </script>

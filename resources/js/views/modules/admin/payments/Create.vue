@@ -760,6 +760,10 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadUsers();
+    },
+    activated() {
+        // this.$store.dispatch("AUTH_USER");
+        this.loadUsers();
     }
 };
 </script>

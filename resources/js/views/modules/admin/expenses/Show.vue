@@ -664,6 +664,12 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.getData();
+    },
+    activated() {
+        this.getData();
+    },
+    deactivated() {
+        Object.assign(this.$data, this.$options.data());
     }
 };
 </script>

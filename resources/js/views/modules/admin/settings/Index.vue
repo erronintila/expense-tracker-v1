@@ -296,6 +296,7 @@ export default {
         this.onLoad();
     },
     activated() {
+        this.$store.dispatch("AUTH_SETTINGS");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.onLoad();
     }

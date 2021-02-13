@@ -40,5 +40,11 @@ export default {
     created() {
         this.getData();
     },
+    activated() {
+        this.getData();
+    },
+    deactivated() {
+        Object.assign(this.$data, this.$options.data());
+    }
 };
 </script>

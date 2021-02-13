@@ -356,6 +356,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -666,12 +674,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getData();
   },
   activated: function activated() {
-    var _this5 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this5.items = data.items;
-      _this5.totalItems = data.total;
-    });
+    this.getData();
+  },
+  deactivated: function deactivated() {
+    this.form.expense_reports = [];
+    Object.assign(this.$data.form, this.$options.data());
   }
 });
 
@@ -1085,12 +1092,19 @@ var render = function() {
                                                         _vm._v(
                                                           "\n                                                    " +
                                                             _vm._s(
-                                                              item.status.status
+                                                              item.status ==
+                                                                null
+                                                                ? ""
+                                                                : item.status
+                                                                    .status
                                                             ) +
                                                             "\n                                                    (" +
                                                             _vm._s(
-                                                              item.status
-                                                                .remarks
+                                                              item.status ==
+                                                                null
+                                                                ? ""
+                                                                : item.status
+                                                                    .remarks
                                                             ) +
                                                             ")\n                                                "
                                                         )

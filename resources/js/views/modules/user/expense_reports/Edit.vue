@@ -510,5 +510,18 @@ export default {
         });
       });
   },
+  activated() {
+    // this.$store.dispatch("AUTH_USER");
+    let _this = this;
+
+    this.getData().then(() => {
+        this.loadExpenses(this.form.user.id).then(() => {
+          this.getDataFromApi().then((data) => {
+            _this.items = data.items;
+            _this.totalItems = data.total;
+          });
+        });
+      });
+  },
 };
 </script>
