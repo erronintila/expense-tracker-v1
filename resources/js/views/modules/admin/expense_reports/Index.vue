@@ -2067,7 +2067,7 @@ export default {
                                         "YYYY-MM-DD HH:mm:ss"
                                     )}`,
                                     width: 500,
-                                    margin: [0.5 * 72, 0.5 * 72, 0, 0],
+                                    margin: [0.5 * 72, 0, 0, 0],
                                     style: "pageFooter"
                                 },
                                 {

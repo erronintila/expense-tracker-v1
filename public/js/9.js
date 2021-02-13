@@ -1856,7 +1856,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               columns: [{
                 text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD HH:mm:ss")),
                 width: 500,
-                margin: [0.5 * 72, 0.5 * 72, 0, 0],
+                margin: [0.5 * 72, 0, 0, 0],
                 style: "pageFooter"
               }, {
                 text: "Page " + currentPage.toString() + " of " + pageCount,
