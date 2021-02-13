@@ -872,7 +872,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var temp_table_body = {};
       var temp_expense_types = {};
       var expense_id = null;
-      var expense_type = null; // ADD TABLE COLUMNS BASED ON REPORT TYPE
+      var expense_type = null;
+      var subheader = ""; // ADD TABLE COLUMNS BASED ON REPORT TYPE
 
       switch (report_type) {
         case "all_expenses":
@@ -885,6 +886,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpensesHeader"
           });
           temp_table_body = {};
+          subheader = "Report No. : " + this.selected.map(function (item) {
+            return item.code;
+          });
           break;
 
         case "expenses_by_user":
@@ -892,6 +896,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             text: "Employee",
             style: "tableOfExpensesHeader"
           });
+          temp_table_body = {};
+          subheader = "User";
           break;
 
         case "expenses_by_date":
@@ -899,6 +905,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             text: "Date",
             style: "tableOfExpensesHeader"
           });
+          temp_table_body = {};
+          subheader = "Date";
           break;
 
         default:
@@ -951,11 +959,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             temp_table_body["Total"] = total;
           }
-        }); //
+        }); // sum total amount per expense type
+
+        _this3.expense_types.forEach(function (expense_type) {
+          temp_expense_types[expense_type.name] = _this3.mixin_formatNumber(table_rows.reduce(function (total, item) {
+            return total + item[expense_type.name];
+          }, 0));
+        }); // add row for total amounts
+
+
+        table_rows.push(_objectSpread(_objectSpread({
+          Total: "Total"
+        }, temp_expense_types), {}, {
+          TotalAmount: _this3.mixin_formatNumber(table_rows.reduce(function (total, item) {
+            return total + item["Total"];
+          }, 0))
+        })); // GET ALL ROW VALUES
 
         var temp = table_rows.map(function (item) {
           return Object.values(item);
-        }); //
+        }); // FORMAT ROW VALUES FOR PDFMAKE TABLE BODY
 
         var itemss = temp.map(function (item) {
           var val = [];
@@ -1044,9 +1067,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           text: ["Expense Summary Report"],
           style: "header"
         }, {
-          text: "Report No. : " + this.selected.map(function (item) {
-            return item.code;
-          }),
+          text: subheader,
           style: "subheader"
         }, {
           style: "tableOfExpenses",
@@ -1319,7 +1340,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             bolditalics: "Roboto-MediumItalic.ttf"
           }
         };
-        console.log(_this7.print_format.background.margin);
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: _this7.print_format.pageSize,
@@ -1574,7 +1594,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             bolditalics: "Roboto-MediumItalic.ttf"
           }
         };
-        console.log(_this8.print_format.background.margin);
         var docDefinition = {
           // pageSize: 'legal',
           pageSize: _this8.print_format.pageSize,
@@ -1804,6 +1823,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var temp = table_rows.map(function (item) {
           return Object.values(item);
         });
+        console.log(temp);
         var itemss = temp.map(function (item) {
           var val = [];
 
@@ -1816,6 +1836,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           return val;
         });
+        console.log(itemss);
         var body = [];
         body.push(table_columns);
         itemss.forEach(function (element) {

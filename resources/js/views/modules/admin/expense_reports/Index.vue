@@ -851,6 +851,7 @@ export default {
             let temp_expense_types = {};
             let expense_id = null;
             let expense_type = null;
+            let subheader = "";
 
             // ADD TABLE COLUMNS BASED ON REPORT TYPE
             switch (report_type) {
@@ -865,18 +866,23 @@ export default {
                     });
 
                     temp_table_body = {};
+                    subheader = "Report No. : " + this.selected.map(item => item.code);
                     break;
                 case "expenses_by_user":
                     table_columns.push({
                         text: "Employee",
                         style: "tableOfExpensesHeader"
                     });
+                    temp_table_body = {};
+                    subheader = "User";
                     break;
                 case "expenses_by_date":
                     table_columns.push({
                         text: "Date",
                         style: "tableOfExpensesHeader"
                     });
+                    temp_table_body = {};
+                    subheader = "Date";
                     break;
                 default:
                     break;
@@ -942,10 +948,34 @@ export default {
                     }
                 });
 
-                //
+                // sum total amount per expense type
+                this.expense_types.forEach(expense_type => {
+                    temp_expense_types[
+                        expense_type.name
+                    ] = this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item[expense_type.name],
+                            0
+                        )
+                    );
+                });
+
+                // add row for total amounts
+                table_rows.push({
+                    Total: "Total",
+                    ...temp_expense_types,
+                    TotalAmount: this.mixin_formatNumber(
+                        table_rows.reduce(
+                            (total, item) => total + item["Total"],
+                            0
+                        )
+                    )
+                });
+
+                // GET ALL ROW VALUES
                 let temp = table_rows.map(item => Object.values(item));
 
-                //
+                // FORMAT ROW VALUES FOR PDFMAKE TABLE BODY
                 let itemss = temp.map(item => {
                     let val = [];
 
@@ -1054,9 +1084,7 @@ export default {
                         style: "header"
                     },
                     {
-                        text:
-                            "Report No. : " +
-                            this.selected.map(item => item.code),
+                        text: subheader,
                         style: "subheader"
                     },
                     {
@@ -1386,8 +1414,6 @@ export default {
                     }
                 };
 
-                console.log(this.print_format.background.margin);
-
                 let docDefinition = {
                     // pageSize: 'legal',
                     pageSize: this.print_format.pageSize,
@@ -1703,8 +1729,6 @@ export default {
                     }
                 };
 
-                console.log(this.print_format.background.margin);
-
                 let docDefinition = {
                     // pageSize: 'legal',
                     pageSize: this.print_format.pageSize,
@@ -2013,6 +2037,8 @@ export default {
 
                 let temp = table_rows.map(item => Object.values(item));
 
+                console.log(temp);
+
                 let itemss = temp.map(item => {
                     let val = [];
                     for (let i = 0; i < item.length; i++) {
@@ -2024,6 +2050,8 @@ export default {
 
                     return val;
                 });
+
+                console.log(itemss);
 
                 let body = [];
                 body.push(table_columns);
