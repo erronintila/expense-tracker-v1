@@ -713,6 +713,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.loadUsers(); // this.loadExpenses();
+  },
+  activated: function activated() {
+    // this.$store.dispatch("AUTH_USER");
+    this.loadUsers(); // this.loadExpenses();
   }
 });
 

@@ -1228,6 +1228,11 @@ export default {
         // this.$store.dispatch("AUTH_USER");
         this.loadVendors();
         this.getData();
+    },
+    activated() {
+        // this.$store.dispatch("AUTH_USER");
+        this.loadVendors();
+        this.getData();
     }
 };
 </script>

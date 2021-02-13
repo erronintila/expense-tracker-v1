@@ -38,7 +38,7 @@
                                     text
                                     color="green"
                                     :to="
-                                        `/admin/expense_reports/${$route.params.id}/edit`
+                                        `/admin/expense_reports/${router_params_id}/edit`
                                     "
                                 >
                                     Edit
@@ -427,7 +427,7 @@ export default {
             total: 0,
             totalItems: 0,
             date_range: [],
-            expense_report_id: this.$route.params.id,
+            expense_report_id: this.router_params_id,
             search: "",
             options: {
                 sortBy: ["created_at"],
@@ -1163,7 +1163,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios
                     .get(
-                        `/api/data/expenses?expense_report_id=${this.$route.params.id}&only=true&sortBy=date&sortType=asc`
+                        `/api/data/expenses?expense_report_id=${this.router_params_id}&only=true&sortBy=date&sortType=asc`
                     )
                     .then(response => {
                         let items = response.data.data;
@@ -1185,7 +1185,7 @@ export default {
         getData() {
             let _this = this;
             axios
-                .get(`/api/expense_reports/${_this.$route.params.id}`)
+                .get(`/api/expense_reports/${_this.router_params_id}`)
                 .then(response => {
                     let data = response.data.data;
 
@@ -1261,7 +1261,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let range = [_this.form.from, _this.form.to];
-                let expense_report_id = _this.$route.params.id;
+                let expense_report_id = _this.router_params_id;
 
                 axios
                     .get("/api/expenses", {
@@ -1327,6 +1327,25 @@ export default {
             }
 
             return true;
+        },
+        router_params_id: {
+            get() {
+                // return this.$route == null ? 0 : this.$route.params.id;
+                if (this.$route) {
+                    if (this.$route.params) {
+                        return this.$route.params.id == null
+                            ? 0
+                            : this.$route.params.id;
+                    }
+
+                    return 0;
+                }
+
+                return 0;
+            },
+            set(value) {
+                return value;
+            }
         }
     },
     created() {
@@ -1334,10 +1353,11 @@ export default {
         this.getData();
     },
     activated() {
-        this.getDataFromApi().then(data => {
-            this.form.expenses = data.items;
-            this.totalItems = data.total;
-        });
-    }
+        this.getData();
+    },
+    deactivated() {
+        this.form.expenses = [];
+        Object.assign(this.$data.form, this.$options.data());
+    },
 };
 </script>

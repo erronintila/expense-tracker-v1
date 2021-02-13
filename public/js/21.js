@@ -685,7 +685,8 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   activated: function activated() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    var _this = this;
+
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this.form = response;
 

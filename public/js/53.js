@@ -528,6 +528,12 @@ __webpack_require__.r(__webpack_exports__);
     this.loadJobs(); // this.loadExpenseTypes();
 
     this.getData();
+  },
+  activated: function activated() {
+    // this.$store.dispatch("AUTH_USER");
+    this.loadJobs(); // this.loadExpenseTypes();
+
+    this.getData();
   }
 });
 

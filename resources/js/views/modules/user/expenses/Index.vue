@@ -899,7 +899,9 @@ export default {
         this.loadExpenseTypes();
     },
     activated() {
+        this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.loadExpenseTypes();
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;

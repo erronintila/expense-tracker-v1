@@ -695,12 +695,16 @@ export default {
     created() {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            console.log(response);
             _this.form = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     },
     activated() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        let _this = this;
+        this.$store.dispatch("AUTH_USER").then(response => {
+            _this.form = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+        });
     }
 };
 </script>

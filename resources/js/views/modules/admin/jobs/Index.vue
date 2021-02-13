@@ -447,6 +447,7 @@ export default {
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.loadDepartments();
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;

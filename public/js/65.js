@@ -866,7 +866,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   activated: function activated() {
     var _this5 = this;
 
+    this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {
       _this5.items = data.items;
       _this5.totalItems = data.total;

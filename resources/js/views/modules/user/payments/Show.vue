@@ -167,9 +167,17 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.status.status }}
+                                                        {{
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .status
+                                                        }}
                                                         ({{
-                                                            item.status.remarks
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .remarks
                                                         }})
                                                     </td>
                                                 </tr>
@@ -357,7 +365,7 @@ export default {
                     .endOf("week")
                     .format("YYYY-MM-DD")
             ],
-            user: this.$store.getters.user,
+            user: this.$store == null ? {id: 0} : this.$store.getters.user,
             code: "",
             reference_no: "",
             voucher_no: "",
@@ -399,7 +407,7 @@ export default {
                 code: "",
                 date: "",
                 description: "",
-                user: this.$store.getters.user,
+                user: this.$store == null ? {id: 0} : this.$store.getters.user,
                 expense_reports: [],
                 notes: "",
                 reference_no: "",
@@ -513,8 +521,8 @@ export default {
                             itemsPerPage: itemsPerPage,
                             user_id: user_id,
                             payment_id: payment_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
+                            // start_date: range[0],
+                            // end_date: range[1] ? range[1] : range[0],
                             admin_page: false
                         }
                     })
@@ -620,10 +628,11 @@ export default {
         this.getData();
     },
     activated() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    }
+        this.getData();
+    },
+    deactivated() {
+        this.form.expense_reports = [];
+        Object.assign(this.$data.form, this.$options.data());
+    },
 };
 </script>

@@ -669,6 +669,7 @@ __webpack_require__.r(__webpack_exports__);
     this.onLoad();
   },
   activated: function activated() {
+    this.$store.dispatch("AUTH_SETTINGS");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.onLoad();
   }

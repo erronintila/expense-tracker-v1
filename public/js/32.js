@@ -464,7 +464,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       total: 0,
       totalItems: 0,
       date_range: [],
-      expense_report_id: this.$route.params.id,
+      expense_report_id: this.router_params_id,
       search: "",
       options: {
         sortBy: ["created_at"],
@@ -1007,7 +1007,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/expenses?expense_report_id=".concat(_this4.$route.params.id, "&only=true&sortBy=date&sortType=asc")).then(function (response) {
+        axios.get("/api/data/expenses?expense_report_id=".concat(_this4.router_params_id, "&only=true&sortBy=date&sortType=asc")).then(function (response) {
           var items = response.data.data;
           resolve({
             items: items
@@ -1024,7 +1024,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
+      axios.get("/api/expense_reports/".concat(_this.router_params_id)).then(function (response) {
         var data = response.data.data;
         _this.form.code = data.code;
         _this.form.reference_no = data.reference_no;
@@ -1091,7 +1091,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this5$options.page,
             itemsPerPage = _this5$options.itemsPerPage;
         var range = [_this.form.from, _this.form.to];
-        var expense_report_id = _this.$route.params.id;
+        var expense_report_id = _this.router_params_id;
         axios.get("/api/expenses", {
           params: {
             page: page,
@@ -1146,6 +1146,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return true;
+    },
+    router_params_id: {
+      get: function get() {
+        // return this.$route == null ? 0 : this.$route.params.id;
+        if (this.$route) {
+          if (this.$route.params) {
+            return this.$route.params.id == null ? 0 : this.$route.params.id;
+          }
+
+          return 0;
+        }
+
+        return 0;
+      },
+      set: function set(value) {
+        return value;
+      }
     }
   },
   created: function created() {
@@ -1153,12 +1170,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getData();
   },
   activated: function activated() {
-    var _this7 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this7.form.expenses = data.items;
-      _this7.totalItems = data.total;
-    });
+    this.getData();
+  },
+  deactivated: function deactivated() {
+    this.form.expenses = [];
+    Object.assign(this.$data.form, this.$options.data());
   }
 });
 
@@ -1288,7 +1304,7 @@ var render = function() {
                                           color: "green",
                                           to:
                                             "/admin/expense_reports/" +
-                                            _vm.$route.params.id +
+                                            _vm.router_params_id +
                                             "/edit"
                                         }
                                       },
