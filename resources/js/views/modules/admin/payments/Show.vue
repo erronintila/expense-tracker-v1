@@ -503,9 +503,8 @@ export default {
             axios
                 .get(`/api/payments/${_this.$route.params.id}`)
                 .then(response => {
+                    console.log(response);
                     let data = response.data.data;
-
-                    console.log(data);
 
                     _this.code = data.code;
                     _this.reference_no = data.reference_no;
@@ -553,7 +552,6 @@ export default {
                     _this.form.logs = data.logs;
 
                     this.getDataFromApi().then(data => {
-                        console.log(data);
                         this.items = data.items;
                         this.totalItems = data.total;
                     });
@@ -599,6 +597,7 @@ export default {
                         }
                     })
                     .then(response => {
+                        console.log("response",response);
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
