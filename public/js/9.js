@@ -781,26 +781,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       expense_types: [],
       reports_by_user: [],
       reports_by_expense: [],
-      reports_by_date: [],
-      print_format: {
-        pageSize: {
-          width: this.$store.getters.settings.expense_report.print_format.pageSize.width * 72,
-          height: this.$store.getters.settings.expense_report.print_format.pageSize.height * 72
-        },
-        pageOrientation: this.$store.getters.settings.expense_report.print_format.pageOrientation,
-        pageMargins: [this.$store.getters.settings.expense_report.print_format.pageMargins.left * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.top * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.right * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.bottom * 72],
-        defaultStyle: {
-          font: this.$store.getters.settings.expense_report.print_format.defaultStyle.font
-        },
-        background: {
-          alignment: this.$store.getters.settings.expense_report.print_format.background.alignment,
-          margin: [this.$store.getters.settings.expense_report.print_format.background.margin.left * 72, this.$store.getters.settings.expense_report.print_format.background.margin.top * 72, this.$store.getters.settings.expense_report.print_format.background.margin.right * 72, this.$store.getters.settings.expense_report.print_format.background.margin.bottom * 72],
-          // absolutePosition: {x: -300, y: 40},
-          width: this.$store.getters.settings.expense_report.print_format.background.width * 72,
-          height: this.$store.getters.settings.expense_report.print_format.background.height * 72,
-          image: this.$store.getters.settings.expense_report.print_format.background.image
-        }
-      }
+      reports_by_date: []
     };
   },
   methods: {
@@ -891,7 +872,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var temp_table_body = {};
       var temp_expense_types = {};
       var expense_id = null;
-      var expense_type = null; // add table columns based on report type
+      var expense_type = null; // ADD TABLE COLUMNS BASED ON REPORT TYPE
 
       switch (report_type) {
         case "all_expenses":
@@ -922,7 +903,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         default:
           break;
-      } // add all expense types as table columns
+      } // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
 
 
       this.expense_types.forEach(function (element) {
@@ -930,23 +911,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           text: element.name,
           style: "tableOfExpensesHeader"
         });
-      }); // add Total as the last table column
+      }); // ADD TOTAL AS THE LAST TABLE COLUMN
 
       table_columns.push({
         text: "Total",
         style: "tableOfExpensesHeader"
-      });
+      }); // LOAD EXPENSE REPORT DATA BASED ON REPORT TYPE AND THEN PRINT REPORT
+
       this.loadReportData(report_type).then(function (item) {
-        // loop through retrieved records
+        // ITERATE THROUGH RETRIEVED DATA
         item.forEach(function (element) {
-          // create new object if current user does not match with previous record
+          // CREATE NEW OBJECT IF CURRENT USER DOES NOT MATCH WITH PREVIOUS DATA
           if (user_id !== element.user_id) {
             temp_table_body = {};
-            user_id = element.user_id; // set default values for current row
+            user_id = element.user_id; // SET ALL EXPENSE TYPES WITH A VALUE OF ZERO
 
             _this3.expense_types.forEach(function (expense_type) {
               temp_expense_types[expense_type.name] = 0;
-            });
+            }); // SET DEFAULT VALUES FOR CURRENT ROW
+
 
             temp_table_body = _objectSpread(_objectSpread({
               User: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
@@ -954,10 +937,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               Total: 0
             });
             table_rows.push(temp_table_body);
-          } // set expense type amount
+          } // SET EXPENSE TYPE AMOUNT
 
 
-          temp_table_body[element.expense_type_name] = element.expense_amount; // sum of all expense types
+          temp_table_body[element.expense_type_name] = element.expense_amount; // SUM OF ALL ROW DATA
 
           if ("Total" in temp_table_body) {
             var total = 0;
@@ -968,10 +951,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             temp_table_body["Total"] = total;
           }
-        });
+        }); //
+
         var temp = table_rows.map(function (item) {
           return Object.values(item);
-        });
+        }); //
+
         var itemss = temp.map(function (item) {
           var val = [];
 
@@ -983,39 +968,51 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
 
           return val;
-        });
+        }); // SET PDFMAKE BODY DATA
+
         var body = [];
         body.push(table_columns);
         itemss.forEach(function (element) {
           body.push(element);
-        });
+        }); // LOAD PDFMAKE INSTANCE
 
-        _this3.printFormat(subheader, table_columns, body, signatures);
+        var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
+
+        if (pdfMake.vfs == undefined) {
+          var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
+
+          pdfMake.vfs = pdfFonts.pdfMake.vfs;
+        } // SET PDFMAKE FONTS
+
+
+        pdfMake.fonts = {
+          Roboto: {
+            normal: "Roboto-Regular.ttf",
+            bold: "Roboto-Medium.ttf",
+            italics: "Roboto-Italic.ttf",
+            bolditalics: "Roboto-MediumItalic.ttf"
+          }
+        }; // SET PRINT FORMAT
+
+        var docDefinition = _this3.printFormat(subheader, table_columns, body, signatures); // PRINT OR EXPORT REPORT
+
+
+        if (export_as_pdf) {
+          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
+          return;
+        } // pdfMake.createPdf(docDefinition).print(); // DISPLAY PRINT DIALOG
+
+
+        pdfMake.createPdf(docDefinition).open(); // DISPLAY PRINT PREVIEW
       });
     },
-    // 
+    //
     // ============================================================================================================================================
     // ============================================================================================================================================
     // ============================================================================================================================================
-    // 
+    //
     printFormat: function printFormat(subheader, table_columns, signatures, export_as_pdf) {
-      var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
-
-      if (pdfMake.vfs == undefined) {
-        var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
-
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      }
-
-      pdfMake.fonts = {
-        Roboto: {
-          normal: "Roboto-Regular.ttf",
-          bold: "Roboto-Medium.ttf",
-          italics: "Roboto-Italic.ttf",
-          bolditalics: "Roboto-MediumItalic.ttf"
-        }
-      };
-      var docDefinition = {
+      return {
         // pageSize: 'legal',
         pageSize: this.print_format.pageSize,
         pageOrientation: this.print_format.pageOrientation,
@@ -1150,13 +1147,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }
       };
-
-      if (export_as_pdf) {
-        // pdfMake.createPdf(docDefinition).print();
-        pdfMake.createPdf(docDefinition).open();
-      } else {
-        pdfMake.createPdf(docDefinition).download("expense_report.pdf");
-      }
     },
     //
     // ============================================================================================================================================
@@ -2762,6 +2752,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return "".concat(start_date, " ~ ").concat(end_date);
+    },
+    print_format: function print_format() {
+      return {
+        pageSize: {
+          width: this.$store.getters.settings.expense_report.print_format.pageSize.width * 72,
+          height: this.$store.getters.settings.expense_report.print_format.pageSize.height * 72
+        },
+        pageOrientation: this.$store.getters.settings.expense_report.print_format.pageOrientation,
+        pageMargins: [this.$store.getters.settings.expense_report.print_format.pageMargins.left * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.top * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.right * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.bottom * 72],
+        defaultStyle: {
+          font: this.$store.getters.settings.expense_report.print_format.defaultStyle.font
+        },
+        background: {
+          alignment: this.$store.getters.settings.expense_report.print_format.background.alignment,
+          margin: [this.$store.getters.settings.expense_report.print_format.background.margin.left * 72, this.$store.getters.settings.expense_report.print_format.background.margin.top * 72, this.$store.getters.settings.expense_report.print_format.background.margin.right * 72, this.$store.getters.settings.expense_report.print_format.background.margin.bottom * 72],
+          // absolutePosition: {x: -300, y: 40},
+          width: this.$store.getters.settings.expense_report.print_format.background.width * 72,
+          height: this.$store.getters.settings.expense_report.print_format.background.height * 72,
+          image: this.$store.getters.settings.expense_report.print_format.background.image
+        }
+      };
     }
   },
   created: function created() {
