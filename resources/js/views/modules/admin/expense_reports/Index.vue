@@ -747,35 +747,7 @@ export default {
             reports_by_user: [],
             reports_by_expense: [],
             reports_by_date: [],
-            print_format: {
-                pageSize: { 
-                    width: this.$store.getters.settings.expense_report.print_format.pageSize.width * 72, 
-                    height: this.$store.getters.settings.expense_report.print_format.pageSize.height * 72 
-                },
-                pageOrientation: this.$store.getters.settings.expense_report.print_format.pageOrientation,
-                pageMargins: [
-                    this.$store.getters.settings.expense_report.print_format.pageMargins.left * 72, 
-                    this.$store.getters.settings.expense_report.print_format.pageMargins.top * 72, 
-                    this.$store.getters.settings.expense_report.print_format.pageMargins.right * 72, 
-                    this.$store.getters.settings.expense_report.print_format.pageMargins.bottom * 72
-                ],
-                defaultStyle: {
-                    font: this.$store.getters.settings.expense_report.print_format.defaultStyle.font
-                },
-                background: {
-                    alignment: this.$store.getters.settings.expense_report.print_format.background.alignment,
-                    margin: [
-                        this.$store.getters.settings.expense_report.print_format.background.margin.left * 72, 
-                        this.$store.getters.settings.expense_report.print_format.background.margin.top * 72, 
-                        this.$store.getters.settings.expense_report.print_format.background.margin.right * 72, 
-                        this.$store.getters.settings.expense_report.print_format.background.margin.bottom * 72
-                    ],
-                    // absolutePosition: {x: -300, y: 40},
-                    width: this.$store.getters.settings.expense_report.print_format.background.width * 72, 
-                    height: this.$store.getters.settings.expense_report.print_format.background.height * 72, 
-                    image: this.$store.getters.settings.expense_report.print_format.background.image
-                },
-            }
+
         };
     },
     methods: {
@@ -822,6 +794,405 @@ export default {
                     console.log(error.response);
                 });
         },
+
+        //
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        //
+
+        loadReportData(report_type) {
+            return new Promise((resolve, reject) => {
+                let ids =
+                    this.selected == null
+                        ? []
+                        : this.selected.map(item => item.id);
+                let url = "";
+
+                switch (report_type) {
+                    case "all_expenses":
+                        url = `/api/data/print_report?by_expense_id=true&ids=${ids}`;
+                        break;
+                    case "expenses_by_user":
+                        url = `/api/data/print_report?by_user_id=true&ids=${ids}`;
+                        break;
+                    case "expenses_by_date":
+                        url = `/api/data/print_report?by_date=true&ids=${ids}`;
+                        break;
+                    default:
+                        break;
+                }
+
+                axios
+                    .get(url)
+                    .then(response => {
+                        let item = response.data.data;
+                        resolve(item);
+                    })
+                    .catch(error => {
+                        reject();
+                        console.log(error);
+                        console.log(error.response);
+                    });
+            });
+        },
+
+        //
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        //
+
+        printReport(action, report_type, export_as_pdf) {
+            let table_columns = [];
+            let table_rows = [];
+            let table_footer = [];
+            let temp_table_body = {};
+            let temp_expense_types = {};
+            let expense_id = null;
+            let expense_type = null;
+
+            // ADD TABLE COLUMNS BASED ON REPORT TYPE
+            switch (report_type) {
+                case "all_expenses":
+                    table_columns.push({
+                        text: "Date",
+                        style: "tableOfExpensesHeader"
+                    });
+                    table_columns.push({
+                        text: "Particulars",
+                        style: "tableOfExpensesHeader"
+                    });
+
+                    temp_table_body = {};
+                    break;
+                case "expenses_by_user":
+                    table_columns.push({
+                        text: "Employee",
+                        style: "tableOfExpensesHeader"
+                    });
+                    break;
+                case "expenses_by_date":
+                    table_columns.push({
+                        text: "Date",
+                        style: "tableOfExpensesHeader"
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+            // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
+            this.expense_types.forEach(element => {
+                table_columns.push({
+                    text: element.name,
+                    style: "tableOfExpensesHeader"
+                });
+            });
+
+            // ADD TOTAL AS THE LAST TABLE COLUMN
+            table_columns.push({
+                text: "Total",
+                style: "tableOfExpensesHeader"
+            });
+
+            // LOAD EXPENSE REPORT DATA BASED ON REPORT TYPE AND THEN PRINT REPORT
+            this.loadReportData(report_type).then(item => {
+                // ITERATE THROUGH RETRIEVED DATA
+                item.forEach(element => {
+                    // CREATE NEW OBJECT IF CURRENT USER DOES NOT MATCH WITH PREVIOUS DATA
+                    if (user_id !== element.user_id) {
+                        temp_table_body = {};
+                        user_id = element.user_id;
+
+                        // SET ALL EXPENSE TYPES WITH A VALUE OF ZERO
+                        this.expense_types.forEach(expense_type => {
+                            temp_expense_types[expense_type.name] = 0;
+                        });
+
+                        // SET DEFAULT VALUES FOR CURRENT ROW
+                        temp_table_body = {
+                            User: `${element.last_name}, ${
+                                element.first_name
+                            } ${
+                                element.middle_name == null
+                                    ? ""
+                                    : element.middle_name
+                            } ${element.suffix == null ? "" : element.suffix}`,
+                            ...temp_expense_types,
+                            Total: 0
+                        };
+
+                        table_rows.push(temp_table_body);
+                    }
+
+                    // SET EXPENSE TYPE AMOUNT
+                    temp_table_body[element.expense_type_name] =
+                        element.expense_amount;
+
+                    // SUM OF ALL ROW DATA
+                    if ("Total" in temp_table_body) {
+                        let total = 0;
+
+                        this.expense_types.forEach(item => {
+                            total += temp_table_body[item.name];
+                        });
+
+                        temp_table_body["Total"] = total;
+                    }
+                });
+
+                //
+                let temp = table_rows.map(item => Object.values(item));
+
+                //
+                let itemss = temp.map(item => {
+                    let val = [];
+
+                    for (let i = 0; i < item.length; i++) {
+                        val.push({
+                            text: item[i],
+                            style: "tableOfExpensesBody"
+                        });
+                    }
+
+                    return val;
+                });
+
+                // SET PDFMAKE BODY DATA
+                let body = [];
+                body.push(table_columns);
+                itemss.forEach(element => {
+                    body.push(element);
+                });
+
+                // LOAD PDFMAKE INSTANCE
+                let pdfMake = require("pdfmake/build/pdfmake.js");
+                if (pdfMake.vfs == undefined) {
+                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+
+                // SET PDFMAKE FONTS
+                pdfMake.fonts = {
+                    Roboto: {
+                        normal: "Roboto-Regular.ttf",
+                        bold: "Roboto-Medium.ttf",
+                        italics: "Roboto-Italic.ttf",
+                        bolditalics: "Roboto-MediumItalic.ttf"
+                    }
+                };
+
+                // SET PRINT FORMAT
+                let docDefinition = this.printFormat(
+                    subheader,
+                    table_columns,
+                    body,
+                    signatures
+                );
+
+                // PRINT OR EXPORT REPORT
+                if (export_as_pdf) {
+                    pdfMake
+                        .createPdf(docDefinition)
+                        .download("expense_report.pdf");
+                    return;
+                }
+
+                // pdfMake.createPdf(docDefinition).print(); // DISPLAY PRINT DIALOG
+                pdfMake.createPdf(docDefinition).open(); // DISPLAY PRINT PREVIEW
+            });
+        },
+
+        //
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        //
+
+        printFormat(subheader, table_columns, signatures, export_as_pdf) {
+            return {
+                // pageSize: 'legal',
+                pageSize: this.print_format.pageSize,
+                pageOrientation: this.print_format.pageOrientation,
+                pageMargins: this.print_format.pageMargins,
+                defaultStyle: this.print_format.defaultStyle,
+                background: {
+                    alignment: this.print_format.background.alignment,
+                    margin: this.print_format.background.margin,
+                    height: this.print_format.background.height,
+                    width: this.print_format.background.width,
+                    image: this.print_format.background.image
+                },
+                footer: function(currentPage, pageCount) {
+                    return {
+                        columns: [
+                            {
+                                text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                )}`,
+                                width: 500,
+                                margin: [0.5 * 72, 0.5 * 72, 0, 0],
+                                style: "pageFooter"
+                            },
+                            {
+                                text:
+                                    "Page " +
+                                    currentPage.toString() +
+                                    " of " +
+                                    pageCount,
+                                alignment: "right",
+                                style: "pageFooter",
+                                margin: [0, 0, 0.5 * 72, 0]
+                            }
+                        ]
+                    };
+                },
+                content: [
+                    {
+                        text: ["Expense Summary Report"],
+                        style: "header"
+                    },
+                    {
+                        text:
+                            "Report No. : " +
+                            this.selected.map(item => item.code),
+                        style: "subheader"
+                    },
+                    {
+                        style: "tableOfExpenses",
+                        table: {
+                            headerRows: 1,
+                            widths: table_columns.map((item, index) => {
+                                if (table_columns.length - 1 == index) {
+                                    return "*";
+                                }
+
+                                return "auto";
+                            }),
+                            body: body
+                        },
+                        layout: {
+                            hLineWidth: function(i, node) {
+                                return i === 0 || i === node.table.body.length
+                                    ? 0.5
+                                    : 0.5;
+                            },
+                            vLineWidth: function(i, node) {
+                                return i === 0 || i === node.table.widths.length
+                                    ? 0.5
+                                    : 0.5;
+                            },
+                            hLineColor: function(i, node) {
+                                return i === 0 || i === node.table.body.length
+                                    ? "gray"
+                                    : "gray";
+                            },
+                            vLineColor: function(i, node) {
+                                return i === 0 || i === node.table.widths.length
+                                    ? "gray"
+                                    : "gray";
+                            },
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
+                            }
+                        }
+                    },
+                    {
+                        style: "tableSignatures",
+                        table: {
+                            widths: ["*", "*", "*", "*"],
+                            body: [
+                                [
+                                    {
+                                        text: "Prepared by:",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text: "Recommended by:",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text: "Checked by:",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text: "Approved by:",
+                                        style: "tableSignaturesBody"
+                                    }
+                                ],
+                                [
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    },
+                                    {
+                                        text:
+                                            "___________________________________",
+                                        style: "tableSignaturesBody"
+                                    }
+                                ]
+                            ]
+                        },
+                        layout: "noBorders"
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 13,
+                        bold: false,
+                        alignment: "center"
+                    },
+                    subheader: {
+                        fontSize: 10
+                    },
+                    tableSignatures: {
+                        margin: [0, 5, 0, 15]
+                    },
+                    tableSignaturesBody: {
+                        fontSize: 10
+                    },
+                    tableOfExpenses: {
+                        margin: [0, 5, 0, 15]
+                    },
+                    tableOfExpensesHeader: {
+                        bold: true,
+                        fontSize: 9,
+                        color: "white",
+                        fillColor: "#4caf50",
+                        alignment: "center"
+                    },
+                    tableOfExpensesBody: {
+                        fontSize: 9
+                    },
+                    signatures: {
+                        margin: [0, 5, 0, 15],
+                        fontSize: 10
+                    },
+                    pageFooter: {
+                        fontSize: 8
+                    }
+                }
+            };
+        },
+
+        //
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        // ============================================================================================================================================
+        //
+
         loadReportByExpense() {
             return new Promise((resolve, reject) => {
                 let _this = this;
@@ -1486,7 +1857,7 @@ export default {
                             alignment: "center"
                         },
                         subheader: {
-                            fontSize:10
+                            fontSize: 10
                         },
                         tableSignatures: {
                             margin: [0, 5, 0, 15]
@@ -1674,8 +2045,6 @@ export default {
                         bolditalics: "Roboto-MediumItalic.ttf"
                     }
                 };
-
-                console.log(this.print_format.background);
 
                 let docDefinition = {
                     // pageSize: 'legal',
@@ -2744,6 +3113,57 @@ export default {
 
             return `${start_date} ~ ${end_date}`;
         },
+        print_format() {
+            return {
+                pageSize: {
+                    width:
+                        this.$store.getters.settings.expense_report.print_format
+                            .pageSize.width * 72,
+                    height:
+                        this.$store.getters.settings.expense_report.print_format
+                            .pageSize.height * 72
+                },
+                pageOrientation: this.$store.getters.settings.expense_report
+                    .print_format.pageOrientation,
+                pageMargins: [
+                    this.$store.getters.settings.expense_report.print_format
+                        .pageMargins.left * 72,
+                    this.$store.getters.settings.expense_report.print_format
+                        .pageMargins.top * 72,
+                    this.$store.getters.settings.expense_report.print_format
+                        .pageMargins.right * 72,
+                    this.$store.getters.settings.expense_report.print_format
+                        .pageMargins.bottom * 72
+                ],
+                defaultStyle: {
+                    font: this.$store.getters.settings.expense_report
+                        .print_format.defaultStyle.font
+                },
+                background: {
+                    alignment: this.$store.getters.settings.expense_report
+                        .print_format.background.alignment,
+                    margin: [
+                        this.$store.getters.settings.expense_report.print_format
+                            .background.margin.left * 72,
+                        this.$store.getters.settings.expense_report.print_format
+                            .background.margin.top * 72,
+                        this.$store.getters.settings.expense_report.print_format
+                            .background.margin.right * 72,
+                        this.$store.getters.settings.expense_report.print_format
+                            .background.margin.bottom * 72
+                    ],
+                    // absolutePosition: {x: -300, y: 40},
+                    width:
+                        this.$store.getters.settings.expense_report.print_format
+                            .background.width * 72,
+                    height:
+                        this.$store.getters.settings.expense_report.print_format
+                            .background.height * 72,
+                    image: this.$store.getters.settings.expense_report
+                        .print_format.background.image
+                }
+            }
+        }
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
