@@ -289,6 +289,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "app",
   props: {
@@ -852,7 +857,25 @@ var render = function() {
               _c(
                 "v-row",
                 { staticClass: "ml-2 mr-2 mt-4" },
-                [_c("v-col", [_c("router-view")], 1)],
+                [
+                  _c(
+                    "v-col",
+                    [
+                      _c(
+                        "keep-alive",
+                        [
+                          _vm.$route.meta.keepAlive
+                            ? _c("router-view")
+                            : _vm._e()
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      !_vm.$route.meta.keepAlive ? _c("router-view") : _vm._e()
+                    ],
+                    1
+                  )
+                ],
                 1
               )
             ],

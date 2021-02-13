@@ -1355,8 +1355,8 @@ export default {
         this.getData();
     },
     deactivated() {
-        // this.form.expenses = [];
-        // Object.assign(this.$data.form, this.$options.data());
+        this.form.expenses = [];
+        Object.assign(this.$data.form, this.$options.data());
     },
 };
 </script>

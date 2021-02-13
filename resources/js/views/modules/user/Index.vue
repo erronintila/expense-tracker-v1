@@ -196,7 +196,12 @@
             <!-- <v-container> -->
             <v-row class="ml-2 mr-2 mt-4">
                 <v-col>
-                    <router-view></router-view>
+                    <!-- <router-view></router-view> -->
+
+                    <keep-alive>
+                        <router-view v-if="$route.meta.keepAlive"></router-view>
+                    </keep-alive>
+                    <router-view v-if="!$route.meta.keepAlive"></router-view>
 
                     <!-- <keep-alive>
                         <router-view v-if="$route.meta.keepAlive"></router-view>

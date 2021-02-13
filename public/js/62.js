@@ -1168,8 +1168,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   activated: function activated() {
     this.getData();
   },
-  deactivated: function deactivated() {// this.form.expenses = [];
-    // Object.assign(this.$data.form, this.$options.data());
+  deactivated: function deactivated() {
+    this.form.expenses = [];
+    Object.assign(this.$data.form, this.$options.data());
   }
 });
 
