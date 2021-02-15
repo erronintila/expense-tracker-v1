@@ -883,58 +883,66 @@ export default {
                 return;
             }
 
-            // ADD PRIMARY TABLE COLUMNS BASED ON REPORT TYPE
-            switch (report_type) {
-                case "all_expenses":
-                    table_columns.push({
-                        text: "Date",
-                        style: "tableOfExpensesHeader"
-                    });
-                    table_columns.push({
-                        text: "Particulars",
-                        style: "tableOfExpensesHeader"
-                    });
-
-                    temp_table_body = {};
-                    subheader =
-                        "Report No. : " + this.selected.map(item => item.code);
-                    break;
-                case "expenses_by_user":
-                    table_columns.push({
-                        text: "Employee",
-                        style: "tableOfExpensesHeader"
-                    });
-                    temp_table_body = {};
-                    subheader = "User";
-                    break;
-                case "expenses_by_date":
-                    table_columns.push({
-                        text: "Date",
-                        style: "tableOfExpensesHeader"
-                    });
-                    temp_table_body = {};
-                    subheader = "Date";
-                    break;
-                default:
-                    break;
-            }
-
-            // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
-            this.expense_types.forEach(element => {
-                table_columns.push({
-                    text: element.name,
-                    style: "tableOfExpensesHeader"
-                });
-            });
-
-            // ADD TOTAL AS THE LAST TABLE COLUMN
-            table_columns.push({
-                text: "Total",
-                style: "tableOfExpensesHeader"
-            });
-
             // LOAD EXPENSE REPORT DATA BASED ON REPORT TYPE AND THEN PRINT REPORT
             this.loadReportData(report_type).then(item => {
+                let item_dates = item.map(item => new Date(item.expense_date));
+                let maxDate = new Date(Math.max.apply(null, item_dates));
+                let minDate = new Date(Math.min.apply(null, item_dates));
+
+                switch (report_type) {
+                    case "all_expenses":
+                        table_columns.push({
+                            text: "Date",
+                            style: "tableOfExpensesHeader"
+                        });
+                        table_columns.push({
+                            text: "Particulars",
+                            style: "tableOfExpensesHeader"
+                        });
+
+                        temp_table_body = {};
+                        subheader =
+                            "Report No. : " +
+                            this.selected.map(item => item.code);
+                        break;
+                    case "expenses_by_user":
+                        table_columns.push({
+                            text: "Employee",
+                            style: "tableOfExpensesHeader"
+                        });
+                        temp_table_body = {};
+                        subheader = `Period: ${moment(minDate).format(
+                            "YYYY-MM-DD"
+                        )} ~ ${moment(maxDate).format("YYYY-MM-DD")}`;
+                        break;
+                    case "expenses_by_date":
+                        table_columns.push({
+                            text: "Date",
+                            style: "tableOfExpensesHeader"
+                        });
+                        temp_table_body = {};
+                        subheader = `Period: ${moment(minDate).format(
+                            "YYYY-MM-DD"
+                        )} ~ ${moment(maxDate).format("YYYY-MM-DD")}`;
+                        break;
+                    default:
+                        break;
+                }
+
+                // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
+                this.expense_types.forEach(element => {
+                    table_columns.push({
+                        text: element.name,
+                        style: "tableOfExpensesHeader"
+                    });
+                });
+
+                // ADD TOTAL AS THE LAST TABLE COLUMN
+                table_columns.push({
+                    text: "Total",
+                    style: "tableOfExpensesHeader"
+                });
+
                 // ITERATE THROUGH RETRIEVED DATA
                 item.forEach(element => {
                     let condition = false;

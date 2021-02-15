@@ -694,62 +694,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No items selected");
         return;
-      } // ADD PRIMARY TABLE COLUMNS BASED ON REPORT TYPE
+      } // LOAD EXPENSE REPORT DATA BASED ON REPORT TYPE AND THEN PRINT REPORT
 
-
-      switch (report_type) {
-        case "all_expenses":
-          table_columns.push({
-            text: "Date",
-            style: "tableOfExpensesHeader"
-          });
-          table_columns.push({
-            text: "Particulars",
-            style: "tableOfExpensesHeader"
-          });
-          temp_table_body = {};
-          subheader = "Report No. : " + this.selected.map(function (item) {
-            return item.code;
-          });
-          break;
-
-        case "expenses_by_user":
-          table_columns.push({
-            text: "Employee",
-            style: "tableOfExpensesHeader"
-          });
-          temp_table_body = {};
-          subheader = "User";
-          break;
-
-        case "expenses_by_date":
-          table_columns.push({
-            text: "Date",
-            style: "tableOfExpensesHeader"
-          });
-          temp_table_body = {};
-          subheader = "Date";
-          break;
-
-        default:
-          break;
-      } // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
-
-
-      this.expense_types.forEach(function (element) {
-        table_columns.push({
-          text: element.name,
-          style: "tableOfExpensesHeader"
-        });
-      }); // ADD TOTAL AS THE LAST TABLE COLUMN
-
-      table_columns.push({
-        text: "Total",
-        style: "tableOfExpensesHeader"
-      }); // LOAD EXPENSE REPORT DATA BASED ON REPORT TYPE AND THEN PRINT REPORT
 
       this.loadReportData(report_type).then(function (item) {
-        // ITERATE THROUGH RETRIEVED DATA
+        var item_dates = item.map(function (item) {
+          return new Date(item.expense_date);
+        });
+        var maxDate = new Date(Math.max.apply(null, item_dates));
+        var minDate = new Date(Math.min.apply(null, item_dates)); // ADD PRIMARY TABLE COLUMNS BASED ON REPORT TYPE
+
+        switch (report_type) {
+          case "all_expenses":
+            table_columns.push({
+              text: "Date",
+              style: "tableOfExpensesHeader"
+            });
+            table_columns.push({
+              text: "Particulars",
+              style: "tableOfExpensesHeader"
+            });
+            temp_table_body = {};
+            subheader = "Report No. : " + _this3.selected.map(function (item) {
+              return item.code;
+            });
+            break;
+
+          case "expenses_by_user":
+            table_columns.push({
+              text: "Employee",
+              style: "tableOfExpensesHeader"
+            });
+            temp_table_body = {};
+            subheader = "Period: ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(minDate).format("YYYY-MM-DD"), " ~ ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(maxDate).format("YYYY-MM-DD"));
+            break;
+
+          case "expenses_by_date":
+            table_columns.push({
+              text: "Date",
+              style: "tableOfExpensesHeader"
+            });
+            temp_table_body = {};
+            subheader = "Period: ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(minDate).format("YYYY-MM-DD"), " ~ ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(maxDate).format("YYYY-MM-DD"));
+            break;
+
+          default:
+            break;
+        } // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
+
+
+        _this3.expense_types.forEach(function (element) {
+          table_columns.push({
+            text: element.name,
+            style: "tableOfExpensesHeader"
+          });
+        }); // ADD TOTAL AS THE LAST TABLE COLUMN
+
+
+        table_columns.push({
+          text: "Total",
+          style: "tableOfExpensesHeader"
+        }); // ITERATE THROUGH RETRIEVED DATA
+
         item.forEach(function (element) {
           var condition = false;
 
