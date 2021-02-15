@@ -605,26 +605,47 @@
                                     </v-btn>
                                 </template>
                                 <v-list>
-                                    <v-list-item
+                                    <!-- <v-list-item
                                         @click="onPrint('print', 'expense')"
+                                    > -->
+                                    <v-list-item
+                                        @click="
+                                            printReport(
+                                                '',
+                                                'all_expenses',
+                                                false
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title
-                                            >Group by expense</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                            Group by expense
+                                        </v-list-item-title>
                                     </v-list-item>
                                     <v-list-item
-                                        @click="onPrint('print', 'user')"
+                                        @click="
+                                            printReport(
+                                                '',
+                                                'expenses_by_user',
+                                                false
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title
-                                            >Group by user</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                            Group by user
+                                        </v-list-item-title>
                                     </v-list-item>
                                     <v-list-item
-                                        @click="onPrint('print', 'date')"
+                                        @click="
+                                            printReport(
+                                                '',
+                                                'expenses_by_date',
+                                                false
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title
-                                            >Group by date</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                            Group by date
+                                        </v-list-item-title>
                                     </v-list-item>
                                 </v-list>
                             </v-menu>
@@ -641,25 +662,43 @@
                                 </template>
                                 <v-list>
                                     <v-list-item
-                                        @click="onPrint('pdf', 'expense')"
+                                        @click="
+                                            printReport(
+                                                '',
+                                                'all_expenses',
+                                                true
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title
-                                            >Group by expense</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                            Group by expense
+                                        </v-list-item-title>
                                     </v-list-item>
                                     <v-list-item
-                                        @click="onPrint('pdf', 'user')"
+                                        @click="
+                                            printReport(
+                                                '',
+                                                'expenses_by_user',
+                                                true
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title
-                                            >Group by user</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                            Group by user
+                                        </v-list-item-title>
                                     </v-list-item>
                                     <v-list-item
-                                        @click="onPrint('pdf', 'date')"
+                                        @click="
+                                            printReport(
+                                                '',
+                                                'expenses_by_date',
+                                                true
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title
-                                            >Group by date</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                            Group by date
+                                        </v-list-item-title>
                                     </v-list-item>
                                 </v-list>
                             </v-menu>
@@ -668,6 +707,10 @@
                 </v-row>
             </v-card-text>
         </v-card>
+
+        <v-btn @click="printReport('', 'all_expenses', false)">
+            Print Report
+        </v-btn>
     </div>
 </template>
 
@@ -794,12 +837,6 @@ export default {
                 });
         },
 
-        //
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        //
-
         loadReportData(report_type) {
             return new Promise((resolve, reject) => {
                 let ids =
@@ -836,23 +873,24 @@ export default {
             });
         },
 
-        //
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        //
-
         printReport(action, report_type, export_as_pdf) {
             let table_columns = [];
             let table_rows = [];
             let table_footer = [];
             let temp_table_body = {};
             let temp_expense_types = {};
+            let user_id = null;
             let expense_id = null;
+            let expense_date = null;
             let expense_type = null;
             let subheader = "";
 
-            // ADD TABLE COLUMNS BASED ON REPORT TYPE
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No items selected");
+                return;
+            }
+
+            // ADD PRIMARY TABLE COLUMNS BASED ON REPORT TYPE
             switch (report_type) {
                 case "all_expenses":
                     table_columns.push({
@@ -906,29 +944,29 @@ export default {
             this.loadReportData(report_type).then(item => {
                 // ITERATE THROUGH RETRIEVED DATA
                 item.forEach(element => {
+                    let condition = false;
+
+                    if(report_type == 'all_expenses') {
+                        condition = expense_id !== element.expense_id;
+                    } else if(report_type == 'expenses_by_user') {
+                        condition = user_id !== element.user_id;
+                    } else {
+                        condition = expense_date !== element.expense_date;
+                    }
+
                     // CREATE NEW OBJECT IF CURRENT USER DOES NOT MATCH WITH PREVIOUS DATA
-                    if (user_id !== element.user_id) {
+                    if (condition) {
                         temp_table_body = {};
                         user_id = element.user_id;
+                        expense_date = element.expense_date;
+                        expense_id = element.expense_id;
 
                         // SET ALL EXPENSE TYPES WITH A VALUE OF ZERO
                         this.expense_types.forEach(expense_type => {
                             temp_expense_types[expense_type.name] = 0;
                         });
 
-                        // // SET DEFAULT VALUES FOR CURRENT ROW
-                        // temp_table_body = {
-                        //     User: `${element.last_name}, ${
-                        //         element.first_name
-                        //     } ${
-                        //         element.middle_name == null
-                        //             ? ""
-                        //             : element.middle_name
-                        //     } ${element.suffix == null ? "" : element.suffix}`,
-                        //     ...temp_expense_types,
-                        //     Total: 0
-                        // };
-
+                        // SET DEFAULT VALUES FOR CURRENT ROW
                         switch (report_type) {
                             case "all_expenses":
                                 let details =
@@ -960,6 +998,7 @@ export default {
                                     ...temp_expense_types,
                                     Total: 0
                                 };
+
                                 break;
                             case "expenses_by_user":
                                 // SET DEFAULT VALUES FOR CURRENT ROW
@@ -1022,17 +1061,32 @@ export default {
                     );
                 });
 
-                // add row for total amounts
-                table_rows.push({
-                    Total: "Total",
-                    ...temp_expense_types,
-                    TotalAmount: this.mixin_formatNumber(
-                        table_rows.reduce(
-                            (total, item) => total + item["Total"],
-                            0
+                if (report_type == "all_expenses") {
+                    // add row for total amounts
+                    table_rows.push({
+                        Total: "Total",
+                        Particulars: "",
+                        ...temp_expense_types,
+                        TotalAmount: this.mixin_formatNumber(
+                            table_rows.reduce(
+                                (total, item) => total + item["Total"],
+                                0
+                            )
                         )
-                    )
-                });
+                    });
+                } else {
+                    // add row for total amounts
+                    table_rows.push({
+                        Total: "Total",
+                        ...temp_expense_types,
+                        TotalAmount: this.mixin_formatNumber(
+                            table_rows.reduce(
+                                (total, item) => total + item["Total"],
+                                0
+                            )
+                        )
+                    });
+                }
 
                 // GET ALL ROW VALUES
                 let temp = table_rows.map(item => Object.values(item));
@@ -1075,6 +1129,41 @@ export default {
                     }
                 };
 
+                let signatureLabels = [
+                    "Prepared by:",
+                    "Recommended by:",
+                    "Checked by:",
+                    "Approved by:"
+                ];
+
+                if (report_type != "all_expenses") {
+                    signatureLabels = [
+                        "Prepared by:",
+                        "Checked by:",
+                        "Approved by:",
+                        "Voucher No."
+                    ];
+                }
+
+                let formattedSignatureLabels = signatureLabels.map(item => {
+                    return {
+                        text: item,
+                        style: "tableSignaturesBody"
+                    };
+                });
+
+                let signatureUnderlines = signatureLabels.map(item => {
+                    return {
+                        text: "___________________________________",
+                        style: "tableSignaturesBody"
+                    };
+                });
+
+                let signatures = [
+                    ...formattedSignatureLabels,
+                    ...signatureUnderlines
+                ];
+
                 // SET PRINT FORMAT
                 let docDefinition = this.printFormat(
                     subheader,
@@ -1096,13 +1185,7 @@ export default {
             });
         },
 
-        //
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        //
-
-        printFormat(subheader, table_columns, signatures, export_as_pdf) {
+        printFormat(subheader, table_columns, body, signatures) {
             return {
                 // pageSize: 'legal',
                 pageSize: this.print_format.pageSize,
@@ -1124,7 +1207,7 @@ export default {
                                     "YYYY-MM-DD HH:mm:ss"
                                 )}`,
                                 width: 500,
-                                margin: [0.5 * 72, 0.5 * 72, 0, 0],
+                                margin: [0.5 * 72, 0, 0.5 * 72, 0],
                                 style: "pageFooter"
                             },
                             {
@@ -1192,48 +1275,7 @@ export default {
                         style: "tableSignatures",
                         table: {
                             widths: ["*", "*", "*", "*"],
-                            body: [
-                                [
-                                    {
-                                        text: "Prepared by:",
-                                        style: "tableSignaturesBody"
-                                    },
-                                    {
-                                        text: "Recommended by:",
-                                        style: "tableSignaturesBody"
-                                    },
-                                    {
-                                        text: "Checked by:",
-                                        style: "tableSignaturesBody"
-                                    },
-                                    {
-                                        text: "Approved by:",
-                                        style: "tableSignaturesBody"
-                                    }
-                                ],
-                                [
-                                    {
-                                        text:
-                                            "___________________________________",
-                                        style: "tableSignaturesBody"
-                                    },
-                                    {
-                                        text:
-                                            "___________________________________",
-                                        style: "tableSignaturesBody"
-                                    },
-                                    {
-                                        text:
-                                            "___________________________________",
-                                        style: "tableSignaturesBody"
-                                    },
-                                    {
-                                        text:
-                                            "___________________________________",
-                                        style: "tableSignaturesBody"
-                                    }
-                                ]
-                            ]
+                            body: signatures
                         },
                         layout: "noBorders"
                     }
@@ -1275,1079 +1317,6 @@ export default {
                     }
                 }
             };
-        },
-
-        //
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        // ============================================================================================================================================
-        //
-
-        loadReportByExpense() {
-            return new Promise((resolve, reject) => {
-                let _this = this;
-                let ids =
-                    _this.selected == null
-                        ? []
-                        : _this.selected.map(item => item.id);
-
-                axios
-                    .get(`/api/data/print_report?by_expense_id=true&ids=${ids}`)
-                    .then(response => {
-                        _this.reports_by_expense = response.data.data;
-                        resolve();
-                    })
-                    .catch(error => {
-                        reject();
-                        console.log(error);
-                        console.log(error.response);
-                    });
-            });
-        },
-        loadReportByUser() {
-            return new Promise((resolve, reject) => {
-                let _this = this;
-                let ids =
-                    _this.selected == null
-                        ? []
-                        : _this.selected.map(item => item.id);
-
-                axios
-                    .get(`/api/data/print_report?by_user_id=true&ids=${ids}`)
-                    .then(response => {
-                        _this.reports_by_user = response.data.data;
-
-                        resolve();
-                    })
-                    .catch(error => {
-                        reject();
-                        console.log(error);
-                        console.log(error.response);
-                    });
-            });
-        },
-        loadReportByDate() {
-            return new Promise((resolve, reject) => {
-                let _this = this;
-                let ids =
-                    _this.selected == null
-                        ? []
-                        : _this.selected.map(item => item.id);
-
-                axios
-                    .get(`/api/data/print_report?by_date=true&ids=${ids}`)
-                    .then(response => {
-                        _this.reports_by_date = response.data.data;
-                        resolve();
-                    })
-                    .catch(error => {
-                        reject();
-                        console.log(error);
-                        console.log(error.response);
-                    });
-            });
-        },
-        printReportByUser(action) {
-            this.loadReportByUser().then(() => {
-                let table_columns = [];
-                let table_rows = [];
-                let table_footer = [];
-
-                table_columns.push({
-                    text: "Employee",
-                    style: "tableOfExpensesHeader"
-                });
-                this.expense_types.forEach(element => {
-                    table_columns.push({
-                        text: element.name,
-                        style: "tableOfExpensesHeader"
-                    });
-                });
-                table_columns.push({
-                    text: "Total",
-                    style: "tableOfExpensesHeader"
-                });
-
-                let temp_table_body = {};
-                let temp_expense_types = {};
-                let user_id = null;
-                let expense_type = null;
-
-                // loop through retrieved records
-                this.reports_by_user.forEach(element => {
-                    // create new object if current user does not match with previous record
-                    if (user_id !== element.user_id) {
-                        temp_table_body = {};
-                        user_id = element.user_id;
-
-                        // set default values for current row
-                        this.expense_types.forEach(expense_type => {
-                            temp_expense_types[expense_type.name] = 0;
-                        });
-
-                        temp_table_body = {
-                            User: `${element.last_name}, ${
-                                element.first_name
-                            } ${
-                                element.middle_name == null
-                                    ? ""
-                                    : element.middle_name
-                            } ${element.suffix == null ? "" : element.suffix}`,
-                            ...temp_expense_types,
-                            Total: 0
-                        };
-
-                        table_rows.push(temp_table_body);
-                    }
-
-                    // set expense type amount
-                    temp_table_body[element.expense_type_name] =
-                        element.expense_amount;
-
-                    // sum of all expense types
-                    if ("Total" in temp_table_body) {
-                        let total = 0;
-
-                        this.expense_types.forEach(item => {
-                            total += temp_table_body[item.name];
-                        });
-
-                        temp_table_body["Total"] = total;
-                    }
-                });
-
-                // sum total amount per expense type
-                this.expense_types.forEach(expense_type => {
-                    temp_expense_types[
-                        expense_type.name
-                    ] = this.mixin_formatNumber(
-                        table_rows.reduce(
-                            (total, item) => total + item[expense_type.name],
-                            0
-                        )
-                    );
-                });
-
-                // add row for total amounts
-                table_rows.push({
-                    Total: "Total",
-                    ...temp_expense_types,
-                    TotalAmount: this.mixin_formatNumber(
-                        table_rows.reduce(
-                            (total, item) => total + item["Total"],
-                            0
-                        )
-                    )
-                });
-
-                let temp = table_rows.map(item => Object.values(item));
-
-                let itemss = temp.map(item => {
-                    let val = [];
-
-                    for (let i = 0; i < item.length; i++) {
-                        val.push({
-                            text: item[i],
-                            style: "tableOfExpensesBody"
-                        });
-                    }
-
-                    return val;
-                });
-
-                let body = [];
-                body.push(table_columns);
-                itemss.forEach(element => {
-                    body.push(element);
-                });
-
-                let pdfMake = require("pdfmake/build/pdfmake.js");
-                if (pdfMake.vfs == undefined) {
-                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
-                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
-                }
-
-                pdfMake.fonts = {
-                    Roboto: {
-                        normal: "Roboto-Regular.ttf",
-                        bold: "Roboto-Medium.ttf",
-                        italics: "Roboto-Italic.ttf",
-                        bolditalics: "Roboto-MediumItalic.ttf"
-                    }
-                };
-
-                let docDefinition = {
-                    // pageSize: 'legal',
-                    pageSize: this.print_format.pageSize,
-                    pageOrientation: this.print_format.pageOrientation,
-                    pageMargins: this.print_format.pageMargins,
-                    defaultStyle: this.print_format.defaultStyle,
-                    background: {
-                        alignment: this.print_format.background.alignment,
-                        margin: this.print_format.background.margin,
-                        height: this.print_format.background.height,
-                        width: this.print_format.background.width,
-                        image: this.print_format.background.image
-                    },
-                    footer: function(currentPage, pageCount) {
-                        return {
-                            columns: [
-                                {
-                                    text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
-                                        "YYYY-MM-DD HH:mm:ss"
-                                    )}`,
-                                    width: 500,
-                                    margin: [0.5 * 72, 0, 0.5 * 72, 0],
-                                    style: "pageFooter"
-                                },
-                                {
-                                    text:
-                                        "Page " +
-                                        currentPage.toString() +
-                                        " of " +
-                                        pageCount,
-                                    alignment: "right",
-                                    style: "pageFooter",
-                                    margin: [0, 0, 0.5 * 72, 0]
-                                }
-                            ]
-                        };
-                    },
-                    content: [
-                        {
-                            text: ["Expense Summary Report"],
-                            style: "header"
-                        },
-                        {
-                            text: "User",
-                            style: "subheader"
-                        },
-                        {
-                            style: "tableOfExpenses",
-                            table: {
-                                headerRows: 1,
-                                widths: table_columns.map((item, index) => {
-                                    if (table_columns.length - 1 == index) {
-                                        return "*";
-                                    }
-
-                                    return "auto";
-                                }),
-                                body: body
-                            },
-                            layout: {
-                                hLineWidth: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.body.length
-                                        ? 0.5
-                                        : 0.5;
-                                },
-                                vLineWidth: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.widths.length
-                                        ? 0.5
-                                        : 0.5;
-                                },
-                                hLineColor: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.body.length
-                                        ? "gray"
-                                        : "gray";
-                                },
-                                vLineColor: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.widths.length
-                                        ? "gray"
-                                        : "gray";
-                                },
-                                fillColor: function(
-                                    rowIndex,
-                                    node,
-                                    columnIndex
-                                ) {
-                                    return rowIndex % 2 === 0
-                                        ? "#dbdbdb"
-                                        : null;
-                                }
-                            }
-                        },
-                        {
-                            style: "tableSignatures",
-                            table: {
-                                widths: ["*", "*", "*", "*"],
-                                body: [
-                                    [
-                                        {
-                                            text: "Prepared by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Checked by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Approved by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Voucher No.",
-                                            style: "tableSignaturesBody"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        }
-                                    ]
-                                ]
-                            },
-                            layout: "noBorders"
-                        }
-                    ],
-                    styles: {
-                        header: {
-                            fontSize: 13,
-                            bold: false,
-                            alignment: "center"
-                        },
-                        subheader: {
-                            fontSize: 10
-                        },
-                        tableSignatures: {
-                            margin: [0, 5, 0, 15]
-                        },
-                        tableSignaturesBody: {
-                            fontSize: 10
-                        },
-                        tableOfExpenses: {
-                            margin: [0, 5, 0, 15]
-                        },
-                        tableOfExpensesHeader: {
-                            bold: true,
-                            fontSize: 9,
-                            color: "white",
-                            fillColor: "#4caf50",
-                            alignment: "center"
-                        },
-                        tableOfExpensesBody: {
-                            fontSize: 9
-                        },
-                        signatures: {
-                            margin: [0, 5, 0, 15],
-                            fontSize: 10
-                        },
-                        pageFooter: {
-                            fontSize: 8
-                        }
-                    }
-                };
-
-                if (action == "print") {
-                    // pdfMake.createPdf(docDefinition).print();
-                    pdfMake.createPdf(docDefinition).open();
-                } else {
-                    pdfMake
-                        .createPdf(docDefinition)
-                        .download("expense_report.pdf");
-                }
-            });
-        },
-        printReportByDate(action) {
-            this.loadReportByDate().then(() => {
-                let table_columns = [];
-                let table_rows = [];
-                let table_footer = [];
-
-                table_columns.push({
-                    text: "Date",
-                    style: "tableOfExpensesHeader"
-                });
-                this.expense_types.forEach(element => {
-                    table_columns.push({
-                        text: element.name,
-                        style: "tableOfExpensesHeader"
-                    });
-                });
-                table_columns.push({
-                    text: "Total",
-                    style: "tableOfExpensesHeader"
-                });
-
-                let temp_table_body = {};
-                let temp_expense_types = {};
-                let expense_date = null;
-                let expense_type = null;
-
-                // loop through retrieved records
-                this.reports_by_date.forEach(element => {
-                    // create new object if current user does not match with previous record
-                    if (expense_date !== element.expense_date) {
-                        temp_table_body = {};
-                        expense_date = element.expense_date;
-
-                        // set default values for current row
-                        this.expense_types.forEach(expense_type => {
-                            temp_expense_types[expense_type.name] = 0;
-                        });
-
-                        temp_table_body = {
-                            Date: element.expense_date,
-                            ...temp_expense_types,
-                            Total: 0
-                        };
-
-                        table_rows.push(temp_table_body);
-                    }
-
-                    // set expense type amount
-                    temp_table_body[element.expense_type_name] =
-                        element.expense_amount;
-
-                    // sum of all expense types
-                    if ("Total" in temp_table_body) {
-                        let total = 0;
-
-                        this.expense_types.forEach(item => {
-                            total += temp_table_body[item.name];
-                        });
-
-                        temp_table_body["Total"] = total;
-                    }
-                });
-
-                // sum total amount per expense type
-                this.expense_types.forEach(expense_type => {
-                    temp_expense_types[
-                        expense_type.name
-                    ] = this.mixin_formatNumber(
-                        table_rows.reduce(
-                            (total, item) => total + item[expense_type.name],
-                            0
-                        )
-                    );
-                });
-
-                // add row for total amounts
-                table_rows.push({
-                    Total: "Total",
-                    ...temp_expense_types,
-                    TotalAmount: this.mixin_formatNumber(
-                        table_rows.reduce(
-                            (total, item) => total + item["Total"],
-                            0
-                        )
-                    )
-                });
-
-                let temp = table_rows.map(item => Object.values(item));
-
-                let itemss = temp.map(item => {
-                    let val = [];
-                    for (let i = 0; i < item.length; i++) {
-                        val.push({
-                            text: item[i],
-                            style: "tableOfExpensesBody"
-                        });
-                    }
-
-                    return val;
-                });
-
-                let body = [];
-                body.push(table_columns);
-                itemss.forEach(element => {
-                    body.push(element);
-                });
-
-                let pdfMake = require("pdfmake/build/pdfmake.js");
-                if (pdfMake.vfs == undefined) {
-                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
-                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
-                }
-
-                pdfMake.fonts = {
-                    Roboto: {
-                        normal: "Roboto-Regular.ttf",
-                        bold: "Roboto-Medium.ttf",
-                        italics: "Roboto-Italic.ttf",
-                        bolditalics: "Roboto-MediumItalic.ttf"
-                    }
-                };
-
-                let docDefinition = {
-                    // pageSize: 'legal',
-                    pageSize: this.print_format.pageSize,
-                    pageOrientation: this.print_format.pageOrientation,
-                    pageMargins: this.print_format.pageMargins,
-                    defaultStyle: this.print_format.defaultStyle,
-                    background: {
-                        alignment: this.print_format.background.alignment,
-                        margin: this.print_format.background.margin,
-                        height: this.print_format.background.height,
-                        width: this.print_format.background.width,
-                        image: this.print_format.background.image
-                    },
-                    footer: function(currentPage, pageCount) {
-                        return {
-                            columns: [
-                                {
-                                    text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
-                                        "YYYY-MM-DD HH:mm:ss"
-                                    )}`,
-                                    width: 500,
-                                    margin: [0.5 * 72, 0, 0.5 * 72, 0],
-                                    style: "pageFooter"
-                                },
-                                {
-                                    text:
-                                        "Page " +
-                                        currentPage.toString() +
-                                        " of " +
-                                        pageCount,
-                                    alignment: "right",
-                                    style: "pageFooter",
-                                    margin: [0, 0, 0.5 * 72, 0]
-                                }
-                            ]
-                        };
-                    },
-                    content: [
-                        {
-                            text: ["Expense Summary Report"],
-                            style: "header"
-                        },
-                        {
-                            text: "Date",
-                            style: "subheader"
-                        },
-                        {
-                            style: "tableOfExpenses",
-                            table: {
-                                headerRows: 1,
-                                widths: table_columns.map((item, index) => {
-                                    if (table_columns.length - 1 == index) {
-                                        return "*";
-                                    }
-
-                                    return "auto";
-                                }),
-                                body: body
-                            },
-                            layout: {
-                                hLineWidth: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.body.length
-                                        ? 0.5
-                                        : 0.5;
-                                },
-                                vLineWidth: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.widths.length
-                                        ? 0.5
-                                        : 0.5;
-                                },
-                                hLineColor: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.body.length
-                                        ? "gray"
-                                        : "gray";
-                                },
-                                vLineColor: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.widths.length
-                                        ? "gray"
-                                        : "gray";
-                                },
-                                fillColor: function(
-                                    rowIndex,
-                                    node,
-                                    columnIndex
-                                ) {
-                                    return rowIndex % 2 === 0
-                                        ? "#dbdbdb"
-                                        : null;
-                                }
-                            }
-                        },
-                        {
-                            style: "tableSignatures",
-                            table: {
-                                widths: ["*", "*", "*", "*"],
-                                body: [
-                                    [
-                                        {
-                                            text: "Prepared by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Checked by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Approved by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Voucher No.",
-                                            style: "tableSignaturesBody"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        }
-                                    ]
-                                ]
-                            },
-                            layout: "noBorders"
-                        }
-                    ],
-                    styles: {
-                        header: {
-                            fontSize: 13,
-                            bold: false,
-                            alignment: "center"
-                        },
-                        subheader: {
-                            fontSize: 10
-                        },
-                        tableSignatures: {
-                            margin: [0, 5, 0, 15]
-                        },
-                        tableSignaturesBody: {
-                            fontSize: 10
-                        },
-                        tableOfExpenses: {
-                            margin: [0, 5, 0, 15]
-                        },
-                        tableOfExpensesHeader: {
-                            bold: true,
-                            fontSize: 9,
-                            color: "white",
-                            fillColor: "#4caf50",
-                            alignment: "center"
-                        },
-                        tableOfExpensesBody: {
-                            fontSize: 9
-                        },
-                        signatures: {
-                            margin: [0, 5, 0, 15],
-                            fontSize: 10
-                        },
-                        pageFooter: {
-                            fontSize: 8
-                        }
-                    }
-                };
-
-                if (action == "print") {
-                    // pdfMake.createPdf(docDefinition).print();
-                    pdfMake.createPdf(docDefinition).open();
-                } else {
-                    pdfMake
-                        .createPdf(docDefinition)
-                        .download("expense_report.pdf");
-                }
-            });
-        },
-        printReportByExpense(action) {
-            this.loadReportByExpense().then(() => {
-                let table_columns = [];
-                let table_rows = [];
-                let table_footer = [];
-
-                table_columns.push({
-                    text: "Date",
-                    style: "tableOfExpensesHeader"
-                });
-                table_columns.push({
-                    text: "Particulars",
-                    style: "tableOfExpensesHeader"
-                });
-                this.expense_types.forEach(element => {
-                    table_columns.push({
-                        text: element.name,
-                        style: "tableOfExpensesHeader"
-                    });
-                });
-                table_columns.push({
-                    text: "Total",
-                    style: "tableOfExpensesHeader"
-                });
-
-                let temp_table_body = {};
-                let temp_expense_types = {};
-                let expense_id = null;
-                let expense_type = null;
-
-                // loop through retrieved records
-                this.reports_by_expense.forEach(element => {
-                    // create new object if current user does not match with previous record
-                    if (expense_id !== element.expense_id) {
-                        temp_table_body = {};
-                        expense_id = element.expense_id;
-
-                        // set default values for current row
-                        this.expense_types.forEach(expense_type => {
-                            temp_expense_types[expense_type.name] = 0;
-                        });
-
-                        let details =
-                            !element.expense_details ||
-                            element.expense_details == "null"
-                                ? []
-                                : JSON.parse(element.expense_details)
-                                      .map(item => {
-                                          return (
-                                              `${
-                                                  item.sub_type_name == null
-                                                      ? ""
-                                                      : item.sub_type_name +
-                                                        "/ "
-                                              }${item.description}: ${
-                                                  item.total
-                                              }` + "\n"
-                                          );
-                                      })
-                                      .join("");
-
-                        temp_table_body = {
-                            Date: element.expense_date,
-                            Particulars:
-                                element.expense_description + "\n" + details,
-                            ...temp_expense_types,
-                            Total: 0
-                        };
-
-                        table_rows.push(temp_table_body);
-                    }
-
-                    // set expense type amount
-                    temp_table_body[element.expense_type_name] =
-                        element.expense_amount;
-
-                    // sum of all expense types
-                    if ("Total" in temp_table_body) {
-                        let total = 0;
-
-                        this.expense_types.forEach(item => {
-                            total += temp_table_body[item.name];
-                        });
-
-                        temp_table_body["Total"] = total;
-                    }
-                });
-
-                // sum total amount per expense type
-                this.expense_types.forEach(expense_type => {
-                    temp_expense_types[
-                        expense_type.name
-                    ] = this.mixin_formatNumber(
-                        table_rows.reduce(
-                            (total, item) => total + item[expense_type.name],
-                            0
-                        )
-                    );
-                });
-
-                // add row for total amounts
-                table_rows.push({
-                    Total: "Total",
-                    Particulars: "",
-                    ...temp_expense_types,
-                    TotalAmount: this.mixin_formatNumber(
-                        table_rows.reduce(
-                            (total, item) => total + item["Total"],
-                            0
-                        )
-                    )
-                });
-
-                let temp = table_rows.map(item => Object.values(item));
-
-                console.log(temp);
-
-                let itemss = temp.map(item => {
-                    let val = [];
-                    for (let i = 0; i < item.length; i++) {
-                        val.push({
-                            text: item[i],
-                            style: "tableOfExpensesBody"
-                        });
-                    }
-
-                    return val;
-                });
-
-                console.log(itemss);
-
-                let body = [];
-                body.push(table_columns);
-                itemss.forEach(element => {
-                    body.push(element);
-                });
-
-                let pdfMake = require("pdfmake/build/pdfmake.js");
-                if (pdfMake.vfs == undefined) {
-                    let pdfFonts = require("pdfmake/build/vfs_fonts.js");
-                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
-                }
-
-                pdfMake.fonts = {
-                    Roboto: {
-                        normal: "Roboto-Regular.ttf",
-                        bold: "Roboto-Medium.ttf",
-                        italics: "Roboto-Italic.ttf",
-                        bolditalics: "Roboto-MediumItalic.ttf"
-                    }
-                };
-
-                let docDefinition = {
-                    // pageSize: 'legal',
-                    pageSize: this.print_format.pageSize,
-                    pageOrientation: this.print_format.pageOrientation,
-                    pageMargins: this.print_format.pageMargins,
-                    defaultStyle: this.print_format.defaultStyle,
-                    background: {
-                        alignment: this.print_format.background.alignment,
-                        margin: this.print_format.background.margin,
-                        height: this.print_format.background.height,
-                        width: this.print_format.background.width,
-                        image: this.print_format.background.image
-                    },
-                    footer: function(currentPage, pageCount) {
-                        return {
-                            columns: [
-                                {
-                                    text: `Generated from Twin-Circa Marketing Expense Tracker ${moment().format(
-                                        "YYYY-MM-DD HH:mm:ss"
-                                    )}`,
-                                    width: 500,
-                                    margin: [0.5 * 72, 0, 0, 0],
-                                    style: "pageFooter"
-                                },
-                                {
-                                    text:
-                                        "Page " +
-                                        currentPage.toString() +
-                                        " of " +
-                                        pageCount,
-                                    alignment: "right",
-                                    style: "pageFooter",
-                                    margin: [0, 0, 0.5 * 72, 0]
-                                }
-                            ]
-                        };
-                    },
-                    content: [
-                        {
-                            text: ["Expense Summary Report"],
-                            style: "header"
-                        },
-                        {
-                            text:
-                                "Report No. : " +
-                                this.selected.map(item => item.code),
-                            style: "subheader"
-                        },
-                        {
-                            style: "tableOfExpenses",
-                            table: {
-                                headerRows: 1,
-                                widths: table_columns.map((item, index) => {
-                                    if (table_columns.length - 1 == index) {
-                                        return "*";
-                                    }
-
-                                    return "auto";
-                                }),
-                                body: body
-                            },
-                            layout: {
-                                hLineWidth: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.body.length
-                                        ? 0.5
-                                        : 0.5;
-                                },
-                                vLineWidth: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.widths.length
-                                        ? 0.5
-                                        : 0.5;
-                                },
-                                hLineColor: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.body.length
-                                        ? "gray"
-                                        : "gray";
-                                },
-                                vLineColor: function(i, node) {
-                                    return i === 0 ||
-                                        i === node.table.widths.length
-                                        ? "gray"
-                                        : "gray";
-                                },
-                                fillColor: function(
-                                    rowIndex,
-                                    node,
-                                    columnIndex
-                                ) {
-                                    return rowIndex % 2 === 0
-                                        ? "#dbdbdb"
-                                        : null;
-                                }
-                            }
-                        },
-                        {
-                            style: "tableSignatures",
-                            table: {
-                                widths: ["*", "*", "*", "*"],
-                                body: [
-                                    [
-                                        {
-                                            text: "Prepared by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Recommended by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Checked by:",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text: "Approved by:",
-                                            style: "tableSignaturesBody"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        },
-                                        {
-                                            text:
-                                                "___________________________________",
-                                            style: "tableSignaturesBody"
-                                        }
-                                    ]
-                                ]
-                            },
-                            layout: "noBorders"
-                        }
-                    ],
-                    styles: {
-                        header: {
-                            fontSize: 13,
-                            bold: false,
-                            alignment: "center"
-                        },
-                        subheader: {
-                            fontSize: 10
-                        },
-                        tableSignatures: {
-                            margin: [0, 5, 0, 15]
-                        },
-                        tableSignaturesBody: {
-                            fontSize: 10
-                        },
-                        tableOfExpenses: {
-                            margin: [0, 5, 0, 15]
-                        },
-                        tableOfExpensesHeader: {
-                            bold: true,
-                            fontSize: 9,
-                            color: "white",
-                            fillColor: "#4caf50",
-                            alignment: "center"
-                        },
-                        tableOfExpensesBody: {
-                            fontSize: 9
-                        },
-                        signatures: {
-                            margin: [0, 5, 0, 15],
-                            fontSize: 10
-                        },
-                        pageFooter: {
-                            fontSize: 8
-                        }
-                    }
-                };
-
-                if (action == "print") {
-                    // pdfMake.createPdf(docDefinition).print();
-                    pdfMake.createPdf(docDefinition).open();
-                } else {
-                    pdfMake
-                        .createPdf(docDefinition)
-                        .download("expense_report.pdf");
-                }
-            });
-        },
-        onPrint(action, group_by) {
-            if (this.selected.length == 0) {
-                this.mixin_errorDialog("Error", "No items selected");
-                return;
-            }
-
-            switch (group_by) {
-                case "user":
-                    this.printReportByUser(action);
-                    break;
-                case "date":
-                    this.printReportByDate(action);
-                    break;
-                default:
-                    this.printReportByExpense(action);
-                    break;
-            }
         },
         updateDates(e) {
             this.date_range = e;
