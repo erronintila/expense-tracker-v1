@@ -707,10 +707,6 @@
                 </v-row>
             </v-card-text>
         </v-card>
-
-        <v-btn @click="printReport('', 'all_expenses', false)">
-            Print Report
-        </v-btn>
     </div>
 </template>
 
