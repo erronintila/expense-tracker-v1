@@ -14,12 +14,73 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -525,6 +586,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       preset: "",
       presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       totalAmount: 0,
+      totalUnsubmitted: 0,
+      totalUnapproved: 0,
       status: "All Expense Reports",
       statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", // "Overdue Expense Reports",
       "Cancelled Expense Reports" // "Archived Expense Reports"
@@ -545,6 +608,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    showAllUnsubmitted: function showAllUnsubmitted() {
+      this.status = "Unsubmitted Expense Reports";
+      this.updateDates([moment__WEBPACK_IMPORTED_MODULE_0___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")]);
+    },
+    showAllUnapproved: function showAllUnapproved() {
+      this.status = "Submitted Expense Reports";
+      this.updateDates([moment__WEBPACK_IMPORTED_MODULE_0___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")]);
+    },
+    loadTotalCountReportStatus: function loadTotalCountReportStatus() {
+      var _this = this;
+
+      axios.get("/api/data/expense_reports?total_count=true&user_id=".concat(this.$store.getters.user.id)).then(function (response) {
+        var _response$data, _total$data$total_uns, _total$data$total_una;
+
+        var total = (_response$data = response.data) !== null && _response$data !== void 0 ? _response$data : 0;
+        console.log(response);
+        _this.totalUnsubmitted = (_total$data$total_uns = total.data.total_unsubmitted) !== null && _total$data$total_uns !== void 0 ? _total$data$total_uns : 0;
+        _this.totalUnapproved = (_total$data$total_una = total.data.total_unapproved) !== null && _total$data$total_una !== void 0 ? _total$data$total_una : 0;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+      });
+    },
     loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
@@ -555,17 +641,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error.response);
       });
     },
-    loadReportByExpense: function loadReportByExpense() {
+    loadReportData: function loadReportData(report_type) {
       var _this2 = this;
 
       return new Promise(function (resolve, reject) {
-        var _this = _this2;
-        var ids = _this.selected == null ? [] : _this.selected.map(function (item) {
+        var ids = _this2.selected == null ? [] : _this2.selected.map(function (item) {
           return item.id;
         });
-        axios.get("/api/data/print_report?by_expense_id=true&ids=".concat(ids)).then(function (response) {
-          _this.reports_by_expense = response.data.data;
-          resolve();
+        var url = "";
+
+        switch (report_type) {
+          case "all_expenses":
+            url = "/api/data/print_report?by_expense_id=true&ids=".concat(ids);
+            break;
+
+          case "expenses_by_user":
+            url = "/api/data/print_report?by_user_id=true&ids=".concat(ids);
+            break;
+
+          case "expenses_by_date":
+            url = "/api/data/print_report?by_date=true&ids=".concat(ids);
+            break;
+
+          default:
+            break;
+        }
+
+        axios.get(url).then(function (response) {
+          var item = response.data.data;
+          resolve(item);
         })["catch"](function (error) {
           reject();
           console.log(error);
@@ -573,832 +677,379 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    loadReportByUser: function loadReportByUser() {
+    printReport: function printReport(action, report_type, export_as_pdf) {
       var _this3 = this;
 
-      return new Promise(function (resolve, reject) {
-        var _this = _this3;
-        var ids = _this.selected == null ? [] : _this.selected.map(function (item) {
-          return item.id;
-        });
-        axios.get("/api/data/print_report?by_user_id=true&ids=".concat(ids)).then(function (response) {
-          _this.reports_by_user = response.data.data;
-          resolve();
-        })["catch"](function (error) {
-          reject();
-          console.log(error);
-          console.log(error.response);
-        });
-      });
-    },
-    loadReportByDate: function loadReportByDate() {
-      var _this4 = this;
+      var table_columns = [];
+      var table_rows = [];
+      var table_footer = [];
+      var temp_table_body = {};
+      var temp_expense_types = {};
+      var user_id = null;
+      var expense_id = null;
+      var expense_date = null;
+      var expense_type = null;
+      var subheader = "";
 
-      return new Promise(function (resolve, reject) {
-        var _this = _this4;
-        var ids = _this.selected == null ? [] : _this.selected.map(function (item) {
-          return item.id;
-        });
-        axios.get("/api/data/print_report?by_date=true&ids=".concat(ids)).then(function (response) {
-          _this.reports_by_date = response.data.data;
-          resolve();
-        })["catch"](function (error) {
-          reject();
-          console.log(error);
-          console.log(error.response);
-        });
-      });
-    },
-    printReportByUser: function printReportByUser(action) {
-      var _this5 = this;
-
-      this.loadReportByUser().then(function () {
-        var table_columns = [];
-        var table_rows = [];
-        var table_footer = [];
-        table_columns.push({
-          text: "Employee",
-          style: "tableOfExpensesHeader"
-        });
-
-        _this5.expense_types.forEach(function (element) {
-          table_columns.push({
-            text: element.name,
-            style: "tableOfExpensesHeader"
-          });
-        });
-
-        table_columns.push({
-          text: "Total",
-          style: "tableOfExpensesHeader"
-        });
-        var temp_table_body = {};
-        var temp_expense_types = {};
-        var user_id = null;
-        var expense_type = null; // loop through retrieved records
-
-        _this5.reports_by_user.forEach(function (element) {
-          // create new object if current user does not match with previous record
-          if (user_id !== element.user_id) {
-            temp_table_body = {};
-            user_id = element.user_id; // set default values for current row
-
-            _this5.expense_types.forEach(function (expense_type) {
-              temp_expense_types[expense_type.name] = 0;
-            });
-
-            temp_table_body = _objectSpread(_objectSpread({
-              User: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
-            }, temp_expense_types), {}, {
-              Total: 0
-            });
-            table_rows.push(temp_table_body);
-          } // set expense type amount
-
-
-          temp_table_body[element.expense_type_name] = element.expense_amount; // sum of all expense types
-
-          if ("Total" in temp_table_body) {
-            var total = 0;
-
-            _this5.expense_types.forEach(function (item) {
-              total += temp_table_body[item.name];
-            });
-
-            temp_table_body["Total"] = total;
-          }
-        }); // sum total amount per expense type
-
-
-        _this5.expense_types.forEach(function (expense_type) {
-          temp_expense_types[expense_type.name] = _this5.mixin_formatNumber(table_rows.reduce(function (total, item) {
-            return total + item[expense_type.name];
-          }, 0));
-        }); // add row for total amounts
-
-
-        table_rows.push(_objectSpread(_objectSpread({
-          Total: "Total"
-        }, temp_expense_types), {}, {
-          TotalAmount: _this5.mixin_formatNumber(table_rows.reduce(function (total, item) {
-            return total + item["Total"];
-          }, 0))
-        }));
-        var temp = table_rows.map(function (item) {
-          return Object.values(item);
-        });
-        var itemss = temp.map(function (item) {
-          var val = [];
-
-          for (var i = 0; i < item.length; i++) {
-            val.push({
-              text: item[i],
-              style: "tableOfExpensesBody"
-            });
-          }
-
-          return val;
-        });
-        var body = [];
-        body.push(table_columns);
-        itemss.forEach(function (element) {
-          body.push(element);
-        });
-
-        var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
-
-        if (pdfMake.vfs == undefined) {
-          var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
-
-          pdfMake.vfs = pdfFonts.pdfMake.vfs;
-        }
-
-        pdfMake.fonts = {
-          Roboto: {
-            normal: "Roboto-Regular.ttf",
-            bold: "Roboto-Medium.ttf",
-            italics: "Roboto-Italic.ttf",
-            bolditalics: "Roboto-MediumItalic.ttf"
-          }
-        };
-        var docDefinition = {
-          // pageSize: 'legal',
-          pageSize: {
-            width: 13 * 72,
-            height: 8.5 * 72
-          },
-          pageOrientation: "landscape",
-          pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
-          defaultStyle: {
-            font: "Roboto"
-          },
-          footer: function footer(currentPage, pageCount) {
-            return {
-              columns: [{
-                text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")),
-                width: 500,
-                margin: [0.5 * 72, 0, 0.5 * 72, 0],
-                style: "pageFooter"
-              }, {
-                text: "Page " + currentPage.toString() + " of " + pageCount,
-                alignment: "right",
-                style: "pageFooter",
-                margin: [0, 0, 0.5 * 72, 0]
-              }]
-            };
-          },
-          content: [{
-            text: ["Expense Summary Report"],
-            style: "header"
-          }, {
-            style: "tableOfExpenses",
-            table: {
-              headerRows: 1,
-              widths: table_columns.map(function (item, index) {
-                if (table_columns.length - 1 == index) {
-                  return "*";
-                }
-
-                return "auto";
-              }),
-              body: body
-            },
-            layout: {
-              hLineWidth: function hLineWidth(i, node) {
-                return i === 0 || i === node.table.body.length ? 0.5 : 0.5;
-              },
-              vLineWidth: function vLineWidth(i, node) {
-                return i === 0 || i === node.table.widths.length ? 0.5 : 0.5;
-              },
-              hLineColor: function hLineColor(i, node) {
-                return i === 0 || i === node.table.body.length ? "gray" : "gray";
-              },
-              vLineColor: function vLineColor(i, node) {
-                return i === 0 || i === node.table.widths.length ? "gray" : "gray";
-              },
-              fillColor: function fillColor(rowIndex, node, columnIndex) {
-                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
-              }
-            }
-          }, {
-            style: "tableSignatures",
-            table: {
-              widths: ["*", "*", "*", "*"],
-              body: [[{
-                text: "Prepared by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Checked by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Approved by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Voucher No.",
-                style: "tableSignaturesBody"
-              }], [{
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }]]
-            },
-            layout: "noBorders"
-          }],
-          styles: {
-            header: {
-              fontSize: 13,
-              bold: false,
-              alignment: "center"
-            },
-            tableSignatures: {
-              margin: [0, 5, 0, 15]
-            },
-            tableSignaturesBody: {
-              fontSize: 10
-            },
-            tableOfExpenses: {
-              margin: [0, 5, 0, 15]
-            },
-            tableOfExpensesHeader: {
-              bold: true,
-              fontSize: 9,
-              color: "white",
-              fillColor: "#4caf50",
-              alignment: "center"
-            },
-            tableOfExpensesBody: {
-              fontSize: 9
-            },
-            signatures: {
-              margin: [0, 5, 0, 15],
-              fontSize: 10
-            },
-            pageFooter: {
-              fontSize: 8
-            }
-          }
-        };
-
-        if (action == "print") {
-          // pdfMake.createPdf(docDefinition).print();
-          pdfMake.createPdf(docDefinition).open();
-        } else {
-          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
-        }
-      });
-    },
-    printReportByDate: function printReportByDate(action) {
-      var _this6 = this;
-
-      this.loadReportByDate().then(function () {
-        var table_columns = [];
-        var table_rows = [];
-        var table_footer = [];
-        table_columns.push({
-          text: "Date",
-          style: "tableOfExpensesHeader"
-        });
-
-        _this6.expense_types.forEach(function (element) {
-          table_columns.push({
-            text: element.name,
-            style: "tableOfExpensesHeader"
-          });
-        });
-
-        table_columns.push({
-          text: "Total",
-          style: "tableOfExpensesHeader"
-        });
-        var temp_table_body = {};
-        var temp_expense_types = {};
-        var expense_date = null;
-        var expense_type = null; // loop through retrieved records
-
-        _this6.reports_by_date.forEach(function (element) {
-          // create new object if current user does not match with previous record
-          if (expense_date !== element.expense_date) {
-            temp_table_body = {};
-            expense_date = element.expense_date; // set default values for current row
-
-            _this6.expense_types.forEach(function (expense_type) {
-              temp_expense_types[expense_type.name] = 0;
-            });
-
-            temp_table_body = _objectSpread(_objectSpread({
-              Date: element.expense_date
-            }, temp_expense_types), {}, {
-              Total: 0
-            });
-            table_rows.push(temp_table_body);
-          } // set expense type amount
-
-
-          temp_table_body[element.expense_type_name] = element.expense_amount; // sum of all expense types
-
-          if ("Total" in temp_table_body) {
-            var total = 0;
-
-            _this6.expense_types.forEach(function (item) {
-              total += temp_table_body[item.name];
-            });
-
-            temp_table_body["Total"] = total;
-          }
-        }); // sum total amount per expense type
-
-
-        _this6.expense_types.forEach(function (expense_type) {
-          temp_expense_types[expense_type.name] = _this6.mixin_formatNumber(table_rows.reduce(function (total, item) {
-            return total + item[expense_type.name];
-          }, 0));
-        }); // add row for total amounts
-
-
-        table_rows.push(_objectSpread(_objectSpread({
-          Total: "Total"
-        }, temp_expense_types), {}, {
-          TotalAmount: _this6.mixin_formatNumber(table_rows.reduce(function (total, item) {
-            return total + item["Total"];
-          }, 0))
-        }));
-        var temp = table_rows.map(function (item) {
-          return Object.values(item);
-        });
-        var itemss = temp.map(function (item) {
-          var val = [];
-
-          for (var i = 0; i < item.length; i++) {
-            val.push({
-              text: item[i],
-              style: "tableOfExpensesBody"
-            });
-          }
-
-          return val;
-        });
-        var body = [];
-        body.push(table_columns);
-        itemss.forEach(function (element) {
-          body.push(element);
-        });
-
-        var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
-
-        if (pdfMake.vfs == undefined) {
-          var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
-
-          pdfMake.vfs = pdfFonts.pdfMake.vfs;
-        }
-
-        pdfMake.fonts = {
-          Roboto: {
-            normal: "Roboto-Regular.ttf",
-            bold: "Roboto-Medium.ttf",
-            italics: "Roboto-Italic.ttf",
-            bolditalics: "Roboto-MediumItalic.ttf"
-          }
-        };
-        var docDefinition = {
-          // pageSize: 'legal',
-          pageSize: {
-            width: 13 * 72,
-            height: 8.5 * 72
-          },
-          pageOrientation: "landscape",
-          pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
-          defaultStyle: {
-            font: "Roboto"
-          },
-          footer: function footer(currentPage, pageCount) {
-            return {
-              columns: [{
-                text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")),
-                width: 500,
-                margin: [0.5 * 72, 0, 0.5 * 72, 0],
-                style: "pageFooter"
-              }, {
-                text: "Page " + currentPage.toString() + " of " + pageCount,
-                alignment: "right",
-                style: "pageFooter",
-                margin: [0, 0, 0.5 * 72, 0]
-              }]
-            };
-          },
-          content: [{
-            text: ["Expense Summary Report"],
-            style: "header"
-          }, {
-            style: "tableOfExpenses",
-            table: {
-              headerRows: 1,
-              widths: table_columns.map(function (item, index) {
-                if (table_columns.length - 1 == index) {
-                  return "*";
-                }
-
-                return "auto";
-              }),
-              body: body
-            },
-            layout: {
-              hLineWidth: function hLineWidth(i, node) {
-                return i === 0 || i === node.table.body.length ? 0.5 : 0.5;
-              },
-              vLineWidth: function vLineWidth(i, node) {
-                return i === 0 || i === node.table.widths.length ? 0.5 : 0.5;
-              },
-              hLineColor: function hLineColor(i, node) {
-                return i === 0 || i === node.table.body.length ? "gray" : "gray";
-              },
-              vLineColor: function vLineColor(i, node) {
-                return i === 0 || i === node.table.widths.length ? "gray" : "gray";
-              },
-              fillColor: function fillColor(rowIndex, node, columnIndex) {
-                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
-              }
-            }
-          }, {
-            style: "tableSignatures",
-            table: {
-              widths: ["*", "*", "*", "*"],
-              body: [[{
-                text: "Prepared by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Checked by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Approved by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Voucher No.",
-                style: "tableSignaturesBody"
-              }], [{
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }]]
-            },
-            layout: "noBorders"
-          }],
-          styles: {
-            header: {
-              fontSize: 13,
-              bold: false,
-              alignment: "center"
-            },
-            tableSignatures: {
-              margin: [0, 5, 0, 15]
-            },
-            tableSignaturesBody: {
-              fontSize: 10
-            },
-            tableOfExpenses: {
-              margin: [0, 5, 0, 15]
-            },
-            tableOfExpensesHeader: {
-              bold: true,
-              fontSize: 9,
-              color: "white",
-              fillColor: "#4caf50",
-              alignment: "center"
-            },
-            tableOfExpensesBody: {
-              fontSize: 9
-            },
-            signatures: {
-              margin: [0, 5, 0, 15],
-              fontSize: 10
-            },
-            pageFooter: {
-              fontSize: 8
-            }
-          }
-        };
-
-        if (action == "print") {
-          // pdfMake.createPdf(docDefinition).print();
-          pdfMake.createPdf(docDefinition).open();
-        } else {
-          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
-        }
-      });
-    },
-    printReportByExpense: function printReportByExpense(action) {
-      var _this7 = this;
-
-      this.loadReportByExpense().then(function () {
-        var table_columns = [];
-        var table_rows = [];
-        var table_footer = [];
-        table_columns.push({
-          text: "Date",
-          style: "tableOfExpensesHeader"
-        });
-        table_columns.push({
-          text: "Particulars",
-          style: "tableOfExpensesHeader"
-        });
-
-        _this7.expense_types.forEach(function (element) {
-          table_columns.push({
-            text: element.name,
-            style: "tableOfExpensesHeader"
-          });
-        });
-
-        table_columns.push({
-          text: "Total",
-          style: "tableOfExpensesHeader"
-        });
-        var temp_table_body = {};
-        var temp_expense_types = {};
-        var expense_id = null;
-        var expense_type = null; // loop through retrieved records
-
-        _this7.reports_by_expense.forEach(function (element) {
-          // create new object if current user does not match with previous record
-          if (expense_id !== element.expense_id) {
-            temp_table_body = {};
-            expense_id = element.expense_id; // set default values for current row
-
-            _this7.expense_types.forEach(function (expense_type) {
-              temp_expense_types[expense_type.name] = 0;
-            });
-
-            var details = !element.expense_details || element.expense_details == "null" ? [] : JSON.parse(element.expense_details).map(function (item) {
-              return "".concat(item.sub_type_name == null ? "" : item.sub_type_name + "/ ").concat(item.description, ": ").concat(item.total) + "\n";
-            }).join("");
-            temp_table_body = _objectSpread(_objectSpread({
-              Date: element.expense_date,
-              Particulars: element.expense_description + "\n" + details
-            }, temp_expense_types), {}, {
-              Total: 0
-            });
-            table_rows.push(temp_table_body);
-          } // set expense type amount
-
-
-          temp_table_body[element.expense_type_name] = element.expense_amount; // sum of all expense types
-
-          if ("Total" in temp_table_body) {
-            var total = 0;
-
-            _this7.expense_types.forEach(function (item) {
-              total += temp_table_body[item.name];
-            });
-
-            temp_table_body["Total"] = total;
-          }
-        }); // sum total amount per expense type
-
-
-        _this7.expense_types.forEach(function (expense_type) {
-          temp_expense_types[expense_type.name] = _this7.mixin_formatNumber(table_rows.reduce(function (total, item) {
-            return total + item[expense_type.name];
-          }, 0));
-        }); // add row for total amounts
-
-
-        table_rows.push(_objectSpread(_objectSpread({
-          Total: "Total",
-          Particulars: ""
-        }, temp_expense_types), {}, {
-          TotalAmount: _this7.mixin_formatNumber(table_rows.reduce(function (total, item) {
-            return total + item["Total"];
-          }, 0))
-        }));
-        var temp = table_rows.map(function (item) {
-          return Object.values(item);
-        });
-        var itemss = temp.map(function (item) {
-          var val = [];
-
-          for (var i = 0; i < item.length; i++) {
-            val.push({
-              text: item[i],
-              style: "tableOfExpensesBody"
-            });
-          }
-
-          return val;
-        });
-        var body = [];
-        body.push(table_columns);
-        itemss.forEach(function (element) {
-          body.push(element);
-        });
-
-        var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
-
-        if (pdfMake.vfs == undefined) {
-          var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
-
-          pdfMake.vfs = pdfFonts.pdfMake.vfs;
-        }
-
-        pdfMake.fonts = {
-          Roboto: {
-            normal: "Roboto-Regular.ttf",
-            bold: "Roboto-Medium.ttf",
-            italics: "Roboto-Italic.ttf",
-            bolditalics: "Roboto-MediumItalic.ttf"
-          }
-        };
-        var docDefinition = {
-          // pageSize: 'legal',
-          pageSize: {
-            width: 13 * 72,
-            height: 8.5 * 72
-          },
-          pageOrientation: "landscape",
-          pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
-          defaultStyle: {
-            font: "Roboto"
-          },
-          footer: function footer(currentPage, pageCount) {
-            return {
-              columns: [{
-                text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")),
-                width: 500,
-                margin: [0.5 * 72, 0, 0.5 * 72, 0],
-                style: "pageFooter"
-              }, {
-                text: "Page " + currentPage.toString() + " of " + pageCount,
-                alignment: "right",
-                style: "pageFooter",
-                margin: [0, 0, 0.5 * 72, 0]
-              }]
-            };
-          },
-          content: [{
-            text: ["Expense Summary Report"],
-            style: "header"
-          }, {
-            text: "Report No. : " + _this7.selected.map(function (item) {
-              return item.code;
-            }),
-            style: "subheader"
-          }, {
-            style: "tableOfExpenses",
-            table: {
-              headerRows: 1,
-              widths: table_columns.map(function (item, index) {
-                if (table_columns.length - 1 == index) {
-                  return "*";
-                }
-
-                return "auto";
-              }),
-              body: body
-            },
-            layout: {
-              hLineWidth: function hLineWidth(i, node) {
-                return i === 0 || i === node.table.body.length ? 0.5 : 0.5;
-              },
-              vLineWidth: function vLineWidth(i, node) {
-                return i === 0 || i === node.table.widths.length ? 0.5 : 0.5;
-              },
-              hLineColor: function hLineColor(i, node) {
-                return i === 0 || i === node.table.body.length ? "gray" : "gray";
-              },
-              vLineColor: function vLineColor(i, node) {
-                return i === 0 || i === node.table.widths.length ? "gray" : "gray";
-              },
-              fillColor: function fillColor(rowIndex, node, columnIndex) {
-                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
-              }
-            }
-          }, {
-            style: "tableSignatures",
-            table: {
-              widths: ["*", "*", "*", "*"],
-              body: [[{
-                text: "Prepared by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Recommended by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Checked by:",
-                style: "tableSignaturesBody"
-              }, {
-                text: "Approved by:",
-                style: "tableSignaturesBody"
-              }], [{
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }, {
-                text: "___________________________________",
-                style: "tableSignaturesBody"
-              }]]
-            },
-            layout: "noBorders"
-          }],
-          styles: {
-            header: {
-              fontSize: 13,
-              bold: false,
-              alignment: "center"
-            },
-            subheader: {
-              fontSize: 10
-            },
-            tableSignatures: {
-              margin: [0, 5, 0, 15]
-            },
-            tableSignaturesBody: {
-              fontSize: 10
-            },
-            tableOfExpenses: {
-              margin: [0, 5, 0, 15]
-            },
-            tableOfExpensesHeader: {
-              bold: true,
-              fontSize: 9,
-              color: "white",
-              fillColor: "#4caf50",
-              alignment: "center"
-            },
-            tableOfExpensesBody: {
-              fontSize: 9
-            },
-            signatures: {
-              margin: [0, 5, 0, 15],
-              fontSize: 10
-            },
-            pageFooter: {
-              fontSize: 8
-            }
-          }
-        };
-
-        if (action == "print") {
-          // pdfMake.createPdf(docDefinition).print();
-          pdfMake.createPdf(docDefinition).open();
-        } else {
-          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
-        }
-      });
-    },
-    onPrint: function onPrint(action, group_by) {
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No items selected");
         return;
-      }
+      } // ADD PRIMARY TABLE COLUMNS BASED ON REPORT TYPE
 
-      switch (group_by) {
-        case "user":
-          this.printReportByUser(action);
+
+      switch (report_type) {
+        case "all_expenses":
+          table_columns.push({
+            text: "Date",
+            style: "tableOfExpensesHeader"
+          });
+          table_columns.push({
+            text: "Particulars",
+            style: "tableOfExpensesHeader"
+          });
+          temp_table_body = {};
+          subheader = "Report No. : " + this.selected.map(function (item) {
+            return item.code;
+          });
           break;
 
-        case "date":
-          this.printReportByDate(action);
+        case "expenses_by_user":
+          table_columns.push({
+            text: "Employee",
+            style: "tableOfExpensesHeader"
+          });
+          temp_table_body = {};
+          subheader = "User";
+          break;
+
+        case "expenses_by_date":
+          table_columns.push({
+            text: "Date",
+            style: "tableOfExpensesHeader"
+          });
+          temp_table_body = {};
+          subheader = "Date";
           break;
 
         default:
-          this.printReportByExpense(action);
           break;
-      }
+      } // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
+
+
+      this.expense_types.forEach(function (element) {
+        table_columns.push({
+          text: element.name,
+          style: "tableOfExpensesHeader"
+        });
+      }); // ADD TOTAL AS THE LAST TABLE COLUMN
+
+      table_columns.push({
+        text: "Total",
+        style: "tableOfExpensesHeader"
+      }); // LOAD EXPENSE REPORT DATA BASED ON REPORT TYPE AND THEN PRINT REPORT
+
+      this.loadReportData(report_type).then(function (item) {
+        // ITERATE THROUGH RETRIEVED DATA
+        item.forEach(function (element) {
+          var condition = false;
+
+          if (report_type == "all_expenses") {
+            condition = expense_id !== element.expense_id;
+          } else if (report_type == "expenses_by_user") {
+            condition = user_id !== element.user_id;
+          } else {
+            condition = expense_date !== element.expense_date;
+          } // CREATE NEW OBJECT IF CURRENT USER DOES NOT MATCH WITH PREVIOUS DATA
+
+
+          if (condition) {
+            temp_table_body = {};
+            user_id = element.user_id;
+            expense_date = element.expense_date;
+            expense_id = element.expense_id; // SET ALL EXPENSE TYPES WITH A VALUE OF ZERO
+
+            _this3.expense_types.forEach(function (expense_type) {
+              temp_expense_types[expense_type.name] = 0;
+            }); // SET DEFAULT VALUES FOR CURRENT ROW
+
+
+            switch (report_type) {
+              case "all_expenses":
+                var details = !element.expense_details || element.expense_details == "null" ? [] : JSON.parse(element.expense_details).map(function (item) {
+                  return "".concat(item.sub_type_name == null ? "" : item.sub_type_name + "/ ").concat(item.description, ": ").concat(item.total) + "\n";
+                }).join("");
+                temp_table_body = _objectSpread(_objectSpread({
+                  Date: element.expense_date,
+                  Particulars: element.expense_description + "\n" + details
+                }, temp_expense_types), {}, {
+                  Total: 0
+                });
+                break;
+
+              case "expenses_by_user":
+                // SET DEFAULT VALUES FOR CURRENT ROW
+                temp_table_body = _objectSpread(_objectSpread({
+                  User: "".concat(element.last_name, ", ").concat(element.first_name, " ").concat(element.middle_name == null ? "" : element.middle_name, " ").concat(element.suffix == null ? "" : element.suffix)
+                }, temp_expense_types), {}, {
+                  Total: 0
+                });
+                break;
+
+              case "expenses_by_date":
+                temp_table_body = _objectSpread(_objectSpread({
+                  Date: element.expense_date
+                }, temp_expense_types), {}, {
+                  Total: 0
+                });
+                break;
+
+              default:
+                break;
+            }
+
+            table_rows.push(temp_table_body);
+          } // SET EXPENSE TYPE AMOUNT
+
+
+          temp_table_body[element.expense_type_name] = element.expense_amount; // SUM OF ALL ROW DATA
+
+          if ("Total" in temp_table_body) {
+            var total = 0;
+
+            _this3.expense_types.forEach(function (item) {
+              total += temp_table_body[item.name];
+            });
+
+            temp_table_body["Total"] = total;
+          }
+        }); // sum total amount per expense type
+
+        _this3.expense_types.forEach(function (expense_type) {
+          temp_expense_types[expense_type.name] = _this3.mixin_formatNumber(table_rows.reduce(function (total, item) {
+            return total + item[expense_type.name];
+          }, 0));
+        });
+
+        if (report_type == "all_expenses") {
+          // add row for total amounts
+          table_rows.push(_objectSpread(_objectSpread({
+            Total: "Total",
+            Particulars: ""
+          }, temp_expense_types), {}, {
+            TotalAmount: _this3.mixin_formatNumber(table_rows.reduce(function (total, item) {
+              return total + item["Total"];
+            }, 0))
+          }));
+        } else {
+          // add row for total amounts
+          table_rows.push(_objectSpread(_objectSpread({
+            Total: "Total"
+          }, temp_expense_types), {}, {
+            TotalAmount: _this3.mixin_formatNumber(table_rows.reduce(function (total, item) {
+              return total + item["Total"];
+            }, 0))
+          }));
+        } // GET ALL ROW VALUES
+
+
+        var temp = table_rows.map(function (item) {
+          return Object.values(item);
+        }); // FORMAT ROW VALUES FOR PDFMAKE TABLE BODY
+
+        var itemss = temp.map(function (item) {
+          var val = [];
+
+          for (var i = 0; i < item.length; i++) {
+            val.push({
+              text: item[i],
+              style: "tableOfExpensesBody"
+            });
+          }
+
+          return val;
+        }); // SET PDFMAKE BODY DATA
+
+        var body = [];
+        body.push(table_columns);
+        itemss.forEach(function (element) {
+          body.push(element);
+        }); // LOAD PDFMAKE INSTANCE
+
+        var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
+
+        if (pdfMake.vfs == undefined) {
+          var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
+
+          pdfMake.vfs = pdfFonts.pdfMake.vfs;
+        } // SET PDFMAKE FONTS
+
+
+        pdfMake.fonts = {
+          Roboto: {
+            normal: "Roboto-Regular.ttf",
+            bold: "Roboto-Medium.ttf",
+            italics: "Roboto-Italic.ttf",
+            bolditalics: "Roboto-MediumItalic.ttf"
+          }
+        };
+        var signatureLabels = ["Prepared by:", "Recommended by:", "Checked by:", "Approved by:"];
+
+        if (report_type != "all_expenses") {
+          signatureLabels = ["Prepared by:", "Checked by:", "Approved by:", "Voucher No."];
+        }
+
+        var formattedSignatureLabels = signatureLabels.map(function (item) {
+          return {
+            text: item,
+            style: "tableSignaturesBody"
+          };
+        });
+        var signatureUnderlines = signatureLabels.map(function (item) {
+          return {
+            text: "___________________________________",
+            style: "tableSignaturesBody"
+          };
+        });
+        var signatures = [].concat(_toConsumableArray(formattedSignatureLabels), _toConsumableArray(signatureUnderlines)); // SET PRINT FORMAT
+
+        var docDefinition = _this3.printFormat(subheader, table_columns, body, signatures); // PRINT OR EXPORT REPORT
+
+
+        if (export_as_pdf) {
+          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
+          return;
+        } // pdfMake.createPdf(docDefinition).print(); // DISPLAY PRINT DIALOG
+
+
+        pdfMake.createPdf(docDefinition).open(); // DISPLAY PRINT PREVIEW
+      });
+    },
+    printFormat: function printFormat(subheader, table_columns, body, signatures) {
+      return {
+        // pageSize: 'legal',
+        pageSize: this.print_format.pageSize,
+        pageOrientation: this.print_format.pageOrientation,
+        pageMargins: this.print_format.pageMargins,
+        defaultStyle: this.print_format.defaultStyle,
+        background: {
+          alignment: this.print_format.background.alignment,
+          margin: this.print_format.background.margin,
+          height: this.print_format.background.height,
+          width: this.print_format.background.width,
+          image: this.print_format.background.image
+        },
+        footer: function footer(currentPage, pageCount) {
+          return {
+            columns: [{
+              text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")),
+              width: 500,
+              margin: [0.5 * 72, 0, 0.5 * 72, 0],
+              style: "pageFooter"
+            }, {
+              text: "Page " + currentPage.toString() + " of " + pageCount,
+              alignment: "right",
+              style: "pageFooter",
+              margin: [0, 0, 0.5 * 72, 0]
+            }]
+          };
+        },
+        content: [{
+          text: ["Expense Summary Report"],
+          style: "header"
+        }, {
+          text: subheader,
+          style: "subheader"
+        }, {
+          style: "tableOfExpenses",
+          table: {
+            headerRows: 1,
+            widths: table_columns.map(function (item, index) {
+              if (table_columns.length - 1 == index) {
+                return "*";
+              }
+
+              return "auto";
+            }),
+            body: body
+          },
+          layout: {
+            hLineWidth: function hLineWidth(i, node) {
+              return i === 0 || i === node.table.body.length ? 0.5 : 0.5;
+            },
+            vLineWidth: function vLineWidth(i, node) {
+              return i === 0 || i === node.table.widths.length ? 0.5 : 0.5;
+            },
+            hLineColor: function hLineColor(i, node) {
+              return i === 0 || i === node.table.body.length ? "gray" : "gray";
+            },
+            vLineColor: function vLineColor(i, node) {
+              return i === 0 || i === node.table.widths.length ? "gray" : "gray";
+            },
+            fillColor: function fillColor(rowIndex, node, columnIndex) {
+              return rowIndex % 2 === 0 ? "#dbdbdb" : null;
+            }
+          }
+        }, {
+          style: "tableSignatures",
+          table: {
+            widths: ["*", "*", "*", "*"],
+            body: signatures
+          },
+          layout: "noBorders"
+        }],
+        styles: {
+          header: {
+            fontSize: 13,
+            bold: false,
+            alignment: "center"
+          },
+          subheader: {
+            fontSize: 10
+          },
+          tableSignatures: {
+            margin: [0, 5, 0, 15]
+          },
+          tableSignaturesBody: {
+            fontSize: 10
+          },
+          tableOfExpenses: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOfExpensesHeader: {
+            bold: true,
+            fontSize: 9,
+            color: "white",
+            fillColor: "#4caf50",
+            alignment: "center"
+          },
+          tableOfExpensesBody: {
+            fontSize: 9
+          },
+          signatures: {
+            margin: [0, 5, 0, 15],
+            fontSize: 10
+          },
+          pageFooter: {
+            fontSize: 8
+          }
+        }
+      };
     },
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
     getDataFromApi: function getDataFromApi() {
-      var _this8 = this;
+      var _this4 = this;
 
       var _this = this;
 
       _this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this8$options = _this8.options,
-            sortBy = _this8$options.sortBy,
-            sortDesc = _this8$options.sortDesc,
-            page = _this8$options.page,
-            itemsPerPage = _this8$options.itemsPerPage;
+        var _this4$options = _this4.options,
+            sortBy = _this4$options.sortBy,
+            sortDesc = _this4$options.sortDesc,
+            page = _this4$options.page,
+            itemsPerPage = _this4$options.itemsPerPage;
 
         var search = _this.search.trim().toLowerCase();
 
@@ -1437,10 +1088,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.$store.dispatch("AUTH_USER");
-      this.$store.dispatch("AUTH_NOTIFICATIONS");
+      this.loadTotalCountReportStatus();
       this.loadExpenseTypes();
       this.selected = [];
+      this.$store.dispatch("AUTH_USER");
+      this.$store.dispatch("AUTH_NOTIFICATIONS");
     },
     onShow: function onShow(item) {
       this.$router.push({
@@ -1845,6 +1497,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
             _this.selected = [];
+
+            _this.loadTotalCountReportStatus();
+
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
@@ -1926,11 +1582,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this9 = this;
+        var _this5 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this9.items = data.items;
-          _this9.totalItems = data.total;
+          _this5.items = data.items;
+          _this5.totalItems = data.total;
         });
       },
       deep: true
@@ -2046,24 +1702,47 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return "".concat(start_date, " ~ ").concat(end_date);
+    },
+    print_format: function print_format() {
+      return {
+        pageSize: {
+          width: this.$store.getters.settings.expense_report.print_format.pageSize.width * 72,
+          height: this.$store.getters.settings.expense_report.print_format.pageSize.height * 72
+        },
+        pageOrientation: this.$store.getters.settings.expense_report.print_format.pageOrientation,
+        pageMargins: [this.$store.getters.settings.expense_report.print_format.pageMargins.left * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.top * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.right * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.bottom * 72],
+        defaultStyle: {
+          font: this.$store.getters.settings.expense_report.print_format.defaultStyle.font
+        },
+        background: {
+          alignment: this.$store.getters.settings.expense_report.print_format.background.alignment,
+          margin: [this.$store.getters.settings.expense_report.print_format.background.margin.left * 72, this.$store.getters.settings.expense_report.print_format.background.margin.top * 72, this.$store.getters.settings.expense_report.print_format.background.margin.right * 72, this.$store.getters.settings.expense_report.print_format.background.margin.bottom * 72],
+          // absolutePosition: {x: -300, y: 40},
+          width: this.$store.getters.settings.expense_report.print_format.background.width * 72,
+          height: this.$store.getters.settings.expense_report.print_format.background.height * 72,
+          image: this.$store.getters.settings.expense_report.print_format.background.image
+        }
+      };
     }
   },
   created: function created() {
     this.$store.dispatch("AUTH_USER");
-    this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.loadUsers();
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadTotalCountReportStatus(); // this.loadUsers();
     // this.loadUsers();
 
     this.loadExpenseTypes();
   },
   activated: function activated() {
-    var _this10 = this;
+    var _this6 = this;
 
     this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadTotalCountReportStatus();
     this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {
-      _this10.items = data.items;
-      _this10.totalItems = data.total;
+      _this6.items = data.items;
+      _this6.totalItems = data.total;
     });
   }
 });
@@ -2375,7 +2054,7 @@ var render = function() {
                                               { attrs: { dark: "" } },
                                               [
                                                 _vm._v(
-                                                  "mdi-view-grid-plus-outline"
+                                                  "\n                                    mdi-view-grid-plus-outline\n                                "
                                                 )
                                               ]
                                             )
@@ -2497,7 +2176,55 @@ var render = function() {
                   on: { "click:close": _vm.onRefresh }
                 },
                 [_vm._v("\n                Refresh\n            ")]
-              )
+              ),
+              _vm._v(" "),
+              _vm.totalUnsubmitted > 0
+                ? _c(
+                    "v-chip",
+                    {
+                      staticClass: "mr-2",
+                      attrs: {
+                        color: "red",
+                        dark: "",
+                        small: "",
+                        close: "",
+                        "close-icon": "mdi-alert"
+                      },
+                      on: { "click:close": _vm.showAllUnsubmitted }
+                    },
+                    [
+                      _vm._v(
+                        "\n                Unsubmitted (" +
+                          _vm._s(_vm.totalUnsubmitted) +
+                          ")\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.totalUnapproved > 0
+                ? _c(
+                    "v-chip",
+                    {
+                      staticClass: "mr-2",
+                      attrs: {
+                        color: "red",
+                        dark: "",
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-alert"
+                      },
+                      on: { "click:close": _vm.showAllUnapproved }
+                    },
+                    [
+                      _vm._v(
+                        "\n                For Approval (" +
+                          _vm._s(_vm.totalUnapproved) +
+                          ")\n            "
+                      )
+                    ]
+                  )
+                : _vm._e()
             ],
             1
           ),
@@ -3104,13 +2831,19 @@ var render = function() {
                                   {
                                     on: {
                                       click: function($event) {
-                                        return _vm.onPrint("print", "expense")
+                                        return _vm.printReport(
+                                          "",
+                                          "all_expenses",
+                                          false
+                                        )
                                       }
                                     }
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v("Group by expense")
+                                      _vm._v(
+                                        "\n                                        Group by expense\n                                    "
+                                      )
                                     ])
                                   ],
                                   1
@@ -3121,13 +2854,19 @@ var render = function() {
                                   {
                                     on: {
                                       click: function($event) {
-                                        return _vm.onPrint("print", "date")
+                                        return _vm.printReport(
+                                          "",
+                                          "expenses_by_date",
+                                          false
+                                        )
                                       }
                                     }
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v("Group by date")
+                                      _vm._v(
+                                        "\n                                        Group by date\n                                    "
+                                      )
                                     ])
                                   ],
                                   1
@@ -3184,13 +2923,19 @@ var render = function() {
                                   {
                                     on: {
                                       click: function($event) {
-                                        return _vm.onPrint("pdf", "expense")
+                                        return _vm.printReport(
+                                          "",
+                                          "all_expenses",
+                                          true
+                                        )
                                       }
                                     }
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v("Group by expense")
+                                      _vm._v(
+                                        "\n                                        Group by expense\n                                    "
+                                      )
                                     ])
                                   ],
                                   1
@@ -3201,13 +2946,19 @@ var render = function() {
                                   {
                                     on: {
                                       click: function($event) {
-                                        return _vm.onPrint("pdf", "date")
+                                        return _vm.printReport(
+                                          "",
+                                          "expenses_by_date",
+                                          true
+                                        )
                                       }
                                     }
                                   },
                                   [
                                     _c("v-list-item-title", [
-                                      _vm._v("Group by date")
+                                      _vm._v(
+                                        "\n                                        Group by date\n                                    "
+                                      )
                                     ])
                                   ],
                                   1

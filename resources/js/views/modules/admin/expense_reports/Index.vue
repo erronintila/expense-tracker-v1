@@ -121,9 +121,9 @@
                                     v-bind="attrs"
                                     v-on="{ ...tooltip, ...menu }"
                                 >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
+                                    <v-icon dark>
+                                        mdi-view-grid-plus-outline
+                                    </v-icon>
                                 </v-btn>
                             </template>
                             <span>More Options</span>
@@ -605,9 +605,6 @@
                                     </v-btn>
                                 </template>
                                 <v-list>
-                                    <!-- <v-list-item
-                                        @click="onPrint('print', 'expense')"
-                                    > -->
                                     <v-list-item
                                         @click="
                                             printReport(
@@ -621,6 +618,7 @@
                                             Group by expense
                                         </v-list-item-title>
                                     </v-list-item>
+
                                     <v-list-item
                                         @click="
                                             printReport(
@@ -868,7 +866,6 @@ export default {
                     });
             });
         },
-
         printReport(action, report_type, export_as_pdf) {
             let table_columns = [];
             let table_rows = [];
@@ -942,9 +939,9 @@ export default {
                 item.forEach(element => {
                     let condition = false;
 
-                    if(report_type == 'all_expenses') {
+                    if (report_type == "all_expenses") {
                         condition = expense_id !== element.expense_id;
-                    } else if(report_type == 'expenses_by_user') {
+                    } else if (report_type == "expenses_by_user") {
                         condition = user_id !== element.user_id;
                     } else {
                         condition = expense_date !== element.expense_date;
@@ -1180,7 +1177,6 @@ export default {
                 pdfMake.createPdf(docDefinition).open(); // DISPLAY PRINT PREVIEW
             });
         },
-
         printFormat(subheader, table_columns, body, signatures) {
             return {
                 // pageSize: 'legal',

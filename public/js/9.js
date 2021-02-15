@@ -762,8 +762,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -980,9 +978,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         item.forEach(function (element) {
           var condition = false;
 
-          if (report_type == 'all_expenses') {
+          if (report_type == "all_expenses") {
             condition = expense_id !== element.expense_id;
-          } else if (report_type == 'expenses_by_user') {
+          } else if (report_type == "expenses_by_user") {
             condition = user_id !== element.user_id;
           } else {
             condition = expense_date !== element.expense_date;
@@ -2388,7 +2386,7 @@ var render = function() {
                                               { attrs: { dark: "" } },
                                               [
                                                 _vm._v(
-                                                  "mdi-view-grid-plus-outline"
+                                                  "\n                                    mdi-view-grid-plus-outline\n                                "
                                                 )
                                               ]
                                             )
