@@ -1944,10 +1944,18 @@ export default {
                     height:
                         this.$store.getters.settings.expense_report.print_format
                             .background.height * 72,
-                    image: this.$store.getters.settings.expense_report
-                        .print_format.background.image
+                    image: this.base64Image
                 }
             };
+        },
+        base64Image() {
+            let base64Image = this.$store.getters.settings.expense_report.print_format.background.image;
+
+            if(!base64Image) {
+                return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+            }
+
+            return base64Image;
         }
     },
     created() {

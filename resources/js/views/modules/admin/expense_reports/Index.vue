@@ -2219,8 +2219,6 @@ export default {
                         this.$store.getters.settings.expense_report.print_format
                             .background.height * 72,
                     image: this.base64Image
-                    // image: this.$store.getters.settings.expense_report
-                    //     .print_format.background.image
                 }
             };
         },

@@ -2034,9 +2034,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // absolutePosition: {x: -300, y: 40},
           width: this.$store.getters.settings.expense_report.print_format.background.width * 72,
           height: this.$store.getters.settings.expense_report.print_format.background.height * 72,
-          image: this.base64Image // image: this.$store.getters.settings.expense_report
-          //     .print_format.background.image
-
+          image: this.base64Image
         }
       };
     },
