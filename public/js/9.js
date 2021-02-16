@@ -2034,9 +2034,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // absolutePosition: {x: -300, y: 40},
           width: this.$store.getters.settings.expense_report.print_format.background.width * 72,
           height: this.$store.getters.settings.expense_report.print_format.background.height * 72,
-          image: this.$store.getters.settings.expense_report.print_format.background.image
+          image: this.base64Image // image: this.$store.getters.settings.expense_report
+          //     .print_format.background.image
+
         }
       };
+    },
+    base64Image: function base64Image() {
+      var base64Image = this.$store.getters.settings.expense_report.print_format.background.image;
+
+      if (!base64Image) {
+        return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+      }
+
+      return base64Image;
     }
   },
   created: function created() {
