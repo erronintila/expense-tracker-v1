@@ -772,8 +772,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log("response", response);
-
                     _this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
@@ -1204,7 +1202,6 @@ export default {
         }
     },
     mounted() {
-        console.log("mounted");
         this.loadUsers();
 
         this.load_pie_chart();
@@ -1220,12 +1217,10 @@ export default {
         // this.loadStatistics();
     },
     created() {
-        console.log("created");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         // this.$store.dispatch("AUTH_USER");
     },
     activated() {
-        console.log("activated");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
 
         this.loadUsers();

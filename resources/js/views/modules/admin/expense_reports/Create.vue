@@ -569,6 +569,12 @@ export default {
     },
     created() {
         this.loadUsers();
+        // this.loadExpenses();
+    },
+    activated() {
+        // this.$store.dispatch("AUTH_USER");
+        this.loadUsers();
+        // this.loadExpenses();
     }
 };
 </script>

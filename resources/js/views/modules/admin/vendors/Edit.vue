@@ -275,6 +275,10 @@ export default {
     created() {
         // this.loadExpenseTypes();
         this.getData();
+    },
+    activated() {
+        // this.loadExpenseTypes();
+        this.getData();
     }
 };
 </script>

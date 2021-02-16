@@ -657,8 +657,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             user_id: user_id,
             payment_id: payment_id,
-            start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
+            // start_date: range[0],
+            // end_date: range[1] ? range[1] : range[0],
             admin_page: true
           }
         }).then(function (response) {
@@ -746,12 +746,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getData();
   },
   activated: function activated() {
-    var _this5 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this5.items = data.items;
-      _this5.totalItems = data.total;
-    });
+    this.getData();
+  },
+  deactivated: function deactivated() {
+    this.form.expense_reports = [];
+    Object.assign(this.$data.form, this.$options.data());
   }
 });
 
@@ -1165,14 +1164,21 @@ var render = function() {
                                                         _vm._v(
                                                           "\n                                                    " +
                                                             _vm._s(
-                                                              item.status.status
+                                                              item.status ==
+                                                                null
+                                                                ? ""
+                                                                : item.status
+                                                                    .status
                                                             ) +
                                                             "\n                                                    (" +
                                                             _vm._s(
-                                                              item.status
-                                                                .remarks
+                                                              item.status ==
+                                                                null
+                                                                ? ""
+                                                                : item.status
+                                                                    .remarks
                                                             ) +
-                                                            ")\n                                                "
+                                                            ") \n                                                "
                                                         )
                                                       ])
                                                     ]),

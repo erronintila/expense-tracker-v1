@@ -69,7 +69,7 @@ const adminRoutes = [
                 component: () =>
                     import("../../views/modules/admin/settings/User.vue"),
                 meta: {
-                    keepAlive: true
+                    keepAlive: false
                 }
             },
             /**

@@ -166,6 +166,11 @@ export default {
         this.loadDepartments();
 
         this.getData();
+    },
+    activated() {
+        this.loadDepartments();
+
+        this.getData();
     }
 };
 </script>

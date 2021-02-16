@@ -695,7 +695,7 @@ export default {
         });
     },
     activated() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
             _this.form = response;
             _this.$store.dispatch("AUTH_NOTIFICATIONS");

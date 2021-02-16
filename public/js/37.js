@@ -1147,6 +1147,11 @@ __webpack_require__.r(__webpack_exports__);
     // this.$store.dispatch("AUTH_USER");
     this.loadUsers();
     this.loadVendors(); //
+  },
+  activated: function activated() {
+    // this.$store.dispatch("AUTH_USER");
+    this.loadUsers();
+    this.loadVendors(); //
   }
 });
 

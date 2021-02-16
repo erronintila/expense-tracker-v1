@@ -798,6 +798,17 @@ export default {
                 return;
             }
 
+            if (!this.mixin_can("restore expenses")) {
+                this.$dialog.message.error(
+                    "Not allowed",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
+
             if (arr.includes(false)) {
                 this.$dialog.message.error(
                     "Expense(s) with report(s) can't be restored",
@@ -942,12 +953,10 @@ export default {
         }
     },
     created() {
-        console.log("created");
         this.loadUsers();
         this.loadExpenseTypes();
     },
     activated() {
-        console.log("activated");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadUsers();
         this.loadExpenseTypes();

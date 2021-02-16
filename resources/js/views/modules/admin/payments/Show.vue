@@ -226,10 +226,10 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.status.status }}
+                                                        {{ item.status == null ? '' : item.status.status }}
                                                         ({{
-                                                            item.status.remarks
-                                                        }})
+                                                            item.status == null ? '' : item.status.remarks
+                                                        }}) 
                                                     </td>
                                                 </tr>
                                                 <tr v-if="item.remarks">
@@ -590,8 +590,8 @@ export default {
                             itemsPerPage: itemsPerPage,
                             user_id: user_id,
                             payment_id: payment_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
+                            // start_date: range[0],
+                            // end_date: range[1] ? range[1] : range[0],
                             admin_page: true
                         }
                     })
@@ -697,10 +697,11 @@ export default {
         this.getData();
     },
     activated() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    }
+        this.getData();
+    },
+    deactivated() {
+        this.form.expense_reports = [];
+        Object.assign(this.$data.form, this.$options.data());
+    },
 };
 </script>

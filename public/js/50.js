@@ -210,10 +210,283 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      validExpenses: false,
+      validExpenseReports: false,
+      validTaxes: false,
+      file_input: null,
+      rules: {
+        file_input: [function (value) {
+          return !value || value.size < 30000 || "Report logo size should be less than 30 KB";
+        }]
+      },
       settings: {
         company_name: "Twin-Circa Marketing",
         currency: "Philippine Peso",
@@ -226,6 +499,34 @@ __webpack_require__.r(__webpack_exports__);
           report_no: {
             prefix: "",
             length: 1
+          },
+          print_format: {
+            pageSize: {
+              width: 0,
+              height: 0
+            },
+            pageOrientation: "landscape",
+            pageMargins: {
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0
+            },
+            defaultStyle: {
+              font: "Roboto"
+            },
+            background: {
+              alignment: "left",
+              width: 0,
+              height: 0,
+              image: "",
+              margin: {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+              }
+            }
           }
         }
       },
@@ -237,7 +538,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/settings").then(function (response) {
-        console.log(response);
+        _this.file_input = null;
         _this.settings = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -254,23 +555,83 @@ __webpack_require__.r(__webpack_exports__);
       // );
 
 
-      axios.post("/api/settings", {
-        settings: _this.settings
-      }).then(function (response) {
-        _this.mixin_successDialog("Success", "Saved settings successfully");
+      _this.$refs.formExpenses.validate();
 
-        _this.$store.dispatch("AUTH_USER");
+      _this.$refs.formExpenseReports.validate();
 
-        _this.$store.dispatch("AUTH_SETTINGS");
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      _this.$refs.formTaxes.validate();
 
-        _this.mixin_errorDialog(error.response.status, error.response.statusText);
-      });
+      if (_this.$refs.formExpenses.validate() && _this.$refs.formExpenseReports.validate() && _this.$refs.formTaxes.validate()) {
+        axios.post("/api/settings", {
+          settings: _this.settings
+        }).then(function (response) {
+          _this.mixin_successDialog("Success", "Saved settings successfully");
+
+          _this.$store.dispatch("AUTH_USER");
+
+          _this.$store.dispatch("AUTH_SETTINGS");
+
+          window.location.replace("/admin/settings");
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog(error.response.status, error.response.statusText);
+        });
+      }
     }
   },
   computed: {
+    page_sizes: function page_sizes() {
+      return [{
+        name: "A4",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Letter",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Folio",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Legal",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Custom",
+        width: 0,
+        height: 0
+      }];
+    },
+    url: function url() {
+      if (this.file_input) {
+        return URL.createObjectURL(this.file_input);
+      }
+
+      return this.$store.getters.settings.expense_report.print_format.background.image;
+    },
+    base64Image: function base64Image() {
+      // let _this = this;
+      // if (this.file_input) {
+      //     let reader = new FileReader();
+      //     reader.readAsDataURL(this.file_input);
+      //     reader.onload = () => {
+      //         _this.settings.expense_report.print_format.background.image =
+      //             reader.result;
+      //         return reader.result;
+      //     };
+      //     reader.onerror = function(error) {
+      //         console.log("Error: ", error);
+      //         // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+      //         return;
+      //     };
+      // }
+      // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+      // return this.$store.getters.settings.expense_report.print_format.background.image;
+      return;
+    },
     report_no: {
       get: function get() {
         var prefix = this.settings.expense_report.report_no.prefix;
@@ -281,6 +642,26 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  watch: {
+    file_input: function file_input() {
+      var _this2 = this;
+
+      if (this.file_input) {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.file_input);
+
+        reader.onload = function () {
+          _this2.settings.expense_report.print_format.background.image = reader.result;
+        };
+
+        reader.onerror = function (error) {
+          console.log("Error: ", error);
+        };
+      } else {
+        this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+      }
+    }
+  },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_SETTINGS");
@@ -288,6 +669,7 @@ __webpack_require__.r(__webpack_exports__);
     this.onLoad();
   },
   activated: function activated() {
+    this.$store.dispatch("AUTH_SETTINGS");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.onLoad();
   }
@@ -385,7 +767,16 @@ var render = function() {
                         [
                           _c(
                             "v-form",
-                            { ref: "formExpenses" },
+                            {
+                              ref: "formExpenses",
+                              model: {
+                                value: _vm.validExpenses,
+                                callback: function($$v) {
+                                  _vm.validExpenses = $$v
+                                },
+                                expression: "validExpenses"
+                              }
+                            },
                             [
                               _c(
                                 "v-row",
@@ -460,8 +851,35 @@ var render = function() {
                         [
                           _c(
                             "v-form",
-                            { ref: "formExpenseReports" },
+                            {
+                              ref: "formExpenseReports",
+                              model: {
+                                value: _vm.validExpenseReports,
+                                callback: function($$v) {
+                                  _vm.validExpenseReports = $$v
+                                },
+                                expression: "validExpenseReports"
+                              }
+                            },
                             [
+                              _c(
+                                "v-row",
+                                [
+                                  _c("v-col", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline green--text" },
+                                      [
+                                        _vm._v(
+                                          "\n                                        General\n                                    "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
@@ -531,11 +949,21 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
                               _c(
                                 "v-row",
                                 [
                                   _c("v-col", [
-                                    _c("div", [_vm._v("Report No. Format:")])
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline  green--text" },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Report No. Format:\n                                    "
+                                        )
+                                      ]
+                                    )
                                   ])
                                 ],
                                 1
@@ -624,6 +1052,569 @@ var render = function() {
                                   )
                                 ],
                                 1
+                              ),
+                              _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c("v-col", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline green--text" },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Print Format\n                                    "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-select", {
+                                        attrs: {
+                                          label: "Page Orientation",
+                                          items: ["portrait", "landscape"]
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.pageOrientation,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format,
+                                              "pageOrientation",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format\n                                                .pageOrientation\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Page Size (width)",
+                                          type: "number"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.pageSize.width,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.pageSize,
+                                              "width",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.pageSize.width\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Page Size (height)",
+                                          type: "number"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.pageSize.height,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.pageSize,
+                                              "height",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.pageSize\n                                                .height\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Page Margin (Left)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.pageMargins.left,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.pageMargins,
+                                              "left",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .left\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Page Margin (Top)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.pageMargins.top,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.pageMargins,
+                                              "top",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .top\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Page Margin (Right)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.pageMargins.right,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.pageMargins,
+                                              "right",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .right\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Page Margin (Bottom)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.pageMargins.bottom,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.pageMargins,
+                                              "bottom",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .bottom\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-select", {
+                                        attrs: {
+                                          label: "Font",
+                                          items: ["Roboto"]
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.defaultStyle.font,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.defaultStyle,
+                                              "font",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.defaultStyle\n                                                .font\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c("v-col", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "overline green--text" },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Report Logo\n                                    "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _vm.url
+                                    ? _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-img", {
+                                            attrs: {
+                                              label: "Report Image Logo",
+                                              src: _vm.url
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-file-input", {
+                                        attrs: {
+                                          rules: _vm.rules.file_input,
+                                          "prepend-icon": "mdi-upload",
+                                          "show-size": "",
+                                          label: "Upload",
+                                          accept:
+                                            "image/png, image/jpeg, image/bmp"
+                                        },
+                                        model: {
+                                          value: _vm.file_input,
+                                          callback: function($$v) {
+                                            _vm.file_input = $$v
+                                          },
+                                          expression: "file_input"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "6" } },
+                                    [
+                                      _c("small", {
+                                        domProps: {
+                                          textContent: _vm._s(_vm.base64Image)
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-select", {
+                                        attrs: {
+                                          items: ["left", "right", "center"],
+                                          label: "Logo Alignment"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.background
+                                              .alignment,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.background,
+                                              "alignment",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .alignment\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Logo Width" },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.background.width,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.background,
+                                              "width",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .width\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: { label: "Logo Height" },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.background.height,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.background,
+                                              "height",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .height\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Logo Margin (Left)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.background.margin
+                                              .left,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.background.margin,
+                                              "left",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.left\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Logo Margin (Top)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.background.margin
+                                              .top,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.background.margin,
+                                              "top",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.top\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Logo Margin (Right)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.background.margin
+                                              .right,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.background.margin,
+                                              "right",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.right\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "3" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          type: "number",
+                                          label: "Logo Margin (Bottom)"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.settings.expense_report
+                                              .print_format.background.margin
+                                              .bottom,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.settings.expense_report
+                                                .print_format.background.margin,
+                                              "bottom",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.bottom\n                                        "
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
                               )
                             ],
                             1
@@ -657,7 +1648,16 @@ var render = function() {
                         [
                           _c(
                             "v-form",
-                            { ref: "formTaxes" },
+                            {
+                              ref: "formTaxes",
+                              model: {
+                                value: _vm.validTaxes,
+                                callback: function($$v) {
+                                  _vm.validTaxes = $$v
+                                },
+                                expression: "validTaxes"
+                              }
+                            },
                             [
                               _c(
                                 "v-row",

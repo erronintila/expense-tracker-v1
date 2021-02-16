@@ -513,6 +513,11 @@ export default {
         // this.$store.dispatch("AUTH_USER");
         this.loadJobs();
         this.loadPermissions();
+    },
+    activated() {
+        // this.$store.dispatch("AUTH_USER");
+        this.loadJobs();
+        this.loadPermissions();
     }
 };
 </script>

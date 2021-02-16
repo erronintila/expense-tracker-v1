@@ -294,6 +294,10 @@ export default {
     created() {
         this.$store.dispatch("AUTH_USER");
         this.loadusers();
+    },
+    activated() {
+        this.$store.dispatch("AUTH_USER");
+        this.loadusers();
     }
 };
 </script>

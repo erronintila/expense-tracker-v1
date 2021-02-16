@@ -919,8 +919,7 @@ class ExpenseReportController extends Controller
                 ["rejected_at", "=", null],
                 ["cancelled_at", "=", null],
                 ["deleted_at", "=", null],
-            ])
-            ->count();
+            ]);
 
             $total_unapproved = DB::table('expense_reports')->where([
                 ["submitted_at", "<>", null],
@@ -928,17 +927,21 @@ class ExpenseReportController extends Controller
                 ["rejected_at", "=", null],
                 ["cancelled_at", "=", null],
                 ["deleted_at", "=", null],
-            ])
-            ->count();
+            ]);
 
-            return $this->successResponse(
-                [
-                "total_unsubmitted" => $total_unsubmitted,
-                "total_unapproved" => $total_unapproved
-            ],
-                "Success",
-                200
-            );
+            if(request()->has("user_id")) {
+                if (request("user_id") > 0) {
+                    $total_unsubmitted = $total_unsubmitted->where("user_id", request("user_id"));
+                    $total_unapproved = $total_unapproved->where("user_id", request("user_id"));
+                }
+            }
+
+            return $this->successResponse([
+                "total_unsubmitted" => $total_unsubmitted->count(),
+                "total_unapproved" => $total_unapproved->count()
+            ], 
+            "Success",
+            200);
         }
 
         if (request()->has("create_payment")) {

@@ -268,6 +268,10 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     // this.loadExpenseTypes();
     this.getData();
+  },
+  activated: function activated() {
+    // this.loadExpenseTypes();
+    this.getData();
   }
 });
 

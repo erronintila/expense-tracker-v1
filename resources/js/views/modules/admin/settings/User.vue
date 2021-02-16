@@ -156,7 +156,7 @@ export default {
         onSave() {
             let _this = this;
 
-            if(_this.user.id == null) {
+            if (_this.user.id == null) {
                 _this.mixin_errorDialog("Error", "No user selected");
                 return;
             }
@@ -244,6 +244,10 @@ export default {
     },
     created() {
         // this.$store.dispatch("AUTH_USER");
+        this.loadExpenseTypes();
+        this.loadUsers();
+    },
+    activated() {
         this.loadExpenseTypes();
         this.loadUsers();
     }

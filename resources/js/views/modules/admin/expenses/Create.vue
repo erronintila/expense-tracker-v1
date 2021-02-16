@@ -1195,6 +1195,12 @@ export default {
         this.loadUsers();
         this.loadVendors();
         //
+    },
+    activated() {
+        // this.$store.dispatch("AUTH_USER");
+        this.loadUsers();
+        this.loadVendors();
+        //
     }
 };
 </script>

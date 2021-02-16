@@ -41,6 +41,11 @@ export default {
     created() {
         this.loadItem();
     },
-    mounted() {}
+    activated() {
+        this.loadItem();
+    },
+    deactivated() {
+        Object.assign(this.$data, this.$options.data());
+    }
 };
 </script>

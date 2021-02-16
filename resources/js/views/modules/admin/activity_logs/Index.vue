@@ -538,6 +538,7 @@ export default {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
     },
     activated() {
+        this.loadUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {
             this.items = data.items;

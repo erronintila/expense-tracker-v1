@@ -543,6 +543,12 @@ export default {
         this.loadJobs();
         // this.loadExpenseTypes();
         this.getData();
+    },
+    activated() {
+        // this.$store.dispatch("AUTH_USER");
+        this.loadJobs();
+        // this.loadExpenseTypes();
+        this.getData();
     }
 };
 </script>

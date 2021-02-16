@@ -39,6 +39,11 @@ export default {
     created() {
         this.getData();
     },
-    mounted() {}
+    activated() {
+        this.getData();
+    },
+    deactivated() {
+        Object.assign(this.$data, this.$options.data());
+    }
 };
 </script>

@@ -798,6 +798,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (!this.mixin_can("restore expenses")) {
+        this.$dialog.message.error("Not allowed", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
       if (arr.includes(false)) {
         this.$dialog.message.error("Expense(s) with report(s) can't be restored", {
           position: "top-right",
@@ -923,14 +931,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    console.log("created");
     this.loadUsers();
     this.loadExpenseTypes();
   },
   activated: function activated() {
     var _this4 = this;
 
-    console.log("activated");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.loadUsers();
     this.loadExpenseTypes();

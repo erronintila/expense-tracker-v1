@@ -678,12 +678,19 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      console.log(response);
       _this.form = response;
+
+      _this.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   },
   activated: function activated() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    var _this = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this.form = response;
+
+      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+    });
   }
 });
 
