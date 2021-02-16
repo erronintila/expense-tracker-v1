@@ -623,7 +623,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var _response$data, _total$data$total_uns, _total$data$total_una;
 
         var total = (_response$data = response.data) !== null && _response$data !== void 0 ? _response$data : 0;
-        console.log(response);
         _this.totalUnsubmitted = (_total$data$total_uns = total.data.total_unsubmitted) !== null && _total$data$total_uns !== void 0 ? _total$data$total_uns : 0;
         _this.totalUnapproved = (_total$data$total_una = total.data.total_unapproved) !== null && _total$data$total_una !== void 0 ? _total$data$total_una : 0;
       })["catch"](function (error) {

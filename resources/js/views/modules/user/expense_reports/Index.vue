@@ -610,7 +610,6 @@ export default {
                 )
                 .then(response => {
                     let total = response.data ?? 0;
-                    console.log(response);
 
                     _this.totalUnsubmitted = total.data.total_unsubmitted ?? 0;
                     _this.totalUnapproved = total.data.total_unapproved ?? 0;
