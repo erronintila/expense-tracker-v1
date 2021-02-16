@@ -44,7 +44,12 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.loadItem();
   },
-  mounted: function mounted() {}
+  activated: function activated() {
+    this.loadItem();
+  },
+  deactivated: function deactivated() {
+    Object.assign(this.$data, this.$options.data());
+  }
 });
 
 /***/ }),
