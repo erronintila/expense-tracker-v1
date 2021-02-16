@@ -1161,9 +1161,11 @@ export default {
                 });
 
                 let signatures = [
-                    ...formattedSignatureLabels,
-                    ...signatureUnderlines
+                    [...formattedSignatureLabels],
+                    [...signatureUnderlines]
                 ];
+
+                console.log("signatures", signatures);
 
                 // SET PRINT FORMAT
                 let docDefinition = this.printFormat(
@@ -1186,6 +1188,7 @@ export default {
             });
         },
         printFormat(subheader, table_columns, body, signatures) {
+            console.log("printformat", signatures);
             return {
                 // pageSize: 'legal',
                 pageSize: this.print_format.pageSize,

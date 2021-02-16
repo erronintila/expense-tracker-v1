@@ -1141,7 +1141,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableSignaturesBody"
           };
         });
-        var signatures = [].concat(_toConsumableArray(formattedSignatureLabels), _toConsumableArray(signatureUnderlines)); // SET PRINT FORMAT
+        var signatures = [_toConsumableArray(formattedSignatureLabels), _toConsumableArray(signatureUnderlines)];
+        console.log("signatures", signatures); // SET PRINT FORMAT
 
         var docDefinition = _this3.printFormat(subheader, table_columns, body, signatures); // PRINT OR EXPORT REPORT
 
@@ -1156,6 +1157,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     printFormat: function printFormat(subheader, table_columns, body, signatures) {
+      console.log("printformat", signatures);
       return {
         // pageSize: 'legal',
         pageSize: this.print_format.pageSize,

@@ -963,8 +963,8 @@ export default {
                 });
 
                 let signatures = [
-                    ...formattedSignatureLabels,
-                    ...signatureUnderlines
+                    [...formattedSignatureLabels],
+                    [...signatureUnderlines]
                 ];
 
                 // SET PRINT FORMAT
