@@ -41,6 +41,8 @@ export default {
     created() {
         this.loadItem();
     },
-    mounted() {}
+    activated() {
+        this.loadItem();
+    }
 };
 </script>

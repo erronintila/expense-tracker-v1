@@ -356,6 +356,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -370,7 +378,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       valid: false,
       menu: false,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
-      user: this.$store.getters.user,
+      user: this.$store == null ? {
+        id: 0
+      } : this.$store.getters.user,
       code: "",
       reference_no: "",
       voucher_no: "",
@@ -432,7 +442,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         code: "",
         date: "",
         description: "",
-        user: this.$store.getters.user,
+        user: this.$store == null ? {
+          id: 0
+        } : this.$store.getters.user,
         expense_reports: [],
         notes: "",
         reference_no: "",
@@ -577,8 +589,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             user_id: user_id,
             payment_id: payment_id,
-            start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
+            // start_date: range[0],
+            // end_date: range[1] ? range[1] : range[0],
             admin_page: false
           }
         }).then(function (response) {
@@ -664,6 +676,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.getData();
+  },
+  activated: function activated() {
+    this.getData();
+  },
+  deactivated: function deactivated() {
+    this.form.expense_reports = [];
+    Object.assign(this.$data.form, this.$options.data());
   }
 });
 
@@ -1077,12 +1096,19 @@ var render = function() {
                                                         _vm._v(
                                                           "\n                                                    " +
                                                             _vm._s(
-                                                              item.status.status
+                                                              item.status ==
+                                                                null
+                                                                ? ""
+                                                                : item.status
+                                                                    .status
                                                             ) +
                                                             "\n                                                    (" +
                                                             _vm._s(
-                                                              item.status
-                                                                .remarks
+                                                              item.status ==
+                                                                null
+                                                                ? ""
+                                                                : item.status
+                                                                    .remarks
                                                             ) +
                                                             ")\n                                                "
                                                         )

@@ -414,6 +414,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -454,7 +462,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       total: 0,
       totalItems: 0,
       date_range: [],
-      expense_report_id: this.$route.params.id,
+      expense_report_id: this.router_params_id,
       search: "",
       options: {
         sortBy: ["created_at"],
@@ -997,7 +1005,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/expenses?expense_report_id=".concat(_this4.$route.params.id, "&only=true&sortBy=date&sortType=asc")).then(function (response) {
+        axios.get("/api/data/expenses?expense_report_id=".concat(_this4.router_params_id, "&only=true&sortBy=date&sortType=asc")).then(function (response) {
           var items = response.data.data;
           resolve({
             items: items
@@ -1014,7 +1022,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
+      axios.get("/api/expense_reports/".concat(_this.router_params_id)).then(function (response) {
         var data = response.data.data;
         _this.form.code = data.code;
         _this.form.reference_no = data.reference_no;
@@ -1069,19 +1077,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     getDataFromApi: function getDataFromApi() {
-      var _this5 = this;
-
       var _this = this;
 
       _this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this5$options = _this5.options,
-            sortBy = _this5$options.sortBy,
-            sortDesc = _this5$options.sortDesc,
-            page = _this5$options.page,
-            itemsPerPage = _this5$options.itemsPerPage;
+        var _this$options = _this.options,
+            sortBy = _this$options.sortBy,
+            sortDesc = _this$options.sortDesc,
+            page = _this$options.page,
+            itemsPerPage = _this$options.itemsPerPage;
+        console.log(_this.options);
         var range = [_this.form.from, _this.form.to];
-        var expense_report_id = _this.$route.params.id;
+        var expense_report_id = _this.router_params_id;
         axios.get("/api/expenses", {
           params: {
             page: page,
@@ -1114,11 +1121,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this6 = this;
+        var _this5 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this6.form.expenses = data.items;
-          _this6.totalItems = data.total;
+          _this5.form.expenses = data.items;
+          _this5.totalItems = data.total;
         });
       },
       deep: true
@@ -1136,11 +1143,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return true;
+    },
+    router_params_id: {
+      get: function get() {
+        if (this.$route) {
+          if (this.$route.params) {
+            return this.$route.params.id == null ? 0 : this.$route.params.id;
+          }
+
+          return 0;
+        }
+
+        return 0;
+      },
+      set: function set(value) {
+        return value;
+      }
     }
   },
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.getData();
+  },
+  activated: function activated() {
+    this.getData();
+  },
+  deactivated: function deactivated() {
+    this.form.expenses = [];
+    Object.assign(this.$data.form, this.$options.data());
   }
 });
 
@@ -1270,7 +1300,7 @@ var render = function() {
                                           color: "green",
                                           to:
                                             "/expense_reports/" +
-                                            _vm.$route.params.id +
+                                            _vm.router_params_id +
                                             "/edit"
                                         }
                                       },

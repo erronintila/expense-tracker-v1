@@ -481,6 +481,13 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.getData(); // this.getExpenseStats();
+  },
+  activated: function activated() {
+    // this.$store.dispatch("AUTH_USER");
+    this.getData(); // this.getExpenseStats();
+  },
+  deactivated: function deactivated() {
+    Object.assign(this.$data, this.$options.data());
   }
 });
 

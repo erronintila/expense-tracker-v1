@@ -695,8 +695,15 @@ export default {
     created() {
         let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            console.log(response);
             _this.form = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+        });
+    },
+    activated() {
+        let _this = this;
+        this.$store.dispatch("AUTH_USER").then(response => {
+            _this.form = response;
+            _this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };

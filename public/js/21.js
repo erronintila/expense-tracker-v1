@@ -683,6 +683,15 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.$store.dispatch("AUTH_NOTIFICATIONS");
     });
+  },
+  activated: function activated() {
+    var _this = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this.form = response;
+
+      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+    });
   }
 });
 

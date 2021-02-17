@@ -96,6 +96,7 @@
                                     item-text="name"
                                     item-value="id"
                                     label="Expense Types"
+                                    return-object
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -162,6 +163,22 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+
+            <v-card-subtitle>
+                {{ formattedDateRange }}
+            </v-card-subtitle>
+
+            <v-row class="ml-4">
+                <v-chip v-if="status!=null" class="mr-2" small>
+                    {{ status }}
+                </v-chip>
+                <v-chip v-if="expense_type!=null" class="mr-2" small>
+                    {{ expense_type.name }}
+                </v-chip>
+                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                    Refresh
+                </v-chip>
+            </v-row>
 
             <v-card-subtitle>
                 <v-text-field
@@ -460,7 +477,7 @@ export default {
             ],
             items: [],
             user: this.$store.getters.user.id,
-            expense_type: 0,
+            expense_type: {id: 0, name: 'All Expense Types'},
             expense_types: [],
             status: "All Expenses",
             statuses: [
@@ -502,7 +519,7 @@ export default {
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
                 let user_id = _this.user;
-                let expense_type_id = _this.expense_type;
+                let expense_type_id = _this.expense_type.id;
                 let range = _this.date_range;
 
                 axios
@@ -852,6 +869,20 @@ export default {
             }
 
             return today;
+        },
+        formattedDateRange() {
+            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
+            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+
+            if(JSON.stringify(start_date) == JSON.stringify(end_date)) {
+                return start_date;
+            }
+
+            if(JSON.stringify(end_date) == null) {
+                return start_date;
+            }
+
+            return `${start_date} ~ ${end_date}`;
         }
     },
     mounted() {
@@ -866,6 +897,15 @@ export default {
         // this.loadUsers();
         // this.loadUsers();
         this.loadExpenseTypes();
+    },
+    activated() {
+        this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.loadExpenseTypes();
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

@@ -98,6 +98,7 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'add expenses beyond encoding period', 'category' => $model]);
                 Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
                 Permission::create(['name' => 'set reimbursable amount', 'category' => $model]);
+                Permission::create(['name' => 'restore expenses', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 
@@ -148,6 +149,7 @@ class UserSeeder extends Seeder
         $roleUser->givePermissionTo("add expenses beyond encoding period");
         $roleUser->givePermissionTo("submit expense reports beyond due date");
         $roleUser->givePermissionTo("add expenses beyond limit");
+        $roleUser->givePermissionTo("restore expenses");
         // $roleUser->givePermissionTo("edit users");
 
         $roleSuperAdmin = Role::create(['name' => 'administrator']);
@@ -227,6 +229,26 @@ class UserSeeder extends Seeder
         Setting::set("submission_period", "Weekly");
         Setting::set("approval_period", 3);
         Setting::set("tax_rate", 12);
+        Setting::set("expense_report.report_no.prefix", 'EXR');
+        Setting::set("expense_report.report_no.num_length", 10);
+
+        Setting::set("expense_report.print_format.pageSize.width", 11.69);
+        Setting::set("expense_report.print_format.pageSize.height", 8.27);
+        Setting::set("expense_report.print_format.pageOrientation", 'landscape');
+        Setting::set("expense_report.print_format.pageMargins.left", 0.5);
+        Setting::set("expense_report.print_format.pageMargins.top", 0.5);
+        Setting::set("expense_report.print_format.pageMargins.right", 0.5);
+        Setting::set("expense_report.print_format.pageMargins.bottom", 0.5);
+        Setting::set("expense_report.print_format.defaultStyle.font", 'Roboto');
+        Setting::set("expense_report.print_format.background.alignment", 'right');
+        Setting::set("expense_report.print_format.background.width", 2.2);
+        Setting::set("expense_report.print_format.background.height", 0);
+        Setting::set("expense_report.print_format.background.image", null);
+        Setting::set("expense_report.print_format.background.margin.left", 0.5);
+        Setting::set("expense_report.print_format.background.margin.top", 0.4);
+        Setting::set("expense_report.print_format.background.margin.right", 0);
+        Setting::set("expense_report.print_format.background.margin.bottom", 0);
+        
         Setting::save();
     }
 }

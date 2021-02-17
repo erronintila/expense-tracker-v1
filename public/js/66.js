@@ -621,6 +621,12 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     // this.$store.dispatch("AUTH_USER");
     this.getData();
+  },
+  activated: function activated() {
+    this.getData();
+  },
+  deactivated: function deactivated() {
+    Object.assign(this.$data, this.$options.data());
   }
 });
 

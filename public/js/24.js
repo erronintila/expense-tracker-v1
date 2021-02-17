@@ -243,6 +243,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -251,6 +269,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
+      yawa: false,
       loading: true,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",
@@ -298,6 +317,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
+    changeUser: function changeUser() {},
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -494,17 +514,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
       }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+    },
+    formattedDateRange: function formattedDateRange() {
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("MMM DD, YYYY");
+
+      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+        return start_date;
+      }
+
+      if (JSON.stringify(end_date) == null) {
+        return start_date;
+      }
+
+      return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
-  // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
   created: function created() {
     this.loadUsers();
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+  },
+  activated: function activated() {
+    var _this4 = this;
+
+    this.loadUsers();
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this4.items = data.items;
+      _this4.totalItems = data.total;
+    });
   }
 });
 
@@ -689,6 +727,7 @@ var render = function() {
                               "item-text": "name",
                               "return-object": ""
                             },
+                            on: { change: _vm.changeUser },
                             scopedSlots: _vm._u([
                               {
                                 key: "item",
@@ -760,7 +799,30 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("br"),
+      _c("v-card-subtitle", [_vm._v(_vm._s(_vm.formattedDateRange))]),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        { staticClass: "ml-4" },
+        [
+          _vm.user != null
+            ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
+                _vm._v("\n            " + _vm._s(_vm.user.name) + "\n        ")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "v-chip",
+            {
+              staticClass: "mr-2",
+              attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
+              on: { "click:close": _vm.onRefresh }
+            },
+            [_vm._v("\n            Refresh\n        ")]
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "v-card-text",

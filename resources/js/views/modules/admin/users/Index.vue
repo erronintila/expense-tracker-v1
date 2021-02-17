@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="elevation-0 p-0 m-0" >
+        <v-card class="elevation-0 p-0 m-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Employees</h4>
 
@@ -80,6 +80,7 @@
                                     v-model="status"
                                     :items="statuses"
                                     label="Status"
+                                    @change="changeStatus"
                                 ></v-select>
                             </v-list-item>
                             <v-list-item>
@@ -101,7 +102,7 @@
                                 <JobData
                                     ref="jobData"
                                     :showAll="true"
-                                    :department_id="department"
+                                    :department_id="department.id"
                                     @changeData="changeJob"
                                 ></JobData>
                                 <!-- <v-select
@@ -189,6 +190,28 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+
+            <v-row class="ml-4">
+                <v-chip v-if="status != null" class="mr-2" small>
+                    {{ status }}
+                </v-chip>
+                <v-chip v-if="department != null" class="mr-2" small>
+                    {{ department.name }}
+                </v-chip>
+                <v-chip v-if="job != null" class="mr-2" small>
+                    {{ job.name }}
+                </v-chip>
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
+                    Refresh
+                </v-chip>
+            </v-row>
+
             <v-card-subtitle>
                 <v-hover v-slot:default="{ hover }">
                     <v-text-field
@@ -260,11 +283,19 @@
                     <template v-slot:[`item.revolving_fund`]="{ item }">
                         {{ `${item.remaining_fund} / ${item.fund}` }}
                     </template>
-                     <template v-slot:[`item.job`]="{ item }">
-                        {{ `${item.job ? item.job.name : ''}` }}
+                    <template v-slot:[`item.job`]="{ item }">
+                        {{ `${item.job ? item.job.name : ""}` }}
                     </template>
-                     <template v-slot:[`item.department`]="{ item }">
-                        {{ `${item.job ? (item.job.department ? item.job.department.name : '') : ''}` }}
+                    <template v-slot:[`item.department`]="{ item }">
+                        {{
+                            `${
+                                item.job
+                                    ? item.job.department
+                                        ? item.job.department.name
+                                        : ""
+                                    : ""
+                            }`
+                        }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon
@@ -351,9 +382,9 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            department: 0,
+            department: { id: null, name: "All Departments" },
             // departments: [],
-            job: 0,
+            job: { id: null, name: "All Job Designations" },
             jobs: [],
             total_fund: 0,
             total_remaining_fund: 0,
@@ -371,14 +402,14 @@ export default {
         };
     },
     methods: {
+        changeStatus() {},
         changeDepartment(e) {
-            this.department = e.id;
-            this.job = null;
-            // this.loadJobs();
-            this.$refs.jobData.resetData(this.department);
+            this.department = e;
+            this.job = { id: null, name: "All Job Designations" };
+            this.$refs.jobData.resetData(this.department.id);
         },
         changeJob(e) {
-            this.job = e.id;
+            this.job = e;
         },
         getDataFromApi() {
             let _this = this;
@@ -389,8 +420,9 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
-                let department_id = _this.department;
-                let job_id = _this.job;
+                let department_id =
+                    _this.department == null ? null : _this.department.id;
+                let job_id = _this.job == null ? null : _this.job.id;
                 let status = _this.status;
 
                 axios
@@ -425,69 +457,17 @@ export default {
                         );
 
                         _this.loading = false;
+
+                        reject();
                     });
             });
         },
-        // loadDepartments() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/departments")
-        //         .then(response => {
-        //             _this.departments = response.data.data;
-        //             _this.departments.unshift({
-        //                 id: 0,
-        //                 name: "All Departments"
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-        //         });
-        // },
-        // loadJobs() {
-        //     let _this = this;
-        //     axios
-        //         .get("/api/data/jobs", {
-        //             params: {
-        //                 department_id: _this.department
-        //             }
-        //         })
-        //         .then(response => {
-        //             _this.jobs = response.data.data;
-        //             _this.jobs.unshift({ id: 0, name: "All Job Designations" });
-
-        //             _this.job = 0;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-        //         });
-        // },
-        // updateDepartment() {
-        //     this.loadJobs();
-        // },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
-            // this.loadDepartments();
-            // this.loadJobs();
 
             this.$refs.departmentData.resetData();
             this.$refs.jobData.resetData();
         },
-        // onShow(item) {
-        //     this.$router.push({
-        //         name: "admin.users.show",
-        //         params: { id: item.id }
-        //     });
-        // },
-        // onEdit(item) {
-        //     this.$router.push({
-        //         name: "admin.users.edit",
-        //         params: { id: item.id }
-        //     });
-        // },
         onEditFund() {
             if (this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
@@ -497,9 +477,7 @@ export default {
                 return;
             }
 
-            this.$router.push(
-                `/admin/users/${this.selected[0].id}/edit/fund`
-            );
+            this.$router.push(`/admin/users/${this.selected[0].id}/edit/fund`);
         },
         onPasswordReset() {
             let _this = this;
@@ -583,8 +561,6 @@ export default {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
 
                             _this.selected = [];
                         })
@@ -690,14 +666,17 @@ export default {
             };
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
     created() {
         this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+    },
+    activated() {
+        this.$store.dispatch("AUTH_USER");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

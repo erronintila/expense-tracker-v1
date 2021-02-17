@@ -91,6 +91,7 @@
                                 item-value="id"
                                 item-text="name"
                                 return-object
+                                @change="changeUser"
                             >
                                 <template v-slot:item="data">
                                     <template>
@@ -153,7 +154,22 @@
             </v-menu> -->
         </v-card-title>
 
-        <br />
+        <v-card-subtitle>{{ formattedDateRange }}</v-card-subtitle>
+
+        <v-row class="ml-4">
+            <v-chip v-if="user != null" class="mr-2" small>
+                {{ user.name }}
+            </v-chip>
+            <v-chip
+                close
+                class="mr-2"
+                small
+                @click:close="onRefresh"
+                close-icon="mdi-refresh"
+            >
+                Refresh
+            </v-chip>
+        </v-row>
 
         <v-card-text>
             <v-data-table
@@ -184,8 +200,10 @@
                         small
                         class="mr-2"
                         @click="
-                            $router.push(hasLink(item) ? 
-                                `/admin/${item.properties.custom.link}` : null
+                            $router.push(
+                                hasLink(item)
+                                    ? `/admin/${item.properties.custom.link}`
+                                    : null
                             )
                         "
                     >
@@ -233,6 +251,7 @@ export default {
     },
     data() {
         return {
+            yawa: false,
             loading: true,
             date_range: [
                 moment()
@@ -284,6 +303,7 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
+        changeUser() {},
         getDataFromApi() {
             let _this = this;
 
@@ -306,7 +326,7 @@ export default {
                             itemsPerPage: itemsPerPage,
                             user_id: user_id,
                             start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
+                            end_date: range[1] ? range[1] : range[0]
                         }
                     })
                     .then(response => {
@@ -387,7 +407,7 @@ export default {
             }
 
             return false;
-        },
+        }
         // onDeleteAll() {
         //     let _this = this;
 
@@ -497,17 +517,33 @@ export default {
                 query: this.user,
                 query: this.date_range
             };
+        },
+        formattedDateRange() {
+            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
+            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+                return start_date;
+            }
+
+            if (JSON.stringify(end_date) == null) {
+                return start_date;
+            }
+
+            return `${start_date} ~ ${end_date}`;
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
     created() {
         this.loadUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
+    },
+    activated() {
+        this.loadUsers();
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

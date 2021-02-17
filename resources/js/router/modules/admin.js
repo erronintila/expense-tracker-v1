@@ -9,7 +9,8 @@ const adminRoutes = [
         component: () => import("../../views/modules/admin/Index.vue"),
         meta: {
             requiresAuth: true,
-            requiresAdmin: true
+            requiresAdmin: true,
+            keepAlive: true
         },
         children: [
             /**
@@ -23,7 +24,10 @@ const adminRoutes = [
                 path: "/admin/dashboard",
                 name: "admin.dashboard.index",
                 component: () =>
-                    import("../../views/modules/admin/dashboard/Index.vue")
+                    import("../../views/modules/admin/dashboard/Index.vue"),
+                meta: {
+                    keepAlive: false
+                }
             },
             /**
              *
@@ -46,13 +50,19 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
                 path: "/admin/settings/user",
                 name: "admin.settings.user",
                 component: () =>
-                    import("../../views/modules/admin/settings/User.vue")
+                    import("../../views/modules/admin/settings/User.vue"),
+                meta: {
+                    keepAlive: false
+                }
             },
             /**
              *
@@ -65,7 +75,10 @@ const adminRoutes = [
                 path: "/admin/profile",
                 name: "admin.profile.index",
                 component: () =>
-                    import("../../views/modules/admin/profile/Index.vue")
+                    import("../../views/modules/admin/profile/Index.vue"),
+                meta: {
+                    keepAlive: true
+                }
             },
             /**
              *
@@ -88,6 +101,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             // {
@@ -178,6 +194,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -194,6 +213,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -210,6 +232,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -226,6 +251,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -244,15 +272,14 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view all users"
-                        )
-                    ) {
+                    if (permissions.includes("view all users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -264,13 +291,14 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes("add users")
-                    ) {
+                    if (permissions.includes("add users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -282,15 +310,14 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit users"
-                        )
-                    ) {
+                    if (permissions.includes("edit users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -302,15 +329,14 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "edit users fund"
-                        )
-                    ) {
+                    if (permissions.includes("edit users fund")) {
                         next();
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -322,15 +348,14 @@ const adminRoutes = [
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
 
-                    if (
-                        permissions.includes(
-                            "view users"
-                        )
-                    ) {
+                    if (permissions.includes("view users")) {
                         next();
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -354,6 +379,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -372,6 +400,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -388,6 +419,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -404,6 +438,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -427,6 +464,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -443,6 +483,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             // {
@@ -474,6 +517,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -490,6 +536,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -513,6 +562,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -529,6 +581,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -545,6 +600,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -561,6 +619,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -584,6 +645,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -600,6 +664,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -616,6 +683,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -632,6 +702,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -657,6 +730,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -675,6 +751,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -693,6 +772,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -711,6 +793,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             // {
@@ -923,6 +1008,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             {
@@ -939,6 +1027,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -955,6 +1046,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: false
                 }
             },
             {
@@ -971,6 +1065,9 @@ const adminRoutes = [
                     } else {
                         next({ name: "error_403" });
                     }
+                },
+                meta: {
+                    keepAlive: true
                 }
             },
             /**
@@ -984,10 +1081,11 @@ const adminRoutes = [
                 path: "/admin/notifications",
                 name: "admin.notifications.index",
                 component: () =>
-                    import(
-                        "../../views/modules/admin/notifications/Index.vue"
-                    ),
-            },
+                    import("../../views/modules/admin/notifications/Index.vue"),
+                meta: {
+                    keepAlive: true
+                }
+            }
         ]
     }
 ];

@@ -7,7 +7,10 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add jobs')">
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add jobs')"
+                    >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -85,6 +88,7 @@
                                     item-text="name"
                                     item-value="id"
                                     label="Department"
+                                    return-object
                                 ></v-select>
                             </v-list-item>
                         </v-list>
@@ -134,6 +138,25 @@
                     </v-list>
                 </v-menu>
             </v-card-title>
+
+            <v-row class="ml-4">
+                <v-chip v-if="status != null" class="mr-2" small>
+                    {{ status }}
+                </v-chip>
+                <v-chip v-if="department != null" class="mr-2" small>
+                    {{ department.name }}
+                </v-chip>
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
+                    Refresh
+                </v-chip>
+            </v-row>
+
             <v-card-subtitle>
                 <v-text-field
                     v-model="search"
@@ -165,7 +188,12 @@
                     class="elevation-0"
                 >
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit jobs')">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="mixin_can('edit jobs')"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -191,7 +219,7 @@ export default {
                 { text: "Actions", value: "actions", sortable: false }
             ],
             items: [],
-            department: 0,
+            department: {id: 0, name: 'All Departments'},
             departments: [],
             status: "Active",
             statuses: ["Active", "Archived"],
@@ -216,7 +244,7 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
-                let department_id = _this.department;
+                let department_id = _this.department.id;
                 let status = _this.status;
 
                 axios
@@ -416,6 +444,14 @@ export default {
     created() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadDepartments();
+    },
+    activated() {
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.loadDepartments();
+        this.getDataFromApi().then(data => {
+            this.items = data.items;
+            this.totalItems = data.total;
+        });
     }
 };
 </script>

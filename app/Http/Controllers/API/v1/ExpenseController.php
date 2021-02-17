@@ -444,10 +444,10 @@ class ExpenseController extends Controller
 
             case 'restore':
 
-                // // check if user is allowed to restore
-                // if (!app("auth")->user()->hasPermissionTo('restore expenses')) {
-                //     abort(403);
-                // }
+                // check if user is allowed to restore
+                if (!app("auth")->user()->hasPermissionTo('restore expenses')) {
+                    abort(403);
+                }
 
                 // check if deleted
                 $deleted = Expense::whereIn("id", $request->ids)
@@ -457,7 +457,7 @@ class ExpenseController extends Controller
                     return $this->errorResponse("Expense(s) has not been deleted.", 422);
                 }
 
-                // check if deleted
+                // check if has report
                 $reported = Expense::whereIn("id", $request->ids)
                     ->where("expense_report_id", "<>", null)->count();
 

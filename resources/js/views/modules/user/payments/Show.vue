@@ -16,7 +16,7 @@
             </v-row>
         </v-container>
         <v-card v-else class="elevation-0 pt-0">
-        <!-- <v-card class="elevation-0 pt-0"> -->
+            <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -107,13 +107,15 @@
                                             <table>
                                                 <tr>
                                                     <td>
-                                                        <strong>Created</strong
-                                                        >
+                                                        <strong>Created</strong>
                                                     </td>
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss")
+                                                            mixin_formatDate(
+                                                                item.created_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
                                                         }}
                                                     </td>
                                                 </tr>
@@ -165,9 +167,17 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.status.status }}
+                                                        {{
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .status
+                                                        }}
                                                         ({{
-                                                            item.status.remarks
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .remarks
                                                         }})
                                                     </td>
                                                 </tr>
@@ -187,9 +197,7 @@
                                 </template>
                                 <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.last_name +
-                                            ", " +
-                                            item.first_name
+                                        item.last_name + ", " + item.first_name
                                     }}
                                 </template>
                                 <template v-slot:[`item.updated_at`]="{ item }">
@@ -357,7 +365,7 @@ export default {
                     .endOf("week")
                     .format("YYYY-MM-DD")
             ],
-            user: this.$store.getters.user,
+            user: this.$store == null ? {id: 0} : this.$store.getters.user,
             code: "",
             reference_no: "",
             voucher_no: "",
@@ -399,7 +407,7 @@ export default {
                 code: "",
                 date: "",
                 description: "",
-                user: this.$store.getters.user,
+                user: this.$store == null ? {id: 0} : this.$store.getters.user,
                 expense_reports: [],
                 notes: "",
                 reference_no: "",
@@ -513,9 +521,9 @@ export default {
                             itemsPerPage: itemsPerPage,
                             user_id: user_id,
                             payment_id: payment_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            admin_page: false,
+                            // start_date: range[0],
+                            // end_date: range[1] ? range[1] : range[0],
+                            admin_page: false
                         }
                     })
                     .then(response => {
@@ -586,7 +594,7 @@ export default {
                 query: this.user,
                 query: this.date_range
             };
-        },
+        }
     },
     watch: {
         params: {
@@ -618,6 +626,13 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.getData();
-    }
+    },
+    activated() {
+        this.getData();
+    },
+    deactivated() {
+        this.form.expense_reports = [];
+        Object.assign(this.$data.form, this.$options.data());
+    },
 };
 </script>
