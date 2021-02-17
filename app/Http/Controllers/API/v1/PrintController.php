@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ExpenseReportResource;
-use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
 use Illuminate\Http\Request;
+use App\Models\ExpenseReport;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpenseReportResource;
 
 class PrintController extends Controller
 {
@@ -163,7 +163,7 @@ class PrintController extends Controller
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
-            ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id") , "=", "expenses.sub_type_id")
+            ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id"), "=", "expenses.sub_type_id")
             ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`users`.`id`, `expense_types`.`id`, `expenses`.`id`"))
             ->orderBy(DB::raw("`expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
