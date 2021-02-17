@@ -327,25 +327,7 @@
                                             v-model="file_input"
                                         />
                                     </v-col>
-                                    <v-col cols="12" md="6">
-                                        <small v-text="base64Image"></small>
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12" md="3">
-                                        <v-select
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .alignment
-                                            "
-                                            :items="['left', 'right', 'center']"
-                                            label="Logo Alignment"
-                                        >
-                                        </v-select>
-                                    </v-col>
-                                    <v-col cols="12" md="3">
+                                     <v-col cols="12" md="3">
                                         <v-text-field
                                             v-model="
                                                 settings.expense_report
@@ -367,6 +349,22 @@
                                         >
                                         </v-text-field>
                                     </v-col>
+                                </v-row>
+
+                                <!-- <v-row>
+                                    <v-col cols="12" md="3">
+                                        <v-select
+                                            v-model="
+                                                settings.expense_report
+                                                    .print_format.background
+                                                    .alignment
+                                            "
+                                            :items="['left', 'right', 'center']"
+                                            label="Logo Alignment"
+                                        >
+                                        </v-select>
+                                    </v-col>
+                                   
                                 </v-row>
 
                                 <v-row>
@@ -418,7 +416,7 @@
                                         >
                                         </v-text-field>
                                     </v-col>
-                                </v-row>
+                                </v-row> -->
                             </v-form>
                         </v-container>
                     </v-expansion-panel-content>

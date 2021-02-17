@@ -239,14 +239,14 @@ class UserSeeder extends Seeder
         Setting::set("expense_report.print_format.pageMargins.right", 0.5);
         Setting::set("expense_report.print_format.pageMargins.bottom", 0.5);
         Setting::set("expense_report.print_format.defaultStyle.font", 'Roboto');
-        Setting::set("expense_report.print_format.background.alignment", 'right');
+        // Setting::set("expense_report.print_format.background.alignment", 'right');
         Setting::set("expense_report.print_format.background.width", 2.2);
         Setting::set("expense_report.print_format.background.height", 0);
         Setting::set("expense_report.print_format.background.image", null);
-        Setting::set("expense_report.print_format.background.margin.left", 0.5);
-        Setting::set("expense_report.print_format.background.margin.top", 0.4);
-        Setting::set("expense_report.print_format.background.margin.right", 0);
-        Setting::set("expense_report.print_format.background.margin.bottom", 0);
+        // Setting::set("expense_report.print_format.background.margin.left", 0.5);
+        // Setting::set("expense_report.print_format.background.margin.top", 0.4);
+        // Setting::set("expense_report.print_format.background.margin.right", 0);
+        // Setting::set("expense_report.print_format.background.margin.bottom", 0);
         
         Setting::save();
     }

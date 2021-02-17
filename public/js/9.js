@@ -34,24 +34,21 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1132,20 +1129,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           signatureLabels = ["Prepared by:", "Checked by:", "Approved by:", "Voucher No."];
         }
 
-        var formattedSignatureLabels = signatureLabels.map(function (item) {
+        var signatures = signatureLabels.map(function (item) {
           return {
-            text: item,
+            text: "".concat(item, "\n\n                        ___________________________________"),
             style: "tableSignaturesBody"
           };
-        });
-        var signatureUnderlines = signatureLabels.map(function (item) {
-          return {
-            text: "___________________________________",
-            style: "tableSignaturesBody"
-          };
-        });
-        var signatures = [_toConsumableArray(formattedSignatureLabels), _toConsumableArray(signatureUnderlines)];
-        console.log("signatures", signatures); // SET PRINT FORMAT
+        }); // SET PRINT FORMAT
 
         var docDefinition = _this3.printFormat(subheader, table_columns, body, signatures); // PRINT OR EXPORT REPORT
 
@@ -1160,20 +1149,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     printFormat: function printFormat(subheader, table_columns, body, signatures) {
-      console.log("printformat", signatures);
       return {
         // pageSize: 'legal',
         pageSize: this.print_format.pageSize,
         pageOrientation: this.print_format.pageOrientation,
         pageMargins: this.print_format.pageMargins,
         defaultStyle: this.print_format.defaultStyle,
-        background: {
-          alignment: this.print_format.background.alignment,
-          margin: this.print_format.background.margin,
-          height: this.print_format.background.height,
-          width: this.print_format.background.width,
-          image: this.print_format.background.image
-        },
         footer: function footer(currentPage, pageCount) {
           return {
             columns: [{
@@ -1190,11 +1171,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           };
         },
         content: [{
-          text: ["Expense Summary Report"],
-          style: "header"
+          columns: [{
+            text: "",
+            style: "subheader1"
+          }, {
+            text: ["Expense Summary Report"],
+            style: "header1"
+          }, {
+            image: this.base64Image,
+            fit: [this.$store.getters.settings.expense_report.print_format.background.width * 72, this.$store.getters.settings.expense_report.print_format.background.height * 72],
+            style: "header2"
+          }]
         }, {
           text: subheader,
-          style: "subheader"
+          style: "subheader1"
         }, {
           style: "tableOfExpenses",
           table: {
@@ -1226,20 +1216,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, {
-          style: "tableSignatures",
-          table: {
-            widths: ["*", "*", "*", "*"],
-            body: signatures
-          },
-          layout: "noBorders"
+          unbreakable: true,
+          columns: signatures
         }],
         styles: {
-          header: {
+          header1: {
             fontSize: 13,
             bold: false,
             alignment: "center"
           },
-          subheader: {
+          header2: {
+            alignment: "right"
+          },
+          subheader1: {
             fontSize: 10
           },
           tableSignatures: {
@@ -1262,7 +1251,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             fontSize: 9
           },
           signatures: {
-            margin: [0, 5, 0, 15],
+            // margin: [0, 5, 0, 15],
             fontSize: 10
           },
           pageFooter: {
@@ -1314,6 +1303,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
+          reject();
           console.log(error);
           console.log(error.response);
 
@@ -2032,14 +2022,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         pageMargins: [this.$store.getters.settings.expense_report.print_format.pageMargins.left * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.top * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.right * 72, this.$store.getters.settings.expense_report.print_format.pageMargins.bottom * 72],
         defaultStyle: {
           font: this.$store.getters.settings.expense_report.print_format.defaultStyle.font
-        },
-        background: {
-          alignment: this.$store.getters.settings.expense_report.print_format.background.alignment,
-          margin: [this.$store.getters.settings.expense_report.print_format.background.margin.left * 72, this.$store.getters.settings.expense_report.print_format.background.margin.top * 72, this.$store.getters.settings.expense_report.print_format.background.margin.right * 72, this.$store.getters.settings.expense_report.print_format.background.margin.bottom * 72],
-          // absolutePosition: {x: -300, y: 40},
-          width: this.$store.getters.settings.expense_report.print_format.background.width * 72,
-          height: this.$store.getters.settings.expense_report.print_format.background.height * 72,
-          image: this.base64Image
         }
       };
     },
@@ -2568,7 +2550,7 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        " \n                " +
+                        "\n                " +
                           _vm._s(_vm.selected.length) +
                           " Selected\n            "
                       )
