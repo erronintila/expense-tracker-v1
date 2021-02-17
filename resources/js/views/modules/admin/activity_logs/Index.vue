@@ -157,6 +157,18 @@
         <v-card-subtitle>{{ formattedDateRange }}</v-card-subtitle>
 
         <v-row class="ml-4">
+            <v-chip
+                color="green"
+                dark
+                v-if="selected.length > 0"
+                close
+                class="mr-2"
+                small
+                @click:close="selected = []"
+                close-icon="mdi-close"
+            >
+                {{ selected.length }} Selected
+            </v-chip>
             <v-chip v-if="user != null" class="mr-2" small>
                 {{ user.name }}
             </v-chip>

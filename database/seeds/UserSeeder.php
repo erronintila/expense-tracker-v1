@@ -183,7 +183,6 @@ class UserSeeder extends Seeder
             'job_id' => null,
 
             'username' => 'superadmin',
-            'email' => 'superadmin@superadmin.com',
             'email_verified_at' => null,
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),

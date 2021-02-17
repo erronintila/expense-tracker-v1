@@ -6,14 +6,14 @@ use App\Models\Expense;
 use Illuminate\Support\Facades\Auth;
 
 class ExpenseObserver
-{
+{    
     /**
-     * Handle the expense "created" event.
+     * created
      *
-     * @param  \App\Expense  $expense
+     * @param  mixed $expense
      * @return void
      */
-    public function created(Expense $expense)
+    public function created(Expense $expense): void
     {
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
 
@@ -25,7 +25,7 @@ class ExpenseObserver
     /**
      * Handle the expense "updated" event.
      *
-     * @param  \App\Expense  $expense
+     * @param  \App\Models\Expense  $expense
      * @return void
      */
     public function updated(Expense $expense)
@@ -56,7 +56,7 @@ class ExpenseObserver
     /**
      * Handle the expense "deleting" event.
      *
-     * @param  \App\Expense  $expense
+     * @param  \App\Models\Expense  $expense
      * @return void
      */
     public function deleting(Expense $expense)
@@ -69,7 +69,7 @@ class ExpenseObserver
     /**
      * Handle the expense "deleted" event.
      *
-     * @param  \App\Expense  $expense
+     * @param  \App\Models\Expense  $expense
      * @return void
      */
     public function deleted(Expense $expense)
@@ -91,7 +91,7 @@ class ExpenseObserver
     /**
      * Handle the expense "restored" event.
      *
-     * @param  \App\Expense  $expense
+     * @param  \App\Models\Expense  $expense
      * @return void
      */
     public function restored(Expense $expense)
@@ -112,7 +112,7 @@ class ExpenseObserver
     /**
      * Handle the expense "force deleted" event.
      *
-     * @param  \App\Expense  $expense
+     * @param  \App\Models\Expense  $expense
      * @return void
      */
     public function forceDeleted(Expense $expense)
