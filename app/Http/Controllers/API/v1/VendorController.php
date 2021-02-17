@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\VendorStoreRequest;
-use App\Http\Requests\VendorUpdateRequest;
-use App\Http\Resources\Vendor\VendorIndexResource;
-use App\Http\Resources\Vendor\VendorShowResource;
-use App\Http\Resources\VendorResource;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\VendorResource;
+use App\Http\Requests\VendorStoreRequest;
+use App\Http\Requests\VendorUpdateRequest;
+use App\Http\Resources\Vendor\VendorShowResource;
+use App\Http\Resources\Vendor\VendorIndexResource;
 
 class VendorController extends Controller
 {

@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use App\Traits\ApiResponse;
 use App\User;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 use JsonException;
+use App\Models\Job;
+use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Department extends Model
 {

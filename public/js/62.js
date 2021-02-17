@@ -915,7 +915,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableSignaturesBody"
           };
         });
-        var signatures = [].concat(_toConsumableArray(formattedSignatureLabels), _toConsumableArray(signatureUnderlines)); // SET PRINT FORMAT
+        var signatures = [_toConsumableArray(formattedSignatureLabels), _toConsumableArray(signatureUnderlines)]; // SET PRINT FORMAT
 
         var docDefinition = _this3.printFormat(subheader, table_columns, body, signatures); // PRINT OR EXPORT REPORT
 

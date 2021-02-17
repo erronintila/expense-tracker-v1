@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Models\Department;
+use App\User;
 use App\Models\Expense;
+use App\Models\Department;
 use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {

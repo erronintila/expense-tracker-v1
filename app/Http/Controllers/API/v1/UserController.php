@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Exports\UsersExport;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdatePasswordRequest;
-use App\Http\Requests\UserUpdateRequest;
-use App\Http\Resources\User\UserOnlyResource;
-use App\Http\Resources\User\UserShowResource;
-use App\Http\Resources\UserResource;
-use App\Models\ExpenseType;
-use App\Models\Job;
 use App\User;
-use App\Rules\MatchOldPassword;
+use App\Models\Job;
+use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
+use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use App\Http\Resources\User\UserOnlyResource;
+use App\Http\Resources\User\UserShowResource;
+use App\Http\Requests\UserUpdatePasswordRequest;
 
 class UserController extends Controller
 {

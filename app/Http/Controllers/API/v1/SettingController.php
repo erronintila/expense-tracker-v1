@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use anlutro\LaravelSettings\Facade as Setting;
 use App\Traits\ApiResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use anlutro\LaravelSettings\Facade as Setting;
 
 class SettingController extends Controller
 {

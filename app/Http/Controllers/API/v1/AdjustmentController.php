@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\AdjustmentResource;
+use App\User;
 use App\Models\Adjustment;
 use App\Traits\ApiResponse;
-use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\AdjustmentResource;
 
 class AdjustmentController extends Controller
 {    

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ExpenseReportResource;
-use App\Models\ExpenseReport;
 use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use App\Models\ExpenseReport;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpenseReportResource;
 
 class PrintController extends Controller
 {

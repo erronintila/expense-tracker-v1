@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Models\ExpenseType;
+use App\Traits\ApiResponse;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Requests\ExpenseTypeStoreRequest;
 use App\Http\Requests\ExpenseTypeUpdateRequest;
 use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
-use App\Http\Resources\ExpenseTypeResource;
-use App\Models\ExpenseType;
-use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
 
 class ExpenseTypeController extends Controller
 {

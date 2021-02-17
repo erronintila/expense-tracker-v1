@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\NotificationResource;
 use App\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notification;
+use App\Http\Resources\NotificationResource;
 
 class NotificationController extends Controller
 {

@@ -36,7 +36,7 @@ class Adjustment extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model

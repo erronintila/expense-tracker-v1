@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\JobStoreRequest;
-use App\Http\Requests\JobUpdateRequest;
-use App\Http\Resources\JobResource;
 use App\Models\Job;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use App\Http\Resources\JobResource;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\JobStoreRequest;
+use App\Http\Requests\JobUpdateRequest;
 
 class JobController extends Controller
 {

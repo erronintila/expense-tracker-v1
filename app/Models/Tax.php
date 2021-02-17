@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Expense;
 use Illuminate\Database\Eloquent\Model;
 
 class Tax extends Model

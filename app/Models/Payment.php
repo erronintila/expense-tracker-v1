@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 use App\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Expense;
+use App\Models\ExpenseReport;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 
 class Payment extends Model
 {

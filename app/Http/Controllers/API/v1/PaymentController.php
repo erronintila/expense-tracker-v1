@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Payment\PaymentIndexResource;
-use App\Http\Resources\Payment\PaymentShowResource;
-use App\Http\Resources\PaymentResource;
-use App\Models\ExpenseReport;
+use App\User;
 use App\Models\Payment;
 use App\Traits\ApiResponse;
-use App\Notifications\PaymentNotification;
-use App\User;
 use Illuminate\Http\Request;
+use App\Models\ExpenseReport;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
+use App\Http\Resources\PaymentResource;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\PaymentNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Http\Resources\Payment\PaymentShowResource;
+use App\Http\Resources\Payment\PaymentIndexResource;
 
 class PaymentController extends Controller
 {
