@@ -61,7 +61,6 @@ class Department extends Model
 
         static::deleting(function ($department) {
             if ($department->jobs()->count() > 0) {
-
                 abort(422, "Item has active child records");
 
                 // throw new JsonException("Model has child records", 422);
@@ -87,7 +86,7 @@ class Department extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model
