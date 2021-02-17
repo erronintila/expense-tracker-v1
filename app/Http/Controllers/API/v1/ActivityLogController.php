@@ -16,16 +16,16 @@ class ActivityLogController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
+            $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
         $this->middleware(['permission:delete activity logs'], ['only' => ['destroy']]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $search = request("search") ?? "";
         $sortBy = request("sortBy") ?? "updated_at";
@@ -53,10 +53,11 @@ class ActivityLogController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request  $request
+     *
+     * @return void
      */
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         //
     }
@@ -64,10 +65,11 @@ class ActivityLogController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int  $id
+     *
+     * @return void
      */
-    public function show($id)
+    public function show($id): void
     {
         //
     }
@@ -75,11 +77,12 @@ class ActivityLogController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request  $request
+     * @param int  $id
+     *
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): void
     {
         //
     }
@@ -87,10 +90,11 @@ class ActivityLogController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int  $id
+     *
+     * @return \Illuminate\Http\Response|null
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id): ?\Illuminate\Http\Response
     {
         if (request()->has("delete_all")) {
             $activity_logs = DB::table('activity_log')->delete();

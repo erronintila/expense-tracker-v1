@@ -60,11 +60,9 @@ class AdjustmentController extends Controller
             switch (request("status")) {
                 case 'Cancelled':
                     $adjustments = $adjustments->onlyTrashed();
-
                     break;
                 default:
                     $adjustments = $adjustments;
-
                     break;
             }
         }
@@ -74,7 +72,6 @@ class AdjustmentController extends Controller
             $q->orWhere('description', "like", "%" . $search . "%");
             $q->orWhere('type', "like", "%" . $search . "%");
         });
-
         $adjustments = $adjustments->paginate($itemsPerPage);
 
         return AdjustmentResource::collection($adjustments);
@@ -114,11 +111,9 @@ class AdjustmentController extends Controller
                     $adjustment->subtract_amount = request("subtract_amount");
                     $adjustment->type = request("type");
                     $adjustment->save();
-
                     break;
                 default:
                     $adjustment->save();
-
                     break;
             }
         }

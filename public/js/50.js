@@ -472,8 +472,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1390,54 +1388,6 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c("small", {
-                                        domProps: {
-                                          textContent: _vm._s(_vm.base64Image)
-                                        }
-                                      })
-                                    ]
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "3" } },
-                                    [
-                                      _c("v-select", {
-                                        attrs: {
-                                          items: ["left", "right", "center"],
-                                          label: "Logo Alignment"
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.settings.expense_report
-                                              .print_format.background
-                                              .alignment,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings.expense_report
-                                                .print_format.background,
-                                              "alignment",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .alignment\n                                        "
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
                                     { attrs: { cols: "12", md: "3" } },
                                     [
                                       _c("v-text-field", {
@@ -1482,132 +1432,6 @@ var render = function() {
                                           },
                                           expression:
                                             "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .height\n                                        "
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "3" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          type: "number",
-                                          label: "Logo Margin (Left)"
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.settings.expense_report
-                                              .print_format.background.margin
-                                              .left,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings.expense_report
-                                                .print_format.background.margin,
-                                              "left",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.left\n                                        "
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "3" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          type: "number",
-                                          label: "Logo Margin (Top)"
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.settings.expense_report
-                                              .print_format.background.margin
-                                              .top,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings.expense_report
-                                                .print_format.background.margin,
-                                              "top",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.top\n                                        "
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "3" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          type: "number",
-                                          label: "Logo Margin (Right)"
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.settings.expense_report
-                                              .print_format.background.margin
-                                              .right,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings.expense_report
-                                                .print_format.background.margin,
-                                              "right",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.right\n                                        "
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "3" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          type: "number",
-                                          label: "Logo Margin (Bottom)"
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.settings.expense_report
-                                              .print_format.background.margin
-                                              .bottom,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.settings.expense_report
-                                                .print_format.background.margin,
-                                              "bottom",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .margin.bottom\n                                        "
                                         }
                                       })
                                     ],

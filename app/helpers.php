@@ -12,7 +12,16 @@ if (!function_exists('generate_code')) {
     }
 }
 
-if (!function_exists('log_activity')) {
+if (!function_exists('log_activity')) {    
+    /**
+     * log_activity
+     *
+     * @param  mixed $log_name
+     * @param  mixed $model
+     * @param  mixed $properties
+     * @param  mixed $action
+     * @return void
+     */
     function log_activity($log_name, $model, $properties, $action)
     {
         activity($log_name)

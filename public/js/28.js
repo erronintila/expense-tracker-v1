@@ -205,6 +205,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -759,6 +771,34 @@ var render = function() {
         "v-row",
         { staticClass: "ml-4" },
         [
+          _vm.selected.length > 0
+            ? _c(
+                "v-chip",
+                {
+                  staticClass: "mr-2",
+                  attrs: {
+                    color: "green",
+                    dark: "",
+                    close: "",
+                    small: "",
+                    "close-icon": "mdi-close"
+                  },
+                  on: {
+                    "click:close": function($event) {
+                      _vm.selected = []
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.selected.length) +
+                      " Selected\n        "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _vm.status != null
             ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
                 _vm._v("\n            " + _vm._s(_vm.status) + "\n        ")

@@ -5,14 +5,14 @@ namespace App\Observers;
 use App\Models\Adjustment;
 
 class AdjustmentObserver
-{
+{    
     /**
-     * Handle the adjustment "created" event.
+     * created
      *
-     * @param  \Models\Adjustment  $adjustment
+     * @param  mixed $adjustment
      * @return void
      */
-    public function created(Adjustment $adjustment)
+    public function created(Adjustment $adjustment): void
     {
         if ($adjustment->type == "Manage Revolving Fund") {
             $added_amount = $adjustment->add_amount;
@@ -34,7 +34,7 @@ class AdjustmentObserver
     /**
      * Handle the adjustment "updated" event.
      *
-     * @param  \Models\Adjustment  $adjustment
+     * @param  \App\Models\Adjustment  $adjustment
      * @return void
      */
     public function updated(Adjustment $adjustment)
@@ -45,7 +45,7 @@ class AdjustmentObserver
     /**
      * Handle the adjustment "deleted" event.
      *
-     * @param  \Models\Adjustment  $adjustment
+     * @param  \App\Models\Adjustment  $adjustment
      * @return void
      */
     public function deleted(Adjustment $adjustment)
@@ -55,7 +55,7 @@ class AdjustmentObserver
     /**
      * Handle the adjustment "restored" event.
      *
-     * @param  \Models\Adjustment  $adjustment
+     * @param  \App\Models\Adjustment  $adjustment
      * @return void
      */
     public function restored(Adjustment $adjustment)
@@ -65,7 +65,7 @@ class AdjustmentObserver
     /**
      * Handle the adjustment "force deleted" event.
      *
-     * @param  \Models\Adjustment  $adjustment
+     * @param  \App\Models\Adjustment  $adjustment
      * @return void
      */
     public function forceDeleted(Adjustment $adjustment)

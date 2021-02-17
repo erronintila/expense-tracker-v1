@@ -156,6 +156,9 @@
             </v-card-subtitle>
 
             <v-row class="ml-4">
+                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
+                    {{selected.length}} Selected
+                </v-chip>
                 <v-chip v-if="status != null" class="mr-2" small>
                     {{ status }}
                 </v-chip>
@@ -948,24 +951,14 @@ export default {
                     ];
                 }
 
-                let formattedSignatureLabels = signatureLabels.map(item => {
+                let signatures = signatureLabels.map(item => {
                     return {
-                        text: item,
+                        text: `${item}
+
+                        ___________________________________`,
                         style: "tableSignaturesBody"
                     };
                 });
-
-                let signatureUnderlines = signatureLabels.map(item => {
-                    return {
-                        text: "___________________________________",
-                        style: "tableSignaturesBody"
-                    };
-                });
-
-                let signatures = [
-                    [...formattedSignatureLabels],
-                    [...signatureUnderlines]
-                ];
 
                 // SET PRINT FORMAT
                 let docDefinition = this.printFormat(
@@ -994,13 +987,6 @@ export default {
                 pageOrientation: this.print_format.pageOrientation,
                 pageMargins: this.print_format.pageMargins,
                 defaultStyle: this.print_format.defaultStyle,
-                background: {
-                    alignment: this.print_format.background.alignment,
-                    margin: this.print_format.background.margin,
-                    height: this.print_format.background.height,
-                    width: this.print_format.background.width,
-                    image: this.print_format.background.image
-                },
                 footer: function(currentPage, pageCount) {
                     return {
                         columns: [
@@ -1027,12 +1013,30 @@ export default {
                 },
                 content: [
                     {
-                        text: ["Expense Summary Report"],
-                        style: "header"
+                        columns: [
+                            {
+                                text: "",
+                                style: "subheader1"
+                            },
+                            {
+                                text: ["Expense Summary Report"],
+                                style: "header1"
+                            },
+                            {
+                                image: this.base64Image,
+                                fit: [
+                                    this.$store.getters.settings.expense_report
+                                        .print_format.background.width * 72,
+                                    this.$store.getters.settings.expense_report
+                                        .print_format.background.height * 72
+                                ],
+                                style: "header2"
+                            }
+                        ]
                     },
                     {
                         text: subheader,
-                        style: "subheader"
+                        style: "subheader1"
                     },
                     {
                         style: "tableOfExpenses",
@@ -1074,21 +1078,20 @@ export default {
                         }
                     },
                     {
-                        style: "tableSignatures",
-                        table: {
-                            widths: ["*", "*", "*", "*"],
-                            body: signatures
-                        },
-                        layout: "noBorders"
+                        unbreakable: true,
+                        columns: signatures
                     }
                 ],
                 styles: {
-                    header: {
+                    header1: {
                         fontSize: 13,
                         bold: false,
                         alignment: "center"
                     },
-                    subheader: {
+                    header2: {
+                        alignment: "right"
+                    },
+                    subheader1: {
                         fontSize: 10
                     },
                     tableSignatures: {
@@ -1111,7 +1114,7 @@ export default {
                         fontSize: 9
                     },
                     signatures: {
-                        margin: [0, 5, 0, 15],
+                        // margin: [0, 5, 0, 15],
                         fontSize: 10
                     },
                     pageFooter: {
@@ -1159,6 +1162,7 @@ export default {
                         resolve({ items, total });
                     })
                     .catch(error => {
+                        reject();
                         console.log(error);
                         console.log(error.response);
 
@@ -1923,28 +1927,6 @@ export default {
                     font: this.$store.getters.settings.expense_report
                         .print_format.defaultStyle.font
                 },
-                background: {
-                    alignment: this.$store.getters.settings.expense_report
-                        .print_format.background.alignment,
-                    margin: [
-                        this.$store.getters.settings.expense_report.print_format
-                            .background.margin.left * 72,
-                        this.$store.getters.settings.expense_report.print_format
-                            .background.margin.top * 72,
-                        this.$store.getters.settings.expense_report.print_format
-                            .background.margin.right * 72,
-                        this.$store.getters.settings.expense_report.print_format
-                            .background.margin.bottom * 72
-                    ],
-                    // absolutePosition: {x: -300, y: 40},
-                    width:
-                        this.$store.getters.settings.expense_report.print_format
-                            .background.width * 72,
-                    height:
-                        this.$store.getters.settings.expense_report.print_format
-                            .background.height * 72,
-                    image: this.base64Image
-                }
             };
         },
         base64Image() {

@@ -166,10 +166,10 @@ class PrintController extends Controller
             ->join("departments", "departments.id", "=", "jobs.department_id")
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
-            ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id") , "=", "expenses.sub_type_id")
+            ->leftJoin(DB::raw("expense_types as sub"), DB::raw("sub.id"), "=", "expenses.sub_type_id")
             ->whereIn('expense_reports.id', explode(",", $ids))
             ->groupBy(DB::raw("`users`.`id`, `expense_types`.`id`, `expenses`.`id`"))
-            ->orderBy(DB::raw("`users`.`id`, `expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
+            ->orderBy(DB::raw("`expenses`.`date`, `expenses`.`id`, `expense_types`.`name`"))
             ->select(DB::raw("
                 `users`.`id` AS user_id,
                 `users`.`last_name`,
@@ -236,8 +236,8 @@ class PrintController extends Controller
             ->join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
             ->join("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
             ->whereIn('expense_reports.id', explode(",", $ids))
-            ->groupBy(DB::raw("`users`.`id`, `expense_types`.`id`, `expenses`.`date`"))
-            ->orderBy(DB::raw("`users`.`id`, `expenses`.`date`, `expense_types`.`name`"))
+            ->groupBy(DB::raw("`expense_types`.`id`, `expenses`.`date`"))
+            ->orderBy(DB::raw("`expenses`.`date`, `expense_types`.`name`"))
             ->select(DB::raw("
                 `users`.`id` AS user_id,
                 `users`.`last_name`,

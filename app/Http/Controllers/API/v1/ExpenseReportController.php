@@ -41,8 +41,9 @@ class ExpenseReportController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * index
      *
+     * @param  mixed $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -171,7 +172,6 @@ class ExpenseReportController extends Controller
             }])
                 ->where(function ($query) use ($search) {
                     $query->where('code', "like", "%" . $search . "%");
-        
                     $query->orWhere('description', "like", "%" . $search . "%");
                 })
                 ->where("user_id", request("user_id"))
