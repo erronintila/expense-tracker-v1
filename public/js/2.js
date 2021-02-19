@@ -219,6 +219,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    closeDialog: function closeDialog() {
+      this.openDialog = false;
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
     onCreateVendor: function onCreateVendor() {
       var _this = this;
 
@@ -251,7 +255,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
-          _this.errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.errors = error.response.data.errors;
         });
@@ -697,13 +701,9 @@ var render = function() {
                 "v-btn",
                 {
                   attrs: { color: "primary", text: "" },
-                  on: {
-                    click: function($event) {
-                      _vm.openDialog = false
-                    }
-                  }
+                  on: { click: _vm.closeDialog }
                 },
-                [_vm._v("Close")]
+                [_vm._v("\n                Close\n            ")]
               ),
               _vm._v(" "),
               _c(
