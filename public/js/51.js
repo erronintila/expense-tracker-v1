@@ -472,6 +472,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -794,7 +840,8 @@ var render = function() {
                                           ),
                                           hint:
                                             "Allowed period for expenses to be encoded based on date",
-                                          "persistent-hint": ""
+                                          "persistent-hint": "",
+                                          type: "number"
                                         },
                                         model: {
                                           value:
@@ -1002,6 +1049,11 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              0
+                                            )
+                                          ),
                                           label: "Length",
                                           type: "number"
                                         },
@@ -1110,6 +1162,11 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
                                           label: "Page Size (width)",
                                           type: "number"
                                         },
@@ -1139,6 +1196,11 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
                                           label: "Page Size (height)",
                                           type: "number"
                                         },
@@ -1174,6 +1236,11 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              0
+                                            )
+                                          ),
                                           type: "number",
                                           label: "Page Margin (Left)"
                                         },
@@ -1203,6 +1270,11 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              0
+                                            )
+                                          ),
                                           type: "number",
                                           label: "Page Margin (Top)"
                                         },
@@ -1232,6 +1304,11 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              0
+                                            )
+                                          ),
                                           type: "number",
                                           label: "Page Margin (Right)"
                                         },
@@ -1261,6 +1338,11 @@ var render = function() {
                                     [
                                       _c("v-text-field", {
                                         attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              0
+                                            )
+                                          ),
                                           type: "number",
                                           label: "Page Margin (Bottom)"
                                         },
@@ -1391,7 +1473,14 @@ var render = function() {
                                     { attrs: { cols: "12", md: "3" } },
                                     [
                                       _c("v-text-field", {
-                                        attrs: { label: "Logo Width" },
+                                        attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
+                                          label: "Logo Width"
+                                        },
                                         model: {
                                           value:
                                             _vm.settings.expense_report
@@ -1417,7 +1506,14 @@ var render = function() {
                                     { attrs: { cols: "12", md: "3" } },
                                     [
                                       _c("v-text-field", {
-                                        attrs: { label: "Logo Height" },
+                                        attrs: {
+                                          rules: [].concat(
+                                            _vm.mixin_validation.minNumberValue(
+                                              1
+                                            )
+                                          ),
+                                          label: "Logo Height"
+                                        },
                                         model: {
                                           value:
                                             _vm.settings.expense_report

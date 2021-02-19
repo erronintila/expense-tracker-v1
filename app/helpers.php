@@ -3,7 +3,15 @@
 use App\Models\Expense;
 use Illuminate\Support\Facades\Auth;
 
-if (!function_exists('generate_code')) {
+if (!function_exists('generate_code')) {    
+    /**
+     * generate_code
+     *
+     * @param  mixed $model
+     * @param  mixed $prefix
+     * @param  mixed $minLength
+     * @return void
+     */
     function generate_code($model, $prefix, $minLength)
     {
         $data = $model::withTrashed()->whereYear("created_at", date("Y"))->whereMonth("created_at", date("m"))->count();
@@ -12,7 +20,7 @@ if (!function_exists('generate_code')) {
     }
 }
 
-if (!function_exists('log_activity')) {    
+if (!function_exists('log_activity')) {
     /**
      * log_activity
      *
