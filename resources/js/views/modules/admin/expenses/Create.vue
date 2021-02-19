@@ -800,80 +800,80 @@ export default {
                 sub_type_limit == null ? expense_type_limit : sub_type_limit;
             let expense_amount = this.form.amount;
 
-            // if (!this.mixin_can("add expenses beyond limit")) {
-            //     if (!this.itemize) {
-            //         if (
-            //             expense_limit !== null &&
-            //             expense_limit < expense_amount
-            //         ) {
-            //             _this.$dialog.message.error(
-            //                 "Amount can't be greater than expense limit.",
-            //                 {
-            //                     position: "top-right",
-            //                     timeout: 2000
-            //                 }
-            //             );
-            //             return;
-            //         }
-            //     } else {
-            //         if (
-            //             expense_limit !== null &&
-            //             expense_limit < this.form.details_amount
-            //         ) {
-            //             _this.$dialog.message.error(
-            //                 "Itemized Expenses Amount can't be greater than expense limit",
-            //                 {
-            //                     position: "top-right",
-            //                     timeout: 2000
-            //                 }
-            //             );
-            //             return;
-            //         }
-            //     }
-            // }
+            if (!this.mixin_can("add expenses beyond limit")) {
+                if (!this.itemize) {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < expense_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Amount can't be greater than expense limit.",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
+                    }
+                } else {
+                    if (
+                        expense_limit !== null &&
+                        expense_limit < this.form.details_amount
+                    ) {
+                        _this.$dialog.message.error(
+                            "Itemized Expenses Amount can't be greater than expense limit",
+                            {
+                                position: "top-right",
+                                timeout: 2000
+                            }
+                        );
+                        return;
+                    }
+                }
+            }
 
-            // if (_this.form.user.id == null) {
-            //     _this.$dialog.message.error("No User Selected", {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     });
-            //     return;
-            // }
+            if (_this.form.user.id == null) {
+                _this.$dialog.message.error("No User Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
-            // if (_this.form.expense_type.id == null) {
-            //     _this.$dialog.message.error("No Expense Type Selected", {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     });
-            //     return;
-            // }
+            if (_this.form.expense_type.id == null) {
+                _this.$dialog.message.error("No Expense Type Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
+                return;
+            }
 
-            // if (
-            //     _this.amount_to_replenish > _this.form.user.remaining_fund
-            // ) {
-            //     _this.$dialog.message.error(
-            //         "Amount to replenish is greater than remaining fund",
-            //         {
-            //             position: "top-right",
-            //             timeout: 2000
-            //         }
-            //     );
-            //     return;
-            // }
+            if (
+                _this.amount_to_replenish > _this.form.user.remaining_fund
+            ) {
+                _this.$dialog.message.error(
+                    "Amount to replenish is greater than remaining fund",
+                    {
+                        position: "top-right",
+                        timeout: 2000
+                    }
+                );
+                return;
+            }
 
-            // if((_this.amount_to_replenish + _this.amount_to_reimburse) < this.form.amount) {
+            if((_this.amount_to_replenish + _this.amount_to_reimburse) < this.form.amount) {
 
-            //     _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
+                _this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
 
-            //     return;
-            // }
+                return;
+            }
 
-            // if((_this.amount_to_replenish + _this.amount_to_reimburse) <= 0) {
+            if((_this.amount_to_replenish + _this.amount_to_reimburse) <= 0) {
 
-            //     _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
+                _this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
 
-            //     return;
-            // }
+                return;
+            }
 
             _this.$refs.form.validate();
 
