@@ -951,7 +951,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               style: "tableOfExpensesHeader"
             });
             temp_table_body = {};
-            subheader = "Period: ".concat(moment__WEBPACK_IMPORTED_MODULE_1___default()(minDate).format("YYYY-MM-DD"), " ~ ").concat(moment__WEBPACK_IMPORTED_MODULE_1___default()(maxDate).format("YYYY-MM-DD"));
+            subheader = ""; // subheader = `Period: ${moment(minDate).format(
+            //     "YYYY-MM-DD"
+            // )} ~ ${moment(maxDate).format("YYYY-MM-DD")}`;
+
             break;
 
           case "expenses_by_date":
