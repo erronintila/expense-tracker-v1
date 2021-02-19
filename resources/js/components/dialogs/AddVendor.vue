@@ -154,9 +154,9 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" text @click="openDialog = false"
-                    >Close</v-btn
-                >
+                <v-btn color="primary" text @click="closeDialog">
+                    Close
+                </v-btn>
                 <v-btn color="primary" text @click="onCreateVendor">
                     Save
                 </v-btn>
@@ -209,6 +209,10 @@ export default {
         };
     },
     methods: {
+        closeDialog() {
+            this.openDialog = false;
+            Object.assign(this.$data, this.$options.data.apply(this));
+        },
         onCreateVendor() {
             let _this = this;
 
@@ -246,7 +250,7 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.errorDialog(
+                        _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );

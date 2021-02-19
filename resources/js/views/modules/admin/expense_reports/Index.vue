@@ -923,9 +923,10 @@ export default {
                             style: "tableOfExpensesHeader"
                         });
                         temp_table_body = {};
-                        subheader = `Period: ${moment(minDate).format(
-                            "YYYY-MM-DD"
-                        )} ~ ${moment(maxDate).format("YYYY-MM-DD")}`;
+                        subheader = "";
+                        // subheader = `Period: ${moment(minDate).format(
+                        //     "YYYY-MM-DD"
+                        // )} ~ ${moment(maxDate).format("YYYY-MM-DD")}`;
                         break;
                     case "expenses_by_date":
                         table_columns.push({

@@ -1016,11 +1016,11 @@ var render = function() {
                                   change: _vm.updateUser
                                 },
                                 model: {
-                                  value: _vm.form,
+                                  value: _vm.form.user,
                                   callback: function($$v) {
-                                    _vm.form = $$v
+                                    _vm.$set(_vm.form, "user", $$v)
                                   },
-                                  expression: "form"
+                                  expression: "form.user"
                                 }
                               }),
                               _vm._v(" "),

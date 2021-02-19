@@ -61,7 +61,7 @@
                                 </v-date-picker>
                             </v-menu>
                             <v-autocomplete
-                                v-model="form"
+                                v-model="form.user"
                                 :rules="mixin_validation.required"
                                 :items="users"
                                 :error-messages="errors.user"
