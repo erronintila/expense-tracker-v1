@@ -15,12 +15,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 use Spatie\Permission\Models\Permission;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\User\UserShowResource;
-use App\Http\Requests\UserUpdatePasswordRequest;
+use App\Http\Requests\User\UserUpdatePasswordRequest;
 
 class UserController extends Controller
 {
@@ -442,6 +442,17 @@ class UserController extends Controller
         return $this->successResponse(null, $message, 200);
 
         // User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make(request("")password)]);
+    }
+    
+    /**
+     * update_profile
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function update_profile(Request $request, $id) {
+        
     }
     
     /**

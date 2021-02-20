@@ -7,8 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\JobResource;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\JobStoreRequest;
-use App\Http\Requests\JobUpdateRequest;
+use App\Http\Requests\Job\JobStoreRequest;
+use App\Http\Requests\Job\JobUpdateRequest;
 
 class JobController extends Controller
 {

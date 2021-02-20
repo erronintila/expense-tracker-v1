@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Department;
 
-use App\Rules\MatchOldPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserUpdatePasswordRequest extends FormRequest
+class DepartmentStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +24,8 @@ class UserUpdatePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'old_password' => ['required', new MatchOldPassword],
-            'password' => ['required', 'confirmed', 'string', 'max:255'],
+            'code' => ['nullable', 'max:255', 'unique:departments'],
+            'name' => ['required', 'max:100', 'unique:departments'],
         ];
     }
 }

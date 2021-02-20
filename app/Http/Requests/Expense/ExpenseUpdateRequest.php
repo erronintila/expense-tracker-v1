@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Expense;
 
-use App\User;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ExpenseStoreRequest extends FormRequest
+class ExpenseUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,11 @@ class ExpenseStoreRequest extends FormRequest
      */
     public function rules()
     {
-        $remaining_fund = User::findOrFail(request("user_id"), ['remaining_fund']);
-
         return [
-            'code' => ['nullable', 'unique:expenses', 'max:255'],
+            'code' => ['nullable', Rule::unique('expenses', 'code')->ignore($this->expense), 'max:255'],
             'reference_no' => ['nullable'],
             'description' => ['nullable', 'max:255'],
-            'amount' => ['required', 'numeric', 'gt:0'],
+            'amount' => ['required', 'numeric'],
             'reimbursable_amount' => ['required', 'numeric', 'min:0', 'lte:amount'],
             'tax_name' => ['nullable', 'max:100'],
             'tax_rate' => ['required'],
@@ -43,8 +41,8 @@ class ExpenseStoreRequest extends FormRequest
             'remarks' => ['nullable'],
             'notes' => ['nullable'],
             'encoding_period' => ['nullable'],
-            'expense_type_id' => ['required'],
             'sub_type_id' => ['nullable'],
+            'expense_type_id' => ['required'],
             'user_id' => ['required'],
             'vendor_id' => ['nullable'],
             'expense_report_id' => ['nullable'],
@@ -61,10 +59,7 @@ class ExpenseStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_id.required' => 'The employee field is required.',
-            'expense_type_id.required' => 'The expense type field is required.',
-            // 'reimbursable_amount.gte' => 'Reimbursable amount must be greater than or equal 0',
-            'reimbursable_amount.lte' => 'Reimbursable amount must be less than or equal to amount'
+            // 'tin.required_if' => 'The tax identification number field is required if VAT inclusive.'
         ];
     }
 }

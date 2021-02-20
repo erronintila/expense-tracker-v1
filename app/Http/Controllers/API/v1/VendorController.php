@@ -7,8 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
-use App\Http\Requests\VendorStoreRequest;
-use App\Http\Requests\VendorUpdateRequest;
+use App\Http\Requests\Vendor\VendorStoreRequest;
+use App\Http\Requests\Vendor\VendorUpdateRequest;
 use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\Vendor\VendorIndexResource;
 

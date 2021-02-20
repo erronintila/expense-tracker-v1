@@ -28,9 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResources(
         [
             'activity_logs' => 'API\v1\ActivityLogController',
-            // 'adjustments' => 'API\v1\AdjustmentController',
             'departments' => 'API\v1\DepartmentController',
-            // 'users' => 'API\v1\UserController',
             'expense_types' => 'API\v1\ExpenseTypeController',
             'sub_types' => 'API\v1\SubTypeController',
             'expenses' => 'API\v1\ExpenseController',
@@ -53,18 +51,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/departments', 'API\v1\DepartmentController@getDepartments');
     Route::put('/departments/restore/{id}', 'API\v1\DepartmentController@restore');
-
-    // /*
-    // |------------------------------------------------------------------------------------------------------------------------------------
-    // | EMPLOYEE CONTROLLER CUSTOM ROUTES
-    // |------------------------------------------------------------------------------------------------------------------------------------
-    // */
-
-    // Route::get('/data/users', 'API\v1\UserController@getUsers');
-    // Route::get('/data/validateFund', 'API\v1\UserController@validateFund');
-    // Route::put('/employees/restore/{id}', 'API\v1\EmployeeController@restore');
-    // Route::put('/employees/update_settings/{id}', 'API\v1\EmployeeController@updateSettings');
-    // Route::put('/employees/update_fund/{id}', 'API\v1\EmployeeController@updateFund');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

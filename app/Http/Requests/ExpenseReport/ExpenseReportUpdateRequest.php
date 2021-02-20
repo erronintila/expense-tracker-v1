@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ExpenseReport;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ExpenseReportStoreRequest extends FormRequest
+class ExpenseReportUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +25,7 @@ class ExpenseReportStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => ['nullable', 'unique:expense_reports', 'max:255'],
+            'code' => ['nullable', Rule::unique('expense_reports', 'code')->ignore($this->expense_report), 'max:255'],
             'description' => ['required', 'max:255'],
             'user_id' => ['required'],
             'remarks' => ['nullable'],

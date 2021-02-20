@@ -7,8 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
-use App\Http\Requests\DepartmentStoreRequest;
-use App\Http\Requests\DepartmentUpdateRequest;
+use App\Http\Requests\Department\DepartmentStoreRequest;
+use App\Http\Requests\Department\DepartmentUpdateRequest;
 
 class DepartmentController extends Controller
 {

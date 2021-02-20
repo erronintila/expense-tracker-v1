@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Resources\ExpenseReportResource;
-use App\Http\Requests\ExpenseReportStoreRequest;
 use App\Notifications\ExpenseReportNotification;
-use App\Http\Requests\ExpenseReportUpdateRequest;
+use App\Http\Requests\ExpenseReport\ExpenseReportStoreRequest;
+use App\Http\Requests\ExpenseReport\ExpenseReportUpdateRequest;
 use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportIndexResource;
 
