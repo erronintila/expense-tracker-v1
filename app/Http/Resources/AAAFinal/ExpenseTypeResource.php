@@ -3,6 +3,9 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\VendorResource;
+use App\Http\Resources\ExpenseResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpenseTypeResource extends JsonResource

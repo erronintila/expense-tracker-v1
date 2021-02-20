@@ -2,13 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Models\ExpenseReport;
-use App\User;
-use Carbon\Carbon;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Spatie\Activitylog\Models\Activity;
-
+use App\Http\Resources\UserResource;
 use function GuzzleHttp\json_decode;
+use App\Http\Resources\VendorResource;
+use App\Http\Resources\ExpenseTypeResource;
+use App\Http\Resources\ExpenseReportResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpenseResource extends JsonResource
 {

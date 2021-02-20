@@ -2,7 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\ExpenseResource;
+use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Resources\Job\JobIndexResource;
+use App\Http\Resources\ExpenseReportResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource

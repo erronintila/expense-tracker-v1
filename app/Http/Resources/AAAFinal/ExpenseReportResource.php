@@ -3,8 +3,11 @@
 namespace App\Http\Resources;
 
 use App\User;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\ExpenseResource;
+use App\Http\Resources\PaymentResource;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpenseReportResource extends JsonResource
 {

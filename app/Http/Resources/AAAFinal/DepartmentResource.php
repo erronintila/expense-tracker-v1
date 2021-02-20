@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\JobResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DepartmentResource extends JsonResource

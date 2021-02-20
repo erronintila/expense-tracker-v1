@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\DepartmentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
