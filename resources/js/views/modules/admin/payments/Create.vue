@@ -694,7 +694,7 @@ export default {
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
                         expense_reports: _this.selected,
-                        user: _this.form.id
+                        user_id: _this.form.user.id
                     })
                     .then(function(response) {
                         _this.onRefresh();
