@@ -61,7 +61,7 @@ class PaymentController extends Controller
 
             "notes" => ['nullable'],
 
-            "user" => ['required'],
+            "user_id" => ['required'],
         ]);
     }
 
@@ -225,7 +225,7 @@ class PaymentController extends Controller
         $payment->received_at = null;
         //////////
 
-        $payment->user_id = $request->user;
+        $payment->user_id = $request->user_id;
 
         $payment->created_by = Auth::id();
 

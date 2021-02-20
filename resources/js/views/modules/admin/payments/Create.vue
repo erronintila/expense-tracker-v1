@@ -597,7 +597,7 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let user_id = _this.form.id;
+                let user_id = _this.form.user.id;
                 let range = _this.date_range;
 
                 axios
@@ -693,7 +693,7 @@ export default {
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
                         expense_reports: _this.selected,
-                        user: _this.form.id
+                        user_id: _this.form.user.id
                     })
                     .then(function(response) {
                         _this.onRefresh();
