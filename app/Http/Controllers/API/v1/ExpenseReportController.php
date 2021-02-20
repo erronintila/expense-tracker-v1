@@ -196,7 +196,7 @@ class ExpenseReportController extends Controller
      */
     public function store(ExpenseReportStoreRequest $request)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Expense Report created successfully";
 
         $expense_report = new ExpenseReport();
@@ -266,7 +266,7 @@ class ExpenseReportController extends Controller
      */
     public function update(ExpenseReportUpdateRequest $request, $id)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Expense Report updated successfully";
 
         $expense_report = ExpenseReport::withTrashed()->findOrFail($id);

@@ -68,7 +68,7 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
         $message = "Department created successfully"; // return message
 
         $department = new Department();
@@ -107,7 +107,7 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
         $message = "Department updated successfully"; // return message
 
         $department = Department::withTrashed()->findOrFail($id);

@@ -22,7 +22,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $request->validate([
+        request()->validate([
             'name'      => ['required', 'max:200'],
             'username'  => ['required', 'unique:users', 'max:150'],
             'email'     => ['required', 'email', 'unique:users', 'max:255'],
@@ -50,12 +50,12 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(request()->all(), [
             'username' => 'required|exists:users,username',
             'password' => 'required'
         ]);
 
-        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+        if (Auth::attempt(['username' => request("username"), 'password' => request("password")])) {
             $authenticated_user = Auth::user();
 
             if ($authenticated_user->email_verified_at == null) {
@@ -89,7 +89,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->tokens->each(function ($token, $key) {
+        request()->user()->tokens->each(function ($token, $key) {
             $token->delete();
         });
 
@@ -106,7 +106,7 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return new UserResource($request->user());
+        return new UserResource(request()->user());
     }
     
     /**
@@ -117,6 +117,6 @@ class AuthController extends Controller
      */
     public function userPermissions(Request $request)
     {
-        return $request->user->getAllPermissions();
+        return request("user")->getAllPermissions();
     }
 }

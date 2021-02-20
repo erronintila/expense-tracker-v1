@@ -139,7 +139,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
         $message = "User created successfully"; // return message
 
         $expense_types = ExpenseType::where("expense_type_id", null)->get();
@@ -214,7 +214,7 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
 
         $message = "User updated successfully"; // return message
 
@@ -427,7 +427,7 @@ class UserController extends Controller
 
     public function update_password(UserUpdatePasswordRequest $request, $id)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "User password updated successfully";
 
         $user = User::withTrashed()->findOrFail(auth()->user()->id);

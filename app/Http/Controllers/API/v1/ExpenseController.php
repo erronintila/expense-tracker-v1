@@ -224,7 +224,7 @@ class ExpenseController extends Controller
      */
     public function store(ExpenseStoreRequest $request)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Expense created successfully";
         $user = User::withTrashed()->findOrFail(request("user_id"));
 
@@ -308,7 +308,7 @@ class ExpenseController extends Controller
      */
     public function update(ExpenseUpdateRequest $request, $id)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Expense updated successfully";
 
         $user = User::withTrashed()->findOrFail(request("user_id"));

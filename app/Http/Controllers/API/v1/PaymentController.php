@@ -160,7 +160,7 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all(), null)->validate();
+        $this->validator(request()->all(), null)->validate();
 
         $payment = new Payment();
         $payment->code = generate_code(Payment::class, "PAY", 10);
@@ -349,7 +349,7 @@ class PaymentController extends Controller
                 break;
             default:
 
-                $this->validator($request->all(), null)->validate();
+                $this->validator(request()->all(), null)->validate();
 
                 $payment = Payment::withTrashed()->findOrFail($id);
 

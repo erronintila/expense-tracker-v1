@@ -85,7 +85,7 @@ class AdjustmentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all(), null)->validate();
+        $this->validator(request()->all(), null)->validate();
 
         $adjustment = new Adjustment();
         $adjustment->reference = request("reference");
