@@ -305,12 +305,9 @@ export default {
                             }
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
 
                             _this.getDataFromApi().then(data => {
@@ -352,17 +349,19 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/departments/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "restore"
-                        })
+                        .put(
+                            `/api/departments/restore/${_this.selected[0].id}`,
+                            {
+                                ids: _this.selected.map(item => {
+                                    return item.id;
+                                })
+                            }
+                        )
                         .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
 
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;

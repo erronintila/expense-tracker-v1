@@ -460,16 +460,6 @@ export default {
                     });
             });
         },
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-        },
-        changeRole() {
-            if (this.form.role == "Administrator") {
-                this.selected = this.permissions;
-            } else {
-                this.selected = [];
-            }
-        },
         onSave() {
             let _this = this;
 
@@ -510,21 +500,16 @@ export default {
                         job_id: _this.form.job
                     })
                     .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Employee updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
 
-                        // _this.$store.dispatch("AUTH_USER");
-
                         window.location.replace("/admin/users");
-
-                        // _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
+                        _this.loader = false;
+
                         console.log(error);
                         console.log(error.response);
 

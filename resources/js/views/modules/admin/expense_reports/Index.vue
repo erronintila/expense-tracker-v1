@@ -1843,6 +1843,31 @@ export default {
         // ------------------------------------------------------------------------------------------------------------------
         onUpdate(action, method) {
             let _this = this;
+            let url = "";
+
+            switch (action) {
+                case "submit":
+                    url = `/api/expense_reports/submit/${_this.selected[0].id}`;
+
+                    break;
+                case "approve":
+                    url = `/api/expense_reports/approve/${_this.selected[0].id}`;
+
+                    break;
+                case "reject":
+                    url = `/api/expense_reports/reject/${_this.selected[0].id}`;
+
+                    break;
+                case "duplicate":
+                    url = `/api/expense_reports/duplicate/${_this.selected[0].id}`;
+
+                    break;
+
+                default:
+                    url = `/api/expense_reports/${_this.selected[0].id}`;
+
+                    break;
+            }
 
             this.$confirm(`Do you want to ${action} expense report(s)?`).then(
                 res => {
@@ -1853,7 +1878,7 @@ export default {
 
                         axios({
                             method: method,
-                            url: `/api/expense_reports/${_this.selected[0].id}`,
+                            url: url,
                             data: {
                                 ids: ids,
                                 action: action
@@ -1861,7 +1886,7 @@ export default {
                         })
                             .then(function(response) {
                                 _this.mixin_successDialog(
-                                    "Success",
+                                    response.data.status,
                                     response.data.message
                                 );
 
@@ -1869,8 +1894,6 @@ export default {
                                     _this.items = data.items;
                                     _this.totalItems = data.total;
                                 });
-
-                                // _this.$store.dispatch("AUTH_USER");
 
                                 _this.selected = [];
 
@@ -1883,7 +1906,7 @@ export default {
                                 console.log(error.response);
 
                                 _this.mixin_errorDialog(
-                                    error.response.data.status,
+                                    error.response.status,
                                     error.response.data.message
                                 );
                             });
@@ -1979,7 +2002,7 @@ export default {
 
                 axios({
                     method: "put",
-                    url: `/api/expense_reports/${_this.selected[0].id}`,
+                    url: `/api/expense_reports/reject/${_this.selected[0].id}`,
                     data: {
                         ids: ids,
                         action: "reject",
@@ -2007,7 +2030,7 @@ export default {
                         console.log(error.response);
 
                         _this.mixin_errorDialog(
-                            error.response.data.status,
+                            error.response.status,
                             error.response.data.message
                         );
                     });

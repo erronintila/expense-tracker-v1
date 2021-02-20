@@ -2,58 +2,29 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Vendor\VendorIndexResource;
-use App\Http\Resources\Vendor\VendorShowResource;
-use App\Http\Resources\VendorResource;
 use App\Models\Vendor;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\VendorResource;
+use App\Http\Requests\VendorStoreRequest;
+use App\Http\Requests\VendorUpdateRequest;
+use App\Http\Resources\Vendor\VendorShowResource;
+use App\Http\Resources\Vendor\VendorIndexResource;
 
 class VendorController extends Controller
 {
+    use ApiResponse; // Laravel Trait used to return appropriate api response
+    
     public function __construct()
     {
+        // apply permissions
         $this->middleware(['permission:view all vendors'], ['only' => ['index']]);
         $this->middleware(['permission:view vendors'], ['only' => ['show']]);
         $this->middleware(['permission:add vendors'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit vendors'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete vendors'], ['only' => ['destroy']]);
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data, $id)
-    {
-        return Validator::make($data, [
-
-            'code' => ['nullable', 'max:255', Rule::unique('vendors')->ignore($id, 'id')],
-
-            'name' => ['required', 'max:150'],
-
-            'email' => ['nullable', 'email', 'max:150', Rule::unique('vendors')->ignore($id, 'id')],
-
-            'tin' => ['nullable', 'max:255', Rule::unique('vendors')->ignore($id, 'id')],
-
-            'contact_person' => ['nullable', 'max:150'],
-
-            'mobile_number' => ['nullable', 'max:50'],
-
-            'telephone_number' => ['nullable', 'max:50'],
-
-            'website' => ['nullable', 'max:150'],
-
-            'remarks' => ['nullable'],
-
-            'is_vat_inclusive' => ['required'],
-
-            'address' => ['nullable'],
-        ]);
+        $this->middleware(['permission:restore vendors'], ['only' => ['restore']]);
     }
 
     /**
@@ -63,48 +34,33 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search ?? "";
-
-        $sortBy = $request->sortBy ?? "name";
-
-        $sortType = $request->sortType ?? "asc";
-
-        $itemsPerPage = $request->itemsPerPage ?? 10;
-
+        $search = request('search') ?? "";
+        $sortBy = request('sortBy') ?? "name";
+        $sortType = request('sortType') ?? "asc";
+        $itemsPerPage = request('itemsPerPage') ?? 10;
         $vendors = Vendor::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-            switch ($request->status) {
-
+            switch (request('status')) {
                 case 'Archived':
-
                     $vendors = $vendors->onlyTrashed();
-
                     break;
                 default:
-
                     $vendors = $vendors;
-
                     break;
             }
         }
 
         $vendors = $vendors->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-
             $query->orWhere("name", "like", "%" . $search . "%");
-
             $query->orWhere("email", "like", "%" . $search . "%");
-
             $query->orWhere("tin", "like", "%" . $search . "%");
-
             $query->orWhere("mobile_number", "like", "%" . $search . "%");
-
             $query->orWhere("telephone_number", "like", "%" . $search . "%");
         });
 
         $vendors = $vendors->paginate($itemsPerPage);
-
         return VendorIndexResource::collection($vendors);
     }
 
@@ -114,52 +70,20 @@ class VendorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(VendorStoreRequest $request)
     {
-        $this->validator($request->all(), null)->validate();
+        $validated = $request->validated();
+        $message = "Vendor created successfully"; 
 
         $vendor = new Vendor();
+        $vendor->create($validated);
 
-        $vendor->code = generate_code(Vendor::class, "VEN", 10);
-
-        $vendor->name = $request->name;
-
-        $vendor->email = $request->email;
-
-        $vendor->tin = $request->tin;
-
-        $vendor->contact_person = $request->contact_person;
-
-        $vendor->mobile_number = $request->mobile_number;
-
-        $vendor->telephone_number = $request->telephone_number;
-
-        $vendor->website = $request->website;
-
-        $vendor->remarks = $request->remarks;
-
-        $vendor->is_vat_inclusive = $request->is_vat_inclusive;
-
-        $vendor->address = $request->address;
-
-        $vendor->save();
-
+        // store expense types associated with vendor
         if (request()->has("expense_types")) {
-            $vendor->expense_types()->sync($request->expense_types);
-
-            // $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($request->expense_types);
-
-            // $vendor->expense_types()->attach($expense_types);
+            $vendor->expense_types()->sync(request('expense_types'));
         }
 
-        return response(
-            [
-                'data' => new VendorResource($vendor),
-
-                'message' => 'Created successfully'
-            ],
-            201
-        );
+        return $this->successResponse(new VendorResource($vendor), $message, 201);
     }
 
     /**
@@ -172,14 +96,7 @@ class VendorController extends Controller
     {
         $vendor = Vendor::withTrashed()->findOrFail($id);
 
-        return response(
-            [
-                'data' => new VendorShowResource($vendor),
-
-                'message' => 'Retrieved successfully'
-            ],
-            200
-        );
+        return $this->successResponse(new VendorShowResource($vendor), 'Vendor retrieved successfully', 200);
     }
 
     /**
@@ -189,72 +106,22 @@ class VendorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(VendorUpdateRequest $request, $id)
     {
-        switch ($request->action) {
+        $validated = $request->validated();
+        $message = "Vendor updated successfully";
 
-            case 'restore':
+        $vendor = Vendor::withTrashed()->findOrFail($id);
+        $vendor->update($validated);
 
-                if (request()->has("ids")) {
-                    foreach ($request->ids as $id) {
-                        $vendor = Vendor::withTrashed()->findOrFail($id);
-        
-                        $vendor->restore();
-                    }
-                } else {
-                    $vendor = Vendor::withTrashed()->findOrFail($id);
-        
-                    $vendor->restore();
-                }
-
-                // $vendor = Vendor::withTrashed()
-                //     ->whereIn('id', $request->ids)
-                //     ->restore();
-
-                break;
-            default:
-
-                $this->validator($request->all(), $id)->validate();
-
-                $vendor = Vendor::withTrashed()->findOrFail($id);
-
-                $vendor->code = $request->code;
-
-                $vendor->name = $request->name;
-
-                $vendor->email = $request->email;
-
-                $vendor->tin = $request->tin;
-
-                $vendor->contact_person = $request->contact_person;
-
-                $vendor->mobile_number = $request->mobile_number;
-
-                $vendor->telephone_number = $request->telephone_number;
-
-                $vendor->website = $request->website;
-
-                $vendor->remarks = $request->remarks;
-
-                $vendor->is_vat_inclusive = $request->is_vat_inclusive;
-
-                $vendor->address = $request->address;
-
-                $vendor->save();
-
-                if (request()->has("expense_types")) {
-                    $vendor->expense_types()->sync($request->expense_types);
-                }
-
-                break;
+        // update expense types associated with vendor
+        if (request()->has("expense_types")) {
+            $vendor->expense_types()->sync(request('expense_types'));
         }
 
-        return response(
-            [
-                'message' => 'Updated successfully'
-            ],
-            201
-        );
+        $message = "Vendor updated successfully";
+
+        return $this->successResponse(null, $message, 201);
     }
 
     /**
@@ -265,26 +132,25 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $message = "Vendor deleted successfully";
+
+        // check if multiple records
         if (request()->has("ids")) {
-            foreach ($request->ids as $id) {
-                $vendor = Vendor::withTrashed()->findOrFail($id);
+            $vendor = Vendor::whereIn('id', request('ids'))->delete();
 
-                $vendor->delete();
-            }
+            // foreach (request('ids') as $id) {
+            //     $vendor = Vendor::findOrFail($id);
+            //     $vendor->delete();
+            // }
+
+            $message = "Vendor(s) deleted successfully";
         } else {
-            $vendor = Vendor::withTrashed()->findOrFail($id);
-
+            $vendor = Vendor::findOrFail($id);
             $vendor->delete();
+            $message = "Vendor deleted successfully";
         }
 
-        // $vendor = Vendor::whereIn('id', $request->ids)->delete();
-
-        return response(
-            [
-                'message' => 'Deleted successfully'
-            ],
-            200
-        );
+        return $this->successResponse(null, $message, 200);
     }
 
     /*
@@ -292,6 +158,37 @@ class VendorController extends Controller
     | VENDOR CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+    
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function restore(Request $request, $id)
+    {
+        $message = "Vendor restored successfully";
+
+        // check if multiple records
+        if (request()->has("ids")) {
+            $vendor = Vendor::withTrashed()
+                ->whereIn('id', request('ids'))
+                ->restore();
+
+            // foreach (request('ids') as $id) {
+            //     $vendor = Vendor::withTrashed()->findOrFail($id);
+            //     $vendor->restore();
+            // }
+
+            $message = "Vendor(s) restored successfully";
+        } else {
+            $vendor = Vendor::withTrashed()->findOrFail($id);
+            $vendor->restore();
+        }
+
+        return $this->successResponse(null, $message, 201);
+    }
 
     /**
      * Display a listing of the resource

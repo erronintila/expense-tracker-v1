@@ -728,13 +728,7 @@ export default {
                         _this.loader = false;
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        _this.mixin_showErrors(error);
 
                         _this.loader = false;
                     })
@@ -749,13 +743,7 @@ export default {
                     _this.expense_types = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         loadUsers() {
@@ -770,13 +758,7 @@ export default {
                         resolve();
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        _this.mixin_showErrors(error);
 
                         reject();
                     });
@@ -798,13 +780,7 @@ export default {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
@@ -941,16 +917,9 @@ export default {
                         _this.$router.push({ name: "admin.expenses.index" });
                     })
                     .catch(function(error) {
-                        // _this.getData();
                         _this.loader = false;
 
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        _this.mixin_showErrors(error);
 
                         if (error.response.data.data !== null) {
                             _this.errors = error.response.data.errors;

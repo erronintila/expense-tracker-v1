@@ -13,6 +13,14 @@ const adminRoutes = [
             keepAlive: true
         },
         children: [
+            {
+                path: "/sample",
+                name: "admin.sample",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/expenses/CreateExpense.vue"
+                    )
+            },
             /**
              *
              *

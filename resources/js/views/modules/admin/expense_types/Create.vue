@@ -199,14 +199,11 @@ export default {
                         sub_types: _this.items
                     })
                     .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Expense type created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
-
+                        
                         _this.$router.push({
                             name: "admin.expense_types.index"
                         });
@@ -217,7 +214,7 @@ export default {
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
 
                         if (error.response) {

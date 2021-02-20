@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Models\Department;
-use App\Models\Expense;
-use App\Models\ExpenseType;
 use App\User;
+use App\Models\Expense;
+use App\Models\Department;
+use App\Models\ExpenseType;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
+    use ApiResponse; // Laravel Trait used to return appropriate api response
+    
     /**
      * Displays total expenses amount on each expense type
      *
@@ -29,11 +32,11 @@ class DashboardController extends Controller
             });
             if (request()->has("user_id")) {
                 if (request()->has("admin_page")) {
-                    if ($request->user_id > 0) {
-                        $q->where('user_id', $request->user_id);
+                    if (request("user_id") > 0) {
+                        $q->where('user_id', request("user_id"));
                     }
                 } else {
-                    $q->where('user_id', $request->user_id);
+                    $q->where('user_id', request("user_id"));
                 }
             }
         }])->where('expense_type_id', null)->get();
@@ -43,11 +46,11 @@ class DashboardController extends Controller
         foreach ($expense_types as $key => $value) {
             $total_expenses = $value["expenses"]->where('cancelled_at', null)
                 ->where('deleted_at', null)
-                ->whereBetween('date', [$request->start_date, $request->end_date]);
+                ->whereBetween('date', [request("start_date"), request("end_date")]);
 
             if (request()->has('user_id')) {
-                if ($request->user_id > 0) {
-                    $total_expenses = $total_expenses->where('user_id', $request->user_id);
+                if (request("user_id") > 0) {
+                    $total_expenses = $total_expenses->where('user_id', request("user_id"));
                 }
             }
 
@@ -83,8 +86,8 @@ class DashboardController extends Controller
                 });
 
                 if (request()->has("user_id")) {
-                    if ($request->user_id > 0) {
-                        $q->where('user_id', $request->user_id)->get();
+                    if (request("user_id") > 0) {
+                        $q->where('user_id', request("user_id"))->get();
                     }
                 }
             }])
@@ -95,7 +98,7 @@ class DashboardController extends Controller
         foreach ($users as $key => $value) {
             $total_expenses = $value["expenses"]->where('cancelled_at', null)
                 ->where('deleted_at', null)
-                ->whereBetween('date', [$request->start_date, $request->end_date])
+                ->whereBetween('date', [request("start_date"), request("end_date")])
                 ->sum("amount");
 
             array_push(
@@ -127,8 +130,8 @@ class DashboardController extends Controller
             });
 
             if (request()->has("user_id")) {
-                if ($request->user_id > 0) {
-                    $q->where('user_id', $request->user_id);
+                if (request("user_id") > 0) {
+                    $q->where('user_id', request("user_id"));
                 }
             }
         }])->get();
@@ -145,7 +148,7 @@ class DashboardController extends Controller
                 foreach ($value["users"] as $key => $value) {
                     $total_expenses += $value["expenses"]->where('cancelled_at', null)
                         ->where('deleted_at', null)
-                        ->whereBetween('date', [$request->start_date, $request->end_date])
+                        ->whereBetween('date', [request("start_date"), request("end_date")])
                         ->sum("amount");
                 }
             }
@@ -170,10 +173,10 @@ class DashboardController extends Controller
      */
     public function total_expenses(Request $request)
     {
-        $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])->get();
+        $expenses = Expense::whereBetween('date', [request("start_date"), request("end_date")])->get();
 
         if (request()->has('user_id')) {
-            $expenses = $expenses->where('user_id', $request->user_id);
+            $expenses = $expenses->where('user_id', request("user_id"));
         }
 
         $expenses = $expenses->sum('amount');
@@ -190,7 +193,7 @@ class DashboardController extends Controller
      */
     public function expenses_summary(Request $request)
     {
-        $expenses = Expense::whereBetween('date', [$request->start_date, $request->end_date])
+        $expenses = Expense::whereBetween('date', [request("start_date"), request("end_date")])
             ->whereHas("expense_report", function ($q) {
                 $q->where("approved_at", "<>", null);
                 $q->where("rejected_at", null);
@@ -202,15 +205,15 @@ class DashboardController extends Controller
 
         if (request()->has('user_id')) {
             if (request()->has("admin_page")) {
-                if ($request->user_id > 0) {
-                    $expenses = $expenses->where('user_id', $request->user_id);
+                if (request("user_id") > 0) {
+                    $expenses = $expenses->where('user_id', request("user_id"));
                 }
             } else {
-                $expenses = $expenses->where('user_id', $request->user_id);
+                $expenses = $expenses->where('user_id', request("user_id"));
             }
         }
 
-        switch ($request->time_unit) {
+        switch (request("time_unit")) {
             case 'day':
                 $expenses = $expenses
                     ->groupBy(DB::raw('(date)'))
@@ -257,7 +260,7 @@ class DashboardController extends Controller
      */
     public function expense_stats(Request $request)
     {
-        $expenses_by_date = Expense::whereBetween('date', [$request->start_date, $request->end_date])
+        $expenses_by_date = Expense::whereBetween('date', [request("start_date"), request("end_date")])
             ->with(['user' => function ($query) {
                 $query->withTrashed();
             }])
@@ -425,7 +428,7 @@ class DashboardController extends Controller
             ->with(['vendor' => function ($query) {
                 $query->withTrashed();
             }])
-            ->whereBetween('date', [$request->start_date, $request->end_date])->get();
+            ->whereBetween('date', [request("start_date"), request("end_date")])->get();
         $pending_expenses = Expense::with(['user' => function ($query) {
             $query->withTrashed();
         }])
@@ -467,7 +470,7 @@ class DashboardController extends Controller
             ->with(['vendor' => function ($query) {
                 $query->withTrashed();
             }])
-            ->whereBetween('date', [$request->start_date, $request->end_date])
+            ->whereBetween('date', [request("start_date"), request("end_date")])
             ->where(function ($q) {
                 $q->whereHas("expense_report");
                 $q->orWhereDoesntHave("expense_report");
@@ -480,18 +483,18 @@ class DashboardController extends Controller
 
         // if (request()->has('user_id') && request()->has("admin_page")) {
         if (request()->has('user_id')) {
-            if ($request->user_id > 0) {
-                $total_expenses_by_date = $total_expenses_by_date->where('user_id', $request->user_id);
-                $pending_expenses = $pending_expenses->where('user_id', $request->user_id);
-                $total_expenses = $total_expenses->where('user_id', $request->user_id);
+            if (request("user_id") > 0) {
+                $total_expenses_by_date = $total_expenses_by_date->where('user_id', request("user_id"));
+                $pending_expenses = $pending_expenses->where('user_id', request("user_id"));
+                $total_expenses = $total_expenses->where('user_id', request("user_id"));
                 //
-                $all_expenses = $all_expenses->where("user_id", $request->user_id);
-                $users = $users->where("id", $request->user_id);
-                $expenses_by_date =  $expenses_by_date->where('user_id', $request->user_id);
-                $unsubmitted_reports = $unsubmitted_reports->where('user_id', $request->user_id);
-                $submitted_reports = $submitted_reports->where('user_id', $request->user_id);
-                $approved_reports = $approved_reports->where('user_id', $request->user_id);
-                $payment_to_receive = $payment_to_receive->where('user_id', $request->user_id);
+                $all_expenses = $all_expenses->where("user_id", request("user_id"));
+                $users = $users->where("id", request("user_id"));
+                $expenses_by_date =  $expenses_by_date->where('user_id', request("user_id"));
+                $unsubmitted_reports = $unsubmitted_reports->where('user_id', request("user_id"));
+                $submitted_reports = $submitted_reports->where('user_id', request("user_id"));
+                $approved_reports = $approved_reports->where('user_id', request("user_id"));
+                $payment_to_receive = $payment_to_receive->where('user_id', request("user_id"));
             }
         }
 
@@ -547,9 +550,9 @@ class DashboardController extends Controller
      */
     public function statistics(Request $request)
     {
-        $user_id = $request->user_id ?? 0;
-        $start_date = $request->start_date ?? "2020-01-01";
-        $end_date = $request->end_date ?? "2020-12-31";
+        $user_id = request("user_id") ?? 0;
+        $start_date = request("start_date") ?? "2020-01-01";
+        $end_date = request("end_date") ?? "2020-12-31";
 
         $expenses = DB::table('expenses')
             ->join("users", "users.id", "=", "expenses.user_id")
@@ -659,8 +662,8 @@ class DashboardController extends Controller
             "));
 
         if ($user_id) {
-            if ($request->user_id > 0) {
-                $expenses = $expenses->where("user_id", $request->user_id);
+            if (request("user_id") > 0) {
+                $expenses = $expenses->where("user_id", request("user_id"));
             }
         }
 

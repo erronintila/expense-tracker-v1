@@ -85,7 +85,7 @@ export default {
 
                     _this.form.name = data.name;
 
-                    _this.form.department = data.department;
+                    _this.form.department = data.department.id;
                 })
                 .catch(error => {
                     console.log(error);
@@ -125,6 +125,8 @@ export default {
 
             _this.$refs.form.validate();
 
+            console.log(this.form.department);
+
             if (_this.$refs.form.validate()) {
                 axios
                     .put("/api/jobs/" + _this.$route.params.id, {
@@ -133,12 +135,9 @@ export default {
                         department_id: _this.form.department
                     })
                     .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Job designation updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
 
                         _this.$router.push({ name: "admin.jobs.index" });

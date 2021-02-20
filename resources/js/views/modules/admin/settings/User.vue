@@ -167,8 +167,7 @@ export default {
                 _this.loader = true;
 
                 axios
-                    .put("/api/users/" + _this.user.id, {
-                        action: "settings",
+                    .put("/api/users/update_settings/" + _this.user.id, {
                         expense_types: _this.allowed_expense_types.map(
                             item => item.id
                         )

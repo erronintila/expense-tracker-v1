@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\AdjustmentResource;
-use App\Models\Adjustment;
 use App\User;
+use App\Models\Adjustment;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\AdjustmentResource;
 
 class AdjustmentController extends Controller
 {    
+    use ApiResponse; // Laravel Trait used to return appropriate api response
+    
     public function __construct()
     {
         $this->middleware(['permission:view all adjustments'], ['only' => ['index']]);
@@ -46,14 +49,15 @@ class AdjustmentController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search ?? "";
-        $sortBy = $request->sortBy ?? "updated_at";
-        $sortType = $request->sortType ?? "desc";
-        $itemsPerPage = $request->itemsPerPage ?? 10;
+        $search = request("search") ?? "";
+        $sortBy = request("sortBy") ?? "updated_at";
+        $sortType = request("sortType") ?? "desc";
+        $itemsPerPage = request("itemsPerPage") ?? 10;
+
         $adjustments = Adjustment::orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-            switch ($request->status) {
+            switch (request("status")) {
                 case 'Cancelled':
                     $adjustments = $adjustments->onlyTrashed();
                     break;
@@ -84,28 +88,28 @@ class AdjustmentController extends Controller
         $this->validator($request->all(), null)->validate();
 
         $adjustment = new Adjustment();
-        $adjustment->reference = $request->reference;
+        $adjustment->reference = request("reference");
         $adjustment->code = generate_code(Adjustment::class, "ADJ", 10);
-        $adjustment->remarks = $request->remarks;
-        $adjustment->user_id = $request->user;
+        $adjustment->remarks = request("remarks");
+        $adjustment->user_id = request("user");
 
         if (request()->has("type")) {
-            switch ($request->type) {
+            switch (request("type")) {
                 case 'Manage Revolving Fund':
-                    $user = User::withTrashed()->findOrFail($request->user);
-                    $new_fund = ($user->fund + $request->add_amount) - $request->subtract_amount;
-                    $new_remaining_fund = ($user->remaining_fund + $request->add_amount) - $request->subtract_amount;
+                    $user = User::withTrashed()->findOrFail(request("user"));
+                    $new_fund = ($user->fund + request("add_amount")) - request("subtract_amount");
+                    $new_remaining_fund = ($user->remaining_fund + request("add_amount")) - request("subtract_amount");
                     if ($new_fund < 0 || $new_remaining_fund < 0) {
                         return response("Error", 500);
                     }
 
-                    $adjustment->description = ($request->add_amount < $request->subtract_amount) ?
+                    $adjustment->description = (request("add_amount") < request("subtract_amount")) ?
                         "Decreased Revolving Fund for {$user->last_name}, {$user->first_name}" :
                         "Added Revolving Fund for {$user->last_name}, {$user->first_name}";
 
-                    $adjustment->add_amount = $request->add_amount;
-                    $adjustment->subtract_amount = $request->subtract_amount;
-                    $adjustment->type = $request->type;
+                    $adjustment->add_amount = request("add_amount");
+                    $adjustment->subtract_amount = request("subtract_amount");
+                    $adjustment->type = request("type");
                     $adjustment->save();
                     break;
                 default:

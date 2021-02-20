@@ -67,6 +67,7 @@
                                                 'Allowed period for expenses to be encoded based on date'
                                             "
                                             persistent-hint
+                                            type="number"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -156,6 +157,11 @@
                                                 settings.expense_report
                                                     .report_no.num_length
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    0
+                                                )
+                                            ]"
                                             label="Length"
                                             type="number"
                                         ></v-text-field>
@@ -199,6 +205,11 @@
                                                 settings.expense_report
                                                     .print_format.pageSize.width
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             label="Page Size (width)"
                                             type="number"
                                         ></v-text-field>
@@ -211,6 +222,11 @@
                                                     .print_format.pageSize
                                                     .height
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             label="Page Size (height)"
                                             type="number"
                                         ></v-text-field>
@@ -225,6 +241,11 @@
                                                     .print_format.pageMargins
                                                     .left
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    0
+                                                )
+                                            ]"
                                             type="number"
                                             label="Page Margin (Left)"
                                         >
@@ -237,6 +258,11 @@
                                                     .print_format.pageMargins
                                                     .top
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    0
+                                                )
+                                            ]"
                                             type="number"
                                             label="Page Margin (Top)"
                                         >
@@ -249,6 +275,11 @@
                                                     .print_format.pageMargins
                                                     .right
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    0
+                                                )
+                                            ]"
                                             type="number"
                                             label="Page Margin (Right)"
                                         >
@@ -261,6 +292,11 @@
                                                     .print_format.pageMargins
                                                     .bottom
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    0
+                                                )
+                                            ]"
                                             type="number"
                                             label="Page Margin (Bottom)"
                                         >
@@ -327,13 +363,18 @@
                                             v-model="file_input"
                                         />
                                     </v-col>
-                                     <v-col cols="12" md="3">
+                                    <v-col cols="12" md="3">
                                         <v-text-field
                                             v-model="
                                                 settings.expense_report
                                                     .print_format.background
                                                     .width
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             label="Logo Width"
                                         >
                                         </v-text-field>
@@ -345,6 +386,11 @@
                                                     .print_format.background
                                                     .height
                                             "
+                                            :rules="[
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             label="Logo Height"
                                         >
                                         </v-text-field>

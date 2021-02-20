@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use anlutro\LaravelSettings\Facade as Setting;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use anlutro\LaravelSettings\Facade as Setting;
 
 class SettingController extends Controller
 {
+    use ApiResponse; // Laravel Trait used to return appropriate api response
+    
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +30,7 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        $settings = request()->has("settings") ? $request->settings : [];
+        $settings = request()->has("settings") ? request("settings") : [];
 
         foreach ($settings as $key => $value) {
             Setting::set($key, $value);

@@ -16,9 +16,7 @@ class ExpenseObserver
     public function created(Expense $expense): void
     {
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
-
         $expense->user->remaining_fund -= $expense_amount;
-
         $expense->user->save();
     }
 
@@ -31,25 +29,16 @@ class ExpenseObserver
     public function updated(Expense $expense)
     {
         // $rejected = $expense->expense_report->getOriginal("rejected_at");
-
         // if ($rejected == null && $expense->expense_report->rejected_at !== null) {
         //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
-
         //     $expense->user->remaining_fund += $expense_amount;
-
         //     $expense->user->save();
-
         //     return;
         // }
-
         $original_deducted_amount = $expense->getOriginal("amount") - $expense->getOriginal("reimbursable_amount");
-
         $new_amount = $expense->amount - $expense->reimbursable_amount;
-
         $remaining_fund = $expense->user->remaining_fund;
-
         $expense->user->remaining_fund = ($remaining_fund + $original_deducted_amount) - $new_amount;
-
         $expense->user->save();
     }
 
@@ -62,7 +51,6 @@ class ExpenseObserver
     public function deleting(Expense $expense)
     {
         $expense->deleted_by = Auth::id();
-
         $expense->save();
     }
 
@@ -79,12 +67,9 @@ class ExpenseObserver
                 return;
             }
         }
-
         // $expense_amount = $expense->revolving_fund;
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
-
         $expense->user->remaining_fund += $expense_amount;
-
         $expense->user->save();
     }
 
@@ -101,11 +86,8 @@ class ExpenseObserver
                 return;
             }
         }
-
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
-
         $expense->user->remaining_fund -= $expense_amount;
-
         $expense->user->save();
     }
 
@@ -118,9 +100,7 @@ class ExpenseObserver
     public function forceDeleted(Expense $expense)
     {
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
-
         $expense->user->remaining_fund += $expense_amount;
-
         $expense->user->save();
     }
 }

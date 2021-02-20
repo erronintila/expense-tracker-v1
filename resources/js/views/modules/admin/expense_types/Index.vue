@@ -181,7 +181,12 @@
                         <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon> -->
-                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit expense types')">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="mixin_can('edit expense types')"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -254,7 +259,7 @@ export default {
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
 
                         _this.loading = false;
@@ -300,13 +305,11 @@ export default {
                             }
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
+
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
@@ -346,17 +349,20 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/expense_types/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "restore"
-                        })
+                        .put(
+                            `/api/expense_types/restore/${_this.selected[0].id}`,
+                            {
+                                ids: _this.selected.map(item => {
+                                    return item.id;
+                                })
+                            }
+                        )
                         .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
@@ -370,7 +376,7 @@ export default {
 
                             _this.mixin_errorDialog(
                                 `Error ${error.response.status}`,
-                                error.response.statusText
+                                error.response.data.message
                             );
                         });
                 }

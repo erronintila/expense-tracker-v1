@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
 use App\Models\SubType;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SubTypeController extends Controller
 {
+    use ApiResponse; // Laravel Trait used to return appropriate api response
+    
     /**
      * Display a listing of the resource.
      *
@@ -61,7 +64,7 @@ class SubTypeController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has("ids")) {
-            foreach ($request->sub_types as $key => $value) {
+            foreach (request("sub_types") as $key => $value) {
                 $sub_type = SubType::withTrashed()->findOrFail($value["id"]);
 
                 if (count($sub_type->expenses)) {

@@ -19,5 +19,6 @@ $factory->define(Vendor::class, function (Faker $faker) {
         'telephone_number' => $faker->phoneNumber,
         'website' => $faker->companyEmail,
         'address' => $faker->address,
+        'is_vat_inclusive' => $faker->randomElement([0, 1])
     ];
 });

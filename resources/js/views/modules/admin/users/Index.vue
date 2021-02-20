@@ -473,10 +473,8 @@ export default {
         },
         onEditFund() {
             if (this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
+
                 return;
             }
 
@@ -486,30 +484,29 @@ export default {
             let _this = this;
 
             if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
+
                 return;
             }
 
             this.$confirm("Do you want to reset password?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/users/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "password_reset"
-                        })
+                        .put(
+                            `/api/users/reset_password/${_this.selected[0].id}`,
+                            {
+                                ids: _this.selected.map(item => {
+                                    return item.id;
+                                })
+                                // action: "password_reset"
+                            }
+                        )
                         .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Password reset successfully. (Default: password)",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
+
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
@@ -535,10 +532,8 @@ export default {
             let _this = this;
 
             if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
+
                 return;
             }
 
@@ -553,13 +548,11 @@ export default {
                             }
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
+
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;
@@ -589,27 +582,26 @@ export default {
             let _this = this;
 
             if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
+
                 return;
             }
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/users/${_this.selected[0].id}`, {
+                        .put(`/api/users/restore/${_this.selected[0].id}`, {
                             ids: _this.selected.map(item => {
                                 return item.id;
-                            }),
-                            action: "restore"
+                            })
+                            // action: "restore"
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
+                            _this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+
                             _this.getDataFromApi().then(data => {
                                 _this.items = data.items;
                                 _this.totalItems = data.total;

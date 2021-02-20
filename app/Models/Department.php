@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use App\Traits\ApiResponse;
 use App\User;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 use JsonException;
+use App\Models\Job;
+use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Department extends Model
 {
@@ -60,7 +61,6 @@ class Department extends Model
 
         static::deleting(function ($department) {
             if ($department->jobs()->count() > 0) {
-
                 abort(422, "Item has active child records");
 
                 // throw new JsonException("Model has child records", 422);
@@ -86,7 +86,7 @@ class Department extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model

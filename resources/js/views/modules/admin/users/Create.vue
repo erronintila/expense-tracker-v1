@@ -279,7 +279,11 @@
                                     ></v-checkbox>
                                 </v-col>
                                 <v-col cols="12" md="4">
-                                    <v-radio-group v-model="form.role" row label="Role">
+                                    <v-radio-group
+                                        v-model="form.role"
+                                        row
+                                        label="Role"
+                                    >
                                         <v-radio
                                             label="Standard User"
                                             value="Standard User"
@@ -421,16 +425,6 @@ export default {
                     );
                 });
         },
-        onRefresh() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-        },
-        changeRole() {
-            if (this.form.role == "Administrator") {
-                this.form.permissions = this.permissions;
-            } else {
-                this.form.permissions = [];
-            }
-        },
         onSave() {
             let _this = this;
             let fund = 0;
@@ -472,12 +466,9 @@ export default {
                         job_id: _this.form.job
                     })
                     .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Employee created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        _this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
 
                         window.location.replace("/admin/users");
@@ -500,7 +491,7 @@ export default {
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
                     });
 

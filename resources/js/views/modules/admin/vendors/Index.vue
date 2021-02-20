@@ -255,15 +255,15 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            let _this = this;
+            let self = this;
 
-            _this.loading = true;
+            self.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
+                let search = self.search.trim().toLowerCase();
+                let status = self.status;
 
                 axios
                     .get("/api/vendors", {
@@ -280,7 +280,7 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        _this.loading = false;
+                        self.loading = false;
 
                         resolve({ items, total });
                     })
@@ -288,12 +288,12 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(
+                        self.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
 
-                        _this.loading = false;
+                        self.loading = false;
                     });
             });
         },
@@ -314,9 +314,9 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
+            let self = this;
 
-            if (_this.selected.length == 0) {
+            if (self.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -327,79 +327,78 @@ export default {
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
                     axios
-                        .delete(`/api/vendors/${_this.selected[0].id}`, {
+                        .delete(`/api/vendors/${self.selected[0].id}`, {
                             params: {
-                                ids: _this.selected.map(item => {
+                                ids: self.selected.map(item => {
                                     return item.id;
                                 })
                             }
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Item(s) moved to archive.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+
+                            self.mixin_successDialog(response.data.status, response.data.message);
+
+                            // self.$dialog.message.success(
+                            //     "Item(s) moved to archive.",
+                            //     {
+                            //         position: "top-right",
+                            //         timeout: 2000
+                            //     }
+                            // );
+
+                            self.getDataFromApi().then(data => {
+                                self.items = data.items;
+                                self.totalItems = data.total;
                             });
 
-                            _this.selected = [];
+                            self.selected = [];
                         })
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.mixin_errorDialog(
+                            self.mixin_errorDialog(
                                 `Error ${error.response.status}`,
-                                error.response.statusText
+                                error.response.data.message
                             );
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
+            let self = this;
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (self.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
+
                 return;
             }
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/vendors/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
+                        .put(`/api/vendors/restore/${self.selected[0].id}`, {
+                            ids: self.selected.map(item => {
                                 return item.id;
                             }),
-                            action: "restore"
                         })
                         .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            self.mixin_successDialog(response.data.status, response.data.message);
+
+                            self.getDataFromApi().then(data => {
+                                self.items = data.items;
+                                self.totalItems = data.total;
                             });
 
-                            _this.selected = [];
+                            self.selected = [];
                         })
                         .catch(function(error) {
                             console.log(error);
                             console.log(error.response);
 
-                            _this.mixin_errorDialog(
+                            self.mixin_errorDialog(
                                 `Error ${error.response.status}`,
-                                error.response.statusText
+                                error.response.data.message
                             );
                         });
                 }

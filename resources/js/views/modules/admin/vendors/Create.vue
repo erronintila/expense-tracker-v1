@@ -19,13 +19,23 @@
                                 BASIC DETAILS
                             </div>
                             <v-row>
-                                <v-col cols="12" md="9">
+                                <!-- <v-col cols="12" md="9">
                                     <v-text-field
                                         v-model="form.name"
                                         :rules="[
                                             ...mixin_validation.required,
                                             ...mixin_validation.minLength(150)
                                         ]"
+                                        :counter="150"
+                                        :error-messages="errors.name"
+                                        label="Name"
+                                        required
+                                    ></v-text-field>
+                                </v-col> -->
+
+                                <v-col cols="12" md="9">
+                                    <v-text-field
+                                        v-model="form.name"
                                         :counter="150"
                                         :error-messages="errors.name"
                                         label="Name"
@@ -54,10 +64,23 @@
                                 </v-col>
                             </v-row>
                             <v-row>
-                                <v-col cols="9" md="9">
+                                <!-- <v-col cols="9" md="9">
                                     <v-text-field
                                         v-model="form.tin"
                                         :rules="mixin_validation.required"
+                                        :error-messages="errors.tin"
+                                        :counter="100"
+                                        label="Tax Identification Number (TIN)"
+                                        required
+                                        :readonly="no_tin"
+                                    >
+                                        <template v-slot:append> </template>
+                                    </v-text-field>
+                                </v-col> -->
+
+                                <v-col cols="9" md="9">
+                                    <v-text-field
+                                        v-model="form.tin"
                                         :error-messages="errors.tin"
                                         :counter="100"
                                         label="Tax Identification Number (TIN)"
@@ -120,9 +143,16 @@
                                 @input="errors.website = []"
                                 label="Website"
                             ></v-text-field>
-                            <v-textarea
+                            <!-- <v-textarea
                                 v-model="form.address"
                                 :rules="mixin_validation.required"
+                                :error-messages="errors.address"
+                                @input="errors.address = []"
+                                label="Address"
+                                rows="3"
+                            ></v-textarea> -->
+                            <v-textarea
+                                v-model="form.address"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
                                 label="Address"
@@ -201,7 +231,7 @@ export default {
 
                     _this.mixin_errorDialog(
                         `Error ${error.response.status}`,
-                        error.response.statusText
+                        error.response.data.message
                     );
                 });
         },
@@ -228,8 +258,8 @@ export default {
                     })
                     .then(function(response) {
                         _this.mixin_successDialog(
-                            "Success",
-                            "Vendor created successfully."
+                            response.data.status,
+                            response.data.message
                         );
 
                         _this.$router.push({ name: "admin.vendors.index" });
@@ -240,7 +270,7 @@ export default {
 
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
-                            error.response.statusText
+                            error.response.data.message
                         );
 
                         if (error.response) {

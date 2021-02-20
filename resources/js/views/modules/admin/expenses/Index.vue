@@ -637,14 +637,7 @@ export default {
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        _this.mixin_showErrors(error);
                         _this.loading = false;
                     });
             });
@@ -662,13 +655,7 @@ export default {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         loadExpenseTypes() {
@@ -684,13 +671,7 @@ export default {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    _this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
@@ -803,13 +784,7 @@ export default {
                             _this.selected = [];
                         })
                         .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                            _this.mixin_showErrors(error);
                         });
                 }
             });
@@ -851,11 +826,10 @@ export default {
             this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/expenses/${_this.selected[0].id}`, {
+                        .put(`/api/expenses/restore/${_this.selected[0].id}`, {
                             ids: _this.selected.map(item => {
                                 return item.id;
                             }),
-                            action: "restore"
                         })
                         .then(function(response) {
                             _this.$dialog.message.success("Item(s) restored.", {
@@ -873,13 +847,7 @@ export default {
                             _this.selected = [];
                         })
                         .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                            _this.mixin_showErrors(error);
                         });
                 }
             });

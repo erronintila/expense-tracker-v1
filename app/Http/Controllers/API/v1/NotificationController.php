@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\NotificationResource;
 use App\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notification;
+use App\Http\Resources\NotificationResource;
 
 class NotificationController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse; // Laravel Trait used to return appropriate api response
 
     /**
      * Display a listing of the resource.
@@ -23,15 +23,10 @@ class NotificationController extends Controller
     public function index()
     {
         $search = request("search") ?? "";
-
         $sortBy = request("sortBy") ?? "created_at";
-
         $sortType = request("sortType") ?? "desc";
-
         $itemsPerPage = request("itemsPerPage") ?? 10;
-
         $start_date = request("start_date") ?? date("Y-m-d");
-
         $end_date = request("end_date") ?? date("Y-m-d");
 
         $user = request()->has("user_id") ?
@@ -47,18 +42,15 @@ class NotificationController extends Controller
 
         switch ($status) {
             case 'All Read':
-
                 $notifications = $notifications->where("read_at", "<>", null);
 
                 break;
             case 'All Unread':
-
                 $notifications = $notifications->where("read_at", null);
 
                 break;
             
             default:
-                
                 break;
         }
 

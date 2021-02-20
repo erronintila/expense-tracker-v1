@@ -574,7 +574,6 @@ export default {
             axios
                 .get("/api/data/users")
                 .then(response => {
-                    console.log(response);
                     _this.users = response.data.data;
                 })
                 .catch(error => {
@@ -621,6 +620,8 @@ export default {
                         let total = response.data.meta.total;
 
                         _this.loading = false;
+
+                        console.log(items);
 
                         resolve({ items, total });
                     })

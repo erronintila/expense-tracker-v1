@@ -5,29 +5,6 @@
 
             <v-spacer></v-spacer>
 
-            <!-- <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        class="elevation-3 mr-2"
-                        color="green"
-                        dark
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <download-excel
-                            :data="export_data"
-                            type="csv"
-                            name="Activity Logs.xls"
-                        >
-                            <v-icon dark>mdi-download</v-icon>
-                        </download-excel>
-                    </v-btn>
-                </template>
-                <span>Export to Excel</span>
-            </v-tooltip> -->
-
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -117,41 +94,6 @@
                     </v-list>
                 </v-card>
             </v-menu>
-
-            <!-- <v-menu offset-y transition="scale-transition" left>
-                <template v-slot:activator="{ on: menu, attrs }">
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on: tooltip }">
-                            <v-btn
-                                class="elevation-3"
-                                color="green"
-                                dark
-                                fab
-                                x-small
-                                v-bind="attrs"
-                                v-on="{ ...tooltip, ...menu }"
-                            >
-                                <v-icon dark>mdi-view-grid-plus-outline</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>More Options</span>
-                    </v-tooltip>
-                </template>
-
-                <v-list>
-                    <v-list-item @click="onDelete">
-                        <v-list-item-title>
-                            Delete
-                        </v-list-item-title>
-                    </v-list-item>
-
-                    <v-list-item @click="onDeleteAll">
-                        <v-list-item-title>
-                            Delete All
-                        </v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu> -->
         </v-card-title>
 
         <v-card-subtitle>{{ formattedDateRange }}</v-card-subtitle>
@@ -317,16 +259,14 @@ export default {
         },
         changeUser() {},
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let user_id = _this.user.id;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let user_id = this.user.id;
+                let range = this.date_range;
 
                 axios
                     .get("/api/activity_logs", {
@@ -345,7 +285,7 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        _this.loading = false;
+                        this.loading = false;
 
                         let export_data = items.map(item => ({
                             user:
@@ -355,7 +295,7 @@ export default {
                             "created at": item.created_at
                         }));
 
-                        _this.export_data = export_data;
+                        this.export_data = export_data;
 
                         resolve({ items, total });
                     })
@@ -363,24 +303,22 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(
+                        this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
 
-                        _this.loading = false;
+                        this.loading = false;
                     });
             });
         },
         loadUsers() {
-            let _this = this;
-
             axios
                 .get("/api/data/users?only=true")
                 .then(response => {
-                    _this.users = response.data.data;
+                    this.users = response.data.data;
 
-                    _this.users.unshift({
+                    this.users.unshift({
                         id: 0,
                         username: "",
                         name: "All Users",
@@ -391,7 +329,7 @@ export default {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(
+                    this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
@@ -420,95 +358,6 @@ export default {
 
             return false;
         }
-        // onDeleteAll() {
-        //     let _this = this;
-
-        //     this.$confirm(
-        //         "WARNING: Delete All Activity Logs? This action can't be revoked."
-        //     ).then(res => {
-        //         if (res) {
-        //             axios
-        //                 .delete(`/api/activity_logs/0`, {
-        //                     params: {
-        //                         delete_all: true
-        //                     }
-        //                 })
-        //                 .then(function(response) {
-        //                     _this.mixin_successDialog(
-        //                         "Success",
-        //                         "Deleted All Logs successfully"
-        //                     );
-
-        //                     _this.getDataFromApi().then(data => {
-        //                         _this.items = data.items;
-        //                         _this.totalItems = data.total;
-        //                     });
-
-        //                     _this.selected = [];
-        //                 })
-        //                 .catch(function(error) {
-        //                     console.log(error);
-        //                     console.log(error.response);
-
-        //                     _this.mixin_errorDialog(
-        //                         `Error ${error.response.status}`,
-        //                         error.response.statusText
-        //                     );
-        //                 });
-        //         }
-        //     });
-        // },
-        // onDelete() {
-        //     let _this = this;
-
-        //     if (_this.selected.length == 0) {
-        //         this.$dialog.message.error("No item(s) selected", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
-        //         return;
-        //     }
-
-        //     this.$confirm(
-        //         "WARNING: Delete selected Activity Log(s)? This action can't be revoked."
-        //     ).then(res => {
-        //         if (res) {
-        //             axios
-        //                 .delete(`/api/activity_logs/${_this.selected[0].id}`, {
-        //                     params: {
-        //                         ids: _this.selected.map(item => {
-        //                             return item.id;
-        //                         })
-        //                     }
-        //                 })
-        //                 .then(function(response) {
-        //                     _this.$dialog.message.success(
-        //                         "Deleted Logs successfully",
-        //                         {
-        //                             position: "top-right",
-        //                             timeout: 2000
-        //                         }
-        //                     );
-
-        //                     _this.getDataFromApi().then(data => {
-        //                         _this.items = data.items;
-        //                         _this.totalItems = data.total;
-        //                     });
-
-        //                     _this.selected = [];
-        //                 })
-        //                 .catch(function(error) {
-        //                     console.log(error);
-        //                     console.log(error.response);
-
-        //                     _this.mixin_errorDialog(
-        //                         `Error ${error.response.status}`,
-        //                         error.response.statusText
-        //                     );
-        //                 });
-        //         }
-        //     });
-        // }
     },
     watch: {
         params: {

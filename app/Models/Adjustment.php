@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Adjustment extends Model
 {
@@ -36,7 +36,7 @@ class Adjustment extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model

@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Payment\PaymentIndexResource;
-use App\Http\Resources\Payment\PaymentShowResource;
-use App\Http\Resources\PaymentResource;
-use App\Models\ExpenseReport;
-use App\Models\Payment;
-use App\Notifications\PaymentNotification;
 use App\User;
+use App\Models\Payment;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use App\Models\ExpenseReport;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
+use App\Http\Resources\PaymentResource;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\PaymentNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Http\Resources\Payment\PaymentShowResource;
+use App\Http\Resources\Payment\PaymentIndexResource;
 
 class PaymentController extends Controller
 {
+    use ApiResponse; // Laravel Trait used to return appropriate api response
+    
     public function __construct()
     {
         $this->middleware(['permission:view all payments'], ['only' => ['index']]);
@@ -36,31 +39,18 @@ class PaymentController extends Controller
     {
         return Validator::make($data, [
             "code" => ['nullable', 'string', 'max:255'],
-
             "reference_no" => ['nullable', 'max:255'],
-
             "voucher_no" => ['nullable', 'max:255'],
-
             "description" => ['required', 'string', 'max:255'],
-
             "date" => ['required'],
-
             "cheque_no" => ['nullable', 'max:255'],
-
             "cheque_date" => ['nullable'],
-
             "amount" => ['required'],
-
             "payee" => ['nullable', 'string', 'max:255'],
-
             "payee_address" => ['nullable', 'max:255'],
-
             "payee_phone" => ['nullable', 'max:255'],
-
             "remarks"  => ['nullable'],
-
             "notes" => ['nullable'],
-
             "user_id" => ['required'],
         ]);
     }
@@ -72,13 +62,10 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search ?? "";
-
-        $sortBy = $request->sortBy ?? "updated_at";
-
-        $sortType = $request->sortType ?? "desc";
-
-        $itemsPerPage = $request->itemsPerPage ?? 10;
+        $search = request("search") ?? "";
+        $sortBy = request("sortBy") ?? "updated_at";
+        $sortType = request("sortType") ?? "desc";
+        $itemsPerPage = request("itemsPerPage") ?? 10;
 
         $payments = Payment::with(['user' => function ($query) {
             $query->withTrashed();
@@ -89,15 +76,11 @@ class PaymentController extends Controller
         ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
-            switch ($request->status) {
-
+            switch (request("status")) {
                 case 'Cancelled Payments':
-
                     $payments = $payments->onlyTrashed();
-
                     break;
                 case 'Completed Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -108,7 +91,6 @@ class PaymentController extends Controller
 
                     break;
                 case 'Received Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -119,7 +101,6 @@ class PaymentController extends Controller
 
                     break;
                 case 'Released Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -130,7 +111,6 @@ class PaymentController extends Controller
 
                     break;
                 case 'Approved Payments':
-
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
                         ["cancelled_at", "=", null],
@@ -141,7 +121,6 @@ class PaymentController extends Controller
 
                     break;
                 default:
-
                     $payments = $payments;
 
                     break;
@@ -149,28 +128,22 @@ class PaymentController extends Controller
         }
 
         if (request()->has("start_date") && request()->has("end_date")) {
-            $payments = $payments->whereBetween("date", [$request->start_date, $request->end_date]);
+            $payments = $payments->whereBetween("date", [request("start_date"), request("end_date")]);
         }
 
         if (request()->has('user_id')) {
-            if ($request->user_id > 0) {
-                $payments = $payments->where("user_id", $request->user_id);
+            if (request("user_id") > 0) {
+                $payments = $payments->where("user_id", request("user_id"));
             }
         }
 
         $payments = $payments->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-
             $query->orWhere('reference_no', "like", "%" . $search . "%");
-
             $query->orWhere('voucher_no', "like", "%" . $search . "%");
-
             $query->orWhere('description', "like", "%" . $search . "%");
-
             $query->orWhere('cheque_no', "like", "%" . $search . "%");
-
             $query->orWhere('amount', "like", "%" . $search . "%");
-
             $query->orWhere('payee', "like", "%" . $search . "%");
         });
 
@@ -190,45 +163,28 @@ class PaymentController extends Controller
         $this->validator($request->all(), null)->validate();
 
         $payment = new Payment();
-
         $payment->code = generate_code(Payment::class, "PAY", 10);
-
-        $payment->reference_no = $request->reference_no;
-
-        $payment->voucher_no = $request->voucher_no;
-
-        $payment->description = $request->description;
-
-        $payment->date = $request->date;
-
-        $payment->cheque_no = $request->cheque_no;
-
-        $payment->cheque_date = $request->cheque_date;
-
-        $payment->amount = $request->amount;
-
-        $payment->payee = $request->payee;
-
-        $payment->payee_address = $request->payee_address;
-
-        $payment->payee_phone = $request->payee_phone;
-
-        $payment->remarks = $request->remarks;
-
-        $payment->notes = $request->notes;
+        $payment->reference_no = request("reference_no");
+        $payment->voucher_no = request("voucher_no");
+        $payment->description = request("description");
+        $payment->date = request("date");
+        $payment->cheque_no = request("cheque_no");
+        $payment->cheque_date = request("cheque_date");
+        $payment->amount = request("amount");
+        $payment->payee = request("payee");
+        $payment->payee_address = request("payee_address");
+        $payment->payee_phone = request("payee_phone");
+        $payment->remarks = request("remarks");
+        $payment->notes = request("notes");
 
         ////////// TEMPORARY
         $payment->approved_at = now();
-
         $payment->released_at = now();
-
         $payment->received_at = null;
         //////////
 
-        $payment->user_id = $request->user_id;
-
+        $payment->user_id = request("user_id");
         $payment->created_by = Auth::id();
-
         $payment->updated_by = Auth::id();
 
         $payment->save();
@@ -236,9 +192,8 @@ class PaymentController extends Controller
         if (request()->has("expense_reports")) {
             $arr = [];
 
-            foreach ($request->expense_reports as $item) {
+            foreach (request("expense_reports") as $item) {
                 $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
-
                 $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
 
                 log_activity(
@@ -263,7 +218,6 @@ class PaymentController extends Controller
         return response(
             [
                 'data' => new PaymentResource($payment),
-
                 'message' => 'Created successfully',
             ],
             201
@@ -308,13 +262,13 @@ class PaymentController extends Controller
     {
         $message = "Updated successfully";
 
-        switch ($request->action) {
+        switch (request("action")) {
 
             case 'approve':
 
                 //unfininshed
 
-                foreach ($request->ids as $id) {
+                foreach (request("ids") as $id) {
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->approved_at = now();
@@ -329,7 +283,7 @@ class PaymentController extends Controller
 
                 //unfininshed
 
-                foreach ($request->ids as $id) {
+                foreach (request("ids") as $id) {
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->released_at = now();
@@ -346,7 +300,7 @@ class PaymentController extends Controller
                     abort(403);
                 }
 
-                foreach ($request->ids as $id) {
+                foreach (request("ids") as $id) {
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->received_at = now();
@@ -378,7 +332,7 @@ class PaymentController extends Controller
 
                 //unfininshed
 
-                foreach ($request->ids as $id) {
+                foreach (request("ids") as $id) {
                     $payment = Payment::withTrashed()->findOrFail($id);
 
                     $payment->approved_at = now();
@@ -399,31 +353,31 @@ class PaymentController extends Controller
 
                 $payment = Payment::withTrashed()->findOrFail($id);
 
-                $payment->code = $request->code;
+                $payment->code = request("code");
 
-                $payment->reference_no = $request->reference_no;
+                $payment->reference_no = request("reference_no");
 
-                $payment->voucher_no = $request->voucher_no;
+                $payment->voucher_no = request("voucher_no");
 
-                $payment->description = $request->description;
+                $payment->description = request("description");
 
-                $payment->date = $request->date;
+                $payment->date = request("date");
 
-                $payment->cheque_no = $request->cheque_no;
+                $payment->cheque_no = request("cheque_no");
 
-                $payment->cheque_date = $request->cheque_date;
+                $payment->cheque_date = request("cheque_date");
 
-                $payment->amount = $request->amount;
+                $payment->amount = request("amount");
 
-                $payment->payee = $request->payee;
+                $payment->payee = request("payee");
 
-                $payment->payee_address = $request->payee_address;
+                $payment->payee_address = request("payee_address");
 
-                $payment->payee_phone = $request->payee_phone;
+                $payment->payee_phone = request("payee_phone");
 
-                $payment->remarks = $request->remarks;
+                $payment->remarks = request("remarks");
 
-                $payment->notes = $request->notes;
+                $payment->notes = request("notes");
 
                 $payment->updated_by = Auth::id();
 
@@ -438,7 +392,7 @@ class PaymentController extends Controller
                 //     $expense_report->save();
                 // }
 
-                // foreach ($request->expense_reports as $key => $value) {
+                // foreach (request("")expense_reports as $key => $value) {
                 //     $expense_report = ExpenseReport::withTrashed()->findOrFail($value["id"]);
 
                 //     $expense_report->payment_id = $payment->id;
@@ -449,7 +403,7 @@ class PaymentController extends Controller
                 if (request()->has("expense_reports")) {
                     $arr = [];
         
-                    foreach ($request->expense_reports as $item) {
+                    foreach (request("expense_reports") as $item) {
                         $expense_report = ExpenseReport::withTrashed()->findOrFail($item["id"]);
 
                         $exists = $expense_report->payments->contains($payment->id);
@@ -504,7 +458,7 @@ class PaymentController extends Controller
     public function destroy(Request $request, $id)
     {
         if (request()->has('ids')) {
-            foreach ($request->ids as $id) {
+            foreach (request("ids") as $id) {
                 $payment = Payment::withTrashed()->findOrFail($id);
 
                 foreach ($payment->expense_reports as $expense_report) {

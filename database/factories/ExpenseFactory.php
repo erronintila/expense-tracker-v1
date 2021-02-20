@@ -52,7 +52,7 @@ $factory->define(Expense::class, function (Faker $faker) {
             // "2020-10-15",
             // "2020-11-15",
 
-            "2020-12-01"
+            "2021-01-01"
         ]
     );
 
@@ -70,10 +70,9 @@ $factory->define(Expense::class, function (Faker $faker) {
         'receipt_number' => Str::random(10),
         'date' => $dates,
         'expense_type_id' => $expense_type->id,
-        // 'user_id' => rand(1, 10),
-        'user_id' => 1,
-        'vendor_id' => rand(1, 50),
+        'user_id' => rand(1, 100),
+        'vendor_id' => rand(1, 500),
         'created_by' => 1,
-        "updated_by" => 1
+        "updated_by" => 1,
     ];
 });
