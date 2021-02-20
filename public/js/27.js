@@ -87,7 +87,14 @@ __webpack_require__.r(__webpack_exports__);
           action: "update",
           name: _this.form.name
         }).then(function (response) {
+<<<<<<< HEAD
           _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+          _this.$dialog.message.success("Department updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+>>>>>>> develop
 
           _this.$router.push({
             name: "admin.departments.index"

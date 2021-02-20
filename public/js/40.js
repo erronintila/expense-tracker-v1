@@ -534,6 +534,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.paid_through_fund = false;
           _this.form.revolving_fund = 0;
         }
+<<<<<<< HEAD
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
         _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
@@ -550,6 +551,27 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
 
+=======
+
+        _this.form.reimbursable_amount = data.reimbursable_amount;
+        _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
+        _this.form.expense_report = data.expense_report;
+        _this.form.created_at = data.created_at;
+        _this.form.updated_at = data.updated_at;
+        _this.form.deleted_at = data.deleted_at;
+        _this.form.submitted_at = data.expense_report ? data.expense_report.submitted_at : null;
+        _this.form.approved_at = data.expense_report ? data.expense_report.approved_at : null;
+        _this.form.rejected_at = data.expense_report ? data.expense_report.rejected_at : null;
+        _this.form.cancelled_at = data.expense_report ? data.expense_report.cancelled_at : null;
+        _this.form.logs = data.logs;
+        _this.loader = false;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+>>>>>>> develop
         _this.loader = false;
       }); // );
     } // loadUsers() {
@@ -562,7 +584,16 @@ __webpack_require__.r(__webpack_exports__);
     //                 resolve();
     //             })
     //             .catch(error => {
+<<<<<<< HEAD
     //                 _this.mixin_showErrors(error);
+=======
+    //                 console.log(error);
+    //                 console.log(error.response);
+    //                 _this.mixin_errorDialog(
+    //                     `Error ${error.response.status}`,
+    //                     error.response.statusText
+    //                 );
+>>>>>>> develop
     //                 reject();
     //             });
     //     });
@@ -586,11 +617,19 @@ __webpack_require__.r(__webpack_exports__);
     amount_to_replenish: function amount_to_replenish() {
       var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
       var amount = this.mixin_convertToNumber(this.form.amount);
+<<<<<<< HEAD
 
       if (remaining_fund >= amount) {
         return amount;
       }
 
+=======
+
+      if (remaining_fund >= amount) {
+        return amount;
+      }
+
+>>>>>>> develop
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {

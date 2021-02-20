@@ -665,7 +665,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onEditFund: function onEditFund() {
       if (this.selected.length == 0) {
+<<<<<<< HEAD
         this.mixin_errorDialog("Error", "No item(s) selected");
+=======
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+>>>>>>> develop
         return;
       }
 
@@ -675,12 +682,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (_this.selected.length == 0) {
+<<<<<<< HEAD
         this.mixin_errorDialog("Error", "No item(s) selected");
+=======
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+>>>>>>> develop
         return;
       }
 
       this.$confirm("Do you want to reset password?").then(function (res) {
         if (res) {
+<<<<<<< HEAD
           axios.put("/api/users/reset_password/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
@@ -688,6 +703,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           }).then(function (response) {
             _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+          axios.put("/api/users/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "password_reset"
+          }).then(function (response) {
+            _this.$dialog.message.success("Password reset successfully. (Default: password)", {
+              position: "top-right",
+              timeout: 2000
+            });
+>>>>>>> develop
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -709,7 +736,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (_this.selected.length == 0) {
+<<<<<<< HEAD
         this.mixin_errorDialog("Error", "No item(s) selected");
+=======
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+>>>>>>> develop
         return;
       }
 
@@ -722,7 +756,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               })
             }
           }).then(function (response) {
+<<<<<<< HEAD
             _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+            _this.$dialog.message.success("Item(s) moved to archive.", {
+              position: "top-right",
+              timeout: 2000
+            });
+>>>>>>> develop
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -744,12 +785,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (_this.selected.length == 0) {
+<<<<<<< HEAD
         this.mixin_errorDialog("Error", "No item(s) selected");
+=======
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+>>>>>>> develop
         return;
       }
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
+<<<<<<< HEAD
           axios.put("/api/users/restore/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
@@ -757,6 +806,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           }).then(function (response) {
             _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+          axios.put("/api/users/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "restore"
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) restored.", {
+              position: "top-right",
+              timeout: 2000
+            });
+>>>>>>> develop
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;

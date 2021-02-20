@@ -49,11 +49,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+<<<<<<< HEAD
 //
 //
 //
 //
 //
+=======
+>>>>>>> develop
 //
 //
 //
@@ -280,7 +283,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
@@ -297,6 +300,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: item.id
         }
       });
+<<<<<<< HEAD
     },
     onEdit: function onEdit(item) {
       this.$router.push({
@@ -306,6 +310,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
+=======
+    },
+    onEdit: function onEdit(item) {
+      this.$router.push({
+        name: "admin.expense_types.edit",
+        params: {
+          id: item.id
+        }
+      });
+    },
+>>>>>>> develop
     onDelete: function onDelete() {
       var _this = this;
 
@@ -326,7 +341,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               })
             }
           }).then(function (response) {
+<<<<<<< HEAD
             _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+            _this.$dialog.message.success("Item(s) moved to archive.", {
+              position: "top-right",
+              timeout: 2000
+            });
+>>>>>>> develop
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -357,12 +379,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
+<<<<<<< HEAD
           axios.put("/api/expense_types/restore/".concat(_this.selected[0].id), {
             ids: _this.selected.map(function (item) {
               return item.id;
             })
           }).then(function (response) {
             _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+          axios.put("/api/expense_types/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "restore"
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) restored.", {
+              position: "top-right",
+              timeout: 2000
+            });
+>>>>>>> develop
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
@@ -374,7 +409,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
+<<<<<<< HEAD
             _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+=======
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+>>>>>>> develop
           });
         }
       });

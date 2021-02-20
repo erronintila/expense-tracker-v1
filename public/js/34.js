@@ -209,7 +209,11 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         console.log(error.response);
 
+<<<<<<< HEAD
         _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+=======
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+>>>>>>> develop
       });
     },
     onSave: function onSave() {
@@ -223,7 +227,14 @@ __webpack_require__.r(__webpack_exports__);
           limit: _this.form.limit,
           sub_types: _this.items
         }).then(function (response) {
+<<<<<<< HEAD
           _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+          _this.$dialog.message.success("Expense type updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+>>>>>>> develop
 
           _this.$router.push({
             name: "admin.expense_types.index"

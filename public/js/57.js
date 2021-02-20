@@ -283,6 +283,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
+<<<<<<< HEAD
       var _this = this;
 
       var self = this;
@@ -406,6 +407,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
             self.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+=======
+      var _this2 = this;
+
+      var _this = this;
+
+      _this.loading = true;
+      return new Promise(function (resolve, reject) {
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
+
+        var search = _this.search.trim().toLowerCase();
+
+        var status = _this.status;
+        axios.get("/api/vendors", {
+          params: {
+            search: search,
+            sortBy: sortBy[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
+            page: page,
+            itemsPerPage: itemsPerPage,
+            status: status
+          }
+        }).then(function (response) {
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this.loading = false;
+          resolve({
+            items: items,
+            total: total
+>>>>>>> develop
           });
         }
       });
@@ -416,10 +450,126 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       handler: function handler() {
         var _this2 = this;
 
+<<<<<<< HEAD
         this.getDataFromApi().then(function (data) {
           _this2.items = data.items;
           _this2.totalItems = data.total;
         });
+=======
+          _this.loading = false;
+        });
+      });
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+      this.selected = [];
+    },
+    onShow: function onShow(item) {
+      this.$router.push({
+        name: "admin.vendors.show",
+        params: {
+          id: item.id
+        }
+      });
+    },
+    onEdit: function onEdit(item) {
+      this.$router.push({
+        name: "admin.vendors.edit",
+        params: {
+          id: item.id
+        }
+      });
+    },
+    onDelete: function onDelete() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      this.$confirm("Move item(s) to archive?").then(function (res) {
+        if (res) {
+          axios["delete"]("/api/vendors/".concat(_this.selected[0].id), {
+            params: {
+              ids: _this.selected.map(function (item) {
+                return item.id;
+              })
+            }
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) moved to archive.", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
+
+            _this.selected = [];
+          })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          });
+        }
+      });
+    },
+    onRestore: function onRestore() {
+      var _this = this;
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      this.$confirm("Do you want to restore account(s)?").then(function (res) {
+        if (res) {
+          axios.put("/api/vendors/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "restore"
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) restored.", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            });
+
+            _this.selected = [];
+          })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          });
+        }
+      });
+    }
+  },
+  watch: {
+    params: {
+      handler: function handler() {
+        var _this3 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this3.items = data.items;
+          _this3.totalItems = data.total;
+        });
+>>>>>>> develop
       },
       deep: true
     }
@@ -435,12 +585,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
+<<<<<<< HEAD
     var _this3 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
       _this3.items = data.items;
       _this3.totalItems = data.total;
+=======
+    var _this4 = this;
+
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this4.items = data.items;
+      _this4.totalItems = data.total;
+>>>>>>> develop
     });
   }
 });

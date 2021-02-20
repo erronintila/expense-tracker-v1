@@ -604,6 +604,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     updateDates: function updateDates(e) {
       this.date_range = e;
+<<<<<<< HEAD
+=======
     },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
@@ -646,12 +648,94 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
-          _this.mixin_showErrors(error);
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           _this.loading = false;
         });
       });
     },
+    loadUsers: function loadUsers() {
+      var _this = this;
+
+      axios.get("/api/data/users?only=true").then(function (response) {
+        _this.users = response.data.data;
+
+        _this.users.unshift({
+          id: 0,
+          full_name: "All Employees"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      });
+>>>>>>> develop
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this2 = this;
+
+      var _this = this;
+
+<<<<<<< HEAD
+      _this.loading = true;
+      return new Promise(function (resolve, reject) {
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
+
+        var search = _this.search.trim().toLowerCase();
+
+        var status = _this.status;
+        var user_id = _this.user.id;
+        var expense_type_id = _this.expense_type.id;
+        var range = _this.date_range;
+        axios.get("/api/expenses", {
+          params: {
+            search: search,
+            sortBy: sortBy[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
+            page: page,
+            itemsPerPage: itemsPerPage,
+            status: status,
+            user_id: user_id,
+            expense_type_id: expense_type_id,
+            start_date: range[0],
+            end_date: range[1] ? range[1] : range[0]
+          }
+        }).then(function (response) {
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this.loading = false;
+          resolve({
+            items: items,
+            total: total
+          });
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
+=======
+      axios.get("/api/data/expense_types?only=true").then(function (response) {
+        _this.expense_types = response.data.data;
+
+        _this.expense_types.unshift({
+          id: 0,
+          name: "All Expense Types"
+        });
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+>>>>>>> develop
+
+          _this.loading = false;
+        });
+      });
+    },
+<<<<<<< HEAD
     loadUsers: function loadUsers() {
       var _this = this;
 
@@ -680,6 +764,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.mixin_showErrors(error);
       });
     },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+      this.status = "All Expenses";
+      this.loadUsers();
+      this.loadExpenseTypes();
+      this.selected = [];
+    },
+    onShow: function onShow(item) {
+      this.$router.push({
+        name: "admin.expenses.show",
+        params: {
+          id: item.id
+        }
+      });
+    },
+    onEdit: function onEdit(item) {
+      if (item.expense_report) {
+        if (item.expense_report.approved_at) {
+          this.$dialog.message.error("Expense with an approved report can't be edited", {
+            position: "top-right",
+            timeout: 2000
+          });
+          return;
+        }
+
+        if (item.expense_report.deleted_at) {
+          this.$dialog.message.error("Expense with a deleted report can't be edited", {
+            position: "top-right",
+            timeout: 2000
+          });
+          return;
+=======
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.status = "All Expenses";
@@ -781,6 +897,100 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             _this.selected = [];
           })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          });
+>>>>>>> develop
+        }
+      });
+    },
+    onRestore: function onRestore() {
+      var _this = this;
+
+      var arr = this.selected.map(function (item) {
+        return item.expense_report === null;
+      });
+
+<<<<<<< HEAD
+      if (this.status == "Cancelled") {
+        this.$dialog.message.error("Expense has been deleted.", {
+=======
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+>>>>>>> develop
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+<<<<<<< HEAD
+      this.$router.push({
+        name: "admin.expenses.edit",
+        params: {
+          id: item.id
+        }
+      });
+    },
+    onDelete: function onDelete() {
+      var _this = this;
+
+      var arr = this.selected.map(function (item) {
+        return item.expense_report === null;
+      }); // this.mixin_is_empty(
+      //     _this.selected.length,
+      //     "No item(s) selected bitch"
+      // );
+
+      if (_this.selected.length == 0) {
+        this.$dialog.message.error("No item(s) selected", {
+=======
+      if (!this.mixin_can("restore expenses")) {
+        this.$dialog.message.error("Not allowed", {
+>>>>>>> develop
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      } // this.mixin_check_if_error(
+      //     arr.includes(false),
+      //     "Expense(s) can't be cancelled bitch"
+      // );
+
+<<<<<<< HEAD
+
+      if (arr.includes(false)) {
+        this.$dialog.message.error("Expense(s) can't be cancelled", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
+
+      this.$confirm("Do you want to cancel expense(s)?").then(function (res) {
+        if (res) {
+          axios["delete"]("/api/expenses/".concat(_this.selected[0].id), {
+            params: {
+              ids: _this.selected.map(function (item) {
+                return item.id;
+              })
+            }
+          }).then(function (response) {
+            _this.$dialog.message.success("Cancelled successfully.", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            }); // _this.$store.dispatch("AUTH_USER");
+
+
+            _this.selected = [];
+          })["catch"](function (error) {
             _this.mixin_showErrors(error);
           });
         }
@@ -833,11 +1043,47 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this.items = data.items;
               _this.totalItems = data.total;
             }); // _this.$store.dispatch("AUTH_USER");
+=======
+      if (arr.includes(false)) {
+        this.$dialog.message.error("Expense(s) with report(s) can't be restored", {
+          position: "top-right",
+          timeout: 2000
+        });
+        return;
+      }
 
+      this.$confirm("Do you want to restore expenses(s)?").then(function (res) {
+        if (res) {
+          axios.put("/api/expenses/".concat(_this.selected[0].id), {
+            ids: _this.selected.map(function (item) {
+              return item.id;
+            }),
+            action: "restore"
+          }).then(function (response) {
+            _this.$dialog.message.success("Item(s) restored.", {
+              position: "top-right",
+              timeout: 2000
+            });
+
+            _this.getDataFromApi().then(function (data) {
+              _this.items = data.items;
+              _this.totalItems = data.total;
+            }); // _this.$store.dispatch("AUTH_USER");
+
+>>>>>>> develop
 
             _this.selected = [];
           })["catch"](function (error) {
+            console.log(error);
+            console.log(error.response);
+
+<<<<<<< HEAD
+            _this.selected = [];
+          })["catch"](function (error) {
             _this.mixin_showErrors(error);
+=======
+            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+>>>>>>> develop
           });
         }
       });
@@ -897,6 +1143,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var settings = this.$store.getters.settings;
       var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
       var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+<<<<<<< HEAD
 
       if (settings) {
         switch (settings.submission_period) {
@@ -904,6 +1151,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
             break;
 
+=======
+
+      if (settings) {
+        switch (settings.submission_period) {
+          case "Weekly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+            break;
+
+>>>>>>> develop
           case "Monthly":
             maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
             break;
@@ -1034,6 +1290,7 @@ var render = function() {
                   )
                 },
                 [_vm._v(" "), _c("span", [_vm._v("Add New")])]
+<<<<<<< HEAD
               ),
               _vm._v(" "),
               _c(
@@ -1085,6 +1342,59 @@ var render = function() {
               _c(
                 "v-menu",
                 {
+=======
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tooltip",
+                {
+                  attrs: { bottom: "" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass: "elevation-3 mr-2",
+                                  attrs: {
+                                    color: "green",
+                                    dark: "",
+                                    fab: "",
+                                    "x-small": ""
+                                  },
+                                  on: { click: _vm.onRefresh }
+                                },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-reload")
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                },
+                [_vm._v(" "), _c("span", [_vm._v("Refresh")])]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-menu",
+                {
+>>>>>>> develop
                   attrs: {
                     transition: "scale-transition",
                     "close-on-content-click": false,

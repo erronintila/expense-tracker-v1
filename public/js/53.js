@@ -379,6 +379,47 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
+<<<<<<< HEAD
+=======
+      var _this = this;
+
+      this.loadPermissions().then(axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
+        var data = response.data.data;
+        _this.form.code = data.code;
+        _this.form.first_name = data.first_name;
+        _this.form.middle_name = data.middle_name;
+        _this.form.last_name = data.last_name;
+        _this.form.suffix = data.suffix;
+        _this.form.gender = data.gender;
+        _this.form.birthdate = data.birthdate;
+        _this.form.mobile_number = data.mobile_number;
+        _this.form.telephone_number = data.telephone_number;
+        _this.form.address = data.address;
+        _this.form.fund = data.fund;
+        _this.form.remaining_fund = data.remaining_fund;
+        _this.form.username = data.username;
+        _this.form.email = data.email;
+        _this.form.is_admin = data.is_admin;
+        _this.form.is_superadmin = data.is_superadmin;
+        _this.form.can_login = data.can_login;
+        _this.form.permissions = data.permissions;
+        _this.form.old_permissions = data.permissions;
+        _this.form.role = data.role[0];
+        _this.form.old_role = data.role[0];
+        _this.form.type = data.type;
+        _this.form.job = data.job.id;
+        _this.loader = false;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+        _this.loader = false;
+      }));
+    },
+    loadJobs: function loadJobs() {
+>>>>>>> develop
       var _this = this;
 
       this.loadPermissions().then(axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
@@ -419,15 +460,30 @@ __webpack_require__.r(__webpack_exports__);
     loadJobs: function loadJobs() {
       var _this = this;
 
+<<<<<<< HEAD
       axios.get("/api/data/jobs?only=true").then(function (response) {
         _this.jobs = response.data.data;
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
+=======
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/data/permissions?role=".concat(_this.form.role)).then(function (response) {
+          _this.permissions = response.data;
+          _this.form.permissions = [];
+          resolve();
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+>>>>>>> develop
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+          reject();
+        });
       });
     },
+<<<<<<< HEAD
     loadPermissions: function loadPermissions() {
       var _this = this;
 
@@ -445,6 +501,17 @@ __webpack_require__.r(__webpack_exports__);
           reject();
         });
       });
+=======
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
+    changeRole: function changeRole() {
+      if (this.form.role == "Administrator") {
+        this.selected = this.permissions;
+      } else {
+        this.selected = [];
+      }
+>>>>>>> develop
     },
     onSave: function onSave() {
       var _this = this;
@@ -479,11 +546,20 @@ __webpack_require__.r(__webpack_exports__);
           permissions: _this.form.permissions,
           job_id: _this.form.job
         }).then(function (response) {
+<<<<<<< HEAD
           _this.mixin_successDialog(response.data.status, response.data.message);
 
           window.location.replace("/admin/users");
+=======
+          _this.$dialog.message.success("Employee updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          }); // _this.$store.dispatch("AUTH_USER");
+
+
+          window.location.replace("/admin/users"); // _this.$router.push({ name: "admin.users.index" });
+>>>>>>> develop
         })["catch"](function (error) {
-          _this.loader = false;
           console.log(error);
           console.log(error.response);
 

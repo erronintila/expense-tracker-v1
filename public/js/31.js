@@ -312,6 +312,159 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+<<<<<<< HEAD
+=======
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+>>>>>>> develop
 
 
 
@@ -387,7 +540,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       this.date_range = e;
+<<<<<<< HEAD
       this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
+=======
+      this.loadExpenses(this.form.user.id).then(function () {
+>>>>>>> develop
         _this2.getDataFromApi().then(function (data) {
           _this2.items = data.items;
           _this2.totalItems = data.total;
@@ -397,7 +554,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateUser: function updateUser() {
       var _this3 = this;
 
+<<<<<<< HEAD
       this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
+=======
+      this.loadExpenses(this.form.user.id).then(function () {
+>>>>>>> develop
         _this3.getDataFromApi().then(function (data) {
           _this3.items = data.items;
           _this3.totalItems = data.total;
@@ -415,6 +576,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.form.remarks = data.remarks;
           _this.form.notes = data.notes;
           _this.form.user = data.user;
+<<<<<<< HEAD
           _this.form.status = data.status;
           _this.total = data.total;
           _this.loader = false;
@@ -426,6 +588,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
+=======
+          _this.form.status = data.status; // _this.expenses = data.expenses;
+          // _this.submitted_at = data.submitted_at;
+          // _this.reviewed_at = data.reviewed_at;
+          // _this.approved_at = data.approved_at;
+          // _this.cancelled_at = data.cancelled_at;
+          // _this.created_at = data.created_at;
+          // _this.updated_at = data.updated_at;
+          // _this.deleted_at = data.deleted_at;
+
+          _this.total = data.total; // _this.date_range = [_this.from, _this.to];
+          // _this.loadExpenses(data.user.id);
+          // _this.getDataFromApi().then((data) => {
+          //     _this.items = data.items;
+          //     _this.totalItems = data.total;
+          //     let selected = data.items.filter(function (item) {
+          //     return item.expense_report !== null;
+          //     });
+          //     _this.selected = _.union(_this.selected, selected);
+          //     // _this.selected.splice(0, 0, ...selected);
+          // });
+          // _this.selected.splice(0, 0, ...data.expenses);
+
+          _this.loader = false;
+          return resolve();
+        })["catch"](function (error) {
+          return reject();
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+>>>>>>> develop
           _this.loader = false;
         });
       });
@@ -544,7 +739,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           user_id: _this.form.user == null ? null : _this.form.user.id,
           expenses: _this.selected
         }).then(function (response) {
+<<<<<<< HEAD
           _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+          _this.$dialog.message.success("Expense Report updated successfully.", {
+            position: "top-right",
+            timeout: 2000
+          }); // _this.$store.dispatch("AUTH_USER");
+
+>>>>>>> develop
 
           _this.$router.push({
             name: "admin.expense_reports.index"
@@ -585,7 +788,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.date_range
+<<<<<<< HEAD
       }, _defineProperty(_objectSpread2, "query", this.expense_report_id), _defineProperty(_objectSpread2, "query", this.form.user == null ? null : this.form.user.id), _objectSpread2));
+=======
+      }, _defineProperty(_objectSpread2, "query", this.expense_report_id), _defineProperty(_objectSpread2, "query", this.form.user.id), _objectSpread2));
+>>>>>>> develop
     },
     default_description: function default_description() {
       return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
@@ -602,7 +809,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     this.loadUsers().then(function () {
       _this6.getData().then(function () {
+<<<<<<< HEAD
         _this6.loadExpenses(_this6.form.user == null ? null : _this6.form.user.id).then(function () {
+=======
+        _this6.loadExpenses(_this6.form.user.id).then(function () {
+>>>>>>> develop
           _this6.getDataFromApi().then(function (data) {
             _this.items = data.items;
             _this.totalItems = data.total;

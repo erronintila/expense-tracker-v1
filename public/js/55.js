@@ -154,6 +154,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
 //
 //
 //
@@ -184,6 +185,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+=======
+>>>>>>> develop
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this2 = this;
@@ -260,7 +263,11 @@ __webpack_require__.r(__webpack_exports__);
           address: _this.form.address,
           expense_types: _this.selected_expense_types
         }).then(function (response) {
+<<<<<<< HEAD
           _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+          _this.mixin_successDialog("Success", "Vendor created successfully.");
+>>>>>>> develop
 
           _this.$router.push({
             name: "admin.vendors.index"
@@ -269,7 +276,11 @@ __webpack_require__.r(__webpack_exports__);
           console.log(error);
           console.log(error.response);
 
+<<<<<<< HEAD
           _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+=======
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+>>>>>>> develop
 
           if (error.response) {
             if (error.response.data) {
@@ -366,6 +377,12 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
+<<<<<<< HEAD
+=======
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(150)
+                                      ),
+>>>>>>> develop
                                       counter: 150,
                                       "error-messages": _vm.errors.name,
                                       label: "Name",
@@ -439,6 +456,10 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
+<<<<<<< HEAD
+=======
+                                      rules: _vm.mixin_validation.required,
+>>>>>>> develop
                                       "error-messages": _vm.errors.tin,
                                       counter: 100,
                                       label: "Tax Identification Number (TIN)",
@@ -526,6 +547,8 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
+<<<<<<< HEAD
+=======
                           _c("v-text-field", {
                             attrs: {
                               rules: [],
@@ -536,6 +559,35 @@ var render = function() {
                             },
                             on: {
                               input: function($event) {
+                                _vm.errors.mobile_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.mobile_number,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "mobile_number", $$v)
+                              },
+                              expression: "form.mobile_number"
+                            }
+                          }),
+                          _vm._v(" "),
+>>>>>>> develop
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: [],
+                              counter: 30,
+<<<<<<< HEAD
+                              "error-messages": _vm.errors.mobile_number,
+                              label: "Mobile Number",
+=======
+                              "error-messages": _vm.errors.telephone_number,
+                              label: "Telephone Number",
+>>>>>>> develop
+                              type: "number"
+                            },
+                            on: {
+                              input: function($event) {
+<<<<<<< HEAD
                                 _vm.errors.mobile_number = []
                               }
                             },
@@ -566,6 +618,16 @@ var render = function() {
                               callback: function($$v) {
                                 _vm.$set(_vm.form, "telephone_number", $$v)
                               },
+=======
+                                _vm.errors.telephone_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.telephone_number,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "telephone_number", $$v)
+                              },
+>>>>>>> develop
                               expression: "form.telephone_number"
                             }
                           }),
@@ -593,6 +655,10 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-textarea", {
                             attrs: {
+<<<<<<< HEAD
+=======
+                              rules: _vm.mixin_validation.required,
+>>>>>>> develop
                               "error-messages": _vm.errors.address,
                               label: "Address",
                               rows: "3"

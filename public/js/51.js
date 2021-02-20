@@ -174,7 +174,12 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this.$refs.form.validate()) {
         _this.loader = true;
+<<<<<<< HEAD
         axios.put("/api/users/update_settings/" + _this.user.id, {
+=======
+        axios.put("/api/users/" + _this.user.id, {
+          action: "settings",
+>>>>>>> develop
           expense_types: _this.allowed_expense_types.map(function (item) {
             return item.id;
           })

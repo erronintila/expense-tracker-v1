@@ -1722,6 +1722,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onUpdate: function onUpdate(action, method) {
       var _this = this;
 
+<<<<<<< HEAD
       var url = "";
 
       switch (action) {
@@ -1746,6 +1747,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           break;
       }
 
+=======
+>>>>>>> develop
       this.$confirm("Do you want to ".concat(action, " expense report(s)?")).then(function (res) {
         if (res) {
           var ids = _this.selected.map(function (item) {
@@ -1754,18 +1757,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           axios({
             method: method,
+<<<<<<< HEAD
             url: url,
+=======
+            url: "/api/expense_reports/".concat(_this.selected[0].id),
+>>>>>>> develop
             data: {
               ids: ids,
               action: action
             }
           }).then(function (response) {
+<<<<<<< HEAD
             _this.mixin_successDialog(response.data.status, response.data.message);
+=======
+            _this.mixin_successDialog("Success", response.data.message);
+>>>>>>> develop
 
             _this.getDataFromApi().then(function (data) {
               _this.items = data.items;
               _this.totalItems = data.total;
+<<<<<<< HEAD
             });
+=======
+            }); // _this.$store.dispatch("AUTH_USER");
+
+>>>>>>> develop
 
             _this.selected = [];
 
@@ -1776,7 +1792,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             console.log(error);
             console.log(error.response);
 
+<<<<<<< HEAD
             _this.mixin_errorDialog(error.response.status, error.response.data.message);
+=======
+            _this.mixin_errorDialog(error.response.data.status, error.response.data.message);
+>>>>>>> develop
           });
         }
       });
@@ -1858,7 +1878,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   });
                   axios({
                     method: "put",
+<<<<<<< HEAD
                     url: "/api/expense_reports/reject/".concat(_this.selected[0].id),
+=======
+                    url: "/api/expense_reports/".concat(_this.selected[0].id),
+>>>>>>> develop
                     data: {
                       ids: ids,
                       action: "reject",
@@ -1880,7 +1904,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     console.log(error);
                     console.log(error.response);
 
+<<<<<<< HEAD
                     _this.mixin_errorDialog(error.response.status, error.response.data.message);
+=======
+                    _this.mixin_errorDialog(error.response.data.status, error.response.data.message);
+>>>>>>> develop
                   });
                 }
 

@@ -684,6 +684,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
+<<<<<<< HEAD
       var _this = this;
 
       this.loadUsers().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
@@ -766,6 +767,100 @@ __webpack_require__.r(__webpack_exports__);
           resolve();
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
+=======
+      var _this = this;
+
+      this.loadUsers().then(axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
+        var data = response.data.data;
+        _this.form.code = data.code;
+        _this.form.description = data.description;
+        _this.form.receipt_number = data.receipt_number;
+        _this.form.date = data.date;
+        _this.form.remarks = data.remarks;
+        _this.form.is_active = data.is_active;
+        _this.form.user = data.user;
+        _this.form.vendor = data.vendor == null ? {
+          id: null,
+          name: "",
+          tin: "",
+          is_vat_inclusive: false
+        } : data.vendor;
+        _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
+
+        _this.expense_types = data.user.expense_types;
+        _this.sub_types = data.expense_type.sub_types;
+        _this.form.is_tax_inclusive = data.is_tax_inclusive;
+        _this.form.tax_name = data.tax_name;
+        _this.form.tax_rate = data.tax_rate;
+        _this.form.tax_amount = data.tax_amount;
+
+        if (data.details !== null) {
+          _this.itemize = true;
+          _this.items = data.details;
+        } else {
+          // _this.itemize = false;
+          // _this.items = [];
+          _this.form.amount = data.amount;
+        }
+
+        _this.sub_types.unshift({
+          id: null,
+          name: "None",
+          limit: null
+        });
+
+        _this.form.sub_type = data.sub_type == null ? {
+          id: null,
+          name: "None",
+          limit: null
+        } : data.sub_type;
+
+        if (data.revolving_fund > 0) {
+          _this.paid_through_fund = true;
+          _this.form.revolving_fund = data.revolving_fund;
+        } else {
+          _this.paid_through_fund = false;
+          _this.form.revolving_fund = 0;
+        }
+
+        _this.form.reimbursable_amount = data.reimbursable_amount;
+        _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
+        _this.loader = false;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+
+        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+
+        _this.loader = false;
+      }));
+    },
+    loadExpenseTypes: function loadExpenseTypes() {
+      var _this = this;
+
+      axios.get("/api/data/expense_types").then(function (response) {
+        _this.expense_types = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        console.log(error.response);
+>>>>>>> develop
+
+          reject();
+        });
+      });
+    },
+    loadUsers: function loadUsers() {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/data/users").then(function (response) {
+          _this.users = response.data.data;
+          resolve();
+        })["catch"](function (error) {
+          console.log(error);
+          console.log(error.response);
+
+          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           reject();
         });
@@ -898,7 +993,14 @@ __webpack_require__.r(__webpack_exports__);
             name: "admin.expenses.index"
           });
         })["catch"](function (error) {
+<<<<<<< HEAD
           _this.loader = false;
+=======
+          // _this.getData();
+          _this.loader = false;
+          console.log(error);
+          console.log(error.response);
+>>>>>>> develop
 
           _this.mixin_showErrors(error);
 
