@@ -574,7 +574,6 @@ export default {
             axios
                 .get("/api/data/users")
                 .then(response => {
-                    console.log(response);
                     _this.users = response.data.data;
                 })
                 .catch(error => {
@@ -597,7 +596,7 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
-                let user_id = _this.form.id;
+                let user_id = _this.form.user.id;
                 let range = _this.date_range;
 
                 axios
@@ -621,6 +620,8 @@ export default {
                         let total = response.data.meta.total;
 
                         _this.loading = false;
+
+                        console.log(items);
 
                         resolve({ items, total });
                     })
