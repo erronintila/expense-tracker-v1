@@ -10,7 +10,7 @@ export default {
     },
     methods: {
         async getUser() {
-            let res = await axios.get("/api/users/1");
+            let res = await axios.get("/api/users/2");
             try {
                 return {data: res.data.data};
             } catch (error) {

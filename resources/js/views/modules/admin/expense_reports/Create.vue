@@ -70,10 +70,10 @@
                                 label="Description"
                             ></v-combobox>
 
-                            <div class="overline green--text">
+                            <v-row class="overline green--text">
                                 Expenses
-                            </div>
-                            
+                            </v-row>
+
                             <v-data-table
                                 v-model="selected"
                                 :headers="headers"
@@ -207,8 +207,11 @@
                                 </template>
                             </v-data-table>
 
-                            <div class="red--text" v-if="errors.expenses.length > 0">
-                                <small>{{errors.expenses[0]}}</small>
+                            <div
+                                class="red--text"
+                                v-if="errors.expenses.length > 0"
+                            >
+                                <small>{{ errors.expenses[0] }}</small>
                             </div>
 
                             <v-row>
@@ -249,9 +252,7 @@
                                                 >
                                                     (-)
                                                     {{
-                                                        mixin_formatNumber(
-                                                            paid
-                                                        )
+                                                        mixin_formatNumber(paid)
                                                     }}
                                                 </td>
                                             </tr>
@@ -301,7 +302,7 @@ import DateRangePicker from "../../../../components/daterangepicker/DateRangePic
 
 export default {
     components: {
-        DateRangePicker
+        DateRangePicker,
     },
     data() {
         return {
@@ -394,7 +395,8 @@ export default {
                 .get("/api/data/expenses", {
                     params: {
                         create_report: true,
-                        user_id: _this.form.user == null ? null : _this.form.user.id,
+                        user_id:
+                            _this.form.user == null ? null : _this.form.user.id,
                         start_date: start_date,
                         end_date: end_date
                     }
@@ -440,7 +442,8 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let range = _this.date_range;
-                let user_id = _this.form.user == null ? null : _this.form.user.id;
+                let user_id =
+                    _this.form.user == null ? null : _this.form.user.id;
 
                 axios
                     .get("/api/expenses", {
@@ -465,7 +468,7 @@ export default {
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
-                        
+
                         _this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.data.message
@@ -482,13 +485,13 @@ export default {
 
             if (_this.form.user == null) {
                 _this.mixin_errorDialog("Error", "No employee selected");
-                
+
                 return;
             }
 
             if (_this.selected.length == 0) {
                 _this.mixin_errorDialog("Error", "No expense(s) selected");
-                
+
                 return;
             }
 
@@ -501,11 +504,15 @@ export default {
                         description: _this.form.description,
                         remarks: _this.form.remarks,
                         notes: _this.form.notes,
-                        user_id: _this.form.user == null ? null : _this.form.user.id,
+                        user_id:
+                            _this.form.user == null ? null : _this.form.user.id,
                         expenses: _this.selected
                     })
                     .then(function(response) {
-                        _this.mixin_successDialog(response.data.status, response.data.message);
+                        _this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
+                        );
 
                         _this.$router.push({
                             name: "admin.expense_reports.index"
@@ -545,10 +552,10 @@ export default {
                 0
             );
 
-            if(this.selected.length > 0) {
+            if (this.selected.length > 0) {
                 this.errors.expenses = [];
             }
-        },
+        }
     },
     computed: {
         params(nv) {
