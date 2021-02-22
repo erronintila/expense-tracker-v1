@@ -248,42 +248,6 @@
                                         required
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" md="4">
-                                    <v-checkbox
-                                        v-model="form.can_login"
-                                        label="Allow Login"
-                                        :error-messages="errors.can_login"
-                                    ></v-checkbox>
-                                </v-col>
-                                <v-col cols="12" md="4">
-                                    <v-radio-group
-                                        v-model="form.role"
-                                        row
-                                        label="Role"
-                                    >
-                                        <v-radio
-                                            label="Standard User"
-                                            value="Standard User"
-                                        ></v-radio>
-                                        <v-radio
-                                            label="Administrator"
-                                            value="Administrator"
-                                        ></v-radio>
-                                    </v-radio-group>
-                                </v-col>
-                            </v-row>
-
-                            <v-row>
-                                <v-col>
-                                    <v-data-table
-                                        v-model="form.permissions"
-                                        show-select
-                                        :items-per-page="-1"
-                                        :headers="headers"
-                                        :items="permissions"
-                                        group-by="category"
-                                    ></v-data-table>
-                                </v-col>
                             </v-row>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
@@ -312,7 +276,6 @@ export default {
             valid: false,
             menu: false,
             jobs: [],
-            permissions: [],
             selected: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
@@ -334,13 +297,8 @@ export default {
                 password_confirmation: "password",
                 is_admin: false,
                 is_superadmin: false,
-                can_login: true,
                 type: "employee",
                 job: null,
-                old_permissions: [],
-                permissions: [],
-                old_role: "",
-                role: "Standard User"
             },
             errors: {
                 code: [],
@@ -357,7 +315,6 @@ export default {
                 address: [],
                 username: [],
                 role: [],
-                can_login: [],
                 has_fund: [],
                 fund: []
             }
@@ -391,12 +348,6 @@ export default {
                         _this.form.email = data.email;
                         _this.form.is_admin = data.is_admin;
                         _this.form.is_superadmin = data.is_superadmin;
-                        _this.form.can_login = data.can_login;
-
-                        _this.form.permissions = data.permissions;
-                        _this.form.old_permissions = data.permissions;
-                        _this.form.role = data.role[0];
-                        _this.form.old_role = data.role[0];
 
                         _this.form.type = data.type;
                         _this.form.job = data.job.id;

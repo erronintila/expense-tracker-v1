@@ -536,6 +536,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -670,6 +679,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.$router.push("/admin/users/".concat(this.selected[0].id, "/edit/fund"));
+    },
+    onEditPermissions: function onEditPermissions() {
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$router.push("/admin/users/".concat(this.selected[0].id, "/edit/permissions"));
     },
     onPasswordReset: function onPasswordReset() {
       var _this = this;
@@ -1284,6 +1301,29 @@ var render = function() {
                           _c("v-list-item-subtitle", [
                             _vm._v(
                               "\n                            Edit Revolving Fund\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.onEditPermissions } },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            [
+                              _c("v-icon", [
+                                _vm._v("mdi-text-box-plus-outline")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "\n                            Edit Permissions\n                        "
                             )
                           ])
                         ],

@@ -12,6 +12,7 @@ use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserPermissionUpdateRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -215,28 +216,15 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // check validation
-
         $message = "User updated successfully"; // return message
 
-        if (!request()->has("profile_update")) {
-            if (!app("auth")->user()->hasPermissionTo('edit users')) {
-                abort(403);
-            }
+        if (!app("auth")->user()->hasPermissionTo('edit users')) {
+            abort(403);
         }
 
         $user = User::withTrashed()->findOrFail($id);
 
-        if (!request()->has("profile_update")) {
-            $user->code = request("code") ?? $user->code;
-            $user->password = $user->password;
-            $user->fund = $user->fund;
-            $user->remaining_fund = $user->remaining_fund;
-            $user->is_admin = request("is_admin");
-            $user->is_superadmin = request("is_superadmin");
-            $user->can_login = request("can_login");
-            $user->job_id = request("job_id");
-        }
-
+        $user->code = request("code") ?? $user->code;
         $user->first_name = request("first_name");
         $user->middle_name = request("middle_name");
         $user->last_name = request("last_name");
@@ -249,17 +237,15 @@ class UserController extends Controller
         $user->username = request("username");
         $user->email = request("email");
         $user->type = request("type");
+
+        $user->password = $user->password;
+        $user->fund = $user->fund;
+        $user->remaining_fund = $user->remaining_fund;
+        $user->is_admin = request("is_admin");
+        $user->is_superadmin = request("is_superadmin");
+        $user->job_id = request("job_id");
+
         $user->save();
-
-        if (!request()->has("profile_update")) {
-            $user->syncPermissions([]);
-
-            $user->syncRoles([]);
-
-            foreach (request("permissions") as $permission) {
-                $user->givePermissionTo($permission["name"]);
-            }
-        }
 
         return $this->successResponse(null, $message, 201);
     }
@@ -278,14 +264,14 @@ class UserController extends Controller
             foreach (request("ids") as $id) {
                 $user = User::withTrashed()->findOrFail($id);
 
-                if (!($user->hasRole('Super Admin'))) {
+                if (!($user->hasRole('Administrator'))) {
                     $user->delete();
                 }
             }
         } else {
             $user = User::withTrashed()->findOrFail($id);
 
-            if (!($user->hasRole('Super Admin'))) {
+            if (!($user->hasRole('Administrator'))) {
                 $user->delete();
             }
         }
@@ -442,6 +428,36 @@ class UserController extends Controller
         return $this->successResponse(null, $message, 200);
 
         // User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make(request("")password)]);
+    }
+
+        
+    /**
+     * update_profile
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function update_permissions(UserPermissionUpdateRequest $request, $id)
+    {
+        if (!app("auth")->user()->hasPermissionTo('edit permissions')) {
+            abort(403);
+        }
+
+        $user = User::findOrFail($id);
+        $user->can_login = request("can_login");
+        $user->is_admin = request("is_admin");
+        $user->save();
+
+        if (request()->has("permissions")) {
+            $user->syncPermissions([]);
+            $user->syncRoles([]);
+            foreach (request("permissions") as $permission) {
+                $user->givePermissionTo($permission["name"]);
+            }
+        }
+
+        return $this->successResponse(null, "User permissions updated successfully.", 200);
     }
     
     /**
