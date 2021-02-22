@@ -42,7 +42,6 @@ class UserUpdateRequest extends FormRequest
             'password'  => ['required', 'min:8', 'max:255', 'confirmed'],
             'is_admin' => [],
             'is_superadmin' => [],
-            'can_login' => ['required'],
             'type' => [],
             'job_id' => ['required_if:is_superadmin,0'],
         ];

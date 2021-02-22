@@ -170,6 +170,15 @@
                             </v-list-item-subtitle>
                         </v-list-item>
 
+                        <v-list-item @click="onEditPermissions">
+                            <v-list-item-icon>
+                                <v-icon>mdi-text-box-plus-outline</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-subtitle>
+                                Edit Permissions
+                            </v-list-item-subtitle>
+                        </v-list-item>
+
                         <v-list-item @click="onRestore">
                             <v-list-item-icon>
                                 <v-icon>mdi-history</v-icon>
@@ -474,11 +483,16 @@ export default {
         onEditFund() {
             if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
-
                 return;
             }
-
             this.$router.push(`/admin/users/${this.selected[0].id}/edit/fund`);
+        },
+        onEditPermissions() {
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
+                return;
+            }
+            this.$router.push(`/admin/users/${this.selected[0].id}/edit/permissions`);
         },
         onPasswordReset() {
             let _this = this;
