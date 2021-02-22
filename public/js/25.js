@@ -121,6 +121,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -128,6 +129,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       loading: false,
       totalItems: 0,
       search: "",
+      multipleSelection: false,
       headers: [{
         value: "full_name",
         sortable: false
@@ -769,7 +771,10 @@ var render = function() {
                   _c(
                     "v-list-item-group",
                     {
-                      attrs: { "active-class": "green--text" },
+                      attrs: {
+                        "active-class": "green--text",
+                        multiple: _vm.multipleSelection
+                      },
                       model: {
                         value: _vm.selected,
                         callback: function($$v) {

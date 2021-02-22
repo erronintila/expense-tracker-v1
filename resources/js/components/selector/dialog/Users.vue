@@ -28,6 +28,7 @@
                     <v-list-item-group
                         v-model="selected"
                         active-class="green--text"
+                        :multiple="multipleSelection"
                     >
                         <template v-for="(item, index) in items">
                             <v-list-item :key="item.id" :value="item">
@@ -112,6 +113,7 @@ export default {
             loading: false,
             totalItems: 0,
             search: "",
+            multipleSelection: false,
             headers: [
                 { value: "full_name", sortable: false }
                 // { text: "Job Designation", value: "job.name", sortable: false },
