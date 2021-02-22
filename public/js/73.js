@@ -111,7 +111,6 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       menu: false,
       permissions: [],
-      selected: [],
       headers: [{
         text: "Permission",
         value: "name",
@@ -119,6 +118,7 @@ __webpack_require__.r(__webpack_exports__);
       }],
       form: {
         can_login: true,
+        is_admin: false,
         old_permissions: [],
         permissions: [],
         old_role: "",
@@ -136,6 +136,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadPermissions().then(axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
+        console.log(data);
+        _this.form.is_admin = data.is_admin;
         _this.form.can_login = data.can_login;
         _this.form.permissions = data.permissions;
         _this.form.old_permissions = data.permissions;
@@ -156,6 +158,7 @@ __webpack_require__.r(__webpack_exports__);
 
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/permissions?role=".concat(_this.form.role)).then(function (response) {
+          console.log(response);
           _this.permissions = response.data;
           _this.form.permissions = [];
           resolve();
@@ -179,6 +182,7 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.$refs.form.validate()) {
         _this.loader = true;
         axios.put("/api/users/update_permissions/" + _this.$route.params.id, {
+          is_admin: is_administrator,
           can_login: _this.form.can_login,
           permissions: _this.form.permissions
         }).then(function (response) {

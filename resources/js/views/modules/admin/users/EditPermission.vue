@@ -101,10 +101,10 @@ export default {
             valid: false,
             menu: false,
             permissions: [],
-            selected: [],
             headers: [{ text: "Permission", value: "name", sortable: false }],
             form: {
                 can_login: true,
+                is_admin: false,
                 old_permissions: [],
                 permissions: [],
                 old_role: "",
@@ -126,6 +126,8 @@ export default {
                     .then(response => {
                         let data = response.data.data;
 
+                        console.log(data);
+                        _this.form.is_admin = data.is_admin;
                         _this.form.can_login = data.can_login;
                         _this.form.permissions = data.permissions;
                         _this.form.old_permissions = data.permissions;
@@ -154,6 +156,7 @@ export default {
                 axios
                     .get(`/api/data/permissions?role=${_this.form.role}`)
                     .then(response => {
+                        console.log(response);
                         _this.permissions = response.data;
                         _this.form.permissions = [];
                         resolve();
@@ -184,6 +187,7 @@ export default {
 
                 axios
                     .put("/api/users/update_permissions/" + _this.$route.params.id, {
+                        is_admin: is_administrator,
                         can_login: _this.form.can_login,
                         permissions: _this.form.permissions,
                     })

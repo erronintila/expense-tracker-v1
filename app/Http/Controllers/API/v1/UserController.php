@@ -264,14 +264,14 @@ class UserController extends Controller
             foreach (request("ids") as $id) {
                 $user = User::withTrashed()->findOrFail($id);
 
-                if (!($user->hasRole('Super Admin'))) {
+                if (!($user->hasRole('Administrator'))) {
                     $user->delete();
                 }
             }
         } else {
             $user = User::withTrashed()->findOrFail($id);
 
-            if (!($user->hasRole('Super Admin'))) {
+            if (!($user->hasRole('Administrator'))) {
                 $user->delete();
             }
         }
@@ -440,12 +440,13 @@ class UserController extends Controller
      */
     public function update_permissions(UserPermissionUpdateRequest $request, $id)
     {
-        // if (!app("auth")->user()->hasPermissionTo('update permissions')) {
-        //     abort(403);
-        // }
+        if (!app("auth")->user()->hasPermissionTo('edit permissions')) {
+            abort(403);
+        }
 
         $user = User::findOrFail($id);
         $user->can_login = request("can_login");
+        $user->is_admin = request("is_admin");
         $user->save();
 
         if (request()->has("permissions")) {
