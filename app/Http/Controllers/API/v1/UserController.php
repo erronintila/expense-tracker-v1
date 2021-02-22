@@ -12,6 +12,7 @@ use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserProfileUpdateRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -215,7 +216,6 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // check validation
-
         $message = "User updated successfully"; // return message
 
         if (!request()->has("profile_update")) {
@@ -442,6 +442,28 @@ class UserController extends Controller
         return $this->successResponse(null, $message, 200);
 
         // User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make(request("")password)]);
+    }
+
+    public function update_profile(UserProfileUpdateRequest $request, $id) {
+        $validated = $request->validated(); // check validation
+        $message = "User profile updated successfully"; // return message
+
+        $user = User::withTrashed()->findOrFail($id);
+        $user->first_name = request("first_name");
+        $user->middle_name = request("middle_name");
+        $user->last_name = request("last_name");
+        $user->suffix = request("suffix");
+        $user->gender = request("gender");
+        $user->birthdate = request("birthdate");
+        $user->mobile_number = request("mobile_number");
+        $user->telephone_number = request("telephone_number");
+        $user->address = request("address");
+        $user->username = request("username");
+        $user->email = request("email");
+        $user->type = request("type");
+        $user->save();
+
+        return $this->successResponse(null, $message, 200);
     }
     
     /**
