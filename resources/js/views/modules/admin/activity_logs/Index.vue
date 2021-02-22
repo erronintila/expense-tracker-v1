@@ -70,24 +70,20 @@
                                 return-object
                                 @change="changeUser"
                             >
-                                <template v-slot:item="data">
-                                    <template>
-                                        <v-list max-width="300">
-                                            <v-list-item-content>
-                                                <v-list-item-title
-                                                    v-html="data.item.name"
-                                                ></v-list-item-title>
-                                                <v-list-item-subtitle
-                                                    v-html="
-                                                        `${data.item.username}`
-                                                    "
-                                                ></v-list-item-subtitle>
-                                                <v-list-item-subtitle
-                                                    v-html="data.item.email"
-                                                ></v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </v-list>
-                                    </template>
+                                <template slot="item" slot-scope="data">
+                                    <v-list max-width="250">
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                v-html="data.item.name"
+                                            ></v-list-item-title>
+                                            <v-list-item-subtitle
+                                                v-html="`${data.item.username}`"
+                                            ></v-list-item-subtitle>
+                                            <v-list-item-subtitle
+                                                v-html="data.item.email"
+                                            ></v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list>
                                 </template>
                             </v-select>
                         </v-list-item>
@@ -192,16 +188,20 @@
                 </template>
             </v-data-table>
         </v-card-text>
+
+        <Users></Users>
     </v-card>
 </template>
 
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import Users from "../../../../components/selector/dialog/Users";
 
 export default {
     components: {
-        DateRangePicker
+        DateRangePicker,
+        Users
     },
     data() {
         return {
@@ -314,7 +314,8 @@ export default {
         },
         loadUsers() {
             axios
-                .get("/api/data/users?only=true")
+                // .get("/api/data/users?only=true")
+                .get("/api/users")
                 .then(response => {
                     this.users = response.data.data;
 
