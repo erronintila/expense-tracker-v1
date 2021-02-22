@@ -30,7 +30,8 @@ class ActivityLogResource extends JsonResource
             // -------------------------------------------------------------------
             // Additional Fields
             // -------------------------------------------------------------------
-            "user" => User::find($this->causer_id ?? 0),
+            // "user" =>  User::find($this->causer_id ?? 0),
+            "user" => optional($this->caused)->name,
 
             // -------------------------------------------------------------------
             // Transaction Logs
