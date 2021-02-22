@@ -562,28 +562,8 @@ export default {
 
             if (_this.$refs.form.validate()) {
                 axios
-                    .put("/api/users/" + _this.form.id, {
-                        action: "update",
-                        profile_update: true,
-
-                        // email: _this.form.email,
-                        // username: _this.form.username,
-                        // is_admin: _this.form.is_admin,
-                        // can_login: _this.form.can_login,
-                        // first_name: _this.form.first_name,
-                        // middle_name: _this.form.middle_name,
-                        // last_name: _this.form.last_name,
-                        // suffix: _this.form.suffix,
-                        // gender: _this.form.gender,
-                        // birthdate: _this.form.birthdate,
-                        // mobile_number: _this.form.mobile_number,
-                        // telephone_number: _this.form.telephone_number,
-                        // email: _this.form.email,
-                        // address: _this.form.address,
-                        // user_id: _this.form.id,
-
-                        id: _this.form.id,
-                        code: _this.form.id,
+                    .put("/api/users/update_profile/" + _this.form.id, {
+                        code: _this.form.code,
                         first_name: _this.form.first_name,
                         middle_name: _this.form.middle_name,
                         last_name: _this.form.last_name,
@@ -615,7 +595,7 @@ export default {
                             }
                         );
 
-                        // _this.$store.dispatch("AUTH_USER");
+                        _this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {
                         console.log(error);
@@ -635,7 +615,7 @@ export default {
 
             if (_this.$refs.form_password.validate()) {
                 axios
-                    .put("/api/users/update_password/" + _this.id, {
+                    .put("/api/users/update_password/" + _this.form.id, {
                         old_password: _this.old_password,
                         password: _this.password,
                         password_confirmation: _this.password_confirmation
