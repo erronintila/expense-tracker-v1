@@ -8,9 +8,9 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Payment\PaymentStoreRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PaymentResource;
-use Illuminate\Support\Facades\Validator;
 use App\Notifications\PaymentNotification;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Resources\Payment\PaymentShowResource;
@@ -27,32 +27,6 @@ class PaymentController extends Controller
         $this->middleware(['permission:add payments'], ['only' => ['create', 'store']]);
         // $this->middleware(['permission:edit payments'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete payments'], ['only' => ['destroy']]);
-    }
-
-    /**
-     * Get a validator for an incoming request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data, $id)
-    {
-        return Validator::make($data, [
-            "code" => ['nullable', 'string', 'max:255'],
-            "reference_no" => ['nullable', 'max:255'],
-            "voucher_no" => ['nullable', 'max:255'],
-            "description" => ['required', 'string', 'max:255'],
-            "date" => ['required'],
-            "cheque_no" => ['nullable', 'max:255'],
-            "cheque_date" => ['nullable'],
-            "amount" => ['required'],
-            "payee" => ['nullable', 'string', 'max:255'],
-            "payee_address" => ['nullable', 'max:255'],
-            "payee_phone" => ['nullable', 'max:255'],
-            "remarks"  => ['nullable'],
-            "notes" => ['nullable'],
-            "user_id" => ['required'],
-        ]);
     }
 
     /**
@@ -158,9 +132,10 @@ class PaymentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PaymentStoreRequest $request)
     {
-        $this->validator(request()->all(), null)->validate();
+        $validated = $request->validated();
+        $message = "Payment created successfully";
 
         $payment = new Payment();
         $payment->code = generate_code(Payment::class, "PAY", 10);
@@ -215,13 +190,7 @@ class PaymentController extends Controller
             "payment" => $payment
         ]));
 
-        return response(
-            [
-                'data' => new PaymentResource($payment),
-                'message' => 'Created successfully',
-            ],
-            201
-        );
+        return $this->successResponse(new PaymentResource($payment), $message, 201);
     }
 
     /**
@@ -260,7 +229,7 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $message = "Updated successfully";
+        $message = "Payment updated successfully";
 
         switch (request("action")) {
 
@@ -348,8 +317,6 @@ class PaymentController extends Controller
 
                 break;
             default:
-
-                $this->validator(request()->all(), null)->validate();
 
                 $payment = Payment::withTrashed()->findOrFail($id);
 
@@ -538,4 +505,64 @@ class PaymentController extends Controller
     | PAYMENT CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    public function approve_payment(Request $request, $id)
+    {
+        foreach (request("ids") as $id) {
+            $payment = Payment::withTrashed()->findOrFail($id);
+
+            $payment->approved_at = now();
+
+            $payment->save();
+        }
+
+        $message = "Payment(s) approved successfully";
+
+        return $this->successResponse(null, $message, 200);
+    }
+
+    public function release_payment(Request $request, $id)
+    {
+        foreach (request("ids") as $id) {
+            $payment = Payment::withTrashed()->findOrFail($id);
+
+            $payment->released_at = now();
+
+            $payment->save();
+        }
+
+        $message = "Payment(s) released successfully";
+
+        return $this->successResponse(null, $message, 200);
+    }
+
+    public function receive_payment(Request $request, $id)
+    {
+        foreach (request("ids") as $id) {
+            $payment = Payment::withTrashed()->findOrFail($id);
+
+            $payment->received_at = now();
+
+            $payment->save();
+        }
+
+        $message = "Payment(s) received successfully";
+
+        return $this->successResponse(null, $message, 200);
+    }
+
+    public function complete_payment(Request $request, $id)
+    {
+        foreach (request("ids") as $id) {
+            $payment = Payment::withTrashed()->findOrFail($id);
+            $payment->approved_at = now();
+            $payment->released_at = now();
+            $payment->received_at = now();
+            $payment->save();
+        }
+
+        $message = "Payment(s) completed successfully";
+
+        return $this->successResponse(null, $message, 200);
+    }
 }

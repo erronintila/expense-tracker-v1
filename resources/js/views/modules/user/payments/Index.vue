@@ -479,12 +479,32 @@ export default {
                         return item.id;
                     });
 
+                     let url = "";
+
+                    switch (action) {
+                        case 'release':
+                            url = `/api/payments/release_payment/${_this.selected[0].id}`;
+                            break;
+                        case 'receive':
+                            url = `/api/payments/receive_payment/${_this.selected[0].id}`;
+                            break;
+                        case 'complete':
+                            url = `/api/payments/complete_payment/${_this.selected[0].id}`;
+                            break;
+                        case 'update':
+                            url = `/api/payments/${_this.selected[0].id}`;
+                            break;
+                        default:
+                            this.mixin_errorDialog("Error", "Action can't be processed.");
+                            return;
+                            break;
+                    }
+
                     axios({
                         method: method,
-                        url: `/api/payments/${_this.selected[0].id}`,
+                        url: url,
                         data: {
                             ids: ids,
-                            action: action
                         }
                     })
                         .then(function(response) {

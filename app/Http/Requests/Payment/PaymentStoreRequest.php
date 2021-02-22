@@ -37,7 +37,8 @@ class PaymentStoreRequest extends FormRequest
             "payee_phone" => ['nullable', 'max:255'],
             "remarks"  => ['nullable'],
             "notes" => ['nullable'],
-            "user" => ['required'],
+            "user_id" => ['required'],
+            "expense_reports" => ['required'],
         ];
     }
 
@@ -49,7 +50,8 @@ class PaymentStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            // 'tin.required_if' => 'The tax identification number field is required if VAT inclusive.'
+            'user_id.required' => 'The employee field is required.',
+            'expense_reports.required' => 'The expense report(s) is/are required.'
         ];
     }
 }

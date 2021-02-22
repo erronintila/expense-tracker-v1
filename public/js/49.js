@@ -566,6 +566,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //     });
     // },
     onUpdate: function onUpdate(action, method) {
+      var _this3 = this;
+
       var _this = this;
 
       if (action == "receive" && !this.mixin_can("receive payments")) {
@@ -598,12 +600,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return item.id;
           });
 
+          var url = "";
+
+          switch (action) {
+            case 'release':
+              url = "/api/payments/release_payment/".concat(_this.selected[0].id);
+              break;
+
+            case 'receive':
+              url = "/api/payments/receive_payment/".concat(_this.selected[0].id);
+              break;
+
+            case 'complete':
+              url = "/api/payments/complete_payment/".concat(_this.selected[0].id);
+              break;
+
+            case 'update':
+              url = "/api/payments/".concat(_this.selected[0].id);
+              break;
+
+            default:
+              _this3.mixin_errorDialog("Error", "Action can't be processed.");
+
+              return;
+              break;
+          }
+
           axios({
             method: method,
-            url: "/api/payments/".concat(_this.selected[0].id),
+            url: url,
             data: {
-              ids: ids,
-              action: action
+              ids: ids
             }
           }).then(function (response) {
             _this.$dialog.message.success(response.data.message, {
@@ -633,11 +660,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this4 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
+          _this4.items = data.items;
+          _this4.totalItems = data.total;
         });
       },
       deep: true
@@ -683,13 +710,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.loadUsers();
   },
   activated: function activated() {
-    var _this4 = this;
+    var _this5 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.loadUsers();
     this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
+      _this5.items = data.items;
+      _this5.totalItems = data.total;
     });
   }
 });
